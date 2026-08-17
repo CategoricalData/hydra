@@ -354,7 +354,7 @@ decodeAliases = define "decodeAliases" $
   lambda "cx" $ lambda "m" $
     Eithers.bind (optArrayE @@ var "cx" @@ avroAliases @@ var "m")
       (lambda "mArr" $
-        Optionals.cases (var "mArr") (Phantoms.right nothing) (lambda "arr" $
+        Optionals.match (var "mArr") (Phantoms.right nothing) (lambda "arr" $
             Eithers.map
               (lambda "strs" $ Optionals.pure (var "strs"))
               (Eithers.mapList (expectStringE @@ var "cx") (var "arr"))))
@@ -472,7 +472,7 @@ decodeObjectSchema = define "decodeObjectSchema" $
             (Logic.ifElse (Equality.equal (var "typeName") (string "fixed"))
               (decodeNamedSchema @@ var "cx" @@ var "m" @@ (decodeFixed @@ var "cx" @@ var "m"))
               -- Primitive type as object (unusual but valid, e.g. {"type": "string"})
-              (Optionals.cases (decodePrimitiveName @@ var "typeName") (err @@ var "cx" @@ (Strings.concat $ list [string "unknown type: ", var "typeName"])) (lambda "p" $ Phantoms.right (inject Avro._Schema Avro._Schema_primitive (var "p"))))))))
+              (Optionals.match (decodePrimitiveName @@ var "typeName") (err @@ var "cx" @@ (Strings.concat $ list [string "unknown type: ", var "typeName"])) (lambda "p" $ Phantoms.right (inject Avro._Schema Avro._Schema_primitive (var "p"))))))))
 
 decodeOrder :: TypedTermDefinition (InferenceContext -> String -> Result Avro.Order)
 decodeOrder = define "decodeOrder" $
@@ -531,7 +531,7 @@ decodeSchema = define "decodeSchema" $
     match JM._Value (var "v") (Just (err @@ var "cx" @@ (Strings.concat $ list [string "unexpected JSON value for schema: ", showJsonValue @@ var "v"]))) [
       -- String: primitive type name or reference
       JM._Value_string>>: lambda "s" $
-        Optionals.cases (decodePrimitiveName @@ var "s") (Phantoms.right (inject Avro._Schema Avro._Schema_reference (var "s"))) (lambda "p" $ Phantoms.right (inject Avro._Schema Avro._Schema_primitive (var "p"))),
+        Optionals.match (decodePrimitiveName @@ var "s") (Phantoms.right (inject Avro._Schema Avro._Schema_reference (var "s"))) (lambda "p" $ Phantoms.right (inject Avro._Schema Avro._Schema_primitive (var "p"))),
       -- Array: union type
       JM._Value_array>>: lambda "schemas" $
         Eithers.map
@@ -573,7 +573,7 @@ encodeEnumE = define "encodeEnum" $
     Lists.concat (list [
       list [pair (string "type") (inject JM._Value JM._Value_string (string "enum"))],
       list [pair (string "symbols") (inject JM._Value JM._Value_array (Lists.map (lambda "s" $ inject JM._Value JM._Value_string (var "s")) (project Avro._Enum Avro._Enum_symbols @@ var "e")))],
-      Optionals.cases (project Avro._Enum Avro._Enum_default @@ var "e") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "default") (inject JM._Value JM._Value_string (var "d"))])])
+      Optionals.match (project Avro._Enum Avro._Enum_default @@ var "e") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "default") (inject JM._Value JM._Value_string (var "d"))])])
 
 encodeFieldE :: TypedTermDefinition (Avro.Field -> JM.Value)
 encodeFieldE = define "encodeField" $
@@ -583,10 +583,10 @@ encodeFieldE = define "encodeField" $
       (Lists.concat (list [
         list [pair (string "name") (inject JM._Value JM._Value_string (project Avro._Field Avro._Field_name @@ var "f"))],
         list [pair (string "type") (encodeSchema @@ (project Avro._Field Avro._Field_type @@ var "f"))],
-        Optionals.cases (project Avro._Field Avro._Field_doc @@ var "f") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "doc") (inject JM._Value JM._Value_string (var "d"))]),
-        Optionals.cases (project Avro._Field Avro._Field_default @@ var "f") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "default") (var "d")]),
-        Optionals.cases (project Avro._Field Avro._Field_order @@ var "f") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "o" $ list [encodeOrderE @@ var "o"]),
-        Optionals.cases (project Avro._Field Avro._Field_aliases @@ var "f") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "als" $ list [pair (string "aliases") (inject JM._Value JM._Value_array (Lists.map (lambda "a" $ inject JM._Value JM._Value_string (var "a")) (var "als")))]),
+        Optionals.match (project Avro._Field Avro._Field_doc @@ var "f") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "doc") (inject JM._Value JM._Value_string (var "d"))]),
+        Optionals.match (project Avro._Field Avro._Field_default @@ var "f") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "default") (var "d")]),
+        Optionals.match (project Avro._Field Avro._Field_order @@ var "f") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "o" $ list [encodeOrderE @@ var "o"]),
+        Optionals.match (project Avro._Field Avro._Field_aliases @@ var "f") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "als" $ list [pair (string "aliases") (inject JM._Value JM._Value_array (Lists.map (lambda "a" $ inject JM._Value JM._Value_string (var "a")) (var "als")))]),
         encodeAnnotations @@ (project Avro._Field Avro._Field_annotations @@ var "f")]))
 
 encodeFixedE :: TypedTermDefinition (Avro.Fixed -> [(String, JM.Value)])
@@ -613,9 +613,9 @@ encodeNamed = define "encodeNamed" $
     inject JM._Value JM._Value_object
       (Lists.concat (list [
         list [pair (string "name") (inject JM._Value JM._Value_string (project Avro._Named Avro._Named_name @@ var "n"))],
-        Optionals.cases (project Avro._Named Avro._Named_namespace @@ var "n") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "ns" $ list [pair (string "namespace") (inject JM._Value JM._Value_string (var "ns"))]),
-        Optionals.cases (project Avro._Named Avro._Named_doc @@ var "n") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "doc") (inject JM._Value JM._Value_string (var "d"))]),
-        Optionals.cases (project Avro._Named Avro._Named_aliases @@ var "n") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "als" $ list [pair (string "aliases") (inject JM._Value JM._Value_array (Lists.map (lambda "a" $ inject JM._Value JM._Value_string (var "a")) (var "als")))]),
+        Optionals.match (project Avro._Named Avro._Named_namespace @@ var "n") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "ns" $ list [pair (string "namespace") (inject JM._Value JM._Value_string (var "ns"))]),
+        Optionals.match (project Avro._Named Avro._Named_doc @@ var "n") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "d" $ list [pair (string "doc") (inject JM._Value JM._Value_string (var "d"))]),
+        Optionals.match (project Avro._Named Avro._Named_aliases @@ var "n") (list ([] :: [TypedTerm (String, JM.Value)])) (lambda "als" $ list [pair (string "aliases") (inject JM._Value JM._Value_array (Lists.map (lambda "a" $ inject JM._Value JM._Value_string (var "a")) (var "als")))]),
         encodeNamedType @@ (project Avro._Named Avro._Named_type @@ var "n"),
         encodeAnnotations @@ (project Avro._Named Avro._Named_annotations @@ var "n")]))
 
@@ -741,7 +741,7 @@ optArrayE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.
 optArrayE = define "optArrayE" $
   doc "Look up an optional array attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
-    Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (Phantoms.right nothing) (lambda "v" $ Eithers.map (lambda "a" $ Optionals.pure (var "a")) (expectArrayE @@ var "cx" @@ var "v"))
+    Optionals.match (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (Phantoms.right nothing) (lambda "v" $ Eithers.map (lambda "a" $ Optionals.pure (var "a")) (expectArrayE @@ var "cx" @@ var "v"))
 
 optE :: TypedTermDefinition (String -> M.Map String JM.Value -> Maybe JM.Value)
 optE = define "optE" $
@@ -753,7 +753,7 @@ optStringE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM
 optStringE = define "optStringE" $
   doc "Look up an optional string attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
-    Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (Phantoms.right nothing) (lambda "v" $ Eithers.map (lambda "s" $ Optionals.pure (var "s")) (expectStringE @@ var "cx" @@ var "v"))
+    Optionals.match (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (Phantoms.right nothing) (lambda "v" $ Eithers.map (lambda "s" $ Optionals.pure (var "s")) (expectStringE @@ var "cx" @@ var "v"))
 
 requireArrayE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result [JM.Value])
 requireArrayE = define "requireArrayE" $
@@ -766,7 +766,7 @@ requireE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.V
 requireE = define "requireE" $
   doc "Look up a required attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
-    Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (err @@ var "cx" @@ (Strings.concat $ list [string "required attribute ", Literals.printString (var "fname"), string " not found"])) (lambda "v" $ Phantoms.right (var "v"))
+    Optionals.match (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (err @@ var "cx" @@ (Strings.concat $ list [string "required attribute ", Literals.printString (var "fname"), string " not found"])) (lambda "v" $ Phantoms.right (var "v"))
 
 requireNumberE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result Sci.Scientific)
 requireNumberE = define "requireNumberE" $

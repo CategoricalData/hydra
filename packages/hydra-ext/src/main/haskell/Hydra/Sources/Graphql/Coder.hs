@@ -368,7 +368,7 @@ encodeTypeName = define "encodeTypeName" $
     "qualName">: Names.qualifyName @@ var "name",
     "local">: Util.qualifiedNameLocal (var "qualName"),
     "mns">: Util.qualifiedNameModuleName (var "qualName"),
-    "prefix">: Optionals.cases (var "mns") (string "") (lambda "ns_" $ Optionals.cases (Maps.lookup (var "ns_") (var "prefixes" :: TypedTerm (M.Map ModuleName String))) (string "") ("p" ~> var "p"))] $
+    "prefix">: Optionals.match (var "mns") (string "") (lambda "ns_" $ Optionals.match (Maps.lookup (var "ns_") (var "prefixes" :: TypedTerm (M.Map ModuleName String))) (string "") ("p" ~> var "p"))] $
     wrap G._Name (Strings.concat2 (var "prefix") (sanitize @@ var "local"))
 
 -- | Encode a union variant field type to a nullable GraphQL FieldDefinition.

@@ -60,7 +60,7 @@ bind = defineWithDefault "bind" "Monadic bind for optionals."
   ["bind(m, f) returns f(x) when m is given(x), and none when m is none.",
    "The monadic bind for optionals; used to chain computations that may be absent.",
    "Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."]
-  ("m" ~> "f" ~> Optionals.cases (var "m") nothing (var "f"))
+  ("m" ~> "f" ~> Optionals.match (var "m") nothing (var "f"))
 
 -- The nothing-case value (position 1) is lazy: it is only evaluated when the optional is empty.
 cases :: PrimitiveDefinition
@@ -111,7 +111,7 @@ givens = defineWithDefault "givens" "Concatenate optionals, keeping only the pre
   \ elements are discarded.",
    "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."]
   ("xs" ~> Lists.foldr
-    ("m" ~> "acc" ~> Optionals.cases (var "m")
+    ("m" ~> "acc" ~> Optionals.match (var "m")
       (var "acc" :: TypedTerm [a])
       ("v" ~> Lists.cons (var "v") (var "acc")))
     (list ([] :: [TypedTerm a]))
@@ -122,14 +122,14 @@ isGiven = defineWithDefault "isGiven" "Test whether an optional is present (give
   (sigWithParams [("m", "the optional to test")] $ TypeScheme [Name "x"] (Types.optional tx Types.~> Types.boolean) Nothing)
   ["isGiven(m) returns true iff m is a given variant.",
    "Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool."]
-  ("m" ~> Optionals.cases (var "m") false ("_" ~> true))
+  ("m" ~> Optionals.match (var "m") false ("_" ~> true))
 
 isNone :: PrimitiveDefinition
 isNone = defineWithDefault "isNone" "Test whether an optional is absent (none)."
   (sigWithParams [("m", "the optional to test")] $ TypeScheme [Name "x"] (Types.optional tx Types.~> Types.boolean) Nothing)
   ["isNone(m) returns true iff m is the none variant.",
    "Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool."]
-  ("m" ~> Optionals.cases (var "m") true ("_" ~> false))
+  ("m" ~> Optionals.match (var "m") true ("_" ~> false))
 
 map :: PrimitiveDefinition
 map = defineWithDefault "map" "Map a function over an optional."
@@ -139,7 +139,7 @@ map = defineWithDefault "map" "Map a function over an optional."
   ["map(f, m) returns given(f x) when m is given(x), and none when m is none.",
    "The functor instance for optionals.",
    "Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."]
-  ("f" ~> "m" ~> Optionals.cases (var "m") nothing ("x" ~> just (var "f" @@ var "x")))
+  ("f" ~> "m" ~> Optionals.match (var "m") nothing ("x" ~> just (var "f" @@ var "x")))
 
 mapList :: PrimitiveDefinition
 mapList = defineWithDefault "mapList" "Traverse a list in the optional monad."
@@ -199,7 +199,7 @@ toList = defineWithDefault "toList" "Convert an optional to a list: given x maps
   (sigWithParams [("m", "the optional to convert")] $ TypeScheme [Name "x"] (Types.optional tx Types.~> Types.list tx) Nothing)
   ["toList(m) returns [x] when m is given(x), and the empty list when m is none.",
    "Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a]."]
-  ("m" ~> Optionals.cases (var "m")
+  ("m" ~> Optionals.match (var "m")
     (list ([] :: [TypedTerm a]))
     ("x" ~> list [var "x"]))
 
@@ -210,4 +210,4 @@ withDefault = defineWithDefault "withDefault" "Return the value contained in an 
     Nothing)
   ["withDefault(def, m) returns x when m is given(x), and def when m is none.",
    "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."]
-  ("def" ~> "m" ~> Optionals.cases (var "m") (var "def" :: TypedTerm a) ("x" ~> var "x"))
+  ("def" ~> "m" ~> Optionals.match (var "m") (var "def" :: TypedTerm a) ("x" ~> var "x"))

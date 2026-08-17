@@ -71,7 +71,7 @@ alter = defineWithDefault "alter" "Alter a value at a key using a function which
    "Total. Corresponds to Haskell's Data.Map.alter :: Ord k => (Maybe v -> Maybe v) -> k -> Map k v ->\
   \ Map k v."]
   (("f" ~> "k" ~> "m" ~>
-    Optionals.cases
+    Optionals.match
       (var "f" @@ Maps.lookup (var "k" :: TypedTerm Int) (var "m"))
       (Maps.delete (var "k" :: TypedTerm Int) (var "m"))
       ("vNew" ~> Maps.insert (var "k" :: TypedTerm Int) (var "vNew") (var "m")))

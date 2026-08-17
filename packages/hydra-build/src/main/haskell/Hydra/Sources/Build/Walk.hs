@@ -101,7 +101,7 @@ baseName :: TypedTermDefinition (String -> String)
 baseName = define "baseName" $
   doc "The final /-separated segment of a path (its file name)" $
   "path" ~>
-  Optionals.cases
+  Optionals.match
     (Lists.last (Strings.splitOn (string "/") (var "path")))
     (var "path")
     ("seg" ~> var "seg")

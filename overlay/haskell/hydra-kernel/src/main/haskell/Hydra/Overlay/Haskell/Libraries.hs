@@ -374,7 +374,7 @@ hydraLibOptionals :: Library
 hydraLibOptionals = standardLibrary [
     prim2     DefOptionals.apply     Optionals.apply        (optional $ funT x_ y_) (optional x_) (optional y_),
     prim2     DefOptionals.bind      Optionals.bind         (optional x_) (fun x_ (optional y_)) (optional y_),
-    prim3 DefOptionals.cases     Optionals.cases        (optional x_) y_ (funT x_ y_) y_,
+    prim3 DefOptionals.match     Optionals.match        (optional x_) y_ (funT x_ y_) y_,
     prim1     DefOptionals.givens       Optionals.givens          (list $ optional x_) (list x_),
     prim3     DefOptionals.compose   Optionals.compose      (fun x_ $ optional y_) (fun y_ $ optional z_) x_ (optional z_),
     prim3     DefOptionals.foldList  Optionals.foldList     (fun x_ (fun y_ (optional x_))) x_ (list y_) (optional x_),

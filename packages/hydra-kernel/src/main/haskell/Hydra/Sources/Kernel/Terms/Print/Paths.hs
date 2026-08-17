@@ -160,8 +160,8 @@ termToSubtermGraph = define "termToSubtermGraph" $
           $ var "helper" @@ var "ids1" @@ var "mroot" @@ var "nextPath" @@ var "stateAfterBindings" @@
             pair Paths.subtermStepLetBody (var "env"),
         _Term_variable>>: lambda "name" $
-          Optionals.cases (var "mroot") (var "state") (lambda "root" $
-              Optionals.cases (Maps.lookup (var "name" :: TypedTerm Name) (var "ids")) (var "state") (lambda "node" $ lets [
+          Optionals.match (var "mroot") (var "state") (lambda "root" $
+              Optionals.match (Maps.lookup (var "name" :: TypedTerm Name) (var "ids")) (var "state") (lambda "node" $ lets [
                   "edge">: Paths.subtermEdge (var "root")
                     (Paths.subtermPath $ Lists.reverse $ var "nextPath") (var "node"),
                   "newEdges">: Lists.cons (var "edge") (var "edges")]

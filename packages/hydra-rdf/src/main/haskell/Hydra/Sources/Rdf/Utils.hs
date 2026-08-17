@@ -285,7 +285,7 @@ propertyIri = define "propertyIri" $
     wrap Rdf._Iri
       (Strings.concat $ list [
         string "urn:",
-        Optionals.cases (var "gname") (string "") (unwrap _ModuleName),
+        Optionals.match (var "gname") (string "") (unwrap _ModuleName),
         string "#",
         Formatting.decapitalize @@ var "local_",
         Formatting.capitalize @@ (Core.unName $ var "fname")])

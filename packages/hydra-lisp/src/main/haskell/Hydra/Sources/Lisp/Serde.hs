@@ -143,7 +143,7 @@ caseExpressionToExpr = define "caseExpressionToExpr" $
           Lists.map (expressionToExpr @@ var "d") (project L._CaseClause L._CaseClause_keys @@ var "c")),
         expressionToExpr @@ var "d" @@ (project L._CaseClause L._CaseClause_body @@ var "c")]))
       (var "clauses"),
-    "defaultPart">: Optionals.cases (var "dflt") (list ([] :: [TypedTerm Expr])) (lambda "e" $ list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
+    "defaultPart">: Optionals.match (var "dflt") (list ([] :: [TypedTerm Expr])) (lambda "e" $ list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
         Serialization.cst @@ string "else",
         expressionToExpr @@ var "d" @@ var "e"])])] $
     Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
@@ -176,7 +176,7 @@ condExpressionToExpr = define "condExpressionToExpr" $
           expressionToExpr @@ var "d" @@ (project L._CondClause L._CondClause_condition @@ var "c"),
           expressionToExpr @@ var "d" @@ (project L._CondClause L._CondClause_body @@ var "c")])
           (var "clauses")),
-        "defaultPart">: Optionals.cases (var "dflt") (list ([] :: [TypedTerm Expr])) (lambda "e" $ list [Serialization.cst @@ string ":else", expressionToExpr @@ var "d" @@ var "e"])] $
+        "defaultPart">: Optionals.match (var "dflt") (list ([] :: [TypedTerm Expr])) (lambda "e" $ list [Serialization.cst @@ string ":else", expressionToExpr @@ var "d" @@ var "e"])] $
         Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
           list [Serialization.cst @@ string "cond"],
           var "clauseExprs",
@@ -193,7 +193,7 @@ condExpressionToExpr = define "condExpressionToExpr" $
           expressionToExpr @@ d @@ (project L._CondClause L._CondClause_condition @@ var "c"),
           expressionToExpr @@ d @@ (project L._CondClause L._CondClause_body @@ var "c")]))
         clauses,
-      "defaultPart">: Optionals.cases dflt (list ([] :: [TypedTerm Expr])) (lambda "e" $ list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
+      "defaultPart">: Optionals.match dflt (list ([] :: [TypedTerm Expr])) (lambda "e" $ list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
           Serialization.cst @@ defaultKeyword,
           expressionToExpr @@ d @@ var "e"])])] $
       Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
@@ -504,7 +504,7 @@ ifExpressionToExpr = define "ifExpressionToExpr" $
     "cond">: expressionToExpr @@ var "d" @@ (project L._IfExpression L._IfExpression_condition @@ var "ifExpr"),
     "then">: expressionToExpr @@ var "d" @@ (project L._IfExpression L._IfExpression_then @@ var "ifExpr"),
     "else">: project L._IfExpression L._IfExpression_else @@ var "ifExpr",
-    "elsePart">: Optionals.cases (var "else") (list ([] :: [TypedTerm Expr])) (lambda "e" $ list [expressionToExpr @@ var "d" @@ var "e"])] $
+    "elsePart">: Optionals.match (var "else") (list ([] :: [TypedTerm Expr])) (lambda "e" $ list [expressionToExpr @@ var "d" @@ var "e"])] $
     Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat (list [
       list [Serialization.cst @@ string "if", var "cond", var "then"],
       var "elsePart"]))
@@ -546,7 +546,7 @@ keywordToExpr = define "keywordToExpr" $
     "ns">: project L._Keyword L._Keyword_namespace @@ var "k"] $
     match L._Dialect (var "d") (Just $
       -- Default: :name or ns/:name
-      Serialization.cst @@ Optionals.cases (var "ns") (Strings.concat2 (string ":") (var "name")) (lambda "n" $ Strings.concat (list [var "n", string "/:", var "name"]))) [
+      Serialization.cst @@ Optionals.match (var "ns") (Strings.concat2 (string ":") (var "name")) (lambda "n" $ Strings.concat (list [var "n", string "/:", var "name"]))) [
       -- Scheme: 'name (quoted symbol, since Scheme has no keywords)
       L._Dialect_scheme>>: constant $
         Serialization.noSep @@ list [
@@ -575,7 +575,7 @@ lambdaToExpr = define "lambdaToExpr" $
     match L._Dialect (var "d") Nothing [
       -- (fn [params] body...) or (fn name [params] body...) if named
       L._Dialect_clojure>>: constant $
-        Optionals.cases
+        Optionals.match
           (var "mname")
           -- Unnamed: (fn [params] body...)
           (Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
@@ -947,7 +947,7 @@ programToExpr = define "programToExpr" $
     match L._Dialect (var "d") Nothing [
       -- Clojure: (ns name (:require [dep1 :refer :all] [dep2 :refer :all] ...)) then forms
       L._Dialect_clojure>>: constant $
-        Optionals.cases (var "modDecl") (Serialization.doubleNewlineSep @@ Lists.concat2 (var "warning") (var "formPart")) (lambda "m" $ lets [
+        Optionals.match (var "modDecl") (Serialization.doubleNewlineSep @@ Lists.concat2 (var "warning") (var "formPart")) (lambda "m" $ lets [
             "nameStr">: unwrap L._NamespaceName @@ (project L._ModuleDeclaration L._ModuleDeclaration_name @@ var "m"),
             "requireClauses">: Lists.map (lambda "imp" $
               sqBrackets (list [
@@ -989,7 +989,7 @@ programToExpr = define "programToExpr" $
               var "formPart"])),
       -- Emacs Lisp: (require 'cl-lib) (require 'dep1) ... forms... (provide 'name)
       L._Dialect_emacsLisp>>: constant $
-        Optionals.cases (var "modDecl") (Serialization.doubleNewlineSep @@ Lists.concat2 (var "warning") (var "formPart")) (lambda "m" $ lets [
+        Optionals.match (var "modDecl") (Serialization.doubleNewlineSep @@ Lists.concat2 (var "warning") (var "formPart")) (lambda "m" $ lets [
             "nameStr">: unwrap L._NamespaceName @@ (project L._ModuleDeclaration L._ModuleDeclaration_name @@ var "m"),
             "requireClLib">: Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
               Serialization.cst @@ string "require",
@@ -1010,7 +1010,7 @@ programToExpr = define "programToExpr" $
               list [var "provideForm"]])),
       -- Common Lisp: (defpackage :name (:use :cl :dep1 :dep2 ...) (:export :sym1 :sym2 ...)) (in-package :name) forms...
       L._Dialect_commonLisp>>: constant $
-        Optionals.cases (var "modDecl") (Serialization.doubleNewlineSep @@ Lists.concat2 (var "warning") (var "formPart")) (lambda "m" $ lets [
+        Optionals.match (var "modDecl") (Serialization.doubleNewlineSep @@ Lists.concat2 (var "warning") (var "formPart")) (lambda "m" $ lets [
             "nameStr">: unwrap L._NamespaceName @@ (project L._ModuleDeclaration L._ModuleDeclaration_name @@ var "m"),
             "colonName">: Strings.concat2 (string ":") (var "nameStr"),
             -- (:use :cl :dep1 :dep2 ...)
@@ -1040,7 +1040,7 @@ programToExpr = define "programToExpr" $
               var "formPart"])),
       -- Scheme: wrap everything in (define-library (name ...) (export ...) (import ...) (begin ...))
       L._Dialect_scheme>>: constant $
-        Optionals.cases (var "modDecl") (Serialization.doubleNewlineSep @@ Lists.concat2 (var "warning") (var "formPart")) (lambda "m" $ lets [
+        Optionals.match (var "modDecl") (Serialization.doubleNewlineSep @@ Lists.concat2 (var "warning") (var "formPart")) (lambda "m" $ lets [
             "nameStr">: unwrap L._NamespaceName @@ (project L._ModuleDeclaration L._ModuleDeclaration_name @@ var "m"),
             "nameParts">: Lists.map (lambda "p" $ Formatting.convertCaseCamelToLowerSnake @@ var "p")
               (Strings.splitOn (string ".") (var "nameStr")),
@@ -1201,8 +1201,8 @@ topLevelFormWithCommentsToExpr = define "topLevelFormWithCommentsToExpr" $
     "mdoc">: project L._TopLevelFormWithComments L._TopLevelFormWithComments_doc @@ var "fwc",
     "mcomment">: project L._TopLevelFormWithComments L._TopLevelFormWithComments_comment @@ var "fwc",
     "form">: project L._TopLevelFormWithComments L._TopLevelFormWithComments_form @@ var "fwc",
-    "docPart">: Optionals.cases (var "mdoc") (list ([] :: [TypedTerm Expr])) (lambda "ds" $ list [docstringToExpr @@ var "ds"]),
-    "commentPart">: Optionals.cases (var "mcomment") (list ([] :: [TypedTerm Expr])) (lambda "c" $ list [commentToExpr @@ var "c"]),
+    "docPart">: Optionals.match (var "mdoc") (list ([] :: [TypedTerm Expr])) (lambda "ds" $ list [docstringToExpr @@ var "ds"]),
+    "commentPart">: Optionals.match (var "mcomment") (list ([] :: [TypedTerm Expr])) (lambda "c" $ list [commentToExpr @@ var "c"]),
     "formExpr">: topLevelFormToExpr @@ var "d" @@ var "form"] $
     Serialization.newlineSep @@ (Lists.concat (list [
       var "commentPart", var "docPart", list [var "formExpr"]]))

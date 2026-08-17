@@ -209,7 +209,7 @@ collectInnerTypeImports = def "collectInnerTypeImports" $
     "ownVars" <~ (match _Term (Strip.deannotateTerm @@ var "term")
       (Just (Sets.empty :: TypedTerm (S.Set Name))) [
       _Term_lambda>>: lambda "lam" $
-        Optionals.cases (Core.lambdaDomain (var "lam"))
+        Optionals.match (Core.lambdaDomain (var "lam"))
           (Sets.empty :: TypedTerm (S.Set Name))
           (lambda "d" $ Variables.freeVariablesInType @@ var "d"),
       _Term_typeApplication>>: lambda "ta" $
@@ -220,7 +220,7 @@ collectInnerTypeImports = def "collectInnerTypeImports" $
         -- typeScheme — collect them too.
         Lists.foldl
           (lambda "acc" $ lambda "b" $
-            Optionals.cases (Core.bindingTypeScheme (var "b"))
+            Optionals.match (Core.bindingTypeScheme (var "b"))
               (var "acc")
               (lambda "ts" $ Sets.union (var "acc")
                 (Variables.freeVariablesInType @@ Core.typeSchemeBody (var "ts"))))
@@ -310,7 +310,7 @@ letBindingIsThunkCandidate = def "letBindingIsThunkCandidate" $
     "callsShow" <~ (Lists.foldl
       (lambda "acc" $ lambda "n" $
         Logic.or (var "acc")
-          (Optionals.cases (Names.moduleNameOf @@ var "n")
+          (Optionals.match (Names.moduleNameOf @@ var "n")
             false
             (lambda "mn" $
               Equality.equal
@@ -434,7 +434,7 @@ lazyFlagsForPrimitive :: TypedTermDefinition (Graph -> Name -> [Bool])
 lazyFlagsForPrimitive = def "lazyFlagsForPrimitive" $
   doc "Look up a primitive by name and return its per-parameter laziness flags in parameter order" $
   lambda "g" $ lambda "name" $
-    Optionals.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
+    Optionals.match (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
       (list ([] :: [TypedTerm Bool]))
       (lambda "prim" $
         Lists.map (lambda "p" $ Typing.parameterIsLazy (var "p"))
@@ -594,7 +594,7 @@ encodeTerm = def "encodeTerm" $
        -- as a member expression, matching the namespace-style import in
        -- the file header.
        "varExpr" <~
-         Optionals.cases (Names.moduleNameOf @@ var "n")
+         Optionals.match (Names.moduleNameOf @@ var "n")
            (tsExprIdent @@ var "local")
            (lambda "ns" $
              Logic.ifElse
@@ -615,7 +615,7 @@ encodeTerm = def "encodeTerm" $
        -- primitives like maps.empty / sets.empty keep their value form. We
        -- cannot use TypeEffect matching because the TypeScript adapter strips
        -- TypeEffect wrappers during type adaptation. Fixes #504.
-       Optionals.cases (Lexical.lookupPrimitive @@ var "g" @@ var "n")
+       Optionals.match (Lexical.lookupPrimitive @@ var "g" @@ var "n")
          (var "varExpr")
          (lambda "prim" $
            "isZeroArityEffect" <~
@@ -711,7 +711,7 @@ encodeTerm = def "encodeTerm" $
        -- flagged args are then wrapped as thunks. `Nothing` otherwise. The
        -- lazy positions come from the primitive's `isLazy` flags, not a
        -- hard-coded name table (issue #391).
-       "lazyMaybe" <~ Optionals.cases (var "mName")
+       "lazyMaybe" <~ Optionals.match (var "mName")
          (nothing :: TypedTerm (Maybe TS.Expression))
          (lambda "n" $
            "lazyFlags" <~ (lazyFlagsForPrimitive @@ var "g" @@ var "n") $
@@ -724,7 +724,7 @@ encodeTerm = def "encodeTerm" $
                      @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm" @@ var "args"
                      @@ var "lazyFlags"))
              (nothing :: TypedTerm (Maybe TS.Expression))) $
-       Optionals.cases (var "lazyMaybe")
+       Optionals.match (var "lazyMaybe")
          -- Default eager emission: detect projection/unwrap heads applied
          -- to one or more args, and inline as `firstArg.field(restArgs...)`
          -- instead of `(x => x.field)(firstArg, restArgs...)`. This mirrors
@@ -795,7 +795,7 @@ encodeTerm = def "encodeTerm" $
      -- The `as any` cast lets the literal flow into nominal positions
      -- typed as `Optional<X>` / `Term` / `Type` without TS2322 churn.
      _Term_optional>>: lambda "mt" $
-       Optionals.cases (var "mt")
+       Optionals.match (var "mt")
          (tsAsAny @@ (tsObject @@ list [pair (string "tag") (tsExprStr @@ string "none")]))
          (lambda "v" $ tsAsAny @@ (tsObject @@ list [
            pair (string "tag") (tsExprStr @@ string "given"),
@@ -936,7 +936,7 @@ encodeTerm = def "encodeTerm" $
        -- Default arm: emit either `default: return <default-expr>;` if
        -- the user supplied one, or `default: throw new Error("unmatched
        -- case");` otherwise.
-       "defaultCase" <~ Optionals.cases (var "defaultMaybe")
+       "defaultCase" <~ Optionals.match (var "defaultMaybe")
          -- No default: throw. The TS AST doesn't have a Throw statement
          -- variant, so emit the throw via an unsanitized identifier
          -- inside an Expression statement (return of an IIFE that
@@ -1162,7 +1162,7 @@ encodeType = def "encodeType" $
       -- TypeScript accepts dotted identifiers like `$type_core.Graph` in type position.
       _Type_variable>>: lambda "name" $
         "lname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ var "name")) $
-        Optionals.cases (Names.moduleNameOf @@ var "name")
+        Optionals.match (Names.moduleNameOf @@ var "name")
           (right (tsNamedType @@ var "lname"))
           (lambda "ns" $
             Logic.ifElse
@@ -1349,7 +1349,7 @@ filterNonLocalNames = def "filterNonLocalNames" $
   lambda "currentNs" $ lambda "names" $
     ((Sets.fromList $ Optionals.givens $ Lists.map
       (lambda "n" $
-        Optionals.cases (Names.moduleNameOf @@ var "n")
+        Optionals.match (Names.moduleNameOf @@ var "n")
           nothing
           (lambda "nameNs" $
             Logic.ifElse
@@ -1453,7 +1453,7 @@ importsToText = def "importsToText" $
     -- or whose namespace matches the current module.
     "pairs" <~ (Optionals.givens $ Lists.map
       (lambda "n" $
-        Optionals.cases (Names.moduleNameOf @@ var "n")
+        Optionals.match (Names.moduleNameOf @@ var "n")
           nothing
           (lambda "ns" $
             Logic.ifElse
@@ -1652,7 +1652,7 @@ tsDocEntityRef = def "tsDocEntityRef" $
 mkDocComment :: TypedTermDefinition (Maybe String -> Maybe TS.DocumentationComment)
 mkDocComment = def "mkDocComment" $
   doc "Build a documentation comment from an optional description string, or nothing if the description is missing or empty" $
-  lambda "mdesc" $ Optionals.cases (var "mdesc")
+  lambda "mdesc" $ Optionals.match (var "mdesc")
     nothing
     (lambda "d" $ Logic.ifElse (Equality.equal (var "d") (string ""))
       nothing
@@ -1694,7 +1694,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
     -- present in the term's free-variable set.
     "typeImportsFromTerms" <~ (Lists.foldl
       (lambda "acc" $ lambda "td" $
-        Optionals.cases (Packaging.termDefinitionSignature (var "td"))
+        Optionals.match (Packaging.termDefinitionSignature (var "td"))
           (var "acc")
           (lambda "sig" $ Sets.union (var "acc")
             (collectImports @@ var "currentNs" @@ (Core.typeSchemeBody (Scoping.termSignatureToTypeScheme @@ var "sig")))))
@@ -1730,7 +1730,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
     -- Module-level description becomes a JSDoc block at the top of the
     -- file, between the auto-generated warning and the imports.
     "mModuleDoc" <~ (Optionals.bind (Packaging.moduleMetadata (var "mod")) ("em" ~> Packaging.entityMetadataDescription (var "em"))) $
-    "moduleDocText" <~ Optionals.cases (var "mModuleDoc")
+    "moduleDocText" <~ Optionals.match (var "mModuleDoc")
       (string "")
       (lambda "d" $ Strings.concat2
         (TypeScriptSerdeSource.toTypeScriptComments @@ var "d" @@ (list ([] :: [TypedTerm TS.DocumentationTag])))
@@ -1745,7 +1745,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
       "mdoc" <~ Pairs.first (var "docAndItem") $
       "item" <~ Pairs.second (var "docAndItem") $
       "itemText" <~ (printModuleItem @@ var "item") $
-      Optionals.cases (var "mdoc")
+      Optionals.match (var "mdoc")
         (var "itemText")
         (lambda "d" $ Strings.concat (list [
           TypeScriptSerdeSource.toTypeScriptComments @@ var "d" @@ (list ([] :: [TypedTerm TS.DocumentationTag])),
@@ -1859,7 +1859,7 @@ printPropertySignature = def "printPropertySignature" $
         (string "?") (string ""),
       string ": ",
       printTypeExpression @@ (project TS._PropertySignature TS._PropertySignature_type @@ var "ps")]) $
-    Optionals.cases (var "mcomments")
+    Optionals.match (var "mcomments")
       (var "line")
       (lambda "dc" $ Strings.concat (list [
         TypeScriptSerdeSource.toTypeScriptComments
@@ -1949,7 +1949,7 @@ printTypeParameter = def "printTypeParameter" $
   lambda "tp" $
     "name" <~ (unwrap TS._Identifier @@ (project TS._TypeParameter TS._TypeParameter_name @@ var "tp")) $
     "constraint" <~ (project TS._TypeParameter TS._TypeParameter_constraint @@ var "tp") $
-    Optionals.cases (var "constraint")
+    Optionals.match (var "constraint")
       (var "name")
       (lambda "c" $ Strings.concat (list [
         var "name",

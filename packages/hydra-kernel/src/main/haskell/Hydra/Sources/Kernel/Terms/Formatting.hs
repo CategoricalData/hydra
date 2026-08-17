@@ -240,7 +240,7 @@ normalizeComment = define "normalizeComment" $
     -- by the null check above, so lastIdx is a valid index.
     ("lastIdx" <~ Math.sub (Strings.length (var "stripped")) (int32 1) $
      "appended" <~ Strings.concat2 (var "stripped") (string ".") $
-     Optionals.cases (Strings.charAt (var "lastIdx") (var "stripped")) (var "appended") ("lastChar" ~> Logic.ifElse
+     Optionals.match (Strings.charAt (var "lastIdx") (var "stripped")) (var "appended") ("lastChar" ~> Logic.ifElse
          (Equality.equal (var "lastChar") (int32 46))
          (var "stripped")
          (var "appended")))

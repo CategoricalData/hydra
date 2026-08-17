@@ -407,7 +407,7 @@ adaptTerm = define "adaptTerm" $
           (Core.termLiteral $ adaptLiteralValue @@ var "litmap" @@ var "lt" @@ var "l")]),
     "forUnsupported">: ("term" ~> lets [
       "tryAlts">: ("alts" ~>
-        Optionals.cases (Lists.uncons $ var "alts") (right nothing) ("uc" ~>
+        Optionals.match (Lists.uncons $ var "alts") (right nothing) ("uc" ~>
             "mterm" <<~ var "tryTerm" @@ (Pairs.first $ var "uc") $
             optCases (var "mterm")
               (var "tryAlts" @@ (Pairs.second $ var "uc"))
@@ -735,14 +735,14 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       optCases (Names.moduleNameOf @@ (Core.bindingName $ var "el"))
         (var "acc")
         ("ns" ~>
-          "existing" <~ Optionals.cases (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "acc")) (list ([] :: [TypedTerm Binding])) (reify Functions.identity) $
+          "existing" <~ Optionals.match (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "acc")) (list ([] :: [TypedTerm Binding])) (reify Functions.identity) $
           Maps.insert (var "ns" :: TypedTerm ModuleName) (Lists.concat2 (var "existing") (list [var "el"])) (var "acc")))
     (Maps.empty :: TypedTerm (M.Map ModuleName [Binding]))
     (var "selectedElements") $
   -- Produce definitions in the order of the input namespaces
   "defsGrouped" <~ Lists.map
     ("ns" ~>
-      "elsForNs" <~ Optionals.cases (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "elementsByNamespace")) (list ([] :: [TypedTerm Binding])) (reify Functions.identity) $
+      "elsForNs" <~ Optionals.match (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "elementsByNamespace")) (list ([] :: [TypedTerm Binding])) (reify Functions.identity) $
       Optionals.givens (Lists.map (var "toDef") (var "elsForNs")))
     (var "namespaces") $
 

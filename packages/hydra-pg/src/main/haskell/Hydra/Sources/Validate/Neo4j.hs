@@ -154,7 +154,7 @@ appendFindingNode :: TypedTermDefinition (
 appendFindingNode = validationDefinition "appendFindingNode" $
   doc "Append a rule-tagged InvalidNodeError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
   "p" ~> "acc" ~> "finding" ~>
-  Optionals.cases (var "finding")
+  Optionals.match (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -184,7 +184,7 @@ appendFindingRelationship :: TypedTermDefinition (
 appendFindingRelationship = validationDefinition "appendFindingRelationship" $
   doc "Append a rule-tagged InvalidRelationshipError finding to a ValidationResult." $
   "p" ~> "acc" ~> "finding" ~>
-  Optionals.cases (var "finding")
+  Optionals.match (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -484,7 +484,7 @@ resolveLabels
   -> TypedTerm ElementId
   -> TypedTerm (Maybe (S.Set NodeLabel))
 resolveLabels resolver eid =
-  Optionals.cases resolver
+  Optionals.match resolver
     nothing
     ("f" ~> var "f" @@ eid)
 
@@ -501,7 +501,7 @@ optionalLabelsToList
   :: TypedTerm (Maybe (S.Set NodeLabel))
   -> TypedTerm [NodeLabel]
 optionalLabelsToList labels =
-  Optionals.cases labels
+  Optionals.match labels
     (list ([] :: [TypedTerm NodeLabel]))
     ("ls" ~> Sets.toList (var "ls" :: TypedTerm (S.Set NodeLabel)))
 
@@ -519,7 +519,7 @@ endpointsMatch startLabels endLabels ret =
     (sideMatches endLabels (project _RelationshipElementType _RelationshipElementType_endLabel @@ ret))
   where
     sideMatches labels required =
-      Optionals.cases labels
+      Optionals.match labels
         true
         ("ls" ~> Sets.member required (var "ls" :: TypedTerm (S.Set NodeLabel)))
 
@@ -548,7 +548,7 @@ nodeExistenceFinding
   -> TypedTerm (Maybe (Name, InvalidNodeError))
 nodeExistenceFinding profile props k =
   guardedNodeRule profile _InvalidNodeError _InvalidNodeError_missingProperty
-    (Optionals.cases (Maps.lookup k (props :: TypedTerm (M.Map Key Value)))
+    (Optionals.match (Maps.lookup k (props :: TypedTerm (M.Map Key Value)))
       (just $ inject _InvalidNodeError _InvalidNodeError_missingProperty $
         record _PropertyExistenceError [_PropertyExistenceError_key>>: k])
       (constant nothing))
@@ -563,7 +563,7 @@ nodeTypeFinding
   -> TypedTerm (Maybe (Name, InvalidNodeError))
 nodeTypeFinding profile props k vt =
   guardedNodeRule profile _InvalidNodeError _InvalidNodeError_wrongPropertyType
-    (Optionals.cases (Maps.lookup k (props :: TypedTerm (M.Map Key Value)))
+    (Optionals.match (Maps.lookup k (props :: TypedTerm (M.Map Key Value)))
       nothing
       ("val" ~> Logic.ifElse (matchesValueType @@ vt @@ var "val")
         nothing
@@ -601,7 +601,7 @@ relationshipExistenceFinding
   -> TypedTerm (Maybe (Name, InvalidRelationshipError))
 relationshipExistenceFinding profile props k =
   guardedRelationshipRule profile _InvalidRelationshipError _InvalidRelationshipError_missingProperty
-    (Optionals.cases (Maps.lookup k (props :: TypedTerm (M.Map Key Value)))
+    (Optionals.match (Maps.lookup k (props :: TypedTerm (M.Map Key Value)))
       (just $ inject _InvalidRelationshipError _InvalidRelationshipError_missingProperty $
         record _PropertyExistenceError [_PropertyExistenceError_key>>: k])
       (constant nothing))
@@ -615,7 +615,7 @@ relationshipTypeFinding
   -> TypedTerm (Maybe (Name, InvalidRelationshipError))
 relationshipTypeFinding profile props k vt =
   guardedRelationshipRule profile _InvalidRelationshipError _InvalidRelationshipError_wrongPropertyType
-    (Optionals.cases (Maps.lookup k (props :: TypedTerm (M.Map Key Value)))
+    (Optionals.match (Maps.lookup k (props :: TypedTerm (M.Map Key Value)))
       nothing
       ("val" ~> Logic.ifElse (matchesValueType @@ vt @@ var "val")
         nothing

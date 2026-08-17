@@ -162,7 +162,7 @@
           (hydra--t-lam "key"
             (hydra--t-lam "val"
               (hydra--t-lam "m"
-                (hydra--t-app (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.optionals.cases")
+                (hydra--t-app (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.optionals.match")
                   (hydra--t-var "val"))
                   (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.maps.delete") (hydra--t-var "key")) (hydra--t-var "m")))
                   (hydra--t-lam "v"
@@ -226,7 +226,7 @@
           (hydra--t-lam "cx"
             (hydra--t-lam "g"
               (hydra--t-lam "anns"
-                (hydra--t-app (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.optionals.cases")
+                (hydra--t-app (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.optionals.match")
                   ;; scrutinee: maps.lookup(keyDescription, anns)
                   (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.maps.lookup")
                     (hydra--t-var "hydra.constants.keyDescription"))

@@ -118,7 +118,7 @@ isComplexBinding = define "isComplexBinding" $
   "term" <~ Core.bindingTerm (var "b") $
   "mts" <~ Core.bindingTypeScheme (var "b") $
   -- Bindings without type schemes are complex (e.g., lifted case expressions)
-  Optionals.cases (var "mts")
+  Optionals.match (var "mts")
     (isComplexTerm @@ var "tc" @@ var "term") $
     "ts" ~>
       -- Check if polymorphic
@@ -160,11 +160,11 @@ isComplexVariable = define "isComplexVariable" $
       (boolean True)
       -- Check if the variable is in the graph's bound types
       ("typeLookup" <~ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tc") $
-       Optionals.cases
+       Optionals.match
          (var "typeLookup")
          -- Not in graphBoundTypes: fall through to graphPrimitives
          ("primLookup" <~ Maps.lookup (var "name") (Graph.graphPrimitives $ var "tc") $
-          Optionals.cases
+          Optionals.match
             (var "primLookup")
             -- If not in graph at all, assume mutual recursion (complex)
             (boolean True)
@@ -290,7 +290,7 @@ isTrivialTerm = define "isTrivialTerm" $
         _Term_unwrap>>: constant (isTrivialTerm @@ var "arg")],
     -- Maybe term (just x) where x is trivial; nothing is also trivial
     _Term_optional>>: "opt" ~>
-      Optionals.cases (var "opt") (boolean True) ("inner" ~> isTrivialTerm @@ var "inner"),
+      Optionals.match (var "opt") (boolean True) ("inner" ~> isTrivialTerm @@ var "inner"),
     -- Record construction is trivial if all field terms are trivial
     _Term_record>>: "rec" ~>
       Lists.foldl ("acc" ~> "fld" ~> Logic.and (var "acc") (isTrivialTerm @@ (Core.fieldTerm $ var "fld")))

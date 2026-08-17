@@ -121,7 +121,7 @@ optionalsCases = subgroup "cases" [
   test "nothing returns default" nothingInt 99 99]
   where
     test name opt def expected = evalPair name showInt32
-      (Optionals.cases opt (Phantoms.int32 def) (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
+      (Optionals.match opt (Phantoms.int32 def) (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
       (Phantoms.int32 expected)
 
 optionalsCompose :: TypedTerm TestGroup

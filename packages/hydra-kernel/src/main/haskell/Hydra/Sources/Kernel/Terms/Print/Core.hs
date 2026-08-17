@@ -100,7 +100,7 @@ binding = define "binding" $
   "el" ~>
   "name" <~ unwrap _Name @@ (Core.bindingName $ var "el") $
   "t" <~ Core.bindingTerm (var "el") $
-  "typeStr" <~ Optionals.cases (Core.bindingTypeScheme $ var "el") (string "") ("ts" ~> Strings.concat (list [string ":(", typeScheme @@ var "ts", string ")"])) $
+  "typeStr" <~ Optionals.match (Core.bindingTypeScheme $ var "el") (string "") ("ts" ~> Strings.concat (list [string ":(", typeScheme @@ var "ts", string ")"])) $
   Strings.concat $ list [
     var "name",
     var "typeStr",
@@ -117,7 +117,7 @@ caseStatement = define "caseStatement" $
   "caseFields" <~ Lists.map
     ("alt" ~> Core.field (Core.caseAlternativeName $ var "alt") (Core.caseAlternativeHandler $ var "alt"))
     (var "csCases") $
-  "defaultField" <~ Optionals.cases (var "mdef") (list ([] :: [TypedTerm Field])) ("d" ~> list [Core.field (Core.name $ string "[default]") (var "d")]) $
+  "defaultField" <~ Optionals.match (var "mdef") (list ([] :: [TypedTerm Field])) ("d" ~> list [Core.field (Core.name $ string "[default]") (var "d")]) $
   "allFields" <~ Lists.concat (list [var "caseFields", var "defaultField"]) $
   Strings.concat $ list [
     string "case(",
@@ -224,7 +224,7 @@ lambda = define "lambda" $
   "v" <~ unwrap _Name @@ (Core.lambdaParameter $ var "l") $
   "mt" <~ Core.lambdaDomain (var "l") $
   "body" <~ Core.lambdaBody (var "l") $
-  "typeStr" <~ Optionals.cases (var "mt") (string "") ("t" ~> Strings.concat2 (string ":") (type_ @@ var "t")) $
+  "typeStr" <~ Optionals.match (var "mt") (string "") ("t" ~> Strings.concat2 (string ":") (type_ @@ var "t")) $
   Strings.concat $ list [
     string "λ",
     var "v",
@@ -297,7 +297,7 @@ optional_ :: TypedTermDefinition ((a -> String) -> Maybe a -> String)
 optional_ = define "optional" $
   doc "Show an optional value using a given function to show the element" $
   "f" ~> "mx" ~>
-  Optionals.cases (var "mx") (string "none") ("x" ~> Strings.concat2 (string "given(") (Strings.concat2 (var "f" @@ var "x") (string ")")))
+  Optionals.match (var "mx") (string "none") ("x" ~> Strings.concat2 (string "given(") (Strings.concat2 (var "f" @@ var "x") (string ")")))
 
 pair_ :: TypedTermDefinition ((a -> String) -> (b -> String) -> (a, b) -> String)
 pair_ = define "pair" $
@@ -386,7 +386,7 @@ term = define "term" $
         string "{",
         Strings.join (string ", ") $ Lists.map (var "entry") $ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)),
         string "}"],
-    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (string "none") ("t" ~> Strings.concat $ list [
+    _Term_optional>>: "mt" ~> Optionals.match (var "mt") (string "none") ("t" ~> Strings.concat $ list [
         string "given(",
         term @@ var "t",
         string ")"]),

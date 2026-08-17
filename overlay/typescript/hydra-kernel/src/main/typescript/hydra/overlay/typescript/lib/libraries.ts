@@ -2148,7 +2148,7 @@ const optionalsPrimitives = (): readonly Primitive[] => {
           if (!mv) return left({ tag: "other", value: "expected an optional" } as never);
           return right({ tag: "list", value: mv.tag === "given" ? [mv.value] : [] } as never);
         })),
-    prim("hydra.lib.optionals.cases", scheme(tyFnCurried(tyOptional(tyVar("a")), tyVar("b"), tyFn(tyVar("a"), tyVar("b")), tyVar("b")), ["a", "b"]),
+    prim("hydra.lib.optionals.match", scheme(tyFnCurried(tyOptional(tyVar("a")), tyVar("b"), tyFn(tyVar("a"), tyVar("b")), tyVar("b")), ["a", "b"]),
       (g, args) =>
         bind(need(args, 0, "cases-m"), (m) =>
           bind(need(args, 1, "cases-default"), (def) =>

@@ -167,7 +167,7 @@ edgeStmtToExpr = define "edgeStmtToExpr" $
     "rhsParts">: Lists.concat (Lists.map
       (lambda "n" $ list [Serialization.cst @@ var "arrow", nodeOrSubgraphToExpr @@ var "directed" @@ var "n"])
       (var "r")),
-    "attrParts">: Optionals.cases (var "attr") (list ([] :: [TypedTerm Expr])) (lambda "a" $ list [attrListToExpr @@ var "a"])] $
+    "attrParts">: Optionals.match (var "attr") (list ([] :: [TypedTerm Expr])) (lambda "a" $ list [attrListToExpr @@ var "a"])] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       list [nodeOrSubgraphToExpr @@ var "directed" @@ var "l"],
       var "rhsParts",
@@ -237,8 +237,8 @@ portToExpr = define "portToExpr" $
   lambda "p" $ lets [
     "mi">: project Dot._Port Dot._Port_id @@ var "p",
     "mp">: project Dot._Port Dot._Port_position @@ var "p",
-    "pre">: Optionals.cases (var "mi") (list ([] :: [TypedTerm Expr])) (lambda "i" $ list [Serialization.cst @@ string ":", idToExpr @@ var "i"]),
-    "suf">: Optionals.cases (var "mp") (list ([] :: [TypedTerm Expr])) (lambda "cp" $ list [Serialization.cst @@ string ":", compassPtToExpr @@ var "cp"])] $
+    "pre">: Optionals.match (var "mi") (list ([] :: [TypedTerm Expr])) (lambda "i" $ list [Serialization.cst @@ string ":", idToExpr @@ var "i"]),
+    "suf">: Optionals.match (var "mp") (list ([] :: [TypedTerm Expr])) (lambda "cp" $ list [Serialization.cst @@ string ":", compassPtToExpr @@ var "cp"])] $
     Serialization.noSep @@ (Lists.concat $ list [var "pre", var "suf"])
 
 stmtToExpr :: TypedTermDefinition (Bool -> Dot.Stmt -> Expr)

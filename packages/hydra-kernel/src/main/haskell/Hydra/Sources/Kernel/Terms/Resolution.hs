@@ -164,7 +164,7 @@ fieldTypes = define "fieldTypes" $
     _Type_union>>: "rt" ~> right (var "toMap" @@ var "rt"),
     _Type_variable>>: "name" ~>
       -- Try graphSchemaTypes first (type definitions), then fall back to graphBoundTerms (legacy)
-      Optionals.cases (Maps.lookup (var "name") (Graph.graphSchemaTypes $ var "graph")) (Eithers.bind (Lexical.requireBinding @@ var "graph" @@ var "name") (
+      Optionals.match (Maps.lookup (var "name") (Graph.graphSchemaTypes $ var "graph")) (Eithers.bind (Lexical.requireBinding @@ var "graph" @@ var "name") (
           "el" ~>
           Eithers.bind (Eithers.bimap ("_e" ~> Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "type") (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
               (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))) (
@@ -182,7 +182,7 @@ findFieldType = define "findFieldType" $
   Logic.ifElse (Lists.null (var "matchingFields"))
     (var "noMatch")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) (int32 1))
-      (Optionals.cases (Lists.head $ var "matchingFields") (var "noMatch") ("ft" ~> right (Core.fieldTypeType $ var "ft")))
+      (Optionals.match (Lists.head $ var "matchingFields") (var "noMatch") ("ft" ~> right (Core.fieldTypeType $ var "ft")))
       (left (Error.errorExtraction $ Error.extractionErrorMultipleFields $ Error.multipleFieldsError (var "fname"))))
 
 fullyStripAndNormalizeType :: TypedTermDefinition (Type -> Type)
@@ -280,7 +280,7 @@ requireRowType = define "requireRowType" $
     _Type_forall>>: "ft" ~> var "rawType" @@ Core.forallTypeBody (var "ft")]) $
   Eithers.bind (requireType @@ var "cx" @@ var "graph" @@ var "name") (
     "t" ~>
-    Optionals.cases (var "getter" @@ (var "rawType" @@ var "t")) (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError
+    Optionals.match (var "getter" @@ (var "rawType" @@ var "t")) (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError
         (Strings.concat2 (var "label") (string " type"))
         (Strings.concat2 (Core.unName (var "name")) (Strings.concat2 (string ": ") (PrintCore.type_ @@ var "t"))))) (reify right))
 
@@ -288,7 +288,7 @@ requireSchemaType :: TypedTermDefinition (InferenceContext -> M.Map Name TypeSch
 requireSchemaType = define "requireSchemaType" $
   doc "Look up a schema type and instantiate it, threading InferenceContext" $
   "cx" ~> "types" ~> "tname" ~>
-  Optionals.cases (Maps.lookup (var "tname" :: TypedTerm Name) (var "types")) (left $
+  Optionals.match (Maps.lookup (var "tname" :: TypedTerm Name) (var "types")) (left $
       Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "tname")) ("ts" ~> right $ instantiateTypeScheme @@ var "cx" @@ (Strip.deannotateTypeSchemeRecursive @@ var "ts"))
 
 requireType :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Either Error Type)
@@ -296,7 +296,7 @@ requireType = define "requireType" $
   doc "Require a type by name" $
   "cx" ~> "graph" ~> "name" ~>
   -- Look up in schema types first, then fall back to bound types
-  Optionals.cases (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph"))) (Optionals.cases (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph"))) (left (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name"))) ("ts" ~> right (Scoping.typeSchemeToFType @@ var "ts"))) ("ts" ~> right (Scoping.typeSchemeToFType @@ var "ts"))
+  Optionals.match (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph"))) (Optionals.match (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph"))) (left (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name"))) ("ts" ~> right (Scoping.typeSchemeToFType @@ var "ts"))) ("ts" ~> right (Scoping.typeSchemeToFType @@ var "ts"))
 
 requireUnionField_ :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Name -> Either Error Type)
 requireUnionField_ = define "requireUnionField" $
@@ -304,7 +304,7 @@ requireUnionField_ = define "requireUnionField" $
   "cx" ~> "graph" ~> "tname" ~> "fname" ~>
   "withRowType" <~ ("rt" ~>
     "noMatchErr" <~ (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname"))) $
-    Optionals.cases (Lists.find
+    Optionals.match (Lists.find
         ("ft" ~> Equality.equal (Core.fieldTypeName $ var "ft") (var "fname"))
         (var "rt")) (var "noMatchErr") ("ft" ~> right $ Core.fieldTypeType $ var "ft")) $
   Eithers.bind (requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") (var "withRowType")
@@ -331,7 +331,7 @@ resolveBaseType = define "resolveBaseType" $
   "stripped" <~ (Strip.deannotateType @@ var "typ") $
   match _Type (var "stripped") (Just (var "stripped")) [
     _Type_variable>>: "name" ~>
-      Optionals.cases (Maps.lookup (var "name" :: TypedTerm Name) (var "types"))
+      Optionals.match (Maps.lookup (var "name" :: TypedTerm Name) (var "types"))
         (var "stripped")
         ("resolved" ~> resolveBaseType @@ var "types" @@ var "resolved"),
     _Type_wrap>>: "inner" ~> resolveBaseType @@ var "types" @@ var "inner"]
@@ -343,7 +343,7 @@ resolveType = define "resolveType" $
   cases _Type (Just (just (var "typ"))) [
     _Type_variable>>: "name" ~>
       -- Look up in schema types first, then fall back to bound types
-      Optionals.cases (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph"))) (Optionals.map ("ts" ~> Scoping.typeSchemeToFType @@ var "ts") (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph")))) ("ts" ~> just (Scoping.typeSchemeToFType @@ var "ts"))]
+      Optionals.match (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph"))) (Optionals.map ("ts" ~> Scoping.typeSchemeToFType @@ var "ts") (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph")))) ("ts" ~> just (Scoping.typeSchemeToFType @@ var "ts"))]
   @@ (Strip.deannotateType @@ var "typ")
 
 typeToTypeScheme :: TypedTermDefinition (Type -> TypeScheme)

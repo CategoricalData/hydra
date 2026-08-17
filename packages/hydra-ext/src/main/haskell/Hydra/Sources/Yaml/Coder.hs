@@ -225,7 +225,7 @@ termCoder = define "termCoder" $
     match _Term (var "strippedMaybeTerm")
       (Just $ left (Error.errorOther $ Error.otherError (Strings.concat $ list [string "expected optional term, found: ", PrintCore.term @@ var "maybeTerm"]))) [
       _Term_optional>>: "maybeContents" ~>
-        Optionals.cases (var "maybeContents") (right $ Yaml.nodeScalar Yaml.scalarNull) ("innerTerm" ~>
+        Optionals.match (var "maybeContents") (right $ Yaml.nodeScalar Yaml.scalarNull) ("innerTerm" ~>
             "encodedInner" <<~ Coders.coderEncode (var "maybeElementCoder") @@ var "innerTerm" $
             right (var "encodedInner"))]) $
   "decodeMaybe" <~ ("maybeElementCoder" ~> "yamlVal" ~>

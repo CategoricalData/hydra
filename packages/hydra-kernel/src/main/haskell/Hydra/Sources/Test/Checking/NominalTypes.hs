@@ -556,20 +556,20 @@ recordProjectionsWithMutualRecursionTests = define "recordProjectionsWithMutualR
       (T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0")))),
   checkTest "chained projections across mutual recursion" []
     (lambda "listA" $
-      primitive DefOptionals.cases @@
+      primitive DefOptionals.match @@
       (project (TestTypes.testTypeBuddyListAName) (name "tail") @@ var "listA") @@
       Core.termOptional nothing @@
       (lambda "listB" $
-        primitive DefOptionals.cases @@
+        primitive DefOptionals.match @@
         (project (TestTypes.testTypeBuddyListBName) (name "tail") @@ var "listB") @@
         Core.termOptional nothing @@
         (project (TestTypes.testTypeBuddyListAName) (name "tail"))))
     (tylam "t0" $ lambdaTyped "listA" (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0")) $
-      tyapps (primitive DefOptionals.cases) [T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"), T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"))] @@
+      tyapps (primitive DefOptionals.match) [T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"), T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"))] @@
       (tyapp (project (TestTypes.testTypeBuddyListAName) (name "tail")) (T.var "t0") @@ var "listA") @@
       tyapp (Core.termOptional nothing) (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0")) @@
       (lambdaTyped "listB" (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0")) $
-        tyapps (primitive DefOptionals.cases) [T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0"), T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"))] @@
+        tyapps (primitive DefOptionals.match) [T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListAName) (T.var "t0"), T.optional (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0"))] @@
         (tyapp (project (TestTypes.testTypeBuddyListBName) (name "tail")) (T.var "t0") @@ var "listB") @@
         tyapp (Core.termOptional nothing) (T.apply (Core.typeVariable $ TestTypes.testTypeBuddyListBName) (T.var "t0")) @@
         (tyapp (project (TestTypes.testTypeBuddyListAName) (name "tail")) (T.var "t0"))))
@@ -603,12 +603,12 @@ recursiveRecordProjectionsTests = define "recursiveRecordProjectionsTests" $
   subgroup "Recursive record projections" [
   checkTest "nested projection from recursive record" []
     (lambda "intList" $
-     primitive DefOptionals.cases @@
+     primitive DefOptionals.match @@
      (project (TestTypes.testTypeIntListName) (name "tail") @@ var "intList") @@
      int32 0 @@
      (project (TestTypes.testTypeIntListName) (name "head")))
     (lambdaTyped "intList" (Core.typeVariable $ TestTypes.testTypeIntListName) $
-     tyapps (primitive DefOptionals.cases) [Core.typeVariable $ TestTypes.testTypeIntListName, T.int32] @@
+     tyapps (primitive DefOptionals.match) [Core.typeVariable $ TestTypes.testTypeIntListName, T.int32] @@
      (project (TestTypes.testTypeIntListName) (name "tail") @@ var "intList") @@
      int32 0 @@
      (project (TestTypes.testTypeIntListName) (name "head")))
@@ -1517,14 +1517,14 @@ multiParameterPolymorphicUnwrappersTests = define "multiParameterPolymorphicUnwr
 
   checkTest "unwrap with maybe to handle optional symmetric triple" []
     (lambda "mst" $
-      primitive DefOptionals.cases @@
+      primitive DefOptionals.match @@
       var "mst" @@
       (Core.termOptional nothing) @@
       (lambda "st" $ Core.termOptional $
         just $ project (TestTypes.testTypeTripleName) (name "second") @@ (unwrap (TestTypes.testTypeSymmetricTripleName) @@ var "st")))
     (tylams ["t0", "t1"] $
       lambdaTyped "mst" (T.optional $ T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"]) $
-      tyapps (primitive DefOptionals.cases)
+      tyapps (primitive DefOptionals.match)
         [T.applys (Core.typeVariable $ TestTypes.testTypeSymmetricTripleName) [T.var "t0", T.var "t1"],
          T.optional (T.var "t1")] @@
       var "mst" @@

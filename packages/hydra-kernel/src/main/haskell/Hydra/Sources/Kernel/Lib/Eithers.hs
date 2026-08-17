@@ -197,7 +197,7 @@ mapOptional = defineWithDefault "mapOptional" "Map a function returning either o
   \ and returns the result with Right wrapped around given.",
    "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."]
   ("f" ~> "m" ~>
-    Optionals.cases (var "m")
+    Optionals.match (var "m")
       (right nothing)
       ("x" ~> Eithers.map ("y" ~> just (var "y")) (var "f" @@ var "x")))
 

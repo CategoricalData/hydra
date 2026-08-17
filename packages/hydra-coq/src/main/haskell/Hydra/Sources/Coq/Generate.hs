@@ -119,7 +119,7 @@ buildAxiomOnlyContent = define "buildAxiomOnlyContent" $
       "name" <~ (Pairs.first $ var "td") $
       "tvars" <~ (Pairs.first $ Pairs.second $ Pairs.second $ var "td") $
       "mty" <~ (Pairs.second $ Pairs.second $ Pairs.second $ var "td") $
-      Optionals.cases (var "mty") (Phantoms.nothing :: TypedTerm (Maybe C.Sentence)) ("schemeTy" ~>
+      Optionals.match (var "mty") (Phantoms.nothing :: TypedTerm (Maybe C.Sentence)) ("schemeTy" ~>
           -- Re-wrap the TypeScheme's forall binders around the body type so
           -- the emitted axiom has well-scoped type variables:
           -- `Axiom f : forall (t0 : Type) (t1 : Type), <body>`.
@@ -343,7 +343,7 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
       "coqBody" <~ (CoqCoderSource.encodeTerm @@ var "env" @@ var "body2") $
       "bodyText" <~ (Serialization.printExpr @@
         (Serialization.parenthesize @@ (CoqSerdeSource.termToExpr @@ var "coqBody"))) $
-      "typeText" <~ Optionals.cases (var "mType") (string "_") ("ty" ~>
+      "typeText" <~ Optionals.match (var "mType") (string "_") ("ty" ~>
           "ep" <~ (CoqUtils.extractTypeParams @@ var "ty") $
           "bodyTy" <~ Pairs.second (var "ep") $
           Serialization.printExpr @@
@@ -459,7 +459,7 @@ encodeTermGroupSingleton = define "encodeTermGroupSingleton" $
   "coqBody" <~ (CoqCoderSource.encodeTerm @@ var "env" @@ var "body2") $
   "binders" <~ (mkTypeBinders @@ var "body2" @@ var "typeVars") $
   "typeBinders" <~ Pairs.second (var "binders") $
-  "returnType" <~ Optionals.cases (var "mType") (Phantoms.nothing :: TypedTerm (Maybe C.Type)) ("ty" ~>
+  "returnType" <~ Optionals.match (var "mType") (Phantoms.nothing :: TypedTerm (Maybe C.Type)) ("ty" ~>
       "ep" <~ (CoqUtils.extractTypeParams @@ var "ty") $
       "bodyTy" <~ Pairs.second (var "ep") $
       Phantoms.just $ CSyntax.type_ $ CoqCoderSource.encodeType @@ var "env" @@ var "bodyTy") $
@@ -1040,7 +1040,7 @@ moduleToCoq = define "moduleToCoq" $
   lambdas ["fieldMap", "constrCounts", "ambiguousNames", "globalSanitizedAcc", "mod_", "defs"] $
   "nsStr" <~ (Packaging.unModuleName (Packaging.moduleName $ var "mod_")) $
   "path" <~ (namespaceToPath @@ var "nsStr") $
-  "desc" <~ Optionals.cases ((Optionals.bind (Packaging.moduleMetadata (var "mod_")) ("em" ~> Packaging.entityMetadataDescription (var "em")))) (string "") ("d" ~> Strings.concat (list [string "(* ", var "d", string " *)\n\n"])) $
+  "desc" <~ Optionals.match ((Optionals.bind (Packaging.moduleMetadata (var "mod_")) ("em" ~> Packaging.entityMetadataDescription (var "em")))) (string "") ("d" ~> Strings.concat (list [string "(* ", var "d", string " *)\n\n"])) $
   -- Modules known to blow up Coq's type-checker; emit axiom stubs instead.
   "axiomOnlyModules" <~ (list [string "hydra.hoisting", string "hydra.inference"]) $
   "isAxiomOnly" <~ ((Lists.member :: TypedTerm String -> TypedTerm [String] -> TypedTerm Bool)
@@ -1058,7 +1058,7 @@ moduleToCoq = define "moduleToCoq" $
       _Definition_term>>: "td" ~>
         "msig" <~ (Packaging.termDefinitionSignature $ var "td") $
         "mts" <~ Optionals.map (asTerm Scoping.termSignatureToTypeScheme) (var "msig") $
-        "vs" <~ Optionals.cases (var "mts") (list ([] :: [TypedTerm Name])) ("ts" ~> Core.typeSchemeVariables $ var "ts") $
+        "vs" <~ Optionals.match (var "mts") (list ([] :: [TypedTerm Name])) ("ts" ~> Core.typeSchemeVariables $ var "ts") $
         "mty" <~ Optionals.map ("ts" ~> Core.typeSchemeBody $ var "ts") (var "mts") $
         Phantoms.just $ pair
           (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.termDefinitionName $ var "td")))

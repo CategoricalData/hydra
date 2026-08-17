@@ -246,7 +246,7 @@ soleLabelForId =
         (Sets.toList (project _Node _Node_labels @@ var "n" :: TypedTerm (S.Set NodeLabel))))
       (var "nodes")) :: TypedTerm (M.Map String [NodeLabel]))]
   $ "eid" ~>
-    Optionals.cases (Maps.lookup (unwrap _ElementId @@ var "eid" :: TypedTerm String) (var "m"))
+    Optionals.match (Maps.lookup (unwrap _ElementId @@ var "eid" :: TypedTerm String) (var "m"))
       (left (Strings.concat (list [string "no node with id ", unwrap _ElementId @@ var "eid"])))
       ("labels" ~> Logic.ifElse
         (Equality.equal (Lists.length (var "labels")) (int32 1))

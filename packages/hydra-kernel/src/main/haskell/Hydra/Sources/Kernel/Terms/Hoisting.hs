@@ -309,7 +309,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     "termWithTypeLambdas" <~ Lists.foldl
       ("t" ~> "v" ~> Core.termTypeLambda $ Core.typeLambda (var "v") (var "t"))
       (var "termWithLambdas")
-      (Lists.reverse $ Optionals.cases (var "newTypeScheme") (list ([] :: [TypedTerm Name])) (reify Core.typeSchemeVariables)) $
+      (Lists.reverse $ Optionals.match (var "newTypeScheme") (list ([] :: [TypedTerm Name])) (reify Core.typeSchemeVariables)) $
 
     -- Build the replacement: first apply type variables for captured type vars,
     -- then apply term variables for captured term vars.
@@ -670,7 +670,7 @@ hoistSubterms = define "hoistSubterms" $
     -- Build the pathPrefix for the body: outer path + letBody accessor
     "bodyPathPrefix" <~ Lists.concat2 (var "path") (list [inject _SubtermStep _SubtermStep_letBody unit]) $
     -- Use the first binding's name to disambiguate the body prefix across nesting levels
-    "firstBindingName" <~ Optionals.cases (Lists.head (var "bindings")) (string "body") (lambda "b" $ Strings.join (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "b"))))) $
+    "firstBindingName" <~ Optionals.match (Lists.head (var "bindings")) (string "body") (lambda "b" $ Strings.join (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "b"))))) $
     "bodyPrefix" <~ Strings.concat2 (var "firstBindingName") (string "_body") $
     "bodyResult" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ var "bodyPrefix" @@ var "bodyPathPrefix" @@ var "body" $
     "newBody" <~ Pairs.second (var "bodyResult") $
@@ -743,10 +743,10 @@ normalizePathForHoisting = define "normalizePathForHoisting" $
   "path" ~>
   -- Helper: process pairs of adjacent accessors
   "go" <~ ("remaining" ~>
-    Optionals.cases (Lists.uncons $ var "remaining") (var "remaining") ("uc1" ~>
+    Optionals.match (Lists.uncons $ var "remaining") (var "remaining") ("uc1" ~>
         "first" <~ Pairs.first (var "uc1") $
         "afterFirst" <~ Pairs.second (var "uc1") $
-        Optionals.cases
+        Optionals.match
           (Lists.uncons $ var "afterFirst")
           -- Only one element: return as-is (no pair to inspect)
           (var "remaining")

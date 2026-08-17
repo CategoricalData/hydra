@@ -89,7 +89,7 @@ _pynames_encode_namespace_with_overrides = var("hydra.python.names.encodeNamespa
 # ----------------------------------------------------------------------
 
 def _annotated_expression():
-    body = Optionals.cases(var("mcomment"), var("expr"), lam(
+    body = Optionals.match(var("mcomment"), var("expr"), lam(
             "c",
             _local("pyPrimaryToPyExpression")(_local("primaryWithExpressionSlices")(_local("pyNameToPyPrimary")(_py_name("Annotated")), list_([
                         var("expr"),
@@ -103,7 +103,7 @@ def _annotated_expression():
 
 
 def _annotated_statement():
-    body = Optionals.cases(var("mcomment"), var("stmt"), lam(
+    body = Optionals.match(var("mcomment"), var("stmt"), lam(
             "c",
             PySyn.statement_annotated(
                 PySyn.annotated_statement(var("c"), var("stmt")),
@@ -416,7 +416,7 @@ def _indented_block():
     body = lets(
         [
             field("commentGroup",
-                Optionals.cases(var("mcomment"), list_([]), lam(
+                Optionals.match(var("mcomment"), list_([]), lam(
                         "s",
                         list_([_local("commentStatement")(var("s"))]),
                     ),),
@@ -467,7 +467,7 @@ def _newtype_statement():
 
 def _or_expression():
     # Inner recursive 'build' lambda
-    build_body = Optionals.cases(Lists.uncons(var("ps")), # Unreachable fallback
+    build_body = Optionals.match(Lists.uncons(var("ps")), # Unreachable fallback
         PySyn.bitwise_or(
             var("prev"),
             _local("pyPrimaryToPyBitwiseXor")(PySyn.primary_simple(PySyn.atom_ellipsis)),
@@ -678,7 +678,7 @@ def _py_expression_to_py_annotated_rhs():
 
 
 def _py_expression_to_py_primary():
-    body = Optionals.cases(_local("decodePyExpressionToPyPrimary")(var("e")), PySyn.primary_simple(
+    body = Optionals.match(_local("decodePyExpressionToPyPrimary")(var("e")), PySyn.primary_simple(
             PySyn.atom_group(
                 PySyn.group_expression(PySyn.named_expression_simple(var("e"))),
             ),

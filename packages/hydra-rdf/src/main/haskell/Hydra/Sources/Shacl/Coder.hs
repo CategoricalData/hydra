@@ -216,7 +216,7 @@ encodeList = define "encodeList" $
           Rdf._Description_subject>>: inject Rdf._Node Rdf._Node_iri (wrap Rdf._Iri (string "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),
           Rdf._Description_graph>>: wrap Rdf._Graph (Sets.empty :: TypedTerm (S.Set Rdf.Triple))]])
         (var "cx0"))
-      (Optionals.cases (Lists.uncons (var "terms")) (right $ pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx0")) (lambda "p" $ lets [
+      (Optionals.match (Lists.uncons (var "terms")) (right $ pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx0")) (lambda "p" $ lets [
           "pair1">: nextBlankNode @@ var "cx0",
           "node1">: Pairs.first (var "pair1"),
           "cx1">: Pairs.second (var "pair1")] $
@@ -321,7 +321,7 @@ encodeTerm = define "encodeTerm" $
           (Rewriting.wrapTermToRecord @@ (Core.wrappedTermTypeName (var "wt")) @@ (Core.wrappedTermBody (var "wt"))) @@
           var "cx" @@ var "g",
       _Term_optional>>: lambda "mterm" $
-        Optionals.cases (var "mterm") (right (pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx"))) ("__inner" ~> encodeTerm @@ var "subject" @@ var "__inner" @@ var "cx" @@ var "g"),
+        Optionals.match (var "mterm") (right (pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx"))) ("__inner" ~> encodeTerm @@ var "subject" @@ var "__inner" @@ var "cx" @@ var "g"),
       _Term_unit>>: constant $ right (pair (list ([] :: [TypedTerm Rdf.Description])) (var "cx")),
       _Term_record>>: lambda "rec" $ lets [
         "rname">: Core.recordTypeName (var "rec"),
@@ -417,7 +417,7 @@ foldAccumResult :: TypedTermDefinition ((I.Int32 -> a -> Either Error (b, I.Int3
 foldAccumResult = define "foldAccumResult" $
   doc "Fold over a list, accumulating results and threading context through each step" $
   lambda "f" $ lambda "cx" $ lambda "xs" $
-    Optionals.cases (Lists.uncons (var "xs")) (right (pair (list ([] :: [TypedTerm b])) (var "cx"))) (lambda "p" $
+    Optionals.match (Lists.uncons (var "xs")) (right (pair (list ([] :: [TypedTerm b])) (var "cx"))) (lambda "p" $
         Eithers.bind
           (var "f" @@ var "cx" @@ Pairs.first (var "p"))
           ("__r" ~> Eithers.map

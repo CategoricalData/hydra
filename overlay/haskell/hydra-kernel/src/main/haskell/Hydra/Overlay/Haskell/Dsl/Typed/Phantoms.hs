@@ -334,7 +334,7 @@ opt :: Maybe (TypedTerm a) -> TypedTerm (Maybe a)
 opt mc = TypedTerm $ Terms.optional (unTypedTerm <$> mc)
 
 optCases :: AsTerm f (a -> b) => TypedTerm (Maybe a) -> TypedTerm b -> f -> TypedTerm b
-optCases arg ifNothing ifJust = primitive3 (Name "hydra.lib.optionals.cases") arg ifNothing (asTerm ifJust)
+optCases arg ifNothing ifJust = primitive3 (Name "hydra.lib.optionals.match") arg ifNothing (asTerm ifJust)
 
 -- | Create a pair
 -- Example: pair (string "age") (int32 32)
