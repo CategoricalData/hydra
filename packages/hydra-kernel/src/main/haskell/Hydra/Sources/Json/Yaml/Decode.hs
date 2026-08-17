@@ -118,7 +118,7 @@ yamlToJson :: TypedTermDefinition (YM.Node -> Either String Value)
 yamlToJson = define "yamlToJson" $
   doc "Convert a YAML node to a JSON value. Fails for non-JSON YAML features (e.g. non-string mapping keys)." $
   "node" ~>
-  cases YM._Node (var "node")
+  match YM._Node (var "node")
     Nothing [
 
     YM._Node_mapping>>: "m" ~>
@@ -127,10 +127,10 @@ yamlToJson = define "yamlToJson" $
         "keyNode" <~ (Pairs.first $ var "kv") $
         "valNode" <~ (Pairs.second $ var "kv") $
         -- Extract string key from the key node
-        "keyResult" <~ (cases YM._Node (var "keyNode")
+        "keyResult" <~ (match YM._Node (var "keyNode")
           (Just $ left $ string "non-scalar YAML mapping key") [
           YM._Node_scalar>>: "s" ~>
-            cases YM._Scalar (var "s")
+            match YM._Scalar (var "s")
               (Just $ left $ string "non-string YAML mapping key") [
               YM._Scalar_str>>: "str" ~> right $ var "str"]]) $
         Eithers.either
@@ -143,7 +143,7 @@ yamlToJson = define "yamlToJson" $
       Eithers.map ("es" ~> Json.valueObject $ var "es") (var "entries"),
 
     YM._Node_scalar>>: "s" ~>
-      cases YM._Scalar (var "s")
+      match YM._Scalar (var "s")
         Nothing [
         YM._Scalar_bool>>: "b" ~> right $ Json.valueBoolean $ var "b",
         YM._Scalar_decimal>>: "d" ~> right $ Json.valueNumber $ var "d",

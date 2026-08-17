@@ -133,7 +133,7 @@ adjacentEdgeToJson = define "adjacentEdgeToJson" $
 doubleValueToJson :: TypedTermDefinition (G.DoubleValue -> JM.Value)
 doubleValueToJson = define "doubleValueToJson" $
   doc "Convert a GraphSON DoubleValue to a JSON Value" $
-  match G._DoubleValue Nothing [
+  cases G._DoubleValue Nothing [
     G._DoubleValue_finite>>: "d" ~> Json.valueNumber (Literals.float64ToDecimal $ var "d"),
     G._DoubleValue_infinity>>: constant $ Json.valueString (string "Infinity"),
     G._DoubleValue_negativeInfinity>>: constant $ Json.valueString (string "-Infinity"),
@@ -169,7 +169,7 @@ edgePropertyMapToJson = define "edgePropertyMapToJson" $
 floatValueToJson :: TypedTermDefinition (G.FloatValue -> JM.Value)
 floatValueToJson = define "floatValueToJson" $
   doc "Convert a GraphSON FloatValue to a JSON Value" $
-  match G._FloatValue Nothing [
+  cases G._FloatValue Nothing [
     G._FloatValue_finite>>: "f" ~> Json.valueNumber (Literals.float32ToDecimal $ var "f"),
     G._FloatValue_infinity>>: constant $ Json.valueString (string "Infinity"),
     G._FloatValue_negativeInfinity>>: constant $ Json.valueString (string "-Infinity"),
@@ -217,7 +217,7 @@ typedValueToJson = define "typedValueToJson" $
 valueToJson :: TypedTermDefinition (G.Value -> JM.Value)
 valueToJson = define "valueToJson" $
   doc "Convert a GraphSON Value to a JSON Value" $
-  match G._Value Nothing [
+  cases G._Value Nothing [
     G._Value_bigDecimal>>: "bd" ~>
       typedValueToJson @@ string "g:BigDecimal" @@ (Json.valueString $ unwrap G._BigDecimalValue @@ var "bd"),
     G._Value_bigInteger>>: "i" ~>

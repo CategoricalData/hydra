@@ -152,7 +152,7 @@ getTermDescription :: TypedTermDefinition (InferenceContext -> Graph -> Term -> 
 getTermDescription = define "getTermDescription" $
   doc "Get term description (Either version)" $
   "cx" ~> "graph" ~> "term" ~>
-  "peel" <~ ("t" ~> cases _Term (var "t")
+  "peel" <~ ("t" ~> match _Term (var "t")
     (Just $ var "t") [
     _Term_typeLambda>>: "tl" ~> var "peel" @@ Core.typeLambdaBody (var "tl"),
     _Term_typeApplication>>: "ta" ~> var "peel" @@ Core.typeApplicationTermBody (var "ta")]) $
@@ -303,7 +303,7 @@ termAnnotationInternal :: TypedTermDefinition (Term -> M.Map Name Term)
 termAnnotationInternal = define "termAnnotationInternal" $
   doc "Get internal term annotations" $
   "term" ~>
-  "getAnn" <~ ("t" ~> cases _Term (var "t")
+  "getAnn" <~ ("t" ~> match _Term (var "t")
     (Just nothing) [
     _Term_annotated>>: "a" ~> just $ var "a"]) $
   aggregateAnnotations
@@ -316,7 +316,7 @@ typeAnnotationInternal :: TypedTermDefinition (Type -> M.Map Name Term)
 typeAnnotationInternal = define "typeAnnotationInternal" $
   doc "Get internal type annotations" $
   "typ" ~>
-  "getAnn" <~ lambda "t" (cases _Type (var "t")
+  "getAnn" <~ lambda "t" (match _Type (var "t")
     (Just nothing) [
     _Type_annotated>>: lambda "a" (just $ var "a")]) $
   aggregateAnnotations
@@ -343,19 +343,19 @@ getAnnotationMap = define "getAnnotationMap" $
     <> " For a TermMap with TermVariable-shaped keys (or, transitionally,"
     <> " TermWrap-encoded Name keys), returns those (Name, value) entries;"
     <> " for any other shape, returns the empty map.") $
-  "t" ~> "extractName" <~ ("k" ~> cases _Term (var "k")
+  "t" ~> "extractName" <~ ("k" ~> match _Term (var "k")
     (Just nothing) [
     _Term_variable>>: "n" ~> just (var "n"),
-    _Term_wrap>>: "w" ~> cases _Term (Core.wrappedTermBody $ var "w")
+    _Term_wrap>>: "w" ~> match _Term (Core.wrappedTermBody $ var "w")
       (Just nothing) [
-      _Term_literal>>: "l" ~> cases _Literal (var "l")
+      _Term_literal>>: "l" ~> match _Literal (var "l")
         (Just nothing) [
         _Literal_string>>: "s" ~> just (Core.name (var "s"))]]]) $
     "fromEntry" <~ ("p" ~>
       "k" <~ Pairs.first (var "p") $
       "v" <~ Pairs.second (var "p") $
       Optionals.map ("n" ~> pair (var "n") (var "v")) (var "extractName" @@ var "k")) $
-    cases _Term (var "t")
+    match _Term (var "t")
       (Just (Maps.empty :: TypedTerm (M.Map Name Term))) [
       _Term_map>>: "m" ~> (Maps.fromList
         (Optionals.givens (Lists.map (var "fromEntry") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))))) :: TypedTerm (M.Map Name Term))]

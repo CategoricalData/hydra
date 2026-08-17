@@ -93,7 +93,7 @@ define = definitionInModule module_
 checkingError :: TypedTermDefinition (CheckingError -> String)
 checkingError = define "checkingError" $
   doc "Show a checking error as a string" $
-  "ce" ~> cases _CheckingError (var "ce") Nothing [
+  "ce" ~> match _CheckingError (var "ce") Nothing [
     _CheckingError_incorrectUnification>>: incorrectUnificationError,
     _CheckingError_notAForallType>>: notAForallTypeError,
     _CheckingError_notAFunctionType>>: notAFunctionTypeError,
@@ -113,7 +113,7 @@ decodingError = define "decodingError" $
 error_ :: TypedTermDefinition (Error -> String)
 error_ = define "error" $
   doc "Show an error as a string" $
-  "e" ~> cases _Error (var "e") Nothing [
+  "e" ~> match _Error (var "e") Nothing [
     _Error_checking>>: checkingError,
     _Error_decoding>>: decodingError,
     _Error_duplicateBinding>>: PrintErrorCore.duplicateBindingError,
@@ -165,7 +165,7 @@ otherError = define "otherError" $
 resolutionError :: TypedTermDefinition (ResolutionError -> String)
 resolutionError = define "resolutionError" $
   doc "Show a resolution error as a string, including the offending name or shape" $
-  "re" ~> cases _ResolutionError (var "re") Nothing [
+  "re" ~> match _ResolutionError (var "re") Nothing [
     _ResolutionError_noSuchBinding>>: "e" ~>
       Strings.concat2 (string "no such binding: ")
         (Core.unName $ project _NoSuchBindingError _NoSuchBindingError_name @@ var "e"),

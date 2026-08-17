@@ -172,17 +172,17 @@ encodeLiteralType :: TypedTermDefinition (InferenceContext -> LiteralType -> Eit
 encodeLiteralType = define "encodeLiteralType" $
   doc "Encode a literal type to a GraphQL NamedType" $
   "cx" ~> lambda "lt" $
-    cases _LiteralType (var "lt")
+    match _LiteralType (var "lt")
       (Just $ left (Error.errorOther $ Error.otherError $ Strings.concat2 (string "Expected GraphQL-compatible literal type, found: ") (PrintCore.literalType @@ var "lt"))) [
       _LiteralType_boolean>>: constant $
         right (wrap G._NamedType (wrap G._Name (string "Boolean"))),
       _LiteralType_float>>: lambda "ft_" $
-        cases _FloatType (var "ft_")
+        match _FloatType (var "ft_")
           (Just $ left (Error.errorOther $ Error.otherError $ Strings.concat2 (string "Expected 64-bit float type, found: ") (PrintCore.floatType @@ var "ft_"))) [
           _FloatType_float64>>: constant $
             right (wrap G._NamedType (wrap G._Name (string "Float")))],
       _LiteralType_integer>>: lambda "it_" $
-        cases _IntegerType (var "it_")
+        match _IntegerType (var "it_")
           (Just $ left (Error.errorOther $ Error.otherError $ Strings.concat2 (string "Expected 32-bit signed integer type, found: ") (PrintCore.integerType @@ var "it_"))) [
           _IntegerType_int32>>: constant $
             right (wrap G._NamedType (wrap G._Name (string "Int")))],
@@ -194,7 +194,7 @@ encodeNamedType :: TypedTermDefinition (InferenceContext -> Graph -> M.Map Modul
 encodeNamedType = define "encodeNamedType" $
   doc "Encode a named type to a GraphQL type definition." $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "name" $ lambda "typ" $
-    cases _Type (Strip.deannotateType @@ var "typ")
+    match _Type (Strip.deannotateType @@ var "typ")
       (Just $ left (Error.errorOther $ Error.otherError $ Strings.concat2 (string "Expected record or union type, found: ") (PrintCore.type_ @@ var "typ"))) [
       _Type_record>>: lambda "rt" $
         "gfields" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "f") (var "rt")) $
@@ -275,10 +275,10 @@ encodeType :: TypedTermDefinition (InferenceContext -> Graph -> M.Map ModuleName
 encodeType = define "encodeType" $
   doc "Encode a Hydra type as a GraphQL type reference" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "typ" $
-    cases _Type (Strip.deannotateType @@ var "typ")
+    match _Type (Strip.deannotateType @@ var "typ")
       (Just $ left (Error.errorOther $ Error.otherError $ Strings.concat2 (string "Expected GraphQL-compatible type, found: ") (PrintCore.type_ @@ var "typ"))) [
       _Type_optional>>: lambda "et" $
-        cases _Type (Strip.deannotateType @@ var "et")
+        match _Type (Strip.deannotateType @@ var "et")
           (Just $ left (Error.errorOther $ Error.otherError $ Strings.concat2 (string "Expected GraphQL-compatible type, found: ") (PrintCore.type_ @@ var "et"))) [
           _Type_list>>: lambda "et2" $
             Eithers.map (lambda "gt" $ inject G._Type G._Type_list (wrap G._ListType (var "gt")))

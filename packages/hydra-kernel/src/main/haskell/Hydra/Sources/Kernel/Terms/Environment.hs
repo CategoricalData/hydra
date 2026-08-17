@@ -131,11 +131,11 @@ partitionDefinitions :: TypedTermDefinition ([Definition] -> ([TypeDefinition], 
 partitionDefinitions = define "partitionDefinitions" $
   doc "Partition a list of definitions into type definitions and term definitions" $
   "defs" ~>
-  "getType" <~ ("def" ~> cases _Definition (var "def") Nothing [
+  "getType" <~ ("def" ~> match _Definition (var "def") Nothing [
     _Definition_type>>: "td" ~> just (var "td"),
     _Definition_term>>: "_" ~> nothing,
     _Definition_primitive>>: "_" ~> nothing]) $
-  "getTerm" <~ ("def" ~> cases _Definition (var "def") Nothing [
+  "getTerm" <~ ("def" ~> match _Definition (var "def") Nothing [
     _Definition_type>>: "_" ~> nothing,
     _Definition_term>>: "td" ~> just (var "td"),
     _Definition_primitive>>: "_" ~> nothing]) $
@@ -171,10 +171,10 @@ reorderDefs = define "reorderDefs" $
     -- before any definition it references, and mutual recursion has no flat ordering that satisfies
     -- the use-before-define rule.
     "sortedTermDefs" <~ (Lists.concat $ (Sorting.topologicalSortNodes :: TypedTermDefinition ((Definition -> Name) -> (Definition -> [Name]) -> [Definition] -> [[Definition]])) @@
-      ("d" ~> cases _Definition (var "d") Nothing [
+      ("d" ~> match _Definition (var "d") Nothing [
         _Definition_term>>: "td" ~> (project _TermDefinition _TermDefinition_name @@ var "td" :: TypedTerm Name)])
       @@
-      ("d" ~> cases _Definition (var "d") (Just (list ([] :: [TypedTerm Name]))) [
+      ("d" ~> match _Definition (var "d") (Just (list ([] :: [TypedTerm Name]))) [
         _Definition_term>>: "td" ~>
           Sets.toList $ Variables.freeVariablesInTerm @@ (project _TermDefinition _TermDefinition_body @@ var "td")])
       @@ var "termDefsWrapped") $
@@ -184,7 +184,7 @@ schemaGraphToTypingEnvironment :: TypedTermDefinition (Graph -> Either Error (M.
 schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
   doc "Convert a schema graph to a typing environment (Either version)" $
   "g" ~>
-  "toTypeScheme" <~ ("vars" ~> "typ" ~> cases _Type (Strip.deannotateType @@ var "typ")
+  "toTypeScheme" <~ ("vars" ~> "typ" ~> match _Type (Strip.deannotateType @@ var "typ")
     (Just (Core.typeScheme (Lists.reverse (var "vars")) (var "typ") Phantoms.nothing)) [
     _Type_forall>>: "ft" ~> var "toTypeScheme"
       @@ Lists.cons (Core.forallTypeParameter (var "ft")) (var "vars")
@@ -196,7 +196,7 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
     Eithers.bimap ("_e" ~> Error.errorDecoding $ var "_e") ("_a" ~> var "_a")
         (decoderFor _TypeScheme @@ var "g" @@ var "term")) $
   "toPair" <~ ("el" ~>
-    "forTerm" <~ ("term" ~> cases _Term (var "term") (Just (right nothing)) [
+    "forTerm" <~ ("term" ~> match _Term (var "term") (Just (right nothing)) [
       _Term_record>>: "r" ~>
         Logic.ifElse
           (Equality.equal (Core.recordTypeName (var "r")) (Core.nameLift _TypeScheme))
@@ -225,7 +225,7 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
 termAsBindings :: TypedTermDefinition (Term -> [Binding])
 termAsBindings = define "termAsBindings" $
   doc "Extract the bindings from a let term, or return an empty list for other terms" $
-  "term" ~> cases _Term (Strip.deannotateTerm @@ var "term")
+  "term" ~> match _Term (Strip.deannotateTerm @@ var "term")
     (Just (list ([] :: [TypedTerm Binding]))) [
     _Term_let>>: "lt" ~> Core.letBindings (var "lt")]
 

@@ -144,7 +144,7 @@ differentiateFunction :: TypedTermDefinition (Term -> Term)
 differentiateFunction = define "differentiateFunction" $
   doc "Differentiate a function term (Float64 -> Float64) with respect to its parameter" $
   "term" ~>
-  cases _Term (var "term")
+  match _Term (var "term")
     (Just $ var "term") [  -- Non-function terms pass through unchanged
     _Term_annotated>>: "at" ~>
       differentiateFunction @@ Core.annotatedTermBody (var "at"),
@@ -163,7 +163,7 @@ differentiateTerm :: TypedTermDefinition (Name -> Term -> Term)
 differentiateTerm = define "differentiateTerm" $
   doc "Differentiate a term with respect to a named variable" $
   "dx" ~> "term" ~>
-  cases _Term (var "term") Nothing [
+  match _Term (var "term") Nothing [
     -- Variable: d/dx(x) = 1.0, d/dx(y) = 0.0
     _Term_variable>>: "v" ~>
       Logic.ifElse (Equality.equal (var "v") (var "dx"))
@@ -178,7 +178,7 @@ differentiateTerm = define "differentiateTerm" $
       "func" <~ Core.applicationFunction (var "app") $
       "arg" <~ Core.applicationArgument (var "app") $
       -- Check if the function is a variable (potentially a primitive)
-      cases _Term (var "func") (Just $
+      match _Term (var "func") (Just $
         -- General case: f(g) => f'(g) * g'
         DeepMath.mulFloat64
           (differentiateTerm @@ var "dx" @@ Core.termApplication (Core.application (var "func") (var "arg")))
@@ -197,7 +197,7 @@ differentiateTerm = define "differentiateTerm" $
         _Term_application>>: "innerApp" ~>
           "innerFunc" <~ Core.applicationFunction (var "innerApp") $
           "innerArg" <~ Core.applicationArgument (var "innerApp") $
-          cases _Term (var "innerFunc")
+          match _Term (var "innerFunc")
             (Just $
               -- Not a variable: fall back to general differentiation
               DeepMath.mulFloat64

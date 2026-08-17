@@ -106,7 +106,7 @@ jsonToYaml :: TypedTermDefinition (Value -> YM.Node)
 jsonToYaml = define "jsonToYaml" $
   doc "Convert a JSON value to a YAML node. Always succeeds since YAML is a superset of JSON." $
   "value" ~>
-  cases _Value (var "value")
+  match _Value (var "value")
     Nothing [
     _Value_array>>: "arr" ~>
       Yaml.nodeSequence $ Lists.map ("v" ~> jsonToYaml @@ var "v") (var "arr"),

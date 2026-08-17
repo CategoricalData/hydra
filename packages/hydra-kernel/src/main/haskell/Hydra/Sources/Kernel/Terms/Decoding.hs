@@ -212,7 +212,7 @@ collectForallVariables :: TypedTermDefinition (Type -> [Name])
 collectForallVariables = define "collectForallVariables" $
   doc "Collect forall type variable names from a type" $
   "typ" ~>
-  cases _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
+  match _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
     _Type_annotated>>: "at" ~>
       collectForallVariables @@ (Core.annotatedTypeBody (var "at")),
     _Type_forall>>: "ft" ~>
@@ -231,7 +231,7 @@ collectOrdConstrainedVariables :: TypedTermDefinition (Type -> [Name])
 collectOrdConstrainedVariables = define "collectOrdConstrainedVariables" $
   doc "Collect type variables needing Ord constraints (from Map key and Set element types)" $
   "typ" ~>
-  cases _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
+  match _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
     _Type_annotated>>: "at" ~>
       collectOrdConstrainedVariables @@ (Core.annotatedTypeBody (var "at")),
     _Type_application>>: "appType" ~>
@@ -295,7 +295,7 @@ collectTypeVariablesFromType :: TypedTermDefinition (Type -> [Name])
 collectTypeVariablesFromType = define "collectTypeVariablesFromType" $
   doc "Collect all type variable names from a type expression" $
   "typ" ~>
-  cases _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
+  match _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
     _Type_annotated>>: "at" ~>
       collectTypeVariablesFromType @@ (Core.annotatedTypeBody (var "at")),
     _Type_application>>: "appType" ~>
@@ -434,7 +434,7 @@ decodeLiteralType :: TypedTermDefinition (LiteralType -> Term)
 decodeLiteralType = define "decodeLiteralType" $
   doc "Generate a decoder for a literal type" $
   "lt" ~>
-  cases _LiteralType (var "lt") Nothing [
+  match _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant decodeBinary,
     _LiteralType_boolean>>: constant decodeBoolean,
     _LiteralType_decimal>>: constant decodeDecimal,
@@ -475,7 +475,7 @@ decodeLiteralType = define "decodeLiteralType" $
 
     -- Decode float: Term -> Either DecodingError <specific float type>.
     -- ft (the FloatType term) is in scope, so the result literal type is literal<float<ft>>. (#476)
-    decodeFloat ft = cases _FloatType ft Nothing [
+    decodeFloat ft = match _FloatType ft Nothing [
         _FloatType_float32>>: constant $ decodeFloatVariant (Core.typeLiteral (Core.literalTypeFloat ft)) _FloatValue_float32 (string "float32"),
         _FloatType_float64>>: constant $ decodeFloatVariant (Core.typeLiteral (Core.literalTypeFloat ft)) _FloatValue_float64 (string "float64")]
 
@@ -489,7 +489,7 @@ decodeLiteralType = define "decodeLiteralType" $
 
     -- Decode integer: Term -> Either DecodingError <specific integer type>.
     -- it (the IntegerType term) is in scope, so result literal type is literal<integer<it>>. (#476)
-    decodeInteger it = cases _IntegerType it Nothing [
+    decodeInteger it = match _IntegerType it Nothing [
         _IntegerType_bigint>>: constant $ decodeIntegerVariant (intLit it) _IntegerValue_bigint (string "bigint"),
         _IntegerType_int8>>: constant $ decodeIntegerVariant (intLit it) _IntegerValue_int8 (string "int8"),
         _IntegerType_int16>>: constant $ decodeIntegerVariant (intLit it) _IntegerValue_int16 (string "int16"),
@@ -550,7 +550,7 @@ decodeModule = define "decodeModule" $
   "cx" ~> "graph" ~> "mod" ~>
     "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
       (Optionals.givens $ Lists.map
-        ("d" ~> cases _Definition (var "d") (Just nothing) [
+        ("d" ~> match _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
             just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
         (Packaging.moduleDefinitions (var "mod")))) $
@@ -705,7 +705,7 @@ decodeType :: TypedTermDefinition (Type -> Term)
 decodeType = define "decodeType" $
   doc "Generate a decoder term for a Type" $
   "typ" ~>
-  cases _Type (var "typ")
+  match _Type (var "typ")
     (Just $ MetaTerms.lambdaTyped "cx" (Core.typeVariable (Core.name (string "hydra.graph.Graph"))) $ MetaTerms.lambdaTyped "t" (Core.typeVariable (Core.nameLift _Term)) $ leftError (Core.typeVariable (Core.nameLift _Term)) $ string "unsupported type variant") [
     _Type_annotated>>: "at" ~> decodeType @@ (Core.annotatedTypeBody (var "at")),
     _Type_application>>: "appType" ~>
@@ -736,7 +736,7 @@ decodeTypeNamed = define "decodeTypeNamed" $
     <> " parameters rather than a bare nominal name — otherwise Java/Scala coders emit raw"
     <> " types that fail to compile against the parameterized signature. (#476)") $
   "ename" ~> "typ" ~> "rtype" ~>
-  cases _Type (var "typ")
+  match _Type (var "typ")
     (Just $ MetaTerms.lambdaTyped "cx" (Core.typeVariable (Core.name (string "hydra.graph.Graph"))) $ MetaTerms.lambdaTyped "t" (Core.typeVariable (Core.nameLift _Term)) $ leftError (Core.typeVariable (Core.nameLift _Term)) $ string "unsupported type variant") [
     _Type_annotated>>: "at" ~> decodeTypeNamed @@ var "ename" @@ (Core.annotatedTypeBody (var "at")) @@ var "rtype",
     _Type_application>>: "appType" ~>
@@ -877,7 +877,7 @@ decoderFullResultType :: TypedTermDefinition (Type -> Type)
 decoderFullResultType = define "decoderFullResultType" $
   doc "Get full result type for decoder" $
   "typ" ~>
-  cases _Type (var "typ") (Just $ Core.typeVariable (Core.nameLift _Term)) [
+  match _Type (var "typ") (Just $ Core.typeVariable (Core.nameLift _Term)) [
     _Type_annotated>>: "at" ~>
       decoderFullResultType @@ (Core.annotatedTypeBody (var "at")),
     _Type_application>>: "appType" ~>
@@ -941,7 +941,7 @@ decoderFullResultTypeNamed :: TypedTermDefinition (Name -> Type -> Type)
 decoderFullResultTypeNamed = define "decoderFullResultTypeNamed" $
   doc "Get full result type for decoder with element name" $
   "ename" ~> "typ" ~>
-  cases _Type (var "typ") (Just $ Core.typeVariable (Core.nameLift _Term)) [
+  match _Type (var "typ") (Just $ Core.typeVariable (Core.nameLift _Term)) [
     _Type_annotated>>: "at" ~>
       decoderFullResultTypeNamed @@ var "ename" @@ (Core.annotatedTypeBody (var "at")),
     _Type_forall>>: "ft" ~>
@@ -992,7 +992,7 @@ decoderResultType :: TypedTermDefinition (Type -> Name)
 decoderResultType = define "decoderResultType" $
   doc "Compute the result type name for a decoder" $
   "typ" ~>
-  cases _Type (var "typ") (Just (Core.nameLift _Term)) [
+  match _Type (var "typ") (Just (Core.nameLift _Term)) [
     _Type_annotated>>: "at" ~>
       decoderResultType @@ (Core.annotatedTypeBody (var "at")),
     _Type_application>>: "appType" ~>
@@ -1122,7 +1122,7 @@ isDecodableBinding = define "isDecodableBinding" $
 prependForallDecoders :: TypedTermDefinition (Type -> Type -> Type)
 prependForallDecoders = define "prependForallDecoders" $
   doc "Prepend decoder types for forall parameters to base type" $
-  "baseType" ~> "typ" ~> cases _Type (var "typ") (Just $ var "baseType") [
+  "baseType" ~> "typ" ~> match _Type (var "typ") (Just $ var "baseType") [
     _Type_annotated>>: "at" ~>
       prependForallDecoders @@ var "baseType" @@ Core.annotatedTypeBody (var "at"),
     _Type_forall>>: "ft" ~>

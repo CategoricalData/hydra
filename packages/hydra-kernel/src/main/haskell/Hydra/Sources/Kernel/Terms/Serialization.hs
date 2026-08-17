@@ -285,7 +285,7 @@ expressionLength = define "expressionLength" $
   doc "Find the approximate length (number of characters, including spaces and newlines) of an expression without actually printing it." $
   "e" ~>
   "symbolLength" <~ ("s" ~> Strings.length $ Ast.unSymbol $ var "s") $
-  "wsLength" <~ ("ws" ~> cases _Ws (var "ws") Nothing [
+  "wsLength" <~ ("ws" ~> match _Ws (var "ws") Nothing [
     _Ws_none>>: constant $ int32 0,
     _Ws_space>>: constant $ int32 1,
     _Ws_break>>: constant $ int32 10000,
@@ -308,7 +308,7 @@ expressionLength = define "expressionLength" $
         (var "blockStyleLength" @@ (Ast.bracketExprStyle $ var "be")))) $
   "indentedExpressionLength" <~ ("ie" ~>
     "baseLen" <~ expressionLength @@ (Ast.indentedExpressionExpr $ var "ie") $
-    "indentLen" <~ cases _IndentStyle (Ast.indentedExpressionStyle $ var "ie") Nothing [
+    "indentLen" <~ match _IndentStyle (Ast.indentedExpressionStyle $ var "ie") Nothing [
       _IndentStyle_allLines>>: "s" ~> Strings.length $ var "s",
       _IndentStyle_subsequentLines>>: "s" ~> Strings.length $ var "s"] $
     Math.add (var "baseLen") (var "indentLen")) $
@@ -329,7 +329,7 @@ expressionLength = define "expressionLength" $
     "totalElLen" <~ Lists.foldl (reify2 Math.add) (int32 0) (var "elementLens") $
     "numSeps" <~ Math.sub (Lists.length $ Ast.seqExprElements $ var "se") (int32 1) $
     Math.add (var "totalElLen") (Math.mul (var "sopLen") (Logic.ifElse (Ordering.gt (var "numSeps") (int32 0)) (var "numSeps") (int32 0)))) $
-  cases _Expr (var "e") Nothing [
+  match _Expr (var "e") Nothing [
     _Expr_const>>: "s" ~> var "symbolLength" @@ var "s",
     _Expr_indent>>: "ie" ~> var "indentedExpressionLength" @@ var "ie",
     _Expr_op>>: "oe" ~> var "opExprLength" @@ var "oe",
@@ -395,7 +395,7 @@ maxLineWidth = define "maxLineWidth" $
   doc ("The canonical maximum line width used by Hydra writers."
     <> " Adaptive helpers compare estimated expression widths against this threshold"
     <> " to decide whether to render inline or break across lines."
-    <> " Set to 120 to match the project-wide line-length convention.") $
+    <> " Set to 120 to cases the project-wide line-length convention.") $
   int32 120
 
 newlineSep :: TypedTermDefinition ([Expr] -> Expr)
@@ -485,13 +485,13 @@ parenthesize :: TypedTermDefinition (Expr -> Expr)
 parenthesize = define "parenthesize" $
   doc "Recursively insert parentheses around subexpressions where required by operator precedence and associativity. The traversal descends into bracket, indent, sequence, and operator expressions and parenthesizes left or right operands whose binding is weaker than the surrounding operator." $
   "exp" ~>
-    "assocLeft" <~ ("a" ~> cases _Associativity (var "a")
+    "assocLeft" <~ ("a" ~> match _Associativity (var "a")
       (Just true) [
       _Associativity_right>>: constant false]) $
-    "assocRight" <~ ("a" ~> cases _Associativity (var "a")
+    "assocRight" <~ ("a" ~> match _Associativity (var "a")
       (Just true) [
       _Associativity_left>>: constant false]) $
-    cases _Expr (var "exp") Nothing [
+    match _Expr (var "exp") Nothing [
       _Expr_brackets>>: "bracketExpr" ~>
         Ast.exprBrackets $ Ast.bracketExpr
           (Ast.bracketExprBrackets $ var "bracketExpr")
@@ -514,27 +514,27 @@ parenthesize = define "parenthesize" $
         "rhs" <~ Ast.opExprRhs (var "opExpr") $
         "lhs'" <~ parenthesize @@ var "lhs" $
         "rhs'" <~ parenthesize @@ var "rhs" $
-        "lhs2" <~ cases _Expr (var "lhs'")
+        "lhs2" <~ match _Expr (var "lhs'")
           (Just $ var "lhs'") [
           _Expr_op>>: "lopExpr" ~>
             "lop" <~ Ast.opExprOp (var "lopExpr") $
             "lprec" <~ Ast.unPrecedence (Ast.opPrecedence $ var "lop") $
             "lassoc" <~ Ast.opAssociativity (var "lop") $
             "comparison" <~ Ordering.compare (var "prec") (var "lprec") $
-            cases _Comparison (var "comparison") Nothing [
+            match _Comparison (var "comparison") Nothing [
               _Comparison_lessThan>>: constant $ var "lhs'",
               _Comparison_greaterThan>>: constant (parens @@ var "lhs'"),
               _Comparison_equalTo>>: constant $ Logic.ifElse
                 (Logic.and (var "assocLeft" @@ var "assoc") (var "assocLeft" @@ var "lassoc"))
                 (var "lhs'")
                 (parens @@ var "lhs'")]] $
-        "rhs2" <~ cases _Expr (var "rhs'") (Just $ var "rhs'") [
+        "rhs2" <~ match _Expr (var "rhs'") (Just $ var "rhs'") [
           _Expr_op>>: "ropExpr" ~>
             "rop" <~ Ast.opExprOp (var "ropExpr") $
             "rprec" <~ Ast.unPrecedence (Ast.opPrecedence $ var "rop") $
             "rassoc" <~ Ast.opAssociativity (var "rop") $
             "comparison" <~ Ordering.compare (var "prec") (var "rprec") $
-            cases _Comparison (var "comparison") Nothing [
+            match _Comparison (var "comparison") Nothing [
               _Comparison_lessThan>>: constant $ var "rhs'",
               _Comparison_greaterThan>>: constant (parens @@ var "rhs'"),
               _Comparison_equalTo>>: constant $ Logic.ifElse
@@ -558,15 +558,15 @@ printExpr :: TypedTermDefinition (Expr -> String)
 printExpr = define "printExpr" $
   doc "Render an expression to a string, expanding bracket pairs, block styles, indents, and operator chains" $
   "e" ~>
-  "pad" <~ ("ws" ~> cases _Ws (var "ws") Nothing [
+  "pad" <~ ("ws" ~> match _Ws (var "ws") Nothing [
     _Ws_none>>: constant $ string "",
     _Ws_space>>: constant $ string " ",
     _Ws_break>>: constant $ string "\n",
     _Ws_breakAndIndent>>: "ignored" ~> string "\n",
     _Ws_doubleBreak>>: constant $ string "\n\n"]) $
-  "idt" <~ ("ws" ~> "s" ~> cases _Ws (var "ws") (Just $ var "s") [
+  "idt" <~ ("ws" ~> "s" ~> match _Ws (var "ws") (Just $ var "s") [
     _Ws_breakAndIndent>>: "indentStr" ~> customIndent @@ var "indentStr" @@ var "s"]) $
-  cases _Expr (var "e") Nothing [
+  match _Expr (var "e") Nothing [
     _Expr_const>>: "symbol" ~> Ast.unSymbol $ var "symbol",
     _Expr_indent>>: "indentExpr" ~>
       "style" <~ Ast.indentedExpressionStyle (var "indentExpr") $
@@ -578,7 +578,7 @@ printExpr = define "printExpr" $
       -- demo) have to strip it post-hoc.
       "indentLine" <~ ("pre" ~> "line" ~>
         Logic.ifElse (Equality.equal (var "line") (string "")) (var "line") (var "pre" ++ var "line")) $
-      "ilns" <~ cases _IndentStyle (var "style") Nothing [
+      "ilns" <~ match _IndentStyle (var "style") Nothing [
         _IndentStyle_allLines>>: "pre" ~> Lists.map (var "indentLine" @@ var "pre") (var "lns"),
         _IndentStyle_subsequentLines>>: "pre" ~>
           Logic.ifElse (Equality.equal (Lists.length $ var "lns") (int32 1))
@@ -605,7 +605,7 @@ printExpr = define "printExpr" $
       -- Fix: build the joined string element-by-element. For each
       -- element after the head, if it starts with `\n` then suppress
       -- the whitespace parts of the separator (only the symbol stays).
-      "isNewlineWs" <~ ("ws" ~> cases _Ws (var "ws") (Just $ boolean False) [
+      "isNewlineWs" <~ ("ws" ~> match _Ws (var "ws") (Just $ boolean False) [
         _Ws_break>>: constant true,
         _Ws_breakAndIndent>>: constant true,
         _Ws_doubleBreak>>: constant true]) $
@@ -655,7 +655,7 @@ printExpr = define "printExpr" $
       --
       -- Newline-emitting Ws values are WsBreak, WsBreakAndIndent, and
       -- WsDoubleBreak.
-      "padrIsNewline" <~ cases _Ws (var "padr") (Just $ boolean False) [
+      "padrIsNewline" <~ match _Ws (var "padr") (Just $ boolean False) [
         _Ws_break>>: constant true,
         _Ws_breakAndIndent>>: constant true,
         _Ws_doubleBreak>>: constant true] $
@@ -667,7 +667,7 @@ printExpr = define "printExpr" $
       -- WsBreakAndIndent is deliberately EXCLUDED: it is the body-on-next-line
       -- form (e.g. `foo x =` followed by an indented body), where the padl space
       -- genuinely must be suppressed to avoid a spurious blank line after `=`.
-      "padlIsNewline" <~ cases _Ws (var "padl") (Just $ boolean False) [
+      "padlIsNewline" <~ match _Ws (var "padl") (Just $ boolean False) [
         _Ws_break>>: constant true,
         _Ws_doubleBreak>>: constant true] $
       -- Suppress padl whitespace only when it is NON-newline whitespace (a space

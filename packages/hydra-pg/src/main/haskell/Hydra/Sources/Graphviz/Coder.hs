@@ -179,7 +179,7 @@ termLabel = define "termLabel" $
   doc "Compute a label and node style for a term" $
   "compact" ~> "namespaces" ~> "term" ~> lets [
     "simpleLabel">: "lab" ~> pair (var "lab") nodeStyleSimple] $
-    match _Term (Just $ var "simpleLabel" @@ string "?") [
+    cases _Term (Just $ var "simpleLabel" @@ string "?") [
       _Term_annotated>>: constant $ var "simpleLabel" @@ string "@{}",
       _Term_application>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "$") (string "apply")),
       _Term_lambda>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "\x03BB") (string "lambda")),
@@ -202,11 +202,11 @@ termLabel = define "termLabel" $
       _Term_let>>: constant $ var "simpleLabel" @@ string "let",
       _Term_list>>: constant $ var "simpleLabel" @@ (Logic.ifElse (var "compact") (string "[]") (string "list")),
       _Term_literal>>: "l" ~>
-        var "simpleLabel" @@ (match _Literal (Just $ string "?") [
+        var "simpleLabel" @@ (cases _Literal (Just $ string "?") [
           _Literal_binary>>: "s" ~> Literals.binaryToBase64 (var "s"),
           _Literal_boolean>>: "b" ~> Literals.printBoolean (var "b"),
           _Literal_integer>>: "i" ~>
-            match _IntegerValue (Just $ string "?") [
+            cases _IntegerValue (Just $ string "?") [
               _IntegerValue_bigint>>: "v" ~> Literals.showBigint (var "v"),
               _IntegerValue_int8>>: "v" ~> Literals.showInt8 (var "v"),
               _IntegerValue_int16>>: "v" ~> Literals.showInt16 (var "v"),
@@ -218,7 +218,7 @@ termLabel = define "termLabel" $
               _IntegerValue_uint64>>: "v" ~> Literals.showUint64 (var "v")]
               @@ var "i",
           _Literal_float>>: "f" ~>
-            match _FloatValue (Just $ string "?") [
+            cases _FloatValue (Just $ string "?") [
               _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v"),
               _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v")]
               @@ var "f",
@@ -302,7 +302,7 @@ termToDotStmts = define "termToDotStmts" $
         (pair (var "selfStmts") (var "selfVisited"))
         (Rewriting.subtermsWithSteps @@ var "currentTerm")]
       -- Main case dispatch on the current term
-      $ match _Term (Just $ var "dflt") [
+      $ cases _Term (Just $ var "dflt") [
           _Term_lambda>>: "lam" ~> lets [
             "v">: Core.lambdaParameter $ var "lam",
             "body">: Core.lambdaBody $ var "lam",

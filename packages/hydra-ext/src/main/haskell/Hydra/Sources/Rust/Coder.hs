@@ -101,7 +101,7 @@ encodeEnumVariant = def "encodeEnumVariant" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
     "ftyp" <~ Core.fieldTypeType (var "ft") $
     "dtyp" <~ (Strip.deannotateType @@ var "ftyp") $
-    "isUnit" <~ (cases _Type (var "dtyp") (Just $ boolean False) [
+    "isUnit" <~ (match _Type (var "dtyp") (Just $ boolean False) [
       _Type_unit>>: constant $ boolean True,
       _Type_record>>: lambda "rt" $
         Lists.null (var "rt")]) $
@@ -112,7 +112,7 @@ encodeEnumVariant = def "encodeEnumVariant" $
         R._EnumVariant_body>>: inject R._EnumVariantBody R._EnumVariantBody_unit unit,
         R._EnumVariant_doc>>: nothing]))
       -- Non-unit variant: check if it's a record (struct variant) or other (tuple variant)
-      (cases _Type (var "dtyp") (Just $
+      (match _Type (var "dtyp") (Just $
           -- Default: tuple variant with single element
           "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
             right (record R._EnumVariant [
@@ -134,7 +134,7 @@ encodeEnumVariant = def "encodeEnumVariant" $
 encodeLiteral :: TypedTermDefinition (Literal -> R.Expression)
 encodeLiteral = def "encodeLiteral" $
   doc "Encode a Hydra literal value as a Rust expression" $
-  lambda "lit" $ cases _Literal (var "lit") Nothing [
+  lambda "lit" $ match _Literal (var "lit") Nothing [
     _Literal_boolean>>: lambda "b" $
       inject R._Expression R._Expression_literal $
         inject R._Literal R._Literal_bool (var "b"),
@@ -142,7 +142,7 @@ encodeLiteral = def "encodeLiteral" $
       inject R._Expression R._Expression_literal $
         inject R._Literal R._Literal_string (var "s"),
     _Literal_float>>: lambda "fv" $
-      cases _FloatValue (var "fv") Nothing [
+      match _FloatValue (var "fv") Nothing [
         _FloatValue_float32>>: lambda "f" $
           inject R._Expression R._Expression_literal $
             inject R._Literal R._Literal_float $
@@ -156,7 +156,7 @@ encodeLiteral = def "encodeLiteral" $
                 R._FloatLiteral_value>>: var "f",
                 R._FloatLiteral_suffix>>: nothing]],
     _Literal_integer>>: lambda "iv" $
-      cases _IntegerValue (var "iv") Nothing [
+      match _IntegerValue (var "iv") Nothing [
         _IntegerValue_int8>>: lambda "i" $
           inject R._Expression R._Expression_literal $
             inject R._Literal R._Literal_integer $
@@ -220,17 +220,17 @@ encodeLiteral = def "encodeLiteral" $
 encodeLiteralType :: TypedTermDefinition (LiteralType -> R.Type)
 encodeLiteralType = def "encodeLiteralType" $
   doc "Encode a Hydra literal type as a Rust type" $
-  lambda "lt" $ cases _LiteralType (var "lt") Nothing [
+  lambda "lt" $ match _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant $
       rustApply1 @@ string "Vec" @@ (rustPath @@ string "u8"),
     _LiteralType_boolean>>: constant $
       rustPath @@ string "bool",
     _LiteralType_float>>: lambda "ft" $
-      cases _FloatType (var "ft") Nothing [
+      match _FloatType (var "ft") Nothing [
         _FloatType_float32>>: constant $ rustPath @@ string "f32",
         _FloatType_float64>>: constant $ rustPath @@ string "f64"],
     _LiteralType_integer>>: lambda "it" $
-      cases _IntegerType (var "it") Nothing [
+      match _IntegerType (var "it") Nothing [
         _IntegerType_bigint>>: constant $ rustPathSegmented @@ list [string "num", string "BigInt"],
         _IntegerType_int8>>: constant $ rustPath @@ string "i8",
         _IntegerType_int16>>: constant $ rustPath @@ string "i16",
@@ -291,7 +291,7 @@ encodeTerm :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Either E
 encodeTerm = def "encodeTerm" $
   doc "Encode a Hydra term as a Rust expression" $
   "cx" ~> "g" ~> lambda "term" $
-    cases _Term (var "term") (Just $
+    match _Term (var "term") (Just $
       left (Error.errorOther $ Error.otherError $ string "unexpected term variant"))
     [_Term_annotated>>: lambda "at" $
        encodeTerm @@ var "cx" @@ var "g" @@ Core.annotatedTermBody (var "at"),
@@ -389,7 +389,7 @@ encodeTerm = def "encodeTerm" $
        "fname" <~ (Formatting.capitalize @@ Core.unName (Core.fieldName (var "field"))) $
        "fterm" <~ Core.fieldTerm (var "field") $
        "dterm" <~ (Strip.deannotateTerm @@ var "fterm") $
-       "isUnit" <~ (cases _Term (var "dterm") (Just $ boolean False) [
+       "isUnit" <~ (match _Term (var "dterm") (Just $ boolean False) [
          _Term_unit>>: constant $ boolean True,
          _Term_record>>: lambda "rt" $ Lists.null (Core.recordFields (var "rt"))]) $
        Logic.ifElse (var "isUnit")
@@ -449,7 +449,7 @@ encodeType = def "encodeType" $
   doc "Encode a Hydra type as a Rust syntax type" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
-    cases _Type (var "typ") Nothing [
+    match _Type (var "typ") Nothing [
       _Type_annotated>>: lambda "at" $
         encodeType @@ var "cx" @@ var "g" @@ Core.annotatedTypeBody (var "at"),
       _Type_application>>: lambda "at" $
@@ -530,7 +530,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
         R._GenericParam_bounds>>: list ([] :: [TypedTerm R.TypeParamBound])])
       (var "freeVars")) $
     "dtyp" <~ (Strip.deannotateType @@ var "typ") $
-    "item" <<~ (cases _Type (var "dtyp") (Just $
+    "item" <<~ (match _Type (var "dtyp") (Just $
         -- Fallback: type alias
         "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
           right (inject R._Item R._Item_typeAlias $

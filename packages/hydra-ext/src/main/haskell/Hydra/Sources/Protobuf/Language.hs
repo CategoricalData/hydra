@@ -130,12 +130,12 @@ protobufLanguage = definition_ "protobufLanguage" $
     Variants.typeVariantVariable,
     Variants.typeVariantVoid,
     Variants.typeVariantWrap],
-  "typePredicate">: "typ" ~> cases _Type (var "typ")
+  "typePredicate">: "typ" ~> match _Type (var "typ")
     (Just true) [
     _Type_map>>: "mt" ~> lets [
       "valuesType">: Core.mapTypeValues $ var "mt",
       "stripped">: Strip.deannotateType @@ var "valuesType"] $
-      cases _Type (var "stripped")
+      match _Type (var "stripped")
         (Just true) [
         _Type_optional>>: constant false]]] $
   Coders.language

@@ -143,7 +143,7 @@ commonConstraintToTriples :: TypedTermDefinition (Rdf.Resource -> Shacl.CommonCo
 commonConstraintToTriples = define "commonConstraintToTriples" $
   doc "Serialize a CommonConstraint to triples" $
   lambda "subj" $ lambda "cc" $
-    cases Shacl._CommonConstraint (var "cc") Nothing [
+    match Shacl._CommonConstraint (var "cc") Nothing [
       Shacl._CommonConstraint_datatype>>: lambda "i" $
         list [tripleRII @@ var "subj" @@ (sh @@ string "datatype") @@ var "i"],
       Shacl._CommonConstraint_class>>: constant $
@@ -183,27 +183,27 @@ commonConstraintToTriples = define "commonConstraintToTriples" $
         Lists.map (lambda "n" $ tripleRIN @@ var "subj" @@ (sh @@ string "in") @@ var "n") (var "nodes"),
       Shacl._CommonConstraint_node>>: lambda "refs" $
         Lists.concat (Lists.map
-          (lambda "ref" $ cases Shacl._Reference (var "ref") (Just (list ([] :: [TypedTerm Rdf.Triple]))) [
+          (lambda "ref" $ match Shacl._Reference (var "ref") (Just (list ([] :: [TypedTerm Rdf.Triple]))) [
             Shacl._Reference_named>>: lambda "i" $ list [tripleRII @@ var "subj" @@ (sh @@ string "node") @@ var "i"]])
           (Sets.toList (var "refs" :: TypedTerm (S.Set (Shacl.Reference Shacl.NodeShape))))),
       Shacl._CommonConstraint_not>>: lambda "refs" $
         Lists.concat (Lists.map
-          (lambda "ref" $ cases Shacl._Reference (var "ref") (Just (list ([] :: [TypedTerm Rdf.Triple]))) [
+          (lambda "ref" $ match Shacl._Reference (var "ref") (Just (list ([] :: [TypedTerm Rdf.Triple]))) [
             Shacl._Reference_named>>: lambda "i" $ list [tripleRII @@ var "subj" @@ (sh @@ string "not") @@ var "i"]])
           (Sets.toList (var "refs" :: TypedTerm (S.Set (Shacl.Reference Shacl.Shape))))),
       Shacl._CommonConstraint_and>>: lambda "refs" $
         Lists.concat (Lists.map
-          (lambda "ref" $ cases Shacl._Reference (var "ref") (Just (list ([] :: [TypedTerm Rdf.Triple]))) [
+          (lambda "ref" $ match Shacl._Reference (var "ref") (Just (list ([] :: [TypedTerm Rdf.Triple]))) [
             Shacl._Reference_named>>: lambda "i" $ list [tripleRII @@ var "subj" @@ (sh @@ string "and") @@ var "i"]])
           (Sets.toList (var "refs" :: TypedTerm (S.Set (Shacl.Reference Shacl.Shape))))),
       Shacl._CommonConstraint_or>>: lambda "refs" $
         Lists.concat (Lists.map
-          (lambda "ref" $ cases Shacl._Reference (var "ref") (Just (list ([] :: [TypedTerm Rdf.Triple]))) [
+          (lambda "ref" $ match Shacl._Reference (var "ref") (Just (list ([] :: [TypedTerm Rdf.Triple]))) [
             Shacl._Reference_named>>: lambda "i" $ list [tripleRII @@ var "subj" @@ (sh @@ string "or") @@ var "i"]])
           (Sets.toList (var "refs" :: TypedTerm (S.Set (Shacl.Reference Shacl.Shape))))),
       Shacl._CommonConstraint_xone>>: lambda "refs" $
         Lists.concat (Lists.map
-          (lambda "ref" $ cases Shacl._Reference (var "ref") (Just (list ([] :: [TypedTerm Rdf.Triple]))) [
+          (lambda "ref" $ match Shacl._Reference (var "ref") (Just (list ([] :: [TypedTerm Rdf.Triple]))) [
             Shacl._Reference_named>>: lambda "i" $ list [tripleRII @@ var "subj" @@ (sh @@ string "xone") @@ var "i"]])
           (Sets.toList (var "refs" :: TypedTerm (S.Set (Shacl.Reference Shacl.Shape))))),
       Shacl._CommonConstraint_equals>>: constant $
@@ -244,7 +244,7 @@ definitionToTriples = define "definitionToTriples" $
   lambda "d" $ lets [
     "iri_">: project Shacl._Definition Shacl._Definition_iri @@ var "d",
     "shape">: project Shacl._Definition Shacl._Definition_target @@ var "d"] $
-    cases Shacl._Shape (var "shape") Nothing [
+    match Shacl._Shape (var "shape") Nothing [
       Shacl._Shape_node>>: lambda "ns_" $ nodeShapeToTriples @@ var "iri_" @@ var "ns_",
       Shacl._Shape_property>>: lambda "ps" $ propertyShapeToTriples @@ (iriResource @@ var "iri_") @@ var "ps"]
 
@@ -271,7 +271,7 @@ iriOrLiteralToNode :: TypedTermDefinition (Rdf.IriOrLiteral -> Rdf.Node)
 iriOrLiteralToNode = define "iriOrLiteralToNode" $
   doc "Convert an IriOrLiteral to an RDF Node" $
   lambda "il" $
-    cases Rdf._IriOrLiteral (var "il") Nothing [
+    match Rdf._IriOrLiteral (var "il") Nothing [
       Rdf._IriOrLiteral_iri>>: lambda "i" $ inject Rdf._Node Rdf._Node_iri (var "i"),
       Rdf._IriOrLiteral_literal>>: lambda "lit" $ inject Rdf._Node Rdf._Node_literal (var "lit")]
 
@@ -287,7 +287,7 @@ nodeKindToIri :: TypedTermDefinition (Shacl.NodeKind -> Rdf.Iri)
 nodeKindToIri = define "nodeKindToIri" $
   doc "Convert a NodeKind to its SHACL IRI" $
   lambda "nk" $
-    cases Shacl._NodeKind (var "nk") Nothing [
+    match Shacl._NodeKind (var "nk") Nothing [
       Shacl._NodeKind_blankNode>>: constant $ sh @@ string "BlankNode",
       Shacl._NodeKind_iri>>: constant $ sh @@ string "IRI",
       Shacl._NodeKind_literal>>: constant $ sh @@ string "Literal",
@@ -312,7 +312,7 @@ propertyRefToTriples :: TypedTermDefinition (Rdf.Resource -> Shacl.Reference Sha
 propertyRefToTriples = define "propertyRefToTriples" $
   doc "Serialize a property shape reference (may be inline or named)" $
   lambda "subj" $ lambda "ref" $
-    cases Shacl._Reference (var "ref") Nothing [
+    match Shacl._Reference (var "ref") Nothing [
       Shacl._Reference_named>>: lambda "i" $
         list [tripleRII @@ var "subj" @@ (sh @@ string "property") @@ var "i"],
       Shacl._Reference_definition>>: lambda "def" $ lets [
@@ -330,7 +330,7 @@ propertyShapeConstraintToTriples :: TypedTermDefinition (Rdf.Resource -> Shacl.P
 propertyShapeConstraintToTriples = define "propertyShapeConstraintToTriples" $
   doc "Serialize a PropertyShapeConstraint to triples" $
   lambda "subj" $ lambda "psc" $
-    cases Shacl._PropertyShapeConstraint (var "psc") Nothing [
+    match Shacl._PropertyShapeConstraint (var "psc") Nothing [
       Shacl._PropertyShapeConstraint_minCount>>: lambda "n" $
         list [tripleRIN @@ var "subj" @@ (sh @@ string "minCount") @@ (integerNode @@ var "n")],
       Shacl._PropertyShapeConstraint_maxCount>>: lambda "n" $

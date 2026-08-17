@@ -91,11 +91,11 @@ instantiateTemplate = define "instantiateTemplate" $
   "cx" ~> "minimal" ~> "schema" ~> "tname" ~> "t" ~>
   "inst" <~ ("tn" ~> instantiateTemplate @@ var "cx" @@ var "minimal" @@ var "schema" @@ var "tn") $
   "noPoly" <~ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "non-polymorphic type") (string "polymorphic or function type")) $
-  "forFloat" <~ ("ft" ~> cases _FloatType (var "ft")
+  "forFloat" <~ ("ft" ~> match _FloatType (var "ft")
     Nothing [
     _FloatType_float32>>: constant (Core.floatValueFloat32 (float32 0.0)),
     _FloatType_float64>>: constant (Core.floatValueFloat64 (float64 0.0))]) $
-  "forInteger" <~ ("it" ~> cases _IntegerType (var "it")
+  "forInteger" <~ ("it" ~> match _IntegerType (var "it")
     Nothing [
     _IntegerType_bigint>>: constant (Core.integerValueBigint (bigint 0)),
     _IntegerType_int8>>: constant (Core.integerValueInt8 (int8 0)),
@@ -106,7 +106,7 @@ instantiateTemplate = define "instantiateTemplate" $
     _IntegerType_uint16>>: constant (Core.integerValueUint16 (uint16 0)),
     _IntegerType_uint32>>: constant (Core.integerValueUint32 (uint32 0)),
     _IntegerType_uint64>>: constant (Core.integerValueUint64 (uint64 0))]) $
-  "forLiteral" <~ ("lt" ~> cases _LiteralType (var "lt")
+  "forLiteral" <~ ("lt" ~> match _LiteralType (var "lt")
     Nothing [
     _LiteralType_binary>>: constant (Core.literalString (string "")),
     _LiteralType_boolean>>: constant (Core.literalBoolean false),
@@ -114,7 +114,7 @@ instantiateTemplate = define "instantiateTemplate" $
     _LiteralType_integer>>: "it" ~> Core.literalInteger (var "forInteger" @@ var "it"),
     _LiteralType_float>>: "ft" ~> Core.literalFloat (var "forFloat" @@ var "ft"),
     _LiteralType_string>>: constant (Core.literalString (string ""))]) $
-  cases _Type (var "t")
+  match _Type (var "t")
     Nothing [
     _Type_annotated>>: "at" ~> var "inst" @@ var "tname" @@ (Core.annotatedTypeBody (var "at")),
     _Type_application>>: constant (var "noPoly"),

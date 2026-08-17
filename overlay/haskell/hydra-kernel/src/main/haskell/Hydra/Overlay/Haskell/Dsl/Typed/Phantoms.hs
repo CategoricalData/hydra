@@ -85,11 +85,11 @@ apply (TypedTerm lhs) (TypedTerm rhs) = TypedTerm $ Terms.apply lhs rhs
 
 
 
--- | Apply a named case match to an argument
--- Example: cases resultTypeName myResult Nothing [onSuccess, onError]
+-- | Create an unapplied pattern match on a union term
+-- Example: cases (Name "Result") (Just $ string "what?") ["success">: string "yay", "error">: string "boo"]
 -- See also: 'match'
-cases :: Name -> TypedTerm a -> Maybe (TypedTerm b) -> [Field] -> TypedTerm b
-cases name arg dflt fields = TypedTerm $ Terms.apply (Terms.match name (unTypedTerm <$> dflt) fields) (unTypedTerm arg)
+cases :: AsName n => n -> Maybe (TypedTerm b) -> [Field] -> TypedTerm (a -> b)
+cases n dflt fields = TypedTerm $ Terms.match (asName n) (unTypedTerm <$> dflt) fields
 
 -- | Compose two functions (g then f)
 -- Example: compose (var "stringLength") (var "toString")
@@ -313,10 +313,11 @@ map = TypedTerm . Terms.map . M.fromList . fmap fromTypedTerm . M.toList
   where
     fromTypedTerm (TypedTerm k, TypedTerm v) = (k, v)
 
--- | Create a pattern match on a union term
--- Example: match (Name "Result") (Just $ string "what?") ["success">: string "yay", "error">: string "boo"]
-match :: AsName n => n -> Maybe (TypedTerm b) -> [Field] -> TypedTerm (a -> b)
-match n dflt fields = TypedTerm $ Terms.match (asName n) (unTypedTerm <$> dflt) fields
+-- | Apply a named case match to an argument
+-- Example: match resultTypeName myResult Nothing [onSuccess, onError]
+-- See also: 'cases'
+match :: AsName n => n -> TypedTerm a -> Maybe (TypedTerm b) -> [Field] -> TypedTerm b
+match n arg dflt fields = TypedTerm $ Terms.apply (Terms.match (asName n) (unTypedTerm <$> dflt) fields) (unTypedTerm arg)
 
 -- | Lift a Haskell Name value to a phantom-typed TypedTerm Name
 nameLift :: Name -> TypedTerm Name

@@ -60,10 +60,10 @@ yamlLanguage = define "yamlLanguage" $
     Variants.typeVariantRecord,
     Variants.typeVariantUnit,
     Variants.typeVariantVoid],
-  "typePredicate">: lambda "typ" $ cases _Type (Strip.deannotateType @@ var "typ")
+  "typePredicate">: lambda "typ" $ match _Type (Strip.deannotateType @@ var "typ")
     (Just true) [
     _Type_optional>>: lambda "innerType" $
-      cases _Type (var "innerType")
+      match _Type (var "innerType")
         (Just true) [
         _Type_optional>>: constant false]]] $
   Coders.language

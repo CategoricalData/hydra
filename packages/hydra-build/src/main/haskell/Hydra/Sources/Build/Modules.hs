@@ -130,7 +130,7 @@ filterTypeModules = define "filterTypeModules" $
   "mods" ~> Lists.filter
     ("m" ~> Lists.foldl
       ("acc" ~> "d" ~> Logic.or (var "acc")
-        (cases _Definition (var "d") (Just false) [
+        (match _Definition (var "d") (Just false) [
           _Definition_type>>: "_" ~> true]))
       false
       (Packaging.moduleDefinitions $ var "m"))
@@ -178,7 +178,7 @@ stripTermTypes = define "stripTermTypes" $
     (Packaging.moduleMetadata $ var "m")
     (Packaging.moduleDependencies $ var "m")
     (Lists.map
-      ("d" ~> cases _Definition (var "d") Nothing [
+      ("d" ~> match _Definition (var "d") Nothing [
         _Definition_type>>: "td" ~> Packaging.definitionType (var "td"),
         _Definition_primitive>>: "pd" ~> Packaging.definitionPrimitive (var "pd"),
         _Definition_term>>: "td" ~> Packaging.definitionTerm (Packaging.termDefinition

@@ -75,9 +75,9 @@ collectLabelsFoldFn :: TypedTerm ([Literal] -> Term -> [Literal])
 collectLabelsFoldFn = Phantoms.lambda "acc" $ Phantoms.lambda "term" $
   Lists.concat (Phantoms.list [
     Phantoms.var "acc",
-    Phantoms.cases _Term (Phantoms.var "term") (Just (Phantoms.list ([] :: [TypedTerm Literal]))) [
+    Phantoms.match _Term (Phantoms.var "term") (Just (Phantoms.list ([] :: [TypedTerm Literal]))) [
       _Term_pair ~>: Phantoms.lambda "p" $
-        Phantoms.cases _Term (Pairs.first (Phantoms.var "p")) (Just (Phantoms.list ([] :: [TypedTerm Literal]))) [
+        Phantoms.match _Term (Pairs.first (Phantoms.var "p")) (Just (Phantoms.list ([] :: [TypedTerm Literal]))) [
           _Term_literal ~>: Phantoms.lambda "lit" $ Phantoms.list [Phantoms.var "lit"]]]])
 
 -- | Fold operation: collect list lengths
@@ -86,7 +86,7 @@ collectListLengthsFoldFn :: TypedTerm ([Int] -> Term -> [Int])
 collectListLengthsFoldFn = Phantoms.lambda "acc" $ Phantoms.lambda "term" $
   Lists.concat (Phantoms.list [
     Phantoms.var "acc",
-    Phantoms.cases _Term (Phantoms.var "term") (Just (Phantoms.list ([] :: [TypedTerm Int]))) [
+    Phantoms.match _Term (Phantoms.var "term") (Just (Phantoms.list ([] :: [TypedTerm Int]))) [
       _Term_list ~>: Phantoms.lambda "elems" $
         Phantoms.list [Lists.length (Phantoms.var "elems")]]])
 
@@ -159,11 +159,11 @@ showType t = PrintCore.type_ @@ t
 sumInt32LiteralsFoldFn :: TypedTerm (Int -> Term -> Int)
 sumInt32LiteralsFoldFn = Phantoms.lambda "acc" $ Phantoms.lambda "term" $
   Math.add (Phantoms.var "acc") $
-    Phantoms.cases _Term (Phantoms.var "term") (Just (Phantoms.int32 0)) [
+    Phantoms.match _Term (Phantoms.var "term") (Just (Phantoms.int32 0)) [
       _Term_literal ~>: Phantoms.lambda "lit" $
-        Phantoms.cases _Literal (Phantoms.var "lit") (Just (Phantoms.int32 0)) [
+        Phantoms.match _Literal (Phantoms.var "lit") (Just (Phantoms.int32 0)) [
           _Literal_integer ~>: Phantoms.lambda "intVal" $
-            Phantoms.cases _IntegerValue (Phantoms.var "intVal") (Just (Phantoms.int32 0)) [
+            Phantoms.match _IntegerValue (Phantoms.var "intVal") (Just (Phantoms.int32 0)) [
               _IntegerValue_int32 ~>: Phantoms.lambda "n" $ Phantoms.var "n"]]]
 
 -- | Core DSL Term-level constructors for building Term-typed values

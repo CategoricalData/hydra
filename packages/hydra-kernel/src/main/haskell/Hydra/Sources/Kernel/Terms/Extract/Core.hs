@@ -167,7 +167,7 @@ bigint = define "bigint" $
 bigintValue :: TypedTermDefinition (IntegerValue -> Prelude.Either Error Integer)
 bigintValue = define "bigintValue" $
   doc "Extract a bigint value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
+  "v" ~> Phantoms.match _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "bigint") (PrintCore.integerValue @@ var "v"))) [
     _IntegerValue_bigint>>: "i" ~> right (var "i")]
 
@@ -181,7 +181,7 @@ binary = define "binary" $
 binaryLiteral :: TypedTermDefinition (Literal -> Prelude.Either Error String)
 binaryLiteral = define "binaryLiteral" $
   doc "Extract a binary literal from a Literal value" $
-  "v" ~> Phantoms.cases _Literal (var "v")
+  "v" ~> Phantoms.match _Literal (var "v")
     (Just (unexpected(Phantoms.string "binary") (PrintCore.literal @@ var "v"))) [
     _Literal_binary>>: "b" ~> right (var "b")]
 
@@ -195,7 +195,7 @@ boolean = define "boolean" $
 booleanLiteral :: TypedTermDefinition (Literal -> Prelude.Either Error Bool)
 booleanLiteral = define "booleanLiteral" $
   doc "Extract a boolean literal from a Literal value" $
-  "v" ~> Phantoms.cases _Literal (var "v")
+  "v" ~> Phantoms.match _Literal (var "v")
     (Just (unexpected(Phantoms.string "boolean") (PrintCore.literal @@ var "v"))) [
     _Literal_boolean>>: "b" ~> right (var "b")]
 
@@ -215,7 +215,7 @@ cases = define "cases" $
   doc "Extract case statement from a term" $
   "name" ~> "graph" ~> "term0" ~>
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
-  Phantoms.cases _Term (var "term")
+  Phantoms.match _Term (var "term")
     (Just (unexpected(Phantoms.string "case statement") (PrintCore.term @@ var "term"))) [
     _Term_cases>>: "cs" ~>
       Logic.ifElse (Core.equalName_ (Core.caseStatementTypeName (var "cs")) (var "name"))
@@ -233,7 +233,7 @@ decimal = define "decimal" $
 decimalLiteral :: TypedTermDefinition (Literal -> Prelude.Either Error Sci.Scientific)
 decimalLiteral = define "decimalLiteral" $
   doc "Extract a decimal literal from a Literal value" $
-  "v" ~> Phantoms.cases _Literal (var "v")
+  "v" ~> Phantoms.match _Literal (var "v")
     (Just (unexpected(Phantoms.string "decimal") (PrintCore.literal @@ var "v"))) [
     _Literal_decimal>>: "d" ~> right (var "d")]
 
@@ -244,7 +244,7 @@ decodeEither = define "decodeEither" $
   "leftDecoder" ~> "rightDecoder" ~> "g" ~> "term" ~>
   Eithers.bind
     (stripWithDecodingError @@ var "g" @@ var "term")
-    ("stripped" ~> Phantoms.cases _Term (var "stripped")
+    ("stripped" ~> Phantoms.match _Term (var "stripped")
       (Just $ left $ Error.decodingError $ Phantoms.string "expected either value") [
       _Term_either>>: "e" ~>
         Eithers.either
@@ -263,7 +263,7 @@ decodeList = define "decodeList" $
   "elemDecoder" ~> "g" ~> "term" ~>
   Eithers.bind
     (stripWithDecodingError @@ var "g" @@ var "term")
-    ("stripped" ~> Phantoms.cases _Term (var "stripped")
+    ("stripped" ~> Phantoms.match _Term (var "stripped")
       (Just $ left $ Error.decodingError $ Phantoms.string "expected list") [
       _Term_list>>: "els" ~> Eithers.mapList (var "elemDecoder" @@ var "g") $ var "els"])
 
@@ -281,7 +281,7 @@ decodeMap = define "decodeMap" $
   "keyDecoder" ~> "valDecoder" ~> "g" ~> "term" ~>
   Eithers.bind
     (stripWithDecodingError @@ var "g" @@ var "term")
-    ("stripped" ~> Phantoms.cases _Term (var "stripped")
+    ("stripped" ~> Phantoms.match _Term (var "stripped")
       (Just $ left $ Error.decodingError $ Phantoms.string "expected map") [
       _Term_map>>: "m" ~>
         Eithers.map (reify (Maps.fromList :: TypedTerm [(k, v)] -> TypedTerm (M.Map k v)))
@@ -301,7 +301,7 @@ decodeMaybe = define "decodeMaybe" $
   "elemDecoder" ~> "g" ~> "term" ~>
   Eithers.bind
     (stripWithDecodingError @@ var "g" @@ var "term")
-    ("stripped" ~> Phantoms.cases _Term (var "stripped")
+    ("stripped" ~> Phantoms.match _Term (var "stripped")
       (Just $ left $ Error.decodingError $ Phantoms.string "expected optional value") [
       _Term_optional>>: "opt" ~> Eithers.mapOptional (var "elemDecoder" @@ var "g") $ var "opt"])
 
@@ -314,7 +314,7 @@ decodePair = define "decodePair" $
   "firstDecoder" ~> "secondDecoder" ~> "g" ~> "term" ~>
   Eithers.bind
     (stripWithDecodingError @@ var "g" @@ var "term")
-    ("stripped" ~> Phantoms.cases _Term (var "stripped")
+    ("stripped" ~> Phantoms.match _Term (var "stripped")
       (Just $ left $ Error.decodingError $ Phantoms.string "expected pair") [
       _Term_pair>>: "p" ~>
         Eithers.bind (var "firstDecoder" @@ var "g" @@ (Pairs.first $ var "p"))
@@ -330,7 +330,7 @@ decodeSet = define "decodeSet" $
   "elemDecoder" ~> "g" ~> "term" ~>
   Eithers.bind
     (stripWithDecodingError @@ var "g" @@ var "term")
-    ("stripped" ~> Phantoms.cases _Term (var "stripped")
+    ("stripped" ~> Phantoms.match _Term (var "stripped")
       (Just $ left $ Error.decodingError $ Phantoms.string "expected set") [
       _Term_set>>: "s" ~>
         Eithers.map (reify (Sets.fromList :: TypedTerm [a] -> TypedTerm (S.Set a)))
@@ -345,7 +345,7 @@ decodeUnit = define "decodeUnit" $
   "g" ~> "term" ~>
   Eithers.bind
     (stripWithDecodingError @@ var "g" @@ var "term")
-    ("stripped" ~> Phantoms.cases _Term (var "stripped")
+    ("stripped" ~> Phantoms.match _Term (var "stripped")
       (Just $ left $ Error.decodingError $ Phantoms.string "expected a unit value") [
       _Term_unit>>: constant $ right Phantoms.unit])
 
@@ -358,7 +358,7 @@ eitherTerm = define "eitherTerm" $
   doc "Extract an either value from a term, applying functions to the left and right values" $
   "leftFun" ~> "rightFun" ~> "graph" ~> "term0" ~>
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
-  Phantoms.cases _Term (var "term")
+  Phantoms.match _Term (var "term")
     (Just (unexpected
       (Phantoms.string "either value")
       (PrintCore.term @@ var "term"))) [
@@ -372,7 +372,7 @@ eitherType = define "eitherType" $
   doc "Extract the left and right types from an either type" $
   "typ" ~>
   "stripped" <~ Strip.deannotateType @@ var "typ" $
-  Phantoms.cases _Type (var "stripped")
+  Phantoms.match _Type (var "stripped")
     (Just (unexpected(Phantoms.string "either type") (PrintCore.type_ @@ var "typ"))) [
     _Type_either>>: "et" ~> right (var "et")]
 field :: TypedTermDefinition (Name -> (Term -> Prelude.Either Error x) -> Graph -> [Field] -> Prelude.Either Error x)
@@ -402,7 +402,7 @@ float32 = define "float32" $
 float32Value :: TypedTermDefinition (FloatValue -> Prelude.Either Error Float)
 float32Value = define "float32Value" $
   doc "Extract a float32 value from a FloatValue" $
-  "v" ~> Phantoms.cases _FloatValue (var "v")
+  "v" ~> Phantoms.match _FloatValue (var "v")
     (Just (unexpected(Phantoms.string "float32") (PrintCore.floatValue @@ var "v"))) [
     _FloatValue_float32>>: "f" ~> right (var "f")]
 
@@ -417,14 +417,14 @@ float64 = define "float64" $
 float64Value :: TypedTermDefinition (FloatValue -> Prelude.Either Error Double)
 float64Value = define "float64Value" $
   doc "Extract a float64 value from a FloatValue" $
-  "v" ~> Phantoms.cases _FloatValue (var "v")
+  "v" ~> Phantoms.match _FloatValue (var "v")
     (Just (unexpected(Phantoms.string "float64") (PrintCore.floatValue @@ var "v"))) [
     _FloatValue_float64>>: "f" ~> right (var "f")]
 
 floatLiteral :: TypedTermDefinition (Literal -> Prelude.Either Error FloatValue)
 floatLiteral = define "floatLiteral" $
   doc "Extract a floating-point literal from a Literal value" $
-  "lit" ~> Phantoms.cases _Literal (var "lit")
+  "lit" ~> Phantoms.match _Literal (var "lit")
     (Just (unexpected(Phantoms.string "floating-point value") (PrintCore.literal @@ var "lit"))) [
     _Literal_float>>: "v" ~> right (var "v")]
 
@@ -440,7 +440,7 @@ functionType = define "functionType" $
   doc "Extract a function type from a type" $
   "typ" ~>
   "stripped" <~ Strip.deannotateType @@ var "typ" $
-  Phantoms.cases _Type (var "stripped")
+  Phantoms.match _Type (var "stripped")
     (Just (unexpected(Phantoms.string "function type") (PrintCore.type_ @@ var "typ"))) [
     _Type_function>>: "ft" ~> right (var "ft")]
 
@@ -450,7 +450,7 @@ injection = define "injection" $
   doc "Extract a field from a union term" $
   "expected" ~> "graph" ~> "term0" ~>
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
-  Phantoms.cases _Term (var "term")
+  Phantoms.match _Term (var "term")
     (Just (unexpected(Phantoms.string "injection") (PrintCore.term @@ var "term"))) [
     _Term_inject>>: "injection" ~>
       Logic.ifElse (Core.equalName_ (Core.injectionTypeName (var "injection")) (var "expected"))
@@ -470,7 +470,7 @@ int16 = define "int16" $
 int16Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error I.Int16)
 int16Value = define "int16Value" $
   doc "Extract an int16 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
+  "v" ~> Phantoms.match _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "int16") (PrintCore.integerValue @@ var "v"))) [
     _IntegerValue_int16>>: "i" ~> right (var "i")]
 
@@ -485,7 +485,7 @@ int32 = define "int32" $
 int32Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error Int)
 int32Value = define "int32Value" $
   doc "Extract an int32 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
+  "v" ~> Phantoms.match _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "int32") (PrintCore.integerValue @@ var "v"))) [
     _IntegerValue_int32>>: "i" ~> right (var "i")]
 int64 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error I.Int64)
@@ -499,7 +499,7 @@ int64 = define "int64" $
 int64Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error I.Int64)
 int64Value = define "int64Value" $
   doc "Extract an int64 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
+  "v" ~> Phantoms.match _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "int64") (PrintCore.integerValue @@ var "v"))) [
     _IntegerValue_int64>>: "i" ~> right (var "i")]
 
@@ -514,14 +514,14 @@ int8 = define "int8" $
 int8Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error I.Int8)
 int8Value = define "int8Value" $
   doc "Extract an int8 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
+  "v" ~> Phantoms.match _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "int8") (PrintCore.integerValue @@ var "v"))) [
     _IntegerValue_int8>>: "i" ~> right (var "i")]
 
 integerLiteral :: TypedTermDefinition (Literal -> Prelude.Either Error IntegerValue)
 integerLiteral = define "integerLiteral" $
   doc "Extract an integer literal from a Literal value" $
-  "lit" ~> Phantoms.cases _Literal (var "lit")
+  "lit" ~> Phantoms.match _Literal (var "lit")
     (Just (unexpected(Phantoms.string "integer value") (PrintCore.literal @@ var "lit"))) [
     _Literal_integer>>: "v" ~> right (var "v")]
 
@@ -537,7 +537,7 @@ lambda = define "lambda" $
   doc "Extract a lambda from a term" $
   "graph" ~> "term0" ~>
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
-  Phantoms.cases _Term (var "term")
+  Phantoms.match _Term (var "term")
     (Just (unexpected(Phantoms.string "lambda") (PrintCore.term @@ var "term"))) [
     _Term_lambda>>: "l" ~> right (var "l")]
 
@@ -568,7 +568,7 @@ let_ = define "let" $
   doc "Extract a let expression from a term" $
   "graph" ~> "term0" ~>
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
-  Phantoms.cases _Term (var "term")
+  Phantoms.match _Term (var "term")
     (Just (unexpected(Phantoms.string "let term") (PrintCore.term @@ var "term"))) [
     _Term_let>>: "lt" ~> right (var "lt")]
 list :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error [Term])
@@ -576,7 +576,7 @@ list = define "list" $
   doc "Extract a list of terms from a term" $
   "graph" ~> "term" ~>
   "stripped" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term" $
-  Phantoms.cases _Term (var "stripped")
+  Phantoms.match _Term (var "stripped")
     (Just (unexpected(Phantoms.string "list") (PrintCore.term @@ var "stripped"))) [
     _Term_list>>: "l" ~> right (var "l")]
 
@@ -591,7 +591,7 @@ listType = define "listType" $
   doc "Extract the element type from a list type" $
   "typ" ~>
   "stripped" <~ Strip.deannotateType @@ var "typ" $
-  Phantoms.cases _Type (var "stripped")
+  Phantoms.match _Type (var "stripped")
     (Just (unexpected(Phantoms.string "list type") (PrintCore.type_ @@ var "typ"))) [
     _Type_list>>: "t" ~> right (var "t")]
 literal :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Literal)
@@ -599,7 +599,7 @@ literal = define "literal" $
   doc "Extract a literal value from a term" $
   "graph" ~> "term0" ~>
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
-  Phantoms.cases _Term (var "term")
+  Phantoms.match _Term (var "term")
     (Just (unexpected(Phantoms.string "literal") (PrintCore.term @@ var "term"))) [
     _Term_literal>>: "lit" ~> right (var "lit")]
 
@@ -614,7 +614,7 @@ map = define "map" $
     "vval" <<~ var "fv" @@ var "vterm" $
     right (Phantoms.pair (var "kval") (var "vval"))) $
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
-  Phantoms.cases _Term (var "term")
+  Phantoms.match _Term (var "term")
     (Just (unexpected
       (Phantoms.string "map")
       (PrintCore.term @@ var "term"))) [
@@ -625,7 +625,7 @@ mapType = define "mapType" $
   doc "Extract the key and value types from a map type" $
   "typ" ~>
   "stripped" <~ Strip.deannotateType @@ var "typ" $
-  Phantoms.cases _Type (var "stripped")
+  Phantoms.match _Type (var "stripped")
     (Just (unexpected(Phantoms.string "map type") (PrintCore.type_ @@ var "typ"))) [
     _Type_map>>: "mt" ~> right (var "mt")]
 
@@ -635,7 +635,7 @@ optionalTerm = define "optionalTerm" $
   doc "Extract an optional value from a term, applying a function to the value if present" $
   "f" ~> "graph" ~> "term0" ~>
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
-  Phantoms.cases _Term (var "term")
+  Phantoms.match _Term (var "term")
     (Just (unexpected
       (Phantoms.string "optional value")
       (PrintCore.term @@ var "term"))) [
@@ -646,7 +646,7 @@ optionalType = define "optionalType" $
   doc "Extract the base type from an optional type" $
   "typ" ~>
   "stripped" <~ Strip.deannotateType @@ var "typ" $
-  Phantoms.cases _Type (var "stripped")
+  Phantoms.match _Type (var "stripped")
     (Just (unexpected(Phantoms.string "optional type") (PrintCore.type_ @@ var "typ"))) [
     _Type_optional>>: "t" ~> right (var "t")]
 
@@ -666,7 +666,7 @@ pair = define "pair" $
   doc "Extract a pair of values from a term, applying functions to each component" $
   "kf" ~> "vf" ~> "graph" ~> "term0" ~>
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
-  Phantoms.cases _Term (var "term")
+  Phantoms.match _Term (var "term")
     (Just (unexpected
       (Phantoms.string "pair")
       (PrintCore.term @@ var "term"))) [
@@ -693,7 +693,7 @@ recordType = define "recordType" $
   doc "Extract the field types from a record type" $
   "ename" ~> "typ" ~>
   "stripped" <~ Strip.deannotateType @@ var "typ" $
-  Phantoms.cases _Type (var "stripped")
+  Phantoms.match _Type (var "stripped")
     (Just (unexpected(Phantoms.string "record type") (PrintCore.type_ @@ var "typ"))) [
     _Type_record>>: "fields" ~> right (var "fields")]
 
@@ -712,7 +712,7 @@ set = define "set" $
   doc "Extract a set of terms from a term" $
   "graph" ~> "term" ~>
   "stripped" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term" $
-  Phantoms.cases _Term (var "stripped")
+  Phantoms.match _Term (var "stripped")
     (Just (unexpected(Phantoms.string "set") (PrintCore.term @@ var "stripped"))) [
     _Term_set>>: "s" ~> right (var "s")]
 
@@ -728,7 +728,7 @@ setType = define "setType" $
   doc "Extract the element type from a set type" $
   "typ" ~>
   "stripped" <~ Strip.deannotateType @@ var "typ" $
-  Phantoms.cases _Type (var "stripped")
+  Phantoms.match _Type (var "stripped")
     (Just (unexpected(Phantoms.string "set type") (PrintCore.type_ @@ var "typ"))) [
     _Type_set>>: "t" ~> right (var "t")]
 
@@ -742,7 +742,7 @@ string = define "string" $
 stringLiteral :: TypedTermDefinition (Literal -> Prelude.Either Error String)
 stringLiteral = define "stringLiteral" $
   doc "Extract a string literal from a Literal value" $
-  "v" ~> Phantoms.cases _Literal (var "v")
+  "v" ~> Phantoms.match _Literal (var "v")
     (Just (unexpected(Phantoms.string "string") (PrintCore.literal @@ var "v"))) [
     _Literal_string>>: "s" ~> right (var "s")]
 -- | Strip annotations and dereference, converting Error to DecodingError
@@ -763,7 +763,7 @@ termRecord = define "termRecord" $
   doc "Extract a record from a term" $
   "graph" ~> "term0" ~>
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
-  Phantoms.cases _Term (var "term")
+  Phantoms.match _Term (var "term")
     (Just (unexpected(Phantoms.string "record") (PrintCore.term @@ var "term"))) [
     _Term_record>>: "record" ~> right (var "record")]
 
@@ -786,7 +786,7 @@ uint16 = define "uint16" $
 uint16Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error Int)
 uint16Value = define "uint16Value" $
   doc "Extract a uint16 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
+  "v" ~> Phantoms.match _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "uint16") (PrintCore.integerValue @@ var "v"))) [
     _IntegerValue_uint16>>: "i" ~> right (var "i")]
 uint32 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error I.Int64)
@@ -799,7 +799,7 @@ uint32 = define "uint32" $
 uint32Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error I.Int64)
 uint32Value = define "uint32Value" $
   doc "Extract a uint32 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
+  "v" ~> Phantoms.match _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "uint32") (PrintCore.integerValue @@ var "v"))) [
     _IntegerValue_uint32>>: "i" ~> right (var "i")]
 uint64 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error Integer)
@@ -812,7 +812,7 @@ uint64 = define "uint64" $
 uint64Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error Integer)
 uint64Value = define "uint64Value" $
   doc "Extract a uint64 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
+  "v" ~> Phantoms.match _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "uint64") (PrintCore.integerValue @@ var "v"))) [
     _IntegerValue_uint64>>: "i" ~> right (var "i")]
 uint8 :: TypedTermDefinition (Graph -> Term -> Prelude.Either Error I.Int16)
@@ -825,7 +825,7 @@ uint8 = define "uint8" $
 uint8Value :: TypedTermDefinition (IntegerValue -> Prelude.Either Error I.Int16)
 uint8Value = define "uint8Value" $
   doc "Extract a uint8 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
+  "v" ~> Phantoms.match _IntegerValue (var "v")
     (Just (unexpected(Phantoms.string "uint8") (PrintCore.integerValue @@ var "v"))) [
     _IntegerValue_uint8>>: "i" ~> right (var "i")]
 
@@ -834,13 +834,13 @@ unionType = define "unionType" $
   doc "Extract the field types from a union type" $
   "ename" ~> "typ" ~>
   "stripped" <~ Strip.deannotateType @@ var "typ" $
-  Phantoms.cases _Type (var "stripped")
+  Phantoms.match _Type (var "stripped")
     (Just (unexpected(Phantoms.string "union type") (PrintCore.type_ @@ var "typ"))) [
     _Type_union>>: "fields" ~> right (var "fields")]
 unit :: TypedTermDefinition (Term -> Prelude.Either Error ())
 unit = define "unit" $
   doc "Extract a unit value from a term" $
-  "term" ~> Phantoms.cases _Term (var "term")
+  "term" ~> Phantoms.match _Term (var "term")
     (Just (unexpected(Phantoms.string "unit") (PrintCore.term @@ var "term"))) [
     _Term_unit>>: constant (right Phantoms.unit)]
 unitVariant :: TypedTermDefinition (Name -> Graph -> Term -> Prelude.Either Error Name)
@@ -856,7 +856,7 @@ wrap = define "wrap" $
   doc "Extract the wrapped value from a wrapped term" $
   "expected" ~> "graph" ~> "term0" ~>
   "term" <<~ Lexical.stripAndDereferenceTerm @@ var "graph" @@ var "term0" $
-  Phantoms.cases _Term (var "term")
+  Phantoms.match _Term (var "term")
     (Just (unexpected
       (Phantoms.string "wrap(" ++ (Core.unName (var "expected")) ++ Phantoms.string ")")
       (PrintCore.term @@ var "term"))) [
@@ -872,7 +872,7 @@ wrappedType = define "wrappedType" $
   doc "Extract the wrapped type from a wrapper type" $
   "ename" ~> "typ" ~>
   "stripped" <~ Strip.deannotateType @@ var "typ" $
-  Phantoms.cases _Type (var "stripped")
+  Phantoms.match _Type (var "stripped")
     (Just (unexpected(Phantoms.string "wrapped type") (PrintCore.type_ @@ var "typ"))) [
     _Type_wrap>>: "innerType" ~> right (var "innerType")]
 

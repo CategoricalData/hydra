@@ -164,7 +164,7 @@ additionalItemsToExpr :: TypedTermDefinition (JS.AdditionalItems -> J.Value)
 additionalItemsToExpr = define "additionalItemsToExpr" $
   doc "Encode additional items as a JSON value" $
   lambda "ai" $
-    cases JS._AdditionalItems (var "ai") Nothing [
+    match JS._AdditionalItems (var "ai") Nothing [
       JS._AdditionalItems_any>>: lambda "b" $ Json.valueBoolean (var "b"),
       JS._AdditionalItems_schema>>: lambda "schema" $ schemaToExpr @@ var "schema"]
 
@@ -172,7 +172,7 @@ arrayRestrictionToExpr :: TypedTermDefinition (JS.ArrayRestriction -> (String, J
 arrayRestrictionToExpr = define "arrayRestrictionToExpr" $
   doc "Encode an array restriction as a key-value pair" $
   lambda "r" $
-    cases JS._ArrayRestriction (var "r") Nothing [
+    match JS._ArrayRestriction (var "r") Nothing [
       JS._ArrayRestriction_items>>: lambda "items" $ itemsToExpr @@ var "items",
       JS._ArrayRestriction_additionalItems>>: lambda "ai" $
         pair keyAdditionalItems (additionalItemsToExpr @@ var "ai"),
@@ -187,7 +187,7 @@ fromObject :: TypedTermDefinition (J.Value -> M.Map String J.Value)
 fromObject = define "fromObject" $
   doc "Extract a name-keyed map from a JSON object value (field order is dropped)" $
   lambda "v" $
-    cases J._Value (var "v") Nothing [
+    match J._Value (var "v") Nothing [
       J._Value_object>>: lambda "mp" $ (Maps.fromList (var "mp") :: TypedTerm (M.Map String J.Value))]
 
 integerToExpr :: TypedTermDefinition (Int -> J.Value)
@@ -201,7 +201,7 @@ itemsToExpr = define "itemsToExpr" $
   doc "Encode items as a key-value pair" $
   lambda "items" $
     pair keyItems
-      (cases JS._Items (var "items") Nothing [
+      (match JS._Items (var "items") Nothing [
         JS._Items_sameItems>>: lambda "schema" $ schemaToExpr @@ var "schema",
         JS._Items_varItems>>: lambda "schemas" $
           Json.valueArray (Lists.map (asTerm schemaToExpr) (var "schemas"))])
@@ -418,7 +418,7 @@ multipleRestrictionToExpr :: TypedTermDefinition (JS.MultipleRestriction -> (Str
 multipleRestrictionToExpr = define "multipleRestrictionToExpr" $
   doc "Encode a multiple restriction as a key-value pair" $
   lambda "r" $
-    cases JS._MultipleRestriction (var "r") Nothing [
+    match JS._MultipleRestriction (var "r") Nothing [
       JS._MultipleRestriction_allOf>>: lambda "schemas" $
         pair keyAllOf (Json.valueArray (Lists.map (asTerm schemaToExpr) (var "schemas"))),
       JS._MultipleRestriction_anyOf>>: lambda "schemas" $
@@ -434,7 +434,7 @@ numericRestrictionToExpr :: TypedTermDefinition (JS.NumericRestriction -> [(Stri
 numericRestrictionToExpr = define "numericRestrictionToExpr" $
   doc "Encode a numeric restriction as a list of key-value pairs" $
   lambda "r" $
-    cases JS._NumericRestriction (var "r") Nothing [
+    match JS._NumericRestriction (var "r") Nothing [
       JS._NumericRestriction_minimum>>: lambda "lim" $ lets [
         "value">: project JS._Limit JS._Limit_value @@ var "lim",
         "excl">: project JS._Limit JS._Limit_exclusive @@ var "lim"] $
@@ -458,7 +458,7 @@ objectRestrictionToExpr :: TypedTermDefinition (JS.ObjectRestriction -> (String,
 objectRestrictionToExpr = define "objectRestrictionToExpr" $
   doc "Encode an object restriction as a key-value pair" $
   lambda "r" $
-    cases JS._ObjectRestriction (var "r") Nothing [
+    match JS._ObjectRestriction (var "r") Nothing [
       JS._ObjectRestriction_properties>>: lambda "props" $
         pair keyProperties
           (Json.valueObject (Lists.map (asTerm propertyToExpr) (Maps.toList (var "props")))),
@@ -497,7 +497,7 @@ restrictionToExpr :: TypedTermDefinition (JS.Restriction -> [(String, J.Value)])
 restrictionToExpr = define "restrictionToExpr" $
   doc "Encode a restriction as a list of key-value pairs" $
   lambda "r" $
-    cases JS._Restriction (var "r") Nothing [
+    match JS._Restriction (var "r") Nothing [
       JS._Restriction_type>>: lambda "t" $
         list [pair keyType_ (typeToExpr @@ var "t")],
       JS._Restriction_string>>: lambda "sr" $
@@ -521,7 +521,7 @@ schemaOrArrayToExpr :: TypedTermDefinition (JS.SchemaOrArray -> J.Value)
 schemaOrArrayToExpr = define "schemaOrArrayToExpr" $
   doc "Encode a schema or array as a JSON value" $
   lambda "soa" $
-    cases JS._SchemaOrArray (var "soa") Nothing [
+    match JS._SchemaOrArray (var "soa") Nothing [
       JS._SchemaOrArray_schema>>: lambda "s" $ schemaToExpr @@ var "s",
       JS._SchemaOrArray_array>>: lambda "keys" $
         Json.valueArray (Lists.map (asTerm keywordToExpr) (var "keys"))]
@@ -542,7 +542,7 @@ stringRestrictionToExpr :: TypedTermDefinition (JS.StringRestriction -> (String,
 stringRestrictionToExpr = define "stringRestrictionToExpr" $
   doc "Encode a string restriction as a key-value pair" $
   lambda "r" $
-    cases JS._StringRestriction (var "r") Nothing [
+    match JS._StringRestriction (var "r") Nothing [
       JS._StringRestriction_maxLength>>: lambda "n" $
         pair keyMaxLength_ (Json.valueNumber (Literals.bigintToDecimal (Literals.int32ToBigint (var "n")))),
       JS._StringRestriction_minLength>>: lambda "n" $
@@ -554,7 +554,7 @@ typeNameToExpr :: TypedTermDefinition (JS.TypeName -> J.Value)
 typeNameToExpr = define "typeNameToExpr" $
   doc "Encode a type name as a JSON string value" $
   lambda "t" $
-    cases JS._TypeName (var "t") Nothing [
+    match JS._TypeName (var "t") Nothing [
       JS._TypeName_string>>: constant $ Json.valueString (string "string"),
       JS._TypeName_integer>>: constant $ Json.valueString (string "integer"),
       JS._TypeName_number>>: constant $ Json.valueString (string "number"),
@@ -567,7 +567,7 @@ typeToExpr :: TypedTermDefinition (JS.Type -> J.Value)
 typeToExpr = define "typeToExpr" $
   doc "Encode a type as a JSON value" $
   lambda "t" $
-    cases JS._Type (var "t") Nothing [
+    match JS._Type (var "t") Nothing [
       JS._Type_single>>: lambda "name" $ typeNameToExpr @@ var "name",
       JS._Type_multiple>>: lambda "names" $
         Json.valueArray (Lists.map (asTerm typeNameToExpr) (var "names"))]

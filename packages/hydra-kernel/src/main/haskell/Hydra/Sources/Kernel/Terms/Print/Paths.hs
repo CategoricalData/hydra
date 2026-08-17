@@ -80,7 +80,7 @@ subtermStep = define "subtermStep" $
   "idx" <~ ("i" ~> nothing) $  -- TODO: restore index functionality
   "idxSuff" <~ ("suffix" ~> "i" ~>
     Optionals.map ("s" ~> Strings.concat2 (var "s") (var "suffix")) (var "idx" @@ var "i")) $
-  cases _SubtermStep (var "step")
+  match _SubtermStep (var "step")
     Nothing [
     _SubtermStep_annotatedBody>>: constant nothing,
     _SubtermStep_applicationFunction>>: constant (just (string "fun")),
@@ -116,7 +116,7 @@ termToSubtermGraph = define "termToSubtermGraph" $
       "nodes">: Pairs.first $ var "nodesEdges",
       "edges">: Pairs.second $ var "nodesEdges",
       "nextPath">: Lists.cons (var "step") (var "path")]
-      $ match _Term (Just $
+      $ cases _Term (Just $
           Lists.foldl
             (var "helper" @@ var "ids" @@ var "mroot" @@ var "nextPath")
             (var "state")

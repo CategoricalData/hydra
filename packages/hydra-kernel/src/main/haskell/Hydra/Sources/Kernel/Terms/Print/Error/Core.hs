@@ -233,7 +233,7 @@ invalidTermError :: TypedTermDefinition (InvalidTermError -> String)
 invalidTermError = define "invalidTermError" $
   doc "Show an invalid term error as a string" $
   "e" ~> Strings.concat2 (string "invalid term: ") $
-    cases _InvalidTermError (var "e") Nothing [
+    match _InvalidTermError (var "e") Nothing [
       _InvalidTermError_constantCondition>>: constantConditionError,
       _InvalidTermError_duplicateBinding>>: duplicateBindingError,
       _InvalidTermError_duplicateField>>: duplicateFieldError,
@@ -273,7 +273,7 @@ invalidTypeError :: TypedTermDefinition (InvalidTypeError -> String)
 invalidTypeError = define "invalidTypeError" $
   doc "Show an invalid type error as a string" $
   "e" ~> Strings.concat2 (string "invalid type: ") $
-    cases _InvalidTypeError (var "e") Nothing [
+    match _InvalidTypeError (var "e") Nothing [
       _InvalidTypeError_duplicateRecordTypeFieldNames>>: duplicateRecordTypeFieldNamesError,
       _InvalidTypeError_duplicateUnionTypeFieldNames>>: duplicateUnionTypeFieldNamesError,
       _InvalidTypeError_emptyRecordType>>: emptyRecordTypeError,

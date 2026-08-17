@@ -73,19 +73,19 @@ hoistCaseStatementsCase cname input output = universalCase cname
 -- | Predicate: hoist function applications
 hoistPredicateApplications :: TypedTerm (([SubtermStep], Term) -> Bool)
 hoistPredicateApplications = Phantoms.lambda "pt" $
-  Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
+  Phantoms.match _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
     _Term_application ~>: Phantoms.lambda "_" Phantoms.true]
 
 -- | Predicate: hoist case statements (elimination unions)
 hoistPredicateCaseStatements :: TypedTerm (([SubtermStep], Term) -> Bool)
 hoistPredicateCaseStatements = Phantoms.lambda "pt" $
-  Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
+  Phantoms.match _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
     _Term_cases ~>: Phantoms.lambda "_" Phantoms.true]
 
 -- | Predicate: hoist list terms
 hoistPredicateLists :: TypedTerm (([SubtermStep], Term) -> Bool)
 hoistPredicateLists = Phantoms.lambda "pt" $
-  Phantoms.cases _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
+  Phantoms.match _Term (Pairs.second (Phantoms.var "pt")) (Just Phantoms.false) [
     _Term_list ~>: Phantoms.lambda "_" Phantoms.true]
 
 -- | Predicate: never hoist anything

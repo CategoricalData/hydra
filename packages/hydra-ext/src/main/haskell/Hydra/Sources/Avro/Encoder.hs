@@ -177,7 +177,7 @@ encodeTypeInner = define "encodeTypeInner" $
       right (pair
         (Coders.adapter (var "lossy") (var "typ") (var "target") (Coders.coder (var "encode") (var "decode")))
         (var "env"))] $
-    cases _Type (var "bareType") (Just (err @@ var "cx" @@ string "unsupported Hydra type for Avro encoding")) [
+    match _Type (var "bareType") (Just (err @@ var "cx" @@ string "unsupported Hydra type for Avro encoding")) [
       _Type_unit>>: constant $
         var "simpleAdapter"
           @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_null)
@@ -197,12 +197,12 @@ encodeTypeInner = define "encodeTypeInner" $
                 Avro._Array_items>>: Coders.adapterTarget (var "innerAd")]))
               (Coders.coder
                 (lambda "t" $
-                  cases _Term (var "t") Nothing [
+                  match _Term (var "t") Nothing [
                     _Term_list>>: lambda "elements" $
                       Eithers.map (lambda "jvs" $ inject JM._Value JM._Value_array (var "jvs"))
                         (Eithers.mapList (lambda "el" $ Coders.coderEncode (Coders.adapterCoder (var "innerAd")) @@ var "el") (var "elements"))])
                 (lambda "j" $
-                  cases JM._Value (var "j") Nothing [
+                  match JM._Value (var "j") Nothing [
                     JM._Value_array>>: lambda "elements" $
                       Eithers.map (lambda "ts" $ Core.termList (var "ts"))
                         (Eithers.mapList (lambda "el" $ Coders.coderDecode (Coders.adapterCoder (var "innerAd")) @@ var "el") (var "elements"))])))
@@ -210,10 +210,10 @@ encodeTypeInner = define "encodeTypeInner" $
       _Type_map>>: lambda "mt" $ lets [
         "keyType">: project _MapType _MapType_keys @@ var "mt",
         "valType">: project _MapType _MapType_values @@ var "mt"] $
-        cases _Type (Strip.deannotateType @@ var "keyType")
+        match _Type (Strip.deannotateType @@ var "keyType")
           (Just (err @@ var "cx" @@ string "Avro maps require string keys")) [
           _Type_literal>>: lambda "lt" $
-            cases _LiteralType (var "lt") (Just (err @@ var "cx" @@ string "Avro maps require string keys")) [
+            match _LiteralType (var "lt") (Just (err @@ var "cx" @@ string "Avro maps require string keys")) [
               _LiteralType_string>>: constant $
                 Eithers.bind (encodeTypeInner @@ var "cx" @@ (nothing :: TypedTerm (Maybe Name)) @@ var "valType" @@ var "env") (lambda "adEnv" $ lets [
                   "valAd">: Pairs.first (var "adEnv"),
@@ -224,7 +224,7 @@ encodeTypeInner = define "encodeTypeInner" $
                         Avro._Map_values>>: Coders.adapterTarget (var "valAd")]))
                       (Coders.coder
                         (lambda "t" $
-                          cases _Term (var "t") Nothing [
+                          match _Term (var "t") Nothing [
                             _Term_map>>: lambda "entries" $ lets [
                               "encodeEntry">: lambda "entry" $ lets [
                                 "k">: Pairs.first (var "entry"),
@@ -235,7 +235,7 @@ encodeTypeInner = define "encodeTypeInner" $
                               Eithers.map (lambda "pairs" $ inject JM._Value JM._Value_object (var "pairs"))
                                 (Eithers.mapList (var "encodeEntry") (Maps.toList (var "entries" :: TypedTerm (M.Map Term Term))))])
                         (lambda "j" $
-                          cases JM._Value (var "j") Nothing [
+                          match JM._Value (var "j") Nothing [
                             JM._Value_object>>: lambda "m" $ lets [
                               "decodeEntry">: lambda "entry" $ lets [
                                 "k">: Pairs.first (var "entry"),
@@ -253,7 +253,7 @@ encodeTypeInner = define "encodeTypeInner" $
       _Type_union>>: lambda "fieldTypes" $ lets [
         "allUnit">: Lists.foldl
           (lambda "b" $ lambda "ft" $ Logic.and (var "b")
-            (cases _Type (project _FieldType _FieldType_type @@ var "ft") (Just (boolean False)) [
+            (match _Type (project _FieldType _FieldType_type @@ var "ft") (Just (boolean False)) [
               _Type_unit>>: constant (boolean True)]))
           (boolean True) (var "fieldTypes")] $
         Logic.ifElse (var "allUnit")
@@ -270,11 +270,11 @@ encodeTypeInner = define "encodeTypeInner" $
                 Coders.adapterTarget (var "innerAd")])))
               (Coders.coder
                 (lambda "t" $
-                  cases _Term (var "t") Nothing [
+                  match _Term (var "t") Nothing [
                     _Term_optional>>: lambda "ot" $
-                      Optionals.cases (var "ot") (right (injectUnit JM._Value JM._Value_null)) (lambda "inner" $ Coders.coderEncode (Coders.adapterCoder (var "innerAd")) @@ var "inner")])
+                      Optionals.match (var "ot") (right (injectUnit JM._Value JM._Value_null)) (lambda "inner" $ Coders.coderEncode (Coders.adapterCoder (var "innerAd")) @@ var "inner")])
                 (lambda "j" $
-                  cases JM._Value (var "j") (Just (
+                  match JM._Value (var "j") (Just (
                     Eithers.map (lambda "t" $ Core.termOptional (just (var "t")))
                       (Coders.coderDecode (Coders.adapterCoder (var "innerAd")) @@ var "j"))) [
                     JM._Value_null>>: constant (right (Core.termOptional nothing))])))
@@ -282,7 +282,7 @@ encodeTypeInner = define "encodeTypeInner" $
       _Type_wrap>>: lambda "inner" $
         encodeTypeInner @@ var "cx" @@ var "mName" @@ var "inner" @@ var "env",
       _Type_variable>>: lambda "name_" $
-        Optionals.cases (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_emitted @@ var "env" :: TypedTerm (M.Map Name HydraAvroAdapter))) (Optionals.cases (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env" :: TypedTerm (M.Map Name Type))) (err @@ var "cx" @@ Strings.concat2 (string "referenced type not found: ") (unwrap _Name @@ var "name_")) (lambda "refType" $ encodeTypeInner @@ var "cx" @@ just (var "name_") @@ var "refType" @@ var "env")) (lambda "existingAd" $
+        Optionals.match (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_emitted @@ var "env" :: TypedTerm (M.Map Name HydraAvroAdapter))) (Optionals.match (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env" :: TypedTerm (M.Map Name Type))) (err @@ var "cx" @@ Strings.concat2 (string "referenced type not found: ") (unwrap _Name @@ var "name_")) (lambda "refType" $ encodeTypeInner @@ var "cx" @@ just (var "name_") @@ var "refType" @@ var "env")) (lambda "existingAd" $
             right (pair
               (Coders.adapterWithTarget (var "existingAd") (inject Avro._Schema Avro._Schema_reference (localName @@ var "name_")))
               (var "env")))
@@ -292,7 +292,7 @@ encodeTypeWithEnv :: TypedTermDefinition (InferenceContext -> Name -> AvroEnv.En
 encodeTypeWithEnv = define "encodeTypeWithEnv" $
   doc "Encode with full environment threading. Returns the adapter and updated environment" $
   lambda "cx" $ lambda "name_" $ lambda "env" $
-    Optionals.cases (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env" :: TypedTerm (M.Map Name Type))) (err @@ var "cx" @@ Strings.concat2 (string "type not found in type map: ") (Literals.printString (unwrap _Name @@ var "name_"))) (lambda "typ" $ encodeTypeInner @@ var "cx" @@ just (var "name_") @@ var "typ" @@ var "env")
+    Optionals.match (Maps.lookup (var "name_") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_typeMap @@ var "env" :: TypedTerm (M.Map Name Type))) (err @@ var "cx" @@ Strings.concat2 (string "type not found in type map: ") (Literals.printString (unwrap _Name @@ var "name_"))) (lambda "typ" $ encodeTypeInner @@ var "cx" @@ just (var "name_") @@ var "typ" @@ var "env")
 
 enumAdapter :: TypedTermDefinition (InferenceContext -> Type -> Maybe Name -> M.Map Name Term -> [FieldType] -> AvroEnv.EncodeEnvironment -> Result (HydraAvroAdapter, AvroEnv.EncodeEnvironment))
 enumAdapter = define "enumAdapter" $
@@ -313,12 +313,12 @@ enumAdapter = define "enumAdapter" $
     "adapter_">: Coders.adapter (boolean False) (var "typ") (var "avroSchema")
       (Coders.coder
         (lambda "t" $
-          cases _Term (var "t") (Just (left (Error.errorOther (Error.otherError (string "expected union term for enum"))))) [
+          match _Term (var "t") (Just (left (Error.errorOther (Error.otherError (string "expected union term for enum"))))) [
             _Term_inject>>: lambda "inj" $ lets [
               "fname">: project _Injection _Injection_field @@ var "inj"] $
               right (inject JM._Value JM._Value_string (localName @@ (project _Field _Field_name @@ var "fname")))])
         (lambda "j" $
-          cases JM._Value (var "j") Nothing [
+          match JM._Value (var "j") Nothing [
             JM._Value_string>>: lambda "s" $
               right (Core.termInject (Core.injection (var "typeName") (Core.field (Core.name (var "s")) Core.termUnit)))])),
     "env1">: record AvroEnv._EncodeEnvironment [
@@ -337,7 +337,7 @@ extractAnnotations :: TypedTermDefinition (Type -> (M.Map Name Term, Type))
 extractAnnotations = define "extractAnnotations" $
   doc "Extract annotations from a potentially annotated type" $
   lambda "typ" $
-    cases _Type (var "typ") (Just (pair (Maps.empty :: TypedTerm (M.Map Name Term)) (var "typ"))) [
+    match _Type (var "typ") (Just (pair (Maps.empty :: TypedTerm (M.Map Name Term)) (var "typ"))) [
       _Type_annotated>>: lambda "at" $ lets [
         "inner">: project _AnnotatedType _AnnotatedType_body @@ var "at",
         "anns">: Annotations.getAnnotationMap @@ (project _AnnotatedType _AnnotatedType_annotation @@ var "at"),
@@ -352,17 +352,17 @@ floatAdapter = define "floatAdapter" $
   lambda "cx" $ lambda "typ" $ lambda "ft" $ lets [
     "simple">: lambda "target" $ lambda "lossy" $ lambda "encode" $ lambda "decode" $
       right (Coders.adapter (var "lossy") (var "typ") (var "target") (Coders.coder (var "encode") (var "decode")))] $
-    cases _FloatType (var "ft") (Just $
+    match _FloatType (var "ft") (Just $
       var "simple"
         @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_double)
         @@ boolean True
         @@ (lambda "t" $
-          cases _Term (var "t") Nothing [
+          match _Term (var "t") Nothing [
             _Term_literal>>: lambda "lit" $
-              cases _Literal (var "lit") Nothing [
+              match _Literal (var "lit") Nothing [
                 _Literal_float>>: lambda "fv" $ right (inject JM._Value JM._Value_number (floatValueToDouble @@ var "fv"))]])
         @@ (lambda "j" $
-          cases JM._Value (var "j") Nothing [
+          match JM._Value (var "j") Nothing [
             JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat64 (Literals.decimalToFloat64 (var "d")))))])) [
     _FloatType_float32>>: constant $
       var "simple"
@@ -372,7 +372,7 @@ floatAdapter = define "floatAdapter" $
           Eithers.map (lambda "f" $ inject JM._Value JM._Value_number (Literals.float32ToDecimal (var "f")))
             (ExtractCore.float32 @@ Graph.emptyGraph @@ var "t"))
         @@ (lambda "j" $
-          cases JM._Value (var "j") Nothing [
+          match JM._Value (var "j") Nothing [
             JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat32 (Literals.decimalToFloat32 (var "d")))))]),
     _FloatType_float64>>: constant $
       var "simple"
@@ -382,14 +382,14 @@ floatAdapter = define "floatAdapter" $
           Eithers.map (lambda "d" $ inject JM._Value JM._Value_number (Literals.float64ToDecimal (var "d")))
             (ExtractCore.float64 @@ Graph.emptyGraph @@ var "t"))
         @@ (lambda "j" $
-          cases JM._Value (var "j") Nothing [
+          match JM._Value (var "j") Nothing [
             JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat64 (Literals.decimalToFloat64 (var "d")))))])]
 
 floatValueToDouble :: TypedTermDefinition (FloatValue -> Sci.Scientific)
 floatValueToDouble = define "floatValueToDouble" $
   doc "Convert any float value to a JSON decimal number" $
   lambda "fv" $
-    cases _FloatValue (var "fv") Nothing [
+    match _FloatValue (var "fv") Nothing [
       _FloatValue_float32>>: lambda "f" $ Literals.float32ToDecimal (var "f"),
       _FloatValue_float64>>: lambda "d" $ Literals.float64ToDecimal (var "d")]
 
@@ -444,17 +444,17 @@ integerAdapter = define "integerAdapter" $
   lambda "cx" $ lambda "typ" $ lambda "it" $ lets [
     "simple">: lambda "target" $ lambda "lossy" $ lambda "encode" $ lambda "decode" $
       right (Coders.adapter (var "lossy") (var "typ") (var "target") (Coders.coder (var "encode") (var "decode")))] $
-    cases _IntegerType (var "it") (Just $
+    match _IntegerType (var "it") (Just $
       var "simple"
         @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_long)
         @@ boolean True
         @@ (lambda "t" $
-          cases _Term (var "t") Nothing [
+          match _Term (var "t") Nothing [
             _Term_literal>>: lambda "lit" $
-              cases _Literal (var "lit") Nothing [
+              match _Literal (var "lit") Nothing [
                 _Literal_integer>>: lambda "iv" $ right (inject JM._Value JM._Value_number (integerValueToDouble @@ var "iv"))]])
         @@ (lambda "j" $
-          cases JM._Value (var "j") Nothing [
+          match JM._Value (var "j") Nothing [
             JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (Literals.bigintToInt64 (Literals.decimalToBigint (var "d"))))))])) [
     _IntegerType_int32>>: constant $
       var "simple"
@@ -464,7 +464,7 @@ integerAdapter = define "integerAdapter" $
           Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToDecimal (Literals.int32ToBigint (var "i"))))
             (ExtractCore.int32 @@ Graph.emptyGraph @@ var "t"))
         @@ (lambda "j" $
-          cases JM._Value (var "j") Nothing [
+          match JM._Value (var "j") Nothing [
             JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (Literals.bigintToInt32 (Literals.decimalToBigint (var "d"))))))]),
     _IntegerType_int64>>: constant $
       var "simple"
@@ -474,14 +474,14 @@ integerAdapter = define "integerAdapter" $
           Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToDecimal (Literals.int64ToBigint (var "i"))))
             (ExtractCore.int64 @@ Graph.emptyGraph @@ var "t"))
         @@ (lambda "j" $
-          cases JM._Value (var "j") Nothing [
+          match JM._Value (var "j") Nothing [
             JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (Literals.bigintToInt64 (Literals.decimalToBigint (var "d"))))))])]
 
 integerValueToDouble :: TypedTermDefinition (IntegerValue -> Sci.Scientific)
 integerValueToDouble = define "integerValueToDouble" $
   doc "Convert any integer value to a JSON decimal number" $
   lambda "iv" $
-    cases _IntegerValue (var "iv") Nothing [
+    match _IntegerValue (var "iv") Nothing [
       _IntegerValue_bigint>>: lambda "i" $ Literals.bigintToDecimal (var "i"),
       _IntegerValue_int8>>: lambda "i" $ Literals.bigintToDecimal (Literals.int8ToBigint (var "i")),
       _IntegerValue_int16>>: lambda "i" $ Literals.bigintToDecimal (Literals.int16ToBigint (var "i")),
@@ -501,42 +501,42 @@ literalAdapter = define "literalAdapter" $
   lambda "cx" $ lambda "typ" $ lambda "lt" $ lets [
     "simple">: lambda "target" $ lambda "lossy" $ lambda "encode" $ lambda "decode" $
       right (Coders.adapter (var "lossy") (var "typ") (var "target") (Coders.coder (var "encode") (var "decode")))] $
-    cases _LiteralType (var "lt") Nothing [
+    match _LiteralType (var "lt") Nothing [
       _LiteralType_boolean>>: constant $
         var "simple"
           @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_boolean)
           @@ boolean False
           @@ (lambda "t" $
-            cases _Term (var "t") Nothing [
+            match _Term (var "t") Nothing [
               _Term_literal>>: lambda "lit" $
-                cases _Literal (var "lit") Nothing [
+                match _Literal (var "lit") Nothing [
                   _Literal_boolean>>: lambda "b" $ right (inject JM._Value JM._Value_boolean (var "b"))]])
           @@ (lambda "j" $
-            cases JM._Value (var "j") Nothing [
+            match JM._Value (var "j") Nothing [
               JM._Value_boolean>>: lambda "b" $ right (Core.termLiteral (Core.literalBoolean (var "b")))]),
       _LiteralType_string>>: constant $
         var "simple"
           @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_string)
           @@ boolean False
           @@ (lambda "t" $
-            cases _Term (var "t") Nothing [
+            match _Term (var "t") Nothing [
               _Term_literal>>: lambda "lit" $
-                cases _Literal (var "lit") Nothing [
+                match _Literal (var "lit") Nothing [
                   _Literal_string>>: lambda "s" $ right (inject JM._Value JM._Value_string (var "s"))]])
           @@ (lambda "j" $
-            cases JM._Value (var "j") Nothing [
+            match JM._Value (var "j") Nothing [
               JM._Value_string>>: lambda "s" $ right (Core.termLiteral (Core.literalString (var "s")))]),
       _LiteralType_binary>>: constant $
         var "simple"
           @@ inject Avro._Schema Avro._Schema_primitive (injectUnit Avro._Primitive Avro._Primitive_bytes)
           @@ boolean False
           @@ (lambda "t" $
-            cases _Term (var "t") Nothing [
+            match _Term (var "t") Nothing [
               _Term_literal>>: lambda "lit" $
-                cases _Literal (var "lit") Nothing [
+                match _Literal (var "lit") Nothing [
                   _Literal_binary>>: lambda "b" $ right (inject JM._Value JM._Value_string (Literals.binaryToBase64 (var "b")))]])
           @@ (lambda "j" $
-            cases JM._Value (var "j") Nothing [
+            match JM._Value (var "j") Nothing [
               JM._Value_string>>: lambda "s" $ right (Core.termLiteral (Core.literalBinary (Literals.base64ToBinary (var "s"))))]),
       _LiteralType_integer>>: lambda "it" $ integerAdapter @@ var "cx" @@ var "typ" @@ var "it",
       _LiteralType_float>>: lambda "ft" $ floatAdapter @@ var "cx" @@ var "typ" @@ var "ft"]
@@ -569,7 +569,7 @@ namedTypeAdapter = define "namedTypeAdapter" $
   lambda "cx" $ lambda "typ" $ lambda "mName" $ lambda "annotations" $ lambda "fieldTypes" $ lambda "env0"
     $ lambda "mkNamedType" $ lambda "mkCoder" $ lets [
     "typeName">: Optionals.withDefault (typeToName @@ var "typ") (var "mName")] $
-    Optionals.cases (Maps.lookup (var "typeName") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_emitted @@ var "env0" :: TypedTerm (M.Map Name HydraAvroAdapter))) (Eithers.bind (foldFieldAdapters @@ var "cx" @@ var "fieldTypes" @@ var "env0") (lambda "faResult" $ lets [
+    Optionals.match (Maps.lookup (var "typeName") (project AvroEnv._EncodeEnvironment AvroEnv._EncodeEnvironment_emitted @@ var "env0" :: TypedTerm (M.Map Name HydraAvroAdapter))) (Eithers.bind (foldFieldAdapters @@ var "cx" @@ var "fieldTypes" @@ var "env0") (lambda "faResult" $ lets [
         "fieldAdapters">: Pairs.first (var "faResult"),
         "env1">: Pairs.second (var "faResult"),
         "avroFields">: Lists.map (asTerm buildAvroField) (var "fieldAdapters"),
@@ -599,7 +599,7 @@ recordTermCoder = define "recordTermCoder" $
   doc "Build a record term coder from field adapters" $
   lambda "cx" $ lambda "typeName" $ lambda "fieldAdapters" $ lets [
     "encode">: lambda "term" $
-      cases _Term (var "term") (Just (err @@ var "cx" @@ string "expected record term")) [
+      match _Term (var "term") (Just (err @@ var "cx" @@ string "expected record term")) [
         _Term_record>>: lambda "rec" $ lets [
           "fields">: project _Record _Record_fields @@ var "rec",
           "fieldMap">: (Maps.fromList (Lists.map (lambda "f" $ pair (project _Field _Field_name @@ var "f") (project _Field _Field_term @@ var "f")) (var "fields")) :: TypedTerm (M.Map Name Term)),
@@ -612,7 +612,7 @@ recordTermCoder = define "recordTermCoder" $
           Eithers.map (lambda "pairs" $ inject JM._Value JM._Value_object (var "pairs"))
             (Eithers.mapList (var "encodeField") (var "fieldAdapters"))],
     "decode">: lambda "json" $
-      cases JM._Value (var "json") (Just (err @@ var "cx" @@ string "expected JSON object")) [
+      match JM._Value (var "json") (Just (err @@ var "cx" @@ string "expected JSON object")) [
         JM._Value_object>>: lambda "m" $ lets [
           "mm">: (Maps.fromList (var "m") :: TypedTerm (M.Map String JM.Value)),
           "decodeField">: lambda "nameAd" $ lets [
@@ -629,9 +629,9 @@ termToJsonValue :: TypedTermDefinition (Term -> JM.Value)
 termToJsonValue = define "termToJsonValue" $
   doc "Convert a Hydra term to a JSON value (for annotation values)" $
   lambda "term" $
-    cases _Term (var "term") (Just (inject JM._Value JM._Value_string (string "<term>"))) [
+    match _Term (var "term") (Just (inject JM._Value JM._Value_string (string "<term>"))) [
       _Term_literal>>: lambda "lit" $
-        cases _Literal (var "lit") Nothing [
+        match _Literal (var "lit") Nothing [
           _Literal_string>>: lambda "s" $ inject JM._Value JM._Value_string (var "s"),
           _Literal_boolean>>: lambda "b" $ inject JM._Value JM._Value_boolean (var "b"),
           _Literal_integer>>: lambda "iv" $ inject JM._Value JM._Value_number (integerValueToDouble @@ var "iv"),
@@ -645,9 +645,9 @@ termToJsonValue = define "termToJsonValue" $
             "k">: Pairs.first (var "entry"),
             "v">: Pairs.second (var "entry")] $
             pair
-              (cases _Term (var "k") (Just (string "<key>")) [
+              (match _Term (var "k") (Just (string "<key>")) [
                 _Term_literal>>: lambda "kl" $
-                  cases _Literal (var "kl") (Just (string "<key>")) [
+                  match _Literal (var "kl") (Just (string "<key>")) [
                     _Literal_string>>: lambda "s" $ var "s"]])
               (termToJsonValue @@ var "v"))
           (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))))),
@@ -660,7 +660,7 @@ typeToName :: TypedTermDefinition (Type -> Name)
 typeToName = define "typeToName" $
   doc "Generate a default name for an anonymous type" $
   lambda "t" $
-    cases _Type (Strip.deannotateType @@ var "t") (Just (Core.name (string "Unknown"))) [
+    match _Type (Strip.deannotateType @@ var "t") (Just (Core.name (string "Unknown"))) [
       _Type_record>>: constant $ Core.name (string "Record"),
       _Type_union>>: constant $ Core.name (string "Union")]
 
@@ -699,7 +699,7 @@ unionAsRecordAdapter = define "unionAsRecordAdapter" $
       "adapter_">: Coders.adapter (boolean True) (var "typ") (var "avroSchema")
         (Coders.coder
           (lambda "t" $
-            cases _Term (var "t") (Just (left (Error.errorOther (Error.otherError (string "expected union term"))))) [
+            match _Term (var "t") (Just (left (Error.errorOther (Error.otherError (string "expected union term"))))) [
               _Term_inject>>: lambda "inj" $ lets [
                 "activeName">: project _Field _Field_name @@ (project _Injection _Injection_field @@ var "inj"),
                 "activeValue">: project _Field _Field_term @@ (project _Injection _Injection_field @@ var "inj"),
@@ -713,18 +713,18 @@ unionAsRecordAdapter = define "unionAsRecordAdapter" $
                 Eithers.map (lambda "pairs" $ inject JM._Value JM._Value_object (var "pairs"))
                   (Eithers.mapList (var "encodePair") (var "fieldAdapters"))])
           (lambda "j" $
-            cases JM._Value (var "j") (Just (left (Error.errorOther (Error.otherError (string "expected JSON object for union-as-record"))))) [
+            match JM._Value (var "j") (Just (left (Error.errorOther (Error.otherError (string "expected JSON object for union-as-record"))))) [
               JM._Value_object>>: lambda "m" $ lets [
                 "mm">: (Maps.fromList (var "m") :: TypedTerm (M.Map String JM.Value)),
                 "findActive">: lambda "remaining" $
-                  Optionals.cases (Lists.uncons (var "remaining")) (left (Error.errorOther (Error.otherError (string "no non-null field in union record")))) (lambda "p" $ lets [
+                  Optionals.match (Lists.uncons (var "remaining")) (left (Error.errorOther (Error.otherError (string "no non-null field in union record")))) (lambda "p" $ lets [
                       "head_">: Pairs.first (var "p"),
                       "rest_">: Pairs.second (var "p"),
                       "fname">: Pairs.first (var "head_"),
                       "ad">: Pairs.second (var "head_"),
                       "mjv">: Maps.lookup (localName @@ var "fname") (var "mm" :: TypedTerm (M.Map String JM.Value))] $
-                      Optionals.cases (var "mjv") (var "findActive" @@ var "rest_") (lambda "jv" $
-                          cases JM._Value (var "jv") (Just (
+                      Optionals.match (var "mjv") (var "findActive" @@ var "rest_") (lambda "jv" $
+                          match JM._Value (var "jv") (Just (
                             Eithers.map (lambda "t" $ Core.termInject (Core.injection (var "typeName") (Core.field (var "fname") (var "t"))))
                               (Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "jv"))) [
                             JM._Value_null>>: constant (var "findActive" @@ var "rest_")]))] $

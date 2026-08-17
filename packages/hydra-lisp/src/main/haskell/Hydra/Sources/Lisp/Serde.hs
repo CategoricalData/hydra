@@ -119,9 +119,9 @@ applicationToExpr = define "applicationToExpr" $
     "fun">: expressionToExpr @@ var "d" @@ var "funExpr",
     "args">: Lists.map (expressionToExpr @@ var "d") (project L._Application L._Application_arguments @@ var "app"),
     -- In a Lisp-2, funcall is needed when the function is not a simple variable.
-    "funcallWhenComputed">: cases L._Expression (var "funExpr") (Just $ boolean True)
+    "funcallWhenComputed">: match L._Expression (var "funExpr") (Just $ boolean True)
       [L._Expression_variable>>: lambda "s" $ boolean False],
-    "needsFuncall">: cases L._Dialect (var "d") (Just $ boolean False)
+    "needsFuncall">: match L._Dialect (var "d") (Just $ boolean False)
       [L._Dialect_commonLisp>>: lambda "u" $ var "funcallWhenComputed",
        L._Dialect_emacsLisp>>: lambda "u" $ var "funcallWhenComputed"],
     "allParts">: Logic.ifElse (var "needsFuncall")
@@ -169,7 +169,7 @@ condExpressionToExpr = define "condExpressionToExpr" $
   lambda "d" $ lambda "condExpr" $ lets [
     "clauses">: project L._CondExpression L._CondExpression_clauses @@ var "condExpr",
     "dflt">: project L._CondExpression L._CondExpression_default @@ var "condExpr"] $
-    cases L._Dialect (var "d") Nothing [
+    match L._Dialect (var "d") Nothing [
       -- Clojure: (cond test1 expr1 test2 expr2 :else default)
       L._Dialect_clojure>>: constant $ lets [
         "clauseExprs">: Lists.concat (Lists.map (lambda "c" $ list [
@@ -217,7 +217,7 @@ constantDefinitionToExpr = define "constantDefinitionToExpr" $
 defKeyword :: TypedTermDefinition (L.Dialect -> String)
 defKeyword = define "defKeyword" $
   doc "The keyword for variable definitions" $
-  lambda "d" $ cases L._Dialect (var "d") Nothing [
+  lambda "d" $ match L._Dialect (var "d") Nothing [
     L._Dialect_clojure>>: constant $ string "def",
     L._Dialect_emacsLisp>>: constant $ string "defvar",
     L._Dialect_commonLisp>>: constant $ string "cl:defvar",
@@ -227,7 +227,7 @@ defKeyword = define "defKeyword" $
 defconstKeyword :: TypedTermDefinition (L.Dialect -> String)
 defconstKeyword = define "defconstKeyword" $
   doc "The keyword for constant definitions" $
-  lambda "d" $ cases L._Dialect (var "d") Nothing [
+  lambda "d" $ match L._Dialect (var "d") Nothing [
     L._Dialect_clojure>>: constant $ string "def",
     L._Dialect_emacsLisp>>: constant $ string "defconst",
     L._Dialect_commonLisp>>: constant $ string "cl:defconstant",
@@ -237,7 +237,7 @@ defconstKeyword = define "defconstKeyword" $
 defnKeyword :: TypedTermDefinition (L.Dialect -> String)
 defnKeyword = define "defnKeyword" $
   doc "The keyword for named function definitions" $
-  lambda "d" $ cases L._Dialect (var "d") Nothing [
+  lambda "d" $ match L._Dialect (var "d") Nothing [
     L._Dialect_clojure>>: constant $ string "defn",
     L._Dialect_emacsLisp>>: constant $ string "defun",
     L._Dialect_commonLisp>>: constant $ string "cl:defun",
@@ -247,7 +247,7 @@ defnKeyword = define "defnKeyword" $
 defrecordKeyword :: TypedTermDefinition (L.Dialect -> String)
 defrecordKeyword = define "defrecordKeyword" $
   doc "The keyword for record/struct definitions" $
-  lambda "d" $ cases L._Dialect (var "d") Nothing [
+  lambda "d" $ match L._Dialect (var "d") Nothing [
     L._Dialect_clojure>>: constant $ string "defrecord",
     L._Dialect_emacsLisp>>: constant $ string "cl-defstruct",
     L._Dialect_commonLisp>>: constant $ string "cl:defstruct",
@@ -258,7 +258,7 @@ doExpressionToExpr :: TypedTermDefinition (L.Dialect -> L.DoExpression -> Expr)
 doExpressionToExpr = define "doExpressionToExpr" $
   doc "Serialize a do/progn/begin expression" $
   lambda "d" $ lambda "doExpr" $ lets [
-    "kw">: cases L._Dialect (var "d") Nothing [
+    "kw">: match L._Dialect (var "d") Nothing [
       L._Dialect_clojure>>: constant $ string "do",
       L._Dialect_emacsLisp>>: constant $ string "progn",
       L._Dialect_commonLisp>>: constant $ string "progn",
@@ -284,7 +284,7 @@ exportDeclarationToExpr = define "exportDeclarationToExpr" $
   doc "Serialize an export declaration" $
   lambda "d" $ lambda "edecl" $ lets [
     "syms">: Lists.map (asTerm symbolToExpr) (project L._ExportDeclaration L._ExportDeclaration_symbols @@ var "edecl")] $
-    cases L._Dialect (var "d") Nothing [
+    match L._Dialect (var "d") Nothing [
       -- Clojure: public by default, no export form
       L._Dialect_clojure>>: constant $ Serialization.cst @@ string "",
       -- (provide 'name)
@@ -310,7 +310,7 @@ expressionToExpr :: TypedTermDefinition (L.Dialect -> L.Expression -> Expr)
 expressionToExpr = define "expressionToExpr" $
   doc "Serialize a Lisp expression" $
   lambda "d" $ lambda "expr" $
-    cases L._Expression (var "expr") Nothing [
+    match L._Expression (var "expr") Nothing [
       L._Expression_application>>: lambda "a" $ applicationToExpr @@ var "d" @@ var "a",
       L._Expression_lambda>>: lambda "l" $ lambdaToExpr @@ var "d" @@ var "l",
       L._Expression_let>>: lambda "l" $ letExpressionToExpr @@ var "d" @@ var "l",
@@ -360,7 +360,7 @@ expressionToExpr = define "expressionToExpr" $
   where
     unquoteToExpr :: TypedTerm L.Dialect -> TypedTerm a -> TypedTerm Expr
     unquoteToExpr d u =
-      cases L._Dialect d Nothing [
+      match L._Dialect d Nothing [
         L._Dialect_clojure>>: constant $
           Serialization.noSep @@ list [
             Serialization.cst @@ string "~",
@@ -379,7 +379,7 @@ expressionToExpr = define "expressionToExpr" $
             expressionToExpr @@ d @@ (project L._UnquoteExpression L._UnquoteExpression_body @@ u)]]
     splicingUnquoteToExpr :: TypedTerm L.Dialect -> TypedTerm a -> TypedTerm Expr
     splicingUnquoteToExpr d su =
-      cases L._Dialect d Nothing [
+      match L._Dialect d Nothing [
         L._Dialect_clojure>>: constant $
           Serialization.noSep @@ list [
             Serialization.cst @@ string "~@",
@@ -401,7 +401,7 @@ expressionToExpr = define "expressionToExpr" $
 falseExpr :: TypedTermDefinition (L.Dialect -> Expr)
 falseExpr = define "falseExpr" $
   doc "The boolean false expression" $
-  lambda "d" $ cases L._Dialect (var "d") Nothing [
+  lambda "d" $ match L._Dialect (var "d") Nothing [
     L._Dialect_clojure>>: constant $ Serialization.cst @@ string "false",
     L._Dialect_emacsLisp>>: constant $ Serialization.cst @@ string "nil",
     L._Dialect_commonLisp>>: constant $ Serialization.cst @@ string "cl:nil",
@@ -415,7 +415,7 @@ fieldAccessToExpr = define "fieldAccessToExpr" $
     "rtype">: symbolToExpr @@ (project L._FieldAccess L._FieldAccess_recordType @@ var "fa"),
     "field">: symbolToExpr @@ (project L._FieldAccess L._FieldAccess_field @@ var "fa"),
     "target">: expressionToExpr @@ var "d" @@ (project L._FieldAccess L._FieldAccess_target @@ var "fa")] $
-    cases L._Dialect (var "d") Nothing [
+    match L._Dialect (var "d") Nothing [
       -- (:field target) in Clojure
       L._Dialect_clojure>>: constant $
         Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
@@ -440,19 +440,19 @@ formatLispFloat = define "formatLispFloat" $
   lambda "d" $ lambda "v" $
     "s" <~ Literals.showFloat64 (var "v") $
     Logic.ifElse (Equality.equal (var "s") (string "NaN"))
-      (cases L._Dialect (var "d") Nothing [
+      (match L._Dialect (var "d") Nothing [
         L._Dialect_clojure>>: constant $ string "Double/NaN",
         L._Dialect_scheme>>: constant $ string "+nan.0",
         L._Dialect_commonLisp>>: constant $ string "+hydra-nan+",
         L._Dialect_emacsLisp>>: constant $ string "0.0e+NaN"]) $
     Logic.ifElse (Equality.equal (var "s") (string "Infinity"))
-      (cases L._Dialect (var "d") Nothing [
+      (match L._Dialect (var "d") Nothing [
         L._Dialect_clojure>>: constant $ string "Double/POSITIVE_INFINITY",
         L._Dialect_scheme>>: constant $ string "+inf.0",
         L._Dialect_commonLisp>>: constant $ string "+hydra-pos-inf+",
         L._Dialect_emacsLisp>>: constant $ string "1.0e+INF"]) $
     Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
-      (cases L._Dialect (var "d") Nothing [
+      (match L._Dialect (var "d") Nothing [
         L._Dialect_clojure>>: constant $ string "Double/NEGATIVE_INFINITY",
         L._Dialect_scheme>>: constant $ string "-inf.0",
         L._Dialect_commonLisp>>: constant $ string "+hydra-neg-inf+",
@@ -470,7 +470,7 @@ functionDefinitionToExpr = define "functionDefinitionToExpr" $
     "name">: symbolToExpr @@ (project L._FunctionDefinition L._FunctionDefinition_name @@ var "fdef"),
     "params">: Lists.map (asTerm symbolToExpr) (project L._FunctionDefinition L._FunctionDefinition_params @@ var "fdef"),
     "body">: Lists.map (expressionToExpr @@ var "d") (project L._FunctionDefinition L._FunctionDefinition_body @@ var "fdef")] $
-    cases L._Dialect (var "d") Nothing [
+    match L._Dialect (var "d") Nothing [
       -- (defn name [params] body...)
       L._Dialect_clojure>>: constant $
         Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
@@ -515,7 +515,7 @@ importDeclarationToExpr = define "importDeclarationToExpr" $
   doc "Serialize an import declaration" $
   lambda "d" $ lambda "idecl" $ lets [
     "modName">: unwrap L._NamespaceName @@ (project L._ImportDeclaration L._ImportDeclaration_module @@ var "idecl")] $
-    cases L._Dialect (var "d") Nothing [
+    match L._Dialect (var "d") Nothing [
       -- (:require [name])
       L._Dialect_clojure>>: constant $
         Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
@@ -544,7 +544,7 @@ keywordToExpr = define "keywordToExpr" $
   lambda "d" $ lambda "k" $ lets [
     "name">: project L._Keyword L._Keyword_name @@ var "k",
     "ns">: project L._Keyword L._Keyword_namespace @@ var "k"] $
-    cases L._Dialect (var "d") (Just $
+    match L._Dialect (var "d") (Just $
       -- Default: :name or ns/:name
       Serialization.cst @@ Optionals.cases (var "ns") (Strings.concat2 (string ":") (var "name")) (lambda "n" $ Strings.concat (list [var "n", string "/:", var "name"]))) [
       -- Scheme: 'name (quoted symbol, since Scheme has no keywords)
@@ -557,7 +557,7 @@ keywordToExpr = define "keywordToExpr" $
 lambdaKeyword :: TypedTermDefinition (L.Dialect -> String)
 lambdaKeyword = define "lambdaKeyword" $
   doc "The keyword for anonymous functions" $
-  lambda "d" $ cases L._Dialect (var "d") Nothing [
+  lambda "d" $ match L._Dialect (var "d") Nothing [
     L._Dialect_clojure>>: constant $ string "fn",
     L._Dialect_emacsLisp>>: constant $ string "lambda",
     L._Dialect_commonLisp>>: constant $ string "cl:lambda",
@@ -572,7 +572,7 @@ lambdaToExpr = define "lambdaToExpr" $
     "body">: Lists.map (expressionToExpr @@ var "d") (project L._Lambda L._Lambda_body @@ var "lam"),
     "mname">: project L._Lambda L._Lambda_name @@ var "lam",
     "kw">: lambdaKeyword @@ var "d"] $
-    cases L._Dialect (var "d") Nothing [
+    match L._Dialect (var "d") Nothing [
       -- (fn [params] body...) or (fn name [params] body...) if named
       L._Dialect_clojure>>: constant $
         Optionals.cases
@@ -612,7 +612,7 @@ letExpressionToExpr = define "letExpressionToExpr" $
     "body">: Lists.map (expressionToExpr @@ var "d") (project L._LetExpression L._LetExpression_body @@ var "letExpr"),
     -- Extract name and value from each binding (all are simple bindings)
     "bindingPairs">: Lists.map (lambda "b" $
-      cases L._LetBinding (var "b") Nothing [
+      match L._LetBinding (var "b") Nothing [
         L._LetBinding_simple>>: lambda "sb" $ pair
           (symbolToExpr @@ (project L._SimpleBinding L._SimpleBinding_name @@ var "sb"))
           (expressionToExpr @@ var "d" @@ (project L._SimpleBinding L._SimpleBinding_value @@ var "sb")),
@@ -620,10 +620,10 @@ letExpressionToExpr = define "letExpressionToExpr" $
           (Serialization.cst @@ string "<destructuring>")
           (Serialization.cst @@ string "<destructuring>")])
       (var "bindings")] $
-    cases L._Dialect (var "d") Nothing [
+    match L._Dialect (var "d") Nothing [
       -- Clojure: (let [name val ...] body...) or (letfn [(name [params] body) ...] body...) for recursive
       L._Dialect_clojure>>: constant $
-        cases L._LetKind (var "kind") Nothing [
+        match L._LetKind (var "kind") Nothing [
           -- Recursive: emit letfn (Clojure's mutually recursive form for fn bindings).
           -- The coder marks let recursive only when an SCC cycle exists, and in
           -- the cycles produced by the kernel all bindings are lambdas, so letfn
@@ -653,11 +653,11 @@ letExpressionToExpr = define "letExpressionToExpr" $
     clojureLetfn :: TypedTerm L.Dialect -> TypedTerm [L.LetBinding] -> TypedTerm [Expr] -> TypedTerm Expr
     clojureLetfn d bindings body = lets [
       "fnSpecs">: Lists.map (lambda "b" $
-        cases L._LetBinding (var "b") Nothing [
+        match L._LetBinding (var "b") Nothing [
           L._LetBinding_simple>>: lambda "sb" $ lets [
             "name">: symbolToExpr @@ (project L._SimpleBinding L._SimpleBinding_name @@ var "sb"),
             "val">: project L._SimpleBinding L._SimpleBinding_value @@ var "sb"] $
-            cases L._Expression (var "val") (Just $
+            match L._Expression (var "val") (Just $
               Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
                 var "name", expressionToExpr @@ d @@ var "val"])) [
               L._Expression_lambda>>: lambda "lam" $ lets [
@@ -676,7 +676,7 @@ letExpressionToExpr = define "letExpressionToExpr" $
         body]))
     letOther :: TypedTerm L.LetKind -> TypedTerm [(Expr, Expr)] -> TypedTerm [Expr] -> TypedTerm Expr
     letOther kind bindingPairs body = lets [
-      "kw">: cases L._LetKind kind Nothing [
+      "kw">: match L._LetKind kind Nothing [
         L._LetKind_parallel>>: constant $ string "let",
         L._LetKind_sequential>>: constant $ string "let*",
         L._LetKind_recursive>>: constant $ string "letrec"],
@@ -693,7 +693,7 @@ letExpressionToExpr = define "letExpressionToExpr" $
 listKeyword :: TypedTermDefinition (L.Dialect -> String)
 listKeyword = define "listKeyword" $
   doc "The keyword for list construction" $
-  lambda "d" $ cases L._Dialect (var "d") Nothing [
+  lambda "d" $ match L._Dialect (var "d") Nothing [
     L._Dialect_clojure>>: constant $ string "list",
     L._Dialect_emacsLisp>>: constant $ string "list",
     L._Dialect_commonLisp>>: constant $ string "cl:list",
@@ -721,7 +721,7 @@ literalToExpr :: TypedTermDefinition (L.Dialect -> L.Literal -> Expr)
 literalToExpr = define "literalToExpr" $
   doc "Serialize a literal value" $
   lambda "d" $ lambda "lit" $
-    cases L._Literal (var "lit") Nothing [
+    match L._Literal (var "lit") Nothing [
       L._Literal_integer>>: lambda "i" $
         Serialization.cst @@ (Literals.showBigint (project L._IntegerLiteral L._IntegerLiteral_value @@ var "i")),
       L._Literal_float>>: lambda "f" $
@@ -731,7 +731,7 @@ literalToExpr = define "literalToExpr" $
         -- Common Lisp does not support \n, \t, \r escape sequences in strings,
         -- so for CL we embed the literal characters directly (multi-line strings are valid).
         "e1" <~ Strings.join (string "\\\\") (Strings.splitOn (string "\\") (var "s")) $
-        cases L._Dialect (var "d") Nothing [
+        match L._Dialect (var "d") Nothing [
           L._Dialect_commonLisp>>: constant $
             -- CL only: escape double-quotes; leave control characters as literal bytes
             "escaped" <~ Strings.join (string "\\\"") (Strings.splitOn (string "\"") (var "e1")) $
@@ -756,7 +756,7 @@ literalToExpr = define "literalToExpr" $
             Serialization.cst @@ (Strings.concat (list [string "\"", var "escaped", string "\""]))],
       L._Literal_character>>: lambda "c" $ lets [
         "ch">: project L._CharacterLiteral L._CharacterLiteral_value @@ var "c"] $
-        cases L._Dialect (var "d") Nothing [
+        match L._Dialect (var "d") Nothing [
           L._Dialect_clojure>>: constant $ Serialization.cst @@ Strings.concat2 (string "\\") (var "ch"),
           L._Dialect_emacsLisp>>: constant $ Serialization.cst @@ Strings.concat2 (string "?") (var "ch"),
           L._Dialect_commonLisp>>: constant $ Serialization.cst @@ Strings.concat2 (string "#\\") (var "ch"),
@@ -776,7 +776,7 @@ macroDefinitionToExpr = define "macroDefinitionToExpr" $
     "name">: symbolToExpr @@ (project L._MacroDefinition L._MacroDefinition_name @@ var "mdef"),
     "params">: Lists.map (asTerm symbolToExpr) (project L._MacroDefinition L._MacroDefinition_params @@ var "mdef"),
     "body">: Lists.map (expressionToExpr @@ var "d") (project L._MacroDefinition L._MacroDefinition_body @@ var "mdef")] $
-    cases L._Dialect (var "d") Nothing [
+    match L._Dialect (var "d") Nothing [
       -- (defmacro name [params] body)
       L._Dialect_clojure>>: constant $
         Serialization.parens @@ (Serialization.spaceSepAdaptive @@ (Lists.concat (list [
@@ -807,7 +807,7 @@ mapLiteralToExpr = define "mapLiteralToExpr" $
   doc "Serialize a map literal" $
   lambda "d" $ lambda "ml" $ lets [
     "entries">: project L._MapLiteral L._MapLiteral_entries @@ var "ml"] $
-    cases L._Dialect (var "d") Nothing [
+    match L._Dialect (var "d") Nothing [
       -- {:key1 val1 :key2 val2} in Clojure
       L._Dialect_clojure>>: constant $
         Serialization.brackets @@ (asTerm Serialization.curlyBraces) @@ (asTerm Serialization.inlineStyle) @@
@@ -850,7 +850,7 @@ moduleDeclarationToExpr = define "moduleDeclarationToExpr" $
   doc "Serialize a module declaration" $
   lambda "d" $ lambda "mdecl" $ lets [
     "name">: unwrap L._NamespaceName @@ (project L._ModuleDeclaration L._ModuleDeclaration_name @@ var "mdecl")] $
-    cases L._Dialect (var "d") Nothing [
+    match L._Dialect (var "d") Nothing [
       -- (ns name)
       L._Dialect_clojure>>: constant $
         Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
@@ -884,7 +884,7 @@ moduleDeclarationToExpr = define "moduleDeclarationToExpr" $
 nilExpr :: TypedTermDefinition (L.Dialect -> Expr)
 nilExpr = define "nilExpr" $
   doc "The nil expression" $
-  lambda "d" $ cases L._Dialect (var "d") Nothing [
+  lambda "d" $ match L._Dialect (var "d") Nothing [
     L._Dialect_clojure>>: constant $ Serialization.cst @@ string "nil",
     L._Dialect_emacsLisp>>: constant $ Serialization.cst @@ string "nil",
     L._Dialect_commonLisp>>: constant $ Serialization.cst @@ string "cl:nil",
@@ -931,7 +931,7 @@ programToExpr = define "programToExpr" $
     -- bindings, e.g. hydra_json_decode_expect_string receiving a bare `:string` type tag instead of
     -- the JSON value ("wrong-type-argument (listp :string)"). The cookie must be the first line, so
     -- it precedes the generated-file warning.
-    "warning">: cases L._Dialect (var "d")
+    "warning">: match L._Dialect (var "d")
       (Just (list [Serialization.cst @@ (Strings.concat2 (string "; ") (asTerm Constants.warningAutoGeneratedFile))]))
       [L._Dialect_emacsLisp>>: constant $ list [
         Serialization.cst @@ string ";; -*- lexical-binding: t -*-",
@@ -944,7 +944,7 @@ programToExpr = define "programToExpr" $
     "exportSyms">: Lists.concat (Lists.map (lambda "edecl" $
       Lists.map (asTerm symbolToExpr) (project L._ExportDeclaration L._ExportDeclaration_symbols @@ var "edecl"))
       (var "exports"))] $
-    cases L._Dialect (var "d") Nothing [
+    match L._Dialect (var "d") Nothing [
       -- Clojure: (ns name (:require [dep1 :refer :all] [dep2 :refer :all] ...)) then forms
       L._Dialect_clojure>>: constant $
         Optionals.cases (var "modDecl") (Serialization.doubleNewlineSep @@ Lists.concat2 (var "warning") (var "formPart")) (lambda "m" $ lets [
@@ -970,7 +970,7 @@ programToExpr = define "programToExpr" $
             -- Extract variable definition names for forward declaration
             "varNames" <~ Lists.concat (Lists.map (lambda "fwc" $
               lets ["form">: project L._TopLevelFormWithComments L._TopLevelFormWithComments_form @@ var "fwc"] $
-              cases L._TopLevelForm (var "form") (Just (list ([] :: [TypedTerm Expr]))) [
+              match L._TopLevelForm (var "form") (Just (list ([] :: [TypedTerm Expr]))) [
                 L._TopLevelForm_variable>>: lambda "vd" $
                   list [symbolToExpr @@ (project L._VariableDefinition L._VariableDefinition_name @@ var "vd")],
                 L._TopLevelForm_function>>: lambda "fd" $
@@ -1087,7 +1087,7 @@ recordTypeDefinitionToExpr = define "recordTypeDefinitionToExpr" $
     "name">: symbolToExpr @@ (project L._RecordTypeDefinition L._RecordTypeDefinition_name @@ var "rdef"),
     "fields">: Lists.map (lambda "f" $ symbolToExpr @@ (project L._FieldDefinition L._FieldDefinition_name @@ var "f"))
       (project L._RecordTypeDefinition L._RecordTypeDefinition_fields @@ var "rdef")] $
-    cases L._Dialect (var "d") Nothing [
+    match L._Dialect (var "d") Nothing [
       -- (defrecord Name [field1 field2])
       -- Also emit (defn make-Name [field1 field2] (->Name field1 field2)) for uniform constructor calls
       L._Dialect_clojure>>: constant $ lets [
@@ -1140,7 +1140,7 @@ sExpressionToExpr :: TypedTermDefinition (L.SExpression -> Expr)
 sExpressionToExpr = define "sExpressionToExpr" $
   doc "Serialize an S-expression escape hatch" $
   lambda "sexpr" $
-    cases L._SExpression (var "sexpr") Nothing [
+    match L._SExpression (var "sexpr") Nothing [
       L._SExpression_atom>>: lambda "a" $ Serialization.cst @@ var "a",
       L._SExpression_list>>: lambda "elems" $
         Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.map (asTerm sExpressionToExpr) (var "elems"))]
@@ -1151,7 +1151,7 @@ setLiteralToExpr = define "setLiteralToExpr" $
   doc "Serialize a set literal" $
   lambda "d" $ lambda "sl" $ lets [
     "elems">: Lists.map (expressionToExpr @@ var "d") (project L._SetLiteral L._SetLiteral_elements @@ var "sl")] $
-    cases L._Dialect (var "d") Nothing [
+    match L._Dialect (var "d") Nothing [
       -- #{1 2 3} in Clojure
       L._Dialect_clojure>>: constant $
         Serialization.noSep @@ list [
@@ -1185,7 +1185,7 @@ topLevelFormToExpr :: TypedTermDefinition (L.Dialect -> L.TopLevelForm -> Expr)
 topLevelFormToExpr = define "topLevelFormToExpr" $
   doc "Serialize a top-level form" $
   lambda "d" $ lambda "form" $
-    cases L._TopLevelForm (var "form") Nothing [
+    match L._TopLevelForm (var "form") Nothing [
       L._TopLevelForm_function>>: lambda "f" $ functionDefinitionToExpr @@ var "d" @@ var "f",
       L._TopLevelForm_variable>>: lambda "v" $ variableDefinitionToExpr @@ var "d" @@ var "v",
       L._TopLevelForm_constant>>: lambda "c" $ constantDefinitionToExpr @@ var "d" @@ var "c",
@@ -1211,7 +1211,7 @@ topLevelFormWithCommentsToExpr = define "topLevelFormWithCommentsToExpr" $
 trueExpr :: TypedTermDefinition (L.Dialect -> Expr)
 trueExpr = define "trueExpr" $
   doc "The boolean true expression" $
-  lambda "d" $ cases L._Dialect (var "d") Nothing [
+  lambda "d" $ match L._Dialect (var "d") Nothing [
     L._Dialect_clojure>>: constant $ Serialization.cst @@ string "true",
     L._Dialect_emacsLisp>>: constant $ Serialization.cst @@ string "t",
     L._Dialect_commonLisp>>: constant $ Serialization.cst @@ string "cl:t",
@@ -1237,7 +1237,7 @@ variableReferenceToExpr = define "variableReferenceToExpr" $
     "name">: symbolToExpr @@ (project L._VariableReference L._VariableReference_name @@ var "vref"),
     "isFnNs">: project L._VariableReference L._VariableReference_functionNamespace @@ var "vref"] $
     Logic.ifElse (var "isFnNs")
-      (cases L._Dialect (var "d") Nothing [
+      (match L._Dialect (var "d") Nothing [
         L._Dialect_commonLisp>>: constant $
           Serialization.noSep @@ list [Serialization.cst @@ string "#'", var "name"],
         L._Dialect_clojure>>: constant $ var "name",
@@ -1251,7 +1251,7 @@ vectorLiteralToExpr = define "vectorLiteralToExpr" $
   doc "Serialize a vector literal" $
   lambda "d" $ lambda "vl" $ lets [
     "elems">: Lists.map (expressionToExpr @@ var "d") (project L._VectorLiteral L._VectorLiteral_elements @@ var "vl")] $
-    cases L._Dialect (var "d") Nothing [
+    match L._Dialect (var "d") Nothing [
       -- [1 2 3] in Clojure and Emacs Lisp
       L._Dialect_clojure>>: constant $ sqBrackets (var "elems"),
       L._Dialect_emacsLisp>>: constant $ sqBrackets (var "elems"),

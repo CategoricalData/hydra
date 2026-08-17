@@ -133,7 +133,7 @@ isComplexTerm :: TypedTermDefinition (Graph -> Term -> Bool)
 isComplexTerm = define "isComplexTerm" $
   doc "Check if a term needs to be treated as a function rather than a simple value" $
   "tc" ~> "t" ~>
-  cases _Term (var "t")
+  match _Term (var "t")
     (Just $
       -- Default: check if any subterm is complex
       Lists.foldl
@@ -180,7 +180,7 @@ isComplexVariable = define "isComplexVariable" $
 isEncodedTerm :: TypedTermDefinition (Term -> Bool)
 isEncodedTerm = define "isEncodedTerm" $
   doc "Determines whether a given term is an encoded term (meta-level term)" $
-  "t" ~> cases _Term (Strip.deannotateTerm @@ var "t") (Just false) [
+  "t" ~> match _Term (Strip.deannotateTerm @@ var "t") (Just false) [
     _Term_application>>: "a" ~>
       isEncodedTerm @@ (Core.applicationFunction (var "a")),
     _Term_inject>>: "i" ~>
@@ -189,7 +189,7 @@ isEncodedTerm = define "isEncodedTerm" $
 isEncodedType :: TypedTermDefinition (Term -> Bool)
 isEncodedType = define "isEncodedType" $
   doc "Determines whether a given term is an encoded type" $
-  "t" ~> cases _Term (Strip.deannotateTerm @@ var "t") (Just false) [
+  "t" ~> match _Term (Strip.deannotateTerm @@ var "t") (Just false) [
     _Term_application>>: "a" ~>
       isEncodedType @@ (Core.applicationFunction (var "a")),
     _Term_inject>>: "i" ~>
@@ -206,7 +206,7 @@ isEnumType :: TypedTermDefinition (Type -> Bool)
 isEnumType = define "isEnumType" $
   doc "Check if a type is an enum type" $
   "typ" ~>
-  match _Type (Just false) [
+  cases _Type (Just false) [
     _Type_union>>: "rt" ~> isEnumRowType @@ var "rt"]
   @@ (Strip.deannotateType @@ var "typ")
 
@@ -216,7 +216,7 @@ isNominalType :: TypedTermDefinition (Type -> Bool)
 isNominalType = define "isNominalType" $
   doc "Check whether a type is a nominal type definition (record, union, wrap, or forall wrapping one). Type aliases (applications, functions, literal types, etc.) return false." $
   lambda "typ" $
-    cases _Type (Strip.deannotateType @@ var "typ")
+    match _Type (Strip.deannotateType @@ var "typ")
       (Just false) [
       _Type_record>>: lambda "rt" $ true,
       _Type_union>>: lambda "rt" $ true,
@@ -269,7 +269,7 @@ isTrivialTerm :: TypedTermDefinition (Term -> Bool)
 isTrivialTerm = define "isTrivialTerm" $
   doc "Check if a term is trivially cheap (no thunking needed)" $
   "t" ~>
-  cases _Term (Strip.deannotateTerm @@ var "t")
+  match _Term (Strip.deannotateTerm @@ var "t")
     (Just $ boolean False) [
     -- Literals are always trivial
     _Term_literal>>: constant (boolean True),
@@ -283,7 +283,7 @@ isTrivialTerm = define "isTrivialTerm" $
     _Term_application>>: "app" ~>
       "fun" <~ Core.applicationFunction (var "app") $
       "arg" <~ Core.applicationArgument (var "app") $
-      cases _Term (var "fun") (Just $ boolean False) [
+      match _Term (var "fun") (Just $ boolean False) [
         -- record projection: trivial if the subject is trivial
         _Term_project>>: constant (isTrivialTerm @@ var "arg"),
         -- newtype unwrap: trivial if the subject is trivial
@@ -304,7 +304,7 @@ isTrivialTerm = define "isTrivialTerm" $
 isType :: TypedTermDefinition (Type -> Bool)
 isType = define "isType" $
   doc "Check whether a type is a type (always true for non-encoded types)" $
-  "t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just false) [
+  "t" ~> match _Type (Strip.deannotateType @@ var "t") (Just false) [
     _Type_application>>: "a" ~>
       isType @@ (Core.applicationTypeFunction (var "a")),
     _Type_forall>>: "l" ~>
@@ -315,12 +315,12 @@ isType = define "isType" $
 isUnitTerm :: TypedTermDefinition (Term -> Bool)
 isUnitTerm = define "isUnitTerm" $
   doc "Check whether a term is the unit term" $
-  match _Term (Just false) [_Term_unit>>: constant true]
+  cases _Term (Just false) [_Term_unit>>: constant true]
 
 isUnitType :: TypedTermDefinition (Type -> Bool)
 isUnitType = define "isUnitType" $
   doc "Check whether a type is the unit type" $
-  match _Type (Just false) [_Type_unit>>: constant true]
+  cases _Type (Just false) [_Type_unit>>: constant true]
 
 typeDependencies :: TypedTermDefinition (InferenceContext -> Graph -> Bool -> (Type -> Type) -> Name -> Either Error (M.Map Name Type))
 typeDependencies = define "typeDependencies" $

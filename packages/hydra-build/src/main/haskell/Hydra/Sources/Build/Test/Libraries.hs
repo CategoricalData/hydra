@@ -28,7 +28,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([BuildLibraries.ns, PrintCore.ns] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata (Just "Test cases for the translingual expected-libraries registry")}
+            moduleMetadata = descriptionMetadata (Just "Test match for the translingual expected-libraries registry")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -48,7 +48,7 @@ showBool b = Logic.ifElse b (Phantoms.string "true") (Phantoms.string "false")
 
 allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
-    Phantoms.doc "Test cases for the translingual expected-libraries registry" $
+    Phantoms.doc "Test match for the translingual expected-libraries registry" $
     supergroup "build.libraries" [
       expectedLibrariesGroup,
       isExpectedLibraryGroup]

@@ -162,7 +162,7 @@ dereferenceSchemaType :: TypedTermDefinition (Name -> M.Map Name TypeScheme -> M
 dereferenceSchemaType = define "dereferenceSchemaType" $
   doc "Resolve a schema type through a chain of zero or more typedefs" $
   "name" ~> "types" ~>
-  "forType" <~ ("t" ~> cases _Type (var "t")
+  "forType" <~ ("t" ~> match _Type (var "t")
     (Just (just (Core.typeScheme (list ([] :: [TypedTerm Name])) (var "t") Phantoms.nothing))) [
     _Type_annotated>>: "at" ~> var "forType" @@ (Core.annotatedTypeBody (var "at")),
     _Type_forall>>: "ft" ~> Optionals.map
@@ -212,7 +212,7 @@ fieldsOf = define "fieldsOf" $
   doc "Extract the fields of a record or union type" $
   "t" ~>
   "stripped" <~ Strip.deannotateType @@ var "t" $
-  cases _Type (var "stripped")
+  match _Type (var "stripped")
     (Just (list ([] :: [TypedTerm FieldType]))) [
     _Type_forall>>: "forallType" ~> fieldsOf @@ (Core.forallTypeBody (var "forallType")),
     _Type_record>>: "rt" ~> var "rt",
@@ -280,7 +280,7 @@ matchRecord = define "matchRecord" $
   doc "Match a term against a record type and decode its fields, failing if the term is not a record" $
   "graph" ~> "decode" ~> "term" ~>
   "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
-  cases _Term (var "stripped")
+  match _Term (var "stripped")
     (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "record") (PrintCore.term @@ var "term")))) [
     _Term_record>>: "record" ~> var "decode" @@
       (Maps.fromList (Lists.map
@@ -296,7 +296,7 @@ matchUnion = define "matchUnion" $
   "graph" ~> "tname" ~> "pairs" ~> "term" ~>
   "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
   "mapping" <~ (Maps.fromList (var "pairs") :: TypedTerm (M.Map Name (Term -> Either Error b))) $
-  cases _Term (var "stripped")
+  match _Term (var "stripped")
     (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (Strings.concat2 (string "injection for type ") (Core.unName (var "tname"))) (PrintCore.term @@ var "stripped")))) [
     _Term_variable>>: "name" ~>
       "el" <<~ requireBinding @@ var "graph" @@ var "name" $
@@ -360,7 +360,7 @@ resolveTerm = define "resolveTerm" $
   "graph" ~> "name" ~>
   "recurse" <~ ("term" ~>
     "stripped" <~ Strip.deannotateTerm @@ var "term" $
-    cases _Term (var "stripped")
+    match _Term (var "stripped")
       (Just (just (var "term"))) [
       _Term_variable>>: "name'" ~> resolveTerm @@ var "graph" @@ var "name'"]) $
   Optionals.cases (lookupTerm @@ var "graph" @@ var "name") nothing (var "recurse")
@@ -370,7 +370,7 @@ stripAndDereferenceTerm = define "stripAndDereferenceTerm" $
   doc "Strip annotations and type lambdas/applications from a term, then follow variable references through the graph until a non-variable term is reached" $
   "graph" ~> "term" ~>
   "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
-  cases _Term (var "stripped")
+  match _Term (var "stripped")
     (Just (right (var "stripped"))) [
     _Term_variable>>: "v" ~>
       Eithers.bind (requireTerm @@ var "graph" @@ var "v") (
@@ -381,7 +381,7 @@ stripAndDereferenceTermEither = define "stripAndDereferenceTermEither" $
   doc "Strip annotations and dereference variables, returning Either an error or the resolved term" $
   "graph" ~> "term" ~>
   "stripped" <~ Strip.deannotateAndDetypeTerm @@ var "term" $
-  cases _Term (var "stripped")
+  match _Term (var "stripped")
     (Just (right (var "stripped"))) [
     _Term_variable>>: "v" ~>
       Eithers.either

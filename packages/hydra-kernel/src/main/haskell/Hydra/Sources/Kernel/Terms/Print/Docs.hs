@@ -121,7 +121,7 @@ _DefinitionReference_type = Name "type"
 definitionReference :: TypedTermDefinition (Term -> String)
 definitionReference = define "definitionReference" $
   doc "Render a DefinitionReference as its fully-qualified name" $
-  match _DefinitionReference Nothing [
+  cases _DefinitionReference Nothing [
     _DefinitionReference_primitive>>: lambda "n" $ Core.unName (var "n"),
     _DefinitionReference_term>>:      lambda "n" $ Core.unName (var "n"),
     _DefinitionReference_type>>:      lambda "n" $ Core.unName (var "n")]
@@ -135,7 +135,7 @@ docSegmentWith :: TypedTermDefinition ((Term -> String) -> Term -> String)
 docSegmentWith = define "docSegmentWith" $
   doc "Render a single DocSegment using a custom {@type hydra.packaging.EntityReference} renderer" $
   lambda "render" $
-  match _DocSegment Nothing [
+  cases _DocSegment Nothing [
     _DocSegment_ref>>:  lambda "r" $ var "render" @@ var "r",
     _DocSegment_text>>: lambda "s" $ var "s"]
 
@@ -153,9 +153,9 @@ docSegmentsWith = define "docSegmentsWith" $
 entityReference :: TypedTermDefinition (Term -> String)
 entityReference = define "entityReference" $
   doc "Render a {@type hydra.packaging.EntityReference} as its doc-escape tag string (without the surrounding braces)" $
-  match _EntityReference Nothing [
+  cases _EntityReference Nothing [
     _EntityReference_definition>>: lambda "d" $ Strings.concat2
-      (match _DefinitionReference Nothing [
+      (cases _DefinitionReference Nothing [
         _DefinitionReference_primitive>>: constant (string "primitive"),
         _DefinitionReference_term>>:      constant (string "term"),
         _DefinitionReference_type>>:      constant (string "type")]

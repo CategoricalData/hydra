@@ -67,7 +67,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Sorting.ns] L.++ KernelTypes.kernelTypesModuleNames),
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Transform test cases for code generation, filtering to tests that can be compiled to target languages")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Transform test match for code generation, filtering to tests that can be compiled to target languages")}
   where
     definitions = [
       toDefinition addGenerationPrefix,
@@ -131,7 +131,7 @@ buildTopologicalSortSCCCall = define "buildTopologicalSortSCCCall" $
 -- | Collect all test cases from a test group (flattening hierarchy)
 collectTestCases :: TypedTermDefinition (TestGroup -> [TestCaseWithMetadata])
 collectTestCases = define "collectTestCases" $
-  doc "Collect all test cases from a test group (flattening hierarchy)" $
+  doc "Collect all test match from a test group (flattening hierarchy)" $
   lambda "tg" $
     Lists.concat2
       (project _TestGroup _TestGroup_cases @@ var "tg")
@@ -160,7 +160,7 @@ encodeCaseConvention = define "encodeCaseConvention" $
     Core.termInject $ Core.injection
       (Core.nameLift _CaseConvention)
       (Core.field
-        (cases _CaseConvention (var "conv") Nothing [
+        (match _CaseConvention (var "conv") Nothing [
           _CaseConvention_lowerSnake>>: constant (Core.nameLift _CaseConvention_lowerSnake),
           _CaseConvention_upperSnake>>: constant (Core.nameLift _CaseConvention_upperSnake),
           _CaseConvention_camel>>: constant (Core.nameLift _CaseConvention_camel),
@@ -218,7 +218,7 @@ transformModule = define "transformModule" $
 -- | Transform a test case (pass through unchanged — all test cases are now universal)
 transformTestCase :: TypedTermDefinition (TestCaseWithMetadata -> Maybe TestCaseWithMetadata)
 transformTestCase = define "transformTestCase" $
-  doc "Pass through test cases unchanged" $
+  doc "Pass through test match unchanged" $
   lambda "tcm" $ just (var "tcm")
 
 

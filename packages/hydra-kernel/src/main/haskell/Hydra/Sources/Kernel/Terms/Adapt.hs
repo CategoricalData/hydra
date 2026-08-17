@@ -211,7 +211,7 @@ adaptFloatType = define "adaptFloatType" $
   "constraints" ~> "ft" ~>
   "supported" <~ Sets.member (var "ft") (Coders.languageConstraintsFloatTypes $ var "constraints") $
   "alt" <~ (adaptFloatType @@ var "constraints") $
-  "forUnsupported" <~ ("ft" ~> cases _FloatType (var "ft")
+  "forUnsupported" <~ ("ft" ~> match _FloatType (var "ft")
     Nothing [
     _FloatType_float32>>: constant $ var "alt" @@ Core.floatTypeFloat64,
     _FloatType_float64>>: constant $ var "alt" @@ Core.floatTypeFloat32]) $
@@ -235,7 +235,7 @@ adaptIntegerType = define "adaptIntegerType" $
   "constraints" ~> "it" ~>
   "supported" <~ Sets.member (var "it") (Coders.languageConstraintsIntegerTypes $ var "constraints") $
   "alt" <~ (adaptIntegerType @@ var "constraints") $
-  "forUnsupported" <~ ("it" ~> cases _IntegerType (var "it")
+  "forUnsupported" <~ ("it" ~> match _IntegerType (var "it")
     Nothing [
     _IntegerType_bigint>>: constant nothing,
     _IntegerType_int8>>: constant $ var "alt" @@ Core.integerTypeUint16,
@@ -259,7 +259,7 @@ adaptLambdaDomains = define "adaptLambdaDomains" $
   doc "Rewrite callback for adapting lambda domain types in a term" $
   "constraints" ~> "litmap" ~> "recurse" ~> "term" ~>
   "rewritten" <<~ var "recurse" @@ var "term" $
-  cases _Term (var "rewritten")
+  match _Term (var "rewritten")
     (Just $ right $ var "rewritten") [
     _Term_lambda>>: "l" ~>
       "adaptedDomain" <<~ optCases (Core.lambdaDomain $ var "l")
@@ -281,33 +281,33 @@ adaptLiteral :: TypedTermDefinition (LiteralType -> Literal -> Literal)
 adaptLiteral = define "adaptLiteral" $
   doc "Convert a literal to a different type" $
   "lt" ~> "l" ~>
-  cases _Literal (var "l")
+  match _Literal (var "l")
     Nothing [
-    _Literal_binary>>: "b" ~> cases _LiteralType (var "lt")
+    _Literal_binary>>: "b" ~> match _LiteralType (var "lt")
       Nothing [
       _LiteralType_string>>: constant $ Core.literalString $ Literals.binaryToBase64 $ var "b"],
-    _Literal_boolean>>: "b" ~> cases _LiteralType (var "lt")
+    _Literal_boolean>>: "b" ~> match _LiteralType (var "lt")
       Nothing [
       _LiteralType_integer>>: "it" ~> Core.literalInteger $
         Literals.bigintToIntegerValue @@ var "it" @@ Logic.ifElse (var "b") (bigint 1) (bigint 0)],
-    _Literal_decimal>>: "d" ~> cases _LiteralType (var "lt")
+    _Literal_decimal>>: "d" ~> match _LiteralType (var "lt")
       Nothing [
       _LiteralType_float>>: constant $ Core.literalFloat $
         inject _FloatValue _FloatValue_float64 (Literals.decimalToFloat64 (var "d")),
       _LiteralType_string>>: constant $ Core.literalString $ Literals.showDecimal (var "d")],
-    _Literal_float>>: "f" ~> cases _LiteralType (var "lt")
+    _Literal_float>>: "f" ~> match _LiteralType (var "lt")
       Nothing [
-      _LiteralType_float>>: "ft" ~> Core.literalFloat $ cases _FloatType (var "ft")
+      _LiteralType_float>>: "ft" ~> Core.literalFloat $ match _FloatType (var "ft")
         Nothing [
-        _FloatType_float32>>: constant $ Core.floatValueFloat32 $ cases _FloatValue (var "f")
+        _FloatType_float32>>: constant $ Core.floatValueFloat32 $ match _FloatValue (var "f")
           Nothing [
           _FloatValue_float32>>: "f32" ~> var "f32",
           _FloatValue_float64>>: "f64" ~> Literals.float64ToFloat32 $ var "f64"],
-        _FloatType_float64>>: constant $ Core.floatValueFloat64 $ cases _FloatValue (var "f")
+        _FloatType_float64>>: constant $ Core.floatValueFloat64 $ match _FloatValue (var "f")
           Nothing [
           _FloatValue_float32>>: "f32" ~> Literals.float32ToFloat64 $ var "f32",
           _FloatValue_float64>>: "f64" ~> var "f64"]]],
-    _Literal_integer>>: "i" ~> cases _LiteralType (var "lt")
+    _Literal_integer>>: "i" ~> match _LiteralType (var "lt")
       Nothing [
       _LiteralType_integer>>: "it" ~> Core.literalInteger $
         Literals.bigintToIntegerValue @@ var "it" @@ (Literals.integerValueToBigint @@ var "i")]]
@@ -316,7 +316,7 @@ adaptLiteralType :: TypedTermDefinition (LanguageConstraints -> LiteralType -> M
 adaptLiteralType = define "adaptLiteralType" $
   doc "Attempt to adapt a literal type using the given language constraints" $
   "constraints" ~> "lt" ~>
-  "forUnsupported" <~ ("lt" ~> cases _LiteralType (var "lt")
+  "forUnsupported" <~ ("lt" ~> match _LiteralType (var "lt")
     (Just nothing) [
     _LiteralType_binary>>: constant $ just Core.literalTypeString,
     _LiteralType_boolean>>: constant $ Optionals.map (reify Core.literalTypeInteger) $
@@ -355,7 +355,7 @@ adaptNestedTypes = define "adaptNestedTypes" $
   doc "Rewrite callback for adapting nested let binding TypeSchemes in a term" $
   "constraints" ~> "litmap" ~> "recurse" ~> "term" ~>
   "rewritten" <<~ var "recurse" @@ var "term" $
-  cases _Term (var "rewritten")
+  match _Term (var "rewritten")
     (Just $ right $ var "rewritten") [
     _Term_let>>: "lt" ~>
       "adaptB" <~ ("b" ~>
@@ -398,7 +398,7 @@ adaptTerm = define "adaptTerm" $
   doc "Adapt a term using the given language constraints" $
   "constraints" ~> "litmap" ~> "cx" ~> "graph" ~> "term0" ~>
   "rewrite" <~ ("recurse" ~> "term0" ~> lets [
-    "forSupported">: ("term" ~> cases _Term (var "term")
+    "forSupported">: ("term" ~> match _Term (var "term")
       (Just $ right $ just $ var "term") [
       _Term_literal>>: "l" ~>
         "lt" <~ Reflect.literalType @@ var "l" $
@@ -425,7 +425,7 @@ adaptTerm = define "adaptTerm" $
     -- Type application/lambda wrappers pass through unconditionally.
     -- fsub already recursed into their bodies; we must not strip the wrappers
     -- because they carry type information needed by typeOf in the coders.
-    cases _Term (var "term1")
+    match _Term (var "term1")
       (Just $
         "mterm" <<~ var "tryTerm" @@ var "term1" $
         optCases (var "mterm")
@@ -478,7 +478,7 @@ adaptType = define "adaptType" $
   doc "Adapt a type using the given language constraints" $
   "constraints" ~> "litmap" ~> "type0" ~>
   lets [
-  "forSupported">: ("typ" ~> cases _Type (var "typ")
+  "forSupported">: ("typ" ~> match _Type (var "typ")
     (Just $ just $ var "typ") [
     _Type_literal>>: "lt" ~> Logic.ifElse (literalTypeSupported @@ var "constraints" @@ var "lt")
       (just $ var "typ")
@@ -669,11 +669,11 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   -- Inference wraps polymorphic bindings as TypeLambda{Annotated{...}}, so the
   -- top-level term may not itself be Annotated. Three-level unfold covers
   -- typical TypeLambda chains.
-  "peelOne" <~ ("t" ~> cases _Term (var "t")
+  "peelOne" <~ ("t" ~> match _Term (var "t")
     (Just $ var "t") [
     _Term_typeLambda>>: "tl" ~> Core.typeLambdaBody $ var "tl",
     _Term_typeApplication>>: "ta" ~> Core.typeApplicationTermBody $ var "ta"]) $
-  "extractAnn" <~ ("t" ~> cases _Term (var "t")
+  "extractAnn" <~ ("t" ~> match _Term (var "t")
     (Just nothing) [
     _Term_annotated>>: "at" ~> just (Core.annotatedTermAnnotation $ var "at")]) $
   -- Try term as-is, then one level of peel, then two, then three.
@@ -699,7 +699,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       (var "b")
       ("ann" ~> Core.binding
         (Core.bindingName $ var "b")
-        (cases _Term (Core.bindingTerm $ var "b")
+        (match _Term (Core.bindingTerm $ var "b")
           -- If already annotated, merge annotations under the map convention
           -- (post-adaptation annotation wins on conflict). Annotations that
           -- aren't map-shaped contribute the empty map to the union.
@@ -761,7 +761,7 @@ literalTypeSupported :: TypedTermDefinition (LanguageConstraints -> LiteralType 
 literalTypeSupported = define "literalTypeSupported" $
   doc "Check if a literal type is supported by the given language constraints" $
   "constraints" ~> "lt" ~>
-  "forType" <~ ("lt" ~> cases _LiteralType (var "lt")
+  "forType" <~ ("lt" ~> match _LiteralType (var "lt")
     (Just true) [
       _LiteralType_float>>: "ft" ~> Sets.member (var "ft") (Coders.languageConstraintsFloatTypes $ var "constraints"),
       _LiteralType_integer>>: "it" ~> Sets.member (var "it") (Coders.languageConstraintsIntegerTypes $ var "constraints")]) $
@@ -777,17 +777,17 @@ prepareFloatType :: TypedTermDefinition (FloatType -> (FloatType, FloatValue -> 
 prepareFloatType = define "prepareFloatType" $
   doc "Prepare a float type, substituting unsupported types" $
   lambda "ft" $
-    (cases _FloatType (var "ft") Nothing [
+    (match _FloatType (var "ft") Nothing [
       _FloatType_float32>>: (constant $
         triple
           Core.floatTypeFloat32
-          ("v" ~> cases _FloatValue (var "v") (Just (var "v")) [
+          ("v" ~> match _FloatValue (var "v") (Just (var "v")) [
             _FloatValue_float32>>: ("f" ~> inject _FloatValue _FloatValue_float32 (var "f"))])
           (Sets.empty :: TypedTerm (S.Set String))),
       _FloatType_float64>>: (constant $
         triple
           Core.floatTypeFloat64
-          ("v" ~> cases _FloatValue (var "v") (Just (var "v")) [
+          ("v" ~> match _FloatValue (var "v") (Just (var "v")) [
             _FloatValue_float64>>: ("f" ~> inject _FloatValue _FloatValue_float64 (var "f"))])
           (Sets.empty :: TypedTerm (S.Set String)))])
 
@@ -798,29 +798,29 @@ prepareIntegerType :: TypedTermDefinition (IntegerType -> (IntegerType, IntegerV
 prepareIntegerType = define "prepareIntegerType" $
   doc "Prepare an integer type, substituting unsupported types" $
   lambda "it" $
-    (cases _IntegerType (var "it") (Just (prepareSame @@ var "it")) [
+    (match _IntegerType (var "it") (Just (prepareSame @@ var "it")) [
       _IntegerType_bigint>>: (constant $
         triple
           Core.integerTypeInt64
-          ("v" ~> cases _IntegerValue (var "v") (Just (var "v")) [
+          ("v" ~> match _IntegerValue (var "v") (Just (var "v")) [
             _IntegerValue_bigint>>: ("i" ~> inject _IntegerValue _IntegerValue_int64 (Literals.bigintToInt64 (var "i")))])
           (Sets.fromList $ list [string "replace arbitrary-precision integers with 64-bit integers"])),
       _IntegerType_uint8>>: (constant $
         triple
           Core.integerTypeInt8
-          ("v" ~> cases _IntegerValue (var "v") (Just (var "v")) [
+          ("v" ~> match _IntegerValue (var "v") (Just (var "v")) [
             _IntegerValue_uint8>>: ("i" ~> inject _IntegerValue _IntegerValue_int8 (Literals.bigintToInt8 (Literals.uint8ToBigint (var "i"))))])
           (Sets.fromList $ list [string "replace unsigned 8-bit integers with signed 8-bit integers"])),
       _IntegerType_uint32>>: (constant $
         triple
           Core.integerTypeInt32
-          ("v" ~> cases _IntegerValue (var "v") (Just (var "v")) [
+          ("v" ~> match _IntegerValue (var "v") (Just (var "v")) [
             _IntegerValue_uint32>>: ("i" ~> inject _IntegerValue _IntegerValue_int32 (Literals.bigintToInt32 (Literals.uint32ToBigint (var "i"))))])
           (Sets.fromList $ list [string "replace unsigned 32-bit integers with signed 32-bit integers"])),
       _IntegerType_uint64>>: (constant $
         triple
           Core.integerTypeInt64
-          ("v" ~> cases _IntegerValue (var "v") (Just (var "v")) [
+          ("v" ~> match _IntegerValue (var "v") (Just (var "v")) [
             _IntegerValue_uint64>>: ("i" ~> inject _IntegerValue _IntegerValue_int64 (Literals.bigintToInt64 (Literals.uint64ToBigint (var "i"))))])
           (Sets.fromList $ list [string "replace unsigned 64-bit integers with signed 64-bit integers"]))])
 
@@ -832,17 +832,17 @@ prepareLiteralType :: TypedTermDefinition (LiteralType -> (LiteralType, Literal 
 prepareLiteralType = define "prepareLiteralType" $
   doc "Prepare a literal type, substituting unsupported types" $
   lambda "at" $
-    (cases _LiteralType (var "at") (Just (prepareSame @@ var "at")) [
+    (match _LiteralType (var "at") (Just (prepareSame @@ var "at")) [
       _LiteralType_binary>>: (constant $
         triple
           (Core.literalTypeString)
-          ("v" ~> cases _Literal (var "v") (Just (var "v")) [
+          ("v" ~> match _Literal (var "v") (Just (var "v")) [
             _Literal_binary>>: ("b" ~> inject _Literal _Literal_string (Literals.binaryToBase64 (var "b")))])
           (Sets.fromList $ list [string "replace binary strings with character strings"])),
       _LiteralType_decimal>>: (constant $
         triple
           (Core.literalTypeFloat Core.floatTypeFloat64)
-          ("v" ~> cases _Literal (var "v") (Just (var "v")) [
+          ("v" ~> match _Literal (var "v") (Just (var "v")) [
             _Literal_decimal>>: ("d" ~> inject _Literal _Literal_float (inject _FloatValue _FloatValue_float64 (Literals.decimalToFloat64 (var "d"))))])
           (Sets.fromList $ list [string "replace arbitrary-precision decimal numbers with 64-bit floating-point numbers (doubles)"])),
       _LiteralType_float>>: ("ft" ~> lets [
@@ -852,7 +852,7 @@ prepareLiteralType = define "prepareLiteralType" $
         "msgs">: Pairs.second (Pairs.second (var "result"))] $
         triple
           (Core.literalTypeFloat (var "rtyp"))
-          ("v" ~> cases _Literal (var "v") (Just (var "v")) [
+          ("v" ~> match _Literal (var "v") (Just (var "v")) [
             _Literal_float>>: ("fv" ~> inject _Literal _Literal_float (var "rep" @@ var "fv"))])
           (var "msgs")),
       _LiteralType_integer>>: ("it" ~> lets [
@@ -862,7 +862,7 @@ prepareLiteralType = define "prepareLiteralType" $
         "msgs">: Pairs.second (Pairs.second (var "result"))] $
         triple
           (Core.literalTypeInteger (var "rtyp"))
-          ("v" ~> cases _Literal (var "v") (Just (var "v")) [
+          ("v" ~> match _Literal (var "v") (Just (var "v")) [
             _Literal_integer>>: ("iv" ~> inject _Literal _Literal_integer (var "rep" @@ var "iv"))])
           (var "msgs"))])
 
@@ -880,7 +880,7 @@ prepareType :: TypedTermDefinition (Graph -> Type -> (Type, Term -> Term, S.Set 
 prepareType = define "prepareType" $
   doc "Prepare a type, substituting unsupported literal types" $
   lambda "cx" $ lambda "typ" $
-    (cases _Type (Strip.deannotateType @@ var "typ") (Just (prepareSame @@ var "typ")) [
+    (match _Type (Strip.deannotateType @@ var "typ") (Just (prepareSame @@ var "typ")) [
       _Type_literal>>: ("at" ~> lets [
         "result">: prepareLiteralType @@ var "at",
         "rtyp">: Pairs.first (var "result"),
@@ -888,7 +888,7 @@ prepareType = define "prepareType" $
         "msgs">: Pairs.second (Pairs.second (var "result"))] $
         triple
           (MetaTypes.literal (var "rtyp"))
-          ("v" ~> cases _Term (var "v") (Just (var "v")) [
+          ("v" ~> match _Term (var "v") (Just (var "v")) [
             _Term_literal>>: ("av" ~> inject _Term _Term_literal (var "rep" @@ var "av"))])
           (var "msgs"))])
 
@@ -901,7 +901,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
     <> " applications or lambda abstractions instead of being directly on the polymorphic variable.") $
   "term" ~>
   lets [
-  "push">: ("body" ~> "typ" ~> cases _Term (var "body")
+  "push">: ("body" ~> "typ" ~> match _Term (var "body")
     -- Default: keep TypeApp as-is
     (Just $ Core.termTypeApplication $ Core.typeApplicationTerm (var "body") (var "typ")) [
     -- TypeApp(Annotated(b, ann), τ) → Annotated(push(b, τ), ann)
@@ -946,7 +946,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
     "forMap" <~ ("m" ~>
       "forPair" <~ ("p" ~> pair (var "go" @@ (Pairs.first $ var "p")) (var "go" @@ (Pairs.second $ var "p"))) $
       (Maps.fromList (Lists.map (var "forPair") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) :: TypedTerm (M.Map Term Term))) $
-    cases _Term (var "t") Nothing [
+    match _Term (var "t") Nothing [
       _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
         (var "go" @@ (Core.annotatedTermBody $ var "at"))
         (Core.annotatedTermAnnotation $ var "at"),
@@ -1045,7 +1045,7 @@ simpleLanguageAdapter = define "simpleLanguageAdapter" $
 termAlternatives :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Prelude.Either Error [Term])
 termAlternatives = define "termAlternatives" $
   doc "Find a list of alternatives for a given term, if any" $
-  "cx" ~> "graph" ~> "term" ~> cases _Term (var "term")
+  "cx" ~> "graph" ~> "term" ~> match _Term (var "term")
     (Just $ right $ list ([] :: [TypedTerm Term])) [
     _Term_annotated>>: "at" ~>
       "term2" <~ Core.annotatedTermBody (var "at") $
@@ -1087,7 +1087,7 @@ termAlternatives = define "termAlternatives" $
 typeAlternatives :: TypedTermDefinition (Type -> [Type])
 typeAlternatives = define "typeAlternatives" $
   doc "Find a list of alternatives for a given type, if any" $
-  "type" ~> cases _Type (var "type")
+  "type" ~> match _Type (var "type")
     (Just $ list ([] :: [TypedTerm Type])) [
     _Type_annotated>>: "at" ~>
       "type2" <~ Core.annotatedTypeBody (var "at") $

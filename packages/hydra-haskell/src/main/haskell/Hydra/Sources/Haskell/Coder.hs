@@ -148,7 +148,7 @@ adaptTypeToHaskellAndEncode = haskellCoderDefinition "adaptTypeToHaskellAndEncod
   doc "Adapt a Hydra type to Haskell's type system and encode it" $
   "namespaces" ~> "typ" ~> "cx" ~> "g" ~>
   "enc" <~ ("t" ~> encodeType @@ var "namespaces" @@ var "t" @@ var "cx" @@ var "g") $
-  cases _Type (Strip.deannotateType @@ var "typ")
+  match _Type (Strip.deannotateType @@ var "typ")
     (Just (
       "adaptedType" <<~ Adapt.adaptTypeForLanguage @@ HaskellLanguage.haskellLanguage @@ var "typ" $
       var "enc" @@ var "adaptedType")) [
@@ -204,7 +204,7 @@ constructModule = haskellCoderDefinition "constructModule" $
       (Strings.concat2 (string "hydra.overlay.haskell.lib.") (var "sub"))
       (var "raw"),
   "createDeclarations">: "def" ~>
-    cases _Definition (var "def") Nothing [
+    match _Definition (var "def") Nothing [
       _Definition_type>>: "type" ~> lets [
         "name">: Packaging.typeDefinitionName $ var "type",
         "typ">: Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "type"] $
@@ -318,7 +318,7 @@ encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
                 "ft">: Core.fieldTypeType $ var "fieldType",
                 "noArgs">: list ([] :: [TypedTerm H.Pattern]),
                 "singleArg">: list [inject H._Pattern H._Pattern_name $ HaskellUtilsSource.rawName @@ var "v1"]] $
-                cases _Type (Strip.deannotateType @@ var "ft")
+                match _Type (Strip.deannotateType @@ var "ft")
                   (Just $ right $ var "singleArg") [
                   _Type_unit>>: constant $ right $ var "noArgs"]) $ lets [
           "lhs">: HaskellUtilsSource.applicationPattern @@ var "hname" @@ var "args"] $
@@ -359,7 +359,7 @@ encodeLiteral :: TypedTermDefinition (Literal -> InferenceContext -> Either Erro
 encodeLiteral = haskellCoderDefinition "encodeLiteral" $
   doc "Encode a Hydra literal as a Haskell expression" $
   "l" ~> "cx" ~>
-    cases _Literal (var "l")
+    match _Literal (var "l")
       (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported literal") (PrintCore.literal @@ var "l"))) [
       _Literal_binary>>: "bs" ~>
         right $ HaskellUtilsSource.hsapp
@@ -374,13 +374,13 @@ encodeLiteral = haskellCoderDefinition "encodeLiteral" $
           @@ (HaskellUtilsSource.hslit @@ (inject H._Literal H._Literal_string
               $ Literals.showDecimal $ var "d")),
       _Literal_float>>: "fv" ~>
-        cases _FloatValue (var "fv") Nothing [
+        match _FloatValue (var "fv") Nothing [
           _FloatValue_float32>>: "f" ~>
             right $ HaskellUtilsSource.hslit @@ (inject H._Literal H._Literal_float $ var "f"),
           _FloatValue_float64>>: "f" ~>
             right $ HaskellUtilsSource.hslit @@ (inject H._Literal H._Literal_double $ var "f")],
       _Literal_integer>>: "iv" ~>
-        cases _IntegerValue (var "iv") Nothing [
+        match _IntegerValue (var "iv") Nothing [
           _IntegerValue_bigint>>: "i" ~>
             right $ HaskellUtilsSource.hslit @@ (inject H._Literal H._Literal_integer $ var "i"),
           _IntegerValue_int8>>: "i" ~>
@@ -439,7 +439,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
       "lhs">: HaskellUtilsSource.hsvar @@ string "S.fromList" ] $
       "rhs" <<~ encodeTerm @@ var "depth" @@ var "namespaces" @@ (inject _Term _Term_list $ Sets.toList $ (var "s" :: TypedTerm (S.Set Term))) @@ var "cx" @@ var "g" $
       right $ HaskellUtilsSource.hsapp @@ var "lhs" @@ var "rhs") $
-    cases _Term (Strip.deannotateTerm @@ var "term")
+    match _Term (Strip.deannotateTerm @@ var "term")
       (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported term") (PrintCore.term @@ var "term"))) [
       _Term_application>>: "app" ~> lets [
         "fun">: Core.applicationFunction $ var "app",
@@ -447,7 +447,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
         "deannotatedFun">: Strip.deannotateTerm @@ (var "fun")] $
         -- When the function is a union elimination, encode as a direct case expression
         -- instead of (\x -> case x of ...) arg
-        cases _Term (var "deannotatedFun")
+        match _Term (var "deannotatedFun")
           (Just $
             "hfun" <<~ var "encode" @@ var "fun" $
               "harg" <<~ var "encode" @@ var "arg" $
@@ -475,7 +475,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
         "collectBindings">: "lt" ~>
           "bs" <~ Core.letBindings (var "lt") $
           "body" <~ Core.letBody (var "lt") $
-          cases _Term (Strip.deannotateTerm @@ var "body")
+          match _Term (Strip.deannotateTerm @@ var "body")
             (Just $ pair (var "bs") (var "body")) [
             _Term_let>>: "innerLt" ~>
               "innerResult" <~ var "collectBindings" @@ var "innerLt" $
@@ -545,7 +545,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
         "lhs">: inject H._Expression H._Expression_variable $ HaskellUtilsSource.unionFieldReference @@ (Sets.union (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) (Sets.fromList (Maps.keys (Graph.graphSchemaTypes $ var "g")))) @@ var "namespaces" @@ var "sname" @@ var "fn",
         "dflt">: Eithers.map (HaskellUtilsSource.hsapp @@ var "lhs") (var "encode" @@ var "ft")] $
         "ftyp" <<~ Resolution.requireUnionField_ @@ var "cx" @@ var "g" @@ var "sname" @@ var "fn" $
-        cases _Type (Strip.deannotateType @@ var "ftyp")
+        match _Type (Strip.deannotateType @@ var "ftyp")
           (Just $ var "dflt") [
           _Type_unit>>: constant $ right $ var "lhs"],
       _Term_unit>>: constant $ right $ inject H._Expression H._Expression_tuple $ list ([] :: [TypedTerm H.Expression]),
@@ -567,7 +567,7 @@ encodeType = haskellCoderDefinition "encodeType" $
   "ref">: "name" ~>
     right $ inject H._Type H._Type_variable $ HaskellUtilsSource.elementReference @@ var "namespaces" @@ var "name",
   "unitTuple">: inject H._Type H._Type_tuple $ list ([] :: [TypedTerm H.Type])] $
-  cases _Type (Strip.deannotateType @@ var "typ")
+  match _Type (Strip.deannotateType @@ var "typ")
     (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported type") (PrintCore.type_ @@ var "typ"))) [
     _Type_application>>: "app" ~> lets [
       "lhs">: Core.applicationTypeFunction $ var "app",
@@ -605,7 +605,7 @@ encodeType = haskellCoderDefinition "encodeType" $
       "hlt" <<~ var "encode" @@ var "lt" $
         right $ inject H._Type H._Type_list $ var "hlt",
     _Type_literal>>: "lt" ~>
-      cases _LiteralType (var "lt")
+      match _LiteralType (var "lt")
         (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported literal type") (PrintCore.literalType @@ var "lt"))) [
         _LiteralType_binary>>: constant $
           right $ inject H._Type H._Type_variable $ HaskellUtilsSource.rawName @@ string "B.ByteString",
@@ -614,13 +614,13 @@ encodeType = haskellCoderDefinition "encodeType" $
         _LiteralType_decimal>>: constant $
           right $ inject H._Type H._Type_variable $ HaskellUtilsSource.rawName @@ string "Sci.Scientific",
         _LiteralType_float>>: "ft" ~>
-          cases _FloatType (var "ft") Nothing [
+          match _FloatType (var "ft") Nothing [
             _FloatType_float32>>: constant $
               right $ inject H._Type H._Type_variable $ HaskellUtilsSource.rawName @@ string "Float",
             _FloatType_float64>>: constant $
               right $ inject H._Type H._Type_variable $ HaskellUtilsSource.rawName @@ string "Double"],
         _LiteralType_integer>>: "it" ~>
-          cases _IntegerType (var "it")
+          match _IntegerType (var "it")
             (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "supported integer type") (PrintCore.integerType @@ var "it"))) [
             _IntegerType_bigint>>: constant $
               right $ inject H._Type H._Type_variable $ HaskellUtilsSource.rawName @@ string "Integer",
@@ -712,7 +712,7 @@ extendMetaForTerm :: TypedTermDefinition (HE.HaskellModuleMetadata -> Term -> HE
 extendMetaForTerm = haskellCoderDefinition "extendMetaForTerm" $
   doc "Extend metadata by analyzing a term for standard import usage (bottom-up step function)" $
   "meta" ~> "term" ~>
-    cases _Term (var "term") (Just $ var "meta") [
+    match _Term (var "term") (Just $ var "meta") [
       _Term_map>>: constant $
         setMetaUsesMap @@ true @@ var "meta",
       _Term_set>>: constant $
@@ -722,13 +722,13 @@ extendMetaForType :: TypedTermDefinition (HE.HaskellModuleMetadata -> Type -> HE
 extendMetaForType = haskellCoderDefinition "extendMetaForType" $
   doc "Extend metadata by analyzing a type for standard import usage (bottom-up step function)" $
   "meta" ~> "typ" ~>
-    cases _Type (Strip.deannotateType @@ var "typ") (Just $ var "meta") [
+    match _Type (Strip.deannotateType @@ var "typ") (Just $ var "meta") [
       _Type_literal>>: "lt" ~>
-        cases _LiteralType (var "lt") (Just $ var "meta") [
+        match _LiteralType (var "lt") (Just $ var "meta") [
           _LiteralType_binary>>: constant $
             setMetaUsesByteString @@ true @@ var "meta",
           _LiteralType_integer>>: "it" ~>
-            cases _IntegerType (var "it") (Just $ var "meta") [
+            match _IntegerType (var "it") (Just $ var "meta") [
               _IntegerType_int8>>: constant $ setMetaUsesInt @@ true @@ var "meta",
               _IntegerType_int16>>: constant $ setMetaUsesInt @@ true @@ var "meta",
               _IntegerType_int64>>: constant $ setMetaUsesInt @@ true @@ var "meta"]],
@@ -742,7 +742,7 @@ findOrdVariables = haskellCoderDefinition "findOrdVariables" $
   doc "Find type variables that require an Ord constraint (used in maps or sets)" $
   "typ" ~> lets [
     "fold">: "names" ~> "typ'" ~>
-      cases _Type (var "typ'")
+      match _Type (var "typ'")
         (Just $ var "names") [
         _Type_map>>: "mapType" ~> lets [
           "kt">: Core.mapTypeKeys $ var "mapType"] $
@@ -752,7 +752,7 @@ findOrdVariables = haskellCoderDefinition "findOrdVariables" $
     "isTypeVariable">: "v" ~>
       Optionals.isNone $ Names.moduleNameOf @@ var "v",
     "tryType">: "names" ~> "t" ~>
-      cases _Type (Strip.deannotateType @@ var "t")
+      match _Type (Strip.deannotateType @@ var "t")
         (Just $ var "names") [
         _Type_variable>>: "v" ~>
           Logic.ifElse (var "isTypeVariable" @@ var "v")
@@ -768,7 +768,7 @@ gatherMetadata = haskellCoderDefinition "gatherMetadata" $
   doc "Gather metadata from definitions by bottom-up traversal of all terms and types" $
   "defs" ~>
     "addDef" <~ ("meta" ~> "def" ~>
-      cases _Definition (var "def") Nothing [
+      match _Definition (var "def") Nothing [
         _Definition_term>>: "termDef" ~>
           "term" <~ Packaging.termDefinitionBody (var "termDef") $
           "metaWithTerm" <~ (Rewriting.foldOverTerm @@ Coders.traversalOrderPre
@@ -910,18 +910,18 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
     "typ">: Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature $ var "def",
     "hname">: HaskellUtilsSource.simpleName @@ (Names.localNameOf @@ var "name"),
     "rewriteValueBinding">: "vb" ~>
-      cases H._ValueBinding (var "vb") Nothing [
+      match H._ValueBinding (var "vb") Nothing [
         H._ValueBinding_simple>>: "simple" ~> lets [
           "pattern'">: project H._SimpleValueBinding H._SimpleValueBinding_pattern @@ var "simple",
           "rhs">: project H._SimpleValueBinding H._SimpleValueBinding_rhs @@ var "simple",
           "bindings">: project H._SimpleValueBinding H._SimpleValueBinding_localBindings @@ var "simple"] $
-          cases H._Pattern (var "pattern'")
+          match H._Pattern (var "pattern'")
             (Just $ var "vb") [
             H._Pattern_application>>: "appPat" ~> lets [
               "name'">: project H._ApplicationPattern H._ApplicationPattern_name @@ var "appPat",
               "args">: project H._ApplicationPattern H._ApplicationPattern_args @@ var "appPat",
               "rhsExpr">: unwrap H._RightHandSide @@ var "rhs"] $
-              cases H._Expression (var "rhsExpr")
+              match H._Expression (var "rhsExpr")
                 (Just $ var "vb") [
                 H._Expression_lambda>>: "lambda'" ~> lets [
                   "vars">: project H._LambdaExpression H._LambdaExpression_bindings @@ var "lambda'",
@@ -934,7 +934,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
                     H._SimpleValueBinding_localBindings>>: var "bindings",
                     H._SimpleValueBinding_comments>>: nothing])]]],
     "toDecl">: "comments" ~> "hname'" ~> "term'" ~> "bindings" ~>
-      cases _Term (Strip.deannotateTerm @@ var "term'")
+      match _Term (Strip.deannotateTerm @@ var "term'")
         (Just $
           "hterm" <<~ encodeTerm @@ int32 0 @@ var "namespaces" @@ var "term'" @@ var "cx" @@ var "g" $ lets [
          "vb">: HaskellUtilsSource.simpleValueBinding @@ var "hname'" @@ var "hterm" @@ var "bindings",
@@ -1049,7 +1049,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
       "t'">: Pairs.second $ var "unpackResult",
       "hd">: var "declHead" @@ var "hname" @@ (Lists.reverse $ var "vars")] $
       "comments" <<~ Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ" $
-      "decl" <<~ (cases _Type (Strip.deannotateType @@ var "t'")
+      "decl" <<~ (match _Type (Strip.deannotateType @@ var "t'")
         (Just $ "htype" <<~ (adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ" @@ var "cx" @@ var "g") $
           right $ inject H._Declaration H._Declaration_type $ record H._TypeSynonymDeclaration [
             H._TypeSynonymDeclaration_name>>: var "hd",
@@ -1099,17 +1099,17 @@ typeDecl = haskellCoderDefinition "typeDecl" $
       Strings.concat $ list [string "_", Names.localNameOf @@ var "name'", string "_type_"],
     "rawTerm">: encoderFor _Type @@ var "typ",
     "rewrite">: "recurse" ~> "term" ~> lets [
-      "variantResult">: cases _Term (Strip.deannotateTerm @@ var "term")
+      "variantResult">: match _Term (Strip.deannotateTerm @@ var "term")
         (Just nothing) [
         _Term_inject>>: "inj" ~> Logic.ifElse (Equality.equal (Core.injectionTypeName $ var "inj") (Core.nameLift _Type))
           (just $ Core.injectionField $ var "inj")
           nothing],
-      "decodeString">: "term" ~> (cases _Term (Strip.deannotateTerm @@ var "term")
+      "decodeString">: "term" ~> (match _Term (Strip.deannotateTerm @@ var "term")
         (Just nothing) [
-        _Term_literal>>: "lit" ~> cases _Literal (var "lit")
+        _Term_literal>>: "lit" ~> match _Literal (var "lit")
           (Just nothing) [
           _Literal_string>>: "s" ~> just (var "s")]]),
-      "decodeName">: "term" ~> (cases _Term (Strip.deannotateTerm @@ var "term")
+      "decodeName">: "term" ~> (match _Term (Strip.deannotateTerm @@ var "term")
         (Just nothing) [
         _Term_wrap>>: "wt" ~> Logic.ifElse (Equality.equal (Core.wrappedTermTypeName $ var "wt") (Core.nameLift _Name))
           (Optionals.map (reify Core.name) $ var "decodeString" @@ (Core.wrappedTermBody $ var "wt"))
@@ -1148,7 +1148,7 @@ typeSchemeConstraintsToClassMap :: TypedTermDefinition (Maybe (M.Map Name TypeVa
 typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsToClassMap" $
   doc "Project type scheme constraints to a map of type variables to typeclass names" $
   "maybeConstraints" ~> lets [
-    "constraintToName">: "tcc" ~> match _TypeClassConstraint Nothing [
+    "constraintToName">: "tcc" ~> cases _TypeClassConstraint Nothing [
       _TypeClassConstraint_simple>>: "className" ~> just (var "className")] @@ (var "tcc")] $
     Optionals.cases (var "maybeConstraints") (Maps.empty :: TypedTerm (M.Map Name (S.Set Name))) ("constraints" ~>
         Maps.map

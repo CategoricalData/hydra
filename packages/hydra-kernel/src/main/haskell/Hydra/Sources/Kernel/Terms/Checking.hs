@@ -182,7 +182,7 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
   Optionals.cases (Lists.uncons $ var "typeArgs") (right $ var "t") ("uc" ~>
       "ah" <~ Pairs.first (var "uc") $
       "at" <~ Pairs.second (var "uc") $
-      cases _Type (var "t")
+      match _Type (var "t")
         (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "forall type") (Strings.concat $ list [
           PrintCore.type_ @@ var "t",
           string ". Trying to apply ",
@@ -222,7 +222,7 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
             ("schemaRes" ~>
               "schemaType" <~ Pairs.first (var "schemaRes") $
               "schemaBody" <~ (Strip.deannotateType @@ (Core.typeSchemeBody $ var "schemaType")) $
-              cases _Type (var "schemaBody")
+              match _Type (var "schemaBody")
                 -- Non-forall schema: saturated nominal type; arguments are vacuous.
                 (Just $ right $ var "t") [
                 -- Polymorphic schema: substitute the args into the resolved forall.
@@ -249,7 +249,7 @@ checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
     "checkOptional" <~ ("m" ~>
       Eithers.bind (Eithers.mapOptional (var "check") (var "m"))
         ("_" ~> right unit)) $
-    cases _Term (var "term")
+    match _Term (var "term")
       (Just $ var "dflt") [
       _Term_lambda>>: "l" ~>
         Eithers.bind (var "checkOptional" @@ (Core.lambdaDomain $ var "l"))
@@ -290,7 +290,7 @@ checkTypeSubst = define "checkTypeSubst" $
   "s" <~ Typing.unTypeSubst (var "subst") $
   "vars" <~ Sets.fromList (Maps.keys (var "s" :: TypedTerm (M.Map Name Type))) $
   "suspectVars" <~ Sets.intersection (var "vars") (Sets.fromList $ Maps.keys $ Graph.graphSchemaTypes $ var "tx") $
-  "isNominal" <~ ("ts" ~> cases _Type (Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))
+  "isNominal" <~ ("ts" ~> match _Type (Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))
     (Just false) [
     _Type_record>>: constant true,
     _Type_union>>: constant true,
@@ -324,7 +324,7 @@ normalizeTypeFreeVars = define "normalizeTypeFreeVars" $
   doc "Normalize free type variables in a type to canonical names based on order of first occurrence. This allows comparing types that differ only in the naming of free type variables. Paper: inference.tex, 'Checking the witness' (effective equality)." $
   "typ" ~>
   "collectVars" <~ ("acc" ~> "t" ~>
-    cases _Type (var "t")
+    match _Type (var "t")
       (Just $ var "acc") [
       _Type_variable>>: "v" ~>
         Logic.ifElse (Maps.member (var "v") (var "acc" :: TypedTerm (M.Map Name Name)))
@@ -354,7 +354,7 @@ typeOf = define "typeOf" $
   doc "Given a type context, reconstruct the type of a System F term. Paper: inference.tex, 'Checking the witness' -- the executable form of the System F typing judgment in the soundness theorem." $
   "cx" ~> "tx" ~> "typeArgs" ~> "term" ~>
   "cx1" <~ (var "cx") $
-  cases _Term (var "term")
+  match _Term (var "term")
     (Just $ left (Error.errorChecking $ ErrorsChecking.checkingErrorUnsupportedTermVariant $ ErrorsChecking.unsupportedTermVariantError (Reflect.termVariant @@ var "term"))) [
     _Term_annotated>>: typeOfAnnotatedTerm @@ var "cx1" @@ var "tx" @@ var "typeArgs",
     _Term_application>>: typeOfApplication @@ var "cx1" @@ var "tx" @@ var "typeArgs",
@@ -390,7 +390,7 @@ typeOfApplication = define "typeOfApplication" $
   "cx" ~> "tx" ~> "typeArgs" ~> "app" ~>
   "fun" <~ Core.applicationFunction (var "app") $
   "arg" <~ Core.applicationArgument (var "app") $
-  "tryType" <~ ("cx0" ~> "tfun" ~> "targ" ~> cases _Type (var "tfun")
+  "tryType" <~ ("cx0" ~> "tfun" ~> "targ" ~> match _Type (var "tfun")
     (Just $ left (Error.errorChecking $ ErrorsChecking.checkingErrorNotAFunctionType $ ErrorsChecking.notAFunctionTypeError (var "tfun"))) [
     _Type_forall>>: "ft" ~> var "tryType" @@ var "cx0" @@ (Core.forallTypeBody (var "ft")) @@ var "targ",
     _Type_function>>: "ft" ~>
@@ -422,8 +422,8 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
   "cx" ~> "tx" ~> "typeArgs" ~> "cs" ~>
   "tname" <~ Core.caseStatementTypeName (var "cs") $
   "dflt" <~ Core.caseStatementDefault (var "cs") $
-  "cases" <~ Core.caseStatementCases (var "cs") $
-  "cterms" <~ Lists.map (reify Core.caseAlternativeHandler) (var "cases") $
+  "match" <~ Core.caseStatementCases (var "cs") $
+  "cterms" <~ Lists.map (reify Core.caseAlternativeHandler) (var "match") $
   -- Type the default case if present
   "dfltResult" <<~ Eithers.mapOptional ("e" ~> typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "e") (var "dflt") $
   -- dfltResult :: Maybe (Type, InferenceContext)

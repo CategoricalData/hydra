@@ -165,7 +165,7 @@ atan2 :: PrimitiveDefinition
 atan2 = define "atan2" "The two-argument arc tangent (atan2)." (f64To2 [("y", "the ordinate (y-coordinate)"), ("x", "the abscissa (x-coordinate)")])
   ["atan2(y, x) returns the angle in radians, in (-\x03C0, +\x03C0], from the positive x-axis to the\
   \ point (x, y), using the signs of both arguments to determine the quadrant.",
-   "Special cases follow IEEE 754 \xA79.2: atan2(\xB10, +x>0) = \xB10; atan2(\xB10, -x<0) = \xB1\x03C0;\
+   "Special match follow IEEE 754 \xA79.2: atan2(\xB10, +x>0) = \xB10; atan2(\xB10, -x<0) = \xB1\x03C0;\
   \ atan2(\xB1y>0, 0) = \xB1\x03C0/2; atan2(\xB1y, +\x221E) = \xB10; atan2(\xB1y, -\x221E) = \xB1\x03C0;\
   \ atan2(\xB1\x221E, finite) = \xB1\x03C0/2; atan2(\xB1\x221E, +\x221E) = \xB1\x03C0/4;\
   \ atan2(\xB1\x221E, -\x221E) = \xB13\x03C0/4; atan2 of any NaN argument is NaN.",
@@ -408,7 +408,7 @@ signum = define "signum" "Numeric sign." numericTo
    "For floating-point, signum(x) returns \xB11.0 for nonzero finite or infinite x (per IEEE 754\
   \ \xA75.5.1); signum(\xB10) = \xB10 (the sign of the input zero is preserved, not collapsed to a\
   \ single zero); signum(NaN) is NaN. A naive three-branch implementation (positive/negative/else-\
-  \ zero) gets both of these float cases wrong and must not be used.",
+  \ zero) gets both of these float match wrong and must not be used.",
    "Requires a 'numeric' type-class constraint on the argument type.",
    "Corresponds to Haskell's signum :: Num a => a -> a."]
 

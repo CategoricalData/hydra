@@ -276,7 +276,7 @@ checkTerm :: TypedTermDefinition (ValidationProfile -> Bool -> SubtermPath -> Gr
 checkTerm = define "checkTerm" $
   doc "Check a single term node for validation errors. Rules disabled by the profile are not evaluated." $
   "p" ~> "typed" ~> "path" ~> "cx" ~> "term" ~>
-  cases _Term (var "term") (Just nothing) [
+  match _Term (var "term") (Just nothing) [
 
     -- T16/T20/T21: TermAnnotated — check for nested or empty annotations
     _Term_annotated>>: "ann" ~>
@@ -292,7 +292,7 @@ checkTerm = define "checkTerm" $
             noError),
         -- T20. NestedTermAnnotationError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nestedTermAnnotation
-          (cases _Term (var "body") (Just noError) [
+          (match _Term (var "body") (Just noError) [
             _Term_annotated>>: constant $
               mkJust $ inject _InvalidTermError _InvalidTermError_nestedTermAnnotation $
                 record _NestedTermAnnotationError [
@@ -306,12 +306,12 @@ checkTerm = define "checkTerm" $
       firstFinding @@ list [
         -- T13. ConstantConditionError: ifElse applied to a literal boolean
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_constantCondition
-          (cases _Term (var "fun") (Just noError) [
+          (match _Term (var "fun") (Just noError) [
             _Term_variable>>: "primName" ~>
               Logic.ifElse (Equality.equal (Core.unName $ var "primName") (string "hydra.lib.logic.ifElse"))
-                (cases _Term (var "arg") (Just noError) [
+                (match _Term (var "arg") (Just noError) [
                   _Term_literal>>: "lit" ~>
-                    cases _Literal (var "lit") (Just noError) [
+                    match _Literal (var "lit") (Just noError) [
                       _Literal_boolean>>: "boolVal" ~>
                         mkJust $ inject _InvalidTermError _InvalidTermError_constantCondition $
                           record _ConstantConditionError [
@@ -320,9 +320,9 @@ checkTerm = define "checkTerm" $
                 noError]),
         -- T15. SelfApplicationError: (TermVariable x) applied to (TermVariable x)
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_selfApplication
-          (cases _Term (var "fun") (Just noError) [
+          (match _Term (var "fun") (Just noError) [
             _Term_variable>>: "funName" ~>
-              cases _Term (var "arg") (Just noError) [
+              match _Term (var "arg") (Just noError) [
                 _Term_variable>>: "argName" ~>
                   Logic.ifElse (Equality.equal (var "funName") (var "argName"))
                     (mkJust $ inject _InvalidTermError _InvalidTermError_selfApplication $
@@ -332,11 +332,11 @@ checkTerm = define "checkTerm" $
                     noError]]),
         -- T16. UnnecessaryIdentityApplicationError: (\x -> x) applied to arg
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unnecessaryIdentityApplication
-          (cases _Term (var "fun") (Just noError) [
+          (match _Term (var "fun") (Just noError) [
             _Term_lambda>>: "lam" ~>
               "param" <~ Core.lambdaParameter (var "lam") $
               "body" <~ Core.lambdaBody (var "lam") $
-              cases _Term (var "body") (Just noError) [
+              match _Term (var "body") (Just noError) [
                 _Term_variable>>: "bodyVar" ~>
                   Logic.ifElse (Equality.equal (var "param") (var "bodyVar"))
                     (mkJust $ inject _InvalidTermError _InvalidTermError_unnecessaryIdentityApplication $
@@ -345,9 +345,9 @@ checkTerm = define "checkTerm" $
                     noError]]),
         -- T14. RedundantWrapUnwrapError: unwrap(n) applied to wrap(n, _)
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_redundantWrapUnwrap
-          (cases _Term (var "fun") (Just noError) [
+          (match _Term (var "fun") (Just noError) [
             _Term_unwrap>>: "unwrapName" ~>
-              cases _Term (var "arg") (Just noError) [
+              match _Term (var "arg") (Just noError) [
                 _Term_wrap>>: "wt" ~>
                   "wrapName" <~ Core.wrappedTermTypeName (var "wt") $
                   Logic.ifElse (Equality.equal (var "unwrapName") (var "wrapName"))
@@ -389,7 +389,7 @@ checkTerm = define "checkTerm" $
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
           (Optionals.cases (var "resolved")
             noError
-            ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantRecord (var "typ")) [
+            ("typ" ~> match _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantRecord (var "typ")) [
               _Type_record>>: constant noError])),
         -- #610 Layer 2a. MissingRecordFieldsError: declared fields absent from the term
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_missingRecordFields
@@ -492,7 +492,7 @@ checkTerm = define "checkTerm" $
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
           (Optionals.cases (var "resolved")
             noError
-            ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantUnion (var "typ")) [
+            ("typ" ~> match _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantUnion (var "typ")) [
               _Type_union>>: constant noError])),
         -- #610 Layer 2. UndeclaredVariantError: the injected variant is not
         -- among the union's declared variants
@@ -572,7 +572,7 @@ checkTerm = define "checkTerm" $
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
           (Optionals.cases (var "resolved")
             noError
-            ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantRecord (var "typ")) [
+            ("typ" ~> match _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantRecord (var "typ")) [
               _Type_record>>: constant noError])),
         -- #610 Layer 2. UnknownProjectedFieldError: the projected field is
         -- not among the record's declared fields
@@ -619,7 +619,7 @@ checkTerm = define "checkTerm" $
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
           (Optionals.cases (var "resolved")
             noError
-            ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantUnion (var "typ")) [
+            ("typ" ~> match _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantUnion (var "typ")) [
               _Type_union>>: constant noError])),
         -- T6. EmptyCaseStatementError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyCaseStatement
@@ -746,7 +746,7 @@ checkTerm = define "checkTerm" $
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
           (Optionals.cases (var "resolved")
             noError
-            ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantWrap (var "typ")) [
+            ("typ" ~> match _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantWrap (var "typ")) [
               _Type_wrap>>: constant noError]))],
 
     -- #610: TermUnwrap — nominal reference validity (Layer 1 only). No
@@ -774,7 +774,7 @@ checkTerm = define "checkTerm" $
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_nominalTypeKindMismatch
           (Optionals.cases (var "resolved")
             noError
-            ("typ" ~> cases _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantWrap (var "typ")) [
+            ("typ" ~> match _Type (var "typ") (Just $ nominalTypeKindMismatch (var "path") (var "tname") Variants.typeVariantWrap (var "typ")) [
               _Type_wrap>>: constant noError]))]]
 
 -- | Check a list of names for shadowing against the current graph scope
@@ -826,7 +826,7 @@ checkVoid :: TypedTermDefinition (Type -> Maybe InvalidTypeError)
 checkVoid = define "checkVoid" $
   doc "Return an error if the given type is TypeVoid" $
   "typ" ~>
-  cases _Type (var "typ") (Just noTypeError) [
+  match _Type (var "typ") (Just noTypeError) [
     _Type_void>>: constant $
       mkJustType $ inject _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition $
         record _VoidInNonBottomPositionError [
@@ -1134,7 +1134,7 @@ resolveRecordFields = define "resolveRecordFields" $
   "cx" ~> "tname" ~>
   Optionals.cases (resolveNominalType @@ var "cx" @@ var "tname")
     nothing
-    ("typ" ~> cases _Type (var "typ") (Just nothing) [
+    ("typ" ~> match _Type (var "typ") (Just nothing) [
       _Type_record>>: "fields" ~> just (var "fields")])
 
 -- | Resolve a type name to the field list of the union type it names, if
@@ -1149,7 +1149,7 @@ resolveUnionFields = define "resolveUnionFields" $
   "cx" ~> "tname" ~>
   "toFields" <~ ("ts" ~>
     "stripped" <~ Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts") $
-    cases _Type (var "stripped") (Just nothing) [
+    match _Type (var "stripped") (Just nothing) [
       _Type_union>>: "fields" ~> just (var "fields")]) $
   -- Look up in schema types first, then fall back to bound types
   Optionals.cases (Maps.lookup (var "tname") (Graph.graphSchemaTypes $ var "cx"))
@@ -1231,7 +1231,7 @@ type_ = define "type" $
         -- Recurse into subtypes, threading the accumulator through. For
         -- multi-child cases, use Lists.foldl over a list of children so the
         -- max-errors cap is respected between children.
-        (cases _Type (var "typ") (Just (var "acc1")) [
+        (match _Type (var "typ") (Just (var "acc1")) [
           -- For forall, extend bound vars before recursing into the body.
           _Type_forall>>: "ft" ~>
             "newBound" <~ Sets.insert (Core.forallTypeParameter $ var "ft") (var "boundVars") $
@@ -1283,7 +1283,7 @@ validateTypeNode :: TypedTermDefinition (ValidationProfile -> S.Set Name -> Type
 validateTypeNode = define "validateTypeNode" $
   doc "Check a single type node for validation errors. Rules disabled by the profile are not evaluated." $
   "p" ~> "boundVars" ~> "typ" ~>
-  cases _Type (var "typ") (Just nothing) [
+  match _Type (var "typ") (Just nothing) [
 
     -- Y8/Y9: TypeAnnotated — nested or empty annotations
     _Type_annotated>>: "ann" ~>
@@ -1299,7 +1299,7 @@ validateTypeNode = define "validateTypeNode" $
             noTypeError),
         -- Y8. NestedTypeAnnotationError
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_nestedTypeAnnotation
-          (cases _Type (var "body") (Just noTypeError) [
+          (match _Type (var "body") (Just noTypeError) [
             _Type_annotated>>: constant $
               mkJustType $ inject _InvalidTypeError _InvalidTypeError_nestedTypeAnnotation $
                 record _NestedTypeAnnotationError [
@@ -1354,7 +1354,7 @@ validateTypeNode = define "validateTypeNode" $
       "keyType" <~ Core.mapTypeKeys (var "mt") $
       firstFindingType @@ list [
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_nonComparableMapKeyType
-          (cases _Type (var "keyType") (Just noTypeError) [
+          (match _Type (var "keyType") (Just noTypeError) [
             _Type_function>>: constant $
               mkJustType $ inject _InvalidTypeError _InvalidTypeError_nonComparableMapKeyType $
                 record _NonComparableMapKeyTypeError [
@@ -1401,7 +1401,7 @@ validateTypeNode = define "validateTypeNode" $
     _Type_set>>: "elemType" ~>
       firstFindingType @@ list [
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_nonComparableSetElementType
-          (cases _Type (var "elemType") (Just noTypeError) [
+          (match _Type (var "elemType") (Just noTypeError) [
             _Type_function>>: constant $
               mkJustType $ inject _InvalidTypeError _InvalidTypeError_nonComparableSetElementType $
                 record _NonComparableSetElementTypeError [

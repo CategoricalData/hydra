@@ -182,7 +182,7 @@ rustReservedWords = define "rustReservedWords" $
       doc "Rust strict keywords (cannot be used as identifiers). See https://doc.rust-lang.org/reference/keywords.html" $
       list $ string <$> [
         "as", "async", "await", "break", "const", "continue", "crate", "dyn", "else", "enum", "extern",
-        "false", "fn", "for", "if", "impl", "in", "let", "loop", "match", "mod", "move", "mut",
+        "false", "fn", "for", "if", "impl", "in", "let", "loop", "cases", "mod", "move", "mut",
         "pub", "ref", "return", "self", "Self", "static", "struct", "super", "trait", "true", "type",
         "unsafe", "use", "where", "while"],
     "reservedKeywords">:

@@ -113,28 +113,28 @@ define = definitionInModule module_
 expectArray :: TypedTermDefinition (Value -> Either String [Value])
 expectArray = define "expectArray" $
   doc "Extract an array from a JSON value, failing if the value is not an array" $
-  lambda "value" $ cases _Value (var "value")
+  lambda "value" $ match _Value (var "value")
     (Just $ left $ Strings.concat2 (Strings.concat2 (string "expected ") (string "JSON array")) (Strings.concat2 (string " but found ") (showValue @@ var "value"))) [
     _Value_array>>: lambda "els" $ right $ var "els"]
 
 expectNumber :: TypedTermDefinition (Value -> Either String Sci.Scientific)
 expectNumber = define "expectNumber" $
   doc "Extract a number from a JSON value, failing if the value is not a number" $
-  lambda "value" $ cases _Value (var "value")
+  lambda "value" $ match _Value (var "value")
     (Just $ left $ Strings.concat2 (Strings.concat2 (string "expected ") (string "JSON number")) (Strings.concat2 (string " but found ") (showValue @@ var "value"))) [
     _Value_number>>: lambda "d" $ right $ var "d"]
 
 expectObject :: TypedTermDefinition (Value -> Either String (M.Map String Value))
 expectObject = define "expectObject" $
   doc "Extract an object from a JSON value as a name-keyed map, failing if the value is not an object. Field order is not preserved; lookups are by name." $
-  lambda "value" $ cases _Value (var "value")
+  lambda "value" $ match _Value (var "value")
     (Just $ left $ Strings.concat2 (Strings.concat2 (string "expected ") (string "JSON object")) (Strings.concat2 (string " but found ") (showValue @@ var "value"))) [
     _Value_object>>: lambda "m" $ right $ (Maps.fromList (var "m") :: TypedTerm (M.Map String Value))]
 
 expectString :: TypedTermDefinition (Value -> Either String String)
 expectString = define "expectString" $
   doc "Extract a string from a JSON value, failing if the value is not a string" $
-  lambda "value" $ cases _Value (var "value")
+  lambda "value" $ match _Value (var "value")
     (Just $ left $ Strings.concat2 (Strings.concat2 (string "expected ") (string "JSON string")) (Strings.concat2 (string " but found ") (showValue @@ var "value"))) [
     _Value_string>>: lambda "s" $ right $ var "s"]
 

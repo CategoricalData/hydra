@@ -220,7 +220,7 @@ nodeToExpr :: TypedTermDefinition (Rdf.Node -> Expr)
 nodeToExpr = define "nodeToExpr" $
   doc "Convert a node to an expression" $
   lambda "n" $
-    cases Rdf._Node (var "n") Nothing [
+    match Rdf._Node (var "n") Nothing [
       Rdf._Node_iri>>: lambda "iri" $ iriToExpr @@ var "iri",
       Rdf._Node_bnode>>: lambda "bnode" $ blankNodeToExpr @@ var "bnode",
       Rdf._Node_literal>>: lambda "lit" $ literalToExpr @@ var "lit"]
@@ -236,7 +236,7 @@ resourceToExpr :: TypedTermDefinition (Rdf.Resource -> Expr)
 resourceToExpr = define "resourceToExpr" $
   doc "Convert a resource to an expression" $
   lambda "r" $
-    cases Rdf._Resource (var "r") Nothing [
+    match Rdf._Resource (var "r") Nothing [
       Rdf._Resource_iri>>: lambda "iri" $ iriToExpr @@ var "iri",
       Rdf._Resource_bnode>>: lambda "bnode" $ blankNodeToExpr @@ var "bnode"]
 

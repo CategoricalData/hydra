@@ -29,7 +29,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([PrintCore.ns, Substitution.ns] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata ((Just "Test cases for type and term substitution operations"))}
+            moduleMetadata = descriptionMetadata ((Just "Test match for type and term substitution operations"))}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -38,7 +38,7 @@ define = definitionInModule module_
 
 allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
-    doc "Test cases for type and term substitution operations" $
+    doc "Test match for type and term substitution operations" $
     supergroup "substitution" [
       substInTypeTests,
       substInTypeSchemeTests]

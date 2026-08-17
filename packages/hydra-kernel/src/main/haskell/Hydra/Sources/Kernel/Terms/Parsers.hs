@@ -92,7 +92,7 @@ alt :: TypedTermDefinition (Parser a -> Parser a -> Parser a)
 alt = define "alt" $
   doc "Try the first parser; if it fails without consuming input, try the second" $
   "p1" ~> "p2" ~>
-  "parse" <~ ("input" ~> cases _ParseResult (unwrap _Parser @@ (var "p1") @@ (var "input")) Nothing [
+  "parse" <~ ("input" ~> match _ParseResult (unwrap _Parser @@ (var "p1") @@ (var "input")) Nothing [
     _ParseResult_success>>: "s" ~>
       Parsing.parseResultSuccess (var "s"),
     _ParseResult_failure>>: "e" ~>
@@ -113,9 +113,9 @@ apply :: TypedTermDefinition (Parser (a -> b) -> Parser a -> Parser b)
 apply = define "apply" $
   doc "Apply a parser containing a function to a parser containing a value" $
   "pf" ~> "pa" ~>
-  "parse" <~ ("input" ~> cases _ParseResult (unwrap _Parser @@ (var "pf") @@ (var "input")) Nothing [
+  "parse" <~ ("input" ~> match _ParseResult (unwrap _Parser @@ (var "pf") @@ (var "input")) Nothing [
     _ParseResult_success>>: "sf" ~>
-      cases _ParseResult (unwrap _Parser @@ (var "pa") @@ (Parsing.parseSuccessRemainder $ var "sf")) Nothing [
+      match _ParseResult (unwrap _Parser @@ (var "pa") @@ (Parsing.parseSuccessRemainder $ var "sf")) Nothing [
         _ParseResult_success>>: "sa" ~>
           Parsing.parseResultSuccess (Parsing.parseSuccess
             ((Parsing.parseSuccessValue $ var "sf") @@ (Parsing.parseSuccessValue $ var "sa"))
@@ -141,7 +141,7 @@ bind :: TypedTermDefinition (Parser a -> (a -> Parser b) -> Parser b)
 bind = define "bind" $
   doc "Sequence two parsers, passing the result of the first to a function that produces the second" $
   "pa" ~> "f" ~>
-  "parse" <~ ("input" ~> cases _ParseResult (unwrap _Parser @@ (var "pa") @@ (var "input")) Nothing [
+  "parse" <~ ("input" ~> match _ParseResult (unwrap _Parser @@ (var "pa") @@ (var "input")) Nothing [
     _ParseResult_success>>: "s" ~>
       unwrap _Parser @@
         (var "f" @@ (Parsing.parseSuccessValue $ var "s")) @@
@@ -206,7 +206,7 @@ manyLoop :: TypedTermDefinition (Parser a -> [Int] -> [a] -> ParseResult [a])
 manyLoop = define "manyLoop" $
   doc "Repeatedly apply a parser, accumulating results, until it fails" $
   "p" ~> "input" ~> "acc" ~>
-  cases _ParseResult (unwrap _Parser @@ (var "p") @@ (var "input")) Nothing [
+  match _ParseResult (unwrap _Parser @@ (var "p") @@ (var "input")) Nothing [
     _ParseResult_success>>: "s" ~>
       manyLoop @@ (var "p") @@ (Parsing.parseSuccessRemainder $ var "s") @@
         (Lists.cons (Parsing.parseSuccessValue $ var "s") (var "acc")),
@@ -218,7 +218,7 @@ map :: TypedTermDefinition ((a -> b) -> Parser a -> Parser b)
 map = define "map" $
   doc "Apply a function to the result of a parser" $
   "f" ~> "pa" ~>
-  "parse" <~ ("input" ~> cases _ParseResult (unwrap _Parser @@ (var "pa") @@ (var "input")) Nothing [
+  "parse" <~ ("input" ~> match _ParseResult (unwrap _Parser @@ (var "pa") @@ (var "input")) Nothing [
     _ParseResult_success>>: "s" ~>
       Parsing.parseResultSuccess (Parsing.parseSuccess
         (var "f" @@ (Parsing.parseSuccessValue $ var "s"))

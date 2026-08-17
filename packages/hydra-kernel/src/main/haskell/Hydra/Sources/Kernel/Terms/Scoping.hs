@@ -189,10 +189,10 @@ fTypeToTypeScheme :: TypedTermDefinition (Type -> TypeScheme)
 fTypeToTypeScheme = define "fTypeToTypeScheme" $
   doc "Convert a forall type to a type scheme" $
   "typ" ~>
-  "stripAnnotations" <~ ("t" ~> cases _Type (var "t")
+  "stripAnnotations" <~ ("t" ~> match _Type (var "t")
     (Just $ var "t") [
     _Type_annotated>>: "at" ~> var "stripAnnotations" @@ (Core.annotatedTypeBody $ var "at")]) $
-  "gatherForall" <~ ("vars" ~> "typ" ~> cases _Type (var "stripAnnotations" @@ var "typ")
+  "gatherForall" <~ ("vars" ~> "typ" ~> match _Type (var "stripAnnotations" @@ var "typ")
      (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "typ") Phantoms.nothing) [
      _Type_forall>>: "ft" ~> var "gatherForall" @@
        (Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars")) @@
@@ -254,7 +254,7 @@ typeSchemeToTermSignature = define "typeSchemeToTermSignature" $
       ("tvm" ~> Core.typeVariableConstraintsClasses $ var "tvm"))
     (var "variables") $
   -- Peel function arrows off the body, accumulating parameter types in reverse order.
-  "peel" <~ ("acc" ~> "t" ~> cases _Type (var "t")
+  "peel" <~ ("acc" ~> "t" ~> match _Type (var "t")
     (Just $ pair (Lists.reverse $ var "acc") (var "t")) [
     _Type_function>>: "ft" ~> var "peel" @@
       (Lists.cons (Core.functionTypeDomain $ var "ft") (var "acc")) @@

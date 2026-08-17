@@ -44,7 +44,7 @@ module_ = Module {
   moduleName = ns,
   moduleDefinitions = definitions,
   moduleDependencies = unqualifiedDep <$> ([Strip.ns] `L.union` kernelTypesModuleNames),
-  moduleMetadata = descriptionMetadata (Just "Fan-out inference benchmark. Each fanWalker_K branches to three smaller fanWalkers via _Term cases — closer to real codegen DAG shape than LinearChain.")
+  moduleMetadata = descriptionMetadata (Just "Fan-out inference benchmark. Each fanWalker_K branches to three smaller fanWalkers via _Term match — closer to real codegen DAG shape than LinearChain.")
   }
   where
     definitions = [toDefinition (mkFanWalker k) | k <- [0 .. numFanWalkers - 1]]
@@ -67,7 +67,7 @@ fanWalkerBody k =
   let (p1, p2, p3) = fanPredecessors k
   in "t" ~>
        "stripped" <~ (Strip.deannotateTerm @@ var "t") $
-       cases _Term (var "stripped") (Just $ just (var "stripped")) [
+       match _Term (var "stripped") (Just $ just (var "stripped")) [
          _Term_application>>: "app" ~>
            "fun" <~ Core.applicationFunction (var "app") $
            "arg" <~ Core.applicationArgument (var "app") $

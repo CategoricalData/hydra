@@ -135,7 +135,7 @@ attrTypeToExpr :: TypedTermDefinition (Dot.AttrType -> Expr)
 attrTypeToExpr = define "attrTypeToExpr" $
   doc "Convert an attribute type to an expression" $
   lambda "t" $
-    cases Dot._AttrType (var "t") Nothing [
+    match Dot._AttrType (var "t") Nothing [
       Dot._AttrType_graph>>: constant $ Serialization.cst @@ string "graph",
       Dot._AttrType_node>>: constant $ Serialization.cst @@ string "node",
       Dot._AttrType_edge>>: constant $ Serialization.cst @@ string "edge"]
@@ -144,7 +144,7 @@ compassPtToExpr :: TypedTermDefinition (Dot.CompassPt -> Expr)
 compassPtToExpr = define "compassPtToExpr" $
   doc "Convert a compass point to an expression" $
   lambda "p" $
-    cases Dot._CompassPt (var "p") Nothing [
+    match Dot._CompassPt (var "p") Nothing [
       Dot._CompassPt_n>>: constant $ Serialization.cst @@ string "n",
       Dot._CompassPt_ne>>: constant $ Serialization.cst @@ string "ne",
       Dot._CompassPt_e>>: constant $ Serialization.cst @@ string "e",
@@ -217,7 +217,7 @@ nodeOrSubgraphToExpr :: TypedTermDefinition (Bool -> Dot.NodeOrSubgraph -> Expr)
 nodeOrSubgraphToExpr = define "nodeOrSubgraphToExpr" $
   doc "Convert a node or subgraph to an expression" $
   lambda "directed" $ lambda "ns" $
-    cases Dot._NodeOrSubgraph (var "ns") Nothing [
+    match Dot._NodeOrSubgraph (var "ns") Nothing [
       Dot._NodeOrSubgraph_node>>: lambda "n" $ nodeIdToExpr @@ var "n",
       Dot._NodeOrSubgraph_subgraph>>: lambda "sg" $ subgraphToExpr @@ var "directed" @@ var "sg"]
 
@@ -245,7 +245,7 @@ stmtToExpr :: TypedTermDefinition (Bool -> Dot.Stmt -> Expr)
 stmtToExpr = define "stmtToExpr" $
   doc "Convert a statement to an expression" $
   lambda "directed" $ lambda "s" $
-    cases Dot._Stmt (var "s") Nothing [
+    match Dot._Stmt (var "s") Nothing [
       Dot._Stmt_node>>: lambda "n" $ nodeStmtToExpr @@ var "n",
       Dot._Stmt_edge>>: lambda "e" $ edgeStmtToExpr @@ var "directed" @@ var "e",
       Dot._Stmt_attr>>: lambda "a" $ attrStmtToExpr @@ var "a",

@@ -109,7 +109,7 @@ appendFindingModule :: TypedTermDefinition (
 appendFindingModule = define "appendFindingModule" $
   doc "Append a rule-tagged InvalidModuleError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
   "p" ~> "acc" ~> "finding" ~>
-  Optionals.cases (var "finding")
+  Optionals.match (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -139,7 +139,7 @@ appendFindingPackage :: TypedTermDefinition (
 appendFindingPackage = define "appendFindingPackage" $
   doc "Append a rule-tagged InvalidPackageError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds." $
   "p" ~> "acc" ~> "finding" ~>
-  Optionals.cases (var "finding")
+  Optionals.match (var "finding")
     (var "acc")
     ("rp" ~>
       "ruleName" <~ Pairs.first (var "rp") $
@@ -174,11 +174,11 @@ checkConflictingModuleNames = define "checkConflictingModuleNames" $
     ("acc" ~> "mod" ~>
       "seen" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
-      Optionals.cases (var "err")
+      Optionals.match (var "err")
         ("ns" <~ Packaging.moduleName (var "mod") $
           "key" <~ Strings.toLower (Packaging.unModuleName $ var "ns") $
           "existing" <~ Maps.lookup (var "key" :: TypedTerm String) (var "seen") $
-          Optionals.cases (var "existing")
+          Optionals.match (var "existing")
             -- No conflict: add to map
             (pair (Maps.insert (var "key" :: TypedTerm String) (var "ns") (var "seen")) nothing)
             -- Conflict found
@@ -210,18 +210,18 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
   -- For each type definition that is a union, check each field
   Lists.foldl
     ("acc" ~> "def" ~>
-      Optionals.cases (var "acc")
-        (cases _Definition (var "def") (Just nothing) [
+      Optionals.match (var "acc")
+        (match _Definition (var "def") (Just nothing) [
           _Definition_type>>: "td" ~>
             "typeName" <~ Packaging.typeDefinitionName (var "td") $
             "localTypeName" <~ (Names.localNameOf @@ var "typeName") $
             "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "td")) $
-            cases _Type (var "typ") (Just nothing) [
+            match _Type (var "typ") (Just nothing) [
               _Type_union>>: "fields" ~>
                 -- Check each field of the union
                 Lists.foldl
                   ("innerAcc" ~> "field" ~>
-                    Optionals.cases (var "innerAcc")
+                    Optionals.match (var "innerAcc")
                       ("fieldName" <~ Core.fieldTypeName (var "field") $
                         "localFieldName" <~ (Names.localNameOf @@ var "fieldName") $
                         "constructorName" <~ Strings.concat2
@@ -255,21 +255,21 @@ checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
   "ns" <~ Packaging.moduleName (var "mod") $
   Lists.foldl
     ("acc" ~> "def" ~>
-      Optionals.cases (var "acc")
+      Optionals.match (var "acc")
         ("name" <~ (definitionName @@ var "def") $
-          "documented" <~ cases _Definition (var "def") (Just false) [
+          "documented" <~ match _Definition (var "def") (Just false) [
             _Definition_term>>: "td" ~>
               "term" <~ Packaging.termDefinitionBody (var "td") $
-              cases _Term (var "term") (Just false) [
+              match _Term (var "term") (Just false) [
                 _Term_annotated>>: "at" ~>
                   Annotations.hasDescription @@ (Annotations.getAnnotationMap @@ (Core.annotatedTermAnnotation $ var "at"))],
             _Definition_type>>: "td" ~>
               "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "td")) $
-              cases _Type (var "typ") (Just false) [
+              match _Type (var "typ") (Just false) [
                 _Type_annotated>>: "at" ~>
                   Annotations.hasDescription @@ (Annotations.getAnnotationMap @@ (Core.annotatedTypeAnnotation $ var "at"))],
             _Definition_primitive>>: "pd" ~>
-              Optionals.cases (Packaging.primitiveDefinitionMetadata $ var "pd") false ("em" ~> Logic.not (Equality.equal
+              Optionals.match (Packaging.primitiveDefinitionMetadata $ var "pd") false ("em" ~> Logic.not (Equality.equal
                   (Optionals.withDefault (string "") (Packaging.entityMetadataDescription $ var "em"))
                   (string "")))] $
           Logic.ifElse (var "documented")
@@ -292,7 +292,7 @@ checkDefinitionModuleNames = define "checkDefinitionModuleNames" $
   "prefixLen" <~ Strings.length (var "prefix") $
   Lists.foldl
     ("acc" ~> "def" ~>
-      Optionals.cases (var "acc")
+      Optionals.match (var "acc")
         -- No error yet: check this definition
         ("name" <~ (definitionName @@ var "def") $
           "nameStr" <~ Core.unName (var "name") $
@@ -316,14 +316,14 @@ checkDefinitionNameConvention = define "checkDefinitionNameConvention" $
   "ns" <~ Packaging.moduleName (var "mod") $
   Lists.foldl
     ("acc" ~> "def" ~>
-      Optionals.cases (var "acc")
+      Optionals.match (var "acc")
         ("name" <~ (definitionName @@ var "def") $
           "local" <~ (Names.localNameOf @@ var "name") $
-          "expected" <~ cases _Definition (var "def") (Just Util.caseConventionCamel) [
+          "expected" <~ match _Definition (var "def") (Just Util.caseConventionCamel) [
             _Definition_term>>: constant Util.caseConventionCamel,
             _Definition_type>>: constant Util.caseConventionPascal,
             _Definition_primitive>>: constant Util.caseConventionCamel] $
-          "pattern" <~ cases _Definition (var "def") (Just (Phantoms.asTerm Constants.regexCamelCase)) [
+          "pattern" <~ match _Definition (var "def") (Just (Phantoms.asTerm Constants.regexCamelCase)) [
             _Definition_term>>: constant (Phantoms.asTerm Constants.regexCamelCase),
             _Definition_type>>: constant (Phantoms.asTerm Constants.regexPascalCase),
             _Definition_primitive>>: constant (Phantoms.asTerm Constants.regexCamelCase)] $
@@ -357,10 +357,10 @@ checkDefinitionOrdering = define "checkDefinitionOrdering" $
     ("acc" ~> "def" ~>
       "prev" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
-      Optionals.cases (var "err")
+      Optionals.match (var "err")
         ("currName" <~ (definitionName @@ var "def") $
           "currLocal" <~ (Names.localNameOf @@ var "currName") $
-          Optionals.cases (var "prev")
+          Optionals.match (var "prev")
             -- First entry: no comparison needed
             (pair (just $ var "currName") nothing)
             -- Subsequent entries: compare local names
@@ -392,7 +392,7 @@ checkDuplicateDefinitionNames = define "checkDuplicateDefinitionNames" $
     ("acc" ~> "def" ~>
       "seen" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
-      Optionals.cases (var "err")
+      Optionals.match (var "err")
         -- No error yet: check this definition
         ("name" <~ (definitionName @@ var "def") $
           Logic.ifElse (Sets.member (var "name") (var "seen" :: TypedTerm (S.Set Name)))
@@ -416,7 +416,7 @@ checkDuplicateModuleNames = define "checkDuplicateModuleNames" $
     ("acc" ~> "mod" ~>
       "seen" <~ Pairs.first (var "acc") $
       "err" <~ Pairs.second (var "acc") $
-      Optionals.cases (var "err")
+      Optionals.match (var "err")
         ("ns" <~ Packaging.moduleName (var "mod") $
           Logic.ifElse (Sets.member (var "ns") (var "seen" :: TypedTerm (S.Set ModuleName)))
             (pair (var "seen") (just $
@@ -518,7 +518,7 @@ checkUndeclaredDependencies = define "checkUndeclaredDependencies" $
   -- False and only structural nominal references remain). Primitive
   -- definitions have no body to inspect here (their optional
   -- defaultImplementation, if any, is not currently traversed).
-  "referencedNames" <~ (("def" ~> cases _Definition (var "def")
+  "referencedNames" <~ (("def" ~> match _Definition (var "def")
     (Just $ (Sets.empty :: TypedTerm (S.Set Name))) [
     _Definition_term>>: "td" ~> Sets.union
       (Variables.freeVariablesInTerm @@ (Packaging.termDefinitionBody $ var "td"))
@@ -553,7 +553,7 @@ definitionName :: TypedTermDefinition (Definition -> Name)
 definitionName = define "definitionName" $
   doc "Extract the name from a definition" $
   "def" ~>
-  cases _Definition (var "def") Nothing [
+  match _Definition (var "def") Nothing [
     _Definition_term>>: "td" ~> Packaging.termDefinitionName (var "td"),
     _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td"),
     _Definition_primitive>>: "pd" ~> Packaging.primitiveDefinitionName (var "pd")]

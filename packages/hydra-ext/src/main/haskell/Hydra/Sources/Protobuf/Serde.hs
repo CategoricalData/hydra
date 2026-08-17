@@ -123,7 +123,7 @@ definitionToExpr :: TypedTermDefinition (P3.Definition -> Expr)
 definitionToExpr = define "definitionToExpr" $
   doc "Convert a definition to an expression" $
   lambda "def" $
-    cases P3._Definition (var "def") Nothing [
+    match P3._Definition (var "def") Nothing [
       P3._Definition_enum>>: lambda "e" $ enumDefinitionToExpr @@ var "e",
       P3._Definition_message>>: lambda "m" $ messageDefinitionToExpr @@ var "m"]
 
@@ -204,7 +204,7 @@ fieldToExpr = define "fieldToExpr" $
     "num">: project P3._Field P3._Field_number @@ var "f",
     "options">: project P3._Field P3._Field_options @@ var "f"] $
     optDesc @@ false @@ var "options" @@
-      (cases P3._FieldType (var "typ") Nothing [
+      (match P3._FieldType (var "typ") Nothing [
         P3._FieldType_oneof>>: lambda "fields" $
           Serialization.spaceSep @@ list [
             Serialization.cst @@ string "oneof",
@@ -238,7 +238,7 @@ fieldTypeToExpr :: TypedTermDefinition (P3.FieldType -> Expr)
 fieldTypeToExpr = define "fieldTypeToExpr" $
   doc "Convert a field type to an expression" $
   lambda "ftyp" $
-    cases P3._FieldType (var "ftyp") Nothing [
+    match P3._FieldType (var "ftyp") Nothing [
       P3._FieldType_map>>: lambda "mt" $ lets [
         "kt">: project P3._MapType P3._MapType_keys @@ var "mt",
         "vt">: project P3._MapType P3._MapType_values @@ var "mt"] $
@@ -306,7 +306,7 @@ optDesc = define "optDesc" $
       (var "opts")] $
     Optionals.cases (Lists.head (var "descs")) (var "expr") (lambda "firstDesc" $ lets [
         "descValue">: project P3._Option P3._Option_value @@ var "firstDesc",
-        "descStr">: cases P3._Value (var "descValue") Nothing [
+        "descStr">: match P3._Value (var "descValue") Nothing [
           P3._Value_boolean>>: lambda "b" $ Logic.ifElse (var "b") (string "true") (string "false"),
           P3._Value_string>>: lambda "s" $ var "s"],
         "commentLines">: Lists.map
@@ -358,7 +358,7 @@ scalarTypeToExpr :: TypedTermDefinition (P3.ScalarType -> Expr)
 scalarTypeToExpr = define "scalarTypeToExpr" $
   doc "Convert a scalar type to an expression" $
   lambda "sct" $ Serialization.cst @@
-    (cases P3._ScalarType (var "sct") Nothing [
+    (match P3._ScalarType (var "sct") Nothing [
       P3._ScalarType_bool>>: constant $ string "bool",
       P3._ScalarType_bytes>>: constant $ string "bytes",
       P3._ScalarType_double>>: constant $ string "double",
@@ -384,7 +384,7 @@ simpleTypeToExpr :: TypedTermDefinition (P3.SimpleType -> Expr)
 simpleTypeToExpr = define "simpleTypeToExpr" $
   doc "Convert a simple type to an expression" $
   lambda "st" $
-    cases P3._SimpleType (var "st") Nothing [
+    match P3._SimpleType (var "st") Nothing [
       P3._SimpleType_reference>>: lambda "name" $
         Serialization.cst @@ (unwrap P3._TypeName @@ var "name"),
       P3._SimpleType_scalar>>: lambda "sct" $ scalarTypeToExpr @@ var "sct"]
@@ -393,6 +393,6 @@ valueToExpr :: TypedTermDefinition (P3.Value -> Expr)
 valueToExpr = define "valueToExpr" $
   doc "Convert a value to an expression" $
   lambda "v" $ Serialization.cst @@
-    (cases P3._Value (var "v") Nothing [
+    (match P3._Value (var "v") Nothing [
       P3._Value_boolean>>: lambda "b" $ Logic.ifElse (var "b") (string "true") (string "false"),
       P3._Value_string>>: lambda "s" $ Literals.printString (var "s")])

@@ -111,7 +111,7 @@ freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
   "getAll" <~ ("vars" ~> "term" ~>
     "recurse" <~ var "getAll" @@ var "vars" $
     "dflt" <~ (var "allOf" @@ Lists.map (var "recurse") (Rewriting.subterms @@ var "term")) $
-    cases _Term (var "term")
+    match _Term (var "term")
       (Just $ var "dflt") [
       _Term_lambda>>: "l" ~>
         "domt" <~ optCases (Core.lambdaDomain $ var "l") (Sets.empty :: TypedTerm (S.Set Name)) (var "tryType" @@ var "vars") $
@@ -155,7 +155,7 @@ freeVariablesInTerm = define "freeVariablesInTerm" $
   "dfltVars" <~ ("_" ~> Lists.foldl ("s" ~> "t" ~> Sets.union (var "s") (freeVariablesInTerm @@ var "t"))
     (Sets.empty :: TypedTerm (S.Set Name))
     (Rewriting.subterms @@ var "term")) $
-  cases _Term (var "term")
+  match _Term (var "term")
     (Just $ var "dfltVars" @@ unit) [
     _Term_lambda>>: "l" ~> Sets.delete
       (Core.lambdaParameter $ var "l")
@@ -172,7 +172,7 @@ freeVariablesInType = define "freeVariablesInType" $
   "dfltVars" <~ Phantoms.fold ("s" ~> "t" ~> Sets.union (var "s") (recurse @@ var "t"))
     @@ (Sets.empty :: TypedTerm (S.Set Name))
     @@ (Rewriting.subtypes @@ var "typ") $
-  cases _Type (var "typ")
+  match _Type (var "typ")
     (Just $ var "dfltVars") [
     _Type_forall>>: "lt" ~> Sets.delete
         (Core.forallTypeParameter $ var "lt")
@@ -187,7 +187,7 @@ freeVariablesInTypeOrdered = define "freeVariablesInTypeOrdered" $
   doc "Find the free variables in a type in deterministic left-to-right order" $
   "typ" ~>
   "collectVars" <~ ("boundVars" ~> "t" ~>
-    cases _Type (var "t")
+    match _Type (var "t")
       (Just $ Lists.concat $ Lists.map (var "collectVars" @@ var "boundVars") $
               Rewriting.subtypes @@ var "t") [
       _Type_variable>>: "v" ~>
@@ -220,7 +220,7 @@ freeVariablesInTypeSimple :: TypedTermDefinition (Type -> S.Set Name)
 freeVariablesInTypeSimple = define "freeVariablesInTypeSimple" $
   doc "Same as freeVariablesInType, but ignores the binding action of lambda types" $
   "typ" ~>
-  "helper" <~ ("types" ~> "typ" ~> cases _Type (var "typ")
+  "helper" <~ ("types" ~> "typ" ~> match _Type (var "typ")
     (Just $ var "types") [
     _Type_variable>>: "v" ~> Sets.insert (var "v" :: TypedTerm Name) (var "types")]) $
   Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "helper" @@ (Sets.empty :: TypedTerm (S.Set Name)) @@ var "typ"
@@ -237,7 +237,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
   "term" ~>
   "replaceName" <~ ("subst" ~> "v" ~> Optionals.withDefault (var "v") $ Maps.lookup (var "v" :: TypedTerm Name) (var "subst" :: TypedTerm (M.Map Name Name))) $
   "substType" <~ ("subst" ~> "typ" ~>
-    "rewrite" <~ ("recurse" ~> "typ" ~> cases _Type (var "typ")
+    "rewrite" <~ ("recurse" ~> "typ" ~> match _Type (var "typ")
       (Just $ var "recurse" @@ var "typ") [
       _Type_variable>>: "v" ~> Core.typeVariable $ var "replaceName" @@ var "subst" @@ var "v"]) $
     Rewriting.rewriteType @@ var "rewrite" @@ var "typ") $
@@ -247,7 +247,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
     "next" <~ Pairs.second (var "state") $
     "subst"     <~ Pairs.first  (var "sb") $
     "boundVars" <~ Pairs.second (var "sb") $
-    "rewrite" <~ ("recurse" ~> "term" ~> cases _Term (var "term")
+    "rewrite" <~ ("recurse" ~> "term" ~> match _Term (var "term")
       (Just $ var "recurse" @@ var "term") [
       -- Lambdas have a "domain" type which needs to be rewritten
       _Term_lambda>>: "l" ~>
@@ -333,7 +333,7 @@ replaceFreeTermVariable :: TypedTermDefinition (Name -> Term -> Term -> Term)
 replaceFreeTermVariable = define "replaceFreeTermVariable" $
   doc "Replace a free variable in a term" $
   "vold" ~> "tnew" ~> "term" ~>
-  "rewrite" <~ ("recurse" ~> "t" ~> cases _Term (var "t")
+  "rewrite" <~ ("recurse" ~> "t" ~> match _Term (var "t")
     (Just $ var "recurse" @@ var "t") [
     _Term_lambda>>: "l" ~>
       "v" <~ Core.lambdaParameter (var "l") $
@@ -350,7 +350,7 @@ replaceFreeTypeVariable :: TypedTermDefinition (Name -> Type -> Type -> Type)
 replaceFreeTypeVariable = define "replaceFreeTypeVariable" $
   doc "Replace free occurrences of a name in a type" $
   "v" ~> "rep" ~> "typ" ~>
-  "mapExpr" <~ ("recurse" ~> "t" ~> cases _Type (var "t")
+  "mapExpr" <~ ("recurse" ~> "t" ~> match _Type (var "t")
     (Just $ var "recurse" @@ var "t") [
     _Type_forall>>: "ft" ~> Logic.ifElse
       (Equality.equal (var "v") (Core.forallTypeParameter $ var "ft"))
@@ -368,7 +368,7 @@ substituteTypeVariables :: TypedTermDefinition (M.Map Name Name -> Type -> Type)
 substituteTypeVariables = define "substituteTypeVariables" $
   doc "Substitute type variables in a type" $
   "subst" ~> "typ" ~>
-  "replace" <~ ("recurse" ~> "typ" ~> cases _Type (var "typ")
+  "replace" <~ ("recurse" ~> "typ" ~> match _Type (var "typ")
     (Just $ var "recurse" @@ var "typ") [
     _Type_variable>>: "n" ~>
       Core.typeVariable $ Optionals.withDefault (var "n") $ Maps.lookup (var "n" :: TypedTerm Name) (var "subst" :: TypedTerm (M.Map Name Name))]) $
@@ -379,7 +379,7 @@ substituteVariable = define "substituteVariable" $
   doc "Substitute one variable for another in a term" $
   "from" ~> "to" ~> "term" ~>
   "replace" <~ ("recurse" ~> "term" ~>
-    cases _Term (var "term")
+    match _Term (var "term")
       (Just $ var "recurse" @@ var "term") [
       _Term_variable>>: "x" ~>
         Core.termVariable $ Logic.ifElse (Equality.equal (var "x") (var "from")) (var "to") (var "x"),
@@ -394,7 +394,7 @@ substituteVariables = define "substituteVariables" $
   doc "Substitute multiple variables in a term" $
   "subst" ~> "term" ~>
   "replace" <~ ("recurse" ~> "term" ~>
-    cases _Term (var "term")
+    match _Term (var "term")
       (Just $ var "recurse" @@ var "term") [
       _Term_variable>>: "n" ~>
         Core.termVariable $ Optionals.withDefault (var "n") $ Maps.lookup (var "n" :: TypedTerm Name) (var "subst" :: TypedTerm (M.Map Name Name)),
@@ -414,7 +414,7 @@ unshadowVariables = define "unshadowVariables" $
       (var "freshName" @@ var "base" @@ Math.add (var "i") (int32 1) @@ var "m")
       (var "candidate")) $
   "f" <~ ("recurse" ~> "m" ~> "term" ~>
-    cases _Term (var "term") (Just $ var "recurse" @@ var "m" @@ var "term") [
+    match _Term (var "term") (Just $ var "recurse" @@ var "m" @@ var "term") [
     _Term_lambda>>: "l" ~>
       "v" <~ Core.lambdaParameter (var "l") $
       "domain" <~ Core.lambdaDomain (var "l") $

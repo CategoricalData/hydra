@@ -41,7 +41,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([SortingModule.ns, PrintCore.ns] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata ((Just "Test cases for topological sorting algorithms"))}
+            moduleMetadata = descriptionMetadata ((Just "Test match for topological sorting algorithms"))}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -54,7 +54,7 @@ adj pairs = list [pair (int32 n) (list (int32 <$> deps)) | (n, deps) <- pairs]
 
 allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
-    doc "Test cases for topological sorting" $
+    doc "Test match for topological sorting" $
     supergroup "sorting" [
       topologicalSortGroup,
       topologicalSortSCCGroup]

@@ -492,7 +492,7 @@ generateArgumentsDecls = define "generateArgumentsDecls" $
     "params" <~ (Pairs.first $ Pairs.second $ var "triple") $
     "bodyTy" <~ (Pairs.second $ Pairs.second $ var "triple") $
     "impAll" <~ (var "implicitAll" @@ var "params") $
-    cases _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm String])) [
+    match _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm String])) [
       _Type_union>>: "fields" ~> Lists.map
         ("ft" ~> Strings.concat (list [
           string "Arguments ",
@@ -617,7 +617,7 @@ generateTypeSentence = define "generateTypeSentence" $
         (var "binders")
         (Phantoms.just $ CSyntax.type_ $ CoqCoderSource.coqTermQualid @@ string "Type")
         (var "body"))) $
-  cases _Type (var "bodyTy") (Just $
+  match _Type (var "bodyTy") (Just $
     list [var "mkDef" @@ var "name" @@ var "paramBinders"
             @@ (CoqCoderSource.encodeType @@ var "env" @@ var "bodyTy")]) [
     _Type_union>>: "fields" ~> lets [
@@ -671,7 +671,7 @@ globalAmbiguousNames = define "globalAmbiguousNames" $
     "allNames">: Lists.concat $ Lists.map
       ("m" ~> lets [
         "nsStr">: Packaging.unModuleName (Packaging.moduleName $ var "m"),
-        "fromDef">: lambda "def_" $ cases _Definition (var "def_")
+        "fromDef">: lambda "def_" $ match _Definition (var "def_")
           (Just (Phantoms.nothing :: TypedTerm (Maybe (String, String)))) [
             _Definition_type>>: "td" ~> Phantoms.just $ pair
               (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
@@ -708,7 +708,7 @@ globalConstructorCounts = define "globalConstructorCounts" $
   lambda "modules" $ lets [
     "allTypeDefs">: Lists.concat $ Lists.map
       ("m" ~> Optionals.givens $ Lists.map
-        ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
+        ("def_" ~> match _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
           _Definition_type>>: "td" ~> Phantoms.just $ pair
             (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
             (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")])
@@ -734,7 +734,7 @@ globalSanitizedAccessors = define "globalSanitizedAccessors" $
     "allTypeGroups">: Lists.concat $ Lists.map
       ("m" ~> lets [
         "typeDefs">: Optionals.givens $ Lists.map
-          ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
+          ("def_" ~> match _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
             _Definition_type>>: "td" ~> Phantoms.just $ pair
               (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
               (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")])
@@ -773,7 +773,7 @@ makeAccessorDefs = define "makeAccessorDefs" $
   "ty" <~ (Pairs.second $ var "nt") $
   "extracted" <~ (CoqUtils.extractTypeParams @@ var "ty") $
   "bodyTy" <~ (Pairs.second $ var "extracted") $
-  cases _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm C.Sentence])) [
+  match _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm C.Sentence])) [
     _Type_record>>: "fields" ~>
       Logic.ifElse (Lists.null $ var "fields")
         (list ([] :: [TypedTerm C.Sentence]))
@@ -832,7 +832,7 @@ makeInductiveBody = define "makeInductiveBody" $
       (list [CoqCoderSource.coqName @@ var "p"])
       (CSyntax.type_ $ CoqCoderSource.coqTermQualid @@ string "Type"))
     (var "params") $
-  cases _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm C.InductiveBody])) [
+  match _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm C.InductiveBody])) [
     _Type_union>>: "fields" ~>
       list [CSyntax.inductiveBody
         (CoqCoderSource.coqIdent @@ var "name")
@@ -1047,13 +1047,13 @@ moduleToCoq = define "moduleToCoq" $
     (var "nsStr") (var "axiomOnlyModules")) $
   -- Extract type and term definitions from the adapted definition list.
   "typeDefs" <~ Optionals.givens (Lists.map
-    ("def_" ~> cases _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
+    ("def_" ~> match _Definition (var "def_") (Just (Phantoms.nothing :: TypedTerm (Maybe (String, Type)))) [
       _Definition_type>>: "td" ~> Phantoms.just $ pair
         (CoqUtils.localName @@ (unwrap _Name @@ (Packaging.typeDefinitionName $ var "td")))
         (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")])
     (var "defs")) $
   "termDefs" <~ Optionals.givens (Lists.map
-    ("def_" ~> cases _Definition (var "def_")
+    ("def_" ~> match _Definition (var "def_")
       (Just (Phantoms.nothing :: TypedTerm (Maybe (String, (Term, ([Name], Maybe Type)))))) [
       _Definition_term>>: "td" ~>
         "msig" <~ (Packaging.termDefinitionSignature $ var "td") $

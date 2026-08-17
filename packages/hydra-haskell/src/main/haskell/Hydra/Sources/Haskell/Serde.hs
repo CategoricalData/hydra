@@ -196,7 +196,7 @@ constraintToExpr :: TypedTermDefinition (H.Constraint -> Expr)
 constraintToExpr = haskellSerdeDefinition "constraintToExpr" $
   doc "Convert a type class constraint to an AST expression" $
   lambda "sert" $
-    cases H._Constraint (var "sert") Nothing [
+    match H._Constraint (var "sert") Nothing [
       H._Constraint_class>>: lambda "cls" $ classConstraintToExpr @@ var "cls",
       H._Constraint_tuple>>: lambda "serts" $
         Serialization.parenList @@ false @@ (Lists.map (asTerm constraintToExpr) (var "serts"))]
@@ -205,10 +205,10 @@ constructorToExpr :: TypedTermDefinition (H.Constructor -> Expr)
 constructorToExpr = haskellSerdeDefinition "constructorToExpr" $
   doc "Convert a data constructor to an AST expression" $
   lambda "cons" $ lets [
-    "mc">: cases H._Constructor (var "cons") Nothing [
+    "mc">: match H._Constructor (var "cons") Nothing [
       H._Constructor_ordinary>>: lambda "ord" $ project H._PositionalConstructor H._PositionalConstructor_comments @@ var "ord",
       H._Constructor_record>>: lambda "rec" $ project H._RecordConstructor H._RecordConstructor_comments @@ var "rec"],
-    "body">: cases H._Constructor (var "cons") Nothing [
+    "body">: match H._Constructor (var "cons") Nothing [
       H._Constructor_ordinary>>: lambda "ord" $ lets [
         "name">: project H._PositionalConstructor H._PositionalConstructor_name @@ var "ord",
         "types">: project H._PositionalConstructor H._PositionalConstructor_fields @@ var "ord"] $
@@ -224,7 +224,7 @@ dataKeywordToExpr :: TypedTermDefinition (H.DataKeyword -> Expr)
 dataKeywordToExpr = haskellSerdeDefinition "dataKeywordToExpr" $
   doc "Convert a data/newtype keyword to an AST expression" $
   lambda "kw" $
-    cases H._DataKeyword (var "kw") Nothing [
+    match H._DataKeyword (var "kw") Nothing [
       H._DataKeyword_data>>: constant $ Serialization.cst @@ string "data",
       H._DataKeyword_newtype>>: constant $ Serialization.cst @@ string "newtype"]
 
@@ -232,7 +232,7 @@ declarationHeadToExpr :: TypedTermDefinition (H.DeclarationHead -> Expr)
 declarationHeadToExpr = haskellSerdeDefinition "declarationHeadToExpr" $
   doc "Convert a declaration head to an AST expression" $
   lambda "hd" $
-    cases H._DeclarationHead (var "hd") Nothing [
+    match H._DeclarationHead (var "hd") Nothing [
       H._DeclarationHead_application>>: lambda "appHead" $ lets [
         "fun">: project H._ApplicationDeclarationHead H._ApplicationDeclarationHead_function @@ var "appHead",
         "op">: project H._ApplicationDeclarationHead H._ApplicationDeclarationHead_operand @@ var "appHead"] $
@@ -243,13 +243,13 @@ declarationToExpr :: TypedTermDefinition (H.Declaration -> Expr)
 declarationToExpr = haskellSerdeDefinition "declarationToExpr" $
   doc "Convert a declaration to an AST expression" $
   lambda "decl" $ lets [
-    "mc">: cases H._Declaration (var "decl") Nothing [
+    "mc">: match H._Declaration (var "decl") Nothing [
       H._Declaration_data>>: lambda "d" $ project H._DataDeclaration H._DataDeclaration_comments @@ var "d",
       H._Declaration_type>>: lambda "t" $ project H._TypeSynonymDeclaration H._TypeSynonymDeclaration_comments @@ var "t",
-      H._Declaration_valueBinding>>: lambda "vb" $ cases H._ValueBinding (var "vb") Nothing [
+      H._Declaration_valueBinding>>: lambda "vb" $ match H._ValueBinding (var "vb") Nothing [
         H._ValueBinding_simple>>: lambda "s" $ project H._SimpleValueBinding H._SimpleValueBinding_comments @@ var "s"],
       H._Declaration_typedBinding>>: lambda "tb" $ project H._TypedBinding H._TypedBinding_comments @@ var "tb"],
-    "body">: cases H._Declaration (var "decl") Nothing [
+    "body">: match H._Declaration (var "decl") Nothing [
       H._Declaration_data>>: lambda "dataDecl" $ lets [
         "kw">: project H._DataDeclaration H._DataDeclaration_keyword @@ var "dataDecl",
         "hd">: project H._DataDeclaration H._DataDeclaration_head @@ var "dataDecl",
@@ -284,9 +284,9 @@ expressionToExpr :: TypedTermDefinition (H.Expression -> Expr)
 expressionToExpr = haskellSerdeDefinition "expressionToExpr" $
   doc "Convert a Haskell expression to an AST expression" $
   lambda "expr" $
-    cases H._Expression (var "expr") Nothing [
+    match H._Expression (var "expr") Nothing [
       H._Expression_application>>: lambda "app" $ applicationExpressionToExpr @@ var "app",
-      H._Expression_case>>: lambda "cases" $ caseExpressionToExpr @@ var "cases",
+      H._Expression_case>>: lambda "match" $ caseExpressionToExpr @@ var "match",
       H._Expression_constructRecord>>: lambda "r" $ recordExpressionToExpr @@ var "r",
       H._Expression_do>>: lambda "statements" $
         Serialization.indentBlock @@ Lists.cons (Serialization.cst @@ (string "do")) (Lists.map (asTerm statementToExpr) (var "statements")),
@@ -349,7 +349,7 @@ importToExpr = haskellSerdeDefinition "importToExpr" $
     "mspec">: project H._Import H._Import_spec @@ var "import",
     "name">: unwrap H._ModuleName @@ var "modName",
     "hidingSec">: lambda "spec" $
-      cases H._ImportSpec (var "spec") Nothing [
+      match H._ImportSpec (var "spec") Nothing [
         H._ImportSpec_hiding>>: lambda "names" $
           Serialization.spaceSep @@ (Lists.cons
             (Serialization.cst @@ (string "hiding "))
@@ -424,7 +424,7 @@ literalToExpr = haskellSerdeDefinition "literalToExpr" $
       @@ Equality.equal (Optionals.withDefault (int32 0) (Strings.charAt (int32 0) (var "raw"))) (int32 45)
       @@ var "raw") $
   Serialization.cst @@
-    cases H._Literal (var "lit") Nothing [
+    match H._Literal (var "lit") Nothing [
       H._Literal_char>>: "c" ~> Literals.printString $ Literals.showUint16 $ var "c",
       H._Literal_double>>: "d" ~> var "showFloat"
         @@ (lambda "v" $ Literals.showFloat64 $ var "v")
@@ -444,7 +444,7 @@ localBindingToExpr :: TypedTermDefinition (H.LocalBinding -> Expr)
 localBindingToExpr = haskellSerdeDefinition "localBindingToExpr" $
   doc "Convert a local binding to an AST expression" $
   lambda "binding" $
-    cases H._LocalBinding (var "binding") Nothing [
+    match H._LocalBinding (var "binding") Nothing [
       H._LocalBinding_signature>>: lambda "ts" $ typeSignatureToExpr @@ var "ts",
       H._LocalBinding_value>>: lambda "vb" $ valueBindingToExpr @@ var "vb"]
 
@@ -484,7 +484,7 @@ nameToExpr = haskellSerdeDefinition "nameToExpr" $
   doc "Convert a Haskell name to an AST expression" $
   lambda "name" $
     Serialization.cst @@
-      cases H._Name (var "name") Nothing [
+      match H._Name (var "name") Nothing [
         H._Name_implicit>>: lambda "qn" $ Strings.concat2 (string "?") (writeQualifiedName @@ var "qn"),
         H._Name_normal>>: lambda "qn" $ writeQualifiedName @@ var "qn"]
 
@@ -497,7 +497,7 @@ patternToExpr :: TypedTermDefinition (H.Pattern -> Expr)
 patternToExpr = haskellSerdeDefinition "patternToExpr" $
   doc "Convert a pattern to an AST expression" $
   lambda "pat" $
-    cases H._Pattern (var "pat") Nothing [
+    match H._Pattern (var "pat") Nothing [
       H._Pattern_application>>: lambda "app" $ applicationPatternToExpr @@ var "app",
       H._Pattern_list>>: lambda "pats" $
         Serialization.bracketList @@ Serialization.halfBlockStyle @@ (Lists.map (asTerm patternToExpr) (var "pats")),
@@ -556,11 +556,11 @@ _DefinitionReference_type_haskell = Name "type"
 haddockEntityRef :: TypedTermDefinition (Term -> String)
 haddockEntityRef = haskellSerdeDefinition "haddockEntityRef" $
   doc "Render a {@type hydra.packaging.EntityReference} as Haddock link syntax" $
-  match _EntityReference_haskell Nothing [
+  cases _EntityReference_haskell Nothing [
     _EntityReference_definition_haskell>>: lambda "d" $
       Strings.concat2 (string "'")
         (Strings.concat2
-          (match _DefinitionReference_haskell Nothing [
+          (cases _DefinitionReference_haskell Nothing [
             _DefinitionReference_primitive_haskell>>: lambda "n" $ Names.localNameOf @@ var "n",
             _DefinitionReference_term_haskell>>:      lambda "n" $ Names.localNameOf @@ var "n",
             _DefinitionReference_type_haskell>>:      lambda "n" $ Names.localNameOf @@ var "n"]
@@ -611,7 +611,7 @@ typeToExpr :: TypedTermDefinition (H.Type -> Expr)
 typeToExpr = haskellSerdeDefinition "typeToExpr" $
   doc "Convert a Haskell type to an AST expression" $
   lambda "htype" $
-    cases H._Type (var "htype") Nothing [
+    match H._Type (var "htype") Nothing [
       H._Type_application>>: lambda "appType" $ lets [
         "lhs">: project H._ApplicationType H._ApplicationType_context @@ var "appType",
         "rhs">: project H._ApplicationType H._ApplicationType_argument @@ var "appType"] $
@@ -634,7 +634,7 @@ valueBindingToExpr :: TypedTermDefinition (H.ValueBinding -> Expr)
 valueBindingToExpr = haskellSerdeDefinition "valueBindingToExpr" $
   doc "Convert a value binding to an AST expression" $
   lambda "vb" $
-    cases H._ValueBinding (var "vb") Nothing [
+    match H._ValueBinding (var "vb") Nothing [
       H._ValueBinding_simple>>: lambda "simpleVB" $ lets [
         "pat">: project H._SimpleValueBinding H._SimpleValueBinding_pattern @@ var "simpleVB",
         "rhs">: project H._SimpleValueBinding H._SimpleValueBinding_rhs @@ var "simpleVB",

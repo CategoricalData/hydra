@@ -146,7 +146,7 @@ evaluateProperties = define "evaluateProperties" $
     -- Lift the match extractor outside the inner lambda to avoid Python inline match issues
     -- This takes the key as parameter so it doesn't need to capture it
     "extractMaybe" <~ ("k" ~> "term" ~>
-      match _Term Nothing [
+      cases _Term Nothing [
         _Term_optional>>: "mv" ~>
           right $ Optionals.map ("v" ~> pair (var "k") (var "v")) (var "mv")]
       @@ var "term") $
@@ -233,7 +233,7 @@ elementIsEdge :: TypedTermDefinition (PG.Element a -> Bool)
 elementIsEdge = define "elementIsEdge" $
   doc "Check if an element is an edge" $
   "el" ~>
-    match PG._Element (Just $ boolean False) [
+    cases PG._Element (Just $ boolean False) [
       PG._Element_edge>>: constant $ boolean True]
     @@ var "el"
 
@@ -242,7 +242,7 @@ elementIsVertex :: TypedTermDefinition (PG.Element a -> Bool)
 elementIsVertex = define "elementIsVertex" $
   doc "Check if an element is a vertex" $
   "el" ~>
-    match PG._Element (Just $ boolean False) [
+    cases PG._Element (Just $ boolean False) [
       PG._Element_vertex>>: constant $ boolean True]
     @@ var "el"
 
@@ -253,7 +253,7 @@ findTablesInTerm = define "findTablesInTerm" $
   "term" ~>
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre
       @@ ("names" ~> "t" ~>
-        match _Term (Just $ var "names") [
+        cases _Term (Just $ var "names") [
           _Term_project>>: "proj" ~>
             Sets.insert
               (Core.unName (project _Projection _Projection_typeName @@ var "proj"))
@@ -593,11 +593,11 @@ decodeCell = define "decodeCell" $
         var "cname",
         string ": ",
         var "value"]) $
-      match _Type (Just $ left $ Strings.concat $ list [
+      cases _Type (Just $ left $ Strings.concat $ list [
         string "Unsupported type for column ",
         var "cname"]) [
         _Type_literal>>: "lt" ~>
-          match _LiteralType (Just $ left $ Strings.concat $ list [
+          cases _LiteralType (Just $ left $ Strings.concat $ list [
             string "Unsupported literal type for column ",
             var "cname"]) [
             _LiteralType_boolean>>: constant $
@@ -606,7 +606,7 @@ decodeCell = define "decodeCell" $
                 (left $ var "parseError")
                 ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalBoolean $ var "parsed"),
             _LiteralType_float>>: "ft" ~>
-              match _FloatType (Just $ left $ Strings.concat $ list [
+              cases _FloatType (Just $ left $ Strings.concat $ list [
                 string "Unsupported float type for column ",
                 var "cname"]) [
                 _FloatType_float32>>: constant $
@@ -621,7 +621,7 @@ decodeCell = define "decodeCell" $
                     ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "parsed")]
               @@ var "ft",
             _LiteralType_integer>>: "it" ~>
-              match _IntegerType (Just $ left $ Strings.concat $ list [
+              cases _IntegerType (Just $ left $ Strings.concat $ list [
                 string "Unsupported integer type for column ",
                 var "cname"]) [
                 _IntegerType_int32>>: constant $

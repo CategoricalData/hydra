@@ -131,7 +131,7 @@ dereferenceType = define "dereferenceType" $
 fTypeIsPolymorphic :: TypedTermDefinition (Type -> Bool)
 fTypeIsPolymorphic = define "fTypeIsPolymorphic" $
   doc "Test whether a given System F type is polymorphic (i.e., a forall type)" $
-  "typ" ~> cases _Type (var "typ")
+  "typ" ~> match _Type (var "typ")
     (Just false) [
     _Type_annotated>>: "at" ~> fTypeIsPolymorphic @@ Core.annotatedTypeBody (var "at"),
     _Type_forall>>: "ft" ~> true]
@@ -157,7 +157,7 @@ fieldTypes = define "fieldTypes" $
   "toMap" <~ ("fields" ~> (Maps.fromList (Lists.map
     ("ft" ~> pair (Core.fieldTypeName (var "ft")) (Core.fieldTypeType (var "ft")))
     (var "fields")) :: TypedTerm (M.Map Name Type))) $
-  match _Type (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $
+  cases _Type (Just (left (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $
     Error.unexpectedShapeError (string "record or union type") (PrintCore.type_ @@ var "t")))) [
     _Type_forall>>: "ft" ~> fieldTypes @@ var "cx" @@ var "graph" @@ Core.forallTypeBody (var "ft"),
     _Type_record>>: "rt" ~> right (var "toMap" @@ var "rt"),
@@ -190,7 +190,7 @@ fullyStripAndNormalizeType = define "fullyStripAndNormalizeType" $
   doc "Fully strip a type of forall quantifiers, normalizing bound variable names for alpha-equivalence comparison" $
   "typ" ~>
   -- Collect forall-bound variables and the body in one pass
-  "go" <~ ("depth" ~> "subst" ~> "t" ~> cases _Type (Strip.deannotateType @@ var "t")
+  "go" <~ ("depth" ~> "subst" ~> "t" ~> match _Type (Strip.deannotateType @@ var "t")
       (Just $ pair (var "subst") (var "t")) [
       _Type_forall>>: "ft" ~>
         "oldVar" <~ Core.forallTypeParameter (var "ft") $
@@ -209,7 +209,7 @@ fullyStripType :: TypedTermDefinition (Type -> Type)
 fullyStripType = define "fullyStripType" $
   doc "Fully strip a type of forall quantifiers" $
   "typ" ~>
-  match _Type (Just (var "typ")) [
+  cases _Type (Just (var "typ")) [
     _Type_forall>>: "ft" ~> fullyStripType @@ Core.forallTypeBody (var "ft")]
   @@ (Strip.deannotateType @@ var "typ")
 
@@ -250,8 +250,8 @@ mapKeyResolvesToString = define "mapKeyResolvesToString" $
   doc ("Test whether a map's key type resolves to string, following aliases and wrappers."
     <> " Used to decide whether a map may use the compact JSON object encoding.") $
   "types" ~> "keyType" ~>
-  cases _Type (resolveBaseType @@ var "types" @@ var "keyType") (Just false) [
-    _Type_literal>>: "lt" ~> cases _LiteralType (var "lt") (Just false) [
+  match _Type (resolveBaseType @@ var "types" @@ var "keyType") (Just false) [
+    _Type_literal>>: "lt" ~> match _LiteralType (var "lt") (Just false) [
       _LiteralType_string>>: constant true]]
 
 nominalApplication :: TypedTermDefinition (Name -> [Type] -> Type)
@@ -267,7 +267,7 @@ requireRecordType :: TypedTermDefinition (InferenceContext -> Graph -> Name -> E
 requireRecordType = define "requireRecordType" $
   doc "Require a name to resolve to a record type" $
   "cx" ~> "graph" ~> "name" ~>
-  "toRecord" <~ ("t" ~> cases _Type (var "t") (Just nothing) [
+  "toRecord" <~ ("t" ~> match _Type (var "t") (Just nothing) [
     _Type_record>>: "rt" ~> just (var "rt")]) $
   requireRowType @@ var "cx" @@ string "record type" @@ var "toRecord" @@ var "graph" @@ var "name"
 
@@ -275,7 +275,7 @@ requireRowType :: TypedTermDefinition (InferenceContext -> String -> (Type -> Ma
 requireRowType = define "requireRowType" $
   doc "Require a name to resolve to a row type" $
   "cx" ~> "label" ~> "getter" ~> "graph" ~> "name" ~>
-  "rawType" <~ ("t" ~> cases _Type (var "t") (Just (var "t")) [
+  "rawType" <~ ("t" ~> match _Type (var "t") (Just (var "t")) [
     _Type_annotated>>: "at" ~> var "rawType" @@ Core.annotatedTypeBody (var "at"),
     _Type_forall>>: "ft" ~> var "rawType" @@ Core.forallTypeBody (var "ft")]) $
   Eithers.bind (requireType @@ var "cx" @@ var "graph" @@ var "name") (
@@ -313,7 +313,7 @@ requireUnionType :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Ei
 requireUnionType = define "requireUnionType" $
   doc "Require a name to resolve to a union type" $
   "cx" ~> "graph" ~> "name" ~>
-  "toUnion" <~ ("t" ~> cases _Type (var "t")
+  "toUnion" <~ ("t" ~> match _Type (var "t")
     (Just nothing) [
     _Type_union>>: "rt" ~> just (var "rt")]) $
   requireRowType @@ var "cx" @@ string "union" @@ var "toUnion" @@ var "graph" @@ var "name"
@@ -329,7 +329,7 @@ resolveBaseType = define "resolveBaseType" $
     <> " self-referential alias is not a supported input and would not terminate.") $
   "types" ~> "typ" ~>
   "stripped" <~ (Strip.deannotateType @@ var "typ") $
-  cases _Type (var "stripped") (Just (var "stripped")) [
+  match _Type (var "stripped") (Just (var "stripped")) [
     _Type_variable>>: "name" ~>
       Optionals.cases (Maps.lookup (var "name" :: TypedTerm Name) (var "types"))
         (var "stripped")
@@ -340,7 +340,7 @@ resolveType :: TypedTermDefinition (Graph -> Type -> Maybe Type)
 resolveType = define "resolveType" $
   doc "Resolve a type, dereferencing type variables" $
   "graph" ~> "typ" ~>
-  match _Type (Just (just (var "typ"))) [
+  cases _Type (Just (just (var "typ"))) [
     _Type_variable>>: "name" ~>
       -- Look up in schema types first, then fall back to bound types
       Optionals.cases (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph"))) (Optionals.map ("ts" ~> Scoping.typeSchemeToFType @@ var "ts") (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph")))) ("ts" ~> just (Scoping.typeSchemeToFType @@ var "ts"))]
@@ -350,7 +350,7 @@ typeToTypeScheme :: TypedTermDefinition (Type -> TypeScheme)
 typeToTypeScheme = define "typeToTypeScheme" $
   doc "Convert a (System F -style) type to a type scheme" $
   "t0" ~>
-  "helper" <~ ("vars" ~> "t" ~> cases _Type (Strip.deannotateType @@ var "t")
+  "helper" <~ ("vars" ~> "t" ~> match _Type (Strip.deannotateType @@ var "t")
     (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "t") Phantoms.nothing) [
     _Type_forall>>: "ft" ~> var "helper"
       @@ (Lists.cons (Core.forallTypeParameter $ var "ft") $ var "vars")

@@ -71,7 +71,7 @@ define = definitionInModule module_
 caseConvention :: TypedTermDefinition (CaseConvention -> String)
 caseConvention = define "caseConvention" $
   doc "Show a case convention as a string" $
-  "c" ~> cases _CaseConvention (var "c") Nothing [
+  "c" ~> match _CaseConvention (var "c") Nothing [
     _CaseConvention_lowerSnake>>: constant (string "lower_snake_case"),
     _CaseConvention_upperSnake>>: constant (string "UPPER_SNAKE_CASE"),
     _CaseConvention_camel>>: constant (string "camelCase"),
@@ -80,7 +80,7 @@ caseConvention = define "caseConvention" $
 comparison :: TypedTermDefinition (Comparison -> String)
 comparison = define "comparison" $
   doc "Show a comparison result as a string" $
-  "c" ~> cases _Comparison (var "c") Nothing [
+  "c" ~> match _Comparison (var "c") Nothing [
     _Comparison_lessThan>>: constant (string "lessThan"),
     _Comparison_equalTo>>: constant (string "equalTo"),
     _Comparison_greaterThan>>: constant (string "greaterThan")]

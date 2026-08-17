@@ -89,7 +89,7 @@ define = definitionInModule module_
 floatTypePrecision :: TypedTermDefinition (FloatType -> Precision)
 floatTypePrecision = define "floatTypePrecision" $
   doc "Find the precision of a given floating-point type" $
-  match _FloatType Nothing [
+  cases _FloatType Nothing [
     _FloatType_float32>>: constant $ Util.precisionBits $ int32 32,
     _FloatType_float64>>: constant $ Util.precisionBits $ int32 64]
 
@@ -103,14 +103,14 @@ floatTypes = define "floatTypes" $
 floatValueType :: TypedTermDefinition (FloatValue -> FloatType)
 floatValueType = define "floatValueType" $
   doc "Find the float type for a given floating-point value" $
-  match _FloatValue Nothing [
+  cases _FloatValue Nothing [
     _FloatValue_float32>>: constant Core.floatTypeFloat32,
     _FloatValue_float64>>: constant Core.floatTypeFloat64]
 
 integerTypeIsSigned :: TypedTermDefinition (IntegerType -> Bool)
 integerTypeIsSigned = define "integerTypeIsSigned" $
   doc "Find whether a given integer type is signed (true) or unsigned (false)" $
-  match _IntegerType Nothing [
+  cases _IntegerType Nothing [
     _IntegerType_bigint>>: constant true,
     _IntegerType_int8>>:   constant true,
     _IntegerType_int16>>:  constant true,
@@ -124,7 +124,7 @@ integerTypeIsSigned = define "integerTypeIsSigned" $
 integerTypePrecision :: TypedTermDefinition (IntegerType -> Precision)
 integerTypePrecision = define "integerTypePrecision" $
   doc "Find the precision of a given integer type" $
-  match _IntegerType Nothing [
+  cases _IntegerType Nothing [
     _IntegerType_bigint>>: constant Util.precisionArbitrary,
     _IntegerType_int8>>: constant $ Util.precisionBits $ int32 8,
     _IntegerType_int16>>: constant $ Util.precisionBits $ int32 16,
@@ -152,7 +152,7 @@ integerTypes = define "integerTypes" $
 integerValueType :: TypedTermDefinition (IntegerValue -> IntegerType)
 integerValueType = define "integerValueType" $
   doc "Find the integer type for a given integer value" $
-  match _IntegerValue Nothing [
+  cases _IntegerValue Nothing [
     _IntegerValue_bigint>>: constant Core.integerTypeBigint,
     _IntegerValue_int8>>: constant Core.integerTypeInt8,
     _IntegerValue_int16>>: constant Core.integerTypeInt16,
@@ -166,7 +166,7 @@ integerValueType = define "integerValueType" $
 literalType :: TypedTermDefinition (Literal -> LiteralType)
 literalType = define "literalType" $
   doc "Find the literal type for a given literal value" $
-  match _Literal Nothing [
+  cases _Literal Nothing [
     _Literal_binary>>: constant $ inject _LiteralType _LiteralType_binary unit,
     _Literal_boolean>>: constant $ inject _LiteralType _LiteralType_boolean unit,
     _Literal_decimal>>: constant $ inject _LiteralType _LiteralType_decimal unit,
@@ -177,7 +177,7 @@ literalType = define "literalType" $
 literalTypeVariant :: TypedTermDefinition (LiteralType -> LiteralVariant)
 literalTypeVariant = define "literalTypeVariant" $
   doc "Find the literal type inject (constructor) for a given literal value" $
-  match _LiteralType Nothing [
+  cases _LiteralType Nothing [
     _LiteralType_binary>>:  constant $ Variants.literalVariantBinary,
     _LiteralType_boolean>>: constant $ Variants.literalVariantBoolean,
     _LiteralType_decimal>>: constant $ Variants.literalVariantDecimal,
@@ -217,7 +217,7 @@ literalVariants = define "literalVariants" $
 termVariant :: TypedTermDefinition (Term -> TermVariant)
 termVariant = define "termVariant" $
   doc "Find the term inject (constructor) for a given term" $
-  match _Term Nothing [
+  cases _Term Nothing [
     _Term_annotated>>: constant Variants.termVariantAnnotated,
     _Term_application>>: constant Variants.termVariantApplication,
     _Term_cases>>: constant Variants.termVariantCases,
@@ -269,7 +269,7 @@ termVariants = define "termVariants" $
 typeVariant :: TypedTermDefinition (Type -> TypeVariant)
 typeVariant = define "typeVariant" $
   doc "Find the type inject (constructor) for a given type" $
-  match _Type Nothing [
+  cases _Type Nothing [
     _Type_annotated>>: constant Variants.typeVariantAnnotated,
     _Type_application>>: constant Variants.typeVariantApplication,
     _Type_effect>>: constant Variants.typeVariantEffect,

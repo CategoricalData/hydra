@@ -92,11 +92,11 @@ module_ = Module {
 applicationToExpr :: TypedTermDefinition (C.Application -> Expr)
 applicationToExpr = define "applicationToExpr" $
   doc "Serialize a Coq application" $
-  lambda "app" $ cases C._Application (var "app") Nothing [
+  lambda "app" $ match C._Application (var "app") Nothing [
     C._Application_normal>>: lambda "na" $ sp [
       term1ToExpr @@ (project C._NormalApplication C._NormalApplication_lhs @@ var "na"),
       Serialization.spaceSep @@ Lists.map
-        (lambda "a" $ cases C._Arg (var "a") Nothing [
+        (lambda "a" $ match C._Arg (var "a") Nothing [
           C._Arg_ident>>: lambda "ia" $ sp [
             Serialization.parens @@ (sp [
               identToExpr @@ (project C._IdentArg C._IdentArg_ident @@ var "ia"),
@@ -126,12 +126,12 @@ axiomDeclarationToExpr = define "axiomDeclarationToExpr" $
 binderToExpr :: TypedTermDefinition (C.Binder -> Expr)
 binderToExpr = define "binderToExpr" $
   doc "Serialize a Coq binder" $
-  lambda "b" $ cases C._Binder (var "b") Nothing [
+  lambda "b" $ match C._Binder (var "b") Nothing [
     C._Binder_name>>: lambda "n" $
-      Optionals.cases (unwrap C._Name @@ var "n") (kw "_") (lambda "i" $ identToExpr @@ var "i"),
+      Optionals.match (unwrap C._Name @@ var "n") (kw "_") (lambda "i" $ identToExpr @@ var "i"),
     C._Binder_type>>: lambda "tb" $ lets [
       "names">: Lists.map
-        (lambda "n" $ Optionals.cases (unwrap C._Name @@ var "n") (kw "_") (lambda "i" $ identToExpr @@ var "i"))
+        (lambda "n" $ Optionals.match (unwrap C._Name @@ var "n") (kw "_") (lambda "i" $ identToExpr @@ var "i"))
         (project C._TypeBinders C._TypeBinders_names @@ var "tb"),
       "ty">: typeToExpr @@ (project C._TypeBinders C._TypeBinders_type @@ var "tb")] $
       Serialization.parens @@ (sp [
@@ -139,31 +139,31 @@ binderToExpr = define "binderToExpr" $
         kw ":",
         var "ty"]),
     C._Binder_term>>: lambda "lb" $ lets [
-      "name">: Optionals.cases (unwrap C._Name @@ (project C._LetBinder C._LetBinder_name @@ var "lb")) (kw "_") (lambda "i" $ identToExpr @@ var "i"),
-      "ty">: Optionals.cases (project C._LetBinder C._LetBinder_type @@ var "lb") (list ([] :: [TypedTerm Expr])) (lambda "t" $ list [kw ":", typeToExpr @@ var "t"]),
+      "name">: Optionals.match (unwrap C._Name @@ (project C._LetBinder C._LetBinder_name @@ var "lb")) (kw "_") (lambda "i" $ identToExpr @@ var "i"),
+      "ty">: Optionals.match (project C._LetBinder C._LetBinder_type @@ var "lb") (list ([] :: [TypedTerm Expr])) (lambda "t" $ list [kw ":", typeToExpr @@ var "t"]),
       "body">: termToExpr @@ (project C._LetBinder C._LetBinder_term @@ var "lb")] $
       Serialization.parens @@ (Serialization.spaceSep @@ Lists.concat (list [
         list [var "name"],
         var "ty",
         list [kw ":=", var "body"]])),
     C._Binder_implicit>>: lambda "ib" $
-      cases C._ImplicitBinders (var "ib") Nothing [
+      match C._ImplicitBinders (var "ib") Nothing [
         C._ImplicitBinders_maximallyInserted>>: lambda "tb" $ lets [
           "names">: Lists.map
-            (lambda "n" $ Optionals.cases (unwrap C._Name @@ var "n") (kw "_") (lambda "i" $ identToExpr @@ var "i"))
+            (lambda "n" $ Optionals.match (unwrap C._Name @@ var "n") (kw "_") (lambda "i" $ identToExpr @@ var "i"))
             (project C._TypeBinders C._TypeBinders_names @@ var "tb"),
           "ty">: typeToExpr @@ (project C._TypeBinders C._TypeBinders_type @@ var "tb")] $
           Serialization.brackets @@ (asTerm Serialization.curlyBraces) @@ (asTerm Serialization.inlineStyle) @@
             (sp [Serialization.spaceSep @@ var "names", kw ":", var "ty"]),
         C._ImplicitBinders_nonMaximallyInserted>>: lambda "tb" $ lets [
           "names">: Lists.map
-            (lambda "n" $ Optionals.cases (unwrap C._Name @@ var "n") (kw "_") (lambda "i" $ identToExpr @@ var "i"))
+            (lambda "n" $ Optionals.match (unwrap C._Name @@ var "n") (kw "_") (lambda "i" $ identToExpr @@ var "i"))
             (project C._TypeBinders C._TypeBinders_names @@ var "tb"),
           "ty">: typeToExpr @@ (project C._TypeBinders C._TypeBinders_type @@ var "tb")] $
           Serialization.brackets @@ (asTerm Serialization.squareBrackets) @@ (asTerm Serialization.inlineStyle) @@
             (sp [Serialization.spaceSep @@ var "names", kw ":", var "ty"])],
     C._Binder_generalizing>>: lambda "gb" $
-      cases C._GeneralizingBinder (var "gb") Nothing [
+      match C._GeneralizingBinder (var "gb") Nothing [
         C._GeneralizingBinder_explicit>>: lambda "tc" $
           Serialization.parens @@ (termToExpr @@ (project C._TypeclassConstraint C._TypeclassConstraint_term @@ var "tc")),
         C._GeneralizingBinder_implicitMaximallyInserted>>: lambda "tc" $
@@ -190,7 +190,7 @@ constructorToExpr = define "constructorToExpr" $
     "name">: identToExpr @@ (project C._Constructor C._Constructor_name @@ var "c"),
     "binders">: Lists.map (lambda "b" $ binderToExpr @@ var "b")
       (project C._Constructor C._Constructor_binders @@ var "c"),
-    "ty">: Optionals.cases (project C._Constructor C._Constructor_type @@ var "c") (list ([] :: [TypedTerm Expr])) (lambda "t" $ list [kw ":", typeToExpr @@ var "t"])] $
+    "ty">: Optionals.match (project C._Constructor C._Constructor_type @@ var "c") (list ([] :: [TypedTerm Expr])) (lambda "t" $ list [kw ":", typeToExpr @@ var "t"])] $
     Serialization.spaceSep @@ Lists.concat (list [
       list [kw "|", var "name"],
       var "binders",
@@ -201,11 +201,11 @@ definitionToExpr :: TypedTermDefinition (C.Definition -> Expr)
 definitionToExpr = define "definitionToExpr" $
   doc "Serialize a Coq Definition command" $
   lambda "d" $ lets [
-    "locPart">: Optionals.cases (project C._Definition C._Definition_locality @@ var "d") (list ([] :: [TypedTerm Expr])) (lambda "l" $ list [localityToExpr @@ var "l"]),
+    "locPart">: Optionals.match (project C._Definition C._Definition_locality @@ var "d") (list ([] :: [TypedTerm Expr])) (lambda "l" $ list [localityToExpr @@ var "l"]),
     "name">: identToExpr @@ (project C._Definition C._Definition_name @@ var "d"),
     "binders">: Lists.map (lambda "b" $ binderToExpr @@ var "b")
       (project C._Definition C._Definition_binders @@ var "d"),
-    "ty">: Optionals.cases (project C._Definition C._Definition_type @@ var "d") (list ([] :: [TypedTerm Expr])) (lambda "t" $ list [kw ":", typeToExpr @@ var "t"]),
+    "ty">: Optionals.match (project C._Definition C._Definition_type @@ var "d") (list ([] :: [TypedTerm Expr])) (lambda "t" $ list [kw ":", typeToExpr @@ var "t"]),
     "body">: termToExpr @@ (project C._Definition C._Definition_body @@ var "d")] $
     withDot $ Serialization.spaceSep @@ Lists.concat (list [
       var "locPart",
@@ -229,7 +229,7 @@ fixDeclToExpr d = lets [
   "name">: identToExpr @@ (project C._Fix_Decl C._Fix_Decl_ident @@ d),
   "binders">: Lists.map (lambda "b" $ binderToExpr @@ var "b")
     (project C._Fix_Decl C._Fix_Decl_binders @@ d),
-  "ty">: Optionals.cases (project C._Fix_Decl C._Fix_Decl_type @@ d) (list ([] :: [TypedTerm Expr])) (lambda "t" $ list [kw ":", typeToExpr @@ var "t"]),
+  "ty">: Optionals.match (project C._Fix_Decl C._Fix_Decl_type @@ d) (list ([] :: [TypedTerm Expr])) (lambda "t" $ list [kw ":", typeToExpr @@ var "t"]),
   "body">: termToExpr @@ (project C._Fix_Decl C._Fix_Decl_term @@ d)] $
   Serialization.spaceSep @@ Lists.concat (list [
     list [var "name"],
@@ -242,11 +242,11 @@ fixpointDefinitionToExpr :: TypedTermDefinition (C.FixpointDefinition -> Expr)
 fixpointDefinitionToExpr = define "fixpointDefinitionToExpr" $
   doc "Serialize a Coq Fixpoint command" $
   lambda "fd" $ lets [
-    "locPart">: Optionals.cases (project C._FixpointDefinition C._FixpointDefinition_locality @@ var "fd") (list ([] :: [TypedTerm Expr])) (lambda "l" $ list [localityToExpr @@ var "l"]),
+    "locPart">: Optionals.match (project C._FixpointDefinition C._FixpointDefinition_locality @@ var "fd") (list ([] :: [TypedTerm Expr])) (lambda "l" $ list [localityToExpr @@ var "l"]),
     "name">: identToExpr @@ (project C._FixpointDefinition C._FixpointDefinition_name @@ var "fd"),
     "binders">: Lists.map (lambda "b" $ binderToExpr @@ var "b")
       (project C._FixpointDefinition C._FixpointDefinition_binders @@ var "fd"),
-    "ty">: Optionals.cases (project C._FixpointDefinition C._FixpointDefinition_type @@ var "fd") (list ([] :: [TypedTerm Expr])) (lambda "t" $ list [kw ":", typeToExpr @@ var "t"]),
+    "ty">: Optionals.match (project C._FixpointDefinition C._FixpointDefinition_type @@ var "fd") (list ([] :: [TypedTerm Expr])) (lambda "t" $ list [kw ":", typeToExpr @@ var "t"]),
     "body">: termToExpr @@ (project C._FixpointDefinition C._FixpointDefinition_body @@ var "fd")] $
     withDot $ Serialization.spaceSep @@ Lists.concat (list [
       var "locPart",
@@ -270,7 +270,7 @@ inductiveBodyToExpr = define "inductiveBodyToExpr" $
     "name">: identToExpr @@ (project C._InductiveBody C._InductiveBody_name @@ var "ib"),
     "binders">: Lists.map (lambda "b" $ binderToExpr @@ var "b")
       (project C._InductiveBody C._InductiveBody_binders @@ var "ib"),
-    "ty">: Optionals.cases (project C._InductiveBody C._InductiveBody_type @@ var "ib") (list ([] :: [TypedTerm Expr])) (lambda "t" $ list [kw ":", typeToExpr @@ var "t"]),
+    "ty">: Optionals.match (project C._InductiveBody C._InductiveBody_type @@ var "ib") (list ([] :: [TypedTerm Expr])) (lambda "t" $ list [kw ":", typeToExpr @@ var "t"]),
     "constrs">: Lists.map (lambda "c" $ constructorToExpr @@ var "c")
       (project C._InductiveBody C._InductiveBody_constructors @@ var "ib")] $
     Serialization.newlineSep @@ Lists.concat (list [
@@ -287,7 +287,7 @@ inductiveDefinitionToExpr :: TypedTermDefinition (C.InductiveDefinition -> Expr)
 inductiveDefinitionToExpr = define "inductiveDefinitionToExpr" $
   doc "Serialize an Inductive or CoInductive definition, joining mutually inductive bodies with 'with'" $
   lambda "id" $ lets [
-    "locPart">: Optionals.cases (project C._InductiveDefinition C._InductiveDefinition_locality @@ var "id") (list ([] :: [TypedTerm Expr])) (lambda "l" $ list [localityToExpr @@ var "l"]),
+    "locPart">: Optionals.match (project C._InductiveDefinition C._InductiveDefinition_locality @@ var "id") (list ([] :: [TypedTerm Expr])) (lambda "l" $ list [localityToExpr @@ var "l"]),
     "kwPart">: Logic.ifElse (project C._InductiveDefinition C._InductiveDefinition_coinductive @@ var "id")
       (kw "CoInductive")
       (kw "Inductive"),
@@ -310,22 +310,22 @@ kw s = Serialization.cst @@ string s
 localityToExpr :: TypedTermDefinition (C.Locality -> Expr)
 localityToExpr = define "localityToExpr" $
   doc "Serialize a Local/Global locality qualifier" $
-  lambda "loc" $ cases C._Locality (var "loc") Nothing [
+  lambda "loc" $ match C._Locality (var "loc") Nothing [
     C._Locality_local>>: constant $ kw "Local",
     C._Locality_global>>: constant $ kw "Global"]
 
 -- | Serialize a Match expression
 matchToExpr :: TypedTermDefinition (C.Match -> Expr)
 matchToExpr = define "matchToExpr" $
-  doc "Serialize a Coq match expression" $
+  doc "Serialize a Coq cases expression" $
   lambda "m" $ lets [
     "items">: Lists.map
       (lambda "ci" $ lets [
         "t">: term100ToExpr @@ (project C._CaseItem C._CaseItem_term @@ var "ci"),
-        "asP">: Optionals.cases (project C._CaseItem C._CaseItem_as @@ var "ci") (list ([] :: [TypedTerm Expr])) (lambda "n" $ list [kw "as", Optionals.cases (unwrap C._Name @@ var "n") (kw "_") (lambda "i" $ identToExpr @@ var "i")])] $
+        "asP">: Optionals.match (project C._CaseItem C._CaseItem_as @@ var "ci") (list ([] :: [TypedTerm Expr])) (lambda "n" $ list [kw "as", Optionals.match (unwrap C._Name @@ var "n") (kw "_") (lambda "i" $ identToExpr @@ var "i")])] $
         Serialization.spaceSep @@ Lists.concat (list [list [var "t"], var "asP"]))
       (project C._Match C._Match_caseItems @@ var "m"),
-    "ret">: Optionals.cases (project C._Match C._Match_return @@ var "m") (list ([] :: [TypedTerm Expr])) (lambda "r" $ list [kw "return", term100ToExpr @@ var "r"]),
+    "ret">: Optionals.match (project C._Match C._Match_return @@ var "m") (list ([] :: [TypedTerm Expr])) (lambda "r" $ list [kw "return", term100ToExpr @@ var "r"]),
     "eqs">: Lists.map
       (lambda "eq" $ lets [
         "patGroups">: Lists.map
@@ -338,7 +338,7 @@ matchToExpr = define "matchToExpr" $
       (project C._Match C._Match_equations @@ var "m")] $
     Serialization.newlineSep @@ Lists.concat (list [
       list [Serialization.spaceSep @@ Lists.concat (list [
-        list [kw "match"],
+        list [kw "cases"],
         var "items",
         var "ret",
         list [kw "with"]])],
@@ -365,10 +365,10 @@ moduleDefinitionToExpr = define "moduleDefinitionToExpr" $
 -- | Serialize OpenBinders
 openBindersToExpr :: TypedTerm C.OpenBinders -> TypedTerm Expr
 openBindersToExpr ob =
-  cases C._OpenBinders ob Nothing [
+  match C._OpenBinders ob Nothing [
     C._OpenBinders_type>>: lambda "tb" $ lets [
       "names">: Lists.map
-        (lambda "n" $ Optionals.cases (unwrap C._Name @@ var "n") (kw "_") (lambda "i" $ identToExpr @@ var "i"))
+        (lambda "n" $ Optionals.match (unwrap C._Name @@ var "n") (kw "_") (lambda "i" $ identToExpr @@ var "i"))
         (project C._TypeBinders C._TypeBinders_names @@ var "tb"),
       "ty">: typeToExpr @@ (project C._TypeBinders C._TypeBinders_type @@ var "tb")] $
       sp [Serialization.parens @@ (sp [Serialization.spaceSep @@ var "names", kw ":", var "ty"])],
@@ -377,7 +377,7 @@ openBindersToExpr ob =
 
 -- | Render an optional part, yielding empty list or singleton
 optPart :: TypedTerm (Maybe a) -> (TypedTerm a -> TypedTerm Expr) -> TypedTerm [Expr]
-optPart opt f = Optionals.cases opt (list ([] :: [TypedTerm Expr])) (lambda "x" $ list [f (var "x")])
+optPart opt f = Optionals.match opt (list ([] :: [TypedTerm Expr])) (lambda "x" $ list [f (var "x")])
 
 -- ===========================================================================
 -- Term language serialization
@@ -387,7 +387,7 @@ optPart opt f = Optionals.cases opt (list ([] :: [TypedTerm Expr])) (lambda "x" 
 pattern0ToExpr :: TypedTermDefinition (C.Pattern0 -> Expr)
 pattern0ToExpr = define "pattern0ToExpr" $
   doc "Serialize a primitive or grouped Coq pattern" $
-  lambda "p" $ cases C._Pattern0 (var "p") Nothing [
+  lambda "p" $ match C._Pattern0 (var "p") Nothing [
     C._Pattern0_qualid>>: lambda "q" $ qualidToExpr @@ var "q",
     C._Pattern0_qualIdAndPattern>>: constant $ kw "...",
     C._Pattern0_placeholder>>: constant $ kw "_",
@@ -404,11 +404,11 @@ pattern0ToExpr = define "pattern0ToExpr" $
 pattern10ToExpr :: TypedTermDefinition (C.Pattern10 -> Expr)
 pattern10ToExpr = define "pattern10ToExpr" $
   doc "Serialize the highest-precedence Coq pattern form: an as-binding, juxtaposition, or qualid with arguments" $
-  lambda "p" $ cases C._Pattern10 (var "p") Nothing [
+  lambda "p" $ match C._Pattern10 (var "p") Nothing [
     C._Pattern10_as>>: lambda "pa" $ sp [
       pattern1ToExpr @@ (project C._Pattern10_As C._Pattern10_As_pattern @@ var "pa"),
       kw "as",
-      Optionals.cases (unwrap C._Name @@ (project C._Pattern10_As C._Pattern10_As_as @@ var "pa")) (kw "_") (lambda "i" $ identToExpr @@ var "i")],
+      Optionals.match (unwrap C._Name @@ (project C._Pattern10_As C._Pattern10_As_as @@ var "pa")) (kw "_") (lambda "i" $ identToExpr @@ var "i")],
     C._Pattern10_patterns>>: lambda "pps" $ lets [
       "first">: pattern1ToExpr @@ (project C._Pattern10_Patterns C._Pattern10_Patterns_pattern @@ var "pps"),
       "rest">: Lists.map (lambda "p2" $ pattern1ToExpr @@ var "p2")
@@ -432,7 +432,7 @@ pattern1ToExpr = define "pattern1ToExpr" $
 patternToExpr :: TypedTermDefinition (C.Pattern -> Expr)
 patternToExpr = define "patternToExpr" $
   doc "Serialize a top-level Coq pattern" $
-  lambda "p" $ cases C._Pattern (var "p") Nothing [
+  lambda "p" $ match C._Pattern (var "p") Nothing [
     C._Pattern_pattern>>: lambda "p10" $ pattern10ToExpr @@ var "p10",
     C._Pattern_term>>: constant $ kw "_"]
 
@@ -459,13 +459,13 @@ recordDefinitionToExpr :: TypedTermDefinition (C.RecordDefinition -> Expr)
 recordDefinitionToExpr = define "recordDefinitionToExpr" $
   doc "Serialize a Record or Structure definition" $
   lambda "rd" $ lets [
-    "locPart">: Optionals.cases (project C._RecordDefinition C._RecordDefinition_locality @@ var "rd") (list ([] :: [TypedTerm Expr])) (lambda "l" $ list [localityToExpr @@ var "l"]),
+    "locPart">: Optionals.match (project C._RecordDefinition C._RecordDefinition_locality @@ var "rd") (list ([] :: [TypedTerm Expr])) (lambda "l" $ list [localityToExpr @@ var "l"]),
     "name">: identToExpr @@ (project C._RecordDefinition C._RecordDefinition_name @@ var "rd"),
     "binders">: Lists.map (lambda "b" $ binderToExpr @@ var "b")
       (project C._RecordDefinition C._RecordDefinition_binders @@ var "rd"),
-    "sortPart">: Optionals.cases (project C._RecordDefinition C._RecordDefinition_sort @@ var "rd") (list ([] :: [TypedTerm Expr])) (lambda "s" $ list [kw ":", sortToExpr @@ var "s"]),
+    "sortPart">: Optionals.match (project C._RecordDefinition C._RecordDefinition_sort @@ var "rd") (list ([] :: [TypedTerm Expr])) (lambda "s" $ list [kw ":", sortToExpr @@ var "s"]),
     "body">: project C._RecordDefinition C._RecordDefinition_body @@ var "rd",
-    "constrPart">: Optionals.cases (project C._RecordBody C._RecordBody_constructor @@ var "body") (list ([] :: [TypedTerm Expr])) (lambda "c" $ list [identToExpr @@ var "c"]),
+    "constrPart">: Optionals.match (project C._RecordBody C._RecordBody_constructor @@ var "body") (list ([] :: [TypedTerm Expr])) (lambda "c" $ list [identToExpr @@ var "c"]),
     "fields">: Lists.map (lambda "f" $ Serialization.suffix @@ string " ;" @@ (recordFieldToExpr @@ var "f"))
       (project C._RecordBody C._RecordBody_fields @@ var "body")] $
     withDot $ Serialization.newlineSep @@ Lists.concat (list [
@@ -495,11 +495,11 @@ requireImportToExpr :: TypedTermDefinition (C.RequireImport -> Expr)
 requireImportToExpr = define "requireImportToExpr" $
   doc "Serialize a Require Import/Export command" $
   lambda "ri" $ lets [
-    "fromPart">: Optionals.cases (project C._RequireImport C._RequireImport_from @@ var "ri") (list ([] :: [TypedTerm Expr])) (lambda "q" $ list [kw "From", qualidToExpr @@ var "q"]),
+    "fromPart">: Optionals.match (project C._RequireImport C._RequireImport_from @@ var "ri") (list ([] :: [TypedTerm Expr])) (lambda "q" $ list [kw "From", qualidToExpr @@ var "q"]),
     "requirePart">: Logic.ifElse (project C._RequireImport C._RequireImport_require @@ var "ri")
       (list [kw "Require"])
       (list ([] :: [TypedTerm Expr])),
-    "qualPart">: Optionals.cases (project C._RequireImport C._RequireImport_qualification @@ var "ri") (list ([] :: [TypedTerm Expr])) (lambda "q" $ cases C._ImportQualification (var "q") Nothing [
+    "qualPart">: Optionals.match (project C._RequireImport C._RequireImport_qualification @@ var "ri") (list ([] :: [TypedTerm Expr])) (lambda "q" $ match C._ImportQualification (var "q") Nothing [
         C._ImportQualification_import>>: constant $ list [kw "Import"],
         C._ImportQualification_export>>: constant $ list [kw "Export"]]),
     "mods">: Lists.map (lambda "m" $ qualidToExpr @@ var "m")
@@ -527,7 +527,7 @@ sectionDefinitionToExpr = define "sectionDefinitionToExpr" $
 sentenceContentToExpr :: TypedTermDefinition (C.SentenceContent -> Expr)
 sentenceContentToExpr = define "sentenceContentToExpr" $
   doc "Serialize the content of a top-level Coq sentence" $
-  lambda "sc" $ cases C._SentenceContent (var "sc") Nothing [
+  lambda "sc" $ match C._SentenceContent (var "sc") Nothing [
     C._SentenceContent_axiom>>: lambda "a" $ axiomDeclarationToExpr @@ var "a",
     C._SentenceContent_definition>>: lambda "d" $ definitionToExpr @@ var "d",
     C._SentenceContent_fixpoint>>: lambda "f" $ fixpointDefinitionToExpr @@ var "f",
@@ -544,7 +544,7 @@ sentenceToExpr :: TypedTermDefinition (C.Sentence -> Expr)
 sentenceToExpr = define "sentenceToExpr" $
   doc "Serialize a top-level Coq sentence, together with its optional comment" $
   lambda "s" $ lets [
-    "cmtPart">: Optionals.cases (project C._Sentence C._Sentence_comment @@ var "s") (list ([] :: [TypedTerm Expr])) (lambda "c" $ list [commentToExpr @@ var "c"]),
+    "cmtPart">: Optionals.match (project C._Sentence C._Sentence_comment @@ var "s") (list ([] :: [TypedTerm Expr])) (lambda "c" $ list [commentToExpr @@ var "c"]),
     "content">: sentenceContentToExpr @@ (project C._Sentence C._Sentence_content @@ var "s")] $
     Serialization.newlineSep @@ Lists.concat (list [var "cmtPart", list [var "content"]])
 
@@ -552,7 +552,7 @@ sentenceToExpr = define "sentenceToExpr" $
 sortToExpr :: TypedTermDefinition (C.Sort -> Expr)
 sortToExpr = define "sortToExpr" $
   doc "Serialize a Coq sort" $
-  lambda "s" $ cases C._Sort (var "s") Nothing [
+  lambda "s" $ match C._Sort (var "s") Nothing [
     C._Sort_set>>: constant $ kw "Set",
     C._Sort_prop>>: constant $ kw "Prop",
     C._Sort_sProp>>: constant $ kw "SProp",
@@ -569,11 +569,11 @@ sp xs = Serialization.spaceSep @@ list xs
 term0ToExpr :: TypedTermDefinition (C.Term0 -> Expr)
 term0ToExpr = define "term0ToExpr" $
   doc "Serialize a Coq term at the lowest precedence level" $
-  lambda "t" $ cases C._Term0 (var "t") Nothing [
+  lambda "t" $ match C._Term0 (var "t") Nothing [
     C._Term0_qualidAnnotated>>: lambda "qa" $ qualidAnnotatedToExpr (var "qa"),
     C._Term0_sort>>: lambda "s" $ sortToExpr @@ var "s",
     C._Term0_primitiveNotations>>: lambda "pn" $
-      cases C._PrimitiveNotations (var "pn") Nothing [
+      match C._PrimitiveNotations (var "pn") Nothing [
         C._PrimitiveNotations_number>>: lambda "n" $ lets [
           "v">: unwrap C._Number @@ var "n"] $
           Serialization.cst @@ (Literals.showFloat64 (var "v")),
@@ -591,7 +591,7 @@ term0ToExpr = define "term0ToExpr" $
 term100ToExpr :: TypedTermDefinition (C.Term100 -> Expr)
 term100ToExpr = define "term100ToExpr" $
   doc "Serialize a Coq term with an optional trailing type cast" $
-  lambda "t" $ cases C._Term100 (var "t") Nothing [
+  lambda "t" $ match C._Term100 (var "t") Nothing [
     C._Term100_cast>>: lambda "tc" $ sp [
       term10ToExpr @@ (project C._TypeCast C._TypeCast_term @@ var "tc"),
       kw ":",
@@ -602,10 +602,10 @@ term100ToExpr = define "term100ToExpr" $
 term10ToExpr :: TypedTermDefinition (C.Term10 -> Expr)
 term10ToExpr = define "term10ToExpr" $
   doc "Serialize a Coq term at application precedence" $
-  lambda "t" $ cases C._Term10 (var "t") Nothing [
+  lambda "t" $ match C._Term10 (var "t") Nothing [
     C._Term10_application>>: lambda "app" $ applicationToExpr @@ var "app",
     C._Term10_oneTerm>>: lambda "ot" $
-      cases C._OneTerm (var "ot") Nothing [
+      match C._OneTerm (var "ot") Nothing [
         C._OneTerm_explicit>>: lambda "qa" $ qualidAnnotatedToExpr (var "qa"),
         C._OneTerm_term1>>: lambda "t1" $ term1ToExpr @@ var "t1"]]
 
@@ -613,7 +613,7 @@ term10ToExpr = define "term10ToExpr" $
 term1ToExpr :: TypedTermDefinition (C.Term1 -> Expr)
 term1ToExpr = define "term1ToExpr" $
   doc "Serialize a Coq term with optional trailing projection or scope annotations" $
-  lambda "t" $ cases C._Term1 (var "t") Nothing [
+  lambda "t" $ match C._Term1 (var "t") Nothing [
     C._Term1_projection>>: constant $ kw "?projection",
     C._Term1_scope>>: constant $ kw "?scope",
     C._Term1_term0>>: lambda "t0" $ term0ToExpr @@ var "t0"]
@@ -622,9 +622,9 @@ term1ToExpr = define "term1ToExpr" $
 termToExpr :: TypedTermDefinition (C.Term -> Expr)
 termToExpr = define "termToExpr" $
   doc "Serialize a Coq term" $
-  lambda "t" $ cases C._Term (var "t") Nothing [
+  lambda "t" $ match C._Term (var "t") Nothing [
     C._Term_forallOrFun>>: lambda "fof" $
-      cases C._ForallOrFun (var "fof") Nothing [
+      match C._ForallOrFun (var "fof") Nothing [
         C._ForallOrFun_forall>>: lambda "fa" $ sp [
           kw "forall",
           openBindersToExpr (project C._Forall C._Forall_binders @@ var "fa"),
@@ -638,13 +638,13 @@ termToExpr = define "termToExpr" $
     C._Term_let>>: lambda "lt" $ lets [
       "bindings">: project C._Let C._Let_bindings @@ var "lt",
       "body">: termToExpr @@ (project C._Let C._Let_in @@ var "lt")] $
-      cases C._LetBindings (var "bindings") Nothing [
+      match C._LetBindings (var "bindings") Nothing [
         C._LetBindings_named>>: lambda "ln" $ lets [
           "binder">: project C._LetNamed C._LetNamed_binder @@ var "ln",
-          "name">: Optionals.cases (unwrap C._Name @@ (project C._LetBinder C._LetBinder_name @@ var "binder")) (kw "_") (lambda "i" $ identToExpr @@ var "i"),
+          "name">: Optionals.match (unwrap C._Name @@ (project C._LetBinder C._LetBinder_name @@ var "binder")) (kw "_") (lambda "i" $ identToExpr @@ var "i"),
           "binders">: Lists.map (lambda "b" $ binderToExpr @@ var "b")
             (project C._LetNamed C._LetNamed_binders @@ var "ln"),
-          "ty">: Optionals.cases (project C._LetBinder C._LetBinder_type @@ var "binder") (list ([] :: [TypedTerm Expr])) (lambda "t2" $ list [kw ":", typeToExpr @@ var "t2"]),
+          "ty">: Optionals.match (project C._LetBinder C._LetBinder_type @@ var "binder") (list ([] :: [TypedTerm Expr])) (lambda "t2" $ list [kw ":", typeToExpr @@ var "t2"]),
           "val">: termToExpr @@ (project C._LetBinder C._LetBinder_term @@ var "binder")] $
           sp [kw "let", Serialization.spaceSep @@ Lists.concat (list [
             list [var "name"],
@@ -660,7 +660,7 @@ termToExpr = define "termToExpr" $
       "els">: termToExpr @@ (project C._If C._If_else @@ var "ifE")] $
       sp [kw "if", var "cond", kw "then", var "thn", kw "else", var "els"],
     C._Term_fix>>: lambda "fx" $
-      cases C._Fix (var "fx") Nothing [
+      match C._Fix (var "fx") Nothing [
         C._Fix_decl>>: lambda "d" $ sp [kw "fix", fixDeclToExpr (var "d")],
         C._Fix_qual>>: lambda "q" $ kw "fix"],
     C._Term_cofix>>: lambda "cf" $ sp [kw "cofix", kw "..."],
@@ -671,7 +671,7 @@ theoremBodyToExpr :: TypedTermDefinition (C.TheoremBody -> Expr)
 theoremBodyToExpr = define "theoremBodyToExpr" $
   doc "Serialize a Theorem/Lemma/Proposition with its proof term" $
   lambda "tb" $ lets [
-    "kindKw">: cases C._TheoremKind (project C._TheoremBody C._TheoremBody_kind @@ var "tb") Nothing [
+    "kindKw">: match C._TheoremKind (project C._TheoremBody C._TheoremBody_kind @@ var "tb") Nothing [
       C._TheoremKind_theorem>>: constant $ kw "Theorem",
       C._TheoremKind_lemma>>: constant $ kw "Lemma",
       C._TheoremKind_proposition>>: constant $ kw "Proposition",

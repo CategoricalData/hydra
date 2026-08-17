@@ -104,7 +104,7 @@ toLower = define "toLower" "Convert a string to lowercase."
   (fn [("s", "the string to convert to lowercase")] Types.string Types.string)
   ["toLower(s) returns s with each character replaced by its Unicode simple (one-to-one) lowercase\
   \ mapping, or itself if it has no lowercase mapping.",
-   "This is a code-point-by-code-point operation, so it does not handle the string-changing cases of\
+   "This is a code-point-by-code-point operation, so it does not handle the string-changing match of\
   \ full Unicode case folding (e.g. U+00DF \"\xDF\" does not lowercase to \"ss\"; it returns itself).",
    "For text intended for human-readable display in locales with non-trivial case mappings, prefer a\
   \ host-specific full case-folding API.",
@@ -115,7 +115,7 @@ toUpper = define "toUpper" "Convert a string to uppercase."
   (fn [("s", "the string to convert to uppercase")] Types.string Types.string)
   ["toUpper(s) returns s with each character replaced by its Unicode simple (one-to-one) uppercase\
   \ mapping, or itself if it has no uppercase mapping.",
-   "This is a code-point-by-code-point operation, so it does not handle the string-changing cases of\
+   "This is a code-point-by-code-point operation, so it does not handle the string-changing match of\
   \ full Unicode case folding (e.g. U+00DF \"\xDF\" does not uppercase to \"SS\"; it returns itself).",
    "For text intended for human-readable display in locales with non-trivial case mappings, prefer a\
   \ host-specific full case-folding API.",

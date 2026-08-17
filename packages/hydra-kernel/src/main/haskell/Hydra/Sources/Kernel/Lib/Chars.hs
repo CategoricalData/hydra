@@ -106,7 +106,7 @@ toLower = define "toLower" "Convert a character to lowercase."
   (intToInt [("char", "the character to convert, as a Unicode code point")])
   ["Return the simple (one-to-one) Unicode lowercase mapping of the argument, or the argument itself if\
   \ it has no lowercase mapping.",
-   "This is a code-point-to-code-point mapping, so it does not handle the string-changing cases of full\
+   "This is a code-point-to-code-point mapping, so it does not handle the string-changing match of full\
    \ Unicode case folding (e.g. U+00DF \"\xDF\" does not lowercase to \"ss\"; it returns itself).",
    "The argument is interpreted as a Unicode code point.",
    "Total. Corresponds to Haskell's Data.Char.toLower :: Char -> Char."]
@@ -116,7 +116,7 @@ toUpper = define "toUpper" "Convert a character to uppercase."
   (intToInt [("char", "the character to convert, as a Unicode code point")])
   ["Return the simple (one-to-one) Unicode uppercase mapping of the argument, or the argument itself if\
   \ it has no uppercase mapping.",
-   "This is a code-point-to-code-point mapping, so it does not handle the string-changing cases of full\
+   "This is a code-point-to-code-point mapping, so it does not handle the string-changing match of full\
    \ Unicode case folding (e.g. U+00DF \"\xDF\" does not uppercase to \"SS\"; it returns itself).",
    "The argument is interpreted as a Unicode code point.",
    "Total. Corresponds to Haskell's Data.Char.toUpper :: Char -> Char."]

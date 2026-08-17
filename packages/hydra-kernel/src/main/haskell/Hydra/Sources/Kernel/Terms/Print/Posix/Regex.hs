@@ -168,7 +168,7 @@ showCodePoint = define "showCodePoint" $
 anyClass :: TypedTermDefinition String
 anyClass = define "anyClass" $
   doc ("The POSIX ERE rendering of Hydra's . (any character incl. newline): an explicit character-class"
-    <> " range spanning the whole Unicode scalar range, which POSIX ERE engines match literally.") $
+    <> " range spanning the whole Unicode scalar range, which POSIX ERE engines cases literally.") $
   Strings.concat $ list [
     string "[",
     showCodePoint @@ int32 0,
@@ -208,7 +208,7 @@ classItem :: TypedTermDefinition (Term -> String)
 classItem = define "classItem" $
   doc "Render one character-class member (a single character or an inclusive range)." $
   "item" ~>
-    cases _ClassItem (var "item") Nothing [
+    match _ClassItem (var "item") Nothing [
       _ClassItem_character>>: "c" ~> escapeClassChar @@ var "c",
       _ClassItem_range>>: "r" ~> Strings.concat $ list [
         escapeClassChar @@ (project _CharacterRange _CharacterRange_from @@ var "r"),
@@ -231,7 +231,7 @@ atom :: TypedTermDefinition (Term -> String)
 atom = define "atom" $
   doc "Render a single atom; . renders as the explicit full-code-point-range class (POSIX-safe)." $
   "a" ~>
-    cases _Atom (var "a") Nothing [
+    match _Atom (var "a") Nothing [
       _Atom_literal>>: "c" ~> escapeLiteral @@ var "c",
       _Atom_any>>: constant (asTerm anyClass),
       _Atom_anchorStart>>: constant (string "^"),
@@ -246,7 +246,7 @@ quantifier :: TypedTermDefinition (Term -> String)
 quantifier = define "quantifier" $
   doc "Render a quantifier suffix; the 'one' quantifier renders as the empty string." $
   "q" ~>
-    cases _Quantifier (var "q") Nothing [
+    match _Quantifier (var "q") Nothing [
       _Quantifier_one>>: constant (string ""),
       _Quantifier_zeroOrOne>>: constant (string "?"),
       _Quantifier_zeroOrMore>>: constant (string "*"),

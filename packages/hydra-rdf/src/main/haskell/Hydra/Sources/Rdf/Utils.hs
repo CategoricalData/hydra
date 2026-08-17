@@ -147,7 +147,7 @@ encodeLiteral :: TypedTermDefinition (Literal -> Rdf.Literal)
 encodeLiteral = define "encodeLiteral" $
   doc "Encode a Hydra literal as an RDF literal" $
   lambda "lit" $
-    cases _Literal (var "lit") Nothing [
+    match _Literal (var "lit") Nothing [
       _Literal_binary>>: lambda "s" $
         record Rdf._Literal [
           Rdf._Literal_lexicalForm>>: Literals.binaryToBase64 (var "s"),
@@ -159,7 +159,7 @@ encodeLiteral = define "encodeLiteral" $
           Rdf._Literal_datatypeIri>>: xmlSchemaDatatypeIri @@ string "boolean",
           Rdf._Literal_languageTag>>: nothing],
       _Literal_float>>: lambda "f" $
-        cases _FloatValue (var "f") Nothing [
+        match _FloatValue (var "f") Nothing [
           _FloatValue_float32>>: lambda "v" $
             record Rdf._Literal [
               Rdf._Literal_lexicalForm>>: Literals.showFloat32 (var "v"),
@@ -171,7 +171,7 @@ encodeLiteral = define "encodeLiteral" $
               Rdf._Literal_datatypeIri>>: xmlSchemaDatatypeIri @@ string "double",
               Rdf._Literal_languageTag>>: nothing]],
       _Literal_integer>>: lambda "i" $
-        cases _IntegerValue (var "i") Nothing [
+        match _IntegerValue (var "i") Nothing [
           _IntegerValue_bigint>>: lambda "v" $
             record Rdf._Literal [
               Rdf._Literal_lexicalForm>>: Literals.showBigint (var "v"),
@@ -302,7 +302,7 @@ resourceToNode :: TypedTermDefinition (Rdf.Resource -> Rdf.Node)
 resourceToNode = define "resourceToNode" $
   doc "Convert a resource to a node" $
   lambda "r" $
-    cases Rdf._Resource (var "r") Nothing [
+    match Rdf._Resource (var "r") Nothing [
       Rdf._Resource_iri>>: lambda "i" $ inject Rdf._Node Rdf._Node_iri (var "i"),
       Rdf._Resource_bnode>>: lambda "b" $ inject Rdf._Node Rdf._Node_bnode (var "b")]
 

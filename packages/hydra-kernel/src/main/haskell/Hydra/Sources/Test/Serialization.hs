@@ -36,7 +36,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Serialization.ns] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata ((Just "Test cases for AST serialization"))}
+            moduleMetadata = descriptionMetadata ((Just "Test match for AST serialization"))}
   where
     definitions = [
       Phantoms.toDefinition arrowOp,
@@ -52,7 +52,7 @@ define = definitionInModule module_
 
 allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
-    doc "Test cases for AST serialization" $
+    doc "Test match for AST serialization" $
     supergroup "serialization" [
       associativityGroup,
       caseStatementGroup,

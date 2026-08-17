@@ -118,12 +118,12 @@ buildFieldOffsets = def "buildFieldOffsets" $
     -- Handles two layers of Forall + one Annotated wrapper, which covers the kernel.
     "recordFieldsOf" <~ (lambda "t" $
       "stripped" <~ (Strip.deannotateType @@ var "t") $
-      cases _Type (var "stripped") (Just $ (nothing :: TypedTerm (Maybe [FieldType]))) [
+      match _Type (var "stripped") (Just $ (nothing :: TypedTerm (Maybe [FieldType]))) [
         _Type_record>>: lambda "fts" $ just (var "fts"),
         _Type_forall>>: lambda "fa" $
           -- A Forall over a record: recurse one level.
           "innerStripped" <~ (Strip.deannotateType @@ Core.forallTypeBody (var "fa")) $
-          cases _Type (var "innerStripped") (Just $ (nothing :: TypedTerm (Maybe [FieldType]))) [
+          match _Type (var "innerStripped") (Just $ (nothing :: TypedTerm (Maybe [FieldType]))) [
             _Type_record>>: lambda "fts" $ just (var "fts")]]) $
     "entryFor" <~ (lambda "nameSchemePair" $
       "tname" <~ Pairs.first (var "nameSchemePair") $
@@ -232,11 +232,11 @@ buildVariantIndexes = def "buildVariantIndexes" $
     -- Return Just [FieldType] if the stripped type is a union; Nothing otherwise.
     "unionFieldsOf" <~ (lambda "t" $
       "stripped" <~ (Strip.deannotateType @@ var "t") $
-      cases _Type (var "stripped") (Just $ (nothing :: TypedTerm (Maybe [FieldType]))) [
+      match _Type (var "stripped") (Just $ (nothing :: TypedTerm (Maybe [FieldType]))) [
         _Type_union>>: lambda "fts" $ just (var "fts"),
         _Type_forall>>: lambda "fa" $
           "innerStripped" <~ (Strip.deannotateType @@ Core.forallTypeBody (var "fa")) $
-          cases _Type (var "innerStripped") (Just $ (nothing :: TypedTerm (Maybe [FieldType]))) [
+          match _Type (var "innerStripped") (Just $ (nothing :: TypedTerm (Maybe [FieldType]))) [
             _Type_union>>: lambda "fts" $ just (var "fts")]]) $
     "entryFor" <~ (lambda "nameSchemePair" $
       "tname" <~ Pairs.first (var "nameSchemePair") $
@@ -283,7 +283,7 @@ collectCallTargets = def "collectCallTargets" $
   lambda "instrs" $
     Lists.foldl
       (lambda "acc" $ lambda "instr" $
-        cases W._Instruction (var "instr") (Just $ var "acc") [
+        match W._Instruction (var "instr") (Just $ var "acc") [
           W._Instruction_call>>: lambda "v" $ Sets.insert (var "v") (var "acc" :: TypedTerm (S.Set String)),
           W._Instruction_block>>: lambda "b" $
             Sets.union (var "acc") (collectCallTargets @@ (project W._BlockInstruction W._BlockInstruction_body @@ var "b")),
@@ -304,7 +304,7 @@ collectInstructionLocals = def "collectInstructionLocals" $
   lambda "instrs" $
     Lists.foldl
       (lambda "acc" $ lambda "instr" $
-        cases W._Instruction (var "instr") (Just $ var "acc") [
+        match W._Instruction (var "instr") (Just $ var "acc") [
           W._Instruction_localGet>>: lambda "v" $ Sets.insert (var "v") (var "acc" :: TypedTerm (S.Set String)),
           W._Instruction_localSet>>: lambda "v" $ Sets.insert (var "v") (var "acc" :: TypedTerm (S.Set String)),
           W._Instruction_localTee>>: lambda "v" $ Sets.insert (var "v") (var "acc" :: TypedTerm (S.Set String)),
@@ -328,9 +328,9 @@ collectStrings = def "collectStrings" $
   doc "Collect every distinct string literal reachable from a list of term definitions, as a deterministically sorted list" $
   lambda "termDefs" $
     "collectOne" <~ (lambda "acc" $ lambda "t" $
-      cases _Term (var "t") (Just $ var "acc") [
+      match _Term (var "t") (Just $ var "acc") [
         _Term_literal>>: lambda "lit" $
-          cases _Literal (var "lit") (Just $ var "acc") [
+          match _Literal (var "lit") (Just $ var "acc") [
             _Literal_string>>: lambda "s" $ Sets.insert (var "s") (var "acc" :: TypedTerm (S.Set String))]]) $
     "allStrings" <~ Lists.foldl
       (lambda "acc" $ lambda "td" $
@@ -370,7 +370,7 @@ encodeApplication = def "encodeApplication" $
         (list [inject W._Instruction W._Instruction_drop unit]))
       (var "realArgInstrs")) $
     -- Dispatch based on the head function
-    cases _Term (var "dfun") (Just $
+    match _Term (var "dfun") (Just $
       -- Default: encode the head function, ignore it (drop), then return placeholder.
       "funInstrs" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "fun") $
         right (Lists.concat (list [
@@ -641,7 +641,7 @@ encodeCases = def "encodeCases" $
 encodeLiteral :: TypedTermDefinition (Literal -> W.Instruction)
 encodeLiteral = def "encodeLiteral" $
   doc "Encode a Hydra literal value as a WASM const instruction" $
-  lambda "lit" $ cases _Literal (var "lit") Nothing [
+  lambda "lit" $ match _Literal (var "lit") Nothing [
     _Literal_boolean>>: lambda "b" $
       inject W._Instruction W._Instruction_const $
         inject W._ConstValue W._ConstValue_i32 $
@@ -662,7 +662,7 @@ encodeLiteral = def "encodeLiteral" $
       inject W._Instruction W._Instruction_const $
         inject W._ConstValue W._ConstValue_i32 (int32 0),
     _Literal_integer>>: lambda "iv" $
-      cases _IntegerValue (var "iv") Nothing [
+      match _IntegerValue (var "iv") Nothing [
         _IntegerValue_int8>>: lambda "i" $
           inject W._Instruction W._Instruction_const $
             inject W._ConstValue W._ConstValue_i32 (Literals.bigintToInt32 (Literals.int8ToBigint (var "i"))),
@@ -700,17 +700,17 @@ encodeLiteral = def "encodeLiteral" $
 encodeLiteralType :: TypedTermDefinition (LiteralType -> W.ValType)
 encodeLiteralType = def "encodeLiteralType" $
   doc "Encode a Hydra literal type as a WASM value type" $
-  lambda "lt" $ cases _LiteralType (var "lt") Nothing [
+  lambda "lt" $ match _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant $
       inject W._ValType W._ValType_i32 unit, -- pointer to memory
     _LiteralType_boolean>>: constant $
       inject W._ValType W._ValType_i32 unit, -- 0 or 1
     _LiteralType_float>>: lambda "ft" $
-      cases _FloatType (var "ft") Nothing [
+      match _FloatType (var "ft") Nothing [
         _FloatType_float32>>: constant $ inject W._ValType W._ValType_f32 unit,
         _FloatType_float64>>: constant $ inject W._ValType W._ValType_f64 unit],
     _LiteralType_integer>>: lambda "it" $
-      cases _IntegerType (var "it") Nothing [
+      match _IntegerType (var "it") Nothing [
         _IntegerType_bigint>>: constant $ inject W._ValType W._ValType_i64 unit,
         _IntegerType_int8>>: constant $ inject W._ValType W._ValType_i32 unit,
         _IntegerType_int16>>: constant $ inject W._ValType W._ValType_i32 unit,
@@ -789,7 +789,7 @@ encodeTerm :: TypedTermDefinition (InferenceContext -> Graph -> M.Map String Int
 encodeTerm = def "encodeTerm" $
   doc "Encode a Hydra term as a list of WASM instructions" $
   "cx" ~> "g" ~> "stringOffsets" ~> "fieldOffsets" ~> "variantIndexes" ~> "funcSigs" ~> lambda "term" $
-    cases _Term (var "term") (Just $
+    match _Term (var "term") (Just $
       left (Error.errorOther $ Error.otherError $ string "unexpected term variant in WASM encoding"))
     [_Term_annotated>>: lambda "at" $
        encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ Core.annotatedTermBody (var "at"),
@@ -856,7 +856,7 @@ encodeTerm = def "encodeTerm" $
        "fieldName" <~ Core.fieldName (var "field") $
        "fterm" <~ Core.fieldTerm (var "field") $
        "dterm" <~ (Strip.deannotateTerm @@ var "fterm") $
-       "isUnit" <~ (cases _Term (var "dterm") (Just $ boolean False) [
+       "isUnit" <~ (match _Term (var "dterm") (Just $ boolean False) [
          _Term_unit>>: constant $ boolean True,
          _Term_record>>: lambda "rt" $ Lists.null (Core.recordFields (var "rt"))]) $
        -- Look up the tag in the universe-wide variant table. Fall back to 0 when the
@@ -995,7 +995,7 @@ encodeTerm = def "encodeTerm" $
        -- in the module-level stringOffsets map and emit `i32.const <offset>`. All other
        -- literal kinds (i32, bool, placeholder-emitted floats/i64/etc.) go through
        -- encodeLiteral unchanged.
-       cases _Literal (var "lit") (Just $
+       match _Literal (var "lit") (Just $
          right (list [encodeLiteral @@ var "lit"])) [
          _Literal_string>>: lambda "s" $
            Optionals.cases
@@ -1334,7 +1334,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "scrutineeInstrs" <~ Optionals.cases (Lists.head (var "paramNameStrs"))
       (list ([] :: [TypedTerm W.Instruction]))
       (lambda "p0" $ list [inject W._Instruction W._Instruction_localGet (var "p0")]) $
-    "rawBodyInstrs" <<~ (cases _Term (var "dBody") (Just $
+    "rawBodyInstrs" <<~ (match _Term (var "dBody") (Just $
         encodeTerm @@ var "cx" @@ var "g" @@ var "stringOffsets" @@ var "fieldOffsets" @@ var "variantIndexes" @@ var "funcSigs" @@ var "innerBody")
       [_Term_project>>: lambda "proj" $
          encodeProjection @@ var "cx" @@ var "g" @@ var "fieldOffsets" @@ var "proj" @@ var "scrutineeInstrs",
@@ -1382,7 +1382,7 @@ encodeType = def "encodeType" $
   doc "Encode a Hydra type as a list of WASM result types, for function signatures" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
-    cases _Type (var "typ") (Just $
+    match _Type (var "typ") (Just $
       -- Default: single i32 result (pointer)
       right (list [inject W._ValType W._ValType_i32 unit]))
     [_Type_annotated>>: lambda "at" $
@@ -1416,7 +1416,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
     "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "tdef")) $
     "dtyp" <~ (Strip.deannotateType @@ var "typ") $
     -- Emit a type section entry for function types
-    cases _Type (var "dtyp") (Just $
+    match _Type (var "dtyp") (Just $
       -- Non-function types are erased
       right (list ([] :: [TypedTerm W.ModuleField])))
     [_Type_function>>: lambda "ft" $
@@ -1441,7 +1441,7 @@ encodeValType = def "encodeValType" $
   doc "Map a Hydra type to a WASM value type" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
-    cases _Type (var "typ") (Just $
+    match _Type (var "typ") (Just $
       -- Default: compound types are represented as i32 (memory pointer)
       right (inject W._ValType W._ValType_i32 unit))
     [_Type_annotated>>: lambda "at" $
@@ -1468,7 +1468,7 @@ extractLambdaParams = def "extractLambdaParams" $
   doc "Extract parameter names from nested lambdas, returning the params and the inner body" $
   lambda "term" $
     "stripped" <~ (Strip.deannotateTerm @@ var "term") $
-    cases _Term (var "stripped") (Just $ pair (list ([] :: [TypedTerm Name])) (var "term")) [
+    match _Term (var "stripped") (Just $ pair (list ([] :: [TypedTerm Name])) (var "term")) [
       _Term_lambda>>: lambda "lam" $
         "paramName" <~ Core.lambdaParameter (var "lam") $
         "body" <~ Core.lambdaBody (var "lam") $
@@ -1495,7 +1495,7 @@ extractParamTypes = def "extractParamTypes" $
   doc "Extract parameter types from a function type, returning a list of domain types" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
-    cases _Type (var "typ") (Just $ right (list ([] :: [TypedTerm W.ValType]))) [
+    match _Type (var "typ") (Just $ right (list ([] :: [TypedTerm W.ValType]))) [
       _Type_function>>: lambda "ft" $
         "domType" <<~ (encodeValType @@ var "cx" @@ var "g" @@ Core.functionTypeDomain (var "ft")) $
         "rest" <<~ (extractParamTypes @@ var "cx" @@ var "g" @@ Core.functionTypeCodomain (var "ft")) $
@@ -1655,7 +1655,7 @@ moduleToWasm = def "moduleToWasm" $
     -- Collect all call targets from all function bodies to generate imports
     "allBodyInstrs" <~ Lists.concat (Lists.map
       (lambda "tf" $
-        cases W._ModuleField (var "tf") (Just $ list ([] :: [TypedTerm W.Instruction])) [
+        match W._ModuleField (var "tf") (Just $ list ([] :: [TypedTerm W.Instruction])) [
           W._ModuleField_func>>: lambda "fn" $ project W._Func W._Func_body @@ var "fn"])
       (var "termFields")) $
     "allCallTargets" <~ (collectCallTargets @@ var "allBodyInstrs") $
@@ -1721,7 +1721,7 @@ peelLambdaApp = def "peelLambdaApp" $
     Logic.ifElse (Lists.null (var "args"))
       (pair (list ([] :: [TypedTerm Name])) (var "term"))
       ("stripped" <~ (Strip.deannotateTerm @@ var "term") $
-       cases _Term (var "stripped") (Just $ pair (list ([] :: [TypedTerm Name])) (var "term")) [
+       match _Term (var "stripped") (Just $ pair (list ([] :: [TypedTerm Name])) (var "term")) [
          _Term_lambda>>: lambda "lam" $
            "paramName" <~ Core.lambdaParameter (var "lam") $
            "body" <~ Core.lambdaBody (var "lam") $

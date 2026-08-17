@@ -222,7 +222,7 @@ graphSchemaToShapesGraph = define "graphSchemaToShapesGraph" $
               @@ PgDsl.vertexTypeLabel (var "vt") @@ var "edgeTypes",
             "baseShape">: ShaclDsl.definitionTarget (var "baseDef"),
             "baseNode">:
-              cases Shacl._Shape (var "baseShape") Nothing [
+              match Shacl._Shape (var "baseShape") Nothing [
                 Shacl._Shape_node>>: lambda "ns" $ var "ns",
                 Shacl._Shape_property>>: lambda "_" $
                   ShaclDsl.nodeShape (emptyCommonWith Sets.empty Sets.empty)],

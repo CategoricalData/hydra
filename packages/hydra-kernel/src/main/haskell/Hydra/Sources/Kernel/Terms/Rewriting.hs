@@ -116,7 +116,7 @@ module_ = Module {
 applyInsideTypeLambdasAndAnnotations :: TypedTermDefinition ((Term -> Term) -> Term -> Term)
 applyInsideTypeLambdasAndAnnotations = define "applyInsideTypeLambdasAndAnnotations" $
   doc "Apply a term-level function inside any leading type lambdas" $
-  "f" ~> "term0" ~> cases _Term (var "term0")
+  "f" ~> "term0" ~> match _Term (var "term0")
     (Just $ var "f" @@ var "term0") [
     _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTermWithBody (var "at")
       (applyInsideTypeLambdasAndAnnotations @@ var "f" @@ (Core.annotatedTermBody $ var "at")),
@@ -126,7 +126,7 @@ applyInsideTypeLambdasAndAnnotations = define "applyInsideTypeLambdasAndAnnotati
 foldOverTerm :: TypedTermDefinition (TraversalOrder -> (x -> Term -> x) -> x -> Term -> x)
 foldOverTerm = define "foldOverTerm" $
   doc "Fold over a term, traversing its subterms in the specified order" $
-  "order" ~> "fld" ~> "b0" ~> "term" ~> cases _TraversalOrder (var "order") Nothing [
+  "order" ~> "fld" ~> "b0" ~> "term" ~> match _TraversalOrder (var "order") Nothing [
     _TraversalOrder_pre>>: constant (Phantoms.fold (foldOverTerm @@ var "order" @@ var "fld")
       @@ (var "fld" @@ var "b0" @@ var "term")
       @@ (subterms @@ var "term")),
@@ -139,7 +139,7 @@ foldOverTerm = define "foldOverTerm" $
 foldOverType :: TypedTermDefinition (TraversalOrder -> (x -> Type -> x) -> x -> Type -> x)
 foldOverType = define "foldOverType" $
   doc "Fold over a type, traversing its subtypes in the specified order" $
-  "order" ~> "fld" ~> "b0" ~> "typ" ~> cases _TraversalOrder (var "order") Nothing [
+  "order" ~> "fld" ~> "b0" ~> "typ" ~> match _TraversalOrder (var "order") Nothing [
     _TraversalOrder_pre>>: constant (Phantoms.fold (foldOverType @@ var "order" @@ var "fld")
       @@ (var "fld" @@ var "b0" @@ var "typ")
       @@ (subtypes @@ var "typ")),
@@ -170,7 +170,7 @@ foldTermWithGraphAndPath = define "foldTermWithGraphAndPath" $
 mapBeneathTypeAnnotations :: TypedTermDefinition ((Type -> Type) -> Type -> Type)
 mapBeneathTypeAnnotations = define "mapBeneathTypeAnnotations" $
   doc "Apply a transformation to the first type beneath a chain of annotations" $
-  "f" ~> "t" ~> cases _Type (var "t")
+  "f" ~> "t" ~> match _Type (var "t")
     (Just $ var "f" @@ var "t") [
     _Type_annotated>>: "at" ~> Core.typeAnnotated $ Core.annotatedType
       (mapBeneathTypeAnnotations @@ var "f" @@ (Core.annotatedTypeBody $ var "at"))
@@ -215,7 +215,7 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
           (Pairs.second $ var "r")
           (Core.bindingTypeScheme $ var "binding"))) $
     "dflt" <~ pair (var "val0") (var "term0") $
-    cases _Term (var "term0")
+    match _Term (var "term0")
       (Just $ var "dflt") [
       _Term_annotated>>: "at" ~> var "forSingle"
         @@ var "recurse"
@@ -323,7 +323,7 @@ rewriteAndFoldTermWithGraph = define "rewriteAndFoldTermWithGraph" $
   "wrapper" <~ ("lowLevelRecurse" ~> "valAndCx" ~> "term" ~>
     "val" <~ Pairs.first (var "valAndCx") $
     "cx" <~ Pairs.second (var "valAndCx") $
-    "cx1" <~ (cases _Term (var "term")
+    "cx1" <~ (match _Term (var "term")
       (Just $ var "cx") [
       _Term_lambda>>: "l" ~> Scoping.extendGraphForLambda @@ var "cx" @@ var "l",
       _Term_let>>: "l" ~> Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
@@ -348,7 +348,7 @@ rewriteAndFoldTermWithGraphAndPath = define "rewriteAndFoldTermWithGraphAndPath"
   "wrapper" <~ ("recurse" ~> "path" ~> "cxAndVal" ~> "term" ~>
     "cx" <~ Pairs.first (var "cxAndVal") $
     "val" <~ Pairs.second (var "cxAndVal") $
-    "cx1" <~ (cases _Term (var "term")
+    "cx1" <~ (match _Term (var "term")
       (Just $ var "cx") [
       _Term_lambda>>: "l" ~> Scoping.extendGraphForLambda @@ var "cx" @@ var "l",
       _Term_let>>: "l" ~> Scoping.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
@@ -421,7 +421,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
           (Pairs.second $ var "r")
           (Core.bindingTypeScheme $ var "binding"))) $
     "dflt" <~ pair (var "val0") (var "term0") $
-    cases _Term (var "term0")
+    match _Term (var "term0")
       (Just $ var "dflt") [
       _Term_annotated>>: "at" ~> var "forSingleWithAccessor"
         @@ var "recurse"
@@ -647,7 +647,7 @@ rewriteTerm = define "rewriteTerm" $
     "forMap" <~ ("m" ~>
       "forPair" <~ ("p" ~> pair (var "recurse" @@ (Pairs.first $ var "p")) (var "recurse" @@ (Pairs.second $ var "p"))) $
       (Maps.fromList (Lists.map (var "forPair") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) :: TypedTerm (M.Map Term Term))) $
-    cases _Term (var "term") Nothing [
+    match _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
         (var "recurse" @@ (Core.annotatedTermBody $ var "at"))
         (Core.annotatedTermAnnotation $ var "at"),
@@ -715,7 +715,7 @@ rewriteTermM = define "rewriteTermM" $
     "mapBinding" <~ ("b" ~>
       "v" <<~ var "recurse" @@ (Core.bindingTerm $ var "b") $
       right $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingTypeScheme $ var "b")) $
-    cases _Term (var "term") Nothing [
+    match _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~>
         "ex" <<~ var "recurse" @@ Core.annotatedTermBody (var "at") $
         right $ Core.termAnnotated $ Core.annotatedTerm (var "ex") (Core.annotatedTermAnnotation $ var "at"),
@@ -819,7 +819,7 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
     "forMap" <~ ("m" ~>
       "forPair" <~ ("p" ~> pair (var "recurse" @@ (Pairs.first $ var "p")) (var "recurse" @@ (Pairs.second $ var "p"))) $
       (Maps.fromList (Lists.map (var "forPair") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) :: TypedTerm (M.Map Term Term))) $
-    cases _Term (var "term") Nothing [
+    match _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
         (var "recurse" @@ (Core.annotatedTermBody $ var "at"))
         (Core.annotatedTermAnnotation $ var "at"),
@@ -889,7 +889,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
     "mapBinding" <~ ("b" ~>
       "v" <<~ var "recurse" @@ (Core.bindingTerm $ var "b") $
       right $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingTypeScheme $ var "b")) $
-    cases _Term (var "term") Nothing [
+    match _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~>
         "ex" <<~ var "recurse" @@ Core.annotatedTermBody (var "at") $
         right $ Core.termAnnotated $ Core.annotatedTerm (var "ex") (Core.annotatedTermAnnotation $ var "at"),
@@ -980,7 +980,7 @@ rewriteTermWithGraph = define "rewriteTermWithGraph" $
   "f" ~> "cx0" ~> "term0" ~>
   "f2" <~ ("recurse" ~> "cx" ~> "term" ~>
     "recurse1" <~ ("term" ~> var "recurse" @@ var "cx" @@ var "term") $
-    cases _Term (var "term") (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "term") [
+    match _Term (var "term") (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "term") [
       _Term_lambda>>: "l" ~>
         "cx1" <~ Scoping.extendGraphForLambda @@ var "cx" @@ var "l" $
         "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
@@ -1002,7 +1002,7 @@ rewriteType = define "rewriteType" $
   "f" ~> "typ0" ~>
   "fsub" <~ ("recurse" ~> "typ" ~>
     "forField" <~ ("field" ~> Core.fieldTypeWithType (var "field") (var "recurse" @@ (Core.fieldTypeType $ var "field"))) $
-    cases _Type (var "typ") Nothing [
+    match _Type (var "typ") Nothing [
       _Type_annotated>>: "at" ~> Core.typeAnnotated $ Core.annotatedType
         (var "recurse" @@ (Core.annotatedTypeBody $ var "at"))
         (Core.annotatedTypeAnnotation $ var "at"),
@@ -1045,7 +1045,7 @@ rewriteTypeM :: TypedTermDefinition (((Type -> Prelude.Either e Type) -> Type ->
 rewriteTypeM = define "rewriteTypeM" $
   doc "Either-based type rewriting" $
   "f" ~> "typ0" ~>
-  "fsub" <~ ("recurse" ~> "typ" ~> cases _Type (var "typ") Nothing [
+  "fsub" <~ ("recurse" ~> "typ" ~> match _Type (var "typ") Nothing [
     _Type_annotated>>: "at" ~>
       "t" <<~ var "recurse" @@ (Core.annotatedTypeBody $ var "at") $
       right $ Core.typeAnnotated $ Core.annotatedType (var "t") (Core.annotatedTypeAnnotation $ var "at"),
@@ -1109,7 +1109,7 @@ rewriteTypeM = define "rewriteTypeM" $
 subterms :: TypedTermDefinition (Term -> [Term])
 subterms = define "subterms" $
   doc "Find the children of a given term" $
-  match _Term Nothing [
+  cases _Term Nothing [
     _Term_annotated>>: "at" ~> list [Core.annotatedTermBody $ var "at"],
     _Term_application>>: "p" ~> list [
       Core.applicationFunction $ var "p",
@@ -1146,7 +1146,7 @@ subterms = define "subterms" $
 subtermsWithSteps :: TypedTermDefinition (Term -> [(SubtermStep, Term)])
 subtermsWithSteps = define "subtermsWithSteps" $
   doc "Find the children of a given term" $
-  match _Term Nothing [
+  cases _Term Nothing [
     _Term_annotated>>: "at" ~> single Paths.subtermStepAnnotatedBody $ Core.annotatedTermBody $ var "at",
     _Term_application>>: "p" ~> list [
       result Paths.subtermStepApplicationFunction $ Core.applicationFunction $ var "p",
@@ -1209,7 +1209,7 @@ subtermsWithSteps = define "subtermsWithSteps" $
 subtypes :: TypedTermDefinition (Type -> [Type])
 subtypes = define "subtypes" $
   doc "Find the children of a given type expression" $
-  match _Type Nothing [
+  cases _Type Nothing [
     _Type_annotated>>: "at" ~> list [Core.annotatedTypeBody $ var "at"],
     _Type_application>>: "at" ~> list [
       Core.applicationTypeFunction $ var "at",

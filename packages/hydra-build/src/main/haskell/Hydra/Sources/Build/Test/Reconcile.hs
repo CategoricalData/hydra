@@ -38,7 +38,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Reconcile.ns, PrintCore.ns] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata ((Just "Test cases for the pure orphan-reconcile decision"))}
+            moduleMetadata = descriptionMetadata ((Just "Test match for the pure orphan-reconcile decision"))}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -47,7 +47,7 @@ define = definitionInModule module_
 
 allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
-    doc "Test cases for the pure orphan-reconcile decision" $
+    doc "Test match for the pure orphan-reconcile decision" $
     supergroup "reconcile" [
       prefixScopedGroup,
       wholeTreeGroup,
@@ -154,7 +154,7 @@ prefixScopedGroup = subgroup "prefix-scoped (Java/Python)" [
       [] scenarioProtect (restrict ["json"]) (restrict scenarioPrefixes)
       scenarioObserved
       ["hydra/java/coder.json", "hydra/java/module.json", "hydra/java/stale.json"],
-    planCase "segment-wise prefix match rejects hydra/javax sibling"
+    planCase "segment-wise prefix cases rejects hydra/javax sibling"
       ["hydra/java/coder.json"] [] (restrict ["json"]) (restrict ["hydra/java"])
       ["hydra/javax/other.json", "hydra/java/stale.json"]
       ["hydra/java/stale.json"]]
@@ -175,12 +175,12 @@ wholeTreeGroup = subgroup "whole-tree (Haskell)" [
 
 -- | Edge cases shared by both parameterizations.
 edgeCaseGroup :: TypedTerm TestGroup
-edgeCaseGroup = subgroup "edge cases" [
+edgeCaseGroup = subgroup "edge match" [
     planCase "empty keep-set + prefix restriction yields empty plan when nothing observed under prefix"
       [] [] (restrict ["json"]) (restrict ["hydra/java"])
       ["hydra/scala/coder.json", "manifest.json"]
       [],
-    planCase "protect exact-match: sibling with same basename in another dir is NOT protected"
+    planCase "protect exact-cases: sibling with same basename in another dir is NOT protected"
       [] ["manifest.json"] noRestriction noRestriction
       ["manifest.json", "sub/manifest.json"]
       ["sub/manifest.json"],

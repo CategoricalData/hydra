@@ -75,7 +75,7 @@ decodeRecord = define "decodeRecord" $
       right (Core.field (var "fname") (var "v"))) $
     "fields" <<~ Eithers.mapList (var "decodeField") (var "coders") $
     right (Core.termRecord $ Core.record (var "tname") (var "fields"))) $
-  cases YM._Node (var "n")
+  match YM._Node (var "n")
     (Just $ left (Error.errorOther $ Error.otherError (string "expected mapping"))) [
     YM._Node_mapping>>: var "decodeObjectBody"]
 
@@ -86,10 +86,10 @@ encodeRecord = define "encodeRecord" $
   "stripped" <~ (Strip.deannotateTerm @@ var "term") $
   -- Check if a field should be omitted: type is Maybe and value is TermOptional Nothing
   "isMaybeNothing" <~ ("ft" ~> "fvalue" ~>
-    cases _Type (Core.fieldTypeType $ var "ft")
+    match _Type (Core.fieldTypeType $ var "ft")
       (Just false) [
       _Type_optional>>: constant $
-        cases _Term (var "fvalue")
+        match _Term (var "fvalue")
           (Just false) [
           _Term_optional>>: "opt" ~> Optionals.isNone (var "opt")]]) $
   "encodeField" <~ ("coderAndField" ~>
@@ -117,29 +117,29 @@ literalYamlCoder = define "literalYamlCoder" $
   doc "Create a YAML coder for literal types" $
   "lt" ~>
   "decodeBool" <~ ("s" ~>
-    cases YM._Scalar (var "s")
+    match YM._Scalar (var "s")
       (Just $ left (Error.errorOther $ Error.otherError (Strings.concat $ list [string "expected boolean, found scalar"]))) [
       YM._Scalar_bool>>: "b" ~> right (Core.literalBoolean $ var "b")]) $
   "decodeDecimal" <~ ("s" ~>
-    cases YM._Scalar (var "s")
+    match YM._Scalar (var "s")
       (Just $ left (Error.errorOther $ Error.otherError (Strings.concat $ list [string "expected decimal, found scalar"]))) [
       YM._Scalar_decimal>>: "d" ~> right (Core.literalDecimal $ var "d"),
       YM._Scalar_float>>: "f" ~> right (Core.literalDecimal $ Literals.float64ToDecimal $ var "f"),
       YM._Scalar_int>>: "i" ~> right (Core.literalDecimal $ Literals.bigintToDecimal $ var "i")]) $
   "decodeFloat" <~ ("s" ~>
-    cases YM._Scalar (var "s")
+    match YM._Scalar (var "s")
       (Just $ left (Error.errorOther $ Error.otherError (Strings.concat $ list [string "expected float, found scalar"]))) [
       YM._Scalar_decimal>>: "d" ~> right (Core.literalFloat $ Core.floatValueFloat64 $ Literals.decimalToFloat64 $ var "d"),
       YM._Scalar_float>>: "f" ~> right (Core.literalFloat $ Core.floatValueFloat64 $ var "f")]) $
   "decodeInteger" <~ ("s" ~>
-    cases YM._Scalar (var "s")
+    match YM._Scalar (var "s")
       (Just $ left (Error.errorOther $ Error.otherError (Strings.concat $ list [string "expected integer, found scalar"]))) [
       YM._Scalar_int>>: "i" ~> right (Core.literalInteger $ Core.integerValueBigint $ var "i")]) $
   "decodeString" <~ ("s" ~>
-    cases YM._Scalar (var "s")
+    match YM._Scalar (var "s")
       (Just $ left (Error.errorOther $ Error.otherError (Strings.concat $ list [string "expected string, found scalar"]))) [
       YM._Scalar_str>>: "s'" ~> right (Core.literalString $ var "s'")]) $
-  "encoded" <~ (cases _LiteralType (var "lt") Nothing [
+  "encoded" <~ (match _LiteralType (var "lt") Nothing [
     _LiteralType_boolean>>: constant $ Coders.coder
       ("lit" ~>
         "b" <<~ ExtractCore.booleanLiteral @@ var "lit" $
@@ -153,7 +153,7 @@ literalYamlCoder = define "literalYamlCoder" $
     _LiteralType_float>>: constant $ Coders.coder
       ("lit" ~>
         "f" <<~ ExtractCore.floatLiteral @@ var "lit" $
-        "bf" <~ (cases _FloatValue (var "f") Nothing [
+        "bf" <~ (match _FloatValue (var "f") Nothing [
           _FloatValue_float32>>: "v" ~> Literals.float32ToFloat64 (var "v"),
           _FloatValue_float64>>: "v" ~> var "v"]) $
         "shown" <~ (Literals.showFloat64 $ var "bf") $
@@ -203,43 +203,43 @@ termCoder = define "termCoder" $
   "typ" ~> "cx" ~> "g" ~>
   "stripped" <~ (Strip.deannotateType @@ var "typ") $
   "encodeLiteral" <~ ("ac" ~> "term" ~>
-    cases _Term (var "term")
+    match _Term (var "term")
       (Just $ left (Error.errorOther $ Error.otherError (Strings.concat $ list [string "expected literal term, found: ", PrintCore.term @@ var "term"]))) [
       _Term_literal>>: "av" ~>
         "scalar" <<~ Coders.coderEncode (var "ac") @@ var "av" $
         right (Yaml.nodeScalar $ var "scalar")]) $
   "encodeList" <~ ("lc" ~> "term" ~>
-    cases _Term (var "term")
+    match _Term (var "term")
       (Just $ left (Error.errorOther $ Error.otherError (Strings.concat $ list [string "expected list term, found: ", PrintCore.term @@ var "term"]))) [
       _Term_list>>: "els" ~>
         "encodedEls" <<~ Eithers.mapList ("el" ~> Coders.coderEncode (var "lc") @@ var "el") (var "els") $
         right (Yaml.nodeSequence $ var "encodedEls")]) $
   "decodeList" <~ ("lc" ~> "n" ~>
-    cases YM._Node (var "n")
+    match YM._Node (var "n")
       (Just $ left (Error.errorOther $ Error.otherError (string "expected sequence"))) [
       YM._Node_sequence>>: "nodes" ~>
         "decodedNodes" <<~ Eithers.mapList ("node" ~> Coders.coderDecode (var "lc") @@ var "node") (var "nodes") $
         right (Core.termList $ var "decodedNodes")]) $
   "encodeMaybe" <~ ("maybeElementCoder" ~> "maybeTerm" ~>
     "strippedMaybeTerm" <~ (Strip.deannotateTerm @@ var "maybeTerm") $
-    cases _Term (var "strippedMaybeTerm")
+    match _Term (var "strippedMaybeTerm")
       (Just $ left (Error.errorOther $ Error.otherError (Strings.concat $ list [string "expected optional term, found: ", PrintCore.term @@ var "maybeTerm"]))) [
       _Term_optional>>: "maybeContents" ~>
         Optionals.cases (var "maybeContents") (right $ Yaml.nodeScalar Yaml.scalarNull) ("innerTerm" ~>
             "encodedInner" <<~ Coders.coderEncode (var "maybeElementCoder") @@ var "innerTerm" $
             right (var "encodedInner"))]) $
   "decodeMaybe" <~ ("maybeElementCoder" ~> "yamlVal" ~>
-    cases YM._Node (var "yamlVal")
+    match YM._Node (var "yamlVal")
       (Just $
         "decodedInner" <<~ Coders.coderDecode (var "maybeElementCoder") @@ var "yamlVal" $
         right (Core.termOptional $ just $ var "decodedInner")) [
       YM._Node_scalar>>: "s" ~>
-        cases YM._Scalar (var "s")
+        match YM._Scalar (var "s")
           (Just $
             "decodedInner" <<~ Coders.coderDecode (var "maybeElementCoder") @@ var "yamlVal" $
             right (Core.termOptional $ just $ var "decodedInner")) [
           YM._Scalar_null>>: constant $ right (Core.termOptional nothing)]]) $
-  "result" <~ (cases _Type (var "stripped")
+  "result" <~ (match _Type (var "stripped")
     (Just $ left (Error.errorOther $ Error.otherError (Strings.concat $ list [
       string "unsupported type in YAML: ",
       PrintCore.type_ @@ var "typ"]))) [
@@ -248,7 +248,7 @@ termCoder = define "termCoder" $
       right $ Coders.coder
         (var "encodeLiteral" @@ var "ac")
         ("n" ~>
-          cases YM._Node (var "n")
+          match YM._Node (var "n")
             (Just $ left (Error.errorOther $ Error.otherError (string "expected scalar node"))) [
             YM._Node_scalar>>: "s" ~>
               "lit" <<~ Coders.coderDecode (var "ac") @@ var "s" $
@@ -277,13 +277,13 @@ termCoder = define "termCoder" $
         right (pair (var "decodedK") (var "decodedV"))) $
       right $ Coders.coder
         ("term" ~>
-          cases _Term (var "term")
+          match _Term (var "term")
             (Just $ left (Error.errorOther $ Error.otherError (Strings.concat $ list [string "expected map term, found: ", PrintCore.term @@ var "term"]))) [
             _Term_map>>: "m" ~>
               "entries" <<~ Eithers.mapList ("entry" ~> var "encodeEntry" @@ var "entry") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))) $
               right (Yaml.nodeMapping $ Maps.fromList $ var "entries")])
         ("n" ~>
-          cases YM._Node (var "n")
+          match YM._Node (var "n")
             (Just $ left (Error.errorOther $ Error.otherError (string "expected mapping"))) [
             YM._Node_mapping>>: "m" ~>
               "entries" <<~ Eithers.mapList ("entry" ~> var "decodeEntry" @@ var "entry") (Maps.toList (var "m" :: TypedTerm (M.Map YM.Node YM.Node))) $
@@ -301,14 +301,14 @@ unitCoder :: TypedTermDefinition (Coder Term YM.Node Error)
 unitCoder = define "unitCoder" $
   doc "YAML coder for unit values" $
   "encodeUnit" <~ ("term" ~>
-    cases _Term (Strip.deannotateTerm @@ var "term")
+    match _Term (Strip.deannotateTerm @@ var "term")
       (Just $ left (Error.errorOther $ Error.otherError (Strings.concat $ list [string "expected unit, found: ", PrintCore.term @@ var "term"]))) [
       _Term_unit>>: constant $ right $ Yaml.nodeScalar Yaml.scalarNull]) $
   "decodeUnit" <~ ("n" ~>
-    cases YM._Node (var "n")
+    match YM._Node (var "n")
       (Just $ left (Error.errorOther $ Error.otherError (string "expected null"))) [
       YM._Node_scalar>>: "s" ~>
-        cases YM._Scalar (var "s")
+        match YM._Scalar (var "s")
           (Just $ left (Error.errorOther $ Error.otherError (string "expected null scalar"))) [
           YM._Scalar_null>>: constant $ right Core.termUnit]]) $
   Coders.coder (var "encodeUnit") (var "decodeUnit")

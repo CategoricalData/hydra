@@ -109,13 +109,13 @@ define label = definitionInModule module_ ("decode" <> label)
 decodeArray :: TypedTermDefinition ((Value -> Either String a) -> Value -> Either String [a])
 decodeArray  = define "Array" $
   doc "Decode a JSON array using a decoder for elements" $
-  lambda "decodeElem" $ match _Value (Just $ left (string "expected an array")) [
+  lambda "decodeElem" $ cases _Value (Just $ left (string "expected an array")) [
     _Value_array>>: lambda "a" $ Eithers.mapList (var "decodeElem") $ var "a"]
 
 decodeBoolean :: TypedTermDefinition (Value -> Either String Bool)
 decodeBoolean  = define "Boolean" $
   doc "Decode a JSON boolean value" $
-  match _Value (Just $ left (string "expected a boolean")) [
+  cases _Value (Just $ left (string "expected a boolean")) [
     _Value_boolean>>: lambda "b" $ right $ var "b"]
 
 decodeField :: TypedTermDefinition ((Value -> Either String a) -> String -> (M.Map String Value) -> Either String a)
@@ -132,13 +132,13 @@ decodeField  = define "Field" $
 decodeNumber :: TypedTermDefinition (Value -> Either String Sci.Scientific)
 decodeNumber  = define "Number" $
   doc "Decode a JSON number value" $
-  match _Value (Just $ left (string "expected a number")) [
+  cases _Value (Just $ left (string "expected a number")) [
     _Value_number>>: lambda "n" $ right $ var "n"]
 
 decodeObject :: TypedTermDefinition (Value -> Either String (M.Map String Value))
 decodeObject  = define "Object" $
   doc "Decode a JSON object value to a name-keyed map. Field order is not preserved; decoding looks fields up by name." $
-  match _Value (Just $ left (string "expected an object")) [
+  cases _Value (Just $ left (string "expected an object")) [
     _Value_object>>: lambda "o" $ right $ (Maps.fromList (var "o") :: TypedTerm (M.Map String Value))]
 
 decodeOptionalField :: TypedTermDefinition ((Value -> Either String a) -> String -> (M.Map String Value) -> Either String (Maybe a))
@@ -153,5 +153,5 @@ decodeOptionalField  = define "OptionalField" $
 decodeString :: TypedTermDefinition (Value -> Either String String)
 decodeString  = define "String" $
   doc "Decode a JSON string value" $
-  match _Value (Just $ left (string "expected a string")) [
+  cases _Value (Just $ left (string "expected a string")) [
     _Value_string>>: lambda "s" $ right $ var "s"]

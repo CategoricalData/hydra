@@ -164,7 +164,7 @@ cp c = int32 (fromIntegral (fromEnum c))
 -- | Is a codepoint a top-level metacharacter (. ^ $ * + ? ( ) [ ] { } | \)?
 isMetachar :: TypedTermDefinition (Int -> Bool)
 isMetachar = define "isMetachar" $
-  doc "True if the codepoint is a top-level regex metacharacter that must be escaped to match literally." $
+  doc "True if the codepoint is a top-level regex metacharacter that must be escaped to cases literally." $
   "c" ~>
     Lists.foldl
       ("acc" ~> "m" ~> Logic.or (var "acc") (Equality.equal (var "c") (var "m")))
@@ -340,7 +340,7 @@ parseRegex = define "parseRegex" $
   "input" ~>
     -- Empty-branch rejection is handled inside 'alternation'; here we only require that a successful
     -- parse consumed ALL input (no trailing garbage).
-    cases _ParseResult (Parsers.runParser @@ (asTerm regex) @@ var "input") Nothing [
+    match _ParseResult (Parsers.runParser @@ (asTerm regex) @@ var "input") Nothing [
       _ParseResult_success>>: "s" ~>
         Logic.ifElse (Lists.null (Parsing.parseSuccessRemainder $ var "s"))
           (just (Parsing.parseSuccessValue (var "s")))

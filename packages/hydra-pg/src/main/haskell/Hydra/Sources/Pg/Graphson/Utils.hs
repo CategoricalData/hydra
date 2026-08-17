@@ -122,7 +122,7 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
     -- Partition elements into vertices and edges
     "partitioned" <~ (Lists.foldl
       ("acc" ~> "el" ~>
-        match PG._Element Nothing [
+        cases PG._Element Nothing [
           PG._Element_vertex>>: "v" ~>
             pair
               (Lists.cons (var "v") (Pairs.first $ var "acc"))
@@ -199,15 +199,15 @@ encodeTermValue :: TypedTermDefinition (Term -> Either Error G.Value)
 encodeTermValue = define "encodeTermValue" $
   doc "Encode a Hydra Term as a GraphSON Value. Supports literals and unit values." $
   "term" ~>
-    match _Term (Just $ left (Error.errorOther $ Error.otherError (string "unsupported term variant for GraphSON encoding"))) [
+    cases _Term (Just $ left (Error.errorOther $ Error.otherError (string "unsupported term variant for GraphSON encoding"))) [
       _Term_literal>>: "lit" ~>
-        match _Literal (Just $ left (Error.errorOther $ Error.otherError (string "unsupported literal type for GraphSON encoding"))) [
+        cases _Literal (Just $ left (Error.errorOther $ Error.otherError (string "unsupported literal type for GraphSON encoding"))) [
           _Literal_binary>>: "b" ~>
             right $ inject G._Value G._Value_binary (Literals.binaryToBase64 $ var "b"),
           _Literal_boolean>>: "b" ~>
             right $ inject G._Value G._Value_boolean (var "b"),
           _Literal_float>>: "fv" ~>
-            match _FloatValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported float type"))) [
+            cases _FloatValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported float type"))) [
               _FloatValue_float32>>: "f" ~>
                 right $ inject G._Value G._Value_float
                   (inject G._FloatValue G._FloatValue_finite (var "f")),
@@ -216,7 +216,7 @@ encodeTermValue = define "encodeTermValue" $
                   (inject G._DoubleValue G._DoubleValue_finite (var "f"))]
             @@ var "fv",
           _Literal_integer>>: "iv" ~>
-            match _IntegerValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported integer type"))) [
+            cases _IntegerValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported integer type"))) [
               _IntegerValue_bigint>>: "i" ~>
                 right $ inject G._Value G._Value_bigInteger (var "i"),
               _IntegerValue_int32>>: "i" ~>

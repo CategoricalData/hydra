@@ -166,14 +166,14 @@ fields = define "fields" $
 floatValue :: TypedTermDefinition (FloatValue -> String)
 floatValue = define "float" $
   doc "Show a float value as a string" $
-  "fv" ~> cases _FloatValue (var "fv") Nothing [
+  "fv" ~> match _FloatValue (var "fv") Nothing [
     _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v") ++ (string ":float32"),
     _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v") ++ (string ":float64")]
 
 floatType :: TypedTermDefinition (FloatType -> String)
 floatType = define "floatType" $
   doc "Show a float type as a string" $
-  "ft" ~> cases _FloatType (var "ft") Nothing [
+  "ft" ~> match _FloatType (var "ft") Nothing [
     _FloatType_float32>>: constant $ string "float32",
     _FloatType_float64>>: constant $ string "float64"]
 
@@ -192,7 +192,7 @@ injection = define "injection" $
 integerValue :: TypedTermDefinition (IntegerValue -> String)
 integerValue = define "integer" $
   doc "Show an integer value as a string" $
-  "iv" ~> cases _IntegerValue (var "iv") Nothing [
+  "iv" ~> match _IntegerValue (var "iv") Nothing [
     _IntegerValue_bigint>>: "v" ~> Literals.showBigint (var "v") ++ (string ":bigint"),
     _IntegerValue_int8>>: "v" ~> Literals.showInt8 (var "v") ++ (string ":int8"),
     _IntegerValue_int16>>: "v" ~> Literals.showInt16 (var "v") ++ (string ":int16"),
@@ -206,7 +206,7 @@ integerValue = define "integer" $
 integerType :: TypedTermDefinition (IntegerType -> String)
 integerType = define "integerType" $
   doc "Show an integer type as a string" $
-  "it" ~> cases _IntegerType (var "it") Nothing [
+  "it" ~> match _IntegerType (var "it") Nothing [
     _IntegerType_bigint>>: constant $ string "bigint",
     _IntegerType_int8>>: constant $ string "int8",
     _IntegerType_int16>>: constant $ string "int16",
@@ -258,7 +258,7 @@ list_ = define "list" $
 literal :: TypedTermDefinition (Literal -> String)
 literal = define "literal" $
   doc "Show a literal as a string" $
-  "l" ~> cases _Literal (var "l") Nothing [
+  "l" ~> match _Literal (var "l") Nothing [
     _Literal_binary>>: constant $ string "[binary]",
     _Literal_boolean>>: "b" ~> Logic.ifElse (var "b") (string "true") (string "false"),
     _Literal_decimal>>: "d" ~> Literals.showDecimal $ var "d",
@@ -269,7 +269,7 @@ literal = define "literal" $
 literalType :: TypedTermDefinition (LiteralType -> String)
 literalType = define "literalType" $
   doc "Show a literal type as a string" $
-  "lt" ~> cases _LiteralType (var "lt") Nothing [
+  "lt" ~> match _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant $ string "binary",
     _LiteralType_boolean>>: constant $ string "boolean",
     _LiteralType_decimal>>: constant $ string "decimal",
@@ -345,10 +345,10 @@ term = define "term" $
   "gatherTerms" <~ ("prev" ~> "app" ~>
     "lhs" <~ Core.applicationFunction (var "app") $
     "rhs" <~ Core.applicationArgument (var "app") $
-    cases _Term (var "lhs")
+    match _Term (var "lhs")
       (Just $ Lists.cons (var "lhs") (Lists.cons (var "rhs") (var "prev"))) [
       _Term_application>>: "app2" ~> var "gatherTerms" @@ (Lists.cons (var "rhs") (var "prev")) @@ var "app2"]) $
-  cases _Term (var "t") Nothing [
+  match _Term (var "t") Nothing [
     _Term_annotated>>: "at" ~> term @@ (Core.annotatedTermBody $ var "at"),
     _Term_application>>: "app" ~>
       "terms" <~ var "gatherTerms" @@ (list ([] :: [TypedTerm Term])) @@ var "app" $
@@ -457,7 +457,7 @@ typeScheme = define "typeScheme" $
       Strings.join (string ",") (var "varNames"),
       string ". "]) $
   "toConstraintPair" <~ ("v" ~> "c" ~> Strings.concat $ list [
-    match _TypeClassConstraint Nothing [
+    cases _TypeClassConstraint Nothing [
       _TypeClassConstraint_simple>>: "n" ~> Core.unName (var "n")] @@ (var "c"),
     string " ",
     Core.unName (var "v")]) $
@@ -492,17 +492,17 @@ type_ = define "type" $
   "gatherTypes" <~ ("prev" ~> "app" ~>
     "lhs" <~ Core.applicationTypeFunction (var "app") $
     "rhs" <~ Core.applicationTypeArgument (var "app") $
-    cases _Type (var "lhs")
+    match _Type (var "lhs")
       (Just $ Lists.cons (var "lhs") (Lists.cons (var "rhs") (var "prev"))) [
       _Type_application>>: "app2" ~> var "gatherTypes" @@ (Lists.cons (var "rhs") (var "prev")) @@ var "app2"]) $
   "gatherFunctionTypes" <~ ("prev" ~> "t" ~>
-    cases _Type (var "t")
+    match _Type (var "t")
       (Just $ Lists.reverse $ Lists.cons (var "t") (var "prev")) [
         _Type_function>>: "ft" ~>
           "dom" <~ Core.functionTypeDomain (var "ft") $
           "cod" <~ Core.functionTypeCodomain (var "ft") $
           var "gatherFunctionTypes" @@ (Lists.cons (var "dom") (var "prev")) @@ var "cod"]) $
-  cases _Type (var "typ") Nothing [
+  match _Type (var "typ") Nothing [
     _Type_annotated>>: "at" ~> type_ @@ (Core.annotatedTypeBody $ var "at"),
     _Type_application>>: "app" ~>
       "types" <~ var "gatherTypes" @@ (list ([] :: [TypedTerm Type])) @@ var "app" $

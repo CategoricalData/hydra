@@ -225,7 +225,7 @@ accessSpecifierToExpr :: TypedTermDefinition (Cpp.AccessSpecifier -> Expr)
 accessSpecifierToExpr = define "accessSpecifierToExpr" $
   doc "Convert an access specifier to an expression" $
   lambda "a" $
-    cases Cpp._AccessSpecifier (var "a") Nothing [
+    match Cpp._AccessSpecifier (var "a") Nothing [
       Cpp._AccessSpecifier_public>>: constant $ Serialization.cst @@ string "public",
       Cpp._AccessSpecifier_protected>>: constant $ Serialization.cst @@ string "protected",
       Cpp._AccessSpecifier_private>>: constant $ Serialization.cst @@ string "private",
@@ -246,7 +246,7 @@ additiveExpressionToExpr :: TypedTermDefinition (Cpp.AdditiveExpression -> Expr)
 additiveExpressionToExpr = define "additiveExpressionToExpr" $
   doc "Convert an additive expression to an expression" $
   lambda "e" $
-    cases Cpp._AdditiveExpression (var "e") Nothing [
+    match Cpp._AdditiveExpression (var "e") Nothing [
       Cpp._AdditiveExpression_multiplicative>>: lambda "m" $ multiplicativeExpressionToExpr @@ var "m",
       Cpp._AdditiveExpression_add>>: lambda "a" $ addOperationToExpr @@ var "a",
       Cpp._AdditiveExpression_subtract>>: lambda "s" $ subtractOperationToExpr @@ var "s"]
@@ -255,7 +255,7 @@ andExpressionToExpr :: TypedTermDefinition (Cpp.AndExpression -> Expr)
 andExpressionToExpr = define "andExpressionToExpr" $
   doc "Convert an and expression to an expression" $
   lambda "e" $
-    cases Cpp._AndExpression (var "e") Nothing [
+    match Cpp._AndExpression (var "e") Nothing [
       Cpp._AndExpression_equality>>: lambda "eq" $ equalityExpressionToExpr @@ var "eq",
       Cpp._AndExpression_bitwiseAnd>>: lambda "a" $ bitwiseAndOperationToExpr @@ var "a"]
 
@@ -263,7 +263,7 @@ assignmentExpressionToExpr :: TypedTermDefinition (Cpp.AssignmentExpression -> E
 assignmentExpressionToExpr = define "assignmentExpressionToExpr" $
   doc "Convert an assignment expression to an expression" $
   lambda "a" $
-    cases Cpp._AssignmentExpression (var "a") Nothing [
+    match Cpp._AssignmentExpression (var "a") Nothing [
       Cpp._AssignmentExpression_conditional>>: lambda "c" $ conditionalExpressionToExpr @@ var "c",
       Cpp._AssignmentExpression_assignment>>: lambda "e" $ explicitAssignmentToExpr @@ var "e"]
 
@@ -271,7 +271,7 @@ assignmentOperatorToExpr :: TypedTermDefinition (Cpp.AssignmentOperator -> Expr)
 assignmentOperatorToExpr = define "assignmentOperatorToExpr" $
   doc "Convert an assignment operator to an expression" $
   lambda "op" $
-    cases Cpp._AssignmentOperator (var "op") Nothing [
+    match Cpp._AssignmentOperator (var "op") Nothing [
       Cpp._AssignmentOperator_assign>>: constant $ Serialization.cst @@ string "=",
       Cpp._AssignmentOperator_plusAssign>>: constant $ Serialization.cst @@ string "+=",
       Cpp._AssignmentOperator_minusAssign>>: constant $ Serialization.cst @@ string "-=",
@@ -296,7 +296,7 @@ basicTypeToExpr :: TypedTermDefinition (Cpp.BasicType -> Expr)
 basicTypeToExpr = define "basicTypeToExpr" $
   doc "Convert a basic type to an expression" $
   lambda "t" $
-    cases Cpp._BasicType (var "t") Nothing [
+    match Cpp._BasicType (var "t") Nothing [
       Cpp._BasicType_void>>: constant $ Serialization.cst @@ string "void",
       Cpp._BasicType_bool>>: constant $ Serialization.cst @@ string "bool",
       Cpp._BasicType_char>>: constant $ Serialization.cst @@ string "char",
@@ -352,7 +352,7 @@ captureListToExpr :: TypedTermDefinition (Cpp.CaptureList -> Expr)
 captureListToExpr = define "captureListToExpr" $
   doc "Convert a capture list to an expression" $
   lambda "cl" $
-    cases Cpp._CaptureList (var "cl") Nothing [
+    match Cpp._CaptureList (var "cl") Nothing [
       Cpp._CaptureList_captureByValue>>: constant $ Serialization.cst @@ string "[=]",
       Cpp._CaptureList_captures>>: lambda "cs" $
         Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map (asTerm captureToExpr) (var "cs"))]
@@ -371,7 +371,7 @@ caseStatementToExpr :: TypedTermDefinition (Cpp.CaseStatement -> Expr)
 caseStatementToExpr = define "caseStatementToExpr" $
   doc "Convert a case statement to an expression" $
   lambda "stmt" $
-    cases Cpp._CaseStatement (var "stmt") Nothing [
+    match Cpp._CaseStatement (var "stmt") Nothing [
       Cpp._CaseStatement_case>>: lambda "cv" $ caseValueToExpr @@ var "cv",
       Cpp._CaseStatement_default>>: lambda "s" $
         Serialization.spaceSep @@ list [
@@ -414,7 +414,7 @@ classKeyToExpr :: TypedTermDefinition (Cpp.ClassKey -> Expr)
 classKeyToExpr = define "classKeyToExpr" $
   doc "Convert a class key to an expression" $
   lambda "k" $
-    cases Cpp._ClassKey (var "k") Nothing [
+    match Cpp._ClassKey (var "k") Nothing [
       Cpp._ClassKey_class>>: constant $ Serialization.cst @@ string "class",
       Cpp._ClassKey_enum>>: constant $ Serialization.cst @@ string "enum",
       Cpp._ClassKey_enumClass>>: constant $ Serialization.cst @@ string "enum class",
@@ -464,7 +464,7 @@ conditionalExpressionToExpr :: TypedTermDefinition (Cpp.ConditionalExpression ->
 conditionalExpressionToExpr = define "conditionalExpressionToExpr" $
   doc "Convert a conditional expression to an expression" $
   lambda "c" $
-    cases Cpp._ConditionalExpression (var "c") Nothing [
+    match Cpp._ConditionalExpression (var "c") Nothing [
       Cpp._ConditionalExpression_logicalOr>>: lambda "l" $ logicalOrExpressionToExpr @@ var "l",
       Cpp._ConditionalExpression_ternary>>: lambda "t" $ ternaryExpressionToExpr @@ var "t"]
 
@@ -491,7 +491,7 @@ declarationToExpr :: TypedTermDefinition (Cpp.Declaration -> Expr)
 declarationToExpr = define "declarationToExpr" $
   doc "Convert a declaration to an expression" $
   lambda "d" $
-    cases Cpp._Declaration (var "d") Nothing [
+    match Cpp._Declaration (var "d") Nothing [
       Cpp._Declaration_preprocessor>>: lambda "p" $ preprocessorDirectiveToExpr @@ var "p",
       Cpp._Declaration_class>>: lambda "c" $ classDeclarationToExpr @@ var "c",
       Cpp._Declaration_function>>: lambda "f" $ functionDeclarationToExpr @@ var "f",
@@ -585,7 +585,7 @@ equalityExpressionToExpr :: TypedTermDefinition (Cpp.EqualityExpression -> Expr)
 equalityExpressionToExpr = define "equalityExpressionToExpr" $
   doc "Convert an equality expression to an expression" $
   lambda "e" $
-    cases Cpp._EqualityExpression (var "e") Nothing [
+    match Cpp._EqualityExpression (var "e") Nothing [
       Cpp._EqualityExpression_relational>>: lambda "r" $ relationalExpressionToExpr @@ var "r",
       Cpp._EqualityExpression_equal>>: lambda "eq" $ equalOperationToExpr @@ var "eq",
       Cpp._EqualityExpression_notEqual>>: lambda "ne" $ notEqualOperationToExpr @@ var "ne"]
@@ -602,7 +602,7 @@ exclusiveOrExpressionToExpr :: TypedTermDefinition (Cpp.ExclusiveOrExpression ->
 exclusiveOrExpressionToExpr = define "exclusiveOrExpressionToExpr" $
   doc "Convert an exclusive or expression to an expression" $
   lambda "e" $
-    cases Cpp._ExclusiveOrExpression (var "e") Nothing [
+    match Cpp._ExclusiveOrExpression (var "e") Nothing [
       Cpp._ExclusiveOrExpression_and>>: lambda "a" $ andExpressionToExpr @@ var "a",
       Cpp._ExclusiveOrExpression_bitwiseXor>>: lambda "x" $ bitwiseXorOperationToExpr @@ var "x"]
 
@@ -622,7 +622,7 @@ expressionToExpr :: TypedTermDefinition (Cpp.Expression -> Expr)
 expressionToExpr = define "expressionToExpr" $
   doc "Convert an expression to an expression" $
   lambda "e" $
-    cases Cpp._Expression (var "e") Nothing [
+    match Cpp._Expression (var "e") Nothing [
       Cpp._Expression_assignment>>: lambda "a" $ assignmentExpressionToExpr @@ var "a",
       Cpp._Expression_comma>>: lambda "c" $ commaExpressionToExpr @@ var "c"]
 
@@ -630,7 +630,7 @@ forInitToExpr :: TypedTermDefinition (Cpp.ForInit -> Expr)
 forInitToExpr = define "forInitToExpr" $
   doc "Convert a for-init to an expression" $
   lambda "i" $
-    cases Cpp._ForInit (var "i") Nothing [
+    match Cpp._ForInit (var "i") Nothing [
       Cpp._ForInit_expression>>: lambda "e" $ expressionToExpr @@ var "e",
       Cpp._ForInit_declaration>>: lambda "d" $ variableDeclarationToExpr @@ false @@ var "d",
       Cpp._ForInit_empty>>: constant $ Serialization.cst @@ string ""]
@@ -668,7 +668,7 @@ functionBodyToExpr :: TypedTermDefinition (Cpp.FunctionBody -> Expr)
 functionBodyToExpr = define "functionBodyToExpr" $
   doc "Convert a function body to an expression" $
   lambda "b" $
-    cases Cpp._FunctionBody (var "b") Nothing [
+    match Cpp._FunctionBody (var "b") Nothing [
       Cpp._FunctionBody_compound>>: lambda "c" $ compoundStatementToExpr @@ var "c",
       Cpp._FunctionBody_declaration>>: constant $ Serialization.cst @@ string ";",
       Cpp._FunctionBody_pure>>: constant $ Serialization.withSemi @@ (Serialization.cst @@ string "= 0"),
@@ -708,7 +708,7 @@ functionIdentifierToExpr :: TypedTermDefinition (Cpp.FunctionIdentifier -> Expr)
 functionIdentifierToExpr = define "functionIdentifierToExpr" $
   doc "Convert a function identifier to an expression" $
   lambda "f" $
-    cases Cpp._FunctionIdentifier (var "f") Nothing [
+    match Cpp._FunctionIdentifier (var "f") Nothing [
       Cpp._FunctionIdentifier_simple>>: lambda "name" $ Serialization.cst @@ var "name",
       Cpp._FunctionIdentifier_qualified>>: lambda "q" $ qualifiedIdentifierToExpr @@ var "q"]
 
@@ -716,7 +716,7 @@ functionSpecifierPrefixToExpr :: TypedTermDefinition (Cpp.FunctionSpecifierPrefi
 functionSpecifierPrefixToExpr = define "functionSpecifierPrefixToExpr" $
   doc "Convert a function specifier prefix to an expression" $
   lambda "s" $
-    cases Cpp._FunctionSpecifierPrefix (var "s") Nothing [
+    match Cpp._FunctionSpecifierPrefix (var "s") Nothing [
       Cpp._FunctionSpecifierPrefix_inline>>: constant $ Serialization.cst @@ string "inline",
       Cpp._FunctionSpecifierPrefix_virtual>>: constant $ Serialization.cst @@ string "virtual",
       Cpp._FunctionSpecifierPrefix_static>>: constant $ Serialization.cst @@ string "static",
@@ -726,7 +726,7 @@ functionSpecifierSuffixToExpr :: TypedTermDefinition (Cpp.FunctionSpecifierSuffi
 functionSpecifierSuffixToExpr = define "functionSpecifierSuffixToExpr" $
   doc "Convert a function specifier suffix to an expression" $
   lambda "s" $
-    cases Cpp._FunctionSpecifierSuffix (var "s") Nothing [
+    match Cpp._FunctionSpecifierSuffix (var "s") Nothing [
       Cpp._FunctionSpecifierSuffix_const>>: constant $ Serialization.cst @@ string "const",
       Cpp._FunctionSpecifierSuffix_noexcept>>: constant $ Serialization.cst @@ string "noexcept",
       Cpp._FunctionSpecifierSuffix_override>>: constant $ Serialization.cst @@ string "override",
@@ -802,7 +802,7 @@ inclusiveOrExpressionToExpr :: TypedTermDefinition (Cpp.InclusiveOrExpression ->
 inclusiveOrExpressionToExpr = define "inclusiveOrExpressionToExpr" $
   doc "Convert an inclusive or expression to an expression" $
   lambda "e" $
-    cases Cpp._InclusiveOrExpression (var "e") Nothing [
+    match Cpp._InclusiveOrExpression (var "e") Nothing [
       Cpp._InclusiveOrExpression_exclusiveOr>>: lambda "x" $ exclusiveOrExpressionToExpr @@ var "x",
       Cpp._InclusiveOrExpression_bitwiseOr>>: lambda "o" $ bitwiseOrOperationToExpr @@ var "o"]
 
@@ -810,7 +810,7 @@ integerLiteralToExpr :: TypedTermDefinition (Cpp.IntegerLiteral -> Expr)
 integerLiteralToExpr = define "integerLiteralToExpr" $
   doc "Convert an integer literal to an expression" $
   lambda "i" $
-    cases Cpp._IntegerLiteral (var "i") Nothing [
+    match Cpp._IntegerLiteral (var "i") Nothing [
       Cpp._IntegerLiteral_decimal>>: lambda "n" $ Serialization.cst @@ (Literals.showBigint (var "n")),
       Cpp._IntegerLiteral_hexadecimal>>: lambda "h" $ Serialization.cst @@ (Strings.concat2 (string "0x") (var "h")),
       Cpp._IntegerLiteral_octal>>: lambda "o" $ Serialization.cst @@ (Strings.concat2 (string "0") (var "o")),
@@ -820,7 +820,7 @@ iterationStatementToExpr :: TypedTermDefinition (Cpp.IterationStatement -> Expr)
 iterationStatementToExpr = define "iterationStatementToExpr" $
   doc "Convert an iteration statement to an expression" $
   lambda "i" $
-    cases Cpp._IterationStatement (var "i") Nothing [
+    match Cpp._IterationStatement (var "i") Nothing [
       Cpp._IterationStatement_while>>: lambda "w" $ whileStatementToExpr @@ var "w",
       Cpp._IterationStatement_do>>: lambda "d" $ doStatementToExpr @@ var "d",
       Cpp._IterationStatement_for>>: lambda "f" $ forStatementToExpr @@ var "f",
@@ -830,7 +830,7 @@ jumpStatementToExpr :: TypedTermDefinition (Cpp.JumpStatement -> Expr)
 jumpStatementToExpr = define "jumpStatementToExpr" $
   doc "Convert a jump statement to an expression" $
   lambda "j" $
-    cases Cpp._JumpStatement (var "j") Nothing [
+    match Cpp._JumpStatement (var "j") Nothing [
       Cpp._JumpStatement_break>>: constant $ Serialization.withSemi @@ (Serialization.cst @@ string "break"),
       Cpp._JumpStatement_continue>>: constant $ Serialization.withSemi @@ (Serialization.cst @@ string "continue"),
       Cpp._JumpStatement_returnValue>>: lambda "e" $
@@ -912,7 +912,7 @@ literalToExpr :: TypedTermDefinition (Cpp.Literal -> Expr)
 literalToExpr = define "literalToExpr" $
   doc "Convert a literal to an expression" $
   lambda "l" $
-    cases Cpp._Literal (var "l") Nothing [
+    match Cpp._Literal (var "l") Nothing [
       Cpp._Literal_integer>>: lambda "i" $ integerLiteralToExpr @@ var "i",
       Cpp._Literal_floating>>: lambda "f" $ Serialization.cst @@ (Literals.showFloat64 (unwrap Cpp._FloatingLiteral @@ var "f")),
       Cpp._Literal_character>>: lambda "c" $
@@ -926,7 +926,7 @@ logicalAndExpressionToExpr :: TypedTermDefinition (Cpp.LogicalAndExpression -> E
 logicalAndExpressionToExpr = define "logicalAndExpressionToExpr" $
   doc "Convert a logical and expression to an expression" $
   lambda "e" $
-    cases Cpp._LogicalAndExpression (var "e") Nothing [
+    match Cpp._LogicalAndExpression (var "e") Nothing [
       Cpp._LogicalAndExpression_inclusiveOr>>: lambda "i" $ inclusiveOrExpressionToExpr @@ var "i",
       Cpp._LogicalAndExpression_logicalAnd>>: lambda "a" $ logicalAndOperationToExpr @@ var "a"]
 
@@ -945,7 +945,7 @@ logicalOrExpressionToExpr :: TypedTermDefinition (Cpp.LogicalOrExpression -> Exp
 logicalOrExpressionToExpr = define "logicalOrExpressionToExpr" $
   doc "Convert a logical or expression to an expression" $
   lambda "e" $
-    cases Cpp._LogicalOrExpression (var "e") Nothing [
+    match Cpp._LogicalOrExpression (var "e") Nothing [
       Cpp._LogicalOrExpression_logicalAnd>>: lambda "l" $ logicalAndExpressionToExpr @@ var "l",
       Cpp._LogicalOrExpression_logicalOr>>: lambda "o" $ logicalOrOperationToExpr @@ var "o"]
 
@@ -1011,7 +1011,7 @@ memberDeclarationToExpr :: TypedTermDefinition (Bool -> Cpp.MemberDeclaration ->
 memberDeclarationToExpr = define "memberDeclarationToExpr" $
   doc "Convert a member declaration to an expression" $
   lambda "commas" $ lambda "m" $
-    cases Cpp._MemberDeclaration (var "m") Nothing [
+    match Cpp._MemberDeclaration (var "m") Nothing [
       Cpp._MemberDeclaration_function>>: lambda "f" $ functionDeclarationToExpr @@ var "f",
       Cpp._MemberDeclaration_variable>>: lambda "v" $ variableDeclarationToExpr @@ var "commas" @@ var "v",
       Cpp._MemberDeclaration_constructor>>: lambda "c" $ constructorDeclarationToExpr @@ var "c",
@@ -1023,7 +1023,7 @@ memberSpecificationToExpr :: TypedTermDefinition (Bool -> Cpp.MemberSpecificatio
 memberSpecificationToExpr = define "memberSpecificationToExpr" $
   doc "Convert a member specification to an expression" $
   lambda "commas" $ lambda "m" $
-    cases Cpp._MemberSpecification (var "m") Nothing [
+    match Cpp._MemberSpecification (var "m") Nothing [
       Cpp._MemberSpecification_accessLabel>>: lambda "a" $
         Serialization.noSep @@ list [accessSpecifierToExpr @@ var "a", Serialization.cst @@ string ":"],
       Cpp._MemberSpecification_member>>: lambda "d" $ memberDeclarationToExpr @@ var "commas" @@ var "d"]
@@ -1043,7 +1043,7 @@ multiplicativeExpressionToExpr :: TypedTermDefinition (Cpp.MultiplicativeExpress
 multiplicativeExpressionToExpr = define "multiplicativeExpressionToExpr" $
   doc "Convert a multiplicative expression to an expression" $
   lambda "e" $
-    cases Cpp._MultiplicativeExpression (var "e") Nothing [
+    match Cpp._MultiplicativeExpression (var "e") Nothing [
       Cpp._MultiplicativeExpression_unary>>: lambda "u" $ unaryExpressionToExpr @@ var "u",
       Cpp._MultiplicativeExpression_multiply>>: lambda "m" $ multiplyOperationToExpr @@ var "m",
       Cpp._MultiplicativeExpression_divide>>: lambda "d" $ divideOperationToExpr @@ var "d",
@@ -1120,7 +1120,7 @@ parameterToExpr = define "parameterToExpr" $
 
 patternMatchToExpr :: TypedTermDefinition (Cpp.PatternMatch -> Expr)
 patternMatchToExpr = define "patternMatchToExpr" $
-  doc "Convert a pattern match to an expression" $
+  doc "Convert a pattern cases to an expression" $
   lambda "pm" $ lets [
     "visitor">: project Cpp._PatternMatch Cpp._PatternMatch_visitor @@ var "pm",
     "variant">: project Cpp._PatternMatch Cpp._PatternMatch_variant @@ var "pm"] $
@@ -1145,7 +1145,7 @@ postfixExpressionToExpr :: TypedTermDefinition (Cpp.PostfixExpression -> Expr)
 postfixExpressionToExpr = define "postfixExpressionToExpr" $
   doc "Convert a postfix expression to an expression" $
   lambda "e" $
-    cases Cpp._PostfixExpression (var "e") Nothing [
+    match Cpp._PostfixExpression (var "e") Nothing [
       Cpp._PostfixExpression_primary>>: lambda "p" $ primaryExpressionToExpr @@ var "p",
       Cpp._PostfixExpression_subscript>>: lambda "s" $ subscriptOperationToExpr @@ var "s",
       Cpp._PostfixExpression_functionCall>>: lambda "f" $ functionCallOperationToExpr @@ var "f",
@@ -1167,7 +1167,7 @@ preprocessorDirectiveToExpr :: TypedTermDefinition (Cpp.PreprocessorDirective ->
 preprocessorDirectiveToExpr = define "preprocessorDirectiveToExpr" $
   doc "Convert a preprocessor directive to an expression" $
   lambda "d" $
-    cases Cpp._PreprocessorDirective (var "d") Nothing [
+    match Cpp._PreprocessorDirective (var "d") Nothing [
       Cpp._PreprocessorDirective_include>>: lambda "i" $ includeDirectiveToExpr @@ var "i",
       Cpp._PreprocessorDirective_pragma>>: lambda "p" $ pragmaDirectiveToExpr @@ var "p",
       Cpp._PreprocessorDirective_define>>: lambda "d" $ defineDirectiveToExpr @@ var "d",
@@ -1186,7 +1186,7 @@ primaryExpressionToExpr :: TypedTermDefinition (Cpp.PrimaryExpression -> Expr)
 primaryExpressionToExpr = define "primaryExpressionToExpr" $
   doc "Convert a primary expression to an expression" $
   lambda "e" $
-    cases Cpp._PrimaryExpression (var "e") Nothing [
+    match Cpp._PrimaryExpression (var "e") Nothing [
       Cpp._PrimaryExpression_identifier>>: lambda "id" $ Serialization.cst @@ var "id",
       Cpp._PrimaryExpression_literal>>: lambda "l" $ literalToExpr @@ var "l",
       Cpp._PrimaryExpression_parenthesized>>: lambda "p" $ Serialization.parens @@ (expressionToExpr @@ var "p"),
@@ -1222,7 +1222,7 @@ qualifiedTypeToExpr = define "qualifiedTypeToExpr" $
   lambda "qt" $ lets [
     "baseType">: project Cpp._QualifiedType Cpp._QualifiedType_baseType @@ var "qt",
     "qualifier">: project Cpp._QualifiedType Cpp._QualifiedType_qualifier @@ var "qt"] $
-    cases Cpp._TypeQualifier (var "qualifier") Nothing [
+    match Cpp._TypeQualifier (var "qualifier") Nothing [
       Cpp._TypeQualifier_const>>: constant $
         Serialization.spaceSep @@ list [Serialization.cst @@ string "const", typeExpressionToExpr @@ var "baseType"],
       Cpp._TypeQualifier_lvalueRef>>: constant $
@@ -1254,7 +1254,7 @@ relationalExpressionToExpr :: TypedTermDefinition (Cpp.RelationalExpression -> E
 relationalExpressionToExpr = define "relationalExpressionToExpr" $
   doc "Convert a relational expression to an expression" $
   lambda "e" $
-    cases Cpp._RelationalExpression (var "e") Nothing [
+    match Cpp._RelationalExpression (var "e") Nothing [
       Cpp._RelationalExpression_shift>>: lambda "s" $ shiftExpressionToExpr @@ var "s",
       Cpp._RelationalExpression_less>>: lambda "l" $ lessOperationToExpr @@ var "l",
       Cpp._RelationalExpression_greater>>: lambda "g" $ greaterOperationToExpr @@ var "g",
@@ -1302,7 +1302,7 @@ shiftExpressionToExpr :: TypedTermDefinition (Cpp.ShiftExpression -> Expr)
 shiftExpressionToExpr = define "shiftExpressionToExpr" $
   doc "Convert a shift expression to an expression" $
   lambda "e" $
-    cases Cpp._ShiftExpression (var "e") Nothing [
+    match Cpp._ShiftExpression (var "e") Nothing [
       Cpp._ShiftExpression_additive>>: lambda "a" $ additiveExpressionToExpr @@ var "a",
       Cpp._ShiftExpression_leftShift>>: lambda "ls" $ leftShiftOperationToExpr @@ var "ls",
       Cpp._ShiftExpression_rightShift>>: lambda "rs" $ rightShiftOperationToExpr @@ var "rs"]
@@ -1319,7 +1319,7 @@ statementToExpr :: TypedTermDefinition (Cpp.Statement -> Expr)
 statementToExpr = define "statementToExpr" $
   doc "Convert a statement to an expression" $
   lambda "s" $
-    cases Cpp._Statement (var "s") Nothing [
+    match Cpp._Statement (var "s") Nothing [
       Cpp._Statement_labeled>>: lambda "l" $ labeledStatementToExpr @@ var "l",
       Cpp._Statement_compound>>: lambda "c" $ compoundStatementToExpr @@ var "c",
       Cpp._Statement_selection>>: lambda "s" $ selectionStatementToExpr @@ var "s",
@@ -1357,18 +1357,18 @@ switchStatementToExpr = define "switchStatementToExpr" $
   doc "Convert a switch statement to an expression" $
   lambda "ss" $ lets [
     "value">: project Cpp._SwitchStatement Cpp._SwitchStatement_value @@ var "ss",
-    "cases">: project Cpp._SwitchStatement Cpp._SwitchStatement_cases @@ var "ss"] $
+    "match">: project Cpp._SwitchStatement Cpp._SwitchStatement_cases @@ var "ss"] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "switch",
       Serialization.parens @@ (expressionToExpr @@ var "value"),
       Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
-        (Serialization.newlineSep @@ (Lists.map (asTerm caseStatementToExpr) (var "cases")))]
+        (Serialization.newlineSep @@ (Lists.map (asTerm caseStatementToExpr) (var "match")))]
 
 templateArgumentToExpr :: TypedTermDefinition (Cpp.TemplateArgument -> Expr)
 templateArgumentToExpr = define "templateArgumentToExpr" $
   doc "Convert a template argument to an expression" $
   lambda "a" $
-    cases Cpp._TemplateArgument (var "a") Nothing [
+    match Cpp._TemplateArgument (var "a") Nothing [
       Cpp._TemplateArgument_type>>: lambda "t" $ typeExpressionToExpr @@ var "t",
       Cpp._TemplateArgument_value>>: lambda "e" $ expressionToExpr @@ var "e"]
 
@@ -1438,7 +1438,7 @@ typeExpressionToExpr :: TypedTermDefinition (Cpp.TypeExpression -> Expr)
 typeExpressionToExpr = define "typeExpressionToExpr" $
   doc "Convert a type expression to an expression" $
   lambda "t" $
-    cases Cpp._TypeExpression (var "t") Nothing [
+    match Cpp._TypeExpression (var "t") Nothing [
       Cpp._TypeExpression_basic>>: lambda "b" $ basicTypeToExpr @@ var "b",
       Cpp._TypeExpression_qualified>>: lambda "q" $ qualifiedTypeToExpr @@ var "q",
       Cpp._TypeExpression_template>>: lambda "t" $ templateTypeToExpr @@ var "t",
@@ -1466,7 +1466,7 @@ unaryExpressionToExpr :: TypedTermDefinition (Cpp.UnaryExpression -> Expr)
 unaryExpressionToExpr = define "unaryExpressionToExpr" $
   doc "Convert a unary expression to an expression" $
   lambda "e" $
-    cases Cpp._UnaryExpression (var "e") Nothing [
+    match Cpp._UnaryExpression (var "e") Nothing [
       Cpp._UnaryExpression_postfix>>: lambda "p" $ postfixExpressionToExpr @@ var "p",
       Cpp._UnaryExpression_unaryOp>>: lambda "o" $ unaryOperationToExpr @@ var "o",
       Cpp._UnaryExpression_sizeof>>: lambda "s" $ sizeofExpressionToExpr @@ var "s"]
@@ -1485,7 +1485,7 @@ unaryOperatorToExpr :: TypedTermDefinition (Cpp.UnaryOperator -> Expr)
 unaryOperatorToExpr = define "unaryOperatorToExpr" $
   doc "Convert a unary operator to an expression" $
   lambda "op" $
-    cases Cpp._UnaryOperator (var "op") Nothing [
+    match Cpp._UnaryOperator (var "op") Nothing [
       Cpp._UnaryOperator_plus>>: constant $ Serialization.cst @@ string "+",
       Cpp._UnaryOperator_minus>>: constant $ Serialization.cst @@ string "-",
       Cpp._UnaryOperator_logicalNot>>: constant $ Serialization.cst @@ string "!",
@@ -1535,7 +1535,7 @@ visitorToExpr :: TypedTermDefinition (Cpp.Visitor -> Expr)
 visitorToExpr = define "visitorToExpr" $
   doc "Convert a visitor to an expression" $
   lambda "v" $
-    cases Cpp._Visitor (var "v") Nothing [
+    match Cpp._Visitor (var "v") Nothing [
       Cpp._Visitor_lambda>>: lambda "l" $ lambdaExpressionToExpr @@ var "l",
       Cpp._Visitor_overloaded>>: lambda "o" $ overloadedLambdasToExpr @@ var "o"]
 

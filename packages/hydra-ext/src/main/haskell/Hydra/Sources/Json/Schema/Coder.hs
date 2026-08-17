@@ -250,7 +250,7 @@ isRequiredField = define "isRequiredField" $
   doc "Determine whether a field is required (i.e., not optional/Maybe)" $
   lambda "ft" $ lets [
     "typ">: project _FieldType _FieldType_type @@ var "ft"] $
-    cases _Type (Strip.deannotateType @@ var "typ") (Just true) [
+    match _Type (Strip.deannotateType @@ var "typ") (Just true) [
       _Type_optional>>: constant false]
 
 jsType :: TypedTermDefinition (Bool -> JS.TypeName -> [JS.Restriction])
@@ -272,7 +272,7 @@ literalTypeName :: TypedTermDefinition (LiteralType -> JS.TypeName)
 literalTypeName = define "literalTypeName" $
   doc "Map a Hydra literal type to a JSON Schema type name" $
   lambda "lt" $
-    cases _LiteralType (var "lt")
+    match _LiteralType (var "lt")
       (Just (inject JS._TypeName JS._TypeName_string unit)) [
       _LiteralType_binary>>: constant (inject JS._TypeName JS._TypeName_string unit),
       _LiteralType_boolean>>: constant (inject JS._TypeName JS._TypeName_boolean unit),
@@ -370,7 +370,7 @@ typeToExpr :: TypedTermDefinition (InferenceContext -> Graph -> Bool -> Type -> 
 typeToExpr = define "typeToExpr" $
   doc "Encode a Hydra type as a list of JSON Schema restrictions" $
   lambda "cx" $ lambda "g" $ lambda "optional" $ lambda "typ" $
-    cases _Type (var "typ")
+    match _Type (var "typ")
       (Just (left (Error.errorOther (Error.otherError
         (Strings.concat2 (string "JSON Schema: unsupported type variant: ")
           (PrintVariants.typeVariant @@ (Reflect.typeVariant @@ var "typ"))))))) [

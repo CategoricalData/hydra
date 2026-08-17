@@ -835,17 +835,17 @@ encodeLiteralType = def "encodeLiteralType" $
   doc "Encode a literal type as a C++ type expression" $
   lambda "lt" $
     inject Cpp._TypeExpression Cpp._TypeExpression_basic $
-      cases _LiteralType (var "lt") Nothing [
+      match _LiteralType (var "lt") Nothing [
         _LiteralType_binary>>: constant $
           inject Cpp._BasicType Cpp._BasicType_char unit,
         _LiteralType_boolean>>: constant $
           inject Cpp._BasicType Cpp._BasicType_bool unit,
         _LiteralType_float>>: lambda "ft" $
-          cases _FloatType (var "ft") (Just $ inject Cpp._BasicType Cpp._BasicType_double unit) [
+          match _FloatType (var "ft") (Just $ inject Cpp._BasicType Cpp._BasicType_double unit) [
             _FloatType_float32>>: constant $ inject Cpp._BasicType Cpp._BasicType_float unit,
             _FloatType_float64>>: constant $ inject Cpp._BasicType Cpp._BasicType_double unit],
         _LiteralType_integer>>: lambda "it" $
-          cases _IntegerType (var "it") (Just $ inject Cpp._BasicType Cpp._BasicType_int unit) [
+          match _IntegerType (var "it") (Just $ inject Cpp._BasicType Cpp._BasicType_int unit) [
             _IntegerType_bigint>>: constant $ inject Cpp._BasicType Cpp._BasicType_int unit,
             _IntegerType_int8>>: constant $ inject Cpp._BasicType Cpp._BasicType_char unit,
             _IntegerType_int16>>: constant $ inject Cpp._BasicType Cpp._BasicType_named (string "int16_t"),
@@ -920,7 +920,7 @@ encodeType = def "encodeType" $
   doc "Encode a Hydra type as a C++ type expression" $
   "cx" ~> "g" ~> lambda "typ" $
     "t" <~ (Strip.deannotateType @@ var "typ") $
-    cases _Type (var "t") (Just $
+    match _Type (var "t") (Just $
       left (Error.errorOther $ Error.otherError $ string "Unsupported type"))
     [_Type_application>>: lambda "at" $
        encodeApplicationType @@ var "cx" @@ var "g" @@ var "at",
@@ -981,7 +981,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
   doc "Encode a top-level type definition (dispatches to record/union/wrap)" $
   "cx" ~> "g" ~> lambda "name" $ lambda "typ" $
     "t" <~ (Strip.deannotateType @@ var "typ") $
-    cases _Type (var "t") (Just $
+    match _Type (var "t") (Just $
       left (Error.errorOther $ Error.otherError $ string "unexpected type in definition: " ++ (PrintCore.type_ @@ var "typ")))
     [_Type_forall>>: lambda "fa" $
        encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "name" @@ Core.forallTypeBody (var "fa"),
@@ -1136,7 +1136,7 @@ isStdContainerType = def "isStdContainerType" $
   doc "Check whether a type maps to an STL container type" $
   lambda "typ" $
     "t" <~ (Strip.deannotateType @@ var "typ") $
-    cases _Type (var "t") (Just $ boolean False)
+    match _Type (var "t") (Just $ boolean False)
     [_Type_application>>: lambda "at" $
        isStdContainerType @@ Core.applicationTypeFunction (var "at"),
      _Type_list>>: constant $ boolean True,
@@ -1150,7 +1150,7 @@ isStructType = def "isStructType" $
   doc "Check whether a type is a struct type (not a literal and not an enum)" $
   lambda "rawType" $
     "t" <~ (Resolution.fullyStripType @@ var "rawType") $
-    "isLiteral" <~ cases _Type (var "t") (Just $ boolean False)
+    "isLiteral" <~ match _Type (var "t") (Just $ boolean False)
       [_Type_literal>>: constant $ boolean True] $
     Logic.and
       (Logic.not (var "isLiteral"))
@@ -1163,9 +1163,9 @@ isTemplateType = def "isTemplateType" $
   lambda "typ" $
     "t" <~ (Strip.deannotateType @@ var "typ") $
     Logic.or
-      (cases _Type (var "t") (Just $ boolean False)
+      (match _Type (var "t") (Just $ boolean False)
         [_Type_literal>>: lambda "lt" $
-          cases _LiteralType (var "lt") (Just $ boolean False)
+          match _LiteralType (var "lt") (Just $ boolean False)
             [_LiteralType_string>>: constant $ boolean True]])
       (isStdContainerType @@ var "typ")
 

@@ -230,7 +230,7 @@ encodeLambdaTerm = define "encodeLambdaTerm" $
   doc "Encode a Lambda into a Coq `fun` expression, sanitising the parameter name" $
   lambdas ["env", "lam"] $ lets [
     "paramName">: sanitizeVar @@ (unwrap _Name @@ (Core.lambdaParameter $ var "lam")),
-    "binder">: Optionals.cases (Core.lambdaDomain $ var "lam") (inject C._Binder C._Binder_name (coqName @@ var "paramName")) (lambda "domTy" $ inject C._Binder C._Binder_type $
+    "binder">: Optionals.match (Core.lambdaDomain $ var "lam") (inject C._Binder C._Binder_name (coqName @@ var "paramName")) (lambda "domTy" $ inject C._Binder C._Binder_type $
         record C._TypeBinders [
           C._TypeBinders_names>>: list [coqName @@ var "paramName"],
           C._TypeBinders_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ var "domTy")])] $
@@ -244,15 +244,15 @@ encodeLambdaTerm = define "encodeLambdaTerm" $
 encodeLiteral :: TypedTermDefinition (Literal -> C.Term)
 encodeLiteral = define "encodeLiteral" $
   doc "Translate a Hydra literal into its Coq stdlib form, with disambiguating parentheses" $
-  lambda "lit" $ cases _Literal (var "lit") Nothing [
+  lambda "lit" $ match _Literal (var "lit") Nothing [
     _Literal_boolean>>: "b" ~>
       Logic.ifElse (var "b") (coqTermQualid @@ string "true") (coqTermQualid @@ string "false"),
     _Literal_decimal>>: "d" ~> coqTermQualid @@ Strings.concat (list [
       string "(", Literals.showDecimal (var "d"), string ")"]),
-    _Literal_float>>: "fv" ~> cases _FloatValue (var "fv") Nothing [
+    _Literal_float>>: "fv" ~> match _FloatValue (var "fv") Nothing [
       _FloatValue_float32>>: "v" ~> encodeFloatLiteral @@ Literals.showFloat64 (Literals.float32ToFloat64 $ var "v"),
       _FloatValue_float64>>: "v" ~> encodeFloatLiteral @@ Literals.showFloat64 (var "v")],
-    _Literal_integer>>: "iv" ~> cases _IntegerValue (var "iv") Nothing [
+    _Literal_integer>>: "iv" ~> match _IntegerValue (var "iv") Nothing [
       _IntegerValue_bigint>>: "v" ~> coqTermQualid @@ Strings.concat (list [
         string "(", Literals.showBigint (var "v"), string ")%Z"]),
       _IntegerValue_int8>>: "v" ~> coqTermQualid @@ Strings.concat (list [
@@ -279,11 +279,11 @@ encodeLiteral = define "encodeLiteral" $
 encodeLiteralType :: TypedTermDefinition (LiteralType -> C.Term)
 encodeLiteralType = define "encodeLiteralType" $
   doc "Map a Hydra LiteralType to its Coq stdlib counterpart" $
-  lambda "lt" $ cases _LiteralType (var "lt") Nothing [
+  lambda "lt" $ match _LiteralType (var "lt") Nothing [
     _LiteralType_boolean>>: constant (coqTermQualid @@ string "bool"),
     _LiteralType_decimal>>: constant (coqTermQualid @@ string "Q"),
     _LiteralType_float>>: constant (coqTermQualid @@ string "Q"),
-    _LiteralType_integer>>: "it" ~> cases _IntegerType (var "it") Nothing [
+    _LiteralType_integer>>: "it" ~> match _IntegerType (var "it") Nothing [
       _IntegerType_bigint>>: constant (coqTermQualid @@ string "Z"),
       _IntegerType_int8>>: constant (coqTermQualid @@ string "Z"),
       _IntegerType_int16>>: constant (coqTermQualid @@ string "Z"),
@@ -331,8 +331,8 @@ encodeProjectionElim = define "encodeProjectionElim" $
 -- | Encode a Hydra Term into a Coq Term.
 encodeTerm :: TypedTermDefinition (CE.CoqEnvironment -> Term -> C.Term)
 encodeTerm = define "encodeTerm" $
-  doc "Translate a Hydra Term into its Coq Term counterpart. The environment provides the constructor-count map used by encodeUnionElim (to decide whether a match is exhaustive) and the ambiguous-name set used by resolveQualifiedName (to decide whether cross-module references need to stay fully qualified)." $
-  lambdas ["env", "tm"] $ cases _Term (var "tm") Nothing [
+  doc "Translate a Hydra Term into its Coq Term counterpart. The environment provides the constructor-count map used by encodeUnionElim (to decide whether a cases is exhaustive) and the ambiguous-name set used by resolveQualifiedName (to decide whether cross-module references need to stay fully qualified)." $
+  lambdas ["env", "tm"] $ match _Term (var "tm") Nothing [
     _Term_annotated>>: "at" ~> encodeTerm @@ var "env" @@ (Core.annotatedTermBody $ var "at"),
     _Term_application>>: "app" ~>
       coqTermApp
@@ -407,7 +407,7 @@ encodeTerm = define "encodeTerm" $
           var "acc"])
         (coqTermQualid @@ string "nil")
         (Maps.toList (var "mt" :: TypedTerm (M.Map Term Term))),
-    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (coqTermQualid @@ string "None") (lambda "v" $ coqTermApp @@ (coqTermQualid @@ string "Some") @@ list [encodeTerm @@ var "env" @@ var "v"]),
+    _Term_optional>>: "mt" ~> Optionals.match (var "mt") (coqTermQualid @@ string "None") (lambda "v" $ coqTermApp @@ (coqTermQualid @@ string "Some") @@ list [encodeTerm @@ var "env" @@ var "v"]),
     _Term_pair>>: "p" ~>
       coqTermApp @@ (coqTermQualid @@ string "pair") @@ list [
         encodeTerm @@ var "env" @@ Pairs.first (var "p"),
@@ -455,9 +455,9 @@ encodeTerm = define "encodeTerm" $
       -- TypeApplication's `type` field does not always match the Coq-side
       -- expected type (e.g. Hydra's `Map Name Term` vs Coq's
       -- `list (Name * Term)`), so a blind cast would produce the wrong type.
-      cases _Term (var "body")
+      match _Term (var "body")
         (Just (var "encoded")) [
-        _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (coqTermCast @@ (coqTermQualid @@ string "None")
+        _Term_optional>>: "mt" ~> Optionals.match (var "mt") (coqTermCast @@ (coqTermQualid @@ string "None")
             @@ (coqTypeTerm @@ (coqTermApp @@ (coqTermQualid @@ string "option")
               @@ list [encodeType @@ var "env" @@ var "tyArg"]))) (constant $ var "encoded"),
         -- Empty list: annotate with `list <tyArg>` when the element type is
@@ -467,7 +467,7 @@ encodeTerm = define "encodeTerm" $
         -- `Name` for an annotation field whose Coq type is `list (Name * Term)`).
         _Term_list>>: "xs" ~> Logic.ifElse
           (Logic.and (Lists.null $ var "xs")
-            (cases _Type (var "tyArg") (Just (boolean False)) [
+            (match _Type (var "tyArg") (Just (boolean False)) [
               _Type_either>>: constant (boolean True),
               _Type_pair>>: constant (boolean True),
               _Type_map>>: constant (boolean True)]))
@@ -480,7 +480,7 @@ encodeTerm = define "encodeTerm" $
         -- We receive the outer one here. If `tyArg` is already a full
         -- `_Type_either`, use it directly. Otherwise, fall through.
         _Term_either>>: "e" ~>
-          cases _Type (var "tyArg")
+          match _Type (var "tyArg")
             (Just (var "encoded")) [
             _Type_either>>: "et" ~> lets [
               "sumTy">: coqTypeTerm @@ (coqTermApp @@ (coqTermQualid @@ string "sum") @@ list [
@@ -494,7 +494,7 @@ encodeTerm = define "encodeTerm" $
           "innerBody">: Core.typeApplicationTermBody $ var "innerTa",
           "innerTyArg">: Core.typeApplicationTermType $ var "innerTa",
           "innerEncoded">: encodeTerm @@ var "env" @@ var "innerBody"] $
-          cases _Term (var "innerBody")
+          match _Term (var "innerBody")
             (Just (var "encoded")) [
             _Term_either>>: "innerE" ~> lets [
               "sumTy">: coqTypeTerm @@ (coqTermApp @@ (coqTermQualid @@ string "sum") @@ list [
@@ -534,7 +534,7 @@ encodeTermDefinitionPair = define "encodeTermDefinitionPair" $
 encodeType :: TypedTermDefinition (CE.CoqEnvironment -> Type -> C.Term)
 encodeType = define "encodeType" $
   doc "Translate a Hydra Type into a Coq Term representing that type. The environment is consulted to resolve qualified type variable references" $
-  lambdas ["env", "ty"] $ cases _Type (var "ty") Nothing [
+  lambdas ["env", "ty"] $ match _Type (var "ty") Nothing [
     _Type_annotated>>: "at" ~> encodeType @@ var "env" @@ (Core.annotatedTypeBody $ var "at"),
     _Type_application>>: "app" ~>
       coqTermApp
@@ -636,7 +636,7 @@ encodeUnionConstructor = define "encodeUnionConstructor" $
 -- | Translate a union eliminator (Hydra `TermCases`) into a Coq `fun x_ => match x_ with ... end`.
 encodeUnionElim :: TypedTermDefinition (CE.CoqEnvironment -> CaseStatement -> C.Term)
 encodeUnionElim = define "encodeUnionElim" $
-  doc "Build a Coq match expression from a Hydra union eliminator. Uses the constructor-count map in the environment to decide whether the match is exhaustive: if so, an explicit default is suppressed; if not and the kernel didn't provide one, inserts `| _ => hydra_unreachable`." $
+  doc "Build a Coq cases expression from a Hydra union eliminator. Uses the constructor-count map in the environment to decide whether the cases is exhaustive: if so, an explicit default is suppressed; if not and the kernel didn't provide one, inserts `| _ => hydra_unreachable`." $
   lambdas ["env", "cs"] $ lets [
     "csName">: Core.caseStatementTypeName $ var "cs",
     "csCases">: Core.caseStatementCases $ var "cs",
@@ -689,20 +689,20 @@ encodeUnionElim = define "encodeUnionElim" $
               C._Pattern10_Qualid_qualid>>: coqQualid @@ string "_",
               C._Pattern10_Qualid_patterns>>: list ([] :: [TypedTerm C.Pattern1])]]],
       C._Equation_term>>: var "body"],
-    "defaultEqs">: Optionals.cases
+    "defaultEqs">: Optionals.match
       (var "csDefault")
       -- No explicit default: if the match is non-exhaustive, synthesize one as
       -- `| _ => hydra_unreachable` (replacing the old addPartialMatchCatchAll pass).
       -- If the match is exhaustive (or we lack the count), emit no default.
       (Logic.ifElse
-        (Optionals.cases (var "expectedCount") (boolean False) (lambda "n" $ Logic.not $ Ordering.gte (var "caseCount") (var "n")))
+        (Optionals.match (var "expectedCount") (boolean False) (lambda "n" $ Logic.not $ Ordering.gte (var "caseCount") (var "n")))
         (list [var "wildcardEq" @@ (coqTermQualid @@ string "hydra_unreachable")])
         (list ([] :: [TypedTerm C.Equation])))
       -- Kernel provided an explicit default: if the non-default cases already cover
       -- every constructor, drop it (replacing the old removeRedundantDefaults pass);
       -- otherwise keep it.
       (lambda "defT" $ Logic.ifElse
-        (Optionals.cases (var "expectedCount") (boolean False) (lambda "n" $ Ordering.gte (var "caseCount") (var "n")))
+        (Optionals.match (var "expectedCount") (boolean False) (lambda "n" $ Ordering.gte (var "caseCount") (var "n")))
         (list ([] :: [TypedTerm C.Equation]))
         (list [var "wildcardEq" @@ (encodeTerm @@ var "env" @@ var "defT")])),
     "allEqs">: Lists.concat2 (var "baseEqs") (var "defaultEqs")] $
@@ -756,13 +756,13 @@ escapeCoqString = define "escapeCoqString" $
 extractLambdaBinders :: TypedTermDefinition (CE.CoqEnvironment -> Term -> [C.Binder])
 extractLambdaBinders = define "extractLambdaBinders" $
   doc "Collect a chain of leading lambdas as Coq binders, converting type annotations as well" $
-  lambdas ["env", "tm"] $ cases _Term (var "tm") (Just $ list ([] :: [TypedTerm C.Binder])) [
+  lambdas ["env", "tm"] $ match _Term (var "tm") (Just $ list ([] :: [TypedTerm C.Binder])) [
     _Term_annotated>>: "at" ~>
       extractLambdaBinders @@ var "env" @@ (Core.annotatedTermBody $ var "at"),
     _Term_lambda>>: "lam" ~> lets [
       "param">: Core.lambdaParameter $ var "lam",
       "mDomain">: Core.lambdaDomain $ var "lam",
-      "binder">: Optionals.cases (var "mDomain") (inject C._Binder C._Binder_name (coqName @@ (unwrap _Name @@ var "param"))) (lambda "domTy" $ inject C._Binder C._Binder_type $
+      "binder">: Optionals.match (var "mDomain") (inject C._Binder C._Binder_name (coqName @@ (unwrap _Name @@ var "param"))) (lambda "domTy" $ inject C._Binder C._Binder_type $
           record C._TypeBinders [
             C._TypeBinders_names>>: list [coqName @@ (unwrap _Name @@ var "param")],
             C._TypeBinders_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ var "domTy")])] $
@@ -772,7 +772,7 @@ extractLambdaBinders = define "extractLambdaBinders" $
 isUnitDomain :: TypedTermDefinition (Maybe Type -> Bool)
 isUnitDomain = define "isUnitDomain" $
   doc "True if the Maybe Type is the unit type, looking through annotations" $
-  lambda "mty" $ Optionals.cases (var "mty") (boolean False) (lambda "ty" $ cases _Type (var "ty") (Just (boolean False)) [
+  lambda "mty" $ Optionals.match (var "mty") (boolean False) (lambda "ty" $ match _Type (var "ty") (Just (boolean False)) [
       _Type_unit>>: constant true,
       _Type_record>>: "fs" ~> Lists.null (var "fs"),
       _Type_annotated>>: "at" ~>
@@ -782,7 +782,7 @@ isUnitDomain = define "isUnitDomain" $
 isUnitLambda :: TypedTermDefinition (Term -> Bool)
 isUnitLambda = define "isUnitLambda" $
   doc "Detect a lambda over the unit type whose parameter is not referenced in the body" $
-  lambda "tm" $ cases _Term (var "tm") (Just (boolean False)) [
+  lambda "tm" $ match _Term (var "tm") (Just (boolean False)) [
     _Term_annotated>>: "at" ~>
       isUnitLambda @@ (Core.annotatedTermBody $ var "at"),
     _Term_lambda>>: "lam" ~> lets [
@@ -949,7 +949,7 @@ standardImports = define "standardImports" $
 stripLambdas :: TypedTermDefinition (Term -> Term)
 stripLambdas = define "stripLambdas" $
   doc "Peel off leading lambdas and annotations, returning the first non-lambda body" $
-  lambda "tm" $ cases _Term (var "tm") (Just (var "tm")) [
+  lambda "tm" $ match _Term (var "tm") (Just (var "tm")) [
     _Term_annotated>>: "at" ~>
       stripLambdas @@ (Core.annotatedTermBody $ var "at"),
     _Term_lambda>>: "lam" ~>
@@ -959,7 +959,7 @@ stripLambdas = define "stripLambdas" $
 termReferencesVar :: TypedTermDefinition (Name -> Term -> Bool)
 termReferencesVar = define "termReferencesVar" $
   doc "Syntactic free-variable check over the shapes encodeTerm walks through" $
-  lambdas ["name", "tm"] $ cases _Term (var "tm") (Just (boolean False)) [
+  lambdas ["name", "tm"] $ match _Term (var "tm") (Just (boolean False)) [
     _Term_variable>>: "v" ~> Equality.equal (var "v") (var "name"),
     _Term_annotated>>: "at" ~>
       termReferencesVar @@ var "name" @@ (Core.annotatedTermBody $ var "at"),
@@ -972,7 +972,7 @@ termReferencesVar = define "termReferencesVar" $
       (listAny
         (lambda "f" $ termReferencesVar @@ var "name" @@ (Core.caseAlternativeHandler $ var "f"))
         (Core.caseStatementCases $ var "cs"))
-      (Optionals.cases (Core.caseStatementDefault $ var "cs") (boolean False) (lambda "d" $ termReferencesVar @@ var "name" @@ var "d")),
+      (Optionals.match (Core.caseStatementDefault $ var "cs") (boolean False) (lambda "d" $ termReferencesVar @@ var "name" @@ var "d")),
     _Term_let>>: "lt" ~> Logic.or
       (listAny
         (lambda "b" $ termReferencesVar @@ var "name" @@ (Core.bindingTerm $ var "b"))
@@ -980,7 +980,7 @@ termReferencesVar = define "termReferencesVar" $
       (termReferencesVar @@ var "name" @@ (Core.letBody $ var "lt")),
     _Term_list>>: "xs" ~>
       listAny (lambda "el" $ termReferencesVar @@ var "name" @@ var "el") (var "xs"),
-    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (boolean False) (lambda "el" $ termReferencesVar @@ var "name" @@ var "el"),
+    _Term_optional>>: "mt" ~> Optionals.match (var "mt") (boolean False) (lambda "el" $ termReferencesVar @@ var "name" @@ var "el"),
     _Term_pair>>: "p" ~> Logic.or
       (termReferencesVar @@ var "name" @@ Pairs.first (var "p"))
       (termReferencesVar @@ var "name" @@ Pairs.second (var "p")),
@@ -1024,7 +1024,7 @@ unionConstructorName = define "unionConstructorName" $
 unitLambdaBody :: TypedTermDefinition (Term -> Term)
 unitLambdaBody = define "unitLambdaBody" $
   doc "Peel the outer unit lambda off a term, returning the body" $
-  lambda "tm" $ cases _Term (var "tm") (Just (var "tm")) [
+  lambda "tm" $ match _Term (var "tm") (Just (var "tm")) [
     _Term_annotated>>: "at" ~>
       unitLambdaBody @@ (Core.annotatedTermBody $ var "at"),
     _Term_lambda>>: "lam" ~> (Core.lambdaBody $ var "lam")]

@@ -515,33 +515,33 @@ extractPostfixExpression :: TypedTermDefinition (Cpp.Expression -> Cpp.PostfixEx
 extractPostfixExpression = def "extractPostfixExpression" $
   doc "Extract the PostfixExpression from a fully-wrapped Expression" $
   lambda "expr" $
-    match Cpp._Expression (Just defaultPostfix) [
+    cases Cpp._Expression (Just defaultPostfix) [
       Cpp._Expression_assignment>>: lambda "a" $
-        match Cpp._AssignmentExpression (Just defaultPostfix) [
+        cases Cpp._AssignmentExpression (Just defaultPostfix) [
           Cpp._AssignmentExpression_conditional>>: lambda "c" $
-            match Cpp._ConditionalExpression (Just defaultPostfix) [
+            cases Cpp._ConditionalExpression (Just defaultPostfix) [
               Cpp._ConditionalExpression_logicalOr>>: lambda "lo" $
-                match Cpp._LogicalOrExpression (Just defaultPostfix) [
+                cases Cpp._LogicalOrExpression (Just defaultPostfix) [
                   Cpp._LogicalOrExpression_logicalAnd>>: lambda "la" $
-                    match Cpp._LogicalAndExpression (Just defaultPostfix) [
+                    cases Cpp._LogicalAndExpression (Just defaultPostfix) [
                       Cpp._LogicalAndExpression_inclusiveOr>>: lambda "io" $
-                        match Cpp._InclusiveOrExpression (Just defaultPostfix) [
+                        cases Cpp._InclusiveOrExpression (Just defaultPostfix) [
                           Cpp._InclusiveOrExpression_exclusiveOr>>: lambda "xo" $
-                            match Cpp._ExclusiveOrExpression (Just defaultPostfix) [
+                            cases Cpp._ExclusiveOrExpression (Just defaultPostfix) [
                               Cpp._ExclusiveOrExpression_and>>: lambda "ae" $
-                                match Cpp._AndExpression (Just defaultPostfix) [
+                                cases Cpp._AndExpression (Just defaultPostfix) [
                                   Cpp._AndExpression_equality>>: lambda "eq" $
-                                    match Cpp._EqualityExpression (Just defaultPostfix) [
+                                    cases Cpp._EqualityExpression (Just defaultPostfix) [
                                       Cpp._EqualityExpression_relational>>: lambda "re" $
-                                        match Cpp._RelationalExpression (Just defaultPostfix) [
+                                        cases Cpp._RelationalExpression (Just defaultPostfix) [
                                           Cpp._RelationalExpression_shift>>: lambda "sh" $
-                                            match Cpp._ShiftExpression (Just defaultPostfix) [
+                                            cases Cpp._ShiftExpression (Just defaultPostfix) [
                                               Cpp._ShiftExpression_additive>>: lambda "ad" $
-                                                match Cpp._AdditiveExpression (Just defaultPostfix) [
+                                                cases Cpp._AdditiveExpression (Just defaultPostfix) [
                                                   Cpp._AdditiveExpression_multiplicative>>: lambda "mu" $
-                                                    match Cpp._MultiplicativeExpression (Just defaultPostfix) [
+                                                    cases Cpp._MultiplicativeExpression (Just defaultPostfix) [
                                                       Cpp._MultiplicativeExpression_unary>>: lambda "ue" $
-                                                        match Cpp._UnaryExpression (Just defaultPostfix) [
+                                                        cases Cpp._UnaryExpression (Just defaultPostfix) [
                                                           Cpp._UnaryExpression_postfix>>: lambda "pf" $ var "pf"]
                                                         @@ var "ue"]
                                                     @@ var "mu"]

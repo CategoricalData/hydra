@@ -36,7 +36,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core", ModuleName "hydra.file", ModuleName "hydra.testing"],
-            moduleMetadata = descriptionMetadata (Just "Effectful test cases for hydra.lib.files primitives")}
+            moduleMetadata = descriptionMetadata (Just "Effectful test match for hydra.lib.files primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -55,7 +55,7 @@ bytes s = binary (BC.pack s)
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Effectful test cases for hydra.lib.files primitives" $
+    Phantoms.doc "Effectful test match for hydra.lib.files primitives" $
     supergroup "hydra.lib.files primitives" [
       filesAppendFile,
       filesCopy,
@@ -259,7 +259,7 @@ filesRename = subgroup "rename" [
 
 -- Render a hydra.file.FileType as a short string, for comparison in status test cases.
 showFileType :: TypedTerm (File.FileType -> String)
-showFileType = match File._FileType Nothing [
+showFileType = cases File._FileType Nothing [
   File._FileType_block >>: lambda "_x" (string "block"),
   File._FileType_character >>: lambda "_x" (string "character"),
   File._FileType_directory >>: lambda "_x" (string "directory"),

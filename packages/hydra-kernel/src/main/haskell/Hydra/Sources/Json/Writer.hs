@@ -187,7 +187,7 @@ valueToExpr :: TypedTermDefinition (J.Value -> Expr)
 valueToExpr = jsonSerdeDefinition "valueToExpr" $
   doc "Convert a JSON value to an AST expression for serialization" $
   "value" ~>
-  cases J._Value (var "value") Nothing [
+  match J._Value (var "value") Nothing [
     J._Value_array>>: "arr" ~>
       Serialization.bracketListAdaptive @@ (Lists.map (asTerm valueToExpr) (var "arr")),
     J._Value_boolean>>: "b" ~>

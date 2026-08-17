@@ -28,7 +28,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, Formatting.ns] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata ((Just "Test cases for string formatting and case conversion"))}
+            moduleMetadata = descriptionMetadata ((Just "Test match for string formatting and case conversion"))}
   where
     definitions = [
       Phantoms.toDefinition allTests,
@@ -39,7 +39,7 @@ define = definitionInModule module_
 
 allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
-    doc "Test cases for hydra.formatting" $
+    doc "Test match for hydra.formatting" $
     Testing.testGroup (string "formatting") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
     subgroups = [
@@ -47,10 +47,10 @@ allTests = define "allTests" $
 
 caseConversionTests :: TypedTermDefinition TestGroup
 caseConversionTests = define "caseConversionTests" $
-  doc "Test cases for case conversion" $
-  Testing.testGroup (string "case conversion") nothing (list ([] :: [TypedTerm TestGroup])) (list cases)
+  doc "Test match for case conversion" $
+  Testing.testGroup (string "case conversion") nothing (list ([] :: [TypedTerm TestGroup])) (list match)
   where
-    cases = [
+    match = [
       -- from lower_snake_case
       testCase 1 CaseConventionLowerSnake CaseConventionUpperSnake "a_hello_world_42_a42_42a_b" "A_HELLO_WORLD_42_A42_42A_B",
       testCase 2 CaseConventionLowerSnake CaseConventionCamel "a_hello_world_42_a42_42a_b" "aHelloWorld42A4242aB",

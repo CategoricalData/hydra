@@ -119,7 +119,7 @@ definitionToExpr :: TypedTermDefinition (G.Definition -> Expr)
 definitionToExpr = define "definitionToExpr" $
   doc "Convert a GraphQL definition to an expression" $
   lambda "def" $
-    cases G._Definition (var "def") Nothing [
+    match G._Definition (var "def") Nothing [
       G._Definition_executable>>: constant $
         Serialization.cst @@ string "Unsupported: executable definition",
       G._Definition_typeSystem>>: lambda "de" $
@@ -200,7 +200,7 @@ nonNullTypeToExpr :: TypedTermDefinition (G.NonNullType -> Expr)
 nonNullTypeToExpr = define "nonNullTypeToExpr" $
   doc "Convert a GraphQL non-null type to an expression" $
   lambda "nnt" $ lets [
-    "typeExpr">: cases G._NonNullType (var "nnt") Nothing [
+    "typeExpr">: match G._NonNullType (var "nnt") Nothing [
       G._NonNullType_named>>: lambda "nt" $ namedTypeToExpr @@ var "nt",
       G._NonNullType_list>>: lambda "lt" $ listTypeToExpr @@ var "lt"]] $
     Serialization.noSep @@ list [var "typeExpr", Serialization.cst @@ string "!"]
@@ -223,7 +223,7 @@ typeDefinitionToExpr :: TypedTermDefinition (G.TypeDefinition -> Expr)
 typeDefinitionToExpr = define "typeDefinitionToExpr" $
   doc "Convert a GraphQL type definition to an expression" $
   lambda "def" $
-    cases G._TypeDefinition (var "def") Nothing [
+    match G._TypeDefinition (var "def") Nothing [
       G._TypeDefinition_scalar>>: constant $
         Serialization.cst @@ string "Unsupported: scalar type definition",
       G._TypeDefinition_object>>: lambda "od" $ objectTypeDefinitionToExpr @@ var "od",
@@ -239,7 +239,7 @@ typeSystemDefinitionOrExtensionToExpr :: TypedTermDefinition (G.TypeSystemDefini
 typeSystemDefinitionOrExtensionToExpr = define "typeSystemDefinitionOrExtensionToExpr" $
   doc "Convert a GraphQL type system definition or extension to an expression" $
   lambda "de" $
-    cases G._TypeSystemDefinitionOrExtension (var "de") Nothing [
+    match G._TypeSystemDefinitionOrExtension (var "de") Nothing [
       G._TypeSystemDefinitionOrExtension_definition>>: lambda "d" $
         typeSystemDefinitionToExpr @@ var "d",
       G._TypeSystemDefinitionOrExtension_extension>>: constant $
@@ -249,7 +249,7 @@ typeSystemDefinitionToExpr :: TypedTermDefinition (G.TypeSystemDefinition -> Exp
 typeSystemDefinitionToExpr = define "typeSystemDefinitionToExpr" $
   doc "Convert a GraphQL type system definition to an expression" $
   lambda "def" $
-    cases G._TypeSystemDefinition (var "def") Nothing [
+    match G._TypeSystemDefinition (var "def") Nothing [
       G._TypeSystemDefinition_schema>>: constant $
         Serialization.cst @@ string "Unsupported: schema definition",
       G._TypeSystemDefinition_type>>: lambda "dt" $ typeDefinitionToExpr @@ var "dt",
@@ -260,7 +260,7 @@ typeToExpr :: TypedTermDefinition (G.Type -> Expr)
 typeToExpr = define "typeToExpr" $
   doc "Convert a GraphQL type to an expression" $
   lambda "typ" $
-    cases G._Type (var "typ") Nothing [
+    match G._Type (var "typ") Nothing [
       G._Type_named>>: lambda "nt" $ namedTypeToExpr @@ var "nt",
       G._Type_list>>: lambda "lt" $ listTypeToExpr @@ var "lt",
       G._Type_nonNull>>: lambda "nnt" $ nonNullTypeToExpr @@ var "nnt"]

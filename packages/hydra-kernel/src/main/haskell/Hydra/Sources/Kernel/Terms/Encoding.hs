@@ -213,7 +213,7 @@ encodeFloatValue = define "encodeFloatValue" $
       (Core.field (floatTypeToFieldName @@ var "floatType") (var "valTerm"))
   where
     floatTypeToFieldName :: TypedTerm (FloatType -> Name)
-    floatTypeToFieldName = match _FloatType Nothing [
+    floatTypeToFieldName = cases _FloatType Nothing [
       _FloatType_float32>>:  constant $ Core.nameLift _FloatValue_float32,
       _FloatType_float64>>:  constant $ Core.nameLift _FloatValue_float64]
 
@@ -269,7 +269,7 @@ encodeIntegerValue = define "encodeIntegerValue" $
       (Core.field (intTypeToFieldName @@ var "intType") (var "valTerm"))
   where
     intTypeToFieldName :: TypedTerm (IntegerType -> Name)
-    intTypeToFieldName = match _IntegerType Nothing [
+    intTypeToFieldName = cases _IntegerType Nothing [
       _IntegerType_bigint>>: constant $ Core.nameLift _IntegerValue_bigint,
       _IntegerType_int8>>:   constant $ Core.nameLift _IntegerValue_int8,
       _IntegerType_int16>>:  constant $ Core.nameLift _IntegerValue_int16,
@@ -308,7 +308,7 @@ encodeLiteralType = define "encodeLiteralType" $
   -- The literal encoder's input is the native literal value; its domain is the
   -- corresponding literal type (e.g. binary -> literal<binary>, string -> literal<string>,
   -- integer<intType> -> literal<integer<intType>>). (#476)
-  match _LiteralType (Just identityEncoder) [
+  cases _LiteralType (Just identityEncoder) [
     _LiteralType_binary>>: constant $
       litLam (Core.literalTypeBinary) $ \x -> termLiteral $ DeepCore.injection _Literal (DeepCore.field _Literal_binary x),
     _LiteralType_boolean>>: constant $
@@ -366,7 +366,7 @@ encodeModule = define "encodeModule" $
   "cx" ~> "graph" ~> "mod" ~>
     "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
       (Optionals.givens $ Lists.map
-        ("d" ~> cases _Definition (var "d") (Just nothing) [
+        ("d" ~> match _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
             just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
         (Packaging.moduleDefinitions (var "mod")))) $
@@ -492,7 +492,7 @@ encodeSetType = define "encodeSetType" $
 encodeType :: TypedTermDefinition (Type -> Term)
 encodeType = define "encodeType" $
   doc "Generate an encoder term for a Type" $
-  match _Type (Just identityEncoder) [
+  cases _Type (Just identityEncoder) [
     _Type_annotated>>: "at" ~>
       encodeType @@ Core.annotatedTypeBody (var "at"),
     _Type_application>>: "appType" ~>
@@ -536,7 +536,7 @@ encodeTypeNamed :: TypedTermDefinition (Name -> Type -> Term)
 encodeTypeNamed = define "encodeTypeNamed" $
   doc "Generate an encoder term for a Type, with the element name for nominal types" $
   "ename" ~> "typ" ~>
-  cases _Type (var "typ") (Just identityEncoder) [
+  match _Type (var "typ") (Just identityEncoder) [
     _Type_annotated>>: "at" ~>
       encodeTypeNamed @@ var "ename" @@ Core.annotatedTypeBody (var "at"),
     _Type_application>>: "appType" ~>
@@ -639,7 +639,7 @@ encoderCollectForallVariables :: TypedTermDefinition (Type -> [Name])
 encoderCollectForallVariables = define "encoderCollectForallVariables" $
   doc "Collect forall type variable names from a type" $
   "typ" ~>
-  cases _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
+  match _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
     _Type_annotated>>: "at" ~>
       encoderCollectForallVariables @@ (Core.annotatedTypeBody (var "at")),
     _Type_forall>>: "ft" ~>
@@ -652,7 +652,7 @@ encoderCollectOrdVars :: TypedTermDefinition (Type -> [Name])
 encoderCollectOrdVars = define "encoderCollectOrdVars" $
   doc "Collect type variables needing Ord constraints" $
   "typ" ~>
-  cases _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
+  match _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
     _Type_annotated>>: "at" ~>
       encoderCollectOrdVars @@ (Core.annotatedTypeBody (var "at")),
     _Type_application>>: "appType" ~>
@@ -703,7 +703,7 @@ encoderCollectTypeVarsFromType :: TypedTermDefinition (Type -> [Name])
 encoderCollectTypeVarsFromType = define "encoderCollectTypeVarsFromType" $
   doc "Collect all type variable names from a type expression" $
   "typ" ~>
-  cases _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
+  match _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
     _Type_annotated>>: "at" ~>
       encoderCollectTypeVarsFromType @@ Core.annotatedTypeBody (var "at"),
     _Type_application>>: "appType" ~>
@@ -749,7 +749,7 @@ encoderFullResultType :: TypedTermDefinition (Type -> Type)
 encoderFullResultType = define "encoderFullResultType" $
   doc "Get full result type for encoder input" $
   "typ" ~>
-  cases _Type (var "typ") (Just $ Core.typeVariable (Core.nameLift _Term)) [
+  match _Type (var "typ") (Just $ Core.typeVariable (Core.nameLift _Term)) [
     _Type_annotated>>: "at" ~>
       encoderFullResultType @@ (Core.annotatedTypeBody (var "at")),
     _Type_application>>: "appType" ~>
@@ -803,7 +803,7 @@ encoderFullResultTypeNamed :: TypedTermDefinition (Name -> Type -> Type)
 encoderFullResultTypeNamed = define "encoderFullResultTypeNamed" $
   doc "Get full result type for encoder input, using element name for nominal types" $
   "ename" ~> "typ" ~>
-  cases _Type (var "typ") (Just $ Core.typeVariable (Core.nameLift _Term)) [
+  match _Type (var "typ") (Just $ Core.typeVariable (Core.nameLift _Term)) [
     _Type_annotated>>: "at" ~>
       encoderFullResultTypeNamed @@ var "ename" @@ (Core.annotatedTypeBody (var "at")),
     _Type_application>>: "appType" ~>
@@ -952,7 +952,7 @@ isEncodableBinding = define "isEncodableBinding" $
 isUnitType_ :: TypedTermDefinition (Type -> Bool)
 isUnitType_ = define "isUnitType" $
   doc "Check whether a type is the unit type" $
-  match _Type (Just $ false) [
+  cases _Type (Just $ false) [
     _Type_unit>>: constant true]
 
 -- | Encode an integer value based on its integer type
@@ -962,7 +962,7 @@ isUnitType_ = define "isUnitType" $
 prependForallEncoders :: TypedTermDefinition (Type -> Type -> Type)
 prependForallEncoders = define "prependForallEncoders" $
   doc "Prepend encoder types for forall parameters to base type" $
-  "baseType" ~> "typ" ~> cases _Type (var "typ") (Just $ var "baseType") [
+  "baseType" ~> "typ" ~> match _Type (var "typ") (Just $ var "baseType") [
     _Type_annotated>>: "at" ~>
       prependForallEncoders @@ var "baseType" @@ Core.annotatedTypeBody (var "at"),
     _Type_forall>>: "ft" ~>

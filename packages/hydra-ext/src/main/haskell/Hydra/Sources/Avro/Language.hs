@@ -115,9 +115,9 @@ avroLanguage = define "avroLanguage" $
     Variants.typeVariantWrap,
     Variants.typeVariantOptional,
     Variants.typeVariantRecord],
-  "typePredicate">: "typ" ~> cases _Type (Strip.deannotateType @@ var "typ")
+  "typePredicate">: "typ" ~> match _Type (Strip.deannotateType @@ var "typ")
     (Just true) [
-    _Type_optional>>: "inner" ~> cases _Type (Strip.deannotateType @@ var "inner")
+    _Type_optional>>: "inner" ~> match _Type (Strip.deannotateType @@ var "inner")
       (Just true) [
       _Type_optional>>: constant false]]] $
   Coders.language

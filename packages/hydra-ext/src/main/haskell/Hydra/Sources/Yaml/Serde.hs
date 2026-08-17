@@ -176,7 +176,7 @@ writeMappingEntry = define "writeMappingEntry" $
   "entry" ~>
   "key" <~ Pairs.first (var "entry") $
   "value" <~ Pairs.second (var "entry") $
-  cases YM._Node (var "value") Nothing [
+  match YM._Node (var "value") Nothing [
     YM._Node_scalar>>: "s" ~> Strings.concat $ list [writeNodeInline @@ var "key", string ": ", writeScalar @@ var "s", string "\n"],
     YM._Node_sequence>>: "items" ~>
       Logic.ifElse (Lists.null $ var "items")
@@ -194,7 +194,7 @@ writeMappingEntryInline = define "writeMappingEntryInline" $
   "entry" ~>
   "key" <~ Pairs.first (var "entry") $
   "value" <~ Pairs.second (var "entry") $
-  cases YM._Node (var "value") Nothing [
+  match YM._Node (var "value") Nothing [
     YM._Node_scalar>>: "s" ~> Strings.concat $ list [writeNodeInline @@ var "key", string ": ", writeScalar @@ var "s", string "\n"],
     YM._Node_sequence>>: "items" ~>
       Logic.ifElse (Lists.null $ var "items")
@@ -209,7 +209,7 @@ writeMappingEntryInline = define "writeMappingEntryInline" $
 writeNode :: TypedTermDefinition (YM.Node -> String)
 writeNode = define "writeNode" $
   doc "Write a YAML node as a top-level value in block style" $
-  "node" ~> cases YM._Node (var "node") Nothing [
+  "node" ~> match YM._Node (var "node") Nothing [
     YM._Node_scalar>>: "s" ~> Strings.concat2 (writeScalar @@ var "s") (string "\n"),
     YM._Node_sequence>>: "items" ~>
       Logic.ifElse (Lists.null $ var "items")
@@ -224,7 +224,7 @@ writeNode = define "writeNode" $
 writeNodeInline :: TypedTermDefinition (YM.Node -> String)
 writeNodeInline = define "writeNodeInline" $
   doc "Write a node inline (for use as a mapping key)" $
-  "node" ~> cases YM._Node (var "node") Nothing [
+  "node" ~> match YM._Node (var "node") Nothing [
     YM._Node_scalar>>: "s" ~> writeScalar @@ var "s",
     YM._Node_sequence>>: "items" ~>
       Strings.concat $ list [
@@ -246,7 +246,7 @@ writeNodeInline = define "writeNodeInline" $
 writeScalar :: TypedTermDefinition (YM.Scalar -> String)
 writeScalar = define "writeScalar" $
   doc "Write a scalar value" $
-  "s" ~> cases YM._Scalar (var "s") Nothing [
+  "s" ~> match YM._Scalar (var "s") Nothing [
     YM._Scalar_bool>>: "b" ~> Logic.ifElse (var "b") (string "true") (string "false"),
     YM._Scalar_decimal>>: "d" ~> Literals.showDecimal (var "d"),
     YM._Scalar_float>>: "f" ~> Literals.showFloat64 (var "f"),
@@ -258,7 +258,7 @@ writeScalar = define "writeScalar" $
 writeSequenceItem :: TypedTermDefinition (YM.Node -> String)
 writeSequenceItem = define "writeSequenceItem" $
   doc "Write a sequence item in block style" $
-  "node" ~> cases YM._Node (var "node") Nothing [
+  "node" ~> match YM._Node (var "node") Nothing [
     YM._Node_scalar>>: "s" ~> Strings.concat $ list [string "- ", writeScalar @@ var "s", string "\n"],
     YM._Node_sequence>>: "items" ~>
       Logic.ifElse (Lists.null $ var "items")

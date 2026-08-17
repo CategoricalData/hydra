@@ -48,7 +48,7 @@ module_ = Module {
   moduleName = ns,
   moduleDefinitions = definitions,
   moduleDependencies = unqualifiedDep <$> ([Strip.ns] `L.union` kernelTypesModuleNames),
-  moduleMetadata = descriptionMetadata (Just "Linear-chain inference benchmark. walkerK cases on _Term variants and recurses to walker(K-1) — depth-N type-resolution stress test.")
+  moduleMetadata = descriptionMetadata (Just "Linear-chain inference benchmark. walkerK match on _Term variants and recurses to walker(K-1) — depth-N type-resolution stress test.")
   }
   where
     definitions = [toDefinition (mkWalker k) | k <- [0 .. numWalkers - 1]]
@@ -76,7 +76,7 @@ walkerBody k =
     -- Pattern 1: let-nesting
     "stripped" <~ (Strip.deannotateTerm @@ var "t") $
     -- Pattern 2: cases on an enum-like union (slim subset of _Term variants)
-    cases _Term (var "stripped") (Just $ just (var "stripped")) [
+    match _Term (var "stripped") (Just $ just (var "stripped")) [
       _Term_application>>: "app" ~>
         "fun" <~ Core.applicationFunction (var "app") $
         "arg" <~ Core.applicationArgument (var "app") $

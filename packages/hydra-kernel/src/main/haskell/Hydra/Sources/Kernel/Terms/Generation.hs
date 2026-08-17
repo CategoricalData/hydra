@@ -360,7 +360,7 @@ generateSourceFiles = define "generateSourceFiles" $
       "g1" <~ Pairs.first (var "dataResult") $
       "defLists" <~ Pairs.second (var "dataResult") $
       -- Refresh modules with elements from the inferred graph
-      "defName" <~ ("d" ~> cases _Definition (var "d") Nothing [
+      "defName" <~ ("d" ~> match _Definition (var "d") Nothing [
         _Definition_term>>: "td" ~> Packaging.termDefinitionName (var "td"),
         _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td"),
         _Definition_primitive>>: "pd" ~> Packaging.primitiveDefinitionName (var "pd")]) $
@@ -370,7 +370,7 @@ generateSourceFiles = define "generateSourceFiles" $
           (Packaging.moduleMetadata $ var "m")
           (Packaging.moduleDependencies $ var "m")
           (Optionals.givens $ Lists.map
-            ("d" ~> cases _Definition (var "d") Nothing [
+            ("d" ~> match _Definition (var "d") Nothing [
               _Definition_type>>: "td" ~> just (Packaging.definitionType (var "td")),
               _Definition_term>>: "td" ~> Optionals.map
                 ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
@@ -590,12 +590,12 @@ lowerPrimitiveDefinitions = define "lowerPrimitiveDefinitions" $
   "origDefs" <~ Packaging.moduleDefinitions (var "m") $
   "hasPrim" <~ Lists.foldl
     ("acc" ~> "d" ~> Logic.or (var "acc")
-      (cases _Definition (var "d") (Just false) [_Definition_primitive>>: "_" ~> true]))
+      (match _Definition (var "d") (Just false) [_Definition_primitive>>: "_" ~> true]))
     false (var "origDefs") $
   Logic.ifElse (Logic.not (var "hasPrim"))
     (var "m")
     ("newDefs" <~ Lists.map
-      ("d" ~> cases _Definition (var "d") (Just (var "d")) [
+      ("d" ~> match _Definition (var "d") (Just (var "d")) [
         _Definition_primitive>>: "pd" ~>
           Packaging.definitionTerm (Packaging.termDefinition
             (Packaging.primitiveDefinitionName $ var "pd")
@@ -653,7 +653,7 @@ moduleDepsTransitive = define "moduleDepsTransitive" $
 -- the inference pass.
 modulePrimitiveDefaultBindings :: TypedTerm Module -> TypedTerm [Binding]
 modulePrimitiveDefaultBindings m = Optionals.givens $ Lists.map
-  ("d" ~> cases _Definition (var "d") (Just nothing) [
+  ("d" ~> match _Definition (var "d") (Just nothing) [
     _Definition_primitive>>: "pd" ~>
       Optionals.map
         ("impl" ~> Core.binding
@@ -666,7 +666,7 @@ modulePrimitiveDefaultBindings m = Optionals.givens $ Lists.map
 -- | Extract term definitions from a module as Bindings (for elementsToGraph compatibility).
 moduleTermBindings :: TypedTerm Module -> TypedTerm [Binding]
 moduleTermBindings m = Optionals.givens $ Lists.map
-  ("d" ~> cases _Definition (var "d") (Just nothing) [
+  ("d" ~> match _Definition (var "d") (Just nothing) [
     _Definition_term>>: "td" ~>
       just (Core.binding
         (Packaging.termDefinitionName $ var "td")
@@ -738,7 +738,7 @@ generateCoderModules
 -- Each TypeDefinition is converted to a Binding by encoding the type as a term.
 moduleTypeBindings :: TypedTerm Module -> TypedTerm [Binding]
 moduleTypeBindings m = Optionals.givens $ Lists.map
-  ("d" ~> cases _Definition (var "d") (Just nothing) [
+  ("d" ~> match _Definition (var "d") (Just nothing) [
     _Definition_type>>: "td" ~>
       just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
   (Packaging.moduleDefinitions m)
@@ -746,7 +746,7 @@ moduleTypeBindings m = Optionals.givens $ Lists.map
 -- | Extract type definition names from a module.
 moduleTypeNames :: TypedTerm Module -> TypedTerm [Name]
 moduleTypeNames m = Optionals.givens $ Lists.map
-  ("d" ~> cases _Definition (var "d") (Just nothing) [
+  ("d" ~> match _Definition (var "d") (Just nothing) [
     _Definition_type>>: "td" ~> just (Packaging.typeDefinitionName $ var "td")])
   (Packaging.moduleDefinitions m)
 
@@ -818,7 +818,7 @@ refreshModule = define "refreshModule" $
       (Packaging.moduleMetadata $ var "m")
       (Packaging.moduleDependencies $ var "m")
       (Optionals.givens $ Lists.map
-        ("d" ~> cases _Definition (var "d") Nothing [
+        ("d" ~> match _Definition (var "d") Nothing [
           _Definition_type>>: "td" ~> just (Packaging.definitionType (var "td")),
           _Definition_term>>: "td" ~> Optionals.map
             ("b" ~> Packaging.definitionTerm (Packaging.termDefinition

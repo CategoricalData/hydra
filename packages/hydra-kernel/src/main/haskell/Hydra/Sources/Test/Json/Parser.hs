@@ -167,9 +167,9 @@ primitivesGroup = subgroup "primitives" [
     parserCase "negative exponent" "1e-2" (Json.valueNumber $ Phantoms.decimal 0.01)]
 
 -- Show a ParseResult Value as a string for universal test comparison.
--- Uses Phantoms.cases to pattern-match the ParseResult union.
+-- Uses Phantoms.match to pattern-match the ParseResult union.
 showParseResult :: TypedTerm (ParseResult Value) -> TypedTerm String
-showParseResult pr = Phantoms.cases _ParseResult pr Nothing [
+showParseResult pr = Phantoms.match _ParseResult pr Nothing [
     _ParseResult_success Phantoms.>>: Phantoms.lambda "ps" (Strings.concat2
       (Phantoms.string "success(")
       (Strings.concat2

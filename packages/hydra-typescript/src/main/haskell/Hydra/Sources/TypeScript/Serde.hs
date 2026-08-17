@@ -202,7 +202,7 @@ arrayElementToExpr :: TypedTermDefinition (TS.ArrayElement -> Expr)
 arrayElementToExpr = define "arrayElementToExpr" $
   doc "Convert an array element to an AST expression" $
   lambda "elem" $
-    cases TS._ArrayElement (var "elem") Nothing [
+    match TS._ArrayElement (var "elem") Nothing [
       TS._ArrayElement_expression>>: lambda "e" $ expressionToExpr @@ var "e",
       TS._ArrayElement_spread>>: lambda "s" $
         Serialization.prefix @@ string "..." @@ (expressionToExpr @@ (unwrap TS._SpreadElement @@ var "s")),
@@ -221,7 +221,7 @@ arrayPatternToExpr = define "arrayPatternToExpr" $
   lambda "arr" $
     Serialization.bracketList @@ Serialization.inlineStyle @@
       (Lists.map
-        (lambda "maybeP" $ Optionals.cases (var "maybeP") (Serialization.cst @@ string "") (asTerm patternToExpr))
+        (lambda "maybeP" $ Optionals.match (var "maybeP") (Serialization.cst @@ string "") (asTerm patternToExpr))
         (var "arr"))
 
 arrowFunctionExpressionToExpr :: TypedTermDefinition (TS.ArrowFunctionExpression -> Expr)
@@ -238,12 +238,12 @@ arrowFunctionExpressionToExpr = define "arrowFunctionExpressionToExpr" $
     -- parens (`x => x`), but a typed pattern (`(x: T) => x`) requires them.
     -- Defaulting to parens keeps the emitter simple.
     "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (asTerm patternToExpr) (var "params")),
-    "bodyExpr">: cases TS._ArrowFunctionBody (var "body") Nothing [
+    "bodyExpr">: match TS._ArrowFunctionBody (var "body") Nothing [
       -- An object-literal body needs explicit parens: `() => { ... }` would
       -- otherwise be parsed as an arrow with a block body. Same for sequence
       -- expressions (`a, b, c`) which would shadow the arrow.
       TS._ArrowFunctionBody_expression>>: lambda "e" $
-        cases TS._Expression (var "e") (Just $ expressionToExpr @@ var "e") [
+        match TS._Expression (var "e") (Just $ expressionToExpr @@ var "e") [
           TS._Expression_object>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "e"),
           TS._Expression_sequence>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "e")],
       TS._ArrowFunctionBody_block>>: lambda "b" $ blockStatementToExpr @@ var "b"]] $
@@ -273,7 +273,7 @@ assignmentOperatorToString :: TypedTermDefinition (TS.AssignmentOperator -> Stri
 assignmentOperatorToString = define "assignmentOperatorToString" $
   doc "Convert an assignment operator to a string" $
   lambda "op" $
-    cases TS._AssignmentOperator (var "op") Nothing [
+    match TS._AssignmentOperator (var "op") Nothing [
       TS._AssignmentOperator_assign>>: constant $ string "=",
       TS._AssignmentOperator_addAssign>>: constant $ string "+=",
       TS._AssignmentOperator_subtractAssign>>: constant $ string "-=",
@@ -327,7 +327,7 @@ binaryOperatorToExpr :: TypedTermDefinition (TS.BinaryOperator -> Op)
 binaryOperatorToExpr = define "binaryOperatorToExpr" $
   doc "Convert a binary operator to an Op" $
   lambda "op" $
-    cases TS._BinaryOperator (var "op") Nothing [
+    match TS._BinaryOperator (var "op") Nothing [
       TS._BinaryOperator_add>>: constant TypeScriptOperators.addOp,
       TS._BinaryOperator_subtract>>: constant TypeScriptOperators.subtractOp,
       TS._BinaryOperator_multiply>>: constant TypeScriptOperators.multiplyOp,
@@ -365,7 +365,7 @@ breakStatementToExpr :: TypedTermDefinition (TS.BreakStatement -> Expr)
 breakStatementToExpr = define "breakStatementToExpr" $
   doc "Convert a break statement to an AST expression" $
   lambda "b" $
-    Optionals.cases (var "b") (Serialization.cst @@ string "break;") (lambda "label" $ Serialization.suffix @@ string ";" @@
+    Optionals.match (var "b") (Serialization.cst @@ string "break;") (lambda "label" $ Serialization.suffix @@ string ";" @@
         (Serialization.spaceSep @@ list [
           Serialization.cst @@ string "break",
           identifierToExpr @@ var "label"]))
@@ -380,7 +380,7 @@ callExpressionToExpr = define "callExpressionToExpr" $
     -- A bare arrow / conditional / binary / sequence / new can't appear in
     -- callee position without parens: `x => x.body(arg)` parses as
     -- `x => (x.body(arg))`, not `(x => x.body)(arg)`. Wrap those forms.
-    "calleeExpr">: cases TS._Expression (var "callee") (Just $ expressionToExpr @@ var "callee") [
+    "calleeExpr">: match TS._Expression (var "callee") (Just $ expressionToExpr @@ var "callee") [
       TS._Expression_arrow>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "callee"),
       TS._Expression_conditional>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "callee"),
       TS._Expression_binary>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "callee"),
@@ -402,7 +402,7 @@ catchClauseToExpr = define "catchClauseToExpr" $
   lambda "c" $ lets [
     "param">: project TS._CatchClause TS._CatchClause_param @@ var "c",
     "body">: project TS._CatchClause TS._CatchClause_body @@ var "c",
-    "catchKw">: Optionals.cases (var "param") (Serialization.cst @@ string "catch") (lambda "p" $ Serialization.spaceSep @@ list [
+    "catchKw">: Optionals.match (var "param") (Serialization.cst @@ string "catch") (lambda "p" $ Serialization.spaceSep @@ list [
         Serialization.cst @@ string "catch",
         Serialization.parens @@ (patternToExpr @@ var "p")])] $
     Serialization.spaceSep @@ list [var "catchKw", blockStatementToExpr @@ var "body"]
@@ -414,7 +414,7 @@ classDeclarationToExpr = define "classDeclarationToExpr" $
     "id">: project TS._ClassDeclaration TS._ClassDeclaration_id @@ var "cls",
     "superClass">: project TS._ClassDeclaration TS._ClassDeclaration_superClass @@ var "cls",
     "body">: project TS._ClassDeclaration TS._ClassDeclaration_body @@ var "cls",
-    "extendsClause">: Optionals.cases (var "superClass") (list ([] :: [TypedTerm Expr])) (lambda "s" $ list [Serialization.cst @@ string "extends", expressionToExpr @@ var "s"]),
+    "extendsClause">: Optionals.match (var "superClass") (list ([] :: [TypedTerm Expr])) (lambda "s" $ list [Serialization.cst @@ string "extends", expressionToExpr @@ var "s"]),
     "bodyExpr">: Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
       (Serialization.newlineSep @@ (Lists.map (asTerm methodDefinitionToExpr) (var "body")))] $
     Serialization.spaceSep @@ (Lists.concat $ list [
@@ -428,7 +428,7 @@ classDeclarationWithCommentsToExpr = define "classDeclarationWithCommentsToExpr"
   lambda "cdwc" $ lets [
     "body">: project TS._ClassDeclarationWithComments TS._ClassDeclarationWithComments_body @@ var "cdwc",
     "mc">: project TS._ClassDeclarationWithComments TS._ClassDeclarationWithComments_comments @@ var "cdwc"] $
-    Optionals.cases (var "mc") (classDeclarationToExpr @@ var "body") (lambda "c" $ Serialization.newlineSep @@ list [
+    Optionals.match (var "mc") (classDeclarationToExpr @@ var "body") (lambda "c" $ Serialization.newlineSep @@ list [
         documentationCommentToExpr @@ var "c",
         classDeclarationToExpr @@ var "body"])
 
@@ -443,11 +443,11 @@ conditionalExpressionToExpr = define "conditionalExpressionToExpr" $
     -- a block statement if it began with `{`. Parenthesize object literals
     -- (and sequences) on either side. Nested conditionals don't need parens
     -- because `?:` is right-associative.
-    "consExpr">: cases TS._Expression (var "consequent")
+    "consExpr">: match TS._Expression (var "consequent")
       (Just $ expressionToExpr @@ var "consequent") [
         TS._Expression_object>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "consequent"),
         TS._Expression_sequence>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "consequent")],
-    "altExpr">: cases TS._Expression (var "alternate")
+    "altExpr">: match TS._Expression (var "alternate")
       (Just $ expressionToExpr @@ var "alternate") [
         TS._Expression_object>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "alternate"),
         TS._Expression_sequence>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "alternate")]] $
@@ -462,7 +462,7 @@ continueStatementToExpr :: TypedTermDefinition (TS.ContinueStatement -> Expr)
 continueStatementToExpr = define "continueStatementToExpr" $
   doc "Convert a continue statement to an AST expression" $
   lambda "c" $
-    Optionals.cases (var "c") (Serialization.cst @@ string "continue;") (lambda "label" $ Serialization.suffix @@ string ";" @@
+    Optionals.match (var "c") (Serialization.cst @@ string "continue;") (lambda "label" $ Serialization.suffix @@ string ";" @@
         (Serialization.spaceSep @@ list [
           Serialization.cst @@ string "continue",
           identifierToExpr @@ var "label"]))
@@ -498,8 +498,8 @@ documentationTagToLine = define "documentationTagToLine" $
     "mtype">: project TS._DocumentationTag TS._DocumentationTag_type @@ var "tag",
     "mparamName">: project TS._DocumentationTag TS._DocumentationTag_paramName @@ var "tag",
     "description">: project TS._DocumentationTag TS._DocumentationTag_description @@ var "tag",
-    "typePart">: Optionals.cases (var "mtype") (string "") (lambda "t" $ Strings.concat $ list [string "{", typeExpressionToString @@ var "t", string "}"]),
-    "paramPart">: Optionals.cases (var "mparamName") (string "") (lambda "p" $ unwrap TS._Identifier @@ var "p"),
+    "typePart">: Optionals.match (var "mtype") (string "") (lambda "t" $ Strings.concat $ list [string "{", typeExpressionToString @@ var "t", string "}"]),
+    "paramPart">: Optionals.match (var "mparamName") (string "") (lambda "p" $ unwrap TS._Identifier @@ var "p"),
     "parts">: list [
       Strings.concat2 (string "@") (var "name"),
       var "typePart",
@@ -528,7 +528,7 @@ exportAllToExpr = define "exportAllToExpr" $
   lambda "a" $ lets [
     "exported">: project TS._ExportAllDeclaration TS._ExportAllDeclaration_exported @@ var "a",
     "source">: project TS._ExportAllDeclaration TS._ExportAllDeclaration_source @@ var "a",
-    "exportedClause">: Optionals.cases (var "exported") (Serialization.cst @@ string "*") (lambda "e" $ Serialization.spaceSep @@ list [
+    "exportedClause">: Optionals.match (var "exported") (Serialization.cst @@ string "*") (lambda "e" $ Serialization.spaceSep @@ list [
         Serialization.cst @@ string "*",
         Serialization.cst @@ string "as",
         identifierToExpr @@ var "e"])] $
@@ -548,7 +548,7 @@ exportDeclarationToExpr :: TypedTermDefinition (TS.ExportDeclaration -> Expr)
 exportDeclarationToExpr = define "exportDeclarationToExpr" $
   doc "Convert an export declaration to an AST expression" $
   lambda "exp" $
-    cases TS._ExportDeclaration (var "exp") Nothing [
+    match TS._ExportDeclaration (var "exp") Nothing [
       TS._ExportDeclaration_named>>: lambda "n" $ namedExportToExpr @@ var "n",
       TS._ExportDeclaration_default>>: lambda "e" $
         Serialization.suffix @@ string ";" @@
@@ -579,7 +579,7 @@ expressionToExpr :: TypedTermDefinition (TS.Expression -> Expr)
 expressionToExpr = define "expressionToExpr" $
   doc "Convert a TypeScript expression to an AST expression" $
   lambda "expr" $
-    cases TS._Expression (var "expr") Nothing [
+    match TS._Expression (var "expr") Nothing [
       TS._Expression_identifier>>: lambda "id" $ identifierToExpr @@ var "id",
       TS._Expression_literal>>: lambda "lit" $ literalToExpr @@ var "lit",
       TS._Expression_array>>: lambda "arr" $ arrayExpressionToExpr @@ var "arr",
@@ -600,7 +600,7 @@ expressionToExpr = define "expressionToExpr" $
           Serialization.cst @@ string "new",
           callExpressionToExpr @@ var "call"],
       TS._Expression_yield>>: lambda "maybeExpr" $
-        Optionals.cases (var "maybeExpr") (Serialization.cst @@ string "yield") (lambda "e" $ Serialization.spaceSep @@ list [
+        Optionals.match (var "maybeExpr") (Serialization.cst @@ string "yield") (lambda "e" $ Serialization.spaceSep @@ list [
             Serialization.cst @@ string "yield",
             expressionToExpr @@ var "e"]),
       TS._Expression_await>>: lambda "e" $
@@ -629,7 +629,7 @@ forInStatementToExpr = define "forInStatementToExpr" $
     "left">: project TS._ForInStatement TS._ForInStatement_left @@ var "f",
     "right">: project TS._ForInStatement TS._ForInStatement_right @@ var "f",
     "body">: project TS._ForInStatement TS._ForInStatement_body @@ var "f",
-    "leftExpr">: cases TS._ForInLeft (var "left") Nothing [
+    "leftExpr">: match TS._ForInLeft (var "left") Nothing [
       TS._ForInLeft_variable>>: lambda "v" $ variableDeclarationToExpr @@ var "v",
       TS._ForInLeft_pattern>>: lambda "p" $ patternToExpr @@ var "p"]] $
     Serialization.spaceSep @@ list [
@@ -651,7 +651,7 @@ forOfStatementToExpr = define "forOfStatementToExpr" $
     "forKw">: Logic.ifElse (var "await")
       (Serialization.cst @@ string "for await")
       (Serialization.cst @@ string "for"),
-    "leftExpr">: cases TS._ForInLeft (var "left") Nothing [
+    "leftExpr">: match TS._ForInLeft (var "left") Nothing [
       TS._ForInLeft_variable>>: lambda "v" $ variableDeclarationToExpr @@ var "v",
       TS._ForInLeft_pattern>>: lambda "p" $ patternToExpr @@ var "p"]] $
     Serialization.spaceSep @@ list [
@@ -670,11 +670,11 @@ forStatementToExpr = define "forStatementToExpr" $
     "test">: project TS._ForStatement TS._ForStatement_test @@ var "f",
     "update">: project TS._ForStatement TS._ForStatement_update @@ var "f",
     "body">: project TS._ForStatement TS._ForStatement_body @@ var "f",
-    "initExpr">: Optionals.cases (var "init") (Serialization.cst @@ string "") (lambda "i" $ cases TS._ForInit (var "i") Nothing [
+    "initExpr">: Optionals.match (var "init") (Serialization.cst @@ string "") (lambda "i" $ match TS._ForInit (var "i") Nothing [
         TS._ForInit_variable>>: lambda "v" $ variableDeclarationToExpr @@ var "v",
         TS._ForInit_expression>>: lambda "e" $ expressionToExpr @@ var "e"]),
-    "testExpr">: Optionals.cases (var "test") (Serialization.cst @@ string "") (asTerm expressionToExpr),
-    "updateExpr">: Optionals.cases (var "update") (Serialization.cst @@ string "") (asTerm expressionToExpr)] $
+    "testExpr">: Optionals.match (var "test") (Serialization.cst @@ string "") (asTerm expressionToExpr),
+    "updateExpr">: Optionals.match (var "update") (Serialization.cst @@ string "") (asTerm expressionToExpr)] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "for",
       Serialization.parenListAdaptive @@ list [var "initExpr", var "testExpr", var "updateExpr"],
@@ -716,7 +716,7 @@ functionDeclarationWithCommentsToExpr = define "functionDeclarationWithCommentsT
   lambda "fdwc" $ lets [
     "body">: project TS._FunctionDeclarationWithComments TS._FunctionDeclarationWithComments_body @@ var "fdwc",
     "mc">: project TS._FunctionDeclarationWithComments TS._FunctionDeclarationWithComments_comments @@ var "fdwc"] $
-    Optionals.cases (var "mc") (functionDeclarationToExpr @@ var "body") (lambda "c" $ Serialization.newlineSep @@ list [
+    Optionals.match (var "mc") (functionDeclarationToExpr @@ var "body") (lambda "c" $ Serialization.newlineSep @@ list [
         documentationCommentToExpr @@ var "c",
         functionDeclarationToExpr @@ var "body"])
 
@@ -733,7 +733,7 @@ functionExpressionToExpr = define "functionExpressionToExpr" $
     "funcKw">: Logic.ifElse (var "generator")
       (Serialization.cst @@ string "function*")
       (Serialization.cst @@ string "function"),
-    "nameExpr">: Optionals.cases (var "mid") (list ([] :: [TypedTerm Expr])) (lambda "id" $ list [identifierToExpr @@ var "id"]),
+    "nameExpr">: Optionals.match (var "mid") (list ([] :: [TypedTerm Expr])) (lambda "id" $ list [identifierToExpr @@ var "id"]),
     "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (asTerm patternToExpr) (var "params"))] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       var "asyncKw",
@@ -757,7 +757,7 @@ ifStatementToExpr = define "ifStatementToExpr" $
       Serialization.cst @@ string "if",
       Serialization.parens @@ (expressionToExpr @@ var "test"),
       statementToExpr @@ var "consequent"]] $
-    Optionals.cases (var "alternate") (var "ifPart") (lambda "alt" $ Serialization.spaceSep @@ list [
+    Optionals.match (var "alternate") (var "ifPart") (lambda "alt" $ Serialization.spaceSep @@ list [
         var "ifPart",
         Serialization.cst @@ string "else",
         statementToExpr @@ var "alt"])
@@ -786,7 +786,7 @@ importSpecifierToExpr :: TypedTermDefinition (TS.ImportClause -> Expr)
 importSpecifierToExpr = define "importSpecifierToExpr" $
   doc "Convert an import specifier to an AST expression" $
   lambda "spec" $
-    cases TS._ImportClause (var "spec") Nothing [
+    match TS._ImportClause (var "spec") Nothing [
       TS._ImportClause_named>>: lambda "n" $ lets [
         "imported">: project TS._ImportSpecifier TS._ImportSpecifier_imported @@ var "n",
         "local">: project TS._ImportSpecifier TS._ImportSpecifier_local @@ var "n"] $
@@ -844,7 +844,7 @@ literalToExpr :: TypedTermDefinition (TS.Literal -> Expr)
 literalToExpr = define "literalToExpr" $
   doc "Convert a literal to an AST expression" $
   lambda "lit" $
-    cases TS._Literal (var "lit") Nothing [
+    match TS._Literal (var "lit") Nothing [
       TS._Literal_string>>: lambda "s" $ stringLiteralToExpr @@ var "s",
       TS._Literal_number>>: lambda "n" $ numericLiteralToExpr @@ var "n",
       TS._Literal_boolean>>: lambda "b" $
@@ -866,7 +866,7 @@ memberExpressionToExpr = define "memberExpressionToExpr" $
     -- Same caveat as in callExpressionToExpr: an unparenthesized arrow /
     -- conditional / binary / object on the LHS of `.` would re-associate
     -- the dot to a sub-expression. Parenthesize them.
-    "objExpr">: cases TS._Expression (var "obj") (Just $ expressionToExpr @@ var "obj") [
+    "objExpr">: match TS._Expression (var "obj") (Just $ expressionToExpr @@ var "obj") [
       TS._Expression_arrow>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "obj"),
       TS._Expression_conditional>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "obj"),
       TS._Expression_binary>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "obj"),
@@ -897,7 +897,7 @@ methodDefinitionToExpr = define "methodDefinitionToExpr" $
     "computed">: project TS._MethodDefinition TS._MethodDefinition_computed @@ var "method",
     "static">: project TS._MethodDefinition TS._MethodDefinition_static @@ var "method",
     "staticKw">: Logic.ifElse (var "static") (list [Serialization.cst @@ string "static"]) (list ([] :: [TypedTerm Expr])),
-    "kindKw">: cases TS._MethodKind (var "kind") Nothing [
+    "kindKw">: match TS._MethodKind (var "kind") Nothing [
       TS._MethodKind_constructor>>: constant $ list ([] :: [TypedTerm Expr]),
       TS._MethodKind_method>>: constant $ list ([] :: [TypedTerm Expr]),
       TS._MethodKind_get>>: constant $ list [Serialization.cst @@ string "get"],
@@ -922,7 +922,7 @@ moduleItemToExpr :: TypedTermDefinition (TS.ModuleItem -> Expr)
 moduleItemToExpr = define "moduleItemToExpr" $
   doc "Convert a module item to an AST expression" $
   lambda "item" $
-    cases TS._ModuleItem (var "item") Nothing [
+    match TS._ModuleItem (var "item") Nothing [
       TS._ModuleItem_statement>>: lambda "s" $ statementToExpr @@ var "s",
       TS._ModuleItem_import>>: lambda "i" $ importDeclarationToExpr @@ var "i",
       TS._ModuleItem_export>>: lambda "e" $ exportDeclarationToExpr @@ var "e"]
@@ -933,7 +933,7 @@ moduleItemWithCommentsToExpr = define "moduleItemWithCommentsToExpr" $
   lambda "miwc" $ lets [
     "body">: project TS._ModuleItemWithComments TS._ModuleItemWithComments_body @@ var "miwc",
     "mc">: project TS._ModuleItemWithComments TS._ModuleItemWithComments_comments @@ var "miwc"] $
-    Optionals.cases (var "mc") (moduleItemToExpr @@ var "body") (lambda "c" $ Serialization.newlineSep @@ list [
+    Optionals.match (var "mc") (moduleItemToExpr @@ var "body") (lambda "c" $ Serialization.newlineSep @@ list [
         documentationCommentToExpr @@ var "c",
         moduleItemToExpr @@ var "body"])
 
@@ -944,7 +944,7 @@ namedExportToExpr = define "namedExportToExpr" $
     "specifiers">: project TS._NamedExport TS._NamedExport_specifiers @@ var "n",
     "source">: project TS._NamedExport TS._NamedExport_source @@ var "n",
     "specExprs">: Lists.map (asTerm exportSpecifierToExpr) (var "specifiers"),
-    "fromClause">: Optionals.cases (var "source") (list ([] :: [TypedTerm Expr])) (lambda "s" $ list [Serialization.cst @@ string "from", stringLiteralToExpr @@ var "s"])] $
+    "fromClause">: Optionals.match (var "source") (list ([] :: [TypedTerm Expr])) (lambda "s" $ list [Serialization.cst @@ string "from", stringLiteralToExpr @@ var "s"])] $
     Serialization.suffix @@ string ";" @@
       (Serialization.spaceSep @@ (Lists.concat $ list [
         list [Serialization.cst @@ string "export"],
@@ -955,7 +955,7 @@ numericLiteralToExpr :: TypedTermDefinition (TS.NumericLiteral -> Expr)
 numericLiteralToExpr = define "numericLiteralToExpr" $
   doc "Convert a numeric literal to an AST expression" $
   lambda "n" $
-    cases TS._NumericLiteral (var "n") Nothing [
+    match TS._NumericLiteral (var "n") Nothing [
       TS._NumericLiteral_integer>>: lambda "i" $
         Serialization.cst @@ (Literals.showInt64 $ var "i"),
       TS._NumericLiteral_float>>: lambda "f" $
@@ -977,7 +977,7 @@ objectPatternPropertyToExpr :: TypedTermDefinition (TS.ObjectPatternProperty -> 
 objectPatternPropertyToExpr = define "objectPatternPropertyToExpr" $
   doc "Convert an object pattern property to an AST expression" $
   lambda "prop" $
-    cases TS._ObjectPatternProperty (var "prop") Nothing [
+    match TS._ObjectPatternProperty (var "prop") Nothing [
       TS._ObjectPatternProperty_property>>: lambda "p" $ propertyToExpr @@ var "p",
       TS._ObjectPatternProperty_rest>>: lambda "r" $
         Serialization.prefix @@ string "..." @@ (patternToExpr @@ (unwrap TS._RestElement @@ var "r"))]
@@ -994,7 +994,7 @@ patternToExpr :: TypedTermDefinition (TS.Pattern -> Expr)
 patternToExpr = define "patternToExpr" $
   doc "Convert a pattern to an AST expression" $
   lambda "pat" $
-    cases TS._Pattern (var "pat") Nothing [
+    match TS._Pattern (var "pat") Nothing [
       TS._Pattern_identifier>>: lambda "id" $ identifierToExpr @@ var "id",
       TS._Pattern_object>>: lambda "obj" $ objectPatternToExpr @@ var "obj",
       TS._Pattern_array>>: lambda "arr" $ arrayPatternToExpr @@ var "arr",
@@ -1011,7 +1011,7 @@ patternToString :: TypedTermDefinition (TS.Pattern -> String)
 patternToString = define "patternToString" $
   doc "Render a TS.Pattern as a plain string" $
   lambda "pat" $
-    cases TS._Pattern (var "pat") (Just $ string "_") [
+    match TS._Pattern (var "pat") (Just $ string "_") [
       TS._Pattern_identifier>>: lambda "id" $ unwrap TS._Identifier @@ var "id",
       TS._Pattern_rest>>: lambda "rest" $
         Strings.concat2 (string "...") (patternToString @@ (unwrap TS._RestElement @@ var "rest")),
@@ -1049,7 +1049,7 @@ returnStatementToExpr :: TypedTermDefinition (TS.ReturnStatement -> Expr)
 returnStatementToExpr = define "returnStatementToExpr" $
   doc "Convert a return statement to an AST expression" $
   lambda "r" $
-    Optionals.cases (var "r") (Serialization.cst @@ string "return;") (lambda "e" $ Serialization.suffix @@ string ";" @@
+    Optionals.match (var "r") (Serialization.cst @@ string "return;") (lambda "e" $ Serialization.suffix @@ string ";" @@
         (Serialization.spaceSep @@ list [
           Serialization.cst @@ string "return",
           expressionToExpr @@ var "e"]))
@@ -1058,7 +1058,7 @@ statementToExpr :: TypedTermDefinition (TS.Statement -> Expr)
 statementToExpr = define "statementToExpr" $
   doc "Convert a statement to an AST expression" $
   lambda "stmt" $
-    cases TS._Statement (var "stmt") Nothing [
+    match TS._Statement (var "stmt") Nothing [
       TS._Statement_expression>>: lambda "e" $
         Serialization.suffix @@ string ";" @@ (expressionToExpr @@ var "e"),
       TS._Statement_block>>: lambda "b" $ blockStatementToExpr @@ var "b",
@@ -1097,7 +1097,7 @@ switchCaseToExpr = define "switchCaseToExpr" $
   lambda "c" $ lets [
     "test">: project TS._SwitchCase TS._SwitchCase_test @@ var "c",
     "consequent">: project TS._SwitchCase TS._SwitchCase_consequent @@ var "c",
-    "caseLabel">: Optionals.cases (var "test") (Serialization.cst @@ string "default:") (lambda "t" $ Serialization.spaceSep @@ list [
+    "caseLabel">: Optionals.match (var "test") (Serialization.cst @@ string "default:") (lambda "t" $ Serialization.spaceSep @@ list [
         Serialization.cst @@ string "case",
         expressionToExpr @@ var "t",
         Serialization.cst @@ string ":"])] $
@@ -1108,12 +1108,12 @@ switchStatementToExpr = define "switchStatementToExpr" $
   doc "Convert a switch statement to an AST expression" $
   lambda "switchStmt" $ lets [
     "discriminant">: project TS._SwitchStatement TS._SwitchStatement_discriminant @@ var "switchStmt",
-    "cases">: project TS._SwitchStatement TS._SwitchStatement_cases @@ var "switchStmt"] $
+    "match">: project TS._SwitchStatement TS._SwitchStatement_cases @@ var "switchStmt"] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "switch",
       Serialization.parens @@ (expressionToExpr @@ var "discriminant"),
       Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
-        (Serialization.newlineSep @@ (Lists.map (asTerm switchCaseToExpr) (var "cases")))]
+        (Serialization.newlineSep @@ (Lists.map (asTerm switchCaseToExpr) (var "match")))]
 
 templateLiteralToExpr :: TypedTermDefinition (TS.TemplateLiteral -> Expr)
 templateLiteralToExpr = define "templateLiteralToExpr" $
@@ -1184,8 +1184,8 @@ tryStatementToExpr = define "tryStatementToExpr" $
     "tryPart">: Serialization.spaceSep @@ list [
       Serialization.cst @@ string "try",
       blockStatementToExpr @@ var "block"],
-    "catchPart">: Optionals.cases (var "handler") (list ([] :: [TypedTerm Expr])) (lambda "c" $ list [catchClauseToExpr @@ var "c"]),
-    "finallyPart">: Optionals.cases (var "finalizer") (list ([] :: [TypedTerm Expr])) (lambda "f" $ list [Serialization.spaceSep @@ list [
+    "catchPart">: Optionals.match (var "handler") (list ([] :: [TypedTerm Expr])) (lambda "c" $ list [catchClauseToExpr @@ var "c"]),
+    "finallyPart">: Optionals.match (var "finalizer") (list ([] :: [TypedTerm Expr])) (lambda "f" $ list [Serialization.spaceSep @@ list [
         Serialization.cst @@ string "finally",
         blockStatementToExpr @@ var "f"]])] $
     Serialization.spaceSep @@ (Lists.concat $ list [list [var "tryPart"], var "catchPart", var "finallyPart"])
@@ -1196,7 +1196,7 @@ tryStatementToExpr = define "tryStatementToExpr" $
 tsTypeExpressionToString :: TypedTermDefinition (TS.TypeExpression -> String)
 tsTypeExpressionToString = define "tsTypeExpressionToString" $
   doc "Render a TypeScript type expression as a string in TS syntax" $
-  lambda "t" $ cases TS._TypeExpression (var "t") (Just $ string "unknown") [
+  lambda "t" $ match TS._TypeExpression (var "t") (Just $ string "unknown") [
     -- Render an identifier — but rewrite the synthetic kernel type-variable
     -- names (`T0`, `T1`, …) to `any`. The Hydra type-variable `tN` is
     -- capitalized to `TN` by encodeType, but inline annotations have no
@@ -1259,7 +1259,7 @@ typeExpressionToString :: TypedTermDefinition (TS.TypeExpression -> String)
 typeExpressionToString = define "typeExpressionToString" $
   doc "Convert a type expression to a string for JSDoc" $
   lambda "typ" $
-    cases TS._TypeExpression (var "typ") Nothing [
+    match TS._TypeExpression (var "typ") Nothing [
       TS._TypeExpression_identifier>>: lambda "id" $ unwrap TS._Identifier @@ var "id",
       TS._TypeExpression_any>>: constant $ string "*",
       TS._TypeExpression_void>>: constant $ string "void",
@@ -1335,7 +1335,7 @@ unaryOperatorToString :: TypedTermDefinition (TS.UnaryOperator -> String)
 unaryOperatorToString = define "unaryOperatorToString" $
   doc "Convert a unary operator to a string" $
   lambda "op" $
-    cases TS._UnaryOperator (var "op") Nothing [
+    match TS._UnaryOperator (var "op") Nothing [
       TS._UnaryOperator_negate>>: constant $ string "-",
       TS._UnaryOperator_plus>>: constant $ string "+",
       TS._UnaryOperator_not>>: constant $ string "!",
@@ -1363,7 +1363,7 @@ variableDeclaratorToExpr = define "variableDeclaratorToExpr" $
   lambda "decl" $ lets [
     "id">: project TS._VariableDeclarator TS._VariableDeclarator_id @@ var "decl",
     "init">: project TS._VariableDeclarator TS._VariableDeclarator_init @@ var "decl"] $
-    Optionals.cases (var "init") (patternToExpr @@ var "id") (lambda "e" $ Serialization.ifx @@ TypeScriptOperators.defineOp @@
+    Optionals.match (var "init") (patternToExpr @@ var "id") (lambda "e" $ Serialization.ifx @@ TypeScriptOperators.defineOp @@
         (patternToExpr @@ var "id") @@
         (expressionToExpr @@ var "e"))
 
@@ -1371,7 +1371,7 @@ variableKindToExpr :: TypedTermDefinition (TS.VariableKind -> Expr)
 variableKindToExpr = define "variableKindToExpr" $
   doc "Convert a variable kind to an AST expression" $
   lambda "kind" $
-    cases TS._VariableKind (var "kind") Nothing [
+    match TS._VariableKind (var "kind") Nothing [
       TS._VariableKind_var>>: constant $ Serialization.cst @@ string "var",
       TS._VariableKind_let>>: constant $ Serialization.cst @@ string "let",
       TS._VariableKind_const>>: constant $ Serialization.cst @@ string "const"]

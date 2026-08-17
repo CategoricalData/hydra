@@ -256,7 +256,7 @@ stringEvalPair :: String -> TypedTerm String -> TypedTerm String -> TypedTerm Te
 stringEvalPair cname = evalPair cname (Phantoms.lambda "s" (Phantoms.var "s"))
 
 subgroup :: AsTerm t TestCaseWithMetadata => String -> [t] -> TypedTerm TestGroup
-subgroup name cases = tgroup name Nothing [] (asTerm <$> cases)
+subgroup name match = tgroup name Nothing [] (asTerm <$> match)
 
 supergroup :: AsTerm t TestGroup => String -> [t] -> TypedTerm TestGroup
 supergroup name subgroups = tgroup name Nothing (asTerm <$> subgroups) []
@@ -272,7 +272,7 @@ testGraphRef :: TypedTerm Graph
 testGraphRef = TypedTerm $ TermVariable $ Name "hydra.test.testGraph.testGraph"
 
 tgroup :: String -> Maybe String -> [TypedTerm TestGroup] -> [TypedTerm TestCaseWithMetadata] -> TypedTerm TestGroup
-tgroup name mdesc subgroups cases = testGroup (Phantoms.string name) (opt (Phantoms.string <$> mdesc)) (Phantoms.list subgroups) (Phantoms.list cases)
+tgroup name mdesc subgroups match = testGroup (Phantoms.string name) (opt (Phantoms.string <$> mdesc)) (Phantoms.list subgroups) (Phantoms.list match)
 
 typeSchemeToFTypeRef :: TypedTerm (TypeScheme -> Type)
 typeSchemeToFTypeRef = TypedTerm $ TermVariable $ Name "hydra.scoping.typeSchemeToFType"
@@ -478,11 +478,11 @@ testCaseWithMetadataTags :: TypedTerm (TestCaseWithMetadata -> [Tag])
 testCaseWithMetadataTags = Phantoms.project _TestCaseWithMetadata _TestCaseWithMetadata_tags
 
 testGroup :: TypedTerm String -> TypedTerm (Maybe String) -> TypedTerm [TestGroup] -> TypedTerm [TestCaseWithMetadata] -> TypedTerm TestGroup
-testGroup name description subgroups cases = Phantoms.record _TestGroup [
+testGroup name description subgroups match = Phantoms.record _TestGroup [
   _TestGroup_name>>: name,
   _TestGroup_description>>: description,
   _TestGroup_subgroups>>: subgroups,
-  _TestGroup_cases>>: cases]
+  _TestGroup_cases>>: match]
 
 -- | Convenience function for creating type reduction test cases
 typeRedCase :: String -> TypedTerm Type -> TypedTerm Type -> TypedTerm TestCaseWithMetadata

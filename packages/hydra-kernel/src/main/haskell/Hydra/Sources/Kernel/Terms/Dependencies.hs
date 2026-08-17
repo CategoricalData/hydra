@@ -126,7 +126,7 @@ flattenLetTerms = define "flattenLetTerms" $
     "key0" <~ Core.bindingName (var "binding") $
     "val0" <~ Core.bindingTerm (var "binding") $
     "t" <~ Core.bindingTypeScheme (var "binding") $
-    cases _Term (var "val0")
+    match _Term (var "val0")
       (Just $ pair (Core.binding (var "key0") (var "val0") (var "t")) (list ([] :: [TypedTerm Binding]))) [
       _Term_annotated>>: "at" ~>
         "val1" <~ Core.annotatedTermBody (var "at") $
@@ -158,14 +158,14 @@ flattenLetTerms = define "flattenLetTerms" $
   -- Note: The default case uses concat2 with empty list to force bindings to have type [Binding]
   -- This ensures proper type inference and prevents incorrect generalization
   "flattenBodyLet" <~ ("bindings" ~> "body" ~>
-    cases _Term (var "body") (Just $ pair (Lists.concat2 (list ([] :: [TypedTerm Binding])) (var "bindings")) (var "body")) [
+    match _Term (var "body") (Just $ pair (Lists.concat2 (list ([] :: [TypedTerm Binding])) (var "bindings")) (var "body")) [
       _Term_let>>: "innerLt" ~>
         "innerBindings" <~ Core.letBindings (var "innerLt") $
         "innerBody" <~ Core.letBody (var "innerLt") $
         var "flattenBodyLet" @@ Lists.concat2 (var "bindings") (var "innerBindings") @@ var "innerBody"]) $
   "flatten" <~ ("recurse" ~> "term" ~>
     "rewritten" <~ var "recurse" @@ var "term" $
-    cases _Term (var "rewritten")
+    match _Term (var "rewritten")
       (Just $ var "rewritten") [
       _Term_let>>: "lt" ~>
         "bindings" <~ Core.letBindings (var "lt") $
@@ -187,7 +187,7 @@ inlineType = define "inlineType" $
   doc "Inline all type variables in a type using the provided schema (Either version). Note: this function is only appropriate for nonrecursive type definitions" $
   "schema" ~> "typ" ~>
   "f" <~ ("recurse" ~> "typ" ~>
-    "afterRecurse" <~ ("tr" ~> cases _Type (var "tr")
+    "afterRecurse" <~ ("tr" ~> match _Type (var "tr")
       (Just $ right $ var "tr") [
       _Type_variable>>: "v" ~>
         Optionals.cases (Maps.lookup (var "v" :: TypedTerm Name) (var "schema")) (left $ Error.errorOther $ Error.otherError $ Strings.concat2 (string "No such type in schema: ") (unwrap _Name @@ var "v")) (inlineType @@ var "schema")]) $
@@ -198,7 +198,7 @@ inlineType = define "inlineType" $
 isLambda :: TypedTermDefinition (Term -> Bool)
 isLambda = define "isLambda" $
   doc "Check whether a term is a lambda, possibly nested within let and/or annotation terms" $
-  "term" ~> cases _Term (Strip.deannotateTerm @@ var "term")
+  "term" ~> match _Term (Strip.deannotateTerm @@ var "term")
     (Just false) [
     _Term_lambda>>: constant true,
     _Term_let>>: "lt" ~> isLambda @@ (project _Let _Let_body @@ var "lt")]
@@ -212,7 +212,7 @@ liftLambdaAboveLet = define "liftLambdaAboveLet" $
   "rewrite" <~ ("recurse" ~> "term" ~>
     "rewriteBinding" <~ ("b" ~> Core.bindingWithTerm (var "b") $ var "rewrite" @@ var "recurse" @@ Core.bindingTerm (var "b")) $
     "rewriteBindings" <~ ("bs" ~> Lists.map (var "rewriteBinding") (var "bs")) $
-    "digForLambdas" <~ ("original" ~> "cons" ~> "term" ~> cases _Term (var"term")
+    "digForLambdas" <~ ("original" ~> "cons" ~> "term" ~> match _Term (var"term")
       (Just $ var "recurse" @@ var "original") [
       _Term_annotated>>: "at" ~> var "digForLambdas"
         @@ var "original"
@@ -228,7 +228,7 @@ liftLambdaAboveLet = define "liftLambdaAboveLet" $
         @@ ("t" ~> var "cons" @@ (Core.termLet $ Core.let_ (var "rewriteBindings" @@ (Core.letBindings $ var "l")) (var "t")))
         @@ Core.letBody (var "l")]) $
     -- Note: we match *before* recursing for the sake of efficiency.
-    cases _Term (var "term")
+    match _Term (var "term")
       (Just $ var "recurse" @@ var "term") [
       _Term_let>>: "l" ~> var "digForLambdas"
         @@ var "term"
@@ -266,7 +266,7 @@ replaceTypedefs = define "replaceTypedefs" $
     -- Note: dflt (recurse @@ typ) is NOT bound as a let here, because in strict languages (Java, Python)
     -- this would eagerly recurse into Record/Union/Wrap fields, causing infinite recursion on recursive types.
     -- Instead, we inline (recurse @@ typ) only where needed.
-    cases _Type (var "typ")
+    match _Type (var "typ")
       (Just $ var "recurse" @@ var "typ") [
 --      _Type_forall>>: "ft" ~> ... -- TODO: shadowing via forall-bound variables
       _Type_annotated>>: "at" ~> Core.typeAnnotated $ Core.annotatedType
@@ -275,7 +275,7 @@ replaceTypedefs = define "replaceTypedefs" $
       _Type_record>>: constant $ var "typ",
       _Type_union>>: constant $ var "typ",
       _Type_variable>>: "v" ~>
-        "forMono" <~ ("t" ~> cases _Type (var "t")
+        "forMono" <~ ("t" ~> match _Type (var "t")
           (Just $ var "rewrite" @@ var "recurse" @@ var "t") [
           _Type_record>>: constant $ var "typ",
           _Type_union>>: constant $ var "typ",
@@ -296,12 +296,12 @@ simplifyTerm = define "simplifyTerm" $
   doc "Simplify terms by applying beta reduction where possible" $
   "term" ~>
   "simplify" <~ ("recurse" ~> "term" ~>
-    "forRhs" <~ ("rhs" ~> "var" ~> "body" ~> cases _Term (Strip.deannotateTerm @@ var "rhs")
+    "forRhs" <~ ("rhs" ~> "var" ~> "body" ~> match _Term (Strip.deannotateTerm @@ var "rhs")
       (Just $ var "term") [
       _Term_variable>>: "v" ~>
         simplifyTerm @@ (Variables.substituteVariable @@ var "var" @@ var "v" @@ var "body")]) $
     "forLhs" <~ ("lhs" ~> "rhs" ~>
-      cases _Term (Strip.deannotateTerm @@ var "lhs")
+      match _Term (Strip.deannotateTerm @@ var "lhs")
         (Just $ var "term") [
         _Term_lambda>>: "l" ~>
           "var" <~ Core.lambdaParameter (var "l") $
@@ -309,7 +309,7 @@ simplifyTerm = define "simplifyTerm" $
           Logic.ifElse (Sets.member (var "var") (Variables.freeVariablesInTerm @@ var "body"))
             (var "forRhs" @@ var "rhs" @@ var "var" @@ var "body")
             (simplifyTerm @@ var "body")]) $
-    "forTerm" <~ ("stripped" ~> cases _Term (var "stripped")
+    "forTerm" <~ ("stripped" ~> match _Term (var "stripped")
       (Just $ var "term") [
       _Term_application>>: "app" ~>
         "lhs" <~ Core.applicationFunction (var "app") $
@@ -333,7 +333,7 @@ termDependencyNames = define "termDependencyNames" $
     "var" <~ ("name" ~> Logic.ifElse (var "binds")
       (Sets.insert (var "name" :: TypedTerm Name) (var "names"))
       (var "names")) $
-    cases _Term (var "term")
+    match _Term (var "term")
       (Just $ var "names") [
       _Term_cases>>: "caseStmt" ~> var "nominal" @@ (Core.caseStatementTypeName $ var "caseStmt"),
       _Term_project>>: "proj" ~> var "nominal" @@ (Core.projectionTypeName $ var "proj"),

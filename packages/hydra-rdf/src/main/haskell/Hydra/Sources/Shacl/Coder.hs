@@ -176,7 +176,7 @@ encodeFieldType = define "encodeFieldType" $
     "ftype">: Core.fieldTypeType (var "ft"),
     "iri">: propertyIri @@ var "rname" @@ var "fname",
     "forType">: lambda "mn" $ lambda "mx" $ lambda "t" $
-      cases _Type (Strip.deannotateType @@ var "t") (Just (var "forTypeDefault" @@ var "mn" @@ var "mx" @@ var "t")) [
+      match _Type (Strip.deannotateType @@ var "t") (Just (var "forTypeDefault" @@ var "mn" @@ var "mx" @@ var "t")) [
         _Type_optional>>: lambda "ot" $ var "forType" @@ (just (bigint 0)) @@ var "mx" @@ var "ot",
         _Type_set>>: lambda "st" $ var "forType" @@ var "mn" @@ nothing @@ var "st"],
     -- Default case: build property shape
@@ -257,15 +257,15 @@ encodeLiteralType = define "encodeLiteralType" $
     "xsd">: lambda "local" $ common @@ list [
       inject Shacl._CommonConstraint Shacl._CommonConstraint_datatype
         (xmlSchemaDatatypeIri @@ var "local")]] $
-    cases _LiteralType (var "lt") Nothing [
+    match _LiteralType (var "lt") Nothing [
       _LiteralType_binary>>: constant $ var "xsd" @@ string "base64Binary",
       _LiteralType_boolean>>: constant $ var "xsd" @@ string "boolean",
       _LiteralType_float>>: lambda "ft" $
-        cases _FloatType (var "ft") Nothing [
+        match _FloatType (var "ft") Nothing [
           _FloatType_float32>>: constant $ var "xsd" @@ string "float",
           _FloatType_float64>>: constant $ var "xsd" @@ string "double"],
       _LiteralType_integer>>: lambda "it" $
-        cases _IntegerType (var "it") Nothing [
+        match _IntegerType (var "it") Nothing [
           _IntegerType_bigint>>: constant $ var "xsd" @@ string "integer",
           _IntegerType_int8>>: constant $ var "xsd" @@ string "byte",
           _IntegerType_int16>>: constant $ var "xsd" @@ string "short",
@@ -282,7 +282,7 @@ encodeTerm :: TypedTermDefinition (Rdf.Resource -> Term -> I.Int32 -> Graph -> E
 encodeTerm = define "encodeTerm" $
   doc "Encode a Hydra term as a list of RDF Descriptions" $
   lambda "subject" $ lambda "term" $ lambda "cx" $ lambda "g" $
-    cases _Term (var "term") (Just (unexpectedE @@ string "RDF-compatible term" @@ string "unsupported term variant")) [
+    match _Term (var "term") (Just (unexpectedE @@ string "RDF-compatible term" @@ string "unsupported term variant")) [
       _Term_annotated>>: lambda "at" $
         encodeTerm @@ var "subject" @@ (Core.annotatedTermBody (var "at")) @@ var "cx" @@ var "g",
       _Term_list>>: lambda "terms" $
@@ -367,7 +367,7 @@ encodeType = define "encodeType" $
   doc "Encode a Hydra type as SHACL CommonProperties" $
   lambda "tname" $ lambda "typ" $ lambda "cx" $ lets [
     "any">: right (common @@ (list ([] :: [TypedTerm Shacl.CommonConstraint])))] $
-    cases _Type (Strip.deannotateType @@ var "typ") (Just (unexpectedE @@ string "type" @@ string "unsupported type variant")) [
+    match _Type (Strip.deannotateType @@ var "typ") (Just (unexpectedE @@ string "type" @@ string "unsupported type variant")) [
       _Type_either>>: lambda "_" $ var "any",
       _Type_list>>: lambda "_" $ var "any",
       _Type_literal>>: lambda "lt" $ right (encodeLiteralType @@ var "lt"),
@@ -482,7 +482,7 @@ shaclCoder = define "shaclCoder" $
   doc "Encode a module's type elements as a SHACL ShapesGraph" $
   lambda "mod" $ lambda "cx" $ lambda "g" $ lets [
     "typeEls">: Optionals.givens (Lists.map
-      ("d" ~> cases _Definition (var "d") (Just nothing) [
+      ("d" ~> match _Definition (var "d") (Just nothing) [
         _Definition_type>>: "td" ~>
           just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
       (Packaging.moduleDefinitions (var "mod"))),
@@ -530,7 +530,7 @@ withType = define "withType" $
   lambda "name" $ lambda "desc" $ lets [
     "subj">: project Rdf._Description Rdf._Description_subject @@ var "desc",
     "triples">: unwrap Rdf._Graph @@ (project Rdf._Description Rdf._Description_graph @@ var "desc"),
-    "subjRes">: cases Rdf._Node (var "subj") Nothing [
+    "subjRes">: match Rdf._Node (var "subj") Nothing [
       Rdf._Node_iri>>: lambda "iri" $ inject Rdf._Resource Rdf._Resource_iri (var "iri"),
       Rdf._Node_bnode>>: lambda "bnode" $ inject Rdf._Resource Rdf._Resource_bnode (var "bnode")],
     "triple">: record Rdf._Triple [

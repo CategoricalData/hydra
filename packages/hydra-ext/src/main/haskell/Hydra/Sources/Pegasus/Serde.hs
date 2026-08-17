@@ -139,7 +139,7 @@ namedSchemaToExpr = define "namedSchemaToExpr" $
     "t">: project PDL._NamedSchema PDL._NamedSchema_type @@ var "ns",
     "anns">: project PDL._NamedSchema PDL._NamedSchema_annotations @@ var "ns"] $
     withAnnotations @@ var "anns" @@
-      (cases PDL._NamedSchemaType (var "t") Nothing [
+      (match PDL._NamedSchemaType (var "t") Nothing [
         PDL._NamedSchemaType_record>>: lambda "rs" $ lets [
           "fields">: project PDL._RecordSchema PDL._RecordSchema_fields @@ var "rs"] $
           Serialization.spaceSep @@ list [
@@ -165,7 +165,7 @@ primitiveTypeToExpr :: TypedTermDefinition (PDL.PrimitiveType -> Expr)
 primitiveTypeToExpr = define "primitiveTypeToExpr" $
   doc "Convert a primitive type to an expression" $
   lambda "pt" $ Serialization.cst @@
-    (cases PDL._PrimitiveType (var "pt") Nothing [
+    (match PDL._PrimitiveType (var "pt") Nothing [
       PDL._PrimitiveType_boolean>>: constant $ string "boolean",
       PDL._PrimitiveType_bytes>>: constant $ string "bytes",
       PDL._PrimitiveType_double>>: constant $ string "double",
@@ -230,7 +230,7 @@ schemaToExpr :: TypedTermDefinition (PDL.Schema -> Expr)
 schemaToExpr = define "schemaToExpr" $
   doc "Convert a schema to an expression" $
   lambda "schema" $
-    cases PDL._Schema (var "schema") Nothing [
+    match PDL._Schema (var "schema") Nothing [
       PDL._Schema_array>>: lambda "s" $ Serialization.noSep @@ list [
         Serialization.cst @@ string "array",
         Serialization.bracketList @@ Serialization.inlineStyle @@ list [schemaToExpr @@ var "s"]],

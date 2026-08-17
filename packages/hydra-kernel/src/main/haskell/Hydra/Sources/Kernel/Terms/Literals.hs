@@ -71,7 +71,7 @@ define = definitionInModule module_
 bigintToIntegerValue :: TypedTermDefinition (IntegerType -> Integer -> IntegerValue)
 bigintToIntegerValue = define "bigintToIntegerValue" $
   doc "Convert a bigint to an integer value of a given type (note: lossy)" $
-  "it" ~> "bi" ~> cases _IntegerType (var "it")
+  "it" ~> "bi" ~> match _IntegerType (var "it")
     Nothing [
     _IntegerType_bigint>>: constant $ Core.integerValueBigint $ var "bi",
     _IntegerType_int8>>: constant $ Core.integerValueInt8 $ Literals.bigintToInt8 $ var "bi",
@@ -86,7 +86,7 @@ bigintToIntegerValue = define "bigintToIntegerValue" $
 integerValueToBigint :: TypedTermDefinition (IntegerValue -> Integer)
 integerValueToBigint = define "integerValueToBigint" $
   doc "Convert an integer value of any precision to a bigint" $
-  match _IntegerValue
+  cases _IntegerValue
     Nothing [
     _IntegerValue_bigint>>: "bi" ~> var "bi",
     _IntegerValue_int8>>: "i8" ~> Literals.int8ToBigint $ var "i8",

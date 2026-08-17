@@ -170,7 +170,7 @@ pgElementToJson :: TypedTermDefinition (PGM.Schema Graph t v e -> PG.Element v -
 pgElementToJson = define "pgElementToJson" $
   doc "Convert a property graph element to JSON" $
   "schema" ~> "el" ~>
-    match PG._Element Nothing [
+    cases PG._Element Nothing [
       PG._Element_vertex>>: "vertex" ~>
         Eithers.bind (Coders.coderDecode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ (project PG._Vertex PG._Vertex_id @@ var "vertex"))
           ("term" ~> lets [

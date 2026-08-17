@@ -79,7 +79,7 @@ primitiveArity = define "primitiveArity" $
 termArity :: TypedTermDefinition (Term -> Int)
 termArity = define "termArity" $
   doc "Find the arity (expected number of arguments) of a term" $
-  match _Term (Just $ int32 0) [
+  cases _Term (Just $ int32 0) [
     _Term_application>>: (lambda "xapp" $ Math.sub (var "xapp") (int32 1)) <.> termArity <.> reify Core.applicationFunction,
     _Term_cases>>: constant (int32 1),
     _Term_lambda>>: (lambda "i" $ Math.add (int32 1) (var "i")) <.> (termArity <.> reify Core.lambdaBody),
@@ -90,7 +90,7 @@ termArity = define "termArity" $
 typeArity :: TypedTermDefinition (Type -> Int)
 typeArity = define "typeArity" $
   doc "Find the arity (expected number of arguments) of a type" $
-  match _Type (Just $ int32 0) [
+  cases _Type (Just $ int32 0) [
     _Type_annotated>>: typeArity <.> reify Core.annotatedTypeBody,
     _Type_application>>: typeArity <.> reify Core.applicationTypeFunction,
     _Type_forall>>: typeArity <.> reify Core.forallTypeBody,
@@ -105,7 +105,7 @@ typeSchemeArity = define "typeSchemeArity" $
 uncurryType :: TypedTermDefinition (Type -> [Type])
 uncurryType = define "uncurryType" $
   doc "Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)" $
-  lambda "t" ((match _Type (Just $ list [var "t"]) [
+  lambda "t" ((cases _Type (Just $ list [var "t"]) [
     _Type_annotated>>: uncurryType <.> reify Core.annotatedTypeBody,
     _Type_application>>: uncurryType <.> reify Core.applicationTypeFunction,
     _Type_forall>>: uncurryType <.> reify Core.forallTypeBody,

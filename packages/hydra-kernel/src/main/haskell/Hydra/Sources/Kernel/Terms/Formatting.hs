@@ -112,12 +112,12 @@ convertCase = define "convertCase" $
         $ Lists.map (primitive DefStrings.fromList) $ Lists.foldl (var "splitOnUppercase") emptyParts
           $ Lists.reverse $ Strings.toList (decapitalize @@ var "original"),
       "byUnderscores">: Strings.splitOn (string "_") $ var "original"]
-      $ (match _CaseConvention Nothing [
+      $ (cases _CaseConvention Nothing [
         _CaseConvention_camel>>: constant $ var "byCaps",
         _CaseConvention_pascal>>: constant $ var "byCaps",
         _CaseConvention_lowerSnake>>: constant $ var "byUnderscores",
         _CaseConvention_upperSnake>>: constant $ var "byUnderscores"]) @@ var "from"]
-    $ (match _CaseConvention Nothing [
+    $ (cases _CaseConvention Nothing [
       _CaseConvention_camel>>: constant $ decapitalize @@ (Strings.concat (Lists.map (capitalize <.> primitive DefStrings.toLower) $ var "parts")),
       _CaseConvention_pascal>>: constant $ Strings.concat (Lists.map (capitalize <.> primitive DefStrings.toLower) $ var "parts"),
       _CaseConvention_lowerSnake>>: constant $ Strings.join (string "_") (Lists.map (primitive DefStrings.toLower) $ var "parts"),

@@ -115,7 +115,7 @@ module_ = Module {
 encodeFloat :: TypedTermDefinition (FloatValue -> Either String Value)
 encodeFloat = define "encodeFloat" $
   doc "Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode." $
-  "fv" ~> cases _FloatValue (var "fv") Nothing [
+  "fv" ~> match _FloatValue (var "fv") Nothing [
     _FloatValue_float32>>: "f" ~>
       "s" <~ (Literals.showFloat32 $ var "f") $
       Logic.ifElse (requiresJsonStringSentinel @@ var "s")
@@ -136,7 +136,7 @@ encodeFloat = define "encodeFloat" $
 encodeInteger :: TypedTermDefinition (IntegerValue -> Either String Value)
 encodeInteger = define "encodeInteger" $
   doc "Encode an integer value to JSON. Small ints use native numbers; large ints use strings." $
-  "iv" ~> cases _IntegerValue (var "iv") Nothing [
+  "iv" ~> match _IntegerValue (var "iv") Nothing [
     -- Large integers: use strings to preserve precision
     _IntegerValue_bigint>>: "bi" ~> right $ Json.valueString $ Literals.showBigint $ var "bi",
     _IntegerValue_int64>>: "i" ~> right $ Json.valueString $ Literals.showInt64 $ var "i",
@@ -152,7 +152,7 @@ encodeInteger = define "encodeInteger" $
 encodeLiteral :: TypedTermDefinition (Literal -> Either String Value)
 encodeLiteral = define "encodeLiteral" $
   doc "Encode a Hydra literal to a JSON value" $
-  "lit" ~> cases _Literal (var "lit") Nothing [
+  "lit" ~> match _Literal (var "lit") Nothing [
     _Literal_binary>>: "b" ~> right $ Json.valueString $ Literals.binaryToBase64 $ var "b",
     _Literal_boolean>>: "b" ~> right $ Json.valueBoolean $ var "b",
     _Literal_decimal>>: "d" ~> right $ Json.valueNumber $ var "d",
@@ -198,7 +198,7 @@ toJson = define "toJson" $
   "reduceApp" <~ ("app" ~>
     "fn" <~ (Strip.deannotateType @@ (Core.applicationTypeFunction $ var "app")) $
     "arg" <~ (Core.applicationTypeArgument $ var "app") $
-    cases _Type (var "fn")
+    match _Type (var "fn")
       (Just $ left $ Strings.concat $ list [
         string "cannot apply a non-parametric type: ",
         PrintCore.type_ @@ var "fn"]) [
@@ -216,7 +216,7 @@ toJson = define "toJson" $
         Optionals.cases (var "lookedUp") (left $ Strings.concat $ list [
             string "unknown type variable: ",
             Core.unName $ var "name"]) ("resolvedFn" ~> var "reduceApp" @@ (Core.applicationType (var "resolvedFn") (var "arg")))]) $
-  cases _Type (var "stripped")
+  match _Type (var "stripped")
     (Just $ left $ Strings.concat $ list [
       string "unsupported type for JSON encoding: ",
       PrintCore.type_ @@ var "typ"]) [
@@ -233,13 +233,13 @@ toJson = define "toJson" $
 
     -- Literals
     _Type_literal>>: constant $
-      cases _Term (var "strippedTerm")
+      match _Term (var "strippedTerm")
         (Just $ left $ string "expected literal term") [
         _Term_literal>>: "lit" ~> encodeLiteral @@ var "lit"],
 
     -- Lists
     _Type_list>>: "elemType" ~>
-      cases _Term (var "strippedTerm")
+      match _Term (var "strippedTerm")
         (Just $ left $ string "expected list term") [
         _Term_list>>: "terms" ~>
           "results" <~ (Eithers.mapList ("t" ~> toJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "elemType" @@ var "t") (var "terms")) $
@@ -247,7 +247,7 @@ toJson = define "toJson" $
 
     -- Sets (encode as arrays)
     _Type_set>>: "elemType" ~>
-      cases _Term (var "strippedTerm")
+      match _Term (var "strippedTerm")
         (Just $ left $ string "expected set term") [
         _Term_set>>: "vals" ~>
           "terms" <~ (Sets.toList (var "vals" :: TypedTerm (S.Set Term))) $
@@ -257,9 +257,9 @@ toJson = define "toJson" $
     -- Maybe: encoding depends on whether the inner type is itself Maybe
     _Type_optional>>: "innerType" ~>
       "innerStripped" <~ (Strip.deannotateType @@ var "innerType") $
-      "isNestedMaybe" <~ (cases _Type (var "innerStripped") (Just false) [
+      "isNestedMaybe" <~ (match _Type (var "innerStripped") (Just false) [
         _Type_optional>>: constant true]) $
-      cases _Term (var "strippedTerm")
+      match _Term (var "strippedTerm")
         (Just $ left $ string "expected maybe term") [
         _Term_optional>>: "opt" ~> optCases (var "opt")
           -- Nothing: always null
@@ -273,14 +273,14 @@ toJson = define "toJson" $
 
     -- Records
     _Type_record>>: "rt" ~>
-      cases _Term (var "strippedTerm")
+      match _Term (var "strippedTerm")
         (Just $ left $ string "expected record term") [
         _Term_record>>: "r" ~>
           -- Helper to check if a field type is simple Maybe (i.e. Maybe(T) where T is not Maybe)
           "isSimpleMaybe" <~ ("ftype" ~>
-            cases _Type (Strip.deannotateType @@ var "ftype") (Just false) [
+            match _Type (Strip.deannotateType @@ var "ftype") (Just false) [
               _Type_optional>>: "innerT" ~>
-                cases _Type (Strip.deannotateType @@ var "innerT") (Just true) [
+                match _Type (Strip.deannotateType @@ var "innerT") (Just true) [
                   _Type_optional>>: constant false]]) $
           -- Encode a (fieldType, field) pair. For simple Maybe fields, omit Nothing and encode Just as plain value.
           "encodeFieldWithType" <~ ("ft" ~> "f" ~>
@@ -289,12 +289,12 @@ toJson = define "toJson" $
             "ftype" <~ (Core.fieldTypeType $ var "ft") $
             Logic.ifElse (var "isSimpleMaybe" @@ var "ftype")
               -- Simple Maybe field: omit Nothing, encode Just as plain value
-              (cases _Term (Strip.deannotateTerm @@ var "fterm")
+              (match _Term (Strip.deannotateTerm @@ var "fterm")
                 (Just $ left $ string "expected maybe term for optional field") [
                 _Term_optional>>: "opt" ~> optCases (var "opt")
                   (right nothing)  -- Nothing -> omit field (signal with Nothing)
                   ("v" ~>
-                    "innerType" <~ (cases _Type (Strip.deannotateType @@ var "ftype") (Just $ var "ftype") [
+                    "innerType" <~ (match _Type (Strip.deannotateType @@ var "ftype") (Just $ var "ftype") [
                       _Type_optional>>: "it" ~> var "it"]) $
                     "encoded" <~ (toJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "innerType" @@ var "v") $
                     Eithers.map ("ev" ~> just $ pair (var "fname") (var "ev")) (var "encoded"))])
@@ -314,7 +314,7 @@ toJson = define "toJson" $
 
     -- Unions (single-key object)
     _Type_union>>: "rt" ~>
-      cases _Term (var "strippedTerm")
+      match _Term (var "strippedTerm")
         (Just $ left $ string "expected union term") [
         _Term_inject>>: "inj" ~>
           "field" <~ (Core.injectionField $ var "inj") $
@@ -329,7 +329,7 @@ toJson = define "toJson" $
             ("err" ~> left $ var "err")
             ("ftype" ~>
               "ftypeStripped" <~ (Strip.deannotateType @@ var "ftype") $
-              "isUnit" <~ (cases _Type (var "ftypeStripped") (Just false) [
+              "isUnit" <~ (match _Type (var "ftypeStripped") (Just false) [
                 _Type_unit>>: constant true]) $
               Logic.ifElse (var "isUnit")
                 (right $ Json.valueString $ var "fname")
@@ -345,7 +345,7 @@ toJson = define "toJson" $
 
     -- Wrapped types (look up inner type and recurse)
     _Type_wrap>>: "wn" ~>
-      cases _Term (var "strippedTerm")
+      match _Term (var "strippedTerm")
         (Just $ left $ string "expected wrapped term") [
         _Term_wrap>>: "wt" ~>
           toJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "wn" @@ (Core.wrappedTermBody $ var "wt")],
@@ -356,7 +356,7 @@ toJson = define "toJson" $
       "keyType" <~ (Core.mapTypeKeys $ var "mt") $
       "valType" <~ (Core.mapTypeValues $ var "mt") $
       "compact" <~ (Logic.and (var "compactMaps") (Resolution.mapKeyResolvesToString @@ var "types" @@ var "keyType")) $
-      cases _Term (var "strippedTerm")
+      match _Term (var "strippedTerm")
         (Just $ left $ string "expected map term") [
         _Term_map>>: "m" ~>
           Logic.ifElse (var "compact")
@@ -368,7 +368,7 @@ toJson = define "toJson" $
                 Eithers.either
                   ("err" ~> left $ var "err")
                   ("ek" ~>
-                    "keyStrResult" <~ (cases _Value (var "ek")
+                    "keyStrResult" <~ (match _Value (var "ek")
                       (Just $ left $ string "internal error: string-resolving map key did not encode to a JSON string")
                       [_Value_string>>: "s" ~> right $ var "s"]) $
                     Eithers.either
@@ -398,7 +398,7 @@ toJson = define "toJson" $
     _Type_pair>>: "pt" ~>
       "firstType" <~ (Core.pairTypeFirst $ var "pt") $
       "secondType" <~ (Core.pairTypeSecond $ var "pt") $
-      cases _Term (var "strippedTerm")
+      match _Term (var "strippedTerm")
         (Just $ left $ string "expected pair term") [
         _Term_pair>>: "p" ~>
           "first" <~ (Pairs.first $ var "p") $
@@ -418,7 +418,7 @@ toJson = define "toJson" $
     _Type_either>>: "et" ~>
       "leftType" <~ (Core.eitherTypeLeft $ var "et") $
       "rightType" <~ (Core.eitherTypeRight $ var "et") $
-      cases _Term (var "strippedTerm")
+      match _Term (var "strippedTerm")
         (Just $ left $ string "expected either term") [
         _Term_either>>: "e" ~>
           Eithers.either
@@ -454,7 +454,7 @@ toJsonUntyped = define "toJsonUntyped" $
   doc "Encode a Hydra term to a JSON value without type information. Falls back to array-wrapped Maybe encoding." $
   "term" ~>
   "stripped" <~ (Strip.deannotateTerm @@ var "term") $
-  cases _Term (var "stripped")
+  match _Term (var "stripped")
     (Just $ left $ Strings.concat $ list [
       string "unsupported term variant for JSON encoding: ",
       PrintCore.term @@ var "term"]) [
@@ -496,7 +496,7 @@ toJsonUntyped = define "toJsonUntyped" $
       "fname" <~ (Core.unName $ Core.fieldName $ var "field") $
       "fterm" <~ (Core.fieldTerm $ var "field") $
       "ftermStripped" <~ (Strip.deannotateTerm @@ var "fterm") $
-      "isUnit" <~ (cases _Term (var "ftermStripped") (Just false) [
+      "isUnit" <~ (match _Term (var "ftermStripped") (Just false) [
         _Term_unit>>: constant true]) $
       Logic.ifElse (var "isUnit")
         (right $ Json.valueString $ var "fname")

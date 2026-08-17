@@ -112,7 +112,7 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
   "cx" ~> "boundVars" ~> "bindings" ~>
   "types" <~ Maps.map (asTerm Scoping.typeSchemeToFType) (Graph.graphBoundTypes (var "cx")) $
   "wrapAfterTypeLambdas" <~ ("vars" ~> "term" ~>
-    cases _Term (var "term")
+    match _Term (var "term")
       -- Default: wrap with lambdas (for any non-type-lambda term)
       (Just $ Lists.foldl
         ("t" ~> "p" ~> Core.termLambda $ Core.lambda (Pairs.first $ var "p") (Pairs.second $ var "p") (var "t"))
@@ -185,7 +185,7 @@ countVarOccurrences = define "countVarOccurrences" $
     ("acc" ~> "t" ~> Math.add (var "acc") (countVarOccurrences @@ var "name" @@ var "t"))
     (int32 0)
     (Rewriting.subterms @@ var "term") $
-  cases _Term (var "term")
+  match _Term (var "term")
     (Just $ var "childCount") [
     _Term_variable>>: "v" ~>
       Logic.ifElse (Equality.equal (var "v") (var "name"))
@@ -207,7 +207,7 @@ hoistAllLetBindings = define "hoistAllLetBindings" $
 hoistCaseStatements :: TypedTermDefinition (Graph -> Term -> Term)
 hoistCaseStatements = define "hoistCaseStatements" $
   doc ("Hoist case statements into local let bindings."
-    <> " This is useful for targets such as Python which only support case statements (match) at the top level."
+    <> " This is useful for targets such as Python which only support case statements (cases) at the top level."
     <> " Case statements are hoisted only when they appear at non-top-level positions."
     <> " Top level = root, or reachable through annotations, let body/binding, lambda bodies, or ONE application LHS."
     <> " Once through an application LHS, lambda bodies no longer count as pass-through.") $
@@ -344,7 +344,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     "bindingsSoFar" <~ Pairs.first (var "newBindingsAndNames") $
     "alreadyUsedNames" <~ Pairs.second (var "newBindingsAndNames") $
     "newTerm" <~ Pairs.second (var "result") $
-    cases _Term (var "newTerm")
+    match _Term (var "newTerm")
       -- Not a let; we are done with this subterm
       (Just $ pair
         (pair (Lists.concat2 (var "previouslyFinishedBindings") (var "bindingsSoFar")) (var "alreadyUsedNames"))
@@ -568,7 +568,7 @@ hoistSubterms = define "hoistSubterms" $
       "currentCounter" <~ Pairs.first (var "acc") $
       "collectedBindings" <~ Pairs.second (var "acc") $
       -- Check if this is a let term or type lambda - if so, don't recurse into it
-      cases _Term (var "term")
+      match _Term (var "term")
         (Just $
           -- Default case: let the framework recurse into subterms, then maybe hoist this term
           "result" <~ var "recurse" @@ var "acc" @@ var "term" $
@@ -683,14 +683,14 @@ hoistSubterms = define "hoistSubterms" $
   -- processImmediateSubterm, so inner collectAndReplace knows the full context
   -- (e.g., that it's inside a case branch of an applied case).
   "rewrite" <~ ("recurse" ~> "path" ~> "cx" ~> "counter" ~> "term" ~>
-    cases _Term (var "term")
+    match _Term (var "term")
       (Just $ var "recurse" @@ var "counter" @@ var "term") [
       _Term_let>>: "lt" ~>
         -- Recurse first (bottom-up), then process the let
         "recursed" <~ var "recurse" @@ var "counter" @@ var "term" $
         "newCounter" <~ Pairs.first (var "recursed") $
         "recursedTerm" <~ Pairs.second (var "recursed") $
-        cases _Term (var "recursedTerm")
+        match _Term (var "recursedTerm")
           (Just $ pair (var "newCounter") (var "recursedTerm")) [
           _Term_let>>: "lt2" ~> var "processLetTerm" @@ var "cx" @@ var "newCounter" @@ var "path" @@ var "lt2"]]) $
 
@@ -701,7 +701,7 @@ hoistSubterms = define "hoistSubterms" $
 isApplicationFunction :: TypedTermDefinition (SubtermStep -> Bool)
 isApplicationFunction = define "isApplicationFunction" $
   doc "Check whether a SubtermStep is the applicationFunction step" $
-  "acc" ~> cases _SubtermStep (var "acc")
+  "acc" ~> match _SubtermStep (var "acc")
     (Just false) [
     _SubtermStep_applicationFunction>>: constant true]
 
@@ -709,7 +709,7 @@ isApplicationFunction = define "isApplicationFunction" $
 isLambdaBody :: TypedTermDefinition (SubtermStep -> Bool)
 isLambdaBody = define "isLambdaBody" $
   doc "Check whether a SubtermStep is the lambdaBody step" $
-  "acc" ~> cases _SubtermStep (var "acc")
+  "acc" ~> match _SubtermStep (var "acc")
     (Just false) [
     _SubtermStep_lambdaBody>>: constant true]
 
@@ -717,7 +717,7 @@ isLambdaBody = define "isLambdaBody" $
 isUnionElimination :: TypedTermDefinition (Term -> Bool)
 isUnionElimination = define "isUnionElimination" $
   doc "Check if a term is a union elimination (case statement)" $
-  "term" ~> cases _Term (var "term")
+  "term" ~> match _Term (var "term")
     (Just false) [
     _Term_cases>>: constant true]
 
@@ -726,7 +726,7 @@ isUnionElimination = define "isUnionElimination" $
 isUnionEliminationApplication :: TypedTermDefinition (Term -> Bool)
 isUnionEliminationApplication = define "isUnionEliminationApplication" $
   doc "Check if a term is an application of a union elimination (case statement applied to an argument)" $
-  "term" ~> cases _Term (var "term")
+  "term" ~> match _Term (var "term")
     (Just false) [
     _Term_application>>: "app" ~>
       isUnionElimination @@ (Strip.deannotateAndDetypeTerm @@ (Core.applicationFunction $ var "app"))]
@@ -832,7 +832,7 @@ updateHoistState = define "updateHoistState" $
   Logic.ifElse (Logic.not $ var "atTop")
     (pair false (var "usedApp"))
     -- Check this accessor
-    (cases _SubtermStep (var "accessor")
+    (match _SubtermStep (var "accessor")
       -- Default: any other accessor takes us out of top level
       (Just $ pair false (var "usedApp")) [
       -- Annotations are transparent

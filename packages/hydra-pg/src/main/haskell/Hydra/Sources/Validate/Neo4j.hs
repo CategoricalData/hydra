@@ -304,7 +304,7 @@ matchesValueType :: TypedTermDefinition (ValueType -> Value -> Bool)
 matchesValueType = validationDefinition "matchesValueType" $
   doc "True iff the given Value has the kind required by the given ValueType." $
   "vt" ~> "v" ~>
-  match _ValueType Nothing [
+  cases _ValueType Nothing [
     _ValueType_boolean      >>: constant (isValueCase _Value_boolean (var "v")),
     _ValueType_string       >>: constant (isValueCase _Value_string (var "v")),
     _ValueType_integer      >>: constant (isValueCase _Value_integer (var "v")),
@@ -466,12 +466,12 @@ validateRelationship = validationDefinition "validateRelationship" $
 -- | True iff the given Value is of the given variant (by case).
 isValueCase :: Name -> TypedTerm Value -> TypedTerm Bool
 isValueCase variantName v =
-  match _Value (Just false) [variantName >>: constant true] @@ v
+  cases _Value (Just false) [variantName >>: constant true] @@ v
 
 -- | True iff the Value is a list whose elements all match the inner ValueType.
 matchesListOf :: TypedTerm ValueType -> TypedTerm Value -> TypedTerm Bool
 matchesListOf inner v =
-  match _Value (Just false) [
+  cases _Value (Just false) [
     _Value_list >>: ("xs" ~> Lists.foldl
         ("acc" ~> "x" ~> Logic.and (var "acc") (matchesValueType @@ inner @@ var "x"))
         true
@@ -580,7 +580,7 @@ nodePropertyChecks
   -> TypedTerm Constraint
   -> TypedTerm [Maybe (Name, InvalidNodeError)]
 nodePropertyChecks profile props c =
-  match _Constraint Nothing [
+  cases _Constraint Nothing [
     _Constraint_propertyExistence >>: ("ec" ~> list [
       nodeExistenceFinding profile props (project _PropertyExistenceConstraint _PropertyExistenceConstraint_property @@ var "ec")]),
     _Constraint_key >>: ("kc" ~> Lists.map
@@ -632,7 +632,7 @@ relationshipPropertyChecks
   -> TypedTerm Constraint
   -> TypedTerm [Maybe (Name, InvalidRelationshipError)]
 relationshipPropertyChecks profile props c =
-  match _Constraint Nothing [
+  cases _Constraint Nothing [
     _Constraint_propertyExistence >>: ("ec" ~> list [
       relationshipExistenceFinding profile props (project _PropertyExistenceConstraint _PropertyExistenceConstraint_property @@ var "ec")]),
     _Constraint_key >>: ("kc" ~> Lists.map

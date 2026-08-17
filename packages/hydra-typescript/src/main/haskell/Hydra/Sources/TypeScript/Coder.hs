@@ -172,7 +172,7 @@ collectForallParams = def "collectForallParams" $
   doc "Collect the bound parameter names from a chain of nested foralls, in outer-to-inner order; stops at the first non-forall type" $
   lambda "t" $
     "dt" <~ (Strip.deannotateType @@ var "t") $
-    cases _Type (var "dt") (Just $ list ([] :: [TypedTerm Name])) [
+    match _Type (var "dt") (Just $ list ([] :: [TypedTerm Name])) [
       _Type_forall>>: lambda "fa" $
         Lists.cons
           (Core.forallTypeParameter (var "fa"))
@@ -206,7 +206,7 @@ collectInnerTypeImports = def "collectInnerTypeImports" $
   lambda "currentNs" $ lambda "term" $
     "subs" <~ (Rewriting.subterms @@ var "term") $
     -- Recursively gather type names from this term plus all subterms.
-    "ownVars" <~ (cases _Term (Strip.deannotateTerm @@ var "term")
+    "ownVars" <~ (match _Term (Strip.deannotateTerm @@ var "term")
       (Just (Sets.empty :: TypedTerm (S.Set Name))) [
       _Term_lambda>>: lambda "lam" $
         Optionals.cases (Core.lambdaDomain (var "lam"))
@@ -260,7 +260,7 @@ encodeBindingAsStatement = def "encodeBindingAsStatement" $
       @@ (Names.localNameOf @@ var "bname")) $
     "bterm" <~ Core.bindingTerm (var "b") $
     "dterm" <~ (Strip.deannotateTerm @@ var "bterm") $
-    cases _Term (var "dterm")
+    match _Term (var "dterm")
       (Just $
         -- Non-lambda value: `const name = <expr>;`
         "expr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "bterm") $
@@ -303,7 +303,7 @@ letBindingIsThunkCandidate = def "letBindingIsThunkCandidate" $
     -- binding as a non-lambda — causing it to be wrongly thunked (a spurious
     -- `\_ -> ...` param prepended, e.g. `rewrite(undefined)`). See #564.
     "dterm" <~ (Strip.deannotateAndDetypeTerm @@ (Core.bindingTerm (var "b"))) $
-    "isLambda" <~ (cases _Term (var "dterm")
+    "isLambda" <~ (match _Term (var "dterm")
       (Just false) [
       _Term_lambda>>: constant true]) $
     "freeVars" <~ (Variables.freeVariablesInTerm @@ (Core.bindingTerm (var "b"))) $
@@ -332,7 +332,7 @@ forceLazyRefs = def "forceLazyRefs" $
   "targets0" ~> "term0" ~>
     Rewriting.rewriteTermWithContext
       @@ ("recurse0" ~> "targets" ~> "term" ~>
-           cases _Term (var "term")
+           match _Term (var "term")
              -- Default: structurally recurse, threading the same active
              -- target set to every child.
              (Just (var "recurse0" @@ var "targets" @@ var "term")) [
@@ -473,7 +473,7 @@ encodeLiteral = def "encodeLiteral" $
     var "litExpr" @@ inject TS._Literal TS._Literal_boolean (var "b")) $
   "bigIntCall" <~ (lambda "txt" $
     tsCall @@ (tsExprIdent @@ string "BigInt") @@ list [var "strLit" @@ var "txt"]) $
-  lambda "lit" $ cases _Literal (var "lit")
+  lambda "lit" $ match _Literal (var "lit")
     (Just $ var "litExpr" @@ inject TS._Literal TS._Literal_null unit) [
     _Literal_binary>>: lambda "b" $
       var "strLit" @@ (Literals.binaryToBase64 (var "b")),
@@ -487,7 +487,7 @@ encodeLiteral = def "encodeLiteral" $
     _Literal_string>>: lambda "s" $
       var "strLit" @@ var "s",
     _Literal_integer>>: lambda "iv" $
-      cases _IntegerValue (var "iv") (Just $ var "numLit" @@ (Literals.bigintToInt64 (Literals.int32ToBigint (int32 0)))) [
+      match _IntegerValue (var "iv") (Just $ var "numLit" @@ (Literals.bigintToInt64 (Literals.int32ToBigint (int32 0)))) [
         _IntegerValue_bigint>>: lambda "n" $
           var "bigIntCall" @@ (Literals.showBigint (var "n")),
         _IntegerValue_int8>>:   lambda "n" $
@@ -507,7 +507,7 @@ encodeLiteral = def "encodeLiteral" $
         _IntegerValue_uint64>>: lambda "n" $
           var "bigIntCall" @@ (Literals.showUint64 (var "n"))],
     _Literal_float>>: lambda "fv" $
-      cases _FloatValue (var "fv") (Just $ var "floatLit" @@ (float64 0.0)) [
+      match _FloatValue (var "fv") (Just $ var "floatLit" @@ (float64 0.0)) [
         _FloatValue_float32>>: lambda "f" $ var "floatLit" @@ (Literals.float32ToFloat64 (var "f")),
         _FloatValue_float64>>: lambda "f" $ var "floatLit" @@ var "f"]]
 
@@ -515,7 +515,7 @@ encodeLiteral = def "encodeLiteral" $
 encodeLiteralType :: TypedTermDefinition (LiteralType -> TS.TypeExpression)
 encodeLiteralType = def "encodeLiteralType" $
   doc "Map a Hydra literal type to a TypeScript type expression" $
-  lambda "lt" $ cases _LiteralType (var "lt") Nothing [
+  lambda "lt" $ match _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant $
       tsParamApp1 @@ string "ReadonlyArray" @@ (tsNamedType @@ string "number"),
     _LiteralType_boolean>>: constant $
@@ -523,11 +523,11 @@ encodeLiteralType = def "encodeLiteralType" $
     _LiteralType_decimal>>: constant $
       tsNamedType @@ string "number",
     _LiteralType_float>>: lambda "ft" $
-      cases _FloatType (var "ft") Nothing [
+      match _FloatType (var "ft") Nothing [
         _FloatType_float32>>: constant $ tsNamedType @@ string "number",
         _FloatType_float64>>: constant $ tsNamedType @@ string "number"],
     _LiteralType_integer>>: lambda "it" $
-      cases _IntegerType (var "it") Nothing [
+      match _IntegerType (var "it") Nothing [
         _IntegerType_bigint>>: constant $ tsNamedType @@ string "bigint",
         _IntegerType_int8>>:   constant $ tsNamedType @@ string "number",
         _IntegerType_int16>>:  constant $ tsNamedType @@ string "number",
@@ -552,7 +552,7 @@ encodeParam = def "encodeParam" $
   doc "Build a TS function parameter as a pattern, typed unless the domain is the analyze pass's untyped-variable sentinel" $
   "cx" ~> "g" ~> "currentNs" ~> "pname" ~> "dom" ~>
     "nstr" <~ (sanitizeParamName @@ var "pname") $
-    cases _Type (Strip.deannotateType @@ var "dom")
+    match _Type (Strip.deannotateType @@ var "dom")
       (Just $ tsTypedIdent @@ var "nstr"
         @@ (encodeTypeOrAny @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "dom")) [
       -- Bare type variables (e.g. `t0`) come from polymorphic top-level
@@ -579,7 +579,7 @@ encodeParam = def "encodeParam" $
 encodeTerm :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> Term -> TS.Expression)
 encodeTerm = def "encodeTerm" $
   doc "Render a Hydra term as a TypeScript expression" $
-  lambda "cx" $ lambda "g" $ lambda "currentNs" $ lambda "term" $ cases _Term (var "term")
+  lambda "cx" $ lambda "g" $ lambda "currentNs" $ lambda "term" $ match _Term (var "term")
     (Just $ tsExprIdent @@ string "null")
     [_Term_annotated>>: lambda "at" $
        encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.annotatedTermBody (var "at"),
@@ -735,7 +735,7 @@ encodeTerm = def "encodeTerm" $
          -- instead of evaluating.
          ("dHead" <~ (Strip.deannotateAndDetypeTerm @@ var "headTerm") $
           "encArgs" <~ Lists.map (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs") (var "args") $
-          cases _Term (var "dHead")
+          match _Term (var "dHead")
             (Just $
               "headExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm") $
               tsCall @@ var "headExpr" @@ var "encArgs") [
@@ -816,7 +816,7 @@ encodeTerm = def "encodeTerm" $
      _Term_inject>>: lambda "inj" $
        "fname" <~ Core.unName (Core.fieldName (Core.injectionField (var "inj"))) $
        "fterm" <~ Core.fieldTerm (Core.injectionField (var "inj")) $
-       "isUnit" <~ (cases _Term (Strip.deannotateTerm @@ var "fterm")
+       "isUnit" <~ (match _Term (Strip.deannotateTerm @@ var "fterm")
          (Just false) [
          _Term_unit>>: constant true]) $
        Logic.ifElse (var "isUnit")
@@ -1015,7 +1015,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "funDecl" <~ (functionDeclarationFromTerm @@ var "cx" @@ var "g" @@ var "currentNs"
       @@ var "lname" @@ var "rawTerm" @@ var "mScheme") $
     "asFunDecl" <~ (var "asExport" @@ (inject TS._Statement TS._Statement_functionDeclaration (var "funDecl"))) $
-    "item" <~ cases _Term (var "dterm")
+    "item" <~ match _Term (var "dterm")
       (Just $
         "expr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "rawTerm") $
         "declarator" <~ (record TS._VariableDeclarator [
@@ -1049,7 +1049,7 @@ encodeType = def "encodeType" $
   doc "Map a Hydra type to a TypeScript type expression" $
   "cx" ~> "g" ~> "currentNs" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
-    cases _Type (var "typ") Nothing [
+    match _Type (var "typ") Nothing [
       _Type_annotated>>: lambda "at" $
         encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.annotatedTypeBody (var "at"),
       -- Type application: unwind nested ApplicationType chains so a Hydra
@@ -1061,7 +1061,7 @@ encodeType = def "encodeType" $
         "argTyp" <~ Core.applicationTypeArgument (var "at") $
         "encFn" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "fnTyp") $
         "encArg" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "argTyp") $
-          cases TS._TypeExpression (var "encFn") (Just (right (var "encFn"))) [
+          match TS._TypeExpression (var "encFn") (Just (right (var "encFn"))) [
             -- F<arg>: head was a bare identifier
             TS._TypeExpression_identifier>>: lambda "_id" $
               right (inject TS._TypeExpression TS._TypeExpression_parameterized $
@@ -1233,7 +1233,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
       (lambda "v" $ tsParam @@ (Formatting.capitalize @@ Core.unName (var "v")))
       (var "forallParams")) $
     "dtyp" <~ (Strip.deannotateType @@ var "typ") $
-    cases _Type (var "dtyp") (Just $
+    match _Type (var "dtyp") (Just $
         -- Fallback: a plain type alias `type Foo<T...> = <encoded>;`
         "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "typ") $
           right (pair (var "mdoc") (inject TS._ModuleItem TS._ModuleItem_typeAlias $
@@ -1266,7 +1266,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
             "dtyp2" <~ (Strip.deannotateType @@ var "ftyp") $
             -- For unit-shaped variants, emit `{ readonly tag: "fname" }`
             -- (no `value` field).
-            cases _Type (var "dtyp2") (Just $
+            match _Type (var "dtyp2") (Just $
               "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "ftyp") $
                 right (inject TS._TypeExpression TS._TypeExpression_object $ list [
                   tsPropSig @@ string "tag" @@ boolean False
@@ -1367,7 +1367,7 @@ flattenApplication = def "flattenApplication" $
   doc "Walk an application spine, returning the innermost head term and its arguments in application order" $
   lambda "t" $
     "dt" <~ (Strip.deannotateTerm @@ var "t") $
-    cases _Term (var "dt")
+    match _Term (var "dt")
       (Just $ pair (var "t") (list ([] :: [TypedTerm Term]))) [
       _Term_application>>: lambda "app" $
         "inner" <~ (flattenApplication @@ Core.applicationFunction (var "app")) $
@@ -1629,11 +1629,11 @@ _DefinitionReference_type_ts = Name "type"
 tsDocEntityRef :: TypedTermDefinition (Term -> String)
 tsDocEntityRef = def "tsDocEntityRef" $
   doc "Render a {@type hydra.packaging.EntityReference} as TSDoc link syntax" $
-  match _EntityReference_ts Nothing [
+  cases _EntityReference_ts Nothing [
     _EntityReference_definition_ts>>: lambda "d" $
       Strings.concat2 (string "{@link ")
         (Strings.concat2
-          (match _DefinitionReference_ts Nothing [
+          (cases _DefinitionReference_ts Nothing [
             _DefinitionReference_primitive_ts>>: lambda "n" $ Names.localNameOf @@ var "n",
             _DefinitionReference_term_ts>>:      lambda "n" $ Names.localNameOf @@ var "n",
             _DefinitionReference_type_ts>>:      lambda "n" $ Names.localNameOf @@ var "n"]
@@ -1807,7 +1807,7 @@ printInterfaceDeclaration = def "printInterfaceDeclaration" $
 printLiteral :: TypedTermDefinition (TS.Literal -> String)
 printLiteral = def "printLiteral" $
   doc "Render a TypeScript literal as source text" $
-  lambda "lit" $ cases TS._Literal (var "lit") (Just $ string "null") [
+  lambda "lit" $ match TS._Literal (var "lit") (Just $ string "null") [
     TS._Literal_string>>: lambda "sl" $
       tsEscapeString @@ (project TS._StringLiteral TS._StringLiteral_value @@ var "sl"),
     TS._Literal_boolean>>: lambda "b" $
@@ -1825,7 +1825,7 @@ printLiteral = def "printLiteral" $
 printModuleItem :: TypedTermDefinition (TS.ModuleItem -> String)
 printModuleItem = def "printModuleItem" $
   doc "Render a top-level module item" $
-  lambda "mi" $ cases TS._ModuleItem (var "mi") (Just $ string "") [
+  lambda "mi" $ match TS._ModuleItem (var "mi") (Just $ string "") [
     TS._ModuleItem_interface>>: asTerm printInterfaceDeclaration,
     TS._ModuleItem_typeAlias>>: asTerm printTypeAliasDeclaration,
     TS._ModuleItem_statement>>: lambda "_s" $
@@ -1890,7 +1890,7 @@ printTypeAliasDeclaration = def "printTypeAliasDeclaration" $
 printTypeExpression :: TypedTermDefinition (TS.TypeExpression -> String)
 printTypeExpression = def "printTypeExpression" $
   doc "Render a TypeScript type expression as source text" $
-  lambda "t" $ cases TS._TypeExpression (var "t") (Just $ string "unknown") [
+  lambda "t" $ match TS._TypeExpression (var "t") (Just $ string "unknown") [
     TS._TypeExpression_identifier>>: lambda "i" $
       unwrap TS._Identifier @@ var "i",
     TS._TypeExpression_literal>>: lambda "l" $
@@ -2024,7 +2024,7 @@ eagerFreeVariablesInTerm = def "eagerFreeVariablesInTerm" $
       (lambda "s" $ lambda "t" $ Sets.union (var "s") (eagerFreeVariablesInTerm @@ var "t"))
       (Sets.empty :: TypedTerm (S.Set Name))
       (Rewriting.subterms @@ var "term")) $
-    cases _Term (var "term")
+    match _Term (var "term")
       (Just $ var "dfltVars" @@ unit) [
       -- A lambda body is not evaluated at definition time: any reference
       -- inside it is deferred, so it contributes no eager free variables.
@@ -2094,7 +2094,7 @@ stripForalls = def "stripForalls" $
   doc "Strip leading forall quantifiers from a type, returning the innermost body" $
   lambda "t" $
     "dt" <~ (Strip.deannotateType @@ var "t") $
-    cases _Type (var "dt") (Just $ var "dt") [
+    match _Type (var "dt") (Just $ var "dt") [
       _Type_forall>>: lambda "fa" $
         stripForalls @@ Core.forallTypeBody (var "fa")]
 
@@ -2108,7 +2108,7 @@ termHeadVariable = def "termHeadVariable" $
   doc "If a term reduces, through annotations and type applications, to a variable reference, return its name" $
   lambda "t" $
     "dt" <~ (Strip.deannotateTerm @@ var "t") $
-    cases _Term (var "dt")
+    match _Term (var "dt")
       (Just (nothing :: TypedTerm (Maybe Name))) [
       _Term_variable>>: lambda "n" $ just (var "n"),
       _Term_typeApplication>>: lambda "ta" $

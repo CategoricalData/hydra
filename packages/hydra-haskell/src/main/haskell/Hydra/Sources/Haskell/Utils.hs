@@ -444,7 +444,7 @@ unionFieldReference = haskellUtilsDefinition "unionFieldReference" $
 unpackForallType :: TypedTermDefinition (Type -> ([Name], Type))
 unpackForallType = haskellUtilsDefinition "unpackForallType" $
   doc "Unpack nested forall types into a list of type variables and the inner type" $
-  "t" ~> cases _Type (Strip.deannotateType @@ var "t")
+  "t" ~> match _Type (Strip.deannotateType @@ var "t")
     (Just $ pair (list ([] :: [TypedTerm Name])) (var "t")) [
     _Type_forall>>: "fat" ~> lets [
       "v">: Core.forallTypeParameter $ var "fat",

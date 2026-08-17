@@ -102,7 +102,7 @@ buildConstructorCounts = define "buildConstructorCounts" $
       "ty">: Pairs.second (var "nt"),
       "extracted">: extractTypeParams @@ var "ty",
       "bodyTy">: Pairs.second (var "extracted")] $
-      cases _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm (String, I.Int32)])) [
+      match _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm (String, I.Int32)])) [
         _Type_union>>: "fields" ~>
           list [pair (var "name") (Lists.length $ var "fields")]])
     (var "defs") :: TypedTerm (M.Map String I.Int32))
@@ -116,14 +116,14 @@ buildFieldMapping = define "buildFieldMapping" $
   lambda "modules" $ (Maps.fromList $ Lists.concat $
     Lists.map (lambda "m" $ Lists.concat $
       Lists.map (lambda "def_" $
-        cases _Definition (var "def_") (Just $ list ([] :: [TypedTerm ((String, String), String)])) [
+        match _Definition (var "def_") (Just $ list ([] :: [TypedTerm ((String, String), String)])) [
           _Definition_type>>: "td" ~> lets [
             "qname">: unwrap _Name @@ (Packaging.typeDefinitionName $ var "td"),
             "tname">: localName @@ var "qname",
             "ty">: Core.typeSchemeBody (Packaging.typeDefinitionBody $ var "td"),
             "extracted">: extractTypeParams @@ var "ty",
             "bodyTy">: Pairs.second (var "extracted")] $
-            cases _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm ((String, String), String)])) [
+            match _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm ((String, String), String)])) [
               _Type_record>>: "fields" ~> Lists.map (lambda "ft" $ lets [
                 "rawFn">: localNameRaw @@ (unwrap _Name @@ (Core.fieldTypeName $ var "ft")),
                 "fn">: sanitize @@ var "rawFn",
@@ -142,14 +142,14 @@ buildFieldMapping = define "buildFieldMapping" $
 collectFreeTypeVars :: TypedTermDefinition (Term -> S.Set String)
 collectFreeTypeVars = define "collectFreeTypeVars" $
   doc "Collect the set of free type-variable-like names (t0, t1, ...) referenced anywhere inside a Term" $
-  lambda "tm" $ cases _Term (var "tm") (Just (Sets.empty :: TypedTerm (S.Set String))) [
+  lambda "tm" $ match _Term (var "tm") (Just (Sets.empty :: TypedTerm (S.Set String))) [
     _Term_annotated>>: "at" ~>
       collectFreeTypeVars @@ (Core.annotatedTermBody $ var "at"),
     _Term_application>>: "app" ~> Sets.union
       (collectFreeTypeVars @@ (Core.applicationFunction $ var "app"))
       (collectFreeTypeVars @@ (Core.applicationArgument $ var "app")),
     _Term_cases>>: "cs" ~> Sets.union
-      (Optionals.cases (Core.caseStatementDefault $ var "cs") (Sets.empty :: TypedTerm (S.Set String)) (lambda "d" $ collectFreeTypeVars @@ var "d"))
+      (Optionals.match (Core.caseStatementDefault $ var "cs") (Sets.empty :: TypedTerm (S.Set String)) (lambda "d" $ collectFreeTypeVars @@ var "d"))
       (Sets.unions $ Lists.map
         (lambda "f" $ collectFreeTypeVars @@ (Core.caseAlternativeHandler $ var "f"))
         (Core.caseStatementCases $ var "cs")),
@@ -161,7 +161,7 @@ collectFreeTypeVars = define "collectFreeTypeVars" $
       collectFreeTypeVars @@ (Core.fieldTerm $ Core.injectionField $ var "inj"),
     _Term_lambda>>: "lam" ~> lets [
       "paramName">: unwrap _Name @@ (Core.lambdaParameter $ var "lam"),
-      "domVars">: Optionals.cases (Core.lambdaDomain $ var "lam") (Sets.empty :: TypedTerm (S.Set String)) (lambda "dty" $ collectFreeTypeVarsInType @@ var "dty"),
+      "domVars">: Optionals.match (Core.lambdaDomain $ var "lam") (Sets.empty :: TypedTerm (S.Set String)) (lambda "dty" $ collectFreeTypeVarsInType @@ var "dty"),
       "bodyVars">: collectFreeTypeVars @@ (Core.lambdaBody $ var "lam"),
       "allVars">: (Sets.union (var "domVars") (var "bodyVars") :: TypedTerm (S.Set String))] $
       Logic.ifElse (isTypeVarLike @@ var "paramName")
@@ -171,12 +171,12 @@ collectFreeTypeVars = define "collectFreeTypeVars" $
       "bindVars">: (Sets.unions $ Lists.map
         (lambda "b" $ Sets.union
           (collectFreeTypeVars @@ (Core.bindingTerm $ var "b"))
-          (Optionals.cases (Core.bindingTypeScheme $ var "b") (Sets.empty :: TypedTerm (S.Set String)) (lambda "sch" $ collectFreeTypeVarsInTypeScheme @@ var "sch")))
+          (Optionals.match (Core.bindingTypeScheme $ var "b") (Sets.empty :: TypedTerm (S.Set String)) (lambda "sch" $ collectFreeTypeVarsInTypeScheme @@ var "sch")))
         (Core.letBindings $ var "lt") :: TypedTerm (S.Set String))] $
       (Sets.union (var "bindVars") (collectFreeTypeVars @@ (Core.letBody $ var "lt")) :: TypedTerm (S.Set String)),
     _Term_list>>: "xs" ~> (Sets.unions $
       Lists.map (lambda "el" $ collectFreeTypeVars @@ var "el") (var "xs") :: TypedTerm (S.Set String)),
-    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (Sets.empty :: TypedTerm (S.Set String)) (lambda "el" $ collectFreeTypeVars @@ var "el"),
+    _Term_optional>>: "mt" ~> Optionals.match (var "mt") (Sets.empty :: TypedTerm (S.Set String)) (lambda "el" $ collectFreeTypeVars @@ var "el"),
     _Term_pair>>: "p" ~> (Sets.union
       (collectFreeTypeVars @@ Pairs.first (var "p"))
       (collectFreeTypeVars @@ Pairs.second (var "p")) :: TypedTerm (S.Set String)),
@@ -200,7 +200,7 @@ collectFreeTypeVars = define "collectFreeTypeVars" $
 collectFreeTypeVarsInType :: TypedTermDefinition (Type -> S.Set String)
 collectFreeTypeVarsInType = define "collectFreeTypeVarsInType" $
   doc "Collect names of type-variable-like references (t0, t1, ...) inside a Type" $
-  lambda "ty" $ cases _Type (var "ty") (Just (Sets.empty :: TypedTerm (S.Set String))) [
+  lambda "ty" $ match _Type (var "ty") (Just (Sets.empty :: TypedTerm (S.Set String))) [
     _Type_annotated>>: "at" ~>
       collectFreeTypeVarsInType @@ (Core.annotatedTypeBody $ var "at"),
     _Type_application>>: "app" ~> Sets.union
@@ -251,7 +251,7 @@ collectFreeTypeVarsInTypeScheme = define "collectFreeTypeVarsInTypeScheme" $
 collectLetBindings :: TypedTermDefinition (Term -> ([Binding], Term))
 collectLetBindings = define "collectLetBindings" $
   doc "Flatten consecutive TermLet wrappers into (bindings, innermostBody)" $
-  lambda "tm" $ cases _Term (var "tm") (Just $ pair (list ([] :: [TypedTerm Binding])) (var "tm")) [
+  lambda "tm" $ match _Term (var "tm") (Just $ pair (list ([] :: [TypedTerm Binding])) (var "tm")) [
     _Term_let>>: "lt" ~> lets [
       "rest">: collectLetBindings @@ (Core.letBody $ var "lt")] $
       pair
@@ -264,7 +264,7 @@ collectLetBindings = define "collectLetBindings" $
 collectQualifiedNamesInTerm :: TypedTermDefinition (Term -> S.Set String)
 collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
   doc "Collect the set of qualified (hydra.*) Name strings that a Hydra Term references" $
-  lambda "tm" $ cases _Term (var "tm") (Just (Sets.empty :: TypedTerm (S.Set String))) [
+  lambda "tm" $ match _Term (var "tm") (Just (Sets.empty :: TypedTerm (S.Set String))) [
     _Term_annotated>>: "at" ~>
       collectQualifiedNamesInTerm @@ (Core.annotatedTermBody $ var "at"),
     _Term_application>>: "app" ~> Sets.union
@@ -276,7 +276,7 @@ collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
         (Sets.unions $ Lists.map
           (lambda "f" $ collectQualifiedNamesInTerm @@ (Core.caseAlternativeHandler $ var "f"))
           (Core.caseStatementCases $ var "cs"))
-        (Optionals.cases (Core.caseStatementDefault $ var "cs") (Sets.empty :: TypedTerm (S.Set String)) (lambda "d" $ collectQualifiedNamesInTerm @@ var "d"))),
+        (Optionals.match (Core.caseStatementDefault $ var "cs") (Sets.empty :: TypedTerm (S.Set String)) (lambda "d" $ collectQualifiedNamesInTerm @@ var "d"))),
     _Term_either>>: "e" ~> Eithers.either
       (lambda "l" $ collectQualifiedNamesInTerm @@ var "l")
       (lambda "r" $ collectQualifiedNamesInTerm @@ var "r")
@@ -285,7 +285,7 @@ collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
       (qualifiedFromName @@ (Core.injectionTypeName $ var "inj"))
       (collectQualifiedNamesInTerm @@ (Core.fieldTerm $ Core.injectionField $ var "inj")),
     _Term_lambda>>: "lam" ~> Sets.union
-      (Optionals.cases (Core.lambdaDomain $ var "lam") (Sets.empty :: TypedTerm (S.Set String)) (lambda "domTy" $ collectQualifiedNamesInType @@ var "domTy"))
+      (Optionals.match (Core.lambdaDomain $ var "lam") (Sets.empty :: TypedTerm (S.Set String)) (lambda "domTy" $ collectQualifiedNamesInType @@ var "domTy"))
       (collectQualifiedNamesInTerm @@ (Core.lambdaBody $ var "lam")),
     _Term_let>>: "lt" ~> Sets.union
       (Sets.unions $ Lists.map
@@ -294,7 +294,7 @@ collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
       (collectQualifiedNamesInTerm @@ (Core.letBody $ var "lt")),
     _Term_list>>: "xs" ~> (Sets.unions $
       Lists.map (lambda "el" $ collectQualifiedNamesInTerm @@ var "el") (var "xs") :: TypedTerm (S.Set String)),
-    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (Sets.empty :: TypedTerm (S.Set String)) (lambda "el" $ collectQualifiedNamesInTerm @@ var "el"),
+    _Term_optional>>: "mt" ~> Optionals.match (var "mt") (Sets.empty :: TypedTerm (S.Set String)) (lambda "el" $ collectQualifiedNamesInTerm @@ var "el"),
     _Term_pair>>: "p" ~> Sets.union
       (collectQualifiedNamesInTerm @@ Pairs.first (var "p"))
       (collectQualifiedNamesInTerm @@ Pairs.second (var "p")),
@@ -317,7 +317,7 @@ collectQualifiedNamesInTerm = define "collectQualifiedNamesInTerm" $
 collectQualifiedNamesInType :: TypedTermDefinition (Type -> S.Set String)
 collectQualifiedNamesInType = define "collectQualifiedNamesInType" $
   doc "Collect the set of qualified (hydra.*) Name strings that a Hydra Type references" $
-  lambda "ty" $ cases _Type (var "ty") (Just (Sets.empty :: TypedTerm (S.Set String))) [
+  lambda "ty" $ match _Type (var "ty") (Just (Sets.empty :: TypedTerm (S.Set String))) [
     _Type_annotated>>: "at" ~>
       collectQualifiedNamesInType @@ (Core.annotatedTypeBody $ var "at"),
     _Type_application>>: "app" ~> Sets.union
@@ -374,7 +374,7 @@ collectSanitizedAccessors = define "collectSanitizedAccessors" $
           "ty">: Pairs.second (var "nt"),
           "extracted">: extractTypeParams @@ var "ty",
           "bodyTy">: Pairs.second (var "extracted")] $
-          cases _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm String])) [
+          match _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm String])) [
             _Type_record>>: "fields" ~>
               Optionals.givens $ Lists.map (lambda "f" $
                 Logic.ifElse (fieldCausesPositivityIssue @@ var "groupNames" @@ (Core.fieldTypeType $ var "f"))
@@ -474,15 +474,15 @@ eraseUnboundTypeVarDomains = define "eraseUnboundTypeVarDomains" $
   doc "Erase lambda domain annotations referencing unbound type variables; recurse under new type binders" $
   "initialBound" ~> "term0" ~>
   "eraseIfUnbound" <~ ("bound" ~> "mdom" ~>
-    Optionals.cases (var "mdom") (Phantoms.nothing :: TypedTerm (Maybe Type)) ("ty" ~> Logic.ifElse (hasUnboundTypeVar @@ var "bound" @@ var "ty")
+    Optionals.match (var "mdom") (Phantoms.nothing :: TypedTerm (Maybe Type)) ("ty" ~> Logic.ifElse (hasUnboundTypeVar @@ var "bound" @@ var "ty")
         (Phantoms.nothing :: TypedTerm (Maybe Type))
         (Phantoms.just $ var "ty"))) $
   "f" <~ ("recurse" ~> "bound" ~> "term" ~>
-    cases _Term (var "term") (Just $ var "recurse" @@ var "bound" @@ var "term") [
+    match _Term (var "term") (Just $ var "recurse" @@ var "bound" @@ var "term") [
       _Term_lambda>>: "lam" ~>
         "paramName" <~ (unwrap _Name @@ (Core.lambdaParameter $ var "lam")) $
         "dom" <~ (Core.lambdaDomain $ var "lam") $
-        "isTypeParam" <~ Optionals.cases (var "dom") (boolean False) ("d" ~> cases _Type (var "d") (Just (boolean False)) [
+        "isTypeParam" <~ Optionals.match (var "dom") (boolean False) ("d" ~> match _Type (var "d") (Just (boolean False)) [
             _Type_variable>>: "v" ~>
               Equality.equal (unwrap _Name @@ var "v") (string "Type")]) $
         "bound2" <~ Logic.ifElse
@@ -513,7 +513,7 @@ extractQualifiedNamespace = define "extractQualifiedNamespace" $
 extractTypeParams :: TypedTermDefinition (Type -> ([String], Type))
 extractTypeParams = define "extractTypeParams" $
   doc "Peel off leading forall binders, returning the list of parameter names and the inner body type" $
-  lambda "ty" $ cases _Type (var "ty") (Just (pair (list ([] :: [TypedTerm String])) (var "ty"))) [
+  lambda "ty" $ match _Type (var "ty") (Just (pair (list ([] :: [TypedTerm String])) (var "ty"))) [
     _Type_forall>>: "ft" ~> lets [
       "param">: unwrap _Name @@ (Core.forallTypeParameter $ var "ft"),
       "rest">: extractTypeParams @@ (Core.forallTypeBody $ var "ft")] $
@@ -528,7 +528,7 @@ extractTypeParams = define "extractTypeParams" $
 fieldCausesPositivityIssue :: TypedTermDefinition (S.Set String -> Type -> Bool)
 fieldCausesPositivityIssue = define "fieldCausesPositivityIssue" $
   doc "Return True if the field type contains a function whose domain mentions a group member" $
-  lambdas ["groupNames", "fty"] $ cases _Type (var "fty") (Just (boolean False)) [
+  lambdas ["groupNames", "fty"] $ match _Type (var "fty") (Just (boolean False)) [
     _Type_function>>: "ft" ~> Logic.or
       (typeContainsGroupRef @@ var "groupNames" @@ (Core.functionTypeDomain $ var "ft"))
       (fieldCausesPositivityIssue @@ var "groupNames" @@ (Core.functionTypeCodomain $ var "ft")),
@@ -550,7 +550,7 @@ hasPositivityIssue = define "hasPositivityIssue" $
         "ty">: Pairs.second (var "nt"),
         "extracted">: extractTypeParams @@ var "ty",
         "bodyTy">: Pairs.second (var "extracted")] $
-        cases _Type (var "bodyTy") (Just (boolean False)) [
+        match _Type (var "bodyTy") (Just (boolean False)) [
           _Type_record>>: "fields" ~>
             Lists.foldl
               (lambdas ["acc2", "f"] $ Logic.or (var "acc2")
@@ -571,7 +571,7 @@ hasPositivityIssue = define "hasPositivityIssue" $
 hasUnboundTypeVar :: TypedTermDefinition (S.Set String -> Type -> Bool)
 hasUnboundTypeVar = define "hasUnboundTypeVar" $
   doc "Return True if the type mentions a t<digits> variable not present in the given set" $
-  lambdas ["bound", "ty"] $ cases _Type (var "ty") (Just (boolean False)) [
+  lambdas ["bound", "ty"] $ match _Type (var "ty") (Just (boolean False)) [
     _Type_annotated>>: "at" ~>
       hasUnboundTypeVar @@ var "bound" @@ (Core.annotatedTypeBody $ var "at"),
     _Type_application>>: "app" ~> Logic.or
@@ -600,7 +600,7 @@ hasUnboundTypeVar = define "hasUnboundTypeVar" $
 isTypeLambdaTerm :: TypedTermDefinition (Term -> Bool)
 isTypeLambdaTerm = define "isTypeLambdaTerm" $
   doc "Return True if a Term (possibly under TermAnnotated wrappers) is a TermTypeLambda" $
-  lambda "tm" $ cases _Term (var "tm") (Just (boolean False)) [
+  lambda "tm" $ match _Term (var "tm") (Just (boolean False)) [
     _Term_annotated>>: "at" ~>
       isTypeLambdaTerm @@ (Core.annotatedTermBody $ var "at"),
     _Term_typeLambda>>: constant (boolean True)]
@@ -672,7 +672,7 @@ normalizeInnerTypeLambdas = define "normalizeInnerTypeLambdas" $
   "term" ~>
   -- Strip outer TermTypeLambda chain: returns (params, innerBody).
   "stripTypeLambdas" <~ ("tm" ~>
-    cases _Term (var "tm") (Just $ pair (list ([] :: [TypedTerm String])) (var "tm")) [
+    match _Term (var "tm") (Just $ pair (list ([] :: [TypedTerm String])) (var "tm")) [
       _Term_typeLambda>>: "tl" ~>
         "rest" <~ (var "stripTypeLambdas" @@ (Core.typeLambdaBody $ var "tl")) $
         pair
@@ -687,7 +687,7 @@ normalizeInnerTypeLambdas = define "normalizeInnerTypeLambdas" $
       (var "params")) $
   -- Custom rewriter: threads the set of "poly-converted" let-bound names.
   "f" <~ ("recurse" ~> "polyNames" ~> "tm" ~>
-    cases _Term (var "tm") (Just $ var "recurse" @@ var "polyNames" @@ var "tm") [
+    match _Term (var "tm") (Just $ var "recurse" @@ var "polyNames" @@ var "tm") [
       _Term_let>>: "lt" ~>
         -- Newly converted names: bindings whose term is (transitively) a TermTypeLambda.
         "newPoly" <~ (Sets.fromList (Optionals.givens $ Lists.map
@@ -815,7 +815,7 @@ reorderLetBindings = define "reorderLetBindings" $
   doc "Topologically reorder let bindings and pair-encode mutually recursive groups" $
   "term0" ~>
   "f" <~ ("recurse" ~> "tm" ~>
-    cases _Term (var "tm") (Just $ var "recurse" @@ var "tm") [
+    match _Term (var "tm") (Just $ var "recurse" @@ var "tm") [
       _Term_let>>: constant $
         "flat" <~ (collectLetBindings @@ var "tm") $
         "allBindings" <~ Pairs.first (var "flat") $
@@ -840,7 +840,7 @@ rewriteTermFields = define "rewriteTermFields" $
   doc "Replace field names in TermProject nodes using the given (typeName, rawFieldName) -> prefixedName map" $
   lambdas ["fm", "term0"] $ lets [
     "rewrite">: lambdas ["recurse", "term"] $
-      cases _Term (var "term") (Just $ var "recurse" @@ var "term") [
+      match _Term (var "term") (Just $ var "recurse" @@ var "term") [
         _Term_project>>: "p" ~> lets [
           "tname">: unwrap _Name @@ (Core.projectionTypeName $ var "p"),
           "rawFn">: localNameRaw @@ (unwrap _Name @@ (Core.projectionFieldName $ var "p")),
@@ -874,7 +874,7 @@ sanitizePositivity = define "sanitizePositivity" $
       Logic.ifElse (fieldCausesPositivityIssue @@ var "groupNames" @@ (Core.fieldTypeType $ var "f"))
         (Core.fieldType (Core.fieldTypeName $ var "f") (Core.typeUnit))
         (var "f"),
-    "sanitized">: cases _Type (var "bodyTy") (Just (var "bodyTy")) [
+    "sanitized">: match _Type (var "bodyTy") (Just (var "bodyTy")) [
       _Type_record>>: "fields" ~>
         Core.typeRecord (Lists.map (var "sanitizeField") (var "fields")),
       _Type_union>>: "fields" ~>
@@ -944,14 +944,14 @@ sortTypeDefsSCC = define "sortTypeDefsSCC" $
 stripHydraFix :: TypedTermDefinition (Name -> Term -> Term)
 stripHydraFix = define "stripHydraFix" $
   doc "Strip an outer hydra_fix lambda wrapper, substituting the inner self-reference for the binding name" $
-  lambdas ["bName", "tm"] $ cases _Term (var "tm") (Just $ var "tm") [
+  lambdas ["bName", "tm"] $ match _Term (var "tm") (Just $ var "tm") [
     _Term_application>>: "app" ~> lets [
       "fn">: Core.applicationFunction $ var "app",
       "arg">: Core.applicationArgument $ var "app"] $
-      cases _Term (var "fn") (Just $ var "tm") [
+      match _Term (var "fn") (Just $ var "tm") [
         _Term_variable>>: "v" ~>
           Logic.ifElse (Equality.equal (unwrap _Name @@ var "v") (string "hydra_fix"))
-            (cases _Term (var "arg") (Just $ var "tm") [
+            (match _Term (var "arg") (Just $ var "tm") [
               _Term_lambda>>: "lam" ~>
                 Variables.substituteVariable
                   @@ (Core.lambdaParameter $ var "lam")
@@ -965,7 +965,7 @@ stripHydraFix = define "stripHydraFix" $
 targetsPolyName :: TypedTermDefinition (S.Set String -> Term -> Bool)
 targetsPolyName = define "targetsPolyName" $
   doc "Return True if the innermost target of a (possibly nested) type application is a poly-converted local name" $
-  lambdas ["polyNames", "tm"] $ cases _Term (var "tm") (Just (boolean False)) [
+  lambdas ["polyNames", "tm"] $ match _Term (var "tm") (Just (boolean False)) [
     _Term_variable>>: "v" ~>
       Sets.member (unwrap _Name @@ var "v" :: TypedTerm String) (var "polyNames"),
     _Term_typeApplication>>: "ta" ~>
@@ -978,7 +978,7 @@ targetsPolyName = define "targetsPolyName" $
 termRefs :: TypedTermDefinition (S.Set String -> Term -> S.Set String)
 termRefs = define "termRefs" $
   doc "Walk a Term and collect the local names it references, intersected with the given locally-defined names" $
-  lambdas ["locals", "tm"] $ cases _Term (var "tm") (Just (Sets.empty :: TypedTerm (S.Set String))) [
+  lambdas ["locals", "tm"] $ match _Term (var "tm") (Just (Sets.empty :: TypedTerm (S.Set String))) [
     _Term_annotated>>: "at" ~>
       termRefs @@ var "locals" @@ (Core.annotatedTermBody $ var "at"),
     _Term_application>>: "app" ~> Sets.union
@@ -988,7 +988,7 @@ termRefs = define "termRefs" $
       (Sets.unions $ Lists.map
         (lambda "f" $ termRefs @@ var "locals" @@ (Core.caseAlternativeHandler $ var "f"))
         (Core.caseStatementCases $ var "cs"))
-      (Optionals.cases (Core.caseStatementDefault $ var "cs") (Sets.empty :: TypedTerm (S.Set String)) (lambda "d" $ termRefs @@ var "locals" @@ var "d")),
+      (Optionals.match (Core.caseStatementDefault $ var "cs") (Sets.empty :: TypedTerm (S.Set String)) (lambda "d" $ termRefs @@ var "locals" @@ var "d")),
     _Term_either>>: "e" ~> Eithers.either
       (lambda "l" $ termRefs @@ var "locals" @@ var "l")
       (lambda "r" $ termRefs @@ var "locals" @@ var "r")
@@ -1004,7 +1004,7 @@ termRefs = define "termRefs" $
       (termRefs @@ var "locals" @@ (Core.letBody $ var "lt")),
     _Term_list>>: "xs" ~> (Sets.unions $
       Lists.map (lambda "el" $ termRefs @@ var "locals" @@ var "el") (var "xs") :: TypedTerm (S.Set String)),
-    _Term_optional>>: "mt" ~> Optionals.cases (var "mt") (Sets.empty :: TypedTerm (S.Set String)) (lambda "el" $ termRefs @@ var "locals" @@ var "el"),
+    _Term_optional>>: "mt" ~> Optionals.match (var "mt") (Sets.empty :: TypedTerm (S.Set String)) (lambda "el" $ termRefs @@ var "locals" @@ var "el"),
     _Term_pair>>: "p" ~> Sets.union
       (termRefs @@ var "locals" @@ Pairs.first (var "p"))
       (termRefs @@ var "locals" @@ Pairs.second (var "p")),
@@ -1030,7 +1030,7 @@ termRefs = define "termRefs" $
 typeContainsGroupRef :: TypedTermDefinition (S.Set String -> Type -> Bool)
 typeContainsGroupRef = define "typeContainsGroupRef" $
   doc "Return True if the Type mentions any type variable whose local name is in the given set" $
-  lambdas ["groupNames", "ty"] $ cases _Type (var "ty") (Just (boolean False)) [
+  lambdas ["groupNames", "ty"] $ match _Type (var "ty") (Just (boolean False)) [
     _Type_annotated>>: "at" ~>
       typeContainsGroupRef @@ var "groupNames" @@ (Core.annotatedTypeBody $ var "at"),
     _Type_application>>: "app" ~> Logic.or
@@ -1064,7 +1064,7 @@ typeContainsGroupRef = define "typeContainsGroupRef" $
 typeRefs :: TypedTermDefinition (S.Set String -> Type -> S.Set String)
 typeRefs = define "typeRefs" $
   doc "Walk a Type and collect the local names it references, intersected with the given locally-defined names" $
-  lambdas ["locals", "ty"] $ cases _Type (var "ty") (Just (Sets.empty :: TypedTerm (S.Set String))) [
+  lambdas ["locals", "ty"] $ match _Type (var "ty") (Just (Sets.empty :: TypedTerm (S.Set String))) [
     _Type_annotated>>: "at" ~>
       typeRefs @@ var "locals" @@ (Core.annotatedTypeBody $ var "at"),
     _Type_application>>: "app" ~> Sets.union
@@ -1106,7 +1106,7 @@ typeRefs = define "typeRefs" $
 typeToTerm :: TypedTermDefinition (Type -> Term)
 typeToTerm = define "typeToTerm" $
   doc "Convert a Hydra Type to a placeholder Term for use as an explicit Coq type argument. Coq-builtin type constructors are marked with a `Coq.` prefix so the encoder can emit them raw without going through sanitizeVar, which would clash with user-level lambda parameters of the same name (e.g. `list` -> `list_`)." $
-  lambda "ty" $ cases _Type (var "ty") (Just $ Core.termVariable (wrap _Name (string "Coq.unit"))) [
+  lambda "ty" $ match _Type (var "ty") (Just $ Core.termVariable (wrap _Name (string "Coq.unit"))) [
     _Type_variable>>: "v" ~> Core.termVariable $ var "v",
     _Type_list>>: "t" ~> Core.termApplication $ Core.application
       (Core.termVariable (wrap _Name (string "Coq.list"))) (typeToTerm @@ var "t"),

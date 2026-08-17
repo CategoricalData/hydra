@@ -117,7 +117,7 @@ def = definitionInModule module_
 dialectCadr :: TypedTermDefinition (L.Dialect -> String)
 dialectCadr = def "dialectCadr" $
   doc "Dialect-aware name for \"cadr\" (second element of a list); Clojure uses \"second\", other dialects use \"cadr\"" $
-  lambda "d" $ cases L._Dialect (var "d") (Just $ string "cadr") [
+  lambda "d" $ match L._Dialect (var "d") (Just $ string "cadr") [
     L._Dialect_clojure>>: constant $ string "second"]
 
 -- | Dialect-aware name for "car" (first element of a list)
@@ -125,7 +125,7 @@ dialectCadr = def "dialectCadr" $
 dialectCar :: TypedTermDefinition (L.Dialect -> String)
 dialectCar = def "dialectCar" $
   doc "Dialect-aware name for \"car\" (first element of a list); Clojure uses \"first\", other dialects use \"car\"" $
-  lambda "d" $ cases L._Dialect (var "d") (Just $ string "car") [
+  lambda "d" $ match L._Dialect (var "d") (Just $ string "car") [
     L._Dialect_clojure>>: constant $ string "first"]
 
 -- | Dialect-aware constructor prefix for record types
@@ -133,7 +133,7 @@ dialectCar = def "dialectCar" $
 dialectConstructorPrefix :: TypedTermDefinition (L.Dialect -> String)
 dialectConstructorPrefix = def "dialectConstructorPrefix" $
   doc "Dialect-aware constructor prefix for record types; Clojure uses \"->\", other dialects use \"make-\"" $
-  lambda "d" $ cases L._Dialect (var "d") (Just $ string "make-") [
+  lambda "d" $ match L._Dialect (var "d") (Just $ string "make-") [
     L._Dialect_clojure>>: constant $ string "->"]
 
 -- | Dialect-aware name for "equal?" (equality test)
@@ -141,7 +141,7 @@ dialectConstructorPrefix = def "dialectConstructorPrefix" $
 dialectEqual :: TypedTermDefinition (L.Dialect -> String)
 dialectEqual = def "dialectEqual" $
   doc "Dialect-aware name for \"equal?\" (equality test): Clojure uses \"=\", Common Lisp/Emacs Lisp use \"equal\", Scheme uses \"equal?\"" $
-  lambda "d" $ cases L._Dialect (var "d") (Just $ string "equal?") [
+  lambda "d" $ match L._Dialect (var "d") (Just $ string "equal?") [
     L._Dialect_clojure>>: constant $ string "=",
     L._Dialect_commonLisp>>: constant $ string "equal",
     L._Dialect_emacsLisp>>: constant $ string "equal"]
@@ -152,7 +152,7 @@ dialectEqual = def "dialectEqual" $
 dialectSupportsLetrec :: TypedTermDefinition (L.Dialect -> Bool)
 dialectSupportsLetrec = def "dialectSupportsLetrec" $
   doc "Whether a dialect provides a native letrec (mutually recursive let); Clojure has only sequential let" $
-  lambda "d" $ cases L._Dialect (var "d") (Just $ boolean True) [
+  lambda "d" $ match L._Dialect (var "d") (Just $ boolean True) [
     L._Dialect_clojure>>: constant $ boolean False]
 
 -- | Encode a function application, detecting ifElse and other lazy primitives.
@@ -173,7 +173,7 @@ encodeApplication = def "encodeApplication" $
         right (lispApp @@ var "fun" @@ list [var "arg"])) $
     -- Helper: encode a term
     "enc" <~ (lambda "t" $ encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "t") $
-    cases _Term (var "dFun") (Just $ var "normal" @@ unit)
+    match _Term (var "dFun") (Just $ var "normal" @@ unit)
     [_Term_application>>: lambda "app2" $
        "midFun" <~ Core.applicationFunction (var "app2") $
        "midArg" <~ Core.applicationArgument (var "app2") $
@@ -191,7 +191,7 @@ encodeApplication = def "encodeApplication" $
            right (lispApp @@ (lispApp @@ var "ePrim" @@ list [wrapInThunk @@ var "eDef"])
                           @@ list [var "eArg"]))
          -- Not a 2-arg lazy primitive — check for 3-deep patterns
-         (cases _Term (var "dMidFun") (Just $ var "normal" @@ unit)
+         (match _Term (var "dMidFun") (Just $ var "normal" @@ unit)
          [_Term_application>>: lambda "app3" $
             "innerFun" <~ Core.applicationFunction (var "app3") $
             "innerArg" <~ Core.applicationArgument (var "app3") $
@@ -304,7 +304,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
         "bname" <~ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ Core.unName (Core.bindingName (var "b")))) $
         "isSelfRef" <~ (Sets.member (Core.bindingName (var "b"))
           (Variables.freeVariablesInTerm @@ Core.bindingTerm (var "b"))) $
-        "isLambda" <~ (cases _Term (Strip.deannotateTerm @@ Core.bindingTerm (var "b"))
+        "isLambda" <~ (match _Term (Strip.deannotateTerm @@ Core.bindingTerm (var "b"))
           (Just $ boolean False)
           [_Term_lambda>>: constant (boolean True)]) $
         "bval" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ Core.bindingTerm (var "b")) $
@@ -317,7 +317,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
           (Logic.ifElse (var "isSelfRef")
             (Logic.ifElse (var "isLambda")
               -- Lambda: add name to the lambda for (fn name [...] ...)
-              (cases L._Expression (var "bval") (Just $ var "bval") [
+              (match L._Expression (var "bval") (Just $ var "bval") [
                 L._Expression_lambda>>: lambda "lam" $
                   inject L._Expression L._Expression_lambda $
                     record L._Lambda [
@@ -369,7 +369,7 @@ encodeLetAsNative = def "encodeLetAsNative" $
 encodeLiteral :: TypedTermDefinition (Literal -> L.Expression)
 encodeLiteral = def "encodeLiteral" $
   doc "Encode a Hydra literal as a Lisp expression" $
-  lambda "lit" $ cases _Literal (var "lit") Nothing [
+  lambda "lit" $ match _Literal (var "lit") Nothing [
     _Literal_boolean>>: lambda "b" $
       inject L._Expression L._Expression_literal $
         inject L._Literal L._Literal_boolean (var "b"),
@@ -385,7 +385,7 @@ encodeLiteral = def "encodeLiteral" $
       inject L._Expression L._Expression_literal $
         inject L._Literal L._Literal_string (var "s"),
     _Literal_float>>: lambda "fv" $
-      cases _FloatValue (var "fv") Nothing [
+      match _FloatValue (var "fv") Nothing [
         _FloatValue_float32>>: lambda "f" $
           inject L._Expression L._Expression_literal $
             inject L._Literal L._Literal_float $
@@ -399,7 +399,7 @@ encodeLiteral = def "encodeLiteral" $
                 L._FloatLiteral_value>>: var "f",
                 L._FloatLiteral_precision>>: nothing]],
     _Literal_integer>>: lambda "iv" $
-      cases _IntegerValue (var "iv") Nothing [
+      match _IntegerValue (var "iv") Nothing [
         _IntegerValue_int8>>: lambda "i" $
           inject L._Expression L._Expression_literal $
             inject L._Literal L._Literal_integer $
@@ -504,7 +504,7 @@ encodeTerm :: TypedTermDefinition (L.Dialect -> S.Set String -> InferenceContext
 encodeTerm = def "encodeTerm" $
   doc "Encode a Hydra term as a Lisp expression" $
   "dialect" ~> "overlaySubs" ~> "cx" ~> "g" ~> lambda "term" $
-    cases _Term (var "term") Nothing
+    match _Term (var "term") Nothing
     [_Term_annotated>>: lambda "at" $
        encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ Core.annotatedTermBody (var "at"),
 
@@ -604,7 +604,7 @@ encodeTerm = def "encodeTerm" $
        "fname" <~ Core.unName (Core.fieldName (var "field")) $
        "fterm" <~ Core.fieldTerm (var "field") $
        "dterm" <~ (Strip.deannotateTerm @@ var "fterm") $
-       "isUnit" <~ (cases _Term (var "dterm") (Just $ boolean False) [
+       "isUnit" <~ (match _Term (var "dterm") (Just $ boolean False) [
          _Term_unit>>: constant $ boolean True,
          _Term_record>>: lambda "rt" $ Lists.null (Core.recordFields (var "rt"))]) $
        Logic.ifElse (var "isUnit")
@@ -641,7 +641,7 @@ encodeTerm = def "encodeTerm" $
            (Sets.member (var "sub") (var "overlaySubs" :: TypedTerm (S.Set String))))
          (Strings.concat (list [
            string "hydra.overlay.",
-           (cases L._Dialect (var "dialect") (Just $ string "lisp") [
+           (match L._Dialect (var "dialect") (Just $ string "lisp") [
              L._Dialect_clojure>>: constant $ string "clojure",
              L._Dialect_scheme>>: constant $ string "scheme",
              L._Dialect_commonLisp>>: constant $ string "common_lisp",
@@ -670,7 +670,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "lname" <~ (qualifiedSnakeName @@ var "name") $
     "dterm" <~ (Strip.deannotateTerm @@ var "term") $
     -- Check if the term is a lambda (function) or a value
-    cases _Term (var "dterm") (Just $
+    match _Term (var "dterm") (Just $
       -- Non-function: encode as a variable definition
       "sterm" <<~ (encodeTerm @@ var "dialect" @@ var "overlaySubs" @@ var "cx" @@ var "g" @@ var "term") $
         right (lispTopForm @@ (inject L._TopLevelForm L._TopLevelForm_variable $
@@ -694,7 +694,7 @@ encodeType = def "encodeType" $
   doc "Encode a Hydra type as a Lisp type specifier, used for type annotations" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
-    cases _Type (var "typ") (Just $
+    match _Type (var "typ") (Just $
       -- Default: named type referencing the Hydra type name
       right (inject L._TypeSpecifier L._TypeSpecifier_named $
         wrap L._Symbol (string "Any")))
@@ -705,7 +705,7 @@ encodeType = def "encodeType" $
      _Type_unit>>: constant $
        right (inject L._TypeSpecifier L._TypeSpecifier_unit unit),
      _Type_literal>>: lambda "lt" $
-       right (cases _LiteralType (var "lt") Nothing [
+       right (match _LiteralType (var "lt") Nothing [
          _LiteralType_binary>>: constant $
            inject L._TypeSpecifier L._TypeSpecifier_named $ wrap L._Symbol (string "ByteArray"),
          _LiteralType_boolean>>: constant $
@@ -767,7 +767,7 @@ encodeTypeBody :: TypedTermDefinition (String -> Type -> Type -> Either Error L.
 encodeTypeBody = def "encodeTypeBody" $
   doc "Encode a type body, after stripping annotations and foralls, as a Lisp top-level form" $
   lambda "lname" $ lambda "origTyp" $ lambda "typ" $
-    cases _Type (var "typ") (Just $
+    match _Type (var "typ") (Just $
       -- Default: emit a comment for types we can't yet represent
       right (record L._TopLevelFormWithComments [
         L._TopLevelFormWithComments_doc>>: nothing,
@@ -897,7 +897,7 @@ primHeadName :: TypedTermDefinition (Term -> Maybe Name)
 primHeadName = def "primHeadName" $
   doc "Extract the primitive or variable name a head term refers to, or nothing if the head is not a plain reference" $
   lambda "term" $
-    cases _Term (var "term") (Just (nothing :: TypedTerm (Maybe Name))) [
+    match _Term (var "term") (Just (nothing :: TypedTerm (Maybe Name))) [
       _Term_variable>>: lambda "name" $ just (var "name"),
       _Term_annotated>>: lambda "at" $
         primHeadName @@ Core.annotatedTermBody (var "at"),
@@ -937,7 +937,7 @@ isPrimitiveRef :: TypedTermDefinition (String -> Term -> Bool)
 isPrimitiveRef = def "isPrimitiveRef" $
   doc "Check whether a term is a reference to a specific primitive, stripping type applications, type lambdas, and annotations" $
   lambda "primName" $ lambda "term" $
-    cases _Term (var "term") (Just $ boolean False) [
+    match _Term (var "term") (Just $ boolean False) [
       _Term_variable>>: lambda "name" $
         Equality.equal (Core.unName (var "name")) (var "primName"),
       _Term_annotated>>: lambda "at" $
@@ -1062,7 +1062,7 @@ moduleExports = def "moduleExports" $
   "forms" ~>
     "symbols" <~ Lists.concat (Lists.map ("fwc" ~>
       "form" <~ (project L._TopLevelFormWithComments L._TopLevelFormWithComments_form @@ var "fwc") $
-      cases L._TopLevelForm (var "form") (Just (list ([] :: [TypedTerm L.Symbol]))) [
+      match L._TopLevelForm (var "form") (Just (list ([] :: [TypedTerm L.Symbol]))) [
         L._TopLevelForm_variable>>: "vd" ~>
           list [project L._VariableDefinition L._VariableDefinition_name @@ var "vd"],
         L._TopLevelForm_recordType>>: "rdef" ~>
@@ -1100,7 +1100,7 @@ moduleImports :: TypedTermDefinition (L.Dialect -> S.Set String -> ModuleName ->
 moduleImports = def "moduleImports" $
   doc "Generate import declarations from the dependency namespaces of a module's definitions" $
   "dialect" ~> "overlaySubs" ~> "focusNs" ~> "defs" ~>
-    "langSeg" <~ (cases L._Dialect (var "dialect") (Just $ string "lisp") [
+    "langSeg" <~ (match L._Dialect (var "dialect") (Just $ string "lisp") [
       L._Dialect_clojure>>: constant $ string "clojure",
       L._Dialect_scheme>>: constant $ string "scheme",
       L._Dialect_commonLisp>>: constant $ string "common_lisp",

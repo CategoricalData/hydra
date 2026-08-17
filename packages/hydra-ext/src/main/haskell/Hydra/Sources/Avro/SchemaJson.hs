@@ -528,7 +528,7 @@ decodeSchema :: TypedTermDefinition (InferenceContext -> JM.Value -> Result Avro
 decodeSchema = define "decodeSchema" $
   doc "Decode an Avro schema from a JSON value" $
   lambda "cx" $ lambda "v" $
-    cases JM._Value (var "v") (Just (err @@ var "cx" @@ (Strings.concat $ list [string "unexpected JSON value for schema: ", showJsonValue @@ var "v"]))) [
+    match JM._Value (var "v") (Just (err @@ var "cx" @@ (Strings.concat $ list [string "unexpected JSON value for schema: ", showJsonValue @@ var "v"]))) [
       -- String: primitive type name or reference
       JM._Value_string>>: lambda "s" $
         Optionals.cases (decodePrimitiveName @@ var "s") (Phantoms.right (inject Avro._Schema Avro._Schema_reference (var "s"))) (lambda "p" $ Phantoms.right (inject Avro._Schema Avro._Schema_primitive (var "p"))),
@@ -623,7 +623,7 @@ encodeNamedType :: TypedTermDefinition (Avro.NamedType -> [(String, JM.Value)])
 encodeNamedType = define "encodeNamedType" $
   doc "Encode the specific variant of a named Avro type" $
   lambda "nt" $
-    cases Avro._NamedType (var "nt") Nothing [
+    match Avro._NamedType (var "nt") Nothing [
       Avro._NamedType_enum>>: lambda "e" $ encodeEnumE @@ var "e",
       Avro._NamedType_fixed>>: lambda "f" $ encodeFixedE @@ var "f",
       Avro._NamedType_record>>: lambda "r" $ encodeRecordE @@ var "r"]
@@ -633,7 +633,7 @@ encodeOrderE = define "encodeOrder" $
   doc "Encode an Avro field ordering as a key-value pair" $
   lambda "o" $
     pair (string "order") (inject JM._Value JM._Value_string
-      (cases Avro._Order (var "o") Nothing [
+      (match Avro._Order (var "o") Nothing [
         Avro._Order_ascending>>: constant (string "ascending"),
         Avro._Order_descending>>: constant (string "descending"),
         Avro._Order_ignore>>: constant (string "ignore")]))
@@ -643,7 +643,7 @@ encodePrimitive = define "encodePrimitive" $
   doc "Encode an Avro primitive type as a JSON string" $
   lambda "p" $
     inject JM._Value JM._Value_string
-      (cases Avro._Primitive (var "p") Nothing [
+      (match Avro._Primitive (var "p") Nothing [
         Avro._Primitive_null>>: constant (string "null"),
         Avro._Primitive_boolean>>: constant (string "boolean"),
         Avro._Primitive_int>>: constant (string "int"),
@@ -665,7 +665,7 @@ encodeSchema :: TypedTermDefinition (Avro.Schema -> JM.Value)
 encodeSchema = define "encodeSchema" $
   doc "Encode an Avro schema to a JSON value" $
   lambda "schema" $
-    cases Avro._Schema (var "schema") Nothing [
+    match Avro._Schema (var "schema") Nothing [
       Avro._Schema_primitive>>: lambda "p" $ encodePrimitive @@ var "p",
       Avro._Schema_array>>: lambda "arr" $ encodeArray @@ var "arr",
       Avro._Schema_map>>: lambda "mp" $ encodeMap @@ var "mp",
@@ -690,28 +690,28 @@ expectArrayE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result [JM.
 expectArrayE = define "expectArrayE" $
   doc "Extract a JSON array or return an error" $
   lambda "cx" $ lambda "value" $
-    cases JM._Value (var "value") Nothing [
+    match JM._Value (var "value") Nothing [
       JM._Value_array>>: lambda "v" $ Phantoms.right (var "v")]
 
 expectNumberE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result Sci.Scientific)
 expectNumberE = define "expectNumberE" $
   doc "Extract a JSON number or return an error" $
   lambda "cx" $ lambda "value" $
-    cases JM._Value (var "value") Nothing [
+    match JM._Value (var "value") Nothing [
       JM._Value_number>>: lambda "v" $ Phantoms.right (var "v")]
 
 expectObjectE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result (M.Map String JM.Value))
 expectObjectE = define "expectObjectE" $
   doc "Extract a JSON object as a name-keyed map or return an error (field order is dropped)" $
   lambda "cx" $ lambda "value" $
-    cases JM._Value (var "value") Nothing [
+    match JM._Value (var "value") Nothing [
       JM._Value_object>>: lambda "v" $ Phantoms.right (Maps.fromList (var "v") :: TypedTerm (M.Map String JM.Value))]
 
 expectStringE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result String)
 expectStringE = define "expectStringE" $
   doc "Extract a JSON string or return an error" $
   lambda "cx" $ lambda "value" $
-    cases JM._Value (var "value") Nothing [
+    match JM._Value (var "value") Nothing [
       JM._Value_string>>: lambda "v" $ Phantoms.right (var "v")]
 
 getAnnotations :: TypedTermDefinition (M.Map String JM.Value -> M.Map String JM.Value)
@@ -792,7 +792,7 @@ stringToJsonValue :: TypedTermDefinition (String -> Either String JM.Value)
 stringToJsonValue = define "stringToJsonValue" $
   doc "Parse a JSON string, returning Either for compatibility" $
   lambda "s" $
-    cases Parsing._ParseResult (var "hydra.json.parser.parseJson" @@ var "s") Nothing [
+    match Parsing._ParseResult (var "hydra.json.parser.parseJson" @@ var "s") Nothing [
       Parsing._ParseResult_success>>: lambda "success" $
         Phantoms.right (project Parsing._ParseSuccess Parsing._ParseSuccess_value @@ var "success"),
       Parsing._ParseResult_failure>>: lambda "failure" $

@@ -38,7 +38,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([BuildModules.ns, Scoping.ns, PrintCore.ns] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata (Just "Test cases for the pure module-list utilities in hydra.build.modules")}
+            moduleMetadata = descriptionMetadata (Just "Test match for the pure module-list utilities in hydra.build.modules")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -132,7 +132,7 @@ showModuleDetail m = Strings.concat (Phantoms.list [
     PrintCore.list_ @@ defFn @@ Packaging.moduleDefinitions m])
   where
     defFn :: TypedTerm (Definition -> String)
-    defFn = Phantoms.lambda "d" $ Phantoms.cases _Definition (Phantoms.var "d") Nothing [
+    defFn = Phantoms.lambda "d" $ Phantoms.match _Definition (Phantoms.var "d") Nothing [
       _Definition_type Phantoms.>>: Phantoms.lambda "td" (Strings.concat (Phantoms.list [
         Phantoms.string "type:", Core.unName (Packaging.typeDefinitionName (Phantoms.var "td"))])),
       _Definition_primitive Phantoms.>>: Phantoms.lambda "pd" (Strings.concat (Phantoms.list [
@@ -154,7 +154,7 @@ showModulesDetail mods = PrintCore.list_ @@ Phantoms.lambda "m" (showModuleDetai
 
 allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
-    Phantoms.doc "Test cases for the pure module-list utilities in hydra.build.modules" $
+    Phantoms.doc "Test match for the pure module-list utilities in hydra.build.modules" $
     supergroup "build.modules" [
       dedupPreservingOrderGroup,
       filterKernelModulesGroup,

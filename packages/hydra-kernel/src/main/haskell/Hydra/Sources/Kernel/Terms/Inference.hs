@@ -213,7 +213,7 @@ bindUnboundTypeVariables = define "bindUnboundTypeVariables" $
     <> " vacuous foralls that target languages with non-polymorphic value bindings (e.g. Scala val) cannot express.") $
   "cx" ~> "term0" ~>
   "svars" <~ Sets.fromList (Maps.keys $ Graph.graphSchemaTypes $ var "cx") $
-  "rewrite" <~ ("recurse" ~> "term" ~> cases _Term (var "term")
+  "rewrite" <~ ("recurse" ~> "term" ~> match _Term (var "term")
     (Just $ var "recurse" @@ var "term") [
     _Term_let>>: "l" ~>
       "forBinding" <~ ("b" ~>
@@ -300,7 +300,7 @@ dischargeClassConstraints = define "dischargeClassConstraints" $
       (right unit)
       ("resolvedType" ~>
         "checkClass" <~ ("classConstraint" ~>
-          "className" <~ cases _TypeClassConstraint (var "classConstraint") Nothing [
+          "className" <~ match _TypeClassConstraint (var "classConstraint") Nothing [
             _TypeClassConstraint_simple>>: "n" ~> var "n"] $
           Logic.ifElse (Classes.classIsSatisfiedByType @@ var "className" @@ var "resolvedType")
             (right unit)
@@ -400,7 +400,7 @@ inferGraphTypes = define "inferGraphTypes" $
   "term" <~ Typing.inferenceResultTerm (var "result") $
   "_" <<~ dischargeClassConstraints @@ var "fcx2" @@ (Typing.inferenceResultSubst (var "result")) @@ (Typing.inferenceResultClassConstraints (var "result")) $
   "finalized" <<~ finalizeInferredTerm @@ var "fcx2" @@ var "g0" @@ var "term" $
-  cases _Term (var "finalized")
+  match _Term (var "finalized")
     Nothing [
     _Term_let>>: "l" ~> right $ pair (var "fromLetTerm" @@ var "l") (var "fcx2"),
     _Term_variable>>: constant $ left (Error.errorInference $ Error.inferenceErrorOther $ Error.otherInferenceError
@@ -554,8 +554,8 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
   "fcx" ~> "cx" ~> "caseStmt" ~>
   "tname" <~ Core.caseStatementTypeName (var "caseStmt") $
   "dflt" <~ Core.caseStatementDefault (var "caseStmt") $
-  "cases" <~ Core.caseStatementCases (var "caseStmt") $
-  "fnames" <~ Lists.map (reify Core.caseAlternativeName) (var "cases") $
+  "match" <~ Core.caseStatementCases (var "caseStmt") $
+  "fnames" <~ Lists.map (reify Core.caseAlternativeName) (var "match") $
   "stRp" <<~ Resolution.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "stRp") $
   "fcx2" <~ Pairs.second (var "stRp") $
@@ -574,7 +574,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
   "caseRp" <<~ inferMany @@ var "fcx3" @@ var "cx" @@ Lists.map
     ("f" ~> pair (Core.caseAlternativeHandler $ var "f")
       (Strings.concat $ list [(string "case "), Core.unName $ var "tname", (string "."), Core.unName $ Core.caseAlternativeName $ var "f"]))
-    (var "cases") $
+    (var "match") $
   "caseResults" <~ Pairs.first (var "caseRp") $
   "fcx4" <~ Pairs.second (var "caseRp") $
   "iterms" <~ Pairs.first (var "caseResults") $
@@ -591,7 +591,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
   "dfltConstraints" <~ Optionals.toList (Optionals.map
     ("r" ~> Typing.typeConstraint (var "cod")
       (Substitution.substInType @@ var "isubst" @@ (Typing.inferenceResultType $ var "r"))
-      (string "match default"))
+      (string "cases default"))
     (var "dfltResult")) $
   "caseConstraints" <~ Optionals.givens (Lists.zipWith
     ("fname" ~> "itype" ~> Optionals.map
@@ -785,7 +785,7 @@ inferTypeOfLet = define "inferTypeOfLet" $
   "rewrittenLet" <~ Lists.foldl (var "createLet") (var "body0") (Lists.reverse $ var "groups") $
   "restoreLet" <~ ("iterm" ~>
     "helper" <~ ("level" ~> "bins" ~> "term" ~>
-      "nonzero" <~ ("term" ~> cases _Term (var "term") Nothing [
+      "nonzero" <~ ("term" ~> match _Term (var "term") Nothing [
         _Term_let>>: "l" ~>
           "bs" <~ Core.letBindings (var "l") $
           "letBody" <~ Core.letBody (var "l") $
@@ -810,7 +810,7 @@ inferTypeOfLet = define "inferTypeOfLet" $
     "isubst" <~ Typing.inferenceResultSubst (var "iresult") $
     "iconstraints" <~ Typing.inferenceResultClassConstraints (var "iresult") $
     Typing.inferenceResult (var "restoreLet" @@ var "iterm") (var "itype") (var "isubst") (var "iconstraints") (var "fcxR")) $
-  "res" <~ (cases _Term (var "rewrittenLet")
+  "res" <~ (match _Term (var "rewrittenLet")
      (Just $ inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "rewrittenLet" @@ (string "empty let term")) [
      _Term_let>>: "l" ~> inferTypeOfLetNormalized @@ var "fcx" @@ var "cx" @@ var "l"]) $
   Eithers.map (var "rewriteResult") (var "res")
@@ -1131,7 +1131,7 @@ inferTypeOfTerm = define "inferTypeOfTerm" $
   doc "Infer the type of a given term (Either version)" $
   "fcx" ~> "cx" ~> "term" ~> "desc" ~>
   "fcx2" <~ (var "fcx") $
-  cases _Term (var "term") Nothing [
+  match _Term (var "term") Nothing [
     _Term_annotated>>: "a" ~> inferTypeOfAnnotatedTerm @@ var "fcx2" @@ var "cx" @@ var "a",
     _Term_application>>: "a" ~> inferTypeOfApplication @@ var "fcx2" @@ var "cx" @@ var "a",
     _Term_cases>>: "c" ~> inferTypeOfCaseStatement @@ var "fcx2" @@ var "cx" @@ var "c",

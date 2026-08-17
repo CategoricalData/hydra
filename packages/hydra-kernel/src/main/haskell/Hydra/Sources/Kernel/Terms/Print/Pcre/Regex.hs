@@ -133,7 +133,7 @@ module_ = Module {
               <> " family syntax (Java, Scala, Clojure, Python, Common Lisp, TypeScript). Differs from the"
               <> " canonical hydra.print.regex in exactly one place: Hydra's . (any character INCLUDING"
               <> " newline) renders as [\\s\\S] rather than a bare . (whose native meaning excludes"
-              <> " newline in these engines). All other productions match the canonical form. See"
+              <> " newline in these engines). All other productions cases the canonical form. See"
               <> " docs/specification/regex.md and issue #567.")}
   where
    definitions = [
@@ -194,7 +194,7 @@ classItem :: TypedTermDefinition (Term -> String)
 classItem = define "classItem" $
   doc "Render one character-class member (a single character or an inclusive range)." $
   "item" ~>
-    cases _ClassItem (var "item") Nothing [
+    match _ClassItem (var "item") Nothing [
       _ClassItem_character>>: "c" ~> escapeClassChar @@ var "c",
       _ClassItem_range>>: "r" ~> Strings.concat $ list [
         escapeClassChar @@ (project _CharacterRange _CharacterRange_from @@ var "r"),
@@ -218,7 +218,7 @@ atom :: TypedTermDefinition (Term -> String)
 atom = define "atom" $
   doc "Render a single atom; the . metacharacter renders as [\\s\\S] to preserve newline-inclusive 'any'." $
   "a" ~>
-    cases _Atom (var "a") Nothing [
+    match _Atom (var "a") Nothing [
       _Atom_literal>>: "c" ~> escapeLiteral @@ var "c",
       _Atom_any>>: constant (string "[\\s\\S]"),
       _Atom_anchorStart>>: constant (string "^"),
@@ -233,7 +233,7 @@ quantifier :: TypedTermDefinition (Term -> String)
 quantifier = define "quantifier" $
   doc "Render a quantifier suffix; the 'one' quantifier renders as the empty string." $
   "q" ~>
-    cases _Quantifier (var "q") Nothing [
+    match _Quantifier (var "q") Nothing [
       _Quantifier_one>>: constant (string ""),
       _Quantifier_zeroOrOne>>: constant (string "?"),
       _Quantifier_zeroOrMore>>: constant (string "*"),

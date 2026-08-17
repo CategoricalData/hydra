@@ -71,10 +71,10 @@ define = definitionInModule module_
 termVariant :: TypedTermDefinition (TermVariant -> String)
 termVariant = define "termVariant" $
   doc "Show a term variant as a string" $
-  match _TermVariant Nothing [
+  cases _TermVariant Nothing [
     _TermVariant_annotated>>: constant $ string "annotated",
     _TermVariant_application>>: constant $ string "application",
-    _TermVariant_cases>>: constant $ string "cases",
+    _TermVariant_cases>>: constant $ string "match",
     _TermVariant_either>>: constant $ string "either",
     _TermVariant_lambda>>: constant $ string "lambda",
     _TermVariant_let>>: constant $ string "let",
@@ -97,7 +97,7 @@ termVariant = define "termVariant" $
 typeVariant :: TypedTermDefinition (TypeVariant -> String)
 typeVariant = define "typeVariant" $
   doc "Show a type variant as a string" $
-  match _TypeVariant Nothing [
+  cases _TypeVariant Nothing [
     _TypeVariant_annotated>>: constant $ string "annotated",
     _TypeVariant_application>>: constant $ string "application",
     _TypeVariant_effect>>: constant $ string "effect",

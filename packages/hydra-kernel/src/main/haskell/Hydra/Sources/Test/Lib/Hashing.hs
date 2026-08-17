@@ -28,7 +28,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ModuleName "hydra.print.core"] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.hashing primitives")}
+            moduleMetadata = descriptionMetadata (Just "Test match for hydra.lib.hashing primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -42,7 +42,7 @@ bytes s = retype (primitive DefText.encodeUtf8 @@ string s)
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for hydra.lib.hashing primitives" $
+    Phantoms.doc "Test match for hydra.lib.hashing primitives" $
     supergroup "hydra.lib.hashing primitives" [
       hashingSha256,
       hashingSha256Hex]

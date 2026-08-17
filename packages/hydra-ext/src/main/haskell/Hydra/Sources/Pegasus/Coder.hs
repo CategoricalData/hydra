@@ -152,7 +152,7 @@ encode :: TypedTermDefinition (InferenceContext -> Graph -> M.Map ModuleName Str
 encode = def "encode" $
   doc "Encode a Hydra type as a PDL schema, failing if it resolves to a nested named schema" $
       "cx" ~> "g" ~> "aliases" ~> "t" ~>
-        cases _Type (Strip.deannotateType @@ var "t")
+        match _Type (Strip.deannotateType @@ var "t")
           (Just $
             "res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "t") $
             Eithers.either
@@ -184,7 +184,7 @@ encodePossiblyOptionalType :: TypedTermDefinition (InferenceContext -> Graph -> 
 encodePossiblyOptionalType = def "encodePossiblyOptionalType" $
   doc "Encode a type as a PDL schema together with a flag indicating whether it was optional" $
   "cx" ~> "g" ~> "aliases" ~> "typ" ~>
-    cases _Type (Strip.deannotateType @@ var "typ") Nothing [
+    match _Type (Strip.deannotateType @@ var "typ") Nothing [
       _Type_optional>>: lambda "ot" $
         "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "ot") $
         right (pair (var "t") true),
@@ -245,7 +245,7 @@ encodeType_ :: TypedTermDefinition (InferenceContext -> Graph -> M.Map ModuleNam
 encodeType_ = def "encodeType" $
   doc "Encode a Hydra type as either a PDL Schema (Left) or a PDL NamedSchemaType (Right)" $
   "cx" ~> "g" ~> "aliases" ~> "typ" ~>
-    cases _Type (var "typ")
+    match _Type (var "typ")
       (Just $ unexpectedE (var "cx") (string "PDL-supported type") (PrintCore.type_ @@ var "typ")) [
       _Type_annotated>>: lambda "at" $
         encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ Core.annotatedTypeBody (var "at"),
@@ -265,21 +265,21 @@ encodeType_ = def "encodeType" $
         "inner" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "lt") $
         right (left (inject PDL._Schema PDL._Schema_array (var "inner"))),
       _Type_literal>>: lambda "lt" $
-        cases _LiteralType (var "lt")
+        match _LiteralType (var "lt")
           (Just $ unexpectedE (var "cx") (string "PDL-supported literal type") (PrintCore.type_ @@ var "typ")) [
           _LiteralType_binary>>: constant $
             right (left (inject PDL._Schema PDL._Schema_primitive (inject PDL._PrimitiveType PDL._PrimitiveType_bytes (unit)))),
           _LiteralType_boolean>>: constant $
             right (left (inject PDL._Schema PDL._Schema_primitive (inject PDL._PrimitiveType PDL._PrimitiveType_boolean (unit)))),
           _LiteralType_float>>: lambda "ft" $
-            cases _FloatType (var "ft")
+            match _FloatType (var "ft")
               (Just $ unexpectedE (var "cx") (string "float32 or float64") (PrintCore.type_ @@ var "typ")) [
               _FloatType_float32>>: constant $
                 right (left (inject PDL._Schema PDL._Schema_primitive (inject PDL._PrimitiveType PDL._PrimitiveType_float (unit)))),
               _FloatType_float64>>: constant $
                 right (left (inject PDL._Schema PDL._Schema_primitive (inject PDL._PrimitiveType PDL._PrimitiveType_double (unit))))],
           _LiteralType_integer>>: lambda "it" $
-            cases _IntegerType (var "it")
+            match _IntegerType (var "it")
               (Just $ unexpectedE (var "cx") (string "int32 or int64") (PrintCore.type_ @@ var "typ")) [
               _IntegerType_int32>>: constant $
                 right (left (inject PDL._Schema PDL._Schema_primitive (inject PDL._PrimitiveType PDL._PrimitiveType_int (unit)))),

@@ -64,11 +64,11 @@ classIsSatisfiedByType :: TypedTermDefinition (Name -> Type -> Bool)
 classIsSatisfiedByType = define "classIsSatisfiedByType" $
   doc "Check whether a type is an instance of a constraint class, by the class's short name." $
   "className" ~> "typ" ~>
-  "isIntegerLiteral" <~ cases _Type (Strip.deannotateType @@ var "typ") (Just false) [
-    _Type_literal>>: "lt" ~> cases _LiteralType (var "lt") (Just false) [
+  "isIntegerLiteral" <~ match _Type (Strip.deannotateType @@ var "typ") (Just false) [
+    _Type_literal>>: "lt" ~> match _LiteralType (var "lt") (Just false) [
       _LiteralType_integer>>: constant true]] $
-  "isFloatLiteral" <~ cases _Type (Strip.deannotateType @@ var "typ") (Just false) [
-    _Type_literal>>: "lt" ~> cases _LiteralType (var "lt") (Just false) [
+  "isFloatLiteral" <~ match _Type (Strip.deannotateType @@ var "typ") (Just false) [
+    _Type_literal>>: "lt" ~> match _LiteralType (var "lt") (Just false) [
       _LiteralType_float>>: constant true]] $
   Logic.ifElse (Equality.equal (var "className") (Core.name (string "equality")))
     true $

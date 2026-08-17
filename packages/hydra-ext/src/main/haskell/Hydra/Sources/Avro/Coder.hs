@@ -141,7 +141,7 @@ annotateAdapter :: TypedTermDefinition (Maybe (M.Map Name Term) -> AvroHydraAdap
 annotateAdapter = define "annotateAdapter" $
   doc "Annotate an adapter's target type with optional annotations" $
   lambda "ann" $ lambda "ad" $
-    Optionals.cases (var "ann") (var "ad") (lambda "n" $ Coders.adapterWithTarget (var "ad") (MetaTypes.annot (var "n") (Coders.adapterTarget (var "ad"))))
+    Optionals.match (var "ann") (var "ad") (lambda "n" $ Coders.adapterWithTarget (var "ad") (MetaTypes.annot (var "n") (Coders.adapterTarget (var "ad"))))
 
 avroEnvironmentNs :: ModuleName
 avroEnvironmentNs = ModuleName "hydra.avro.environment"
@@ -159,7 +159,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
     -- decimalToBigint already truncates toward zero, so no intermediate Math.truncate is needed.
     "doubleToInt">: lambda "d" $ Literals.bigintToInt32 (Literals.decimalToBigint (var "d")),
     "doubleToLong">: lambda "d" $ Literals.bigintToInt64 (Literals.decimalToBigint (var "d"))] $
-    cases Avro._Schema (var "schema") Nothing [
+    match Avro._Schema (var "schema") Nothing [
       -- SchemaArray
       Avro._Schema_array>>: lambda "arr" $
         Eithers.bind (avroHydraAdapter @@ var "cx" @@ (project Avro._Array Avro._Array_items @@ var "arr") @@ var "env0") (lambda "adEnv" $ lets [
@@ -170,12 +170,12 @@ avroHydraAdapter = define "avroHydraAdapter" $
               (MetaTypes.list (Coders.adapterTarget (var "ad")))
               (Coders.coder
                 (lambda "v" $
-                  cases JM._Value (var "v") Nothing [
+                  match JM._Value (var "v") Nothing [
                     JM._Value_array>>: lambda "vals" $
                       Eithers.map (lambda "ts" $ Core.termList (var "ts"))
                         (Eithers.mapList (lambda "jv" $ Coders.coderEncode (Coders.adapterCoder (var "ad")) @@ var "jv") (var "vals"))])
                 (lambda "t" $
-                  cases _Term (var "t") Nothing [
+                  match _Term (var "t") Nothing [
                     _Term_list>>: lambda "vals" $
                       Eithers.map (lambda "jvs" $ inject JM._Value JM._Value_array (var "jvs"))
                         (Eithers.mapList (lambda "tv" $ Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "tv") (var "vals"))])))
@@ -197,7 +197,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
               (MetaTypes.map MetaTypes.string (Coders.adapterTarget (var "ad")))
               (Coders.coder
                 (lambda "v" $
-                  cases JM._Value (var "v") Nothing [
+                  match JM._Value (var "v") Nothing [
                     JM._Value_object>>: lambda "m" $
                       Eithers.map (lambda "pairs" $ Core.termMap (Maps.fromList (var "pairs")))
                         (Eithers.mapList (lambda "e" $ var "pairToHydra" @@ var "e") (var "m"))])
@@ -214,7 +214,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
         "manns">: namedAnnotationsToCore @@ var "n",
         "ann">: Logic.ifElse (Maps.null (var "manns" :: TypedTerm (M.Map Name Term))) nothing (just (var "manns")),
         "lastNs">: project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namespace @@ var "env0",
-        "nextNs">: Optionals.cases (var "ns") (var "lastNs") (lambda "s" $ just (var "s")),
+        "nextNs">: Optionals.match (var "ns") (var "lastNs") (lambda "s" $ just (var "s")),
         "env1">: record AvroEnv._AvroEnvironment [
           AvroEnv._AvroEnvironment_namedAdapters>>:
             project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namedAdapters @@ var "env0",
@@ -226,11 +226,11 @@ avroHydraAdapter = define "avroHydraAdapter" $
           AvroEnv._AvroQualifiedName_name>>: project Avro._Named Avro._Named_name @@ var "n"],
         "hydraName">: avroNameToHydraName @@ var "qname"] $
         -- Check if already defined
-        Optionals.cases
+        Optionals.match
           (getAvroHydraAdapter @@ var "qname" @@ var "env1")
           -- Not previously defined: process based on named type
           (Eithers.bind
-            (cases Avro._NamedType (project Avro._Named Avro._Named_type @@ var "n") Nothing [
+            (match Avro._NamedType (project Avro._Named Avro._Named_type @@ var "n") Nothing [
               -- Enum
               Avro._NamedType_enum>>: lambda "e" $ lets [
                 "syms">: project Avro._Enum Avro._Enum_symbols @@ var "e",
@@ -238,11 +238,11 @@ avroHydraAdapter = define "avroHydraAdapter" $
                   (Lists.map (lambda "s" $ Core.fieldType (Core.name (var "s")) MetaTypes.unit) (var "syms"))] $
                 var "simpleAdapter" @@ var "env1" @@ var "typ"
                   @@ (lambda "jv" $
-                    cases JM._Value (var "jv") Nothing [
+                    match JM._Value (var "jv") Nothing [
                       JM._Value_string>>: lambda "s" $
                         right (Core.termInject (Core.injection (var "hydraName") (Core.field (Core.name (var "s")) Core.termUnit)))])
                   @@ (lambda "t" $
-                    cases _Term (var "t") Nothing [
+                    match _Term (var "t") Nothing [
                       _Term_inject>>: lambda "inj" $ lets [
                         "fld">: project _Injection _Injection_field @@ var "inj",
                         "fn">: project _Field _Field_name @@ var "fld"] $
@@ -252,7 +252,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
               Avro._NamedType_fixed>>: lambda "_f" $
                 var "simpleAdapter" @@ var "env1" @@ MetaTypes.binary
                   @@ (lambda "jv" $
-                    cases JM._Value (var "jv") Nothing [
+                    match JM._Value (var "jv") Nothing [
                       JM._Value_string>>: lambda "s" $
                         right (Core.termLiteral (Core.literalBinary (Literals.base64ToBinary (var "s"))))])
                   @@ (lambda "t" $
@@ -270,14 +270,14 @@ avroHydraAdapter = define "avroHydraAdapter" $
                     "encodePair">: lambda "entry" $ lets [
                       "k">: Pairs.first (var "entry"),
                       "v">: Pairs.second (var "entry")] $
-                      Optionals.cases (Maps.lookup (var "k") (var "adaptersByFieldName" :: TypedTerm (M.Map String (Avro.Field, AvroHydraAdapter)))) (left (Error.errorOther (Error.otherError (Strings.concat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"]))))) (lambda "fad" $ Eithers.map
+                      Optionals.match (Maps.lookup (var "k") (var "adaptersByFieldName" :: TypedTerm (M.Map String (Avro.Field, AvroHydraAdapter)))) (left (Error.errorOther (Error.otherError (Strings.concat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"]))))) (lambda "fad" $ Eithers.map
                           (lambda "v'" $ Core.field (Core.name (var "k")) (var "v'"))
                           (Coders.coderEncode (Coders.adapterCoder (Pairs.second (var "fad"))) @@ var "v")),
                     -- decodeField: decode a Hydra field back to a key-value pair
                     "decodeField">: lambda "fld" $ lets [
                       "k">: unwrap _Name @@ (project _Field _Field_name @@ var "fld"),
                       "v">: project _Field _Field_term @@ var "fld"] $
-                      Optionals.cases (Maps.lookup (var "k") (var "adaptersByFieldName" :: TypedTerm (M.Map String (Avro.Field, AvroHydraAdapter)))) (left (Error.errorOther (Error.otherError (Strings.concat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"]))))) (lambda "fad" $ Eithers.map
+                      Optionals.match (Maps.lookup (var "k") (var "adaptersByFieldName" :: TypedTerm (M.Map String (Avro.Field, AvroHydraAdapter)))) (left (Error.errorOther (Error.otherError (Strings.concat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"]))))) (lambda "fad" $ Eithers.map
                           (lambda "v'" $ pair (var "k") (var "v'"))
                           (Coders.coderDecode (Coders.adapterCoder (Pairs.second (var "fad"))) @@ var "v")),
                     -- lossy: any adapter is lossy?
@@ -293,12 +293,12 @@ avroHydraAdapter = define "avroHydraAdapter" $
                       (Coders.adapter (var "lossy") (var "schema") (var "target")
                         (Coders.coder
                           (lambda "jv" $
-                            cases JM._Value (var "jv") Nothing [
+                            match JM._Value (var "jv") Nothing [
                               JM._Value_object>>: lambda "m" $
                                 Eithers.map (lambda "fields" $ Core.termRecord (Core.record (var "hydraName") (var "fields")))
                                   (Eithers.mapList (lambda "e" $ var "encodePair" @@ var "e") (var "m"))])
                           (lambda "t" $
-                            cases _Term (var "t") Nothing [
+                            match _Term (var "t") Nothing [
                               _Term_record>>: lambda "rec" $
                                 Eithers.map (lambda "kvs" $ inject JM._Value JM._Value_object (var "kvs"))
                                   (Eithers.mapList (lambda "fld" $ var "decodeField" @@ var "fld")
@@ -322,12 +322,12 @@ avroHydraAdapter = define "avroHydraAdapter" $
 
       -- SchemaPrimitive
       Avro._Schema_primitive>>: lambda "p" $
-        cases Avro._Primitive (var "p") Nothing [
+        match Avro._Primitive (var "p") Nothing [
           -- Null
           Avro._Primitive_null>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.unit
               @@ (lambda "jv" $
-                cases JM._Value (var "jv") Nothing [
+                match JM._Value (var "jv") Nothing [
                   JM._Value_string>>: lambda "s" $ right (MetaTerms.stringLift (var "s"))])
               @@ (lambda "t" $
                 Eithers.map (lambda "s" $ inject JM._Value JM._Value_string (var "s"))
@@ -336,7 +336,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
           Avro._Primitive_boolean>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.boolean
               @@ (lambda "jv" $
-                cases JM._Value (var "jv") Nothing [
+                match JM._Value (var "jv") Nothing [
                   JM._Value_boolean>>: lambda "b" $ right (MetaTerms.booleanLift (var "b"))])
               @@ (lambda "t" $
                 Eithers.map (lambda "b" $ inject JM._Value JM._Value_boolean (var "b"))
@@ -345,7 +345,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
           Avro._Primitive_int>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.int32
               @@ (lambda "jv" $
-                cases JM._Value (var "jv") Nothing [
+                match JM._Value (var "jv") Nothing [
                   JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (var "doubleToInt" @@ var "d"))))])
               @@ (lambda "t" $
                 Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToDecimal (Literals.int32ToBigint (var "i"))))
@@ -354,7 +354,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
           Avro._Primitive_long>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.int64
               @@ (lambda "jv" $
-                cases JM._Value (var "jv") Nothing [
+                match JM._Value (var "jv") Nothing [
                   JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (var "doubleToLong" @@ var "d"))))])
               @@ (lambda "t" $
                 Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToDecimal (Literals.int64ToBigint (var "i"))))
@@ -363,7 +363,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
           Avro._Primitive_float>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.float32
               @@ (lambda "jv" $
-                cases JM._Value (var "jv") Nothing [
+                match JM._Value (var "jv") Nothing [
                   JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat32 (Literals.decimalToFloat32 (var "d")))))])
               @@ (lambda "t" $
                 Eithers.map (lambda "f" $ inject JM._Value JM._Value_number (Literals.float32ToDecimal (var "f")))
@@ -372,7 +372,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
           Avro._Primitive_double>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.float64
               @@ (lambda "jv" $
-                cases JM._Value (var "jv") Nothing [
+                match JM._Value (var "jv") Nothing [
                   JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat64 (Literals.decimalToFloat64 (var "d")))))])
               @@ (lambda "t" $
                 Eithers.map (lambda "d" $ inject JM._Value JM._Value_number (Literals.float64ToDecimal (var "d")))
@@ -381,7 +381,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
           Avro._Primitive_bytes>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.binary
               @@ (lambda "jv" $
-                cases JM._Value (var "jv") Nothing [
+                match JM._Value (var "jv") Nothing [
                   JM._Value_string>>: lambda "s" $ right (Core.termLiteral (Core.literalBinary (Literals.base64ToBinary (var "s"))))])
               @@ (lambda "t" $
                 Eithers.map (lambda "b" $ inject JM._Value JM._Value_string (Literals.binaryToBase64 (var "b")))
@@ -390,7 +390,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
           Avro._Primitive_string>>: constant $
             var "simpleAdapter" @@ var "env0" @@ MetaTypes.string
               @@ (lambda "jv" $
-                cases JM._Value (var "jv") Nothing [
+                match JM._Value (var "jv") Nothing [
                   JM._Value_string>>: lambda "s" $ right (MetaTerms.stringLift (var "s"))])
               @@ (lambda "t" $
                 Eithers.map (lambda "s" $ inject JM._Value JM._Value_string (var "s"))
@@ -399,15 +399,15 @@ avroHydraAdapter = define "avroHydraAdapter" $
       -- SchemaReference
       Avro._Schema_reference>>: lambda "name_" $ lets [
         "qname">: parseAvroName @@ (project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namespace @@ var "env0") @@ var "name_"] $
-        Optionals.cases (getAvroHydraAdapter @@ var "qname" @@ var "env0") (err @@ var "cx" @@ Strings.concat2 (string "Referenced Avro type has not been defined: ") (showQname @@ var "qname")) (lambda "ad" $ right (pair (var "ad") (var "env0"))),
+        Optionals.match (getAvroHydraAdapter @@ var "qname" @@ var "env0") (err @@ var "cx" @@ Strings.concat2 (string "Referenced Avro type has not been defined: ") (showQname @@ var "qname")) (lambda "ad" $ right (pair (var "ad") (var "env0"))),
 
       -- SchemaUnion
       Avro._Schema_union>>: lambda "u" $ lets [
         "schemas">: unwrap Avro._Union @@ var "u",
         "isNull">: lambda "s" $
-          cases Avro._Schema (var "s") (Just (boolean False)) [
+          match Avro._Schema (var "s") (Just (boolean False)) [
             Avro._Schema_primitive>>: lambda "prim" $
-              cases Avro._Primitive (var "prim") (Just (boolean False)) [
+              match Avro._Primitive (var "prim") (Just (boolean False)) [
                 Avro._Primitive_null>>: constant (boolean True)]],
         "hasNull">: Logic.not (Lists.null (Lists.filter (var "isNull") (var "schemas"))),
         "nonNulls">: Lists.filter (lambda "s" $ Logic.not (var "isNull" @@ var "s")) (var "schemas"),
@@ -420,18 +420,18 @@ avroHydraAdapter = define "avroHydraAdapter" $
                 (MetaTypes.optional (Coders.adapterTarget (var "ad")))
                 (Coders.coder
                   (lambda "v" $
-                    cases JM._Value (var "v") (Just (
+                    match JM._Value (var "v") (Just (
                       Eithers.map (lambda "t" $ Core.termOptional (just (var "t")))
                         (Coders.coderEncode (Coders.adapterCoder (var "ad")) @@ var "v"))) [
                       JM._Value_null>>: constant (right (Core.termOptional nothing))])
                   (lambda "t" $
-                    cases _Term (var "t") Nothing [
+                    match _Term (var "t") Nothing [
                       _Term_optional>>: lambda "ot" $
-                        Optionals.cases (var "ot") (right (injectUnit JM._Value JM._Value_null)) (lambda "term'" $ Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "term'")])))
+                        Optionals.match (var "ot") (right (injectUnit JM._Value JM._Value_null)) (lambda "term'" $ Coders.coderDecode (Coders.adapterCoder (var "ad")) @@ var "term'")])))
               (var "env1")))] $
         Logic.ifElse (Ordering.gt (Lists.length (var "nonNulls")) (int32 1))
           (err @@ var "cx" @@ string "general-purpose unions are not yet supported")
-          (Optionals.cases (Lists.head (var "nonNulls")) (err @@ var "cx" @@ string "cannot generate the empty type") (lambda "nonNullHead" $
+          (Optionals.match (Lists.head (var "nonNulls")) (err @@ var "cx" @@ string "cannot generate the empty type") (lambda "nonNullHead" $
               Logic.ifElse (var "hasNull")
                 (var "forOptional" @@ var "nonNullHead")
                 (Eithers.bind (avroHydraAdapter @@ var "cx" @@ var "nonNullHead" @@ var "env0") (lambda "adEnv" $ lets [
@@ -481,7 +481,7 @@ encodeAnnotationValue :: TypedTermDefinition (JM.Value -> Term)
 encodeAnnotationValue = define "encodeAnnotationValue" $
   doc "Encode a JSON value as a Hydra term for annotation purposes" $
   lambda "v" $
-    cases JM._Value (var "v") Nothing [
+    match JM._Value (var "v") Nothing [
       JM._Value_array>>: lambda "vals" $
         Core.termList (Lists.map (asTerm encodeAnnotationValue) (var "vals")),
       JM._Value_boolean>>: lambda "b" $
@@ -510,21 +510,21 @@ expectArrayE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result [JM.
 expectArrayE = define "expectArrayE" $
   doc "Extract a JSON array or return an error" $
   lambda "cx" $ lambda "value" $
-    cases JM._Value (var "value") Nothing [
+    match JM._Value (var "value") Nothing [
       JM._Value_array>>: lambda "v" $ right (var "v")]
 
 expectObjectE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result (M.Map String JM.Value))
 expectObjectE = define "expectObjectE" $
   doc "Extract a JSON object or return an error" $
   lambda "cx" $ lambda "value" $
-    cases JM._Value (var "value") Nothing [
+    match JM._Value (var "value") Nothing [
       JM._Value_object>>: lambda "v" $ right (Maps.fromList (var "v") :: TypedTerm (M.Map String JM.Value))]
 
 expectStringE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result String)
 expectStringE = define "expectStringE" $
   doc "Extract a JSON string or return an error" $
   lambda "cx" $ lambda "value" $
-    cases JM._Value (var "value") Nothing [
+    match JM._Value (var "value") Nothing [
       JM._Value_string>>: lambda "v" $ right (var "v")]
 
 fieldAnnotationsToCore :: TypedTermDefinition (Avro.Field -> M.Map Name Term)
@@ -553,12 +553,12 @@ foreignKeyE :: TypedTermDefinition (InferenceContext -> Avro.Field -> Result (Ma
 foreignKeyE = define "foreignKeyE" $
   doc "Extract a foreign key annotation from a field, if present" $
   lambda "cx" $ lambda "f" $
-    Optionals.cases (Maps.lookup (asTerm avroForeignKey) (project Avro._Field Avro._Field_annotations @@ var "f")) (right nothing) (lambda "v" $
+    Optionals.match (Maps.lookup (asTerm avroForeignKey) (project Avro._Field Avro._Field_annotations @@ var "f")) (right nothing) (lambda "v" $
         Eithers.bind (expectObjectE @@ var "cx" @@ var "v") (lambda "m" $
         Eithers.bind (Eithers.map (lambda "s" $ Core.name (var "s")) (requireStringE @@ var "cx" @@ string "type" @@ var "m")) (lambda "tname" $
         Eithers.bind (optStringE @@ var "cx" @@ string "pattern" @@ var "m") (lambda "pattern_" $
           lets [
-            "constr">: Optionals.cases (var "pattern_") (lambda "s" $ Core.name (var "s")) (lambda "pat" $ patternToNameConstructor @@ var "pat")] $
+            "constr">: Optionals.match (var "pattern_") (lambda "s" $ Core.name (var "s")) (lambda "pat" $ patternToNameConstructor @@ var "pat")] $
             right (just $ record AvroEnv._AvroForeignKey [
               AvroEnv._AvroForeignKey_typeName>>: var "tname",
               AvroEnv._AvroForeignKey_constructor>>: var "constr"])))))
@@ -576,7 +576,7 @@ jsonToStringE :: TypedTermDefinition (InferenceContext -> JM.Value -> Result Str
 jsonToStringE = define "jsonToStringE" $
   doc "Convert a JSON value to a string, supporting booleans, strings, and numbers" $
   lambda "cx" $ lambda "v" $
-    cases JM._Value (var "v") (Just (unexpectedE @@ var "cx" @@ string "string, number, or boolean" @@ string "other")) [
+    match JM._Value (var "v") (Just (unexpectedE @@ var "cx" @@ string "string, number, or boolean" @@ string "other")) [
       JM._Value_boolean>>: lambda "b" $
         right (Logic.ifElse (var "b") (string "true") (string "false")),
       JM._Value_string>>: lambda "s" $
@@ -599,7 +599,7 @@ optStringE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM
 optStringE = define "optStringE" $
   doc "Look up an optional string attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
-    Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (right nothing) (lambda "v" $ Eithers.map (lambda "s" $ Optionals.pure (var "s")) (expectStringE @@ var "cx" @@ var "v"))
+    Optionals.match (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (right nothing) (lambda "v" $ Eithers.map (lambda "s" $ Optionals.pure (var "s")) (expectStringE @@ var "cx" @@ var "v"))
 
 
 -- | Constants
@@ -632,7 +632,7 @@ prepareField = define "prepareField" $
     "ann">: Logic.ifElse (Maps.null (var "manns" :: TypedTerm (M.Map Name Term))) nothing (just (var "manns"))] $
     Eithers.bind (foreignKeyE @@ var "cx" @@ var "f") (lambda "fk" $
     Eithers.bind
-      (Optionals.cases
+      (Optionals.match
         (var "fk")
         -- No foreign key: just use avroHydraAdapter directly
         (avroHydraAdapter @@ var "cx" @@ (project Avro._Field Avro._Field_type @@ var "f") @@ var "env")
@@ -651,7 +651,7 @@ prepareField = define "prepareField" $
                 right (Core.termVariable (var "fkConstr" @@ var "s")))),
             -- decodeTerm: decode a TermVariable back via the adapter
             "decodeTerm">: lambda "t" $
-              cases _Term (var "t") (Just (left (Error.errorOther (Error.otherError (string "expected variable"))))) [
+              match _Term (var "t") (Just (left (Error.errorOther (Error.otherError (string "expected variable"))))) [
                 _Term_variable>>: lambda "name_" $
                   Eithers.bind (stringToTermE @@ var "cx" @@ Coders.adapterTarget (var "ad0") @@ (unwrap _Name @@ var "name_")) (lambda "term_" $
                   Coders.coderDecode (Coders.adapterCoder (var "ad0")) @@ var "term_")],
@@ -661,10 +661,10 @@ prepareField = define "prepareField" $
                 (Coders.adapter (Coders.adapterIsLossy (var "ad1")) (project Avro._Field Avro._Field_type @@ var "f") (var "typ") (var "cdr"))
                 (var "env2"))] $
             -- Match on the deannotated target type for foreign key handling
-            cases _Type (Strip.deannotateType @@ Coders.adapterTarget (var "ad0"))
+            match _Type (Strip.deannotateType @@ Coders.adapterTarget (var "ad0"))
               (Just (err @@ var "cx" @@ Strings.concat2 (string "unsupported type annotated as foreign key: ") (string "unknown"))) [
               _Type_optional>>: lambda "innerTyp" $
-                cases _Type (var "innerTyp") (Just (err @@ var "cx" @@ string "expected literal type inside optional foreign key")) [
+                match _Type (var "innerTyp") (Just (err @@ var "cx" @@ string "expected literal type inside optional foreign key")) [
                   _Type_literal>>: lambda "_" $
                     var "forTypeAndCoder" @@ var "env1" @@ var "ad0"
                       @@ (MetaTypes.optional (var "elTyp"))
@@ -673,13 +673,13 @@ prepareField = define "prepareField" $
                           Eithers.map (lambda "v'" $ Core.termOptional (just (var "v'"))) (var "encodeValue" @@ var "json"))
                         (var "decodeTerm"))],
               _Type_list>>: lambda "innerTyp2" $
-                cases _Type (var "innerTyp2") (Just (err @@ var "cx" @@ string "expected literal type inside list foreign key")) [
+                match _Type (var "innerTyp2") (Just (err @@ var "cx" @@ string "expected literal type inside list foreign key")) [
                   _Type_literal>>: lambda "_" $
                     var "forTypeAndCoder" @@ var "env1" @@ var "ad0"
                       @@ (MetaTypes.list (var "elTyp"))
                       @@ (Coders.coder
                         (lambda "json" $
-                          cases JM._Value (var "json") (Just (left (Error.errorOther (Error.otherError (string "Expected JSON array"))))) [
+                          match JM._Value (var "json") (Just (left (Error.errorOther (Error.otherError (string "Expected JSON array"))))) [
                             JM._Value_array>>: lambda "vals" $
                               Eithers.map (lambda "terms" $ Core.termList (var "terms"))
                                 (Eithers.mapList (lambda "jv" $ var "encodeValue" @@ var "jv") (var "vals"))])
@@ -717,7 +717,7 @@ primaryKeyE :: TypedTermDefinition (InferenceContext -> Avro.Field -> Maybe Avro
 primaryKeyE = define "primaryKeyE" $
   doc "Extract a primary key annotation from a field, if present" $
   lambda "cx" $ lambda "f" $
-    Optionals.cases (Maps.lookup (asTerm avroPrimaryKey) (project Avro._Field Avro._Field_annotations @@ var "f")) nothing (lambda "v" $
+    Optionals.match (Maps.lookup (asTerm avroPrimaryKey) (project Avro._Field Avro._Field_annotations @@ var "f")) nothing (lambda "v" $
         Eithers.either
           (lambda "_" $ nothing)
           (lambda "s" $ just $ record AvroEnv._AvroPrimaryKey [
@@ -742,7 +742,7 @@ requireStringE :: TypedTermDefinition (InferenceContext -> String -> M.Map Strin
 requireStringE = define "requireStringE" $
   doc "Look up a required string attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
-    Optionals.cases (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (err @@ var "cx" @@ (Strings.concat $ list [string "required attribute ", Literals.printString (var "fname"), string " not found"])) (lambda "v" $ expectStringE @@ var "cx" @@ var "v")
+    Optionals.match (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (err @@ var "cx" @@ (Strings.concat $ list [string "required attribute ", Literals.printString (var "fname"), string " not found"])) (lambda "v" $ expectStringE @@ var "cx" @@ var "v")
 
 rewriteAvroSchemaM :: TypedTermDefinition (((Avro.Schema -> Result Avro.Schema) -> Avro.Schema -> Result Avro.Schema) -> Avro.Schema -> Result Avro.Schema)
 rewriteAvroSchemaM = define "rewriteAvroSchemaM" $
@@ -751,7 +751,7 @@ rewriteAvroSchemaM = define "rewriteAvroSchemaM" $
     "recurse">: rewriteAvroSchemaM @@ var "f",
     -- fsub: structural descent into schema subtypes
     "fsub">: lambda "s" $
-      cases Avro._Schema (var "s") (Just (right (var "s"))) [
+      match Avro._Schema (var "s") (Just (right (var "s"))) [
         Avro._Schema_array>>: lambda "arr" $
           Eithers.map
             (lambda "els'" $ inject Avro._Schema Avro._Schema_array (record Avro._Array [
@@ -771,7 +771,7 @@ rewriteAvroSchemaM = define "rewriteAvroSchemaM" $
               Avro._Named_doc>>: project Avro._Named Avro._Named_doc @@ var "n",
               Avro._Named_type>>: var "nt'",
               Avro._Named_annotations>>: project Avro._Named Avro._Named_annotations @@ var "n"]))
-            (cases Avro._NamedType (project Avro._Named Avro._Named_type @@ var "n")
+            (match Avro._NamedType (project Avro._Named Avro._Named_type @@ var "n")
               (Just (right (project Avro._Named Avro._Named_type @@ var "n"))) [
               Avro._NamedType_record>>: lambda "r" $
                 Eithers.map
@@ -804,7 +804,7 @@ showQname = define "showQname" $
     "mns">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_namespace @@ var "qname",
     "local">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_name @@ var "qname"] $
     Strings.concat2
-      (Optionals.cases (var "mns") (string "") (lambda "ns" $ Strings.concat2 (var "ns") (string ".")))
+      (Optionals.match (var "mns") (string "") (lambda "ns" $ Strings.concat2 (var "ns") (string ".")))
       (var "local")
 
 stringToTermE :: TypedTermDefinition (InferenceContext -> Type -> String -> Result Term)
@@ -813,16 +813,16 @@ stringToTermE = define "stringToTermE" $
   lambda "cx" $ lambda "typ" $ lambda "s" $ lets [
     "readErr">: err @@ var "cx" @@ string "failed to read value",
     "readAndWrap">: lambda "reader" $ lambda "wrapper" $
-      Optionals.cases (var "reader" @@ var "s") (var "readErr") (lambda "v" $ right (Core.termLiteral (var "wrapper" @@ var "v")))] $
-    cases _Type (Strip.deannotateType @@ var "typ")
+      Optionals.match (var "reader" @@ var "s") (var "readErr") (lambda "v" $ right (Core.termLiteral (var "wrapper" @@ var "v")))] $
+    match _Type (Strip.deannotateType @@ var "typ")
       (Just (unexpectedE @@ var "cx" @@ string "literal type" @@ string "other")) [
       _Type_literal>>: lambda "lt" $
-        cases _LiteralType (var "lt")
+        match _LiteralType (var "lt")
           (Just (unexpectedE @@ var "cx" @@ string "literal type" @@ string "other literal type")) [
           _LiteralType_boolean>>: constant $
             var "readAndWrap" @@ (lambda "x" $ Literals.parseBoolean (var "x")) @@ (lambda "b" $ Core.literalBoolean (var "b")),
           _LiteralType_integer>>: lambda "it" $
-            cases _IntegerType (var "it") Nothing [
+            match _IntegerType (var "it") Nothing [
               _IntegerType_bigint>>: constant $
                 var "readAndWrap" @@ (lambda "x" $ Literals.readBigint (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueBigint (var "i")),
               _IntegerType_int8>>: constant $
@@ -848,15 +848,15 @@ termToStringE :: TypedTermDefinition (InferenceContext -> Term -> Result String)
 termToStringE = define "termToStringE" $
   doc "Convert a literal term to its string representation" $
   lambda "cx" $ lambda "term" $
-    cases _Term (Strip.deannotateTerm @@ var "term")
+    match _Term (Strip.deannotateTerm @@ var "term")
       (Just (unexpectedE @@ var "cx" @@ string "literal value" @@ string "other")) [
       _Term_literal>>: lambda "l" $
-        cases _Literal (var "l")
+        match _Literal (var "l")
           (Just (unexpectedE @@ var "cx" @@ string "boolean, integer, or string" @@ string "other literal")) [
           _Literal_boolean>>: lambda "b" $
             right (Literals.printBoolean (var "b")),
           _Literal_integer>>: lambda "iv" $
-            right (cases _IntegerValue (var "iv") Nothing [
+            right (match _IntegerValue (var "iv") Nothing [
               _IntegerValue_bigint>>: lambda "i" $ Literals.showBigint (var "i"),
               _IntegerValue_int8>>: lambda "i" $ Literals.showInt8 (var "i"),
               _IntegerValue_int16>>: lambda "i" $ Literals.showInt16 (var "i"),
@@ -869,7 +869,7 @@ termToStringE = define "termToStringE" $
           _Literal_string>>: lambda "s" $
             right (var "s")],
       _Term_optional>>: lambda "ot" $
-        Optionals.cases (var "ot") (unexpectedE @@ var "cx" @@ string "literal value" @@ string "Nothing") (lambda "term'" $ termToStringE @@ var "cx" @@ var "term'")]
+        Optionals.match (var "ot") (unexpectedE @@ var "cx" @@ string "literal value" @@ string "Nothing") (lambda "term'" $ termToStringE @@ var "cx" @@ var "term'")]
 
 unexpectedE :: TypedTermDefinition (InferenceContext -> String -> String -> Result a)
 unexpectedE = define "unexpectedE" $

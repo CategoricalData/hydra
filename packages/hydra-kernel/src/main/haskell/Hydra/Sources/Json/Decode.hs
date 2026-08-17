@@ -118,17 +118,17 @@ decodeFloat :: TypedTermDefinition (FloatType -> Value -> Either String Term)
 decodeFloat = define "decodeFloat" $
   doc "Decode a JSON value to a float term. Finite values arrive as JSON numbers; NaN/Inf/-0.0 arrive as JSON string sentinels. Float32 and Float64 are symmetric." $
   "ft" ~> "value" ~>
-  cases _FloatType (var "ft") Nothing [
+  match _FloatType (var "ft") Nothing [
     -- Float32: JSON number (Scientific) -> float32, or special sentinel string
     _FloatType_float32>>: constant $
-      cases _Value (var "value")
+      match _Value (var "value")
         (Just $ left $ string "expected number or special float string for float32") [
         _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ Literals.decimalToFloat32 $ var "n",
         _Value_string>>: "s" ~>
           Optionals.cases (parseSpecialFloat32 @@ var "s") (left $ Strings.concat $ list [string "invalid float32 sentinel: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "v")],
     -- Float64: JSON number (Scientific) -> float64, or special sentinel string
     _FloatType_float64>>: constant $
-      cases _Value (var "value")
+      match _Value (var "value")
         (Just $ left $ string "expected number or special float string for float64") [
         _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ Literals.decimalToFloat64 $ var "n",
         _Value_string>>: "s" ~>
@@ -146,7 +146,7 @@ decodeInteger :: TypedTermDefinition (IntegerType -> Value -> Either String Term
 decodeInteger = define "decodeInteger" $
   doc "Decode a JSON value to an integer term. Small ints from numbers; large ints from strings." $
   "it" ~> "value" ~>
-  cases _IntegerType (var "it") Nothing [
+  match _IntegerType (var "it") Nothing [
     -- Large integers: decode from JSON string
     _IntegerType_bigint>>: constant $
       "strResult" <~ (expectString @@ var "value") $
@@ -207,7 +207,7 @@ decodeInteger = define "decodeInteger" $
     -- For forward compatibility with format-version-1 JSON written before this change,
     -- a string-encoded uint32 is still accepted.
     _IntegerType_uint32>>: constant $
-      cases _Value (var "value")
+      match _Value (var "value")
         (Just $ left $ string "expected number or string for uint32") [
         _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint32 $
           Literals.bigintToUint32 $ Literals.decimalToBigint $ var "n",
@@ -223,18 +223,18 @@ decodeLiteral :: TypedTermDefinition (LiteralType -> Value -> Either String Term
 decodeLiteral = define "decodeLiteral" $
   doc "Decode a JSON value to a literal term" $
   "lt" ~> "value" ~>
-  cases _LiteralType (var "lt") Nothing [
+  match _LiteralType (var "lt") Nothing [
     _LiteralType_binary>>: constant $
       "strResult" <~ (expectString @@ var "value") $
       Eithers.map ("s" ~> Core.termLiteral $ Core.literalBinary $ Literals.base64ToBinary $ var "s") (var "strResult"),
 
     _LiteralType_boolean>>: constant $
-      cases _Value (var "value")
+      match _Value (var "value")
         (Just $ left $ string "expected boolean") [
         _Value_boolean>>: "b" ~> right $ Core.termLiteral $ Core.literalBoolean $ var "b"],
 
     _LiteralType_decimal>>: constant $
-      cases _Value (var "value")
+      match _Value (var "value")
         (Just $ left $ string "expected number for decimal") [
         _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalDecimal $ var "n"],
 
@@ -250,7 +250,7 @@ decodeLiteral = define "decodeLiteral" $
 expectArray :: TypedTermDefinition (Value -> Either String [Value])
 expectArray = define "expectArray" $
   doc "Extract an array from a JSON value" $
-  "value" ~> cases _Value (var "value")
+  "value" ~> match _Value (var "value")
     (Just $ left $ string "expected array") [
     _Value_array>>: "arr" ~> right $ var "arr"]
 
@@ -259,14 +259,14 @@ expectArray = define "expectArray" $
 expectNumber :: TypedTermDefinition (Value -> Either String Sci.Scientific)
 expectNumber = define "expectNumber" $
   doc "Extract a number from a JSON value" $
-  "value" ~> cases _Value (var "value")
+  "value" ~> match _Value (var "value")
     (Just $ left $ string "expected number") [
     _Value_number>>: "n" ~> right $ var "n"]
 -- | Extract an object from a JSON value
 expectObject :: TypedTermDefinition (Value -> Either String (M.Map String Value))
 expectObject = define "expectObject" $
   doc "Extract an object from a JSON value as a name-keyed map. Field order is not preserved here; decoding looks fields up by name." $
-  "value" ~> cases _Value (var "value")
+  "value" ~> match _Value (var "value")
     (Just $ left $ string "expected object") [
     _Value_object>>: "obj" ~> right $ (Maps.fromList $ var "obj" :: TypedTerm (M.Map String Value))]
 
@@ -275,7 +275,7 @@ expectObject = define "expectObject" $
 expectString :: TypedTermDefinition (Value -> Either String String)
 expectString = define "expectString" $
   doc "Extract a string from a JSON value" $
-  "value" ~> cases _Value (var "value")
+  "value" ~> match _Value (var "value")
     (Just $ left $ string "expected string") [
     _Value_string>>: "s" ~> right $ var "s"]
 
@@ -296,7 +296,7 @@ fromJson = define "fromJson" $
   "reduceApp" <~ ("app" ~>
     "fn" <~ (Strip.deannotateType @@ (Core.applicationTypeFunction $ var "app")) $
     "arg" <~ (Core.applicationTypeArgument $ var "app") $
-    cases _Type (var "fn")
+    match _Type (var "fn")
       (Just $ left $ Strings.concat $ list [
         string "cannot apply a non-parametric type: ",
         PrintCore.type_ @@ var "fn"]) [
@@ -314,7 +314,7 @@ fromJson = define "fromJson" $
         Optionals.cases (var "lookedUp") (left $ Strings.concat $ list [
             string "unknown type variable: ",
             Core.unName $ var "name"]) ("resolvedFn" ~> var "reduceApp" @@ (Core.applicationType (var "resolvedFn") (var "arg")))]) $
-  cases _Type (var "stripped")
+  match _Type (var "stripped")
     (Just $ left $ Strings.concat $ list [
       string "unsupported type for JSON decoding: ",
       PrintCore.type_ @@ var "typ"]) [
@@ -362,7 +362,7 @@ fromJson = define "fromJson" $
     --   Nested Maybe(Maybe(T)): null -> Nothing, [v] -> Just v (array-wrapped)
     _Type_optional>>: "innerType" ~>
       "innerStripped" <~ (Strip.deannotateType @@ var "innerType") $
-      "isNestedMaybe" <~ (cases _Type (var "innerStripped") (Just false) [
+      "isNestedMaybe" <~ (match _Type (var "innerStripped") (Just false) [
         _Type_optional>>: constant true]) $
       Logic.ifElse (var "isNestedMaybe")
         -- Nested Maybe: use array-wrapped encoding (null -> Nothing, [v] -> Just v)
@@ -377,12 +377,12 @@ fromJson = define "fromJson" $
             (Logic.ifElse (Equality.equal (var "len") (int32 1))
               (var "decodeJust" @@ var "arr")
               (left $ string "expected single-element array for Just"))) $
-        cases _Value (var "value")
+        match _Value (var "value")
           (Just $ left $ string "expected null or single-element array for nested Maybe") [
           _Value_null>>: constant $ right $ Core.termOptional nothing,
           _Value_array>>: "arr" ~> var "decodeMaybeArray" @@ var "arr"])
         -- Simple Maybe: idiomatic encoding (null -> Nothing, value -> Just)
-        (cases _Value (var "value")
+        (match _Value (var "value")
           (Just $
             Eithers.map ("v" ~> Core.termOptional $ just $ var "v")
               (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "innerType" @@ var "value")) [
@@ -444,11 +444,11 @@ fromJson = define "fromJson" $
             (var "rt")) (left $ Strings.concat $ list [string "unknown variant: ", var "s"])
           ("ft" ~>
             "ftypeStripped" <~ (Strip.deannotateType @@ (Core.fieldTypeType $ var "ft")) $
-            cases _Type (var "ftypeStripped") (Just $ left $ Strings.concat $ list [string "compact string form requires unit-typed variant, got non-unit type for variant: ", var "s"]) [
+            match _Type (var "ftypeStripped") (Just $ left $ Strings.concat $ list [string "compact string form requires unit-typed variant, got non-unit type for variant: ", var "s"]) [
               _Type_unit>>: constant $ right $ Core.termInject $ Core.injection
                 (var "tname")
                 (Core.field (Core.name $ var "s") Core.termUnit)])) $
-      cases _Value (var "value")
+      match _Value (var "value")
         (Just $ left $ string "expected string or object for union") [
         _Value_string>>: "s" ~> var "decodeCompactString" @@ var "s",
         _Value_object>>: "obj" ~>
@@ -508,7 +508,7 @@ fromJson = define "fromJson" $
             "entries" <~ (Eithers.mapList (var "decodeCompactEntry") (var "obj")) $
             Eithers.map ("es" ~> Core.termMap $ Maps.fromList $ var "es") (var "entries"))
           (left $ string "duplicate key in compact map object")) $
-      cases _Value (var "value")
+      match _Value (var "value")
         (Just $ left $ string "expected object or array for map") [
         _Value_array>>: "arr" ~> var "decodeArrayForm" @@ var "arr",
         _Value_object>>: "obj" ~>

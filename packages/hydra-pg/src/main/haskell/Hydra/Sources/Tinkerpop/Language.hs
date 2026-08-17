@@ -180,18 +180,18 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
 
     "typePredicate">: "typ" ~> lets [
       "dt">: Strip.deannotateType @@ var "typ"] $
-      cases _Type (var "dt") (Just true) [
+      match _Type (var "dt") (Just true) [
         -- Only lists of literal values are supported, as nothing else is mentioned in Graph.Features
-        _Type_list>>: "t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just false) [
-          _Type_literal>>: "lt" ~> cases _LiteralType (var "lt") (Just false) [
+        _Type_list>>: "t" ~> match _Type (Strip.deannotateType @@ var "t") (Just false) [
+          _Type_literal>>: "lt" ~> match _LiteralType (var "lt") (Just false) [
             _LiteralType_boolean>>: constant
               (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsBooleanArrayValues @@ var "vpFeatures"),
-            _LiteralType_float>>: "ft" ~> cases _FloatType (var "ft") (Just false) [
+            _LiteralType_float>>: "ft" ~> match _FloatType (var "ft") (Just false) [
               _FloatType_float64>>: constant
                 (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsDoubleArrayValues @@ var "vpFeatures"),
               _FloatType_float32>>: constant
                 (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsFloatArrayValues @@ var "vpFeatures")],
-            _LiteralType_integer>>: "it" ~> cases _IntegerType (var "it") (Just false) [
+            _LiteralType_integer>>: "it" ~> match _IntegerType (var "it") (Just false) [
               _IntegerType_uint8>>: constant
                 (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsByteArrayValues @@ var "vpFeatures"),
               _IntegerType_int32>>: constant
@@ -205,7 +205,7 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
           project TF._ExtraFeatures TF._ExtraFeatures_supportsMapKey @@ var "extras"
             @@ (project _MapType _MapType_keys @@ var "mt"),
         _Type_wrap>>: constant true,
-        _Type_optional>>: "ot" ~> cases _Type (Strip.deannotateType @@ var "ot") (Just false) [
+        _Type_optional>>: "ot" ~> match _Type (Strip.deannotateType @@ var "ot") (Just false) [
           _Type_literal>>: constant true]]] $
 
   Coders.language

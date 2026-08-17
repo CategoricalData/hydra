@@ -84,7 +84,7 @@ define = definitionInModule module_
 collectForallVars :: TypedTermDefinition (Type -> [Name])
 collectForallVars = define "collectForallVars" $
   doc "Collect forall type variable names from a type" $
-  "typ" ~> cases _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
+  "typ" ~> match _Type (var "typ") (Just $ list ([] :: [TypedTerm Name])) [
     _Type_annotated>>: "at" ~>
       collectForallVars @@ Core.annotatedTypeBody (var "at"),
     _Type_forall>>: "ft" ~>
@@ -216,7 +216,7 @@ dslModule = define "dslModule" $
     -- Type path (unchanged): collect eligible type bindings, then generate helpers.
     "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
       (Optionals.givens $ Lists.map
-        ("d" ~> cases _Definition (var "d") (Just nothing) [
+        ("d" ~> match _Definition (var "d") (Just nothing) [
           _Definition_type>>: "td" ~>
             just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
         (Packaging.moduleDefinitions (var "mod")))) $
@@ -276,7 +276,7 @@ generateRefBindings :: TypedTermDefinition (Definition -> Either Error [Binding]
 generateRefBindings = define "generateRefBindings" $
   doc "Generate typed reference DSL bindings for a primitive (or signature-carrying term) definition" $
   "d" ~>
-  cases _Definition (var "d") (Just $ right (list ([] :: [TypedTerm Binding]))) [
+  match _Definition (var "d") (Just $ right (list ([] :: [TypedTerm Binding]))) [
     _Definition_type>>: constant (right (list ([] :: [TypedTerm Binding]))),
     _Definition_term>>: "td" ~>
       Optionals.cases (Packaging.termDefinitionSignature (var "td"))
@@ -359,7 +359,7 @@ generateBindingsForType = define "generateBindingsForType" $
     -- since hosts do not materialize a distinct class/type for aliases and a
     -- token/builder referencing one would be dead weight at best, a broken
     -- reference at worst.
-    right (cases _Type (var "typ") (Just $ list ([] :: [TypedTerm Binding])) [
+    right (match _Type (var "typ") (Just $ list ([] :: [TypedTerm Binding])) [
       _Type_record>>: "fts" ~>
         Lists.concat $ list [
           list [generateTypeNameToken @@ var "rawType" @@ var "typeName"],
@@ -812,7 +812,7 @@ isDslEligibleBinding = define "isDslEligibleBinding" $
 --   bindingWithName b newName = Binding newName (bindingTerm b) (bindingType b)
 -- This constructs a new record with the specified field replaced and all others projected.
 isUnitType_ :: TypedTerm (Type -> Bool)
-isUnitType_ = "t" ~> cases _Type (Strip.deannotateType @@ var "t") (Just Phantoms.false) [
+isUnitType_ = "t" ~> match _Type (Strip.deannotateType @@ var "t") (Just Phantoms.false) [
   _Type_unit>>: constant Phantoms.true]
 
 -- | Transform a type module into a DSL module.

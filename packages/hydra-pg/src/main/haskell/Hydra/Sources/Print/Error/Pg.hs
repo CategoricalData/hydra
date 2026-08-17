@@ -45,7 +45,7 @@ invalidEdgeError :: TypedTermDefinition (InvalidEdgeError -> String)
 invalidEdgeError = define "invalidEdgeError" $
   doc "Show an invalid edge error as a string" $
   "e" ~>
-  cases _InvalidEdgeError (var "e") Nothing [
+  match _InvalidEdgeError (var "e") Nothing [
     _InvalidEdgeError_id>>:
       ("v" ~> Strings.concat2 (string "invalid id: ") (invalidValueError @@ var "v")),
     _InvalidEdgeError_inVertexLabel>>:
@@ -83,7 +83,7 @@ invalidGraphError :: TypedTermDefinition ((v -> String) -> InvalidGraphError v -
 invalidGraphError = define "invalidGraphError" $
   doc "Show an invalid graph error as a string, given a value printer" $
   "printValue" ~> "e" ~>
-  cases _InvalidGraphError (var "e") Nothing [
+  match _InvalidGraphError (var "e") Nothing [
     _InvalidGraphError_edge>>:
       ("ge" ~> invalidGraphEdgeError @@ var "printValue" @@ var "ge"),
     _InvalidGraphError_vertex>>:
@@ -102,7 +102,7 @@ invalidPropertyError :: TypedTermDefinition (InvalidPropertyError -> String)
 invalidPropertyError = define "invalidPropertyError" $
   doc "Show an invalid property error as a string" $
   "e" ~>
-  cases _InvalidPropertyError (var "e") Nothing [
+  match _InvalidPropertyError (var "e") Nothing [
     _InvalidPropertyError_invalidValue>>:
       ("v" ~> Strings.concat2 (string "invalid value: ") (invalidValueError @@ var "v")),
     _InvalidPropertyError_missingRequired>>:
@@ -123,7 +123,7 @@ invalidVertexError :: TypedTermDefinition (InvalidVertexError -> String)
 invalidVertexError = define "invalidVertexError" $
   doc "Show an invalid vertex error as a string" $
   "e" ~>
-  cases _InvalidVertexError (var "e") Nothing [
+  match _InvalidVertexError (var "e") Nothing [
     _InvalidVertexError_id>>:
       ("v" ~> Strings.concat2 (string "invalid id: ") (invalidValueError @@ var "v")),
     _InvalidVertexError_label>>:

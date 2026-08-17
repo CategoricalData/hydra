@@ -122,7 +122,7 @@ betaReduceType = define "betaReduceType" $
   "reduceApp" <~ ("app" ~>
     "lhs" <~ Core.applicationTypeFunction (var "app") $
     "rhs" <~ Core.applicationTypeArgument (var "app") $
-    cases _Type (var "lhs") Nothing [
+    match _Type (var "lhs") Nothing [
       _Type_annotated>>: "at" ~>
         "a" <<~ var "reduceApp" @@ (Core.applicationType
           (Core.annotatedTypeBody $ var "at")
@@ -137,7 +137,7 @@ betaReduceType = define "betaReduceType" $
         "t'" <<~ Resolution.requireType @@ var "cx" @@ var "graph" @@ var "name" $
         betaReduceType @@ var "cx" @@ var "graph" @@ (Core.typeApplication $ Core.applicationType (var "t'") (var "rhs"))]) $
   "mapExpr" <~ ("recurse" ~> "t" ~>
-    "findApp" <~ ("r" ~> cases _Type (var "r")
+    "findApp" <~ ("r" ~> match _Type (var "r")
       (Just $ right $ var "r") [
       _Type_application>>: "a" ~> var "reduceApp" @@ var "a"]) $
     "r" <<~ var "recurse" @@ var "t" $
@@ -162,12 +162,12 @@ contractTerm = define "contractTerm" $
   "term" ~>
   "rewrite" <~ ("recurse" ~> "t" ~>
     "rec" <~ var "recurse" @@ var "t" $
-    cases _Term (var "rec")
+    match _Term (var "rec")
       (Just $ var "rec") [
       _Term_application>>: "app" ~>
         "lhs" <~ Core.applicationFunction (var "app") $
         "rhs" <~ Core.applicationArgument (var "app") $
-        cases _Term (Strip.deannotateTerm @@ var "lhs")
+        match _Term (Strip.deannotateTerm @@ var "lhs")
           (Just $ var "rec") [
           _Term_lambda>>: "l" ~>
             "v" <~ Core.lambdaParameter (var "l") $
@@ -208,7 +208,7 @@ etaExpandTerm = define "etaExpandTerm" $
 
   -- termArityWithContext: compute arity of a term using Graph for lookups
   "termArityWithContext" <~ ("tx" ~> "term" ~>
-    cases _Term (var "term")
+    match _Term (var "term")
       (Just $ int32 0) [
       _Term_annotated>>: "at" ~>
         var "termArityWithContext" @@ var "tx" @@ Core.annotatedTermBody (var "at"),
@@ -244,7 +244,7 @@ etaExpandTerm = define "etaExpandTerm" $
         -- No type available: return n copies of Nothing
         (Lists.map (constant nothing) (Math.range (int32 0) (var "n")))
         ("typ" ~>
-          cases _Type (var "typ")
+          match _Type (var "typ")
             (Just $ Lists.map (constant nothing) (Math.range (int32 0) (var "n"))) [
             _Type_function>>: "ftyp" ~>
               Lists.cons (just $ Core.functionTypeDomain $ var "ftyp")
@@ -268,7 +268,7 @@ etaExpandTerm = define "etaExpandTerm" $
       (optCases (var "mtyp")
         nothing
         ("typ" ~>
-          cases _Type (var "typ")
+          match _Type (var "typ")
             (Just nothing) [
             _Type_function>>: "ftyp" ~>
               var "peelFunctionDomains" @@ just (Core.functionTypeCodomain $ var "ftyp") @@ Math.sub (var "n") (int32 1),
@@ -331,7 +331,7 @@ etaExpandTerm = define "etaExpandTerm" $
     -- by following annotations, lets, type applications, and type lambdas.
     -- Returns Nothing for terms whose head type can't be determined from the context.
     "termHeadType" <~ ("tx2" ~> "trm2" ~>
-      cases _Term (var "trm2")
+      match _Term (var "trm2")
         (Just nothing) [
         _Term_annotated>>: "at2" ~>
           var "termHeadType" @@ var "tx2" @@ Core.annotatedTermBody (var "at2"),
@@ -350,7 +350,7 @@ etaExpandTerm = define "etaExpandTerm" $
         _Term_typeApplication>>: "tat2" ~>
           -- Get the head type of the body, then substitute forall parameter with the type argument
           Optionals.bind (var "termHeadType" @@ var "tx2" @@ Core.typeApplicationTermBody (var "tat2"))
-            ("htyp2" ~> cases _Type (var "htyp2") (Just $ just $ var "htyp2") [
+            ("htyp2" ~> match _Type (var "htyp2") (Just $ just $ var "htyp2") [
               _Type_forall>>: "ft2" ~>
                 just $ Variables.replaceFreeTypeVariable
                   @@ Core.forallTypeParameter (var "ft2")
@@ -382,7 +382,7 @@ etaExpandTerm = define "etaExpandTerm" $
                                  (var "recurse" @@ var "tx" @@ Pairs.second (var "pr"))) $
       ((Maps.fromList $ Lists.map (var "forPair") $ Maps.toList (var "mp" :: TypedTerm (M.Map Term Term))) :: TypedTerm (M.Map Term Term))) $
 
-    cases _Term (var "term") Nothing [
+    match _Term (var "term") Nothing [
       -- Annotated: recurse into body, preserve annotation
       _Term_annotated>>: "at" ~> var "afterRecursion" @@ Core.termAnnotated (Core.annotatedTerm
         (var "recurse" @@ var "tx" @@ Core.annotatedTermBody (var "at"))
@@ -471,7 +471,7 @@ etaExpandTerm = define "etaExpandTerm" $
       -- (otherwise the wrapper would have a bare nominal domain, which after
       -- pushTypeAppsInward would clash with the typed inner case-statement).
       _Term_typeApplication>>: "tt" ~>
-        "gatherTypeApps" <~ ("acc" ~> "trm" ~> cases _Term (Strip.deannotateTerm @@ var "trm")
+        "gatherTypeApps" <~ ("acc" ~> "trm" ~> match _Term (Strip.deannotateTerm @@ var "trm")
           (Just $ pair (var "trm") (var "acc")) [
           _Term_typeApplication>>: "tt2" ~>
             var "gatherTypeApps"
@@ -482,7 +482,7 @@ etaExpandTerm = define "etaExpandTerm" $
           @@ Core.typeApplicationTermBody (var "tt")) $
         "innermost" <~ Pairs.first (var "gathered") $
         "tApps" <~ Pairs.second (var "gathered") $
-        cases _Term (Strip.deannotateTerm @@ var "innermost")
+        match _Term (Strip.deannotateTerm @@ var "innermost")
           (Just $ var "afterRecursion" @@ (Core.termTypeApplication $ Core.typeApplicationTerm
             (var "recurse" @@ var "tx" @@ Core.typeApplicationTermBody (var "tt"))
             (Core.typeApplicationTermType $ var "tt"))) [
@@ -543,7 +543,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
     ) $
   "cx" ~> "tx0" ~> "term0" ~>
   "rewrite" <~ ("topLevel" ~> "forced" ~> "typeArgs" ~> "recurse" ~> "tx" ~> "term" ~>
-    "rewriteSpine" <~ ("term" ~> cases _Term (var "term")
+    "rewriteSpine" <~ ("term" ~> match _Term (var "term")
       (Just $ var "rewrite" @@ false @@ false @@ list ([] :: [TypedTerm Type]) @@ var "recurse" @@ var "tx" @@ var "term") [
       _Term_annotated>>: "at" ~>
         "body" <<~ var "rewriteSpine" @@ Core.annotatedTermBody (var "at") $
@@ -574,7 +574,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
     "arityOf" <~ ("tx" ~> "term" ~>
       "dflt" <~ (Eithers.map ("_tc" ~> Arity.typeArity @@ Pairs.first (var "_tc"))
           (Checking.typeOf @@ var "cx" @@ var "tx" @@ list ([] :: [TypedTerm Type]) @@ var "term")) $
-      cases _Term (var "term")
+      match _Term (var "term")
         (Just $ var "dflt") [
         _Term_annotated>>: "at" ~> var "arityOf" @@ var "tx" @@ Core.annotatedTermBody (var "at"),
         -- Note: No _Term_application case - the dflt fallback using typeOf is correct.
@@ -653,7 +653,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         (var "padn" @@ int32 1 @@ var "base")
         (var "base")) $
 
-    cases _Term (var "term")
+    match _Term (var "term")
       (Just $ var "recurseOrForce" @@ var "term") [
       _Term_application>>: "a" ~>
         "lhs" <~ Core.applicationFunction (var "a") $
@@ -691,7 +691,7 @@ etaExpansionArity :: TypedTermDefinition (Graph -> Term -> Int)
 etaExpansionArity = define "etaExpansionArity" $
   doc ("Calculate the arity for eta expansion"
     <> " Note: this is a \"trusty\" function which assumes the graph is well-formed, i.e. no dangling references.") $
-  "graph" ~> "term" ~> cases _Term (var "term")
+  "graph" ~> "term" ~> match _Term (var "term")
     (Just $ int32 0) [
     _Term_annotated>>: "at" ~>
       etaExpansionArity @@ var "graph" @@ Core.annotatedTermBody (var "at"),
@@ -719,14 +719,14 @@ etaReduceTerm = define "etaReduceTerm" $
     "v" <~ Core.lambdaParameter (var "l") $
     "d" <~ Core.lambdaDomain (var "l") $
     "body" <~ Core.lambdaBody (var "l") $
-    cases _Term (etaReduceTerm @@ var "body")
+    match _Term (etaReduceTerm @@ var "body")
       (Just $ var "noChange") [
       _Term_annotated>>: "at" ~>
         var "reduceLambda" @@ (Core.lambda (var "v") (var "d") (Core.annotatedTermBody $ var "at")),
       _Term_application>>: "app" ~>
         "lhs" <~ Core.applicationFunction (var "app") $
         "rhs" <~ Core.applicationArgument (var "app") $
-        cases _Term (etaReduceTerm @@ var "rhs")
+        match _Term (etaReduceTerm @@ var "rhs")
           (Just $ var "noChange") [
           _Term_annotated>>: "at" ~>
             var "reduceLambda" @@ (Core.lambda (var "v") (var "d") $
@@ -738,7 +738,7 @@ etaReduceTerm = define "etaReduceTerm" $
                 (Logic.not $ Variables.isFreeVariableInTerm @@ var "v" @@ var "lhs"))
               (etaReduceTerm @@ var "lhs")
               (var "noChange")]]) $
-  cases _Term (var "term")
+  match _Term (var "term")
     (Just $ var "noChange") [
     _Term_annotated>>: "at" ~>
       Core.termAnnotated $ Core.annotatedTerm
@@ -755,7 +755,7 @@ reduceTerm = define "reduceTerm" $
   "cx" ~> "graph" ~> "eager" ~> "term" ~>
   "reduce" <~ ("eager" ~> reduceTerm @@ var "cx" @@ var "graph" @@ var "eager") $
   "doRecurse" <~ ("eager" ~> "term" ~>
-    "isNonLambdaTerm" <~ cases _Term (var "term")
+    "isNonLambdaTerm" <~ match _Term (var "term")
       (Just true) [
       _Term_lambda>>: constant false,
       -- Don't recurse into let; handle in applyIfNullary
@@ -828,7 +828,7 @@ reduceTerm = define "reduceTerm" $
       "primResult" <<~ Eithers.bimap (var "mapErrorToString") ("x" ~> var "x") (Graph.primitiveImplementation (var "prim") @@ var "graph" @@ var "strippedArgs") $
       "reducedResult" <<~ var "reduce" @@ var "eager" @@ var "primResult" $
       var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
-    cases _Term (var "stripped")
+    match _Term (var "stripped")
       (Just $ right $ var "applyToArguments" @@ var "original" @@ var "args") [
       _Term_application>>: "app" ~> var "applyIfNullary" @@ var "eager" @@
         (Core.applicationFunction $ var "app") @@
@@ -919,7 +919,7 @@ termIsValue = define "termIsValue" $
   "checkField" <~ ("f" ~> termIsValue @@ Core.fieldTerm (var "f")) $
   "checkFields" <~ ("fields" ~> Lists.foldl ("b" ~> "f" ~> Logic.and (var "b") (var "checkField" @@ var "f")) true (var "fields")) $
   "checkCaseAlternatives" <~ ("alts" ~> Lists.foldl ("b" ~> "a" ~> Logic.and (var "b") (termIsValue @@ Core.caseAlternativeHandler (var "a"))) true (var "alts")) $
-  cases _Term (Strip.deannotateTerm @@ var "term")
+  match _Term (Strip.deannotateTerm @@ var "term")
     (Just false) [
     _Term_application>>: constant false,
     _Term_cases>>: "cs" ~>

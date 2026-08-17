@@ -195,7 +195,7 @@ analyzeFunctionTermWithGather = define "analyzeFunctionTermWithGather" $
   doc "Recursive step of the function-term walk: peel lambdas / type-lambdas / type-applications, accumulating params and bindings, then call analyzeFunctionTermWithFinish" $
   "cx" ~> "forBinding" ~> "getTC" ~> "setTC" ~>
   "argMode" ~> "gEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "t" ~>
-  cases _Term (Strip.deannotateTerm @@ var "t")
+  match _Term (Strip.deannotateTerm @@ var "t")
     (Just $ analyzeFunctionTermWithFinish @@ var "cx" @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
     _Term_lambda>>: "lam" ~>
       Logic.ifElse (var "argMode")
@@ -252,7 +252,7 @@ definitionDependencyModuleNames :: TypedTermDefinition ([Definition] -> S.Set Mo
 definitionDependencyModuleNames = define "definitionDependencyModuleNames" $
   doc "Get dependency module names from definitions" $
   "defs" ~>
-  "defNames" <~ ("def" ~> cases _Definition (var "def")
+  "defNames" <~ ("def" ~> match _Definition (var "def")
     Nothing [
     _Definition_type>>: "typeDef" ~>
       Dependencies.typeDependencyNames @@ true @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "typeDef")),
@@ -299,7 +299,7 @@ gatherApplications = define "gatherApplications" $
   "term" ~>
   -- Use a local recursive helper with an accumulator
   "go" <~ ("args" ~> "t" ~>
-    cases _Term (Strip.deannotateTerm @@ var "t")
+    match _Term (Strip.deannotateTerm @@ var "t")
       (Just $ pair (var "args") (var "t")) [
       _Term_application>>: "app" ~>
         "lhs" <~ Core.applicationFunction (var "app") $
@@ -311,7 +311,7 @@ gatherArgs :: TypedTermDefinition (Term -> [Term] -> (Term, [Term]))
 gatherArgs = define "gatherArgs" $
   doc "Gather term arguments, stripping type-level constructs" $
   "term" ~> "args" ~>
-  cases _Term (Strip.deannotateTerm @@ var "term")
+  match _Term (Strip.deannotateTerm @@ var "term")
     (Just $ pair (var "term") (var "args")) [
     _Term_application>>: "app" ~>
       "lhs" <~ Core.applicationFunction (var "app") $
@@ -328,7 +328,7 @@ gatherArgsWithTypeApps :: TypedTermDefinition (Term -> [Term] -> [Type] -> (Term
 gatherArgsWithTypeApps = define "gatherArgsWithTypeApps" $
   doc "Gather term and type arguments from a term" $
   "term" ~> "args" ~> "tyArgs" ~>
-  cases _Term (Strip.deannotateTerm @@ var "term")
+  match _Term (Strip.deannotateTerm @@ var "term")
     (Just $ triple (var "term") (var "args") (var "tyArgs")) [
     _Term_application>>: "app" ~>
       "lhs" <~ Core.applicationFunction (var "app") $
@@ -357,11 +357,11 @@ isSimpleAssignment :: TypedTermDefinition (Term -> Bool)
 isSimpleAssignment = define "isSimpleAssignment" $
   doc "Check if a term can be encoded as a simple assignment" $
   "term" ~>
-  cases _Term (var "term")
+  match _Term (var "term")
     (Just $
       -- Check if the base term (after gathering args) is a union elimination
       "baseTerm" <~ Pairs.first (gatherArgs @@ var "term" @@ list ([] :: [TypedTerm Term])) $
-      cases _Term (var "baseTerm")
+      match _Term (var "baseTerm")
         (Just $ boolean True) [
         _Term_cases>>: constant (boolean False)]) [
     _Term_annotated>>: "at" ~>
@@ -377,7 +377,7 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
   doc "Check that all self-references are in tail position" $
   "funcName" ~> "term" ~>
     "stripped" <~ (Strip.deannotateAndDetypeTerm @@ var "term") $
-    cases _Term (var "stripped") (Just $
+    match _Term (var "stripped") (Just $
       -- Default: funcName must NOT appear free in this term (not a recognized tail position)
       Variables.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
       -- Application: check if it's a self-tail-call or a case statement application
@@ -386,7 +386,7 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
         "gatherArgs" <~ (Pairs.first $ var "gathered") $
         "gatherFun" <~ (Pairs.second $ var "gathered") $
         "strippedFun" <~ (Strip.deannotateAndDetypeTerm @@ var "gatherFun") $
-        cases _Term (var "strippedFun") (Just $
+        match _Term (var "strippedFun") (Just $
           -- Unknown function form: funcName must not appear anywhere
           Variables.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
           -- Variable: check if self-call
@@ -407,7 +407,7 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
                     (Logic.not $ Rewriting.foldOverTerm @@ Coders.traversalOrderPre
                       @@ ("found" ~> "t" ~>
                         Logic.or (var "found")
-                          (cases _Term (var "t") (Just false) [
+                          (match _Term (var "t") (Just false) [
                             _Term_lambda>>: "lam" ~>
                               -- Any lambda in an argument disqualifies from TCO
                               "ignore" <~ (Core.lambdaBody $ var "lam") $
@@ -459,14 +459,14 @@ moduleContainsBinaryLiterals = define "moduleContainsBinaryLiterals" $
   doc "Check whether a module contains any binary literal values" $
   "mod" ~>
   "checkTerm" <~ ("found" ~> "term" ~> Logic.or (var "found") $
-    cases _Term (var "term") (Just false) [
+    match _Term (var "term") (Just false) [
       _Term_literal>>: "lit" ~>
-        cases _Literal (var "lit") (Just false) [
+        match _Literal (var "lit") (Just false) [
           _Literal_binary>>: constant true]]) $
   "termContainsBinary" <~ ("term" ~>
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "checkTerm" @@ false @@ var "term") $
   "defTerms" <~ Optionals.givens (Lists.map
-    ("d" ~> cases _Definition (var "d") (Just nothing) [
+    ("d" ~> match _Definition (var "d") (Just nothing) [
       _Definition_term>>: "td" ~> just (Packaging.termDefinitionBody $ var "td")])
     (Packaging.moduleDefinitions (var "mod"))) $
   Lists.foldl
@@ -479,14 +479,14 @@ moduleContainsDecimalLiterals = define "moduleContainsDecimalLiterals" $
   doc "Check whether a module contains any decimal literal values" $
   "mod" ~>
   "checkTerm" <~ ("found" ~> "term" ~> Logic.or (var "found") $
-    cases _Term (var "term") (Just false) [
+    match _Term (var "term") (Just false) [
       _Term_literal>>: "lit" ~>
-        cases _Literal (var "lit") (Just false) [
+        match _Literal (var "lit") (Just false) [
           _Literal_decimal>>: constant true]]) $
   "termContainsDecimal" <~ ("term" ~>
     Rewriting.foldOverTerm @@ Coders.traversalOrderPre @@ var "checkTerm" @@ false @@ var "term") $
   "defTerms" <~ Optionals.givens (Lists.map
-    ("d" ~> cases _Definition (var "d") (Just nothing) [
+    ("d" ~> match _Definition (var "d") (Just nothing) [
       _Definition_term>>: "td" ~> just (Packaging.termDefinitionBody $ var "td")])
     (Packaging.moduleDefinitions (var "mod"))) $
   Lists.foldl
@@ -499,7 +499,7 @@ moduleDependencyModuleNames = define "moduleDependencyModuleNames" $
   doc "Find dependency module names in all elements of a module, excluding the module's own module name (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "mod" ~>
   "allBindings" <~ Optionals.givens (Lists.map
-    ("d" ~> cases _Definition (var "d") (Just nothing) [
+    ("d" ~> match _Definition (var "d") (Just nothing) [
       _Definition_type>>: "td" ~>
         just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")),
       _Definition_term>>: "td" ~>
