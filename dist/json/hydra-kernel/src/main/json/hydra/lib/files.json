@@ -103,6 +103,30 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.lib.files.createSymlink",
+        "metadata": {
+          "description": "Create a symbolic link.",
+          "comments": [
+            "createSymlink(target, link) describes an effectful computation which attempts to create a symbolic link at link, pointing to target (POSIX symlink). target is stored verbatim; it may be a relative path, and it need not exist. There is no force flag: if link already exists (including as a dangling symbolic link), the computation fails with left(alreadyExists); a caller that wants replace-if-exists semantics should compose status(false, link), removeFile, and createSymlink. A missing parent directory yields left(notFound); a host or file system which refuses to create the link (e.g. an unprivileged process on Windows, or an unsupported file system) yields left(permissionDenied) or left(other) as appropriate. A recoverable file-system failure is returned as left(error); success is returned as right(unit)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "target",
+              "description": "the path that the new symbolic link will point to",
+              "type": {"variable": "hydra.file.FilePath"},
+              "isLazy": false},
+            {
+              "name": "link",
+              "description": "the path of the symbolic link to create",
+              "type": {"variable": "hydra.file.FilePath"},
+              "isLazy": false}],
+          "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.files.exists",
         "metadata": {
           "description": "Test whether a path exists.",
@@ -158,6 +182,27 @@
               "type": {"variable": "hydra.file.FilePath"},
               "isLazy": false}],
           "result": {"type": {"effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": "binary"}}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.lib.files.readSymlink",
+        "metadata": {
+          "description": "Read the target of a symbolic link.",
+          "comments": [
+            "readSymlink(path) describes an effectful computation which attempts to read the target of the symbolic link at path (POSIX readlink). This is a single-hop, unresolved read: the target is returned exactly as stored, with no chain resolution or canonicalization; a relative target is returned relative, and a dangling target (one that does not exist) is returned as-is. To resolve a chain of links to a canonical path, compose repeated calls to readSymlink and status. A missing path yields left(notFound); a path which exists but is not a symbolic link yields left(invalidPath). A recoverable file-system failure is returned as left(error); success is returned as right(target)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "path",
+              "description": "the path of the symbolic link to read",
+              "type": {"variable": "hydra.file.FilePath"},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "effect": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"variable": "hydra.file.FilePath"}}}}}},
         "isPure": false,
         "isTotal": true}},
     {
@@ -233,11 +278,16 @@
         "metadata": {
           "description": "Retrieve metadata about a file or directory.",
           "comments": [
-            "status(path) describes an effectful computation which retrieves metadata about the file at path (POSIX stat), including its type, size, and modification time. Symbolic links are followed. A path which does not exist yields left(notFound); other recoverable file-system failures are also returned as left(error). Use exists for a boolean presence check that does not error on absence."],
+            "status(followLinks, path) describes an effectful computation which retrieves metadata about the file system entry at path, including its type, size, and modification time. When followLinks is true, this corresponds to POSIX stat: if path is a symbolic link, the metadata describes the link's target, and a dangling link (whose target does not exist) yields left(notFound). When followLinks is false, this corresponds to POSIX lstat: the metadata describes the link itself, with fileType link, a size equal to the length of the stored target path, and the link's own timestamps; a dangling link is not an error in this mode. status(false, path) is the only way to observe fileType link; status(true, path) never produces it, since a followed link's metadata is always that of its (non-link) target. For paths that are not symbolic links, both modes report identical metadata. A path which does not exist yields left(notFound); other recoverable file-system failures are also returned as left(error). Use exists for a boolean presence check that does not error on absence."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
+            {
+              "name": "followLinks",
+              "description": "whether to resolve symbolic links (true reproduces the previous, follow, behavior; false inspects the entry itself)",
+              "type": {"literal": "boolean"},
+              "isLazy": false},
             {
               "name": "path",
               "description": "the path to retrieve metadata for",
