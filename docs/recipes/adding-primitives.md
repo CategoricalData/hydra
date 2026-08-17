@@ -78,6 +78,23 @@ copy bytes directly. It would also misbehave on binary files and hold the whole 
 memory. Here the performance and capability considerations vastly outweigh the preference
 for minimalism, so `copyFile` is a primitive.
 
+A worked example in the opposite direction is recursive directory listing
+([#666](https://github.com/CategoricalData/hydra/issues/666), and earlier
+[#527](https://github.com/CategoricalData/hydra/issues/527)).
+It is expressible — `listDirectory` + `status` recursion, per `listDirectory`'s own contract —
+so the question was purely one of performance, and measurement settled it:
+on the slowest host the composed walk costs ~11 µs per entry, which over Hydra's largest real
+walk domains (10³–10⁴ entries) is far below what any workflow can observe, and the overhead is
+generic per-effect-call cost rather than anything a traversal primitive would uniquely avoid.
+The general rule distilled from that gate: distinguish **capability gaps** from **efficiency
+gaps**.
+An operation that is inexpressible in Hydra terms is a permanent gap that justifies permanent
+surface (as with the symlink family, also from #666).
+An operation that is merely slower composed is a contingent gap: measure its *absolute* cost in
+the real consuming workflows on the hosts that actually run them, and add the primitive only
+when that cost is a first-order, observable term — recording a concrete revisit trigger when
+you decline, so the decision stays falsifiable as consumers evolve.
+
 ### No partial functions
 
 Primitive functions must not encode partial operations that can fail for ordinary,
