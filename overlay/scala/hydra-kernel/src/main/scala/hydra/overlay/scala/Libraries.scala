@@ -1476,6 +1476,9 @@ object Libraries:
       // createDirectory: boolean -> FilePath -> effect<either<FileError, unit>>
       hydra.lib.files.createDirectory.name -> mkPrimEffect(hydra.lib.files.createDirectory.name,
         tMono(tFun(tBool, tFun(tFilePath, tEffect(tEither(tFileError, tUnit)))))),
+      // createSymlink: FilePath -> FilePath -> effect<either<FileError, unit>>
+      hydra.lib.files.createSymlink.name -> mkPrimEffect(hydra.lib.files.createSymlink.name,
+        tMono(tFun(tFilePath, tFun(tFilePath, tEffect(tEither(tFileError, tUnit)))))),
       // exists: FilePath -> effect<either<FileError, boolean>>
       hydra.lib.files.exists.name -> mkPrimEffect(hydra.lib.files.exists.name,
         tMono(tFun(tFilePath, tEffect(tEither(tFileError, tBool))))),
@@ -1485,6 +1488,9 @@ object Libraries:
       // readFile: FilePath -> effect<either<FileError, binary>>
       hydra.lib.files.readFile.name -> mkPrimEffect(hydra.lib.files.readFile.name,
         tMono(tFun(tFilePath, tEffect(tEither(tFileError, tBinary))))),
+      // readSymlink: FilePath -> effect<either<FileError, FilePath>>
+      hydra.lib.files.readSymlink.name -> mkPrimEffect(hydra.lib.files.readSymlink.name,
+        tMono(tFun(tFilePath, tEffect(tEither(tFileError, tFilePath))))),
       // removeDirectory: boolean -> FilePath -> effect<either<FileError, unit>>
       hydra.lib.files.removeDirectory.name -> mkPrimEffect(hydra.lib.files.removeDirectory.name,
         tMono(tFun(tBool, tFun(tFilePath, tEffect(tEither(tFileError, tUnit)))))),
@@ -1494,9 +1500,9 @@ object Libraries:
       // rename: FilePath -> FilePath -> effect<either<FileError, unit>>
       hydra.lib.files.rename.name -> mkPrimEffect(hydra.lib.files.rename.name,
         tMono(tFun(tFilePath, tFun(tFilePath, tEffect(tEither(tFileError, tUnit)))))),
-      // status: FilePath -> effect<either<FileError, FileStatus>>
+      // status: boolean -> FilePath -> effect<either<FileError, FileStatus>>
       hydra.lib.files.status.name -> mkPrimEffect(hydra.lib.files.status.name,
-        tMono(tFun(tFilePath, tEffect(tEither(tFileError, tFileStatus))))),
+        tMono(tFun(tBool, tFun(tFilePath, tEffect(tEither(tFileError, tFileStatus)))))),
       // writeFile: FilePath -> binary -> effect<either<FileError, unit>>
       hydra.lib.files.writeFile.name -> mkPrimEffect(hydra.lib.files.writeFile.name,
         tMono(tFun(tFilePath, tFun(tBinary, tEffect(tEither(tFileError, tUnit)))))),

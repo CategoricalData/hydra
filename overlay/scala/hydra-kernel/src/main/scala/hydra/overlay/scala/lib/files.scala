@@ -51,6 +51,14 @@ object files:
       ()
     }
 
+  /** Create a symbolic link at link, pointing to target (stored verbatim). No force flag: an
+    * occupied link path (including a dangling symlink) fails with alreadyExists. */
+  def createSymlink(target: String)(link: String): Either[FileError, Unit] =
+    withFileError(link) {
+      Files.createSymbolicLink(Paths.get(link), Paths.get(target))
+      ()
+    }
+
   /** Test whether a path exists (no error on absence). */
   def exists(path: String): Either[FileError, Boolean] =
     withFileError(path) { Files.exists(Paths.get(path)) }
@@ -75,6 +83,19 @@ object files:
       java.util.Base64.getEncoder.encodeToString(Files.readAllBytes(Paths.get(path)))
     }
 
+  /** Read the target of the symbolic link at path, verbatim and unresolved (relative stays
+    * relative; a dangling target is returned as-is). Fails with invalidPath if path is not a
+    * symbolic link. */
+  def readSymlink(path: String): Either[FileError, String] =
+    withFileError(path) {
+      val p = Paths.get(path)
+      if !Files.exists(p, _root_.java.nio.file.LinkOption.NOFOLLOW_LINKS) then
+        throw new NoSuchFileException(path)
+      if !Files.isSymbolicLink(p) then
+        throw new InvalidPathException(path, "not a symbolic link")
+      Files.readSymbolicLink(p).toString
+    }
+
   /** Remove a directory; when recursive, remove its entire contents (rm -r). */
   def removeDirectory(recursive: Boolean)(path: String): Either[FileError, Unit] =
     withFileError(path) {
@@ -96,17 +117,27 @@ object files:
       ()
     }
 
-  /** Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed. */
-  def status(path: String): Either[FileError, hydra.file.FileStatus] =
+  /** Retrieve metadata about the file at path. When followLinks is true (POSIX stat), a
+    * symbolic link's metadata is that of its target, and a dangling link is not found. When
+    * false (POSIX lstat), a symbolic link's own metadata is reported (fileType link), and a
+    * dangling link is not an error. */
+  def status(followLinks: Boolean)(path: String): Either[FileError, hydra.file.FileStatus] =
     withFileError(path) {
-      import java.nio.file.attribute.BasicFileAttributes
-      val attrs = Files.readAttributes(Paths.get(path), classOf[BasicFileAttributes])
+      import _root_.java.nio.file.LinkOption
+      val options: Array[LinkOption] =
+        if followLinks then Array.empty else Array(LinkOption.NOFOLLOW_LINKS)
+      val attrs = Files.readAttributes(Paths.get(path), "unix:*", options*)
+      val mode = attrs.get("mode").asInstanceOf[Integer].intValue
+      val size = attrs.get("size").asInstanceOf[java.lang.Long].longValue
+      val mtime = attrs.get("lastModifiedTime").asInstanceOf[_root_.java.nio.file.attribute.FileTime]
+      val atime = attrs.get("lastAccessTime").asInstanceOf[_root_.java.nio.file.attribute.FileTime]
+      val ctime = attrs.get("ctime").asInstanceOf[_root_.java.nio.file.attribute.FileTime]
       hydra.file.FileStatus(
-        fileType(attrs),
-        attrs.size,
-        timespec(attrs.lastModifiedTime.toInstant),
-        Some(timespec(attrs.lastAccessTime.toInstant)),
-        None)
+        fileTypeFromMode(mode),
+        size,
+        timespec(mtime.toInstant),
+        Some(timespec(atime.toInstant)),
+        Some(timespec(ctime.toInstant)))
     }
 
   /** Write binary contents (base64-encoded) as the complete contents of a file. */
@@ -118,10 +149,26 @@ object files:
 
   // ---- Helpers (not primitives) ----
 
-  private def fileType(attrs: _root_.java.nio.file.attribute.BasicFileAttributes): hydra.file.FileType =
-    if attrs.isDirectory then hydra.file.FileType.directory
-    else if attrs.isSymbolicLink then hydra.file.FileType.link
-    else hydra.file.FileType.regular
+  // POSIX st_mode file-type bits (<sys/stat.h> S_IFMT and the individual S_IF* macros).
+  private val S_IFMT   = 0170000
+  private val S_IFSOCK = 0140000
+  private val S_IFLNK  = 0120000
+  private val S_IFREG  = 0100000
+  private val S_IFBLK  = 0060000
+  private val S_IFDIR  = 0040000
+  private val S_IFCHR  = 0020000
+  private val S_IFIFO  = 0010000
+
+  private def fileTypeFromMode(mode: Int): hydra.file.FileType =
+    (mode & S_IFMT) match {
+      case S_IFDIR  => hydra.file.FileType.directory
+      case S_IFLNK  => hydra.file.FileType.link
+      case S_IFBLK  => hydra.file.FileType.block
+      case S_IFCHR  => hydra.file.FileType.character
+      case S_IFIFO  => hydra.file.FileType.fifo
+      case S_IFSOCK => hydra.file.FileType.socket
+      case _        => hydra.file.FileType.regular
+    }
 
   private def timespec(instant: _root_.java.time.Instant): hydra.time.Timespec =
     hydra.time.Timespec(instant.getEpochSecond, instant.getNano.toLong)
