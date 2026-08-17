@@ -70,6 +70,7 @@ EXTERNAL_DEPS: dict[str, list[str]] = {
         "split                         >= 0.2.3 && < 0.3",     # Lib.Lists (Data.List.Split)
         "text                          >= 2.0.2 && < 2.2",     # Lib.Strings (Data.Text)
         "time                          >= 1.12.0 && < 1.13",   # Lib.Files (Data.Time.Clock[.POSIX], #494)
+        "unix                          >= 2.8.0 && < 2.9",     # Lib.Files (System.Posix.Files, #666 symlinks)
     ],
     # The generated coder packages ship pure generated Haskell (no hand-written
     # runtime), so their external footprint is small and uniform: base plus, for
