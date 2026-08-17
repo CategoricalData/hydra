@@ -191,7 +191,7 @@ def _decode_py_comparison_to_py_await_primary():
             Optionals.is_given(var("sumLhs")),
             Optionals.is_given(var("termLhs")),
             apply(
-                match("hydra.python.syntax.Factor",
+                cases("hydra.python.syntax.Factor",
                     Given(nothing()),
                     [
                         field("simple",
@@ -234,7 +234,7 @@ def _decode_py_conjunction_to_py_primary():
 
 def _decode_py_expression_to_py_primary():
     body = apply(
-        match("hydra.python.syntax.Expression",
+        cases("hydra.python.syntax.Expression",
             Given(nothing()),
             [
                 field("simple",
@@ -275,7 +275,7 @@ def _decode_py_expression_to_py_primary():
 
 def _decode_py_inversion_to_py_primary():
     body = apply(
-        match("hydra.python.syntax.Inversion",
+        cases("hydra.python.syntax.Inversion",
             Given(nothing()),
             [
                 field("simple",
@@ -651,7 +651,7 @@ def _py_expression_to_bitwise_or():
 
 
 def _py_expression_to_disjunction():
-    body = cases_with_default("hydra.python.syntax.Expression", var("e"), PySyn.disjunction(list_([
+    body = match_with_default("hydra.python.syntax.Expression", var("e"), PySyn.disjunction(list_([
             _local("pyPrimaryToPyConjunction")(PySyn.primary_simple(
                     PySyn.atom_group(
                         PySyn.group_expression(PySyn.named_expression_simple(var("e"))),

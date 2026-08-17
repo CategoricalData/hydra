@@ -177,7 +177,7 @@ def _generate_python_test_case():
                 project(_TEST_CASE_WITH_METADATA, Name("case"))(var("tcm")),
             ),
         ],
-        cases(
+        match(
             _TEST_CASE,
             var("tcase"),
             None_(),

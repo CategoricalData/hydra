@@ -122,7 +122,7 @@ def _ty(name: str) -> Name:
 def _annotated_rhs_to_expr():
     body = _space_sep(list_([
         _cst("="),
-        cases(
+        match(
             _ty("AnnotatedRhs"), var("arhs"), None_(),
             [
                 field("star",
@@ -191,7 +191,7 @@ def _args_to_expr():
 
 
 def _assignment_to_expr():
-    body = cases(
+    body = match(
         _ty("Assignment"), var("a"), None_(),
         [
             field("typed", lam("t", _local("typedAssignmentToExpr")(var("t")))),
@@ -224,7 +224,7 @@ def _assignment_expression_to_expr():
 
 
 def _atom_to_expr():
-    body = cases(
+    body = match(
         _ty("Atom"), var("atom"), None_(),
         [
             field("dict", lam("d", _local("dictToExpr")(var("d")))),
@@ -330,7 +330,7 @@ def _bitwise_xor_to_expr():
 
 
 def _block_to_expr():
-    body = cases(
+    body = match(
         _ty("Block"), var("b"), None_(),
         [
             field("indented",
@@ -451,7 +451,7 @@ def _class_pattern_to_expr():
 
 
 def _closed_pattern_to_expr():
-    body = cases(
+    body = match(
         _ty("ClosedPattern"), var("cp"), None_(),
         [
             field("literal", lam("_", _cst("..."))),
@@ -482,7 +482,7 @@ def _compare_op_bitwise_or_pair_to_expr():
 
 
 def _compare_op_to_string():
-    body = cases(
+    body = match(
         _ty("CompareOp"), var("op"), None_(),
         [
             field("eq", constant(string("=="))),
@@ -527,7 +527,7 @@ def _comparison_to_expr():
 
 
 def _compound_statement_to_expr():
-    body = cases(
+    body = match(
         _ty("CompoundStatement"), var("cs"), None_(),
         [
             field("function", lam("f", _local("functionDefinitionToExpr")(var("f")))),
@@ -646,7 +646,7 @@ def _dotted_name_to_expr():
 
 
 def _double_starred_kvpair_to_expr():
-    body = cases(
+    body = match(
         _ty("DoubleStarredKvpair"), var("dskv"), None_(),
         [
             field("pair", lam("p", _local("kvpairToExpr")(var("p")))),
@@ -663,7 +663,7 @@ def _double_starred_kvpair_to_expr():
 
 
 def _expression_to_expr():
-    body = cases(
+    body = match(
         _ty("Expression"), var("expr"), None_(),
         [
             field("simple", lam("d", _local("disjunctionToExpr")(var("d")))),
@@ -678,7 +678,7 @@ def _expression_to_expr():
 
 
 def _factor_to_expr():
-    body = cases(
+    body = match(
         _ty("Factor"), var("f"), None_(),
         [
             field("positive",
@@ -787,7 +787,7 @@ def _function_definition_to_expr():
 
 
 def _group_to_expr():
-    body = cases(
+    body = match(
         _ty("Group"), var("g"), None_(),
         [
             field("expression", lam("ne", _local("namedExpressionToExpr")(var("ne")))),
@@ -866,7 +866,7 @@ def _import_from_as_name_to_expr():
 
 
 def _import_from_targets_to_expr():
-    body = cases(
+    body = match(
         _ty("ImportFromTargets"), var("t"), None_(),
         [
             field("simple",
@@ -906,7 +906,7 @@ def _import_name_to_expr():
 
 
 def _import_statement_to_expr():
-    body = cases(
+    body = match(
         _ty("ImportStatement"), var("is_"), None_(),
         [
             field("name", lam("n", _local("importNameToExpr")(var("n")))),
@@ -920,7 +920,7 @@ def _import_statement_to_expr():
 
 
 def _inversion_to_expr():
-    body = cases(
+    body = match(
         _ty("Inversion"), var("i"), None_(),
         [
             field("not",
@@ -1003,7 +1003,7 @@ def _kwarg_to_expr():
 
 
 def _kwarg_or_double_starred_to_expr():
-    body = cases(
+    body = match(
         _ty("KwargOrDoubleStarred"), var("kds"), None_(),
         [
             field("kwarg", lam("k", _local("kwargToExpr")(var("k")))),
@@ -1022,7 +1022,7 @@ def _kwarg_or_double_starred_to_expr():
 
 
 def _kwarg_or_starred_to_expr():
-    body = cases(
+    body = match(
         _ty("KwargOrStarred"), var("ks"), None_(),
         [
             field("kwarg", lam("k", _local("kwargToExpr")(var("k")))),
@@ -1078,7 +1078,7 @@ def _lambda_parameters_to_expr():
 
 
 def _lambda_star_etc_to_expr():
-    body = cases(
+    body = match(
         _ty("LambdaStarEtc"), var("lse"), None_(),
         [
             field("paramNoDefault", lam("p", _local("lambdaParamNoDefaultToExpr")(var("p")))),
@@ -1165,7 +1165,7 @@ def _name_or_attribute_to_expr():
 
 
 def _named_expression_to_expr():
-    body = cases(
+    body = match(
         _ty("NamedExpression"), var("ne"), None_(),
         [
             field("simple", lam("e", _local("expressionToExpr")(var("e")))),
@@ -1179,7 +1179,7 @@ def _named_expression_to_expr():
 
 
 def _number_to_expr():
-    body = cases(
+    body = match(
         _ty("Number"), var("num"), None_(),
         [
             field("float",
@@ -1249,7 +1249,7 @@ def _param_no_default_parameters_to_expr():
 
 
 def _parameters_to_expr():
-    body = cases(
+    body = match(
         _ty("Parameters"), var("p"), None_(),
         [
             field("paramNoDefault", lam("pnd", _local("paramNoDefaultParametersToExpr")(var("pnd")))),
@@ -1264,7 +1264,7 @@ def _parameters_to_expr():
 
 
 def _pattern_to_expr():
-    body = cases(
+    body = match(
         _ty("Pattern"), var("p"), None_(),
         [
             field("or", lam("op", _local("orPatternToExpr")(var("op")))),
@@ -1286,7 +1286,7 @@ def _pattern_capture_target_to_expr():
 
 
 def _patterns_to_expr():
-    body = cases(
+    body = match(
         _ty("Patterns"), var("ps"), None_(),
         [
             field("pattern", lam("p", _local("patternToExpr")(var("p")))),
@@ -1300,7 +1300,7 @@ def _patterns_to_expr():
 
 
 def _pos_arg_to_expr():
-    body = cases(
+    body = match(
         _ty("PosArg"), var("pa"), None_(),
         [
             field("starred", lam("se", _local("starredExpressionToExpr")(var("se")))),
@@ -1346,7 +1346,7 @@ def _power_to_expr():
 
 
 def _primary_to_expr():
-    body = cases(
+    body = match(
         _ty("Primary"), var("p"), None_(),
         [
             field("simple", lam("a", _local("atomToExpr")(var("a")))),
@@ -1360,7 +1360,7 @@ def _primary_to_expr():
 
 
 def _primary_rhs_to_expr():
-    body = cases(
+    body = match(
         _ty("PrimaryRhs"), var("rhs"), None_(),
         [
             field("call",
@@ -1444,7 +1444,7 @@ def _raise_statement_to_expr():
 
 
 def _relative_import_prefix_to_expr():
-    body = cases(
+    body = match(
         _ty("RelativeImportPrefix"), var("p"), None_(),
         [
             field("dot", constant(_cst("."))),
@@ -1485,7 +1485,7 @@ def _shift_expression_to_expr():
 
 
 def _simple_statement_to_expr():
-    body = cases(
+    body = match(
         _ty("SimpleStatement"), var("ss"), None_(),
         [
             field("assignment", lam("a", _local("assignmentToExpr")(var("a")))),
@@ -1520,7 +1520,7 @@ def _simple_type_parameter_to_expr():
 
 
 def _single_target_to_expr():
-    body = cases(
+    body = match(
         _ty("SingleTarget"), var("st"), None_(),
         [
             field("name", lam("n", _local("nameToExpr")(var("n")))),
@@ -1535,7 +1535,7 @@ def _single_target_to_expr():
 
 
 def _slice_to_expr():
-    body = cases(
+    body = match(
         _ty("Slice"), var("s"), None_(),
         [
             field("named", lam("ne", _local("namedExpressionToExpr")(var("ne")))),
@@ -1549,7 +1549,7 @@ def _slice_to_expr():
 
 
 def _slice_or_starred_expression_to_expr():
-    body = cases(
+    body = match(
         _ty("SliceOrStarredExpression"), var("s"), None_(),
         [
             field("slice", lam("sl", _local("sliceToExpr")(var("sl")))),
@@ -1580,7 +1580,7 @@ def _slices_to_expr():
 
 
 def _star_atom_to_expr():
-    body = cases(
+    body = match(
         _ty("StarAtom"), var("sa"), None_(),
         [
             field("name", lam("n", _local("nameToExpr")(var("n")))),
@@ -1596,7 +1596,7 @@ def _star_atom_to_expr():
 
 
 def _star_expression_to_expr():
-    body = cases(
+    body = match(
         _ty("StarExpression"), var("se"), None_(),
         [
             field("star",
@@ -1615,7 +1615,7 @@ def _star_expression_to_expr():
 
 
 def _star_named_expression_to_expr():
-    body = cases(
+    body = match(
         _ty("StarNamedExpression"), var("sne"), None_(),
         [
             field("star",
@@ -1634,7 +1634,7 @@ def _star_named_expression_to_expr():
 
 
 def _star_target_to_expr():
-    body = cases(
+    body = match(
         _ty("StarTarget"), var("st"), None_(),
         [
             field("unstarred", lam("t", _local("targetWithStarAtomToExpr")(var("t")))),
@@ -1664,7 +1664,7 @@ def _starred_expression_to_expr():
 
 
 def _statement_to_expr():
-    body = cases(
+    body = match(
         _ty("Statement"), var("stmt"), None_(),
         [
             field("annotated", lam("a", _local("annotatedStatementToExpr")(var("a")))),
@@ -1681,7 +1681,7 @@ def _statement_to_expr():
 
 
 def _string_prefix_to_text():
-    body = cases(
+    body = match(
         _ty("StringPrefix"), var("p"), None_(),
         [
             field("raw", constant(string("r"))),
@@ -1703,7 +1703,7 @@ def _string_to_expr():
             field("prefix", Optionals.cases(_proj("String", "prefix", "s"), string(""), _local("stringPrefixToText"))),
             field("style", _proj("String", "quoteStyle", "s")),
         ],
-        cases(
+        match(
             _ty("QuoteStyle"), var("style"), None_(),
             [
                 field("single",
@@ -1736,7 +1736,7 @@ def _string_to_expr():
 
 
 def _subject_expression_to_expr():
-    body = cases(
+    body = match(
         _ty("SubjectExpression"), var("se"), None_(),
         [
             field("simple", lam("ne", _local("namedExpressionToExpr")(var("ne")))),
@@ -1758,7 +1758,7 @@ def _sum_to_expr():
 
 
 def _t_primary_to_expr():
-    body = cases(
+    body = match(
         _ty("TPrimary"), var("tp"), None_(),
         [
             field("atom", lam("a", _local("atomToExpr")(var("a")))),
@@ -1793,7 +1793,7 @@ def _t_primary_and_name_to_expr():
 
 
 def _target_with_star_atom_to_expr():
-    body = cases(
+    body = match(
         _ty("TargetWithStarAtom"), var("t"), None_(),
         [
             field("atom", lam("a", _local("starAtomToExpr")(var("a")))),
@@ -1875,7 +1875,7 @@ def _type_alias_to_expr():
 
 
 def _type_parameter_to_expr():
-    body = cases(
+    body = match(
         _ty("TypeParameter"), var("tp"), None_(),
         [
             field("simple", lam("s", _local("simpleTypeParameterToExpr")(var("s")))),
@@ -2038,12 +2038,12 @@ def _python_float_literal_text():
 
 
 def _python_doc_entity_ref():
-    body = cases(
+    body = match(
         Name("hydra.packaging.EntityReference"), var("ref"), None_(),
         [
             field("definition",
                 lam("d",
-                    cases(
+                    match(
                         Name("hydra.packaging.DefinitionReference"), var("d"), None_(),
                         [
                             field("primitive", lam("n", Strings.concat2(string(":func:`"), Strings.concat2(hydra.dsl.names.local_name_of(var("n")), string("`"))))),

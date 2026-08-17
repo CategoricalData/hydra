@@ -191,7 +191,7 @@ def _type_cases_with_one_branch(arg_term, default_result, branch_field,
         fields.append(
             field(v, constant(default_result))
         )
-    return cases("hydra.core.Type",
+    return match("hydra.core.Type",
         hydra.dsl.strip.deannotate_type(arg_term),
         None_(),
         fields,
@@ -312,7 +312,7 @@ def _case_block_to_expr():
                 ),
                 (
                     "effectiveLambda",
-                    cases_with_default("hydra.core.Term", var("stripped"), eff_lambda_default,
+                    match_with_default("hydra.core.Term", var("stripped"), eff_lambda_default,
             field("lambda",
                                 lam("lam", var("lam")),
                             )),
@@ -415,7 +415,7 @@ def _cond_import_symbol():
 def _collect_type_variables():
     body = lambdas(
         ["initial", "typ"],
-        cases_with_default("hydra.core.Type", hydra.dsl.strip.deannotate_type(var("typ")), let_chain(
+        match_with_default("hydra.core.Type", hydra.dsl.strip.deannotate_type(var("typ")), let_chain(
                     [
                         (
                             "freeVars",
@@ -591,7 +591,7 @@ def _deduplicate_case_variables():
                 ("fname", Core.case_alternative_name(var("field"))),
                 ("fterm", Core.case_alternative_handler(var("field"))),
             ],
-            cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("fterm")), pair(
+            match_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("fterm")), pair(
                         var("countByName"),
                         Lists.cons(var("field"), var("done")),
                     ),
@@ -625,7 +625,7 @@ def _deduplicate_case_variables():
 def _dig_for_wrap():
     body = lambdas(
         ["isTermAnnot", "meta", "typ"],
-        cases_with_default("hydra.core.Type", hydra.dsl.strip.deannotate_type(var("typ")), var("meta"),
+        match_with_default("hydra.core.Type", hydra.dsl.strip.deannotate_type(var("typ")), var("meta"),
             field("forall",
                     lam(
                         "ft",
@@ -880,7 +880,7 @@ def _eliminate_unit_var():
     ]
     rewrite = lambdas(
         ["recurse", "term"],
-        cases("hydra.core.Term",
+        match("hydra.core.Term",
             hydra.dsl.strip.deannotate_and_detype_term(var("term")),
             Given(var("term")),
             rewrite_body_fields,
@@ -1242,7 +1242,7 @@ def _encode_application_inner():
                 ("withRest", with_rest),
                 ("defaultCase", default_case),
             ],
-            cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("fun")), var("defaultCase"),
+            match_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("fun")), var("defaultCase"),
             field("project", project_branch),
             field("cases", cases_branch),
             field("unwrap", unwrap_branch),
@@ -2098,7 +2098,7 @@ def _encode_definition():
     )
     body = lambdas(
         ["cx", "env", "def_"],
-        cases("hydra.packaging.Definition",
+        match("hydra.packaging.Definition",
             var("def_"),
             None_(),
             [
@@ -2253,7 +2253,7 @@ def _encode_field_type():
 def _encode_float_value():
     body = lambdas(
         ["fv"],
-        cases("hydra.core.FloatValue",
+        match("hydra.core.FloatValue",
             var("fv"),
             None_(),
             [
@@ -3253,7 +3253,7 @@ def _encode_term_inline():
     )
     strip_type_apps = lam(
         "t",
-        cases_with_default("hydra.core.Term", var("t"), var("t"),
+        match_with_default("hydra.core.Term", var("t"), var("t"),
             field("annotated",
                     lam(
                         "ann",
@@ -3936,7 +3936,7 @@ def _encode_term_inline():
                 ("stripTypeApps", strip_type_apps),
                 ("withCast", with_cast),
             ],
-            cases("hydra.core.Term",
+            match("hydra.core.Term",
                 hydra.dsl.strip.deannotate_and_detype_term(var("term")),
                 None_(),
                 [
@@ -4151,7 +4151,7 @@ def _encode_term_multiline():
                             ),
                         ),
                     ],
-                    cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("body")), var("dfltLogic"),
+                    match_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("body")), var("dfltLogic"),
             field("cases", cases_branch)),
                 ),
                 var("dfltLogic"),
@@ -4288,7 +4288,7 @@ def _encode_term_multiline_tco():
                         ),
                     ),
                 ],
-                cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("body2")), Eithers.bind(
+                match_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("body2")), Eithers.bind(
                             _local("encodeTermInline")(var("cx"), var("env"), false(), var("term")),
                             lam(
                                 "expr",
@@ -4338,7 +4338,7 @@ def _encode_term_multiline_tco():
                 ),
                 (
                     "isSelfCall",
-                    cases_with_default("hydra.core.Term", var("strippedFun"), false(),
+                    match_with_default("hydra.core.Term", var("strippedFun"), false(),
             field("variable",
                                 lam(
                                     "n",
@@ -4648,7 +4648,7 @@ def _encode_type():
                     ),
                 ),
             ],
-            cases("hydra.core.Type",
+            match("hydra.core.Type",
                 hydra.dsl.strip.deannotate_type(var("typ")),
                 None_(),
                 fields,
@@ -4700,7 +4700,7 @@ def _encode_type_assignment_inner():
                 ("stripped", hydra.dsl.strip.deannotate_type(var("typ"))),
                 ("dflt", dflt),
             ],
-            cases_with_default("hydra.core.Type", var("stripped"), var("dflt"),
+            match_with_default("hydra.core.Type", var("stripped"), var("dflt"),
             field("forall",
                         lam(
                             "ft",
@@ -5242,7 +5242,7 @@ def _encode_integer_value():
         ["iv"],
         let_chain(
             [("toPyInt", to_py_int)],
-            cases("hydra.core.IntegerValue",
+            match("hydra.core.IntegerValue",
                 var("iv"),
                 None_(),
                 [
@@ -5272,7 +5272,7 @@ def _encode_integer_value():
 def _encode_literal():
     body = lambdas(
         ["lit"],
-        cases("hydra.core.Literal",
+        match("hydra.core.Literal",
             var("lit"),
             None_(),
             [
@@ -5364,7 +5364,7 @@ def _encode_literal_type():
             [
                 (
                     "findName",
-                    cases("hydra.core.LiteralType",
+                    match("hydra.core.LiteralType",
                         var("lt"),
                         None_(),
                         [
@@ -5380,7 +5380,7 @@ def _encode_literal_type():
                             field("float",
                                 lam(
                                     "ft",
-                                    cases("hydra.core.FloatType",
+                                    match("hydra.core.FloatType",
                                         var("ft"),
                                         None_(),
                                         [
@@ -5438,7 +5438,7 @@ def _environment_type_parameters():
 def _extend_env_with_lambda_params():
     inner_go = lambdas(
         ["e", "t"],
-        cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("t")), var("e"),
+        match_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("t")), var("e"),
             field("lambda",
                     lam(
                         "lam",
@@ -6078,7 +6078,7 @@ def _enum_variant_pattern():
 def _extend_meta_for_term():
     step_inner = lambdas(
         ["meta", "t"],
-        cases_with_default("hydra.core.Term", var("t"), var("meta"),
+        match_with_default("hydra.core.Term", var("t"), var("meta"),
             field("either",
                     lam(
                         "e",
@@ -6167,7 +6167,7 @@ def _extend_meta_for_term():
             field("literal",
                     lam(
                         "l",
-                        cases_with_default("hydra.core.Literal", var("l"), var("meta"),
+                        match_with_default("hydra.core.Literal", var("l"), var("meta"),
             field("decimal",
                                     constant(
                                         _local("setMetaUsesDecimal")(var("meta"), true())
@@ -6262,7 +6262,7 @@ def _extend_meta_for_type():
         field("literal",
             lam(
                 "lt",
-                cases_with_default("hydra.core.LiteralType", var("lt"), var("metaWithSubtypes"),
+                match_with_default("hydra.core.LiteralType", var("lt"), var("metaWithSubtypes"),
             field("decimal",
                             constant(
                                 _local("setMetaUsesDecimal")(var("metaWithSubtypes"), true())
@@ -6295,7 +6295,7 @@ def _extend_meta_for_type():
                             _local("digForWrap")(var("isTermAnnot"), var("metaWithSubtypes"), var("body")),
                         ),
                     ],
-                    cases_with_default("hydra.core.Type", hydra.dsl.strip.deannotate_type(var("body")), var("metaForWrap"),
+                    match_with_default("hydra.core.Type", hydra.dsl.strip.deannotate_type(var("body")), var("metaForWrap"),
             field("record",
                                 constant(
                                     _local("setMetaUsesGeneric")(var("metaForWrap"), true())
@@ -6377,7 +6377,7 @@ def _extend_meta_for_type():
                     ),
                 ),
             ],
-            cases("hydra.core.Type",
+            match("hydra.core.Type",
                 hydra.dsl.strip.deannotate_type(var("typ")),
                 Given(var("metaWithSubtypes")),
                 case_fields,
@@ -6437,7 +6437,7 @@ def _extend_meta_for_types():
 def _extract_case_elimination():
     body = lambdas(
         ["term"],
-        cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("term")), nothing(),
+        match_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("term")), nothing(),
             field("cases",
                     lam("cs", just(var("cs"))),
                 )),
@@ -6725,7 +6725,7 @@ def _function_definition_to_expr():
 def _gather_lambdas():
     inner_go = lambdas(
         ["params", "t"],
-        cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("t")), pair(var("params"), var("t")),
+        match_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("t")), pair(var("params"), var("t")),
             field("lambda",
                     lam(
                         "l",
@@ -6751,7 +6751,7 @@ def _gather_lambdas():
 def _gather_metadata():
     add_def = lambdas(
         ["meta", "def"],
-        cases("hydra.packaging.Definition",
+        match("hydra.packaging.Definition",
             var("def"),
             None_(),
             [
@@ -6950,7 +6950,7 @@ def _is_case_statement_application():
                             ),
                         ),
                     ],
-                    cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("body")), nothing(),
+                    match_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("body")), nothing(),
             field("cases",
                                 lam(
                                     "cs",
@@ -6997,7 +6997,7 @@ def _is_type_module_check():
                 Lists.filter(
                     lam(
                         "d",
-                        cases_with_default("hydra.packaging.Definition", var("d"), false(),
+                        match_with_default("hydra.packaging.Definition", var("d"), false(),
             field("type",
                                     constant(true()),
                                 )),
@@ -7740,7 +7740,7 @@ def _standard_import_statement():
 def _term_arity_with_primitives():
     body = lambdas(
         ["graph", "term"],
-        cases_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("term")), int_(0),
+        match_with_default("hydra.core.Term", hydra.dsl.strip.deannotate_and_detype_term(var("term")), int_(0),
             field("application",
                     lam(
                         "app",
@@ -7919,7 +7919,7 @@ def _with_definitions():
                         Lists.map(
                             lam(
                                 "def_",
-                                cases_with_default("hydra.packaging.Definition", var("def_"), nothing(),
+                                match_with_default("hydra.packaging.Definition", var("def_"), nothing(),
             field("term",
                                             lam(
                                                 "td",

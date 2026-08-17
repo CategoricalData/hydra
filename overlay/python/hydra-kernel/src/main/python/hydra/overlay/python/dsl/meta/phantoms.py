@@ -147,11 +147,11 @@ def binary_function(f) -> TypedTerm[A]:
             return TypedTerm[A](terms.string(f"unexpected term as binary function: {term}"))
 
 
-def cases(name, arg: TypedTerm[A], dflt: Optional[TypedTerm[B]] = None, fields: Sequence[Field] = ()) -> TypedTerm[B]:
+def match(name, arg: TypedTerm[A], dflt: Optional[TypedTerm[B]] = None, fields: Sequence[Field] = ()) -> TypedTerm[B]:
     """Apply a named case match to an argument.
 
     Accepts a str or Name. Without a default, pass `dflt=None` (treated as None_()).
-    With a default, pass `dflt=Given(default_tterm)` or use `cases_with_default(...)`.
+    With a default, pass `dflt=Given(default_tterm)` or use `match_with_default(...)`.
     """
     if dflt is None:
         dflt_term = None_()
@@ -165,10 +165,10 @@ def cases(name, arg: TypedTerm[A], dflt: Optional[TypedTerm[B]] = None, fields: 
     return TypedTerm[B](terms.apply(terms.match(_name(name), dflt_term, fields), un_tterm(arg)))
 
 
-def cases_with_default(name, arg: TypedTerm[A], default: TypedTerm[B], *fields: Field) -> TypedTerm[B]:
+def match_with_default(name, arg: TypedTerm[A], default: TypedTerm[B], *fields: Field) -> TypedTerm[B]:
     """Apply a named case match with a default branch.
 
-    Java-style alternative to `cases(name, arg, Given(default), [f1, f2, ...])`.
+    Java-style alternative to `match(name, arg, Given(default), [f1, f2, ...])`.
     Accepts variadic field args for ergonomics.
     """
     return TypedTerm[B](terms.apply(
@@ -482,7 +482,7 @@ def map_(m: Mapping[TypedTerm[A], TypedTerm[B]]) -> TypedTerm[dict[A, B]]:
     )
 
 
-def match(name, dflt: Optional[TypedTerm[B]] = None, fields: Sequence[Field] = ()) -> TypedTerm[A]:
+def cases(name, dflt: Optional[TypedTerm[B]] = None, fields: Sequence[Field] = ()) -> TypedTerm[A]:
     """Create a pattern match on a union term. Accepts str or Name."""
     if dflt is None:
         dflt_term = None_()
