@@ -149,7 +149,7 @@ invalidDefinitionNameError = define "invalidDefinitionNameError" $
     Packaging.unModuleName $ project _InvalidDefinitionNameError _InvalidDefinitionNameError_moduleName @@ var "e",
     string ": definition ",
     Core.unName $ project _InvalidDefinitionNameError _InvalidDefinitionNameError_name @@ var "e",
-    string " does not cases expected ",
+    string " does not match expected ",
     PrintUtil.caseConvention @@ (project _InvalidDefinitionNameError _InvalidDefinitionNameError_expectedConvention @@ var "e")]
 
 invalidModuleError :: TypedTermDefinition (InvalidModuleError -> String)
@@ -171,7 +171,7 @@ invalidModuleNameConventionError = define "invalidModuleNameConventionError" $
   "e" ~> Strings.concat $ list [
     string "namespace ",
     Packaging.unModuleName $ project _InvalidModuleNameConventionError _InvalidModuleNameConventionError_moduleName @@ var "e",
-    string " does not cases the dotted-camelCase naming convention"]
+    string " does not match the dotted-camelCase naming convention"]
 
 invalidPackageError :: TypedTermDefinition (InvalidPackageError -> String)
 invalidPackageError = define "invalidPackageError" $
@@ -190,7 +190,7 @@ invalidPackageNameError = define "invalidPackageNameError" $
   "e" ~> Strings.concat $ list [
     string "package name ",
     Packaging.unPackageName $ project _InvalidPackageNameError _InvalidPackageNameError_packageName @@ var "e",
-    string " does not cases the hyphen-separated lowercase naming convention"]
+    string " does not match the hyphen-separated lowercase naming convention"]
 
 missingDocumentationError :: TypedTermDefinition (MissingDocumentationError -> String)
 missingDocumentationError = define "missingDocumentationError" $

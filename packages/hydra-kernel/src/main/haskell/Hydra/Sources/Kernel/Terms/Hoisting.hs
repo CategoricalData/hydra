@@ -207,7 +207,7 @@ hoistAllLetBindings = define "hoistAllLetBindings" $
 hoistCaseStatements :: TypedTermDefinition (Graph -> Term -> Term)
 hoistCaseStatements = define "hoistCaseStatements" $
   doc ("Hoist case statements into local let bindings."
-    <> " This is useful for targets such as Python which only support case statements (cases) at the top level."
+    <> " This is useful for targets such as Python which only support case statements (match) at the top level."
     <> " Case statements are hoisted only when they appear at non-top-level positions."
     <> " Top level = root, or reachable through annotations, let body/binding, lambda bodies, or ONE application LHS."
     <> " Once through an application LHS, lambda bodies no longer count as pass-through.") $

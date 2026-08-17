@@ -36,7 +36,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core", ModuleName "hydra.file", ModuleName "hydra.testing"],
-            moduleMetadata = descriptionMetadata (Just "Effectful test match for hydra.lib.files primitives")}
+            moduleMetadata = descriptionMetadata (Just "Effectful test cases for hydra.lib.files primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -55,7 +55,7 @@ bytes s = binary (BC.pack s)
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Effectful test match for hydra.lib.files primitives" $
+    Phantoms.doc "Effectful test cases for hydra.lib.files primitives" $
     supergroup "hydra.lib.files primitives" [
       filesAppendFile,
       filesCopy,

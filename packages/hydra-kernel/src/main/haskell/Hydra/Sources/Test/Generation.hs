@@ -42,7 +42,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Generation.ns, PrintCore.ns, TestGraph.ns] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata ((Just "Test match for code generation operations such as inferModules and inferModulesGiven"))}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for code generation operations such as inferModules and inferModulesGiven"))}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -222,7 +222,7 @@ showResult r = Eithers.either
 
 allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
-    Phantoms.doc "Test match for code generation operations" $
+    Phantoms.doc "Test cases for code generation operations" $
     supergroup "generation" [
       subgroup "inferModulesGiven" [
         incrementalSubsetCase,

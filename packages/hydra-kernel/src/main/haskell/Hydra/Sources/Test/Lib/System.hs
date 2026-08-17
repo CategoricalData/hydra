@@ -43,7 +43,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core", ModuleName "hydra.system", ModuleName "hydra.error.system", ModuleName "hydra.testing"],
-            moduleMetadata = descriptionMetadata (Just "Effectful test match for hydra.lib.system primitives")}
+            moduleMetadata = descriptionMetadata (Just "Effectful test cases for hydra.lib.system primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -69,7 +69,7 @@ module_ = Module {
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Effectful test match for hydra.lib.system primitives" $
+    Phantoms.doc "Effectful test cases for hydra.lib.system primitives" $
     supergroup "hydra.lib.system primitives" [
       systemExecute,
       systemGetEnvironment,

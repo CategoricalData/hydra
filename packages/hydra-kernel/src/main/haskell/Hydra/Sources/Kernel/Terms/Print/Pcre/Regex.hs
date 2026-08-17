@@ -55,7 +55,7 @@ ns :: ModuleName
 ns = ModuleName "hydra.print.pcre.regex"
 
 -- Local Name constants for the hydra.regex types and fields (the generated Hydra.Dsl.Regex wrapper is
--- not available at Sources-compile time; see Print/Regex.hs). Referenced via project/cases only.
+-- not available at Sources-compile time; see Print/Regex.hs). Referenced via project/match only.
 _CharacterRange :: Name
 _CharacterRange = Name "hydra.regex.CharacterRange"
 _CharacterRange_from :: Name
@@ -133,7 +133,7 @@ module_ = Module {
               <> " family syntax (Java, Scala, Clojure, Python, Common Lisp, TypeScript). Differs from the"
               <> " canonical hydra.print.regex in exactly one place: Hydra's . (any character INCLUDING"
               <> " newline) renders as [\\s\\S] rather than a bare . (whose native meaning excludes"
-              <> " newline in these engines). All other productions cases the canonical form. See"
+              <> " newline in these engines). All other productions match the canonical form. See"
               <> " docs/specification/regex.md and issue #567.")}
   where
    definitions = [

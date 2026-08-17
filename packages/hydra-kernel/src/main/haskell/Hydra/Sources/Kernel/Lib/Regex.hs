@@ -36,10 +36,10 @@ str3 :: Type -> Type
 str3 result = Types.string Types.~> Types.string Types.~> Types.string Types.~> result
 
 find :: PrimitiveDefinition
-find = define "find" "Find the first regex cases within a string, returning the matched substring if any."
+find = define "find" "Find the first regex match within a string, returning the matched substring if any."
   (sigWithParams [("pat", "the regex pattern to search for"), ("s", "the string to search within")] $ TypeScheme [] (str2 (Types.optional Types.string)) Nothing)
   ["find(pat, s) returns Just(t) where t is the leftmost substring of s matching pat, or Nothing if\
-  \ pat does not cases anywhere in s.",
+  \ pat does not match anywhere in s.",
    "Regex syntax is host-defined; behavior tends to converge on the intersection of ECMA-262 and\
   \ POSIX-ERE features (literal characters, character classes, alternation, anchors ^ and $,\
   \ repetition with ?/*/+/{n,m}, grouping with parentheses), but extension features (lookaround,\
@@ -52,7 +52,7 @@ findAll :: PrimitiveDefinition
 findAll = define "findAll" "Find all non-overlapping regex matches within a string."
   (sigWithParams [("pat", "the regex pattern to search for"), ("s", "the string to search within")] $ TypeScheme [] (str2 (Types.list Types.string)) Nothing)
   ["findAll(pat, s) returns the list of all leftmost, non-overlapping matches of pat in s, in the\
-  \ order they appear. Returns the empty list if pat does not cases anywhere.",
+  \ order they appear. Returns the empty list if pat does not match anywhere.",
    "Regex syntax is host-defined; see find for the common-subset caveat.",
    "Total; ill-formed patterns are host-defined."]
 
@@ -65,10 +65,10 @@ matches = define "matches" "Test whether a regex matches anywhere in a string."
    "Total; ill-formed patterns are host-defined."]
 
 replace :: PrimitiveDefinition
-replace = define "replace" "Replace the first regex cases in a string with a replacement string."
-  (sigWithParams [("pat", "the regex pattern to cases"), ("repl", "the replacement string"), ("s", "the string to operate on")] $ TypeScheme [] (str3 Types.string) Nothing)
-  ["replace(pat, repl, s) returns s with the first leftmost cases of pat replaced by repl. If pat\
-  \ does not cases, s is returned unchanged.",
+replace = define "replace" "Replace the first regex match in a string with a replacement string."
+  (sigWithParams [("pat", "the regex pattern to match"), ("repl", "the replacement string"), ("s", "the string to operate on")] $ TypeScheme [] (str3 Types.string) Nothing)
+  ["replace(pat, repl, s) returns s with the first leftmost match of pat replaced by repl. If pat\
+  \ does not match, s is returned unchanged.",
    "Replacement-string syntax (capture-group references such as $1 or \\\\1, literal escapes) is\
   \ host-defined.",
    "Regex syntax is host-defined; see find for the common-subset caveat.",
@@ -76,9 +76,9 @@ replace = define "replace" "Replace the first regex cases in a string with a rep
 
 replaceAll :: PrimitiveDefinition
 replaceAll = define "replaceAll" "Replace all non-overlapping regex matches in a string with a replacement string."
-  (sigWithParams [("pat", "the regex pattern to cases"), ("repl", "the replacement string"), ("s", "the string to operate on")] $ TypeScheme [] (str3 Types.string) Nothing)
-  ["replaceAll(pat, repl, s) returns s with every leftmost, non-overlapping cases of pat replaced\
-  \ by repl. If pat does not cases anywhere, s is returned unchanged.",
+  (sigWithParams [("pat", "the regex pattern to match"), ("repl", "the replacement string"), ("s", "the string to operate on")] $ TypeScheme [] (str3 Types.string) Nothing)
+  ["replaceAll(pat, repl, s) returns s with every leftmost, non-overlapping match of pat replaced\
+  \ by repl. If pat does not match anywhere, s is returned unchanged.",
    "Replacement-string syntax is host-defined; see replace and find for the common-subset caveats.",
    "Total; ill-formed patterns and replacement strings are host-defined."]
 
@@ -86,7 +86,7 @@ split :: PrimitiveDefinition
 split = define "split" "Split a string by occurrences of a regex pattern."
   (sigWithParams [("pat", "the regex pattern to split on"), ("s", "the string to split")] $ TypeScheme [] (str2 (Types.list Types.string)) Nothing)
   ["split(pat, s) returns the list of substrings of s obtained by splitting on every leftmost,\
-  \ non-overlapping cases of pat.",
+  \ non-overlapping match of pat.",
    "Trailing empty splits are host-defined (some engines retain them, some discard them; for\
   \ portable code, do not rely on the trailing-empty behavior).",
    "Regex syntax is host-defined; see find for the common-subset caveat.",

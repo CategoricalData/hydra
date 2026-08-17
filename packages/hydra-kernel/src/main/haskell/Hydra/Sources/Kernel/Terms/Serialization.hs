@@ -395,7 +395,7 @@ maxLineWidth = define "maxLineWidth" $
   doc ("The canonical maximum line width used by Hydra writers."
     <> " Adaptive helpers compare estimated expression widths against this threshold"
     <> " to decide whether to render inline or break across lines."
-    <> " Set to 120 to cases the project-wide line-length convention.") $
+    <> " Set to 120 to match the project-wide line-length convention.") $
   int32 120
 
 newlineSep :: TypedTermDefinition ([Expr] -> Expr)

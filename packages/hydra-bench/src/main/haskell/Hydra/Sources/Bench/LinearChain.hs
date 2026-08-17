@@ -48,7 +48,7 @@ module_ = Module {
   moduleName = ns,
   moduleDefinitions = definitions,
   moduleDependencies = unqualifiedDep <$> ([Strip.ns] `L.union` kernelTypesModuleNames),
-  moduleMetadata = descriptionMetadata (Just "Linear-chain inference benchmark. walkerK match on _Term variants and recurses to walker(K-1) — depth-N type-resolution stress test.")
+  moduleMetadata = descriptionMetadata (Just "Linear-chain inference benchmark. walkerK matches on _Term variants and recurses to walker(K-1) — depth-N type-resolution stress test.")
   }
   where
     definitions = [toDefinition (mkWalker k) | k <- [0 .. numWalkers - 1]]

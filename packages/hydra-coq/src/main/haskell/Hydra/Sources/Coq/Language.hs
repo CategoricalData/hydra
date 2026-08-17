@@ -141,7 +141,7 @@ coqReservedWords = define "coqReservedWords" $
     reservedWords = [
       -- Gallina and vernacular keywords
       "as", "at", "cofix", "do", "else", "end", "exists", "exists2",
-      "fix", "for", "forall", "fun", "if", "IF", "in", "let", "cases",
+      "fix", "for", "forall", "fun", "if", "IF", "in", "let", "match",
       "mod", "open", "Prop", "return", "Set", "then", "Type", "using",
       "where", "with",
       "Axiom", "Class", "Coercion", "Context", "Definition", "Fixpoint",
@@ -174,7 +174,7 @@ coqStrippedReservedWords = define "coqStrippedReservedWords" $
     reservedWords = [
       -- Gallina and vernacular keywords
       "as", "at", "cofix", "do", "else", "end", "exists", "exists2",
-      "fix", "for", "forall", "fun", "if", "IF", "in", "let", "cases",
+      "fix", "for", "forall", "fun", "if", "IF", "in", "let", "match",
       "mod", "Prop", "return", "Set", "then", "Type", "using",
       "where", "with",
       "Axiom", "Class", "Coercion", "Context", "Definition", "Fixpoint",

@@ -74,7 +74,7 @@ termVariant = define "termVariant" $
   cases _TermVariant Nothing [
     _TermVariant_annotated>>: constant $ string "annotated",
     _TermVariant_application>>: constant $ string "application",
-    _TermVariant_cases>>: constant $ string "match",
+    _TermVariant_cases>>: constant $ string "cases",
     _TermVariant_either>>: constant $ string "either",
     _TermVariant_lambda>>: constant $ string "lambda",
     _TermVariant_let>>: constant $ string "let",

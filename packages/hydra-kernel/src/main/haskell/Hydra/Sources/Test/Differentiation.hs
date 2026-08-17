@@ -39,7 +39,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Diff.ns, Variables.ns, PrintCore.ns, ModuleName "hydra.reduction", ModuleName "hydra.test.testGraph"] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata ((Just "Test match for automatic differentiation"))}
+            moduleMetadata = descriptionMetadata ((Just "Test cases for automatic differentiation"))}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -48,7 +48,7 @@ define = definitionInModule module_
 
 allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
-    doc "Test match for automatic differentiation" $
+    doc "Test cases for automatic differentiation" $
     supergroup "differentiation" [
       basicDiffGroup,
       primitiveDiffGroup,

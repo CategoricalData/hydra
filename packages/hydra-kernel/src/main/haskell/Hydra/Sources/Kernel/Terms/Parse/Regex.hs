@@ -164,7 +164,7 @@ cp c = int32 (fromIntegral (fromEnum c))
 -- | Is a codepoint a top-level metacharacter (. ^ $ * + ? ( ) [ ] { } | \)?
 isMetachar :: TypedTermDefinition (Int -> Bool)
 isMetachar = define "isMetachar" $
-  doc "True if the codepoint is a top-level regex metacharacter that must be escaped to cases literally." $
+  doc "True if the codepoint is a top-level regex metacharacter that must be escaped to match literally." $
   "c" ~>
     Lists.foldl
       ("acc" ~> "m" ~> Logic.or (var "acc") (Equality.equal (var "c") (var "m")))

@@ -331,7 +331,7 @@ encodeProjectionElim = define "encodeProjectionElim" $
 -- | Encode a Hydra Term into a Coq Term.
 encodeTerm :: TypedTermDefinition (CE.CoqEnvironment -> Term -> C.Term)
 encodeTerm = define "encodeTerm" $
-  doc "Translate a Hydra Term into its Coq Term counterpart. The environment provides the constructor-count map used by encodeUnionElim (to decide whether a cases is exhaustive) and the ambiguous-name set used by resolveQualifiedName (to decide whether cross-module references need to stay fully qualified)." $
+  doc "Translate a Hydra Term into its Coq Term counterpart. The environment provides the constructor-count map used by encodeUnionElim (to decide whether a match is exhaustive) and the ambiguous-name set used by resolveQualifiedName (to decide whether cross-module references need to stay fully qualified)." $
   lambdas ["env", "tm"] $ match _Term (var "tm") Nothing [
     _Term_annotated>>: "at" ~> encodeTerm @@ var "env" @@ (Core.annotatedTermBody $ var "at"),
     _Term_application>>: "app" ~>
@@ -636,7 +636,7 @@ encodeUnionConstructor = define "encodeUnionConstructor" $
 -- | Translate a union eliminator (Hydra `TermCases`) into a Coq `fun x_ => match x_ with ... end`.
 encodeUnionElim :: TypedTermDefinition (CE.CoqEnvironment -> CaseStatement -> C.Term)
 encodeUnionElim = define "encodeUnionElim" $
-  doc "Build a Coq cases expression from a Hydra union eliminator. Uses the constructor-count map in the environment to decide whether the cases is exhaustive: if so, an explicit default is suppressed; if not and the kernel didn't provide one, inserts `| _ => hydra_unreachable`." $
+  doc "Build a Coq match expression from a Hydra union eliminator. Uses the constructor-count map in the environment to decide whether the match is exhaustive: if so, an explicit default is suppressed; if not and the kernel didn't provide one, inserts `| _ => hydra_unreachable`." $
   lambdas ["env", "cs"] $ lets [
     "csName">: Core.caseStatementTypeName $ var "cs",
     "csCases">: Core.caseStatementCases $ var "cs",

@@ -89,7 +89,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> (namespaces ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
-      <> " the criterion for a true Hydra implementation is that all test match pass."))}
+      <> " the criterion for a true Hydra implementation is that all test cases pass."))}
   where
     definitions = [Phantoms.toDefinition allTests]
     namespaces = fst <$> testPairs

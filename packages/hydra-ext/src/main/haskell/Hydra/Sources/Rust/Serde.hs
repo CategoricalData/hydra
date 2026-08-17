@@ -901,7 +901,7 @@ macroInvocationToExpr = define "macroInvocationToExpr" $
 
 matchArmToExpr :: TypedTermDefinition (R.MatchArm -> Expr)
 matchArmToExpr = define "matchArmToExpr" $
-  doc "Serialize a cases arm" $
+  doc "Serialize a match arm" $
   lambda "arm" $ lets [
     "pat">: project R._MatchArm R._MatchArm_pattern @@ var "arm",
     "guard">: project R._MatchArm R._MatchArm_guard @@ var "arm",
@@ -918,12 +918,12 @@ matchArmToExpr = define "matchArmToExpr" $
 
 matchExprToExpr :: TypedTermDefinition (R.MatchExpr -> Expr)
 matchExprToExpr = define "matchExprToExpr" $
-  doc "Serialize a cases expression" $
+  doc "Serialize a match expression" $
   lambda "m" $ lets [
     "scrut">: project R._MatchExpr R._MatchExpr_scrutinee @@ var "m",
     "arms">: project R._MatchExpr R._MatchExpr_arms @@ var "m"] $
     Serialization.spaceSep @@ list [
-      Serialization.cst @@ string "cases",
+      Serialization.cst @@ string "match",
       expressionToExpr @@ var "scrut",
       Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@
         (Lists.map (asTerm matchArmToExpr) (var "arms"))]

@@ -317,7 +317,7 @@ localityToExpr = define "localityToExpr" $
 -- | Serialize a Match expression
 matchToExpr :: TypedTermDefinition (C.Match -> Expr)
 matchToExpr = define "matchToExpr" $
-  doc "Serialize a Coq cases expression" $
+  doc "Serialize a Coq match expression" $
   lambda "m" $ lets [
     "items">: Lists.map
       (lambda "ci" $ lets [
@@ -338,7 +338,7 @@ matchToExpr = define "matchToExpr" $
       (project C._Match C._Match_equations @@ var "m")] $
     Serialization.newlineSep @@ Lists.concat (list [
       list [Serialization.spaceSep @@ Lists.concat (list [
-        list [kw "cases"],
+        list [kw "match"],
         var "items",
         var "ret",
         list [kw "with"]])],

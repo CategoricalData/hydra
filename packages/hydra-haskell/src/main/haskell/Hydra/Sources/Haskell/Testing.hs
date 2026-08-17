@@ -177,7 +177,7 @@ collectNames = define "collectNames" $
 -- | Collect all test cases from a test group (recursively)
 collectTestCases :: TypedTermDefinition (TestGroup -> [TestCaseWithMetadata])
 collectTestCases = define "collectTestCases" $
-  doc "Collect all test match from a test group recursively" $
+  doc "Collect all test cases from a test group recursively" $
   lambda "tg" $
     Lists.concat2
       (project _TestGroup _TestGroup_cases @@ var "tg")

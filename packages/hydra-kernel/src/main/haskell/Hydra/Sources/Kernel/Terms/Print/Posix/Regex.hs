@@ -55,7 +55,7 @@ ns :: ModuleName
 ns = ModuleName "hydra.print.posix.regex"
 
 -- Local Name constants for the hydra.regex types and fields (the generated Hydra.Dsl.Regex wrapper is
--- not available at Sources-compile time; see Print/Regex.hs). Referenced via project/cases only.
+-- not available at Sources-compile time; see Print/Regex.hs). Referenced via project/match only.
 _CharacterRange :: Name
 _CharacterRange = Name "hydra.regex.CharacterRange"
 _CharacterRange_from :: Name
@@ -168,7 +168,7 @@ showCodePoint = define "showCodePoint" $
 anyClass :: TypedTermDefinition String
 anyClass = define "anyClass" $
   doc ("The POSIX ERE rendering of Hydra's . (any character incl. newline): an explicit character-class"
-    <> " range spanning the whole Unicode scalar range, which POSIX ERE engines cases literally.") $
+    <> " range spanning the whole Unicode scalar range, which POSIX ERE engines match literally.") $
   Strings.concat $ list [
     string "[",
     showCodePoint @@ int32 0,

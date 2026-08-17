@@ -38,7 +38,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([BuildModules.ns, Scoping.ns, PrintCore.ns] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata (Just "Test match for the pure module-list utilities in hydra.build.modules")}
+            moduleMetadata = descriptionMetadata (Just "Test cases for the pure module-list utilities in hydra.build.modules")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -154,7 +154,7 @@ showModulesDetail mods = PrintCore.list_ @@ Phantoms.lambda "m" (showModuleDetai
 
 allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
-    Phantoms.doc "Test match for the pure module-list utilities in hydra.build.modules" $
+    Phantoms.doc "Test cases for the pure module-list utilities in hydra.build.modules" $
     supergroup "build.modules" [
       dedupPreservingOrderGroup,
       filterKernelModulesGroup,

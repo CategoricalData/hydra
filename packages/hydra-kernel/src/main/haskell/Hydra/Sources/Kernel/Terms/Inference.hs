@@ -591,7 +591,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
   "dfltConstraints" <~ Optionals.toList (Optionals.map
     ("r" ~> Typing.typeConstraint (var "cod")
       (Substitution.substInType @@ var "isubst" @@ (Typing.inferenceResultType $ var "r"))
-      (string "cases default"))
+      (string "match default"))
     (var "dfltResult")) $
   "caseConstraints" <~ Optionals.givens (Lists.zipWith
     ("fname" ~> "itype" ~> Optionals.map

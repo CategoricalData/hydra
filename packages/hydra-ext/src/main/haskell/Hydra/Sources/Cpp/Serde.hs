@@ -1120,7 +1120,7 @@ parameterToExpr = define "parameterToExpr" $
 
 patternMatchToExpr :: TypedTermDefinition (Cpp.PatternMatch -> Expr)
 patternMatchToExpr = define "patternMatchToExpr" $
-  doc "Convert a pattern cases to an expression" $
+  doc "Convert a pattern match to an expression" $
   lambda "pm" $ lets [
     "visitor">: project Cpp._PatternMatch Cpp._PatternMatch_visitor @@ var "pm",
     "variant">: project Cpp._PatternMatch Cpp._PatternMatch_variant @@ var "pm"] $

@@ -32,7 +32,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Routing.ns, PrintCore.ns, PrintError.ns] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata (Just "Test match for hydra.build.routing")}
+            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.build.routing")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -41,7 +41,7 @@ define = definitionInModule module_
 
 allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
-  doc "Test match for hydra.build.routing" $
+  doc "Test cases for hydra.build.routing" $
   supergroup "routing" [
     buildRoutingMapGroup,
     namespaceToPackageInGroup,
