@@ -66,7 +66,8 @@ allTests = definitionInModule module_ "allTests" $
       filesRemoveDirectory,
       filesRemoveFile,
       filesRename,
-      filesStatus]
+      filesStatus,
+      filesSymlinks]
 
 -- Fold an effect<either<FileError, T>> into an effect<string> via the eithers eliminator, with the
 -- right branch passed through a (T -> string) function and the left branch rendered as "ERR".
@@ -276,7 +277,7 @@ filesStatus = subgroup "status" [
       @@ (lambda "_w" $ foldEither
             (lambda "s" $ primitive DefLiterals.showInt64 @@
               (project File._FileStatus File._FileStatus_size @@ var "s"))
-            (primitive DefFiles.status @@ path "stat.txt")))
+            (primitive DefFiles.status @@ true @@ path "stat.txt")))
     (string "5"),
   effectfulCase "status reports directory as the file type"
     (primitive DefEffects.bind
@@ -284,10 +285,98 @@ filesStatus = subgroup "status" [
       @@ (lambda "_d" $ foldEither
             (lambda "s" $ showFileType @@
               (project File._FileStatus File._FileStatus_fileType @@ var "s"))
-            (primitive DefFiles.status @@ path "stat-dir")))
+            (primitive DefFiles.status @@ true @@ path "stat-dir")))
     (string "directory"),
   effectfulCase "status on a missing path yields an error"
     (foldEither
       (lambda "s" $ string "unexpected success")
-      (primitive DefFiles.status @@ path "stat-missing.txt"))
+      (primitive DefFiles.status @@ true @@ path "stat-missing.txt"))
     (string "ERR")]
+
+-- Symbolic links: creation, inspection with and without following, dangling links, and errors.
+filesSymlinks :: TypedTerm TestGroup
+filesSymlinks = subgroup "symlinks" [
+  effectfulCase "createSymlink then status(false) reports fileType link"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.writeFile @@ path "link-target.txt" @@ bytes "target contents")
+      @@ (lambda "_w" $ primitive DefEffects.bind
+            @@ (primitive DefFiles.createSymlink @@ path "link-target.txt" @@ path "link-to-target")
+            @@ (lambda "_l" $ foldEither
+                  (lambda "s" $ showFileType @@
+                    (project File._FileStatus File._FileStatus_fileType @@ var "s"))
+                  (primitive DefFiles.status @@ false @@ path "link-to-target"))))
+    (string "link"),
+  effectfulCase "readSymlink returns the target verbatim"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.writeFile @@ path "link-target2.txt" @@ bytes "x")
+      @@ (lambda "_w" $ primitive DefEffects.bind
+            @@ (primitive DefFiles.createSymlink @@ path "link-target2.txt" @@ path "link-to-target2")
+            @@ (lambda "_l" $ foldEither
+                  (lambda "t" $ Phantoms.unwrap File._FilePath @@ var "t")
+                  (primitive DefFiles.readSymlink @@ path "link-to-target2"))))
+    (string (testDir ++ "/link-target2.txt")),
+  effectfulCase "status(true) on a symlink reports the target's status"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.writeFile @@ path "link-target3.txt" @@ bytes "1234")
+      @@ (lambda "_w" $ primitive DefEffects.bind
+            @@ (primitive DefFiles.createSymlink @@ path "link-target3.txt" @@ path "link-to-target3")
+            @@ (lambda "_l" $ foldEither
+                  (lambda "s" $ showFileType @@
+                    (project File._FileStatus File._FileStatus_fileType @@ var "s"))
+                  (primitive DefFiles.status @@ true @@ path "link-to-target3"))))
+    (string "regular"),
+  effectfulCase "createSymlink to a nonexistent target then status(false) reports link, not an error"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.createSymlink @@ path "does-not-exist.txt" @@ path "dangling-link")
+      @@ (lambda "_l" $ foldEither
+            (lambda "s" $ showFileType @@
+              (project File._FileStatus File._FileStatus_fileType @@ var "s"))
+            (primitive DefFiles.status @@ false @@ path "dangling-link")))
+    (string "link"),
+  effectfulCase "a dangling symlink is not found when followed with status(true)"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.createSymlink @@ path "still-does-not-exist.txt" @@ path "dangling-link2")
+      @@ (lambda "_l" $ foldEither
+            (lambda "s" $ string "unexpected success")
+            (primitive DefFiles.status @@ true @@ path "dangling-link2")))
+    (string "ERR"),
+  effectfulCase "a dangling symlink is reported absent by exists"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.createSymlink @@ path "yet-another-missing.txt" @@ path "dangling-link3")
+      @@ (lambda "_l" $ foldEither
+            (lambda "b" $ primitive DefLiterals.printBoolean @@ var "b")
+            (primitive DefFiles.exists @@ path "dangling-link3")))
+    (string "false"),
+  effectfulCase "createSymlink over an existing file yields alreadyExists"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.writeFile @@ path "occupied.txt" @@ bytes "x")
+      @@ (lambda "_w" $ foldEither
+            (lambda "_u" $ string "unexpected success")
+            (primitive DefFiles.createSymlink @@ path "some-target" @@ path "occupied.txt")))
+    (string "ERR"),
+  effectfulCase "createSymlink over an existing dangling symlink yields alreadyExists"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.createSymlink @@ path "missing-target" @@ path "occupied-link")
+      @@ (lambda "_l" $ foldEither
+            (lambda "_u" $ string "unexpected success")
+            (primitive DefFiles.createSymlink @@ path "another-target" @@ path "occupied-link")))
+    (string "ERR"),
+  effectfulCase "readSymlink on a regular file yields invalidPath"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.writeFile @@ path "not-a-link.txt" @@ bytes "x")
+      @@ (lambda "_w" $ foldEither
+            (lambda "t" $ string "unexpected success")
+            (primitive DefFiles.readSymlink @@ path "not-a-link.txt")))
+    (string "ERR"),
+  effectfulCase "readSymlink on a missing path yields notFound"
+    (foldEither
+      (lambda "t" $ string "unexpected success")
+      (primitive DefFiles.readSymlink @@ path "no-such-link"))
+    (string "ERR"),
+  effectfulCase "createSymlink preserves a relative target verbatim"
+    (primitive DefEffects.bind
+      @@ (primitive DefFiles.createSymlink @@ (wrap File._FilePath (string "relative-target.txt")) @@ path "relative-link")
+      @@ (lambda "_l" $ foldEither
+            (lambda "t" $ Phantoms.unwrap File._FilePath @@ var "t")
+            (primitive DefFiles.readSymlink @@ path "relative-link")))
+    (string "relative-target.txt")]
