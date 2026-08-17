@@ -125,6 +125,17 @@
             (Files/createDirectory p (into-array java.nio.file.attribute.FileAttribute []))))
         nil)))))
 
+;; createSymlink :: FilePath -> FilePath -> effect<Either<FileError, unit>>
+;; No force flag: an occupied link path (including a dangling symlink) fails with alreadyExists.
+(def hydra_overlay_clojure_lib_files_create_symlink
+  "Create a symbolic link at link, pointing to target (stored verbatim)."
+  (fn [target] (fn [link]
+    (with-file-error link
+      (fn []
+        (Files/createSymbolicLink (path-of link) (path-of target)
+          (into-array java.nio.file.attribute.FileAttribute []))
+        nil)))))
+
 ;; exists :: FilePath -> effect<Either<FileError, Bool>>
 (def hydra_overlay_clojure_lib_files_exists
   "Test whether anything exists at the given path (no error on absence)."
@@ -155,6 +166,20 @@
     (with-file-error path
       (fn [] (bytes->binary (Files/readAllBytes (path-of path)))))))
 
+;; readSymlink :: FilePath -> effect<Either<FileError, FilePath>>
+;; Single-hop, unresolved read: the target is returned exactly as stored.
+(def hydra_overlay_clojure_lib_files_read_symlink
+  "Read the target of the symbolic link at path, verbatim and unresolved."
+  (fn [path]
+    (with-file-error path
+      (fn []
+        (let [p (path-of path)]
+          (when-not (Files/exists p (into-array LinkOption [LinkOption/NOFOLLOW_LINKS]))
+            (throw (NoSuchFileException. path)))
+          (when-not (Files/isSymbolicLink p)
+            (throw (InvalidPathException. path "not a symbolic link")))
+          (.toString (Files/readSymbolicLink p)))))))
+
 ;; removeDirectory :: Bool -> FilePath -> effect<Either<FileError, unit>>
 (def hydra_overlay_clojure_lib_files_remove_directory
   "Remove a directory; when recursive, remove its entire contents (rm -r)."
@@ -183,34 +208,52 @@
           (into-array java.nio.file.CopyOption []))
         nil)))))
 
-;; Classify BasicFileAttributes into a hydra.file.FileType union value.
-(defn- file-type [^BasicFileAttributes attrs]
-  (cond
-    (.isDirectory attrs)     (list :directory nil)
-    (.isSymbolicLink attrs)  (list :link nil)
-    (.isRegularFile attrs)   (list :regular nil)
-    :else                    (list :regular nil)))
+;; POSIX st_mode file-type bits (<sys/stat.h> S_IFMT and the individual S_IF* macros).
+(def ^:private S_IFMT   0170000)
+(def ^:private S_IFSOCK 0140000)
+(def ^:private S_IFLNK  0120000)
+(def ^:private S_IFREG  0100000)
+(def ^:private S_IFBLK  0060000)
+(def ^:private S_IFDIR  0040000)
+(def ^:private S_IFCHR  0020000)
+(def ^:private S_IFIFO  0010000)
+
+;; Classify a raw st_mode int (from the "unix:*" attribute view) into a hydra.file.FileType.
+(defn- file-type-from-mode [mode]
+  (condp = (bit-and mode S_IFMT)
+    S_IFDIR  (list :directory nil)
+    S_IFLNK  (list :link nil)
+    S_IFBLK  (list :block nil)
+    S_IFCHR  (list :character nil)
+    S_IFIFO  (list :fifo nil)
+    S_IFSOCK (list :socket nil)
+    (list :regular nil)))
 
 ;; java.time.Instant -> hydra.time.Timespec (a hydra_time_timespec defrecord {:seconds :nanoseconds}).
 (defn- timespec [^java.time.Instant instant]
   (->hydra_time_timespec (.getEpochSecond instant) (long (.getNano instant))))
 
-;; status :: FilePath -> effect<Either<FileError, FileStatus>>
-;; Retrieve metadata about the file at path (POSIX stat). Symbolic links are followed.
+;; status :: Bool -> FilePath -> effect<Either<FileError, FileStatus>>
+;; When followLinks is true (POSIX stat), a symbolic link's metadata is that of its target, and
+;; a dangling link is not found. When false (POSIX lstat), a symbolic link's own metadata is
+;; reported (fileType link), and a dangling link is not an error.
 ;; FileStatus is a hydra_file_file_status defrecord
 ;; {:file_type :size :modification_time :access_time :status_change_time}.
 (def hydra_overlay_clojure_lib_files_status
-  "Retrieve metadata about the file at path (POSIX stat)."
-  (fn [path]
+  "Retrieve metadata about the file at path."
+  (fn [follow-links] (fn [path]
     (with-file-error path
       (fn []
-        (let [attrs (Files/readAttributes (path-of path) BasicFileAttributes (into-array LinkOption []))]
+        (let [options (if follow-links (into-array LinkOption [])
+                         (into-array LinkOption [LinkOption/NOFOLLOW_LINKS]))
+              attrs (Files/readAttributes (path-of path) "unix:*" options)
+              mode (int (.get attrs "mode"))]
           (->hydra_file_file_status
-            (file-type attrs)
-            (.size attrs)
-            (timespec (.toInstant (.lastModifiedTime attrs)))
-            (list :given (timespec (.toInstant (.lastAccessTime attrs))))
-            (list :none)))))))
+            (file-type-from-mode mode)
+            (.get attrs "size")
+            (timespec (.toInstant ^java.nio.file.attribute.FileTime (.get attrs "lastModifiedTime")))
+            (list :given (timespec (.toInstant ^java.nio.file.attribute.FileTime (.get attrs "lastAccessTime"))))
+            (list :given (timespec (.toInstant ^java.nio.file.attribute.FileTime (.get attrs "ctime")))))))))))
 
 ;; writeFile :: FilePath -> binary -> effect<Either<FileError, unit>>
 (def hydra_overlay_clojure_lib_files_write_file

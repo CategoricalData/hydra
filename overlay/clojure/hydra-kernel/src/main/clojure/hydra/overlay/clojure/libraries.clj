@@ -669,6 +669,9 @@
      (prim-name 'hydra.lib.files/hydra_lib_files_create_directory) (p/prim2 (prim-name 'hydra.lib.files/hydra_lib_files_create_directory)
                                      (fn [recursive path] ((files/hydra_overlay_clojure_lib_files_create_directory recursive) path))
                                      [] bool fp (eff (p/tc-either ferr unit)))
+     (prim-name 'hydra.lib.files/hydra_lib_files_create_symlink) (p/prim2 (prim-name 'hydra.lib.files/hydra_lib_files_create_symlink)
+                                     (fn [target link] ((files/hydra_overlay_clojure_lib_files_create_symlink target) link))
+                                     [] fp fp (eff (p/tc-either ferr unit)))
      (prim-name 'hydra.lib.files/hydra_lib_files_exists) (p/prim1 (prim-name 'hydra.lib.files/hydra_lib_files_exists)
                                      files/hydra_overlay_clojure_lib_files_exists
                                      [] fp (eff (p/tc-either ferr bool)))
@@ -678,6 +681,9 @@
      (prim-name 'hydra.lib.files/hydra_lib_files_read_file) (p/prim1 (prim-name 'hydra.lib.files/hydra_lib_files_read_file)
                                      files/hydra_overlay_clojure_lib_files_read_file
                                      [] fp (eff (p/tc-either ferr bin)))
+     (prim-name 'hydra.lib.files/hydra_lib_files_read_symlink) (p/prim1 (prim-name 'hydra.lib.files/hydra_lib_files_read_symlink)
+                                     files/hydra_overlay_clojure_lib_files_read_symlink
+                                     [] fp (eff (p/tc-either ferr fp)))
      (prim-name 'hydra.lib.files/hydra_lib_files_remove_directory) (p/prim2 (prim-name 'hydra.lib.files/hydra_lib_files_remove_directory)
                                      (fn [recursive path] ((files/hydra_overlay_clojure_lib_files_remove_directory recursive) path))
                                      [] bool fp (eff (p/tc-either ferr unit)))
@@ -687,9 +693,9 @@
      (prim-name 'hydra.lib.files/hydra_lib_files_rename) (p/prim2 (prim-name 'hydra.lib.files/hydra_lib_files_rename)
                                      (fn [source destination] ((files/hydra_overlay_clojure_lib_files_rename source) destination))
                                      [] fp fp (eff (p/tc-either ferr unit)))
-     (prim-name 'hydra.lib.files/hydra_lib_files_status) (p/prim1 (prim-name 'hydra.lib.files/hydra_lib_files_status)
-                                     files/hydra_overlay_clojure_lib_files_status
-                                     [] fp (eff (p/tc-either ferr fstat)))
+     (prim-name 'hydra.lib.files/hydra_lib_files_status) (p/prim2 (prim-name 'hydra.lib.files/hydra_lib_files_status)
+                                     (fn [follow-links path] ((files/hydra_overlay_clojure_lib_files_status follow-links) path))
+                                     [] bool fp (eff (p/tc-either ferr fstat)))
      (prim-name 'hydra.lib.files/hydra_lib_files_write_file) (p/prim2 (prim-name 'hydra.lib.files/hydra_lib_files_write_file)
                                      (fn [path contents] ((files/hydra_overlay_clojure_lib_files_write_file path) contents))
                                      [] fp bin (eff (p/tc-either ferr unit)))}))
