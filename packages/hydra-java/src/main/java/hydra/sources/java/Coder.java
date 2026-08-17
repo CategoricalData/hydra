@@ -8261,16 +8261,6 @@ public class Coder {
                                                             proj(CaseStatement.TYPE_, CaseStatement.DEFAULT, "cs")),
                                                         field("cases_",
                                                             proj(CaseStatement.TYPE_, CaseStatement.CASES, "cs")),
-                                                        field("domArgs",
-                                                            Lists.map(
-                                                                lambda("tp",
-                                                                    apply(
-                                                                        ref(Utils.typeParameterToTypeArgument),
-                                                                        apply(
-                                                                            ref(Utils.javaTypeParameter),
-                                                                            hydra.dsl.Formatting.capitalize(
-                                                                                apply(unwrap(Name.TYPE_), var("tp")))))),
-                                                                var("tparams"))),
                                                                 Eithers.bind(
                                                                     apply(
                                                                         ref(Coder.encodeTerm),
@@ -8320,7 +8310,7 @@ public class Coder {
                                                                                                     ref(Utils.nameToJavaReferenceType),
                                                                                                     var("aliases"),
                                                                                                     bool(true),
-                                                                                                    var("domArgs"),
+                                                                                                    list(),
                                                                                                     var("tname"),
                                                                                                     just(
                                                                                                         hydra.dsl.Formatting.capitalize(
