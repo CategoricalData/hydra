@@ -1,7 +1,7 @@
 // Hand-written runtime: hydra.lib.optionals primitives.
 //
 // Signatures are flat (positional), matching Python's heads/python/lib/optionals.py.
-// `cases` and `fromOptional` have lazy default positions — see
+// `match` and `fromOptional` have lazy default positions — see
 // docs/recipes/new-implementation.md "Lazy evaluation and thunking". The coder
 // wraps those defaults in nullary arrows `() => expr`; we force the value
 // here only when needed.
@@ -14,7 +14,7 @@
 import type { Optional } from "../../../runtime.js";
 import { Given, None } from "../../../runtime.js";
 
-// `force` is inlined into each consumer (`cases`, `fromOptional`)
+// `force` is inlined into each consumer (`match`, `fromOptional`)
 // to save one JS frame per call. See lib/logic.ts ifElse for the same
 // rationale and feature_126_typescript-plan.md for measurements.
 
@@ -24,7 +24,7 @@ export const apply = (f: any, m: any): Optional<any> =>
 export const bind = (m: any, f: (a: any) => any): Optional<any> =>
   m.tag === "given" ? f(m.value) : None;
 
-export const cases = (m: any, n: any, j: (a: any) => any): any =>
+export const match = (m: any, n: any, j: (a: any) => any): any =>
   m.tag === "given" ? j(m.value) : (typeof n === "function" ? n() : n);
 
 export const givens = (ms: any): readonly any[] => {

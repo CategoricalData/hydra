@@ -33,16 +33,6 @@
           (list :none)
           (funcall f (maybe-value m))))))
 
-;; cases :: Maybe a -> b -> (a -> b) -> b
-;; Thunk-aware: if def is a zero-arg function (thunk), only called when Maybe is Nothing
-(defvar hydra_overlay_emacs_lisp_lib_optionals_cases
-  (lambda (m)
-    (lambda (def)
-      (lambda (f)
-        (if (maybe-nothing-p m)
-            (if (functionp def) (funcall def) def)
-            (funcall f (maybe-value m)))))))
-
 ;; givens :: [Maybe a] -> [a]
 (defvar hydra_overlay_emacs_lisp_lib_optionals_givens
   (lambda (ms)
@@ -97,6 +87,16 @@
           (let ((result (funcall f x)))
             (unless (maybe-nothing-p result)
               (push (maybe-value result) acc))))))))
+
+;; match :: Maybe a -> b -> (a -> b) -> b
+;; Thunk-aware: if def is a zero-arg function (thunk), only called when Maybe is Nothing
+(defvar hydra_overlay_emacs_lisp_lib_optionals_match
+  (lambda (m)
+    (lambda (def)
+      (lambda (f)
+        (if (maybe-nothing-p m)
+            (if (functionp def) (funcall def) def)
+            (funcall f (maybe-value m)))))))
 
 ;; pure :: a -> Maybe a
 (defvar hydra_overlay_emacs_lisp_lib_optionals_pure

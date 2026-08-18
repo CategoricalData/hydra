@@ -577,9 +577,6 @@
           (cons (prim-name def:hydra_lib_optionals_bind)     (prim2 (prim-name def:hydra_lib_optionals_bind)
                                               hydra_overlay_scheme_lib_optionals_bind
                                               #f (tc-optional a) (fun a (tc-optional b)) (tc-optional b)))
-          (cons (prim-name def:hydra_lib_optionals_cases)    (lazy-args '(1) (prim3 (prim-name def:hydra_lib_optionals_cases)
-                                              hydra_overlay_scheme_lib_optionals_cases
-                                              #f (tc-optional a) b (fun a b) b)))
           (cons (prim-name def:hydra_lib_optionals_givens)      (prim1 (prim-name def:hydra_lib_optionals_givens)      hydra_overlay_scheme_lib_optionals_givens      #f (tc-list (tc-optional a)) (tc-list a)))
           (cons (prim-name def:hydra_lib_optionals_compose)  (prim3 (prim-name def:hydra_lib_optionals_compose)
                                               hydra_overlay_scheme_lib_optionals_compose
@@ -595,6 +592,9 @@
           (cons (prim-name def:hydra_lib_optionals_map_optional)  (prim2 (prim-name def:hydra_lib_optionals_map_optional)
                                                hydra_overlay_scheme_lib_optionals_map_optional
                                                #f (fun a (tc-optional b)) (tc-list a) (tc-list b)))
+          (cons (prim-name def:hydra_lib_optionals_match)    (lazy-args '(1) (prim3 (prim-name def:hydra_lib_optionals_match)
+                                              hydra_overlay_scheme_lib_optionals_match
+                                              #f (tc-optional a) b (fun a b) b)))
           (cons (prim-name def:hydra_lib_optionals_pure)      (prim1 (prim-name def:hydra_lib_optionals_pure)      hydra_overlay_scheme_lib_optionals_pure      #f a (tc-optional a)))
           (cons (prim-name def:hydra_lib_optionals_to_list)    (prim1 (prim-name def:hydra_lib_optionals_to_list)    hydra_overlay_scheme_lib_optionals_to_list   #f (tc-optional a) (tc-list a))))))
 

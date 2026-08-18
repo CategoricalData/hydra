@@ -2,7 +2,6 @@
   (import (scheme base))
   (export hydra_overlay_scheme_lib_optionals_apply
           hydra_overlay_scheme_lib_optionals_bind
-          hydra_overlay_scheme_lib_optionals_cases
           hydra_overlay_scheme_lib_optionals_givens
           hydra_overlay_scheme_lib_optionals_compose
           hydra_overlay_scheme_lib_optionals_with_default
@@ -10,6 +9,7 @@
           hydra_overlay_scheme_lib_optionals_is_none
           hydra_overlay_scheme_lib_optionals_map
           hydra_overlay_scheme_lib_optionals_map_optional
+          hydra_overlay_scheme_lib_optionals_match
           hydra_overlay_scheme_lib_optionals_pure
           hydra_overlay_scheme_lib_optionals_to_list
           maybe-nothing?
@@ -46,16 +46,6 @@
           (if (maybe-nothing? m)
               (list 'none)
               (f (maybe-value m))))))
-
-    ;; cases :: Maybe a -> b -> (a -> b) -> b
-    ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Maybe is Nothing
-    (define hydra_overlay_scheme_lib_optionals_cases
-      (lambda (m)
-        (lambda (def)
-          (lambda (f)
-            (if (maybe-nothing? m)
-                (if (procedure? def) (def) def)
-                (f (maybe-value m)))))))
 
     ;; cat :: [Maybe a] -> [a]
     (define hydra_overlay_scheme_lib_optionals_givens
@@ -115,6 +105,16 @@
                   (if (not (maybe-nothing? result))
                       (loop (cdr rest) (cons (maybe-value result) acc))
                       (loop (cdr rest) acc))))))))
+
+    ;; match :: Maybe a -> b -> (a -> b) -> b
+    ;; Thunk-aware: if def is a zero-arg procedure (thunk), only called when Maybe is Nothing
+    (define hydra_overlay_scheme_lib_optionals_match
+      (lambda (m)
+        (lambda (def)
+          (lambda (f)
+            (if (maybe-nothing? m)
+                (if (procedure? def) (def) def)
+                (f (maybe-value m)))))))
 
     ;; pure :: a -> Maybe a
     (define hydra_overlay_scheme_lib_optionals_pure
