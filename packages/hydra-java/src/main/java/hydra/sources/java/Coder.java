@@ -3440,7 +3440,7 @@ public class Coder {
                                                 var("resultR"),
                                                 just(list(var("throwStmt"))))),
     field("otherwiseComment",
-                                            string("Default branch for unhandled match.")),
+                                            string("Default branch for unhandled cases.")),
     field("pvVisitMethods",
                                             Lists.map(
                                                 lambda("ft",
