@@ -8262,7 +8262,7 @@ public class Coder {
                                                         field("cases_",
                                                             proj(CaseStatement.TYPE_, CaseStatement.CASES, "cs")),
                                                         field("tnameIsGeneric",
-                                                            Optionals.cases(
+                                                            Optionals.match(
                                                                 Maps.lookup(var("tname"),
                                                                     proj(Graph.TYPE_, Graph.SCHEMA_TYPES, "g")),
                                                                 bool(false),
