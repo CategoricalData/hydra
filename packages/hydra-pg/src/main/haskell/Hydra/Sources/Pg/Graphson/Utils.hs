@@ -103,6 +103,7 @@ module_ = Module {
   where
     definitions = [
       toDefinition (elementsToVerticesWithAdjacentEdges :: TypedTermDefinition ([PG.Element String] -> [PG.VertexWithAdjacentEdges String])),
+      toDefinition encodeLiteralValue,
       toDefinition encodeStringValue,
       toDefinition encodeTermValue,
       toDefinition (pgElementsToGraphson :: TypedTermDefinition ((String -> Either Error G.Value) -> [PG.Element String] -> Either Error [JM.Value]))]
@@ -194,6 +195,38 @@ encodeStringValue = define "encodeStringValue" $
   "s" ~>
     right $ inject G._Value G._Value_string (var "s")
 
+-- | Encode a Literal value to GraphSON
+encodeLiteralValue :: TypedTermDefinition (Literal -> Either Error G.Value)
+encodeLiteralValue = define "encodeLiteralValue" $
+  doc "Encode a Hydra Literal as a GraphSON Value" $
+  "lit" ~>
+    cases _Literal (Just $ left (Error.errorOther $ Error.otherError (string "unsupported literal type for GraphSON encoding"))) [
+      _Literal_binary>>: "b" ~>
+        right $ inject G._Value G._Value_binary (Literals.binaryToBase64 $ var "b"),
+      _Literal_boolean>>: "b" ~>
+        right $ inject G._Value G._Value_boolean (var "b"),
+      _Literal_float>>: "fv" ~>
+        cases _FloatValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported float type"))) [
+          _FloatValue_float32>>: "f" ~>
+            right $ inject G._Value G._Value_float
+              (inject G._FloatValue G._FloatValue_finite (var "f")),
+          _FloatValue_float64>>: "f" ~>
+            right $ inject G._Value G._Value_double
+              (inject G._DoubleValue G._DoubleValue_finite (var "f"))]
+        @@ var "fv",
+      _Literal_integer>>: "iv" ~>
+        cases _IntegerValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported integer type"))) [
+          _IntegerValue_bigint>>: "i" ~>
+            right $ inject G._Value G._Value_bigInteger (var "i"),
+          _IntegerValue_int32>>: "i" ~>
+            right $ inject G._Value G._Value_integer (var "i"),
+          _IntegerValue_int64>>: "i" ~>
+            right $ inject G._Value G._Value_long (var "i")]
+        @@ var "iv",
+      _Literal_string>>: "s" ~>
+        right $ inject G._Value G._Value_string (var "s")]
+    @@ var "lit"
+
 -- | Encode a Term value to GraphSON
 encodeTermValue :: TypedTermDefinition (Term -> Either Error G.Value)
 encodeTermValue = define "encodeTermValue" $
@@ -201,32 +234,7 @@ encodeTermValue = define "encodeTermValue" $
   "term" ~>
     cases _Term (Just $ left (Error.errorOther $ Error.otherError (string "unsupported term variant for GraphSON encoding"))) [
       _Term_literal>>: "lit" ~>
-        cases _Literal (Just $ left (Error.errorOther $ Error.otherError (string "unsupported literal type for GraphSON encoding"))) [
-          _Literal_binary>>: "b" ~>
-            right $ inject G._Value G._Value_binary (Literals.binaryToBase64 $ var "b"),
-          _Literal_boolean>>: "b" ~>
-            right $ inject G._Value G._Value_boolean (var "b"),
-          _Literal_float>>: "fv" ~>
-            cases _FloatValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported float type"))) [
-              _FloatValue_float32>>: "f" ~>
-                right $ inject G._Value G._Value_float
-                  (inject G._FloatValue G._FloatValue_finite (var "f")),
-              _FloatValue_float64>>: "f" ~>
-                right $ inject G._Value G._Value_double
-                  (inject G._DoubleValue G._DoubleValue_finite (var "f"))]
-            @@ var "fv",
-          _Literal_integer>>: "iv" ~>
-            cases _IntegerValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported integer type"))) [
-              _IntegerValue_bigint>>: "i" ~>
-                right $ inject G._Value G._Value_bigInteger (var "i"),
-              _IntegerValue_int32>>: "i" ~>
-                right $ inject G._Value G._Value_integer (var "i"),
-              _IntegerValue_int64>>: "i" ~>
-                right $ inject G._Value G._Value_long (var "i")]
-            @@ var "iv",
-          _Literal_string>>: "s" ~>
-            right $ inject G._Value G._Value_string (var "s")]
-        @@ var "lit",
+        (encodeLiteralValue :: TypedTermDefinition (Literal -> Either Error G.Value)) @@ var "lit",
       _Term_unit>>: constant $
         right $ injectUnit G._Value G._Value_null]
     @@ (Strip.deannotateTerm @@ var "term")
