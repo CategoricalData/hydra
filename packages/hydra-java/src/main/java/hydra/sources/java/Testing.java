@@ -286,7 +286,7 @@ public class Testing {
                 let(
                     binds(
                         field("cases_", apply(
-                            project("hydra.testing.TestGroup", "match"),
+                            project("hydra.testing.TestGroup", "cases"),
                             var("testGroup"))),
                         field("subgroups", apply(
                             project("hydra.testing.TestGroup", "subgroups"),

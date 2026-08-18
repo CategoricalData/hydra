@@ -192,7 +192,7 @@ public class Language {
                         list(
                             termVariantInj("application"),
                             termVariantInj("either"),
-                            termVariantInj("match"),
+                            termVariantInj("cases"),
                             termVariantInj("lambda"),
                             termVariantInj("project"),
                             termVariantInj("unwrap"),
