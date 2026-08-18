@@ -37,6 +37,7 @@ import qualified Hydra.Sources.Build.Assembly as BuildAssembly
 import qualified Hydra.Sources.Build.AssemblyPlan as BuildAssemblyPlan
 import qualified Hydra.Sources.Build.BenchResult as BuildBenchResult
 import qualified Hydra.Sources.Build.CompareReport as BuildCompareReport
+import qualified Hydra.Sources.Build.CompareReportLogic as BuildCompareReportLogic
 import qualified Hydra.Sources.Build.Format as BuildFormat
 import qualified Hydra.Sources.Build.LangExpansion as BuildLangExpansion
 import qualified Hydra.Sources.Build.Libraries as BuildLibraries
@@ -61,6 +62,7 @@ mainModules = [
   BuildAssemblyPlan.module_,
   BuildBenchResult.module_,
   BuildCompareReport.module_,
+  BuildCompareReportLogic.module_,
   BuildFormat.module_,
   BuildLangExpansion.module_,
   BuildLibraries.module_,
