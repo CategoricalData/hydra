@@ -735,7 +735,7 @@
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
+                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
                                                                         "type": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
                                                                     "argument": {
                                                                       "application": {

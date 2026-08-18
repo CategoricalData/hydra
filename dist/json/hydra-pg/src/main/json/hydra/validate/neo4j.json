@@ -113,7 +113,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"variable": "hydra.lib.optionals.cases"},
+                                                "body": {"variable": "hydra.lib.optionals.match"},
                                                 "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}},
                                             "type": {"application": {"function": {"variable": "hydra.validation.ValidationResult"}, "argument": {"variable": "t0"}}}}},
                                         "argument": {"variable": "finding"}}},
@@ -354,7 +354,7 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"variable": "hydra.lib.optionals.cases"},
+                                                "body": {"variable": "hydra.lib.optionals.match"},
                                                 "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "t0"}}}}},
                                             "type": {"application": {"function": {"variable": "hydra.validation.ValidationResult"}, "argument": {"variable": "t0"}}}}},
                                         "argument": {"variable": "finding"}}},
@@ -1713,7 +1713,7 @@
                                                                                                 "function": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
-                                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
                                                                                                     "type": {"optional": {"variable": "hydra.error.neo4j.InvalidNodeError"}}}},
                                                                                                 "argument": {
                                                                                                   "application": {
@@ -1821,7 +1821,7 @@
                                                                                                         "function": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {
-                                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
                                                                                                             "type": {"optional": {"variable": "hydra.error.neo4j.InvalidNodeError"}}}},
                                                                                                         "argument": {
                                                                                                           "application": {
@@ -1911,7 +1911,7 @@
                                                                                                 "function": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
-                                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
                                                                                                     "type": {"optional": {"variable": "hydra.error.neo4j.InvalidNodeError"}}}},
                                                                                                 "argument": {
                                                                                                   "application": {
@@ -2181,7 +2181,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.optionals.cases"},
+                                                        "body": {"variable": "hydra.lib.optionals.match"},
                                                         "type": {
                                                           "function": {
                                                             "domain": {"variable": "hydra.neo4j.model.ElementId"},
@@ -2216,7 +2216,7 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.optionals.cases"},
+                                                        "body": {"variable": "hydra.lib.optionals.match"},
                                                         "type": {
                                                           "function": {
                                                             "domain": {"variable": "hydra.neo4j.model.ElementId"},
@@ -2295,7 +2295,7 @@
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
+                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
                                                                         "type": {"literal": "boolean"}}},
                                                                     "argument": {"variable": "startLabels"}}},
                                                                 "argument": {"literal": {"boolean": true}}}},
@@ -2323,7 +2323,7 @@
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
                                                                     "type": {"literal": "boolean"}}},
                                                                 "argument": {"variable": "endLabels"}}},
                                                             "argument": {"literal": {"boolean": true}}}},
@@ -2577,7 +2577,7 @@
                                                                                     "function": {
                                                                                       "typeApplication": {
                                                                                         "body": {
-                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
+                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
                                                                                         "type": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
                                                                                     "argument": {"variable": "startLabels"}}},
                                                                                 "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
@@ -2601,7 +2601,7 @@
                                                                                     "function": {
                                                                                       "typeApplication": {
                                                                                         "body": {
-                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
+                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
                                                                                         "type": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
                                                                                     "argument": {"variable": "endLabels"}}},
                                                                                 "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
@@ -2731,7 +2731,7 @@
                                                                                                 "function": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
-                                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
                                                                                                     "type": {"optional": {"variable": "hydra.error.neo4j.InvalidRelationshipError"}}}},
                                                                                                 "argument": {
                                                                                                   "application": {
@@ -2847,7 +2847,7 @@
                                                                                                         "function": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {
-                                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
                                                                                                             "type": {"optional": {"variable": "hydra.error.neo4j.InvalidRelationshipError"}}}},
                                                                                                         "argument": {
                                                                                                           "application": {
@@ -2944,7 +2944,7 @@
                                                                                                 "function": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
-                                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
+                                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.neo4j.model.Value"}}},
                                                                                                     "type": {"optional": {"variable": "hydra.error.neo4j.InvalidRelationshipError"}}}},
                                                                                                 "argument": {
                                                                                                   "application": {

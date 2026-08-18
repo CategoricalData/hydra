@@ -565,7 +565,7 @@
                               "application": {
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}},
                                 "argument": {"variable": "mc"}}},
                             "argument": {"variable": "body"}}},
@@ -1049,7 +1049,7 @@
                               "application": {
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}},
                                 "argument": {"variable": "mc"}}},
                             "argument": {"variable": "body"}}},
@@ -1103,10 +1103,10 @@
                             "name": "case",
                             "handler": {
                               "lambda": {
-                                "parameter": "cases",
+                                "parameter": "match",
                                 "domain": {"variable": "hydra.haskell.syntax.CaseExpression"},
                                 "body": {
-                                  "application": {"function": {"variable": "hydra.haskell.serde.caseExpressionToExpr"}, "argument": {"variable": "cases"}}}}}},
+                                  "application": {"function": {"variable": "hydra.haskell.serde.caseExpressionToExpr"}, "argument": {"variable": "match"}}}}}},
                           {
                             "name": "constructRecord",
                             "handler": {
@@ -1377,7 +1377,7 @@
                               "application": {
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}},
                                 "argument": {"variable": "mc"}}},
                             "argument": {"variable": "body"}}},
@@ -2190,7 +2190,7 @@
                               "application": {
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.ast.Expr"}}},
                                 "argument": {"variable": "mc"}}},
                             "argument": {"variable": "head"}}},
@@ -2279,7 +2279,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.haskell.syntax.ModuleHead"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.haskell.syntax.ModuleHead"}}},
                                         "type": {"list": {"variable": "hydra.ast.Expr"}}}},
                                     "argument": {"variable": "mh"}}},
                                 "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}}}},
@@ -3100,7 +3100,7 @@
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.haskell.syntax.LocalBindings"}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.haskell.syntax.LocalBindings"}}},
                                                     "type": {"variable": "hydra.ast.Expr"}}},
                                                 "argument": {"variable": "local"}}},
                                             "argument": {"variable": "body"}}},

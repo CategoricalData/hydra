@@ -201,7 +201,7 @@
           "description": "Convert a string to lowercase.",
           "comments": [
             "toLower(s) returns s with each character replaced by its Unicode simple (one-to-one) lowercase mapping, or itself if it has no lowercase mapping.",
-            "This is a code-point-by-code-point operation, so it does not handle the string-changing cases of full Unicode case folding (e.g. U+00DF \"ß\" does not lowercase to \"ss\"; it returns itself).",
+            "This is a code-point-by-code-point operation, so it does not handle the string-changing match of full Unicode case folding (e.g. U+00DF \"ß\" does not lowercase to \"ss\"; it returns itself).",
             "For text intended for human-readable display in locales with non-trivial case mappings, prefer a host-specific full case-folding API.",
             "Total."],
           "seeAlso": []},
@@ -218,7 +218,7 @@
           "description": "Convert a string to uppercase.",
           "comments": [
             "toUpper(s) returns s with each character replaced by its Unicode simple (one-to-one) uppercase mapping, or itself if it has no uppercase mapping.",
-            "This is a code-point-by-code-point operation, so it does not handle the string-changing cases of full Unicode case folding (e.g. U+00DF \"ß\" does not uppercase to \"SS\"; it returns itself).",
+            "This is a code-point-by-code-point operation, so it does not handle the string-changing match of full Unicode case folding (e.g. U+00DF \"ß\" does not uppercase to \"SS\"; it returns itself).",
             "For text intended for human-readable display in locales with non-trivial case mappings, prefer a host-specific full case-folding API.",
             "Total."],
           "seeAlso": []},

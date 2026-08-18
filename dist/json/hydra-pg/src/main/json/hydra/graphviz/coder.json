@@ -1013,7 +1013,7 @@
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"variable": "hydra.lib.optionals.cases"},
+                                                                                "body": {"variable": "hydra.lib.optionals.match"},
                                                                                 "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
                                                                             "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
                                                                         "argument": {"variable": "mlabstyle"}}},
@@ -1181,7 +1181,7 @@
                                                                       "application": {
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graphviz.dot.Id"}}},
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.graphviz.dot.Id"}}},
                                                                             "type": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}},
                                                                         "argument": {"variable": "mparent"}}},
                                                                     "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.graphviz.dot.Stmt"}}}}},
@@ -1749,7 +1749,7 @@
                                                                                   "application": {
                                                                                     "function": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graphviz.dot.Id"}}},
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.graphviz.dot.Id"}}},
                                                                                         "type": {"pair": {"first": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}, "second": {"set": {"literal": "string"}}}}}},
                                                                                     "argument": {
                                                                                       "application": {

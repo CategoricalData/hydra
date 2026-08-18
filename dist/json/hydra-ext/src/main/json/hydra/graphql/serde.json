@@ -195,7 +195,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}},
                                         "type": {"list": {"variable": "hydra.ast.Expr"}}}},
                                     "argument": {"variable": "values"}}},
                                 "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}}}},
@@ -527,7 +527,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}},
                                         "type": {"list": {"variable": "hydra.ast.Expr"}}}},
                                     "argument": {"variable": "fields"}}},
                                 "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}}}},

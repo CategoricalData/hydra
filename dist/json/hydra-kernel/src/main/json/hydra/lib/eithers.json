@@ -580,7 +580,7 @@
                   "application": {
                     "function": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.cases"}, "argument": {"variable": "m"}}},
+                        "function": {"application": {"function": {"variable": "hydra.lib.optionals.match"}, "argument": {"variable": "m"}}},
                         "argument": {"either": {"right": {"optional": null}}}}},
                     "argument": {
                       "lambda": {

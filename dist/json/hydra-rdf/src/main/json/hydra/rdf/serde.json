@@ -542,7 +542,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.rdf.syntax.LanguageTag"}}},
                                         "type": {"variable": "hydra.ast.Expr"}}},
                                     "argument": {"variable": "lang"}}},
                                 "argument": {

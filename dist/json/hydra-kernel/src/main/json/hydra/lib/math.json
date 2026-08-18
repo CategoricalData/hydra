@@ -194,7 +194,7 @@
           "description": "The two-argument arc tangent (atan2).",
           "comments": [
             "atan2(y, x) returns the angle in radians, in (-π, +π], from the positive x-axis to the point (x, y), using the signs of both arguments to determine the quadrant.",
-            "Special cases follow IEEE 754 ੹.2: atan2(ଐ, +x>0) = ଐ; atan2(ଐ, -x<0) = ±π; atan2(±y>0, 0) = ±π/2; atan2(±y, +∞) = ଐ; atan2(±y, -∞) = ±π; atan2(±∞, finite) = ±π/2; atan2(±∞, +∞) = ±π/4; atan2(±∞, -∞) = ଓπ/4; atan2 of any NaN argument is NaN.",
+            "Special match follow IEEE 754 ੹.2: atan2(ଐ, +x>0) = ଐ; atan2(ଐ, -x<0) = ±π; atan2(±y>0, 0) = ±π/2; atan2(±y, +∞) = ଐ; atan2(±y, -∞) = ±π; atan2(±∞, finite) = ±π/2; atan2(±∞, +∞) = ±π/4; atan2(±∞, -∞) = ଓπ/4; atan2 of any NaN argument is NaN.",
             "Corresponds to Haskell's atan2 :: Double -> Double -> Double."],
           "seeAlso": []},
         "signature": {
@@ -683,7 +683,7 @@
           "description": "Numeric sign.",
           "comments": [
             "Constraint-polymorphic sign function over any type with a 'numeric' instance. For integer types, signum(x) returns -1 if x < 0, 0 if x = 0, and 1 if x > 0 (same width as the argument); unsigned integers return only 0 or 1. The function satisfies abs(x) * signum(x) = x for all integer instances except signed minBound (where the identity fails because +maxBound+1 is not representable).",
-            "For floating-point, signum(x) returns ଑.0 for nonzero finite or infinite x (per IEEE 754 ੵ.5.1); signum(ଐ) = ଐ (the sign of the input zero is preserved, not collapsed to a single zero); signum(NaN) is NaN. A naive three-branch implementation (positive/negative/else- zero) gets both of these float cases wrong and must not be used.",
+            "For floating-point, signum(x) returns ଑.0 for nonzero finite or infinite x (per IEEE 754 ੵ.5.1); signum(ଐ) = ଐ (the sign of the input zero is preserved, not collapsed to a single zero); signum(NaN) is NaN. A naive three-branch implementation (positive/negative/else- zero) gets both of these float match wrong and must not be used.",
             "Requires a 'numeric' type-class constraint on the argument type.",
             "Corresponds to Haskell's signum :: Num a => a -> a."],
           "seeAlso": []},
