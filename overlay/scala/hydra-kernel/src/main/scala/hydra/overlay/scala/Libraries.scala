@@ -1116,7 +1116,7 @@ object Libraries:
             case None => mkMaybe(None)
             case Some(x) => app(f, x)
         }),
-      hydra.lib.optionals.match.name -> withLazy(mkPrimImpl(hydra.lib.optionals.match.name, tScheme(Seq("a", "b"),
+      hydra.lib.optionals.`match`.name -> withLazy(mkPrimImpl(hydra.lib.optionals.`match`.name, tScheme(Seq("a", "b"),
         tFun(tOpt(a), tFun(b, tFun(tFun(a, b), b)))),
         impl3 { (mx, d, f) =>
           exMaybe(mx) match

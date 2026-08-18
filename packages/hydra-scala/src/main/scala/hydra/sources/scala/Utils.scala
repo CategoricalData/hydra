@@ -2,7 +2,7 @@ package hydra.sources.scala
 
 import hydra.overlay.scala.dsl.{Helpers, Phantoms}
 import hydra.overlay.scala.dsl.meta.Defs
-import hydra.overlay.scala.dsl.Phantoms.{`var` => v, prim, applyP, lambda, let, field, string, int32, bool, list, nothing, just, doc, casesWithDefault, project, unwrap, wrap, makeLocal, define, cat2}
+import hydra.overlay.scala.dsl.Phantoms.{`var` => v, prim, applyP, lambda, let, field, string, int32, bool, list, nothing, just, doc, matchWithDefault, project, unwrap, wrap, makeLocal, define, cat2}
 import hydra.packaging.{Definition, EntityMetadata, Module, ModuleName}
 import hydra.typed.TypedTerm
 
@@ -37,7 +37,7 @@ object Utils:
   lazy val nameOfTypeDef: Definition =
     define(NS, "nameOfType").doc("Extract the name from a type, if it is a named type")
       .lam("cx").lam("t").to(
-        casesWithDefault("hydra.core.Type",
+        matchWithDefault("hydra.core.Type",
           applyP("hydra.strip.deannotateType", v("t")),
           nothing,
           field("variable", lambda("name", just(v("name")))),
@@ -82,10 +82,10 @@ object Utils:
                 string("["),
                 applyP("hydra.lib.strings.join", string(", "), v("typeStrings")),
                 string("]"))))),
-          casesWithDefault("hydra.scala.syntax.Data",
+          matchWithDefault("hydra.scala.syntax.Data",
             v("fun"), v("fun"),
             field("ref", lambda("ref",
-              casesWithDefault("hydra.scala.syntax.RefData",
+              matchWithDefault("hydra.scala.syntax.RefData",
                 v("ref"), v("fun"),
                 field("name", lambda("dn",
                   let(Seq(
@@ -303,10 +303,10 @@ object Utils:
   lazy val typeToStringDef: Definition =
     define(NS, "typeToString").doc("Convert a Scala type to its string representation")
       .lam("t").to(
-        casesWithDefault("hydra.scala.syntax.Type",
+        matchWithDefault("hydra.scala.syntax.Type",
           v("t"), string("Any"),
           field("ref", lambda("tr",
-            casesWithDefault("hydra.scala.syntax.RefType",
+            matchWithDefault("hydra.scala.syntax.RefType",
               v("tr"), string("Any"),
               field("name", lambda("tn",
                 ScalaSyntax.nameTypeValue(v("tn"))))))),
