@@ -127,10 +127,10 @@ compareModule :: TypedTermDefinition (String -> Maybe String -> Maybe String -> 
 compareModule = define "compareModule" $
   doc "Compare one module (both sides pre-read) to a (name, statusTag, diffLines) triple" $
   "name" ~> "ourContent" ~> "canonContent" ~>
-  Optionals.cases (var "ourContent")
+  Optionals.match (var "ourContent")
     (triple (var "name") (string "missing") (int32 0))
     ("ours" ~>
-      Optionals.cases (var "canonContent")
+      Optionals.match (var "canonContent")
         (triple (var "name") (string "missing") (int32 0))
         ("canon" ~>
           Logic.ifElse (Equality.equal (var "ours") (var "canon"))

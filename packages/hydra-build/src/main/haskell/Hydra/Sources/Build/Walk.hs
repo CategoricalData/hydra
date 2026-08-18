@@ -118,7 +118,7 @@ extensionOf = define "extensionOf" $
   "path" ~>
   "dotParts" <~ Strings.splitOn (string ".") (baseName @@ var "path") $
   Logic.ifElse (Ordering.gt (Lists.length (var "dotParts")) (int32 1))
-    (Optionals.cases (Lists.last (var "dotParts")) (string "") ("ext" ~> var "ext"))
+    (Optionals.match (Lists.last (var "dotParts")) (string "") ("ext" ~> var "ext"))
     (string "")
 
 -- | The paths whose base name equals the given file name, ordered deterministically
