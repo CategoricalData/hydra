@@ -69,6 +69,9 @@ import qualified Data.Maybe                  as Y
 -- Determinism — the whole point of the exercise, since @listDirectory@ is
 -- unordered — lives entirely in the pure part ('sortPaths'). Paths are
 -- forward-slash-separated relative strings, as the drivers already normalize.
+-- The two glob shapes the drivers actually use are covered as pure filters:
+-- @**/<name>@ (base-name match, 'filterByBaseName') and @*.<ext>@ (extension
+-- match, 'filterByExtension').
 ns :: ModuleName
 ns = ModuleName "hydra.build.walk"
 
@@ -84,8 +87,11 @@ module_ = Module {
   where
    definitions = [
      toDefinition baseName,
+     toDefinition extensionOf,
      toDefinition filterByBaseName,
+     toDefinition filterByExtension,
      toDefinition matchesBaseName,
+     toDefinition matchesExtension,
      toDefinition sortPaths]
 
 -- | The final @/@-separated segment of a path: e.g. @"heads/java/package.yaml"@
@@ -100,6 +106,21 @@ baseName = define "baseName" $
     (var "path")
     ("seg" ~> var "seg")
 
+-- | The extension of a path: the segment of its file name after the final @.@, or
+-- the empty string if the file name has no @.@. E.g. @"heads/java/Foo.java"@ yields
+-- @"java"@; @"heads/java/README"@ yields @""@. A leading-dot name like @".gitignore"@
+-- (single dot part after the split of @".gitignore"@ into @["", "gitignore"]@) yields
+-- @"gitignore"@ — dotfiles are pre-filtered by the driver, so this edge case is not
+-- exercised in practice.
+extensionOf :: TypedTermDefinition (String -> String)
+extensionOf = define "extensionOf" $
+  doc "The extension of a path (after the final . in its file name), or empty if none" $
+  "path" ~>
+  "dotParts" <~ Strings.splitOn (string ".") (baseName @@ var "path") $
+  Logic.ifElse (Ordering.gt (Lists.length (var "dotParts")) (int32 1))
+    (Optionals.cases (Lists.last (var "dotParts")) (string "") ("ext" ~> var "ext"))
+    (string "")
+
 -- | The paths whose base name equals the given file name, ordered deterministically
 -- (via 'sortPaths'). This is the pure core of a @**/<name>@ glob — e.g.
 -- @filterByBaseName "package.yaml" observed@ selects every @heads/**/package.yaml@
@@ -111,6 +132,16 @@ filterByBaseName = define "filterByBaseName" $
   "name" ~> "paths" ~>
   sortPaths @@ (Lists.filter ("path" ~> matchesBaseName @@ var "name" @@ var "path") (var "paths"))
 
+-- | The paths whose extension equals the given extension, ordered deterministically
+-- (via 'sortPaths'). This is the pure core of a @*.<ext>@ glob — e.g.
+-- @filterByExtension "yaml" observed@ selects every @*.yaml@ the native walker found,
+-- in a stable order. The extension is given without the leading @.@.
+filterByExtension :: TypedTermDefinition (String -> [String] -> [String])
+filterByExtension = define "filterByExtension" $
+  doc "Paths whose extension equals the given extension, sorted deterministically" $
+  "ext" ~> "paths" ~>
+  sortPaths @@ (Lists.filter ("path" ~> matchesExtension @@ var "ext" @@ var "path") (var "paths"))
+
 -- | Whether a path's base name (final @/@-segment) equals the given file name.
 -- Segment-wise, so @"package.yaml"@ matches @"heads/java/package.yaml"@ but not
 -- @"heads/java/my-package.yaml"@.
@@ -119,6 +150,15 @@ matchesBaseName = define "matchesBaseName" $
   doc "Whether a path's file name equals the given name" $
   "name" ~> "path" ~>
   Equality.equal (baseName @@ var "path") (var "name")
+
+-- | Whether a path's extension (the part of its file name after the final @.@)
+-- equals the given extension. The extension is given without the leading @.@, so
+-- @"yaml"@ matches @"heads/java/build.yaml"@ but not @"heads/java/build.yamlx"@.
+matchesExtension :: TypedTermDefinition (String -> String -> Bool)
+matchesExtension = define "matchesExtension" $
+  doc "Whether a path's extension equals the given extension" $
+  "ext" ~> "path" ~>
+  Equality.equal (extensionOf @@ var "path") (var "ext")
 
 -- | Sort a list of paths into a deterministic (ascending) order. This is where
 -- the determinism lives — @listDirectory@ makes no ordering guarantee, so any
