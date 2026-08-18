@@ -16,10 +16,6 @@ apply = (<*>)
 bind :: Y.Maybe a -> (a -> Y.Maybe b) -> Y.Maybe b
 bind = (>>=)
 
--- | Handle an optional value with the absent-case value as the first argument.
-cases :: Y.Maybe a -> b -> (a -> b) -> b
-cases m n j = Y.maybe n j m
-
 -- | Compose two optional-returning functions (Kleisli composition).
 compose :: (a -> Y.Maybe b) -> (b -> Y.Maybe c) -> (a -> Y.Maybe c)
 compose f g = \x -> f x >>= g
@@ -55,6 +51,10 @@ mapOptional = Y.mapMaybe
 -- | Traverse a set in the optional monad.
 mapSet :: Ord b => (a -> Y.Maybe b) -> S.Set a -> Y.Maybe (S.Set b)
 mapSet f s = fmap S.fromList (CM.mapM f (S.toList s))
+
+-- | Handle an optional value with the absent-case value as the first argument.
+match :: Y.Maybe a -> b -> (a -> b) -> b
+match m n j = Y.maybe n j m
 
 -- | Lift a value into the optional type.
 pure :: a -> Y.Maybe a

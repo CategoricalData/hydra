@@ -834,7 +834,9 @@ renameLibKeyword = define "renameLibKeyword" $
     Logic.ifElse (Equality.equal (var "s") (string "lists.at"))
       (string "lists.at_") $
     Logic.ifElse (Equality.equal (var "s") (string "math.mod"))
-      (string "math.mod_")
+      (string "math.mod_") $
+    Logic.ifElse (Equality.equal (var "s") (string "optionals.match"))
+      (string "optionals.match_")
       (var "s")
 
 -- | Build a Require Import sentence for a list of module names.

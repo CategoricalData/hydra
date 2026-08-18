@@ -200,8 +200,8 @@ testGroupForFolds = define "testGroupForFolds" $
         T.int32],
 
     subgroup "Optional eliminations" [
-      -- cases : Maybe a -> b -> (a -> b) -> b (scrutinee-first). Cases 1 and 5 wrap the
-      -- eliminator in a lambda over the optional, since cases takes the scrutinee first and
+      -- match : Maybe a -> b -> (a -> b) -> b (scrutinee-first). Cases 1 and 5 wrap the
+      -- eliminator in a lambda over the optional, since match takes the scrutinee first and
       -- cannot be partially applied to (def, f) while leaving the optional open.
       expectMono 1 [tag_disabledForMinimalInference]
         (lambda "m" $ primitive DefOptionals.match @@ (var "m") @@ (int32 42) @@ (primitive DefMath.negate))

@@ -8,7 +8,7 @@ import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Optionals as Optionals
 import qualified Hydra.Dsl.Lib.Sets     as Sets
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, cases, compose, map)
+import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, compose, map, match)
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), map, pure)
@@ -25,8 +25,8 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.optionals module.")}
   where
-    definitions = [apply, bind, cases, compose, foldList, givens, isGiven, isNone,
-                   map, mapList, mapOptional, mapSet, pure, toList, withDefault]
+    definitions = [apply, bind, compose, foldList, givens, isGiven, isNone,
+                   map, mapList, mapOptional, mapSet, match, pure, toList, withDefault]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -61,18 +61,6 @@ bind = defineWithDefault "bind" "Monadic bind for optionals."
    "The monadic bind for optionals; used to chain computations that may be absent.",
    "Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."]
   ("m" ~> "f" ~> Optionals.match (var "m") nothing (var "f"))
-
--- The nothing-case value (position 1) is lazy: it is only evaluated when the optional is empty.
-cases :: PrimitiveDefinition
-cases = define "cases" "Case analysis on an optional, with cases-style argument order."
-  (markLazyParams [1] $ sigWithParams [("m", "the optional value to eliminate"), ("def", "the value to return when the optional is none"), ("f", "the function to apply to the contained value when the optional is given")] $ TypeScheme [Name "x", Name "y"]
-    (Types.optional tx Types.~> ty Types.~> (tx Types.~> ty) Types.~> ty)
-    Nothing)
-  ["cases(m, def, f) returns f(x) when m is given(x), and def when m is none.",
-   "The fundamental eliminator for the optional type; every other primitive in this namespace can be\
-   \ derived from it. The optional value is the first argument, matching the convention for\
-   \ case-statement-like elimination.",
-   "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."]
 
 compose :: PrimitiveDefinition
 compose = defineWithDefault "compose" "Kleisli composition for optionals."
@@ -186,6 +174,18 @@ mapSet = defineWithDefault "mapSet" "Traverse a set in the optional monad."
             "y" ~> Optionals.map ("ys" ~> Lists.cons (var "y") (var "ys")) (var "acc"))
         (Optionals.pure (list ([] :: [TypedTerm Int])))
         (Sets.toList (var "s" :: TypedTerm (S.Set Int))))) :: TypedTerm ((Int -> Maybe Int) -> S.Set Int -> Maybe (S.Set Int)))
+
+-- The default value (position 1) is lazy: it is only evaluated when the optional is empty.
+match :: PrimitiveDefinition
+match = define "match" "The fundamental eliminator for the optional type, scrutinee-first."
+  (markLazyParams [1] $ sigWithParams [("m", "the optional value to eliminate"), ("def", "the value to return when the optional is none"), ("f", "the function to apply to the contained value when the optional is given")] $ TypeScheme [Name "x", Name "y"]
+    (Types.optional tx Types.~> ty Types.~> (tx Types.~> ty) Types.~> ty)
+    Nothing)
+  ["match(m, def, f) returns f(x) when m is given(x), and def when m is none.",
+   "The fundamental eliminator for the optional type; every other primitive in this namespace can be\
+   \ derived from it. The optional value is the first argument, matching the convention for\
+   \ case-statement-like elimination.",
+   "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."]
 
 pure :: PrimitiveDefinition
 pure = defineWithDefault "pure" "Wrap a value in given."

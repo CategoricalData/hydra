@@ -21,13 +21,6 @@ Definition bind (x y : Type) (mx : option x) (f : x -> option y) : option y :=
   end.
 Arguments bind {x y}.
 
-Definition cases (x y : Type) (mx : option x) (def : y) (f : x -> y) : y :=
-  match mx with
-  | Some v => f v
-  | None => def
-  end.
-Arguments cases {x y}.
-
 Definition givens (x : Type) (opts : list (option x)) : list x :=
   List.flat_map (fun o => match o with Some v => [v] | None => [] end) opts.
 Arguments givens {x}.
@@ -77,6 +70,13 @@ Arguments map {x y}.
 Definition mapOptional (x y : Type) (f : x -> option y) (xs : list x) : list y :=
   List.flat_map (fun v => match f v with Some w => [w] | None => [] end) xs.
 Arguments mapOptional {x y}.
+
+Definition match_ (x y : Type) (mx : option x) (def : y) (f : x -> y) : y :=
+  match mx with
+  | Some v => f v
+  | None => def
+  end.
+Arguments match_ {x y}.
 
 Definition pure (x : Type) (v : x) : option x := Some v.
 Arguments pure {x}.
