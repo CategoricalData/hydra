@@ -74,6 +74,68 @@
                   "value": {"literal": {"string": "The final /-separated segment of a path (its file name)"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.build.walk.extensionOf",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "path",
+                "domain": {"literal": "string"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "dotParts",
+                        "term": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
+                            "argument": {"application": {"function": {"variable": "hydra.build.walk.baseName"}, "argument": {"variable": "path"}}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "string"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"literal": "string"}}},
+                                            "argument": {"variable": "dotParts"}}}}},
+                                    "argument": {"literal": {"integer": {"int32": 1}}}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.cases"}, "type": {"literal": "string"}}},
+                                            "type": {"literal": "string"}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.last"}, "type": {"literal": "string"}}},
+                                            "argument": {"variable": "dotParts"}}}}},
+                                    "argument": {"literal": {"string": ""}}}},
+                                "argument": {"lambda": {"parameter": "ext", "domain": {"literal": "string"}, "body": {"variable": "ext"}}}}}}},
+                        "argument": {"literal": {"string": ""}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "The extension of a path (after the final . in its file name), or empty if none"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.build.walk.filterByBaseName",
         "signature": {
           "typeParameters": [],
@@ -115,6 +177,47 @@
                   "value": {"literal": {"string": "Paths whose file name equals the given name, sorted deterministically"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.build.walk.filterByExtension",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "arg1", "type": {"list": {"literal": "string"}}, "isLazy": false}],
+          "result": {"type": {"list": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "ext",
+                "domain": {"literal": "string"},
+                "body": {
+                  "lambda": {
+                    "parameter": "paths",
+                    "domain": {"list": {"literal": "string"}},
+                    "body": {
+                      "application": {
+                        "function": {"typeApplication": {"body": {"variable": "hydra.build.walk.sortPaths"}, "type": {"literal": "string"}}},
+                        "argument": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.filter"}, "type": {"literal": "string"}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "path",
+                                    "domain": {"literal": "string"},
+                                    "body": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.build.walk.matchesExtension"}, "argument": {"variable": "ext"}}},
+                                        "argument": {"variable": "path"}}}}}}},
+                            "argument": {"variable": "paths"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Paths whose extension equals the given extension, sorted deterministically"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.build.walk.matchesBaseName",
         "signature": {
           "typeParameters": [],
@@ -144,6 +247,37 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Whether a path's file name equals the given name"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.walk.matchesExtension",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "ext",
+                "domain": {"literal": "string"},
+                "body": {
+                  "lambda": {
+                    "parameter": "path",
+                    "domain": {"literal": "string"},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
+                            "argument": {"application": {"function": {"variable": "hydra.build.walk.extensionOf"}, "argument": {"variable": "path"}}}}},
+                        "argument": {"variable": "ext"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Whether a path's extension equals the given extension"}}}]}}}}},
     {
       "term": {
         "name": "hydra.build.walk.sortPaths",
