@@ -6,6 +6,7 @@
     "hydra.build.assemblyplan",
     "hydra.build.benchresult",
     "hydra.build.comparereport",
+    "hydra.build.comparereportlogic",
     "hydra.build.format",
     "hydra.build.langexpansion",
     "hydra.build.libraries",
