@@ -273,8 +273,18 @@ if [ -f "$FMT_HS" ]; then
     echo "  [R22-shim] injecting lines/unlines into seeded Formatting.hs Prelude hiding (#417, retire at 0.17.5)"
     # Insert `lines` before `map` and `unlines` after `sum` in the hiding list, matching
     # the R22 coder's native output order: ..., fail, lines, map, ..., sum, unlines.
-    sed_inplace 's/\(import[[:space:]]\+Prelude[[:space:]]\+hiding[[:space:]]*(.*\bfail\b\), map,/\1, lines, map,/' "$FMT_HS"
-    sed_inplace 's/\(import[[:space:]]\+Prelude[[:space:]]\+hiding[[:space:]]*(.*\bsum\b\))/\1, unlines)/' "$FMT_HS"
+    #
+    # PORTABILITY: these patterns must stay POSIX BRE. Two GNU-only constructs broke
+    # this shim on macOS (BSD sed) while it worked in CI (GNU sed), so the failure was
+    # invisible to Linux-only validation:
+    #   * `\+`  -> not a BRE repetition operator in BSD sed; use `\{1,\}`.
+    #   * `\b`  -> word-boundary is a GNU extension BSD sed does not implement at all.
+    # `fail`/`sum` need no boundary guard here: both are anchored by the literal
+    # ", map," / ")" that follows, so dropping `\b` does not loosen the match.
+    # Symptom when this regresses: both substitutions silently no-op, hiding_has_both
+    # fails, and the seed aborts with "did not match the expected pattern".
+    sed_inplace 's/\(import[[:space:]]\{1,\}Prelude[[:space:]]\{1,\}hiding[[:space:]]*(.*fail\), map,/\1, lines, map,/' "$FMT_HS"
+    sed_inplace 's/\(import[[:space:]]\{1,\}Prelude[[:space:]]\{1,\}hiding[[:space:]]*(.*sum\))/\1, unlines)/' "$FMT_HS"
     # Verify the injection actually landed (fail loudly rather than seed a broken tree).
     if ! hiding_has_both "$FMT_HS"; then
         echo "  [R22-shim] ERROR: failed to inject lines/unlines into Formatting.hs hiding clause;" >&2
