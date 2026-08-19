@@ -37,13 +37,15 @@ Primitives:
   hydra.lib.files.appendFile : ((hydra.file.FilePath → binary → effect<either<hydra.error.file.FileError, unit>>))
   hydra.lib.files.copy : ((boolean → hydra.file.FilePath → hydra.file.FilePath → effect<either<hydra.error.file.FileError, unit>>))
   hydra.lib.files.createDirectory : ((boolean → hydra.file.FilePath → effect<either<hydra.error.file.FileError, unit>>))
+  hydra.lib.files.createSymlink : ((hydra.file.FilePath → hydra.file.FilePath → effect<either<hydra.error.file.FileError, unit>>))
   hydra.lib.files.exists : ((hydra.file.FilePath → effect<either<hydra.error.file.FileError, boolean>>))
   hydra.lib.files.listDirectory : ((hydra.file.FilePath → effect<either<hydra.error.file.FileError, list<hydra.file.FilePath>>>))
   hydra.lib.files.readFile : ((hydra.file.FilePath → effect<either<hydra.error.file.FileError, binary>>))
+  hydra.lib.files.readSymlink : ((hydra.file.FilePath → effect<either<hydra.error.file.FileError, hydra.file.FilePath>>))
   hydra.lib.files.removeDirectory : ((boolean → hydra.file.FilePath → effect<either<hydra.error.file.FileError, unit>>))
   hydra.lib.files.removeFile : ((hydra.file.FilePath → effect<either<hydra.error.file.FileError, unit>>))
   hydra.lib.files.rename : ((hydra.file.FilePath → hydra.file.FilePath → effect<either<hydra.error.file.FileError, unit>>))
-  hydra.lib.files.status : ((hydra.file.FilePath → effect<either<hydra.error.file.FileError, hydra.file.FileStatus>>))
+  hydra.lib.files.status : ((boolean → hydra.file.FilePath → effect<either<hydra.error.file.FileError, hydra.file.FileStatus>>))
   hydra.lib.files.writeFile : ((hydra.file.FilePath → binary → effect<either<hydra.error.file.FileError, unit>>))
   hydra.lib.functions.compose : (forall t1,t2,t3. ((t2 → t3) → (t1 → t2) → t1 → t3))
   hydra.lib.functions.const : (forall t1,t2. (t1 → t2 → t1))
@@ -176,7 +178,7 @@ Primitives:
   hydra.lib.maps.toList : (forall k,v. (ordering k) => (map<k, v> → list<(k, v)>))
   hydra.lib.maps.union : (forall k,v. (ordering k) => (map<k, v> → map<k, v> → map<k, v>))
   hydra.lib.maps.unions : (forall k,v. (ordering k) => (list<map<k, v>> → map<k, v>))
-  hydra.lib.math.abs : ((int32 → int32))
+  hydra.lib.math.abs : (forall x. (numeric x) => (x → x))
   hydra.lib.math.acos : ((float64 → float64))
   hydra.lib.math.acosh : ((float64 → float64))
   hydra.lib.math.add : (forall x. (numeric x) => (x → x → x))
@@ -189,27 +191,28 @@ Primitives:
   hydra.lib.math.ceiling : ((float64 → float64))
   hydra.lib.math.cos : ((float64 → float64))
   hydra.lib.math.cosh : ((float64 → float64))
-  hydra.lib.math.div : ((int32 → int32 → optional<int32>))
+  hydra.lib.math.div : (forall x. (integral x) => (x → x → optional<x>))
+  hydra.lib.math.divide : (forall x. (fractional x) => (x → x → x))
   hydra.lib.math.e : (float64)
-  hydra.lib.math.even : ((int32 → boolean))
+  hydra.lib.math.even : (forall x. (integral x) => (x → boolean))
   hydra.lib.math.exp : ((float64 → float64))
   hydra.lib.math.floor : ((float64 → float64))
   hydra.lib.math.log : ((float64 → float64))
   hydra.lib.math.logBase : ((float64 → float64 → float64))
-  hydra.lib.math.mod : ((int32 → int32 → optional<int32>))
+  hydra.lib.math.mod : (forall x. (integral x) => (x → x → optional<x>))
   hydra.lib.math.mul : (forall x. (numeric x) => (x → x → x))
   hydra.lib.math.mulFloat64 : ((float64 → float64 → float64))
   hydra.lib.math.negate : (forall x. (numeric x) => (x → x))
   hydra.lib.math.negateFloat64 : ((float64 → float64))
-  hydra.lib.math.odd : ((int32 → boolean))
+  hydra.lib.math.odd : (forall x. (integral x) => (x → boolean))
   hydra.lib.math.pi : (float64)
   hydra.lib.math.pow : ((float64 → float64 → float64))
   hydra.lib.math.range : ((int32 → int32 → list<int32>))
-  hydra.lib.math.rem : ((int32 → int32 → optional<int32>))
+  hydra.lib.math.rem : (forall x. (integral x) => (x → x → optional<x>))
   hydra.lib.math.round : ((float64 → float64))
   hydra.lib.math.roundFloat32 : ((int32 → float32 → float32))
   hydra.lib.math.roundFloat64 : ((int32 → float64 → float64))
-  hydra.lib.math.signum : ((int32 → int32))
+  hydra.lib.math.signum : (forall x. (numeric x) => (x → x))
   hydra.lib.math.sin : ((float64 → float64))
   hydra.lib.math.sinh : ((float64 → float64))
   hydra.lib.math.sqrt : ((float64 → float64))
@@ -220,7 +223,6 @@ Primitives:
   hydra.lib.math.truncate : ((float64 → float64))
   hydra.lib.optionals.apply : (forall x,y. (optional<(x → y)> → optional<x> → optional<y>))
   hydra.lib.optionals.bind : (forall x,y. (optional<x> → (x → optional<y>) → optional<y>))
-  hydra.lib.optionals.cases : (forall x,y. (optional<x> → y → (x → y) → y))
   hydra.lib.optionals.compose : (forall x,y,z. ((x → optional<y>) → (y → optional<z>) → x → optional<z>))
   hydra.lib.optionals.foldList : (forall x,y. ((x → y → optional<x>) → x → list<y> → optional<x>))
   hydra.lib.optionals.givens : (forall x. (list<optional<x>> → list<x>))
@@ -230,6 +232,7 @@ Primitives:
   hydra.lib.optionals.mapList : (forall x,y. ((x → optional<y>) → list<x> → optional<list<y>>))
   hydra.lib.optionals.mapOptional : (forall x,y. ((x → optional<y>) → list<x> → list<y>))
   hydra.lib.optionals.mapSet : (forall x,y. (ordering x, ordering y) => ((x → optional<y>) → set<x> → optional<set<y>>))
+  hydra.lib.optionals.match : (forall x,y. (optional<x> → y → (x → y) → y))
   hydra.lib.optionals.pure : (forall x. (x → optional<x>))
   hydra.lib.optionals.toList : (forall x. (optional<x> → list<x>))
   hydra.lib.optionals.withDefault : (forall x. (x → optional<x> → x))
@@ -270,13 +273,11 @@ Primitives:
   hydra.lib.strings.fromList : ((list<int32> → string))
   hydra.lib.strings.join : ((string → list<string> → string))
   hydra.lib.strings.length : ((string → int32))
-  hydra.lib.strings.lines : ((string → list<string>))
   hydra.lib.strings.null : ((string → boolean))
   hydra.lib.strings.splitOn : ((string → string → list<string>))
   hydra.lib.strings.toList : ((string → list<int32>))
   hydra.lib.strings.toLower : ((string → string))
   hydra.lib.strings.toUpper : ((string → string))
-  hydra.lib.strings.unlines : ((list<string> → string))
   hydra.lib.system.execute : ((hydra.system.Command → effect<either<hydra.error.system.SystemError, hydra.system.ProcessResult>>))
   hydra.lib.system.exit : ((hydra.system.StatusCode → effect<unit>))
   hydra.lib.system.getEnvironment : (effect<map<hydra.system.EnvironmentVariable, string>>)
@@ -378,18 +379,21 @@ Types:
   hydra.error.core.EmptyTypeAnnotationError = record{location:hydra.paths.SubtermPath}
   hydra.error.core.EmptyTypeNameInTermError = record{location:hydra.paths.SubtermPath}
   hydra.error.core.EmptyUnionTypeError = record{location:hydra.paths.SubtermPath}
+  hydra.error.core.ExtraRecordFieldsError = record{location:hydra.paths.SubtermPath, typeName:hydra.core.Name, fieldNames:list<hydra.core.Name>}
   hydra.error.core.InvalidForallParameterNameError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
   hydra.error.core.InvalidLambdaParameterNameError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
   hydra.error.core.InvalidLetBindingNameError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
   hydra.error.core.InvalidLiteralError = union{typeMismatch:hydra.error.core.LiteralTypeMismatchError}
-  hydra.error.core.InvalidTermError = union{constantCondition:hydra.error.core.ConstantConditionError, duplicateBinding:hydra.error.core.DuplicateBindingError, duplicateField:hydra.error.core.DuplicateFieldError, emptyCaseStatement:hydra.error.core.EmptyCaseStatementError, emptyLetBindings:hydra.error.core.EmptyLetBindingsError, emptyTermAnnotation:hydra.error.core.EmptyTermAnnotationError, emptyTypeNameInTerm:hydra.error.core.EmptyTypeNameInTermError, invalidLambdaParameterName:hydra.error.core.InvalidLambdaParameterNameError, invalidLetBindingName:hydra.error.core.InvalidLetBindingNameError, invalidTypeLambdaParameterName:hydra.error.core.InvalidTypeLambdaParameterNameError, missingCaseBranches:hydra.error.core.MissingCaseBranchesError, nestedTermAnnotation:hydra.error.core.NestedTermAnnotationError, redundantWrapUnwrap:hydra.error.core.RedundantWrapUnwrapError, selfApplication:hydra.error.core.SelfApplicationError, termVariableShadowing:hydra.error.core.TermVariableShadowingError, typeVariableShadowingInTypeLambda:hydra.error.core.TypeVariableShadowingInTypeLambdaError, undefinedTermVariable:hydra.error.core.UndefinedTermVariableError, undefinedTypeVariableInBindingType:hydra.error.core.UndefinedTypeVariableInBindingTypeError, undefinedTypeVariableInLambdaDomain:hydra.error.core.UndefinedTypeVariableInLambdaDomainError, undefinedTypeVariableInTypeApplication:hydra.error.core.UndefinedTypeVariableInTypeApplicationError, unknownCaseAlternative:hydra.error.core.UnknownCaseAlternativeError, unknownPrimitiveName:hydra.error.core.UnknownPrimitiveNameError, unnecessaryIdentityApplication:hydra.error.core.UnnecessaryIdentityApplicationError, untypedTermVariable:hydra.error.core.UntypedTermVariableError}
+  hydra.error.core.InvalidTermError = union{constantCondition:hydra.error.core.ConstantConditionError, duplicateBinding:hydra.error.core.DuplicateBindingError, duplicateField:hydra.error.core.DuplicateFieldError, emptyCaseStatement:hydra.error.core.EmptyCaseStatementError, emptyLetBindings:hydra.error.core.EmptyLetBindingsError, emptyTermAnnotation:hydra.error.core.EmptyTermAnnotationError, emptyTypeNameInTerm:hydra.error.core.EmptyTypeNameInTermError, extraRecordFields:hydra.error.core.ExtraRecordFieldsError, invalidLambdaParameterName:hydra.error.core.InvalidLambdaParameterNameError, invalidLetBindingName:hydra.error.core.InvalidLetBindingNameError, invalidTypeLambdaParameterName:hydra.error.core.InvalidTypeLambdaParameterNameError, missingCaseBranches:hydra.error.core.MissingCaseBranchesError, missingRecordFields:hydra.error.core.MissingRecordFieldsError, nestedTermAnnotation:hydra.error.core.NestedTermAnnotationError, nominalTypeKindMismatch:hydra.error.core.NominalTypeKindMismatchError, redundantWrapUnwrap:hydra.error.core.RedundantWrapUnwrapError, selfApplication:hydra.error.core.SelfApplicationError, termVariableShadowing:hydra.error.core.TermVariableShadowingError, typeVariableShadowingInTypeLambda:hydra.error.core.TypeVariableShadowingInTypeLambdaError, undeclaredVariant:hydra.error.core.UndeclaredVariantError, undefinedTermVariable:hydra.error.core.UndefinedTermVariableError, undefinedTypeVariableInBindingType:hydra.error.core.UndefinedTypeVariableInBindingTypeError, undefinedTypeVariableInLambdaDomain:hydra.error.core.UndefinedTypeVariableInLambdaDomainError, undefinedTypeVariableInTypeApplication:hydra.error.core.UndefinedTypeVariableInTypeApplicationError, unknownCaseAlternative:hydra.error.core.UnknownCaseAlternativeError, unknownPrimitiveName:hydra.error.core.UnknownPrimitiveNameError, unknownProjectedField:hydra.error.core.UnknownProjectedFieldError, unnecessaryIdentityApplication:hydra.error.core.UnnecessaryIdentityApplicationError, unresolvedNominalType:hydra.error.core.UnresolvedNominalTypeError, untypedTermVariable:hydra.error.core.UntypedTermVariableError}
   hydra.error.core.InvalidTypeError = union{duplicateRecordTypeFieldNames:hydra.error.core.DuplicateRecordTypeFieldNamesError, duplicateUnionTypeFieldNames:hydra.error.core.DuplicateUnionTypeFieldNamesError, emptyRecordType:hydra.error.core.EmptyRecordTypeError, emptyTypeAnnotation:hydra.error.core.EmptyTypeAnnotationError, emptyUnionType:hydra.error.core.EmptyUnionTypeError, invalidForallParameterName:hydra.error.core.InvalidForallParameterNameError, invalidTypeSchemeVariableName:hydra.error.core.InvalidTypeSchemeVariableNameError, nestedTypeAnnotation:hydra.error.core.NestedTypeAnnotationError, nonComparableMapKeyType:hydra.error.core.NonComparableMapKeyTypeError, nonComparableSetElementType:hydra.error.core.NonComparableSetElementTypeError, singleVariantUnion:hydra.error.core.SingleVariantUnionError, typeVariableShadowingInForall:hydra.error.core.TypeVariableShadowingInForallError, undefinedTypeVariable:hydra.error.core.UndefinedTypeVariableError, voidInNonBottomPosition:hydra.error.core.VoidInNonBottomPositionError}
   hydra.error.core.InvalidTypeLambdaParameterNameError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
   hydra.error.core.InvalidTypeSchemeVariableNameError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
   hydra.error.core.LiteralTypeMismatchError = record{expectedType:hydra.core.LiteralType, actualType:hydra.core.LiteralType}
   hydra.error.core.MissingCaseBranchesError = record{location:hydra.paths.SubtermPath, typeName:hydra.core.Name, variantNames:list<hydra.core.Name>}
+  hydra.error.core.MissingRecordFieldsError = record{location:hydra.paths.SubtermPath, typeName:hydra.core.Name, fieldNames:list<hydra.core.Name>}
   hydra.error.core.NestedTermAnnotationError = record{location:hydra.paths.SubtermPath}
   hydra.error.core.NestedTypeAnnotationError = record{location:hydra.paths.SubtermPath}
+  hydra.error.core.NominalTypeKindMismatchError = record{location:hydra.paths.SubtermPath, typeName:hydra.core.Name, expectedVariant:hydra.variants.TypeVariant, actualVariant:hydra.variants.TypeVariant}
   hydra.error.core.NonComparableMapKeyTypeError = record{location:hydra.paths.SubtermPath, keyType:hydra.core.Type}
   hydra.error.core.NonComparableSetElementTypeError = record{location:hydra.paths.SubtermPath, elementType:hydra.core.Type}
   hydra.error.core.RedundantWrapUnwrapError = record{location:hydra.paths.SubtermPath, typeName:hydra.core.Name}
@@ -398,6 +402,7 @@ Types:
   hydra.error.core.TermVariableShadowingError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
   hydra.error.core.TypeVariableShadowingInForallError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
   hydra.error.core.TypeVariableShadowingInTypeLambdaError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.UndeclaredVariantError = record{location:hydra.paths.SubtermPath, typeName:hydra.core.Name, variantName:hydra.core.Name}
   hydra.error.core.UndefinedFieldError = record{fieldName:hydra.core.Name, typeName:hydra.core.Name}
   hydra.error.core.UndefinedTermVariableError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
   hydra.error.core.UndefinedTypeVariableError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
@@ -408,7 +413,9 @@ Types:
   hydra.error.core.UnexpectedTypeVariantError = record{expectedVariant:hydra.variants.TypeVariant, actualType:hydra.core.Type}
   hydra.error.core.UnknownCaseAlternativeError = record{location:hydra.paths.SubtermPath, typeName:hydra.core.Name, name:hydra.core.Name}
   hydra.error.core.UnknownPrimitiveNameError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
+  hydra.error.core.UnknownProjectedFieldError = record{location:hydra.paths.SubtermPath, typeName:hydra.core.Name, fieldName:hydra.core.Name}
   hydra.error.core.UnnecessaryIdentityApplicationError = record{location:hydra.paths.SubtermPath}
+  hydra.error.core.UnresolvedNominalTypeError = record{location:hydra.paths.SubtermPath, typeName:hydra.core.Name}
   hydra.error.core.UntypedTermVariableError = record{location:hydra.paths.SubtermPath, name:hydra.core.Name}
   hydra.error.core.VoidInNonBottomPositionError = record{location:hydra.paths.SubtermPath}
   hydra.error.file.FileError = union{alreadyExists:hydra.file.FilePath, invalidPath:string, notFound:hydra.file.FilePath, other:string, permissionDenied:hydra.file.FilePath}
@@ -471,10 +478,10 @@ Types:
   hydra.packaging.Version = wrap(string)
   hydra.packaging.VersionRange = record{lowerInclusive:optional<hydra.packaging.Version>, upperExclusive:optional<hydra.packaging.Version>}
   hydra.packaging.VersionSpecifier = union{any:unit, exact:hydra.packaging.Version, atLeast:hydra.packaging.Version, range:hydra.packaging.VersionRange}
-  hydra.parsing.ParseError = record{message:string, remainder:string}
+  hydra.parsing.ParseError = record{message:string, remainder:list<int32>}
   hydra.parsing.ParseResult = (∀a.union{success:(hydra.parsing.ParseSuccess @ a), failure:hydra.parsing.ParseError})
-  hydra.parsing.ParseSuccess = (∀a.record{value:a, remainder:string})
-  hydra.parsing.Parser = (∀a.wrap((string → (hydra.parsing.ParseResult @ a))))
+  hydra.parsing.ParseSuccess = (∀a.record{value:a, remainder:list<int32>})
+  hydra.parsing.Parser = (∀a.wrap((list<int32> → (hydra.parsing.ParseResult @ a))))
   hydra.paths.SubtermEdge = record{source:hydra.paths.SubtermNode, path:hydra.paths.SubtermPath, target:hydra.paths.SubtermNode}
   hydra.paths.SubtermGraph = record{nodes:list<hydra.paths.SubtermNode>, edges:list<hydra.paths.SubtermEdge>}
   hydra.paths.SubtermNode = record{name:hydra.core.Name, label:string, id:string}
@@ -680,7 +687,10 @@ Terms:
   hydra.checking.typeOfWrappedTerm : ((hydra.typing.InferenceContext → hydra.graph.Graph → list<hydra.core.Type> → hydra.core.WrappedTerm → either<hydra.errors.Error, (hydra.core.Type, hydra.typing.InferenceContext)>))
   hydra.checking.typesAllEffectivelyEqual : ((hydra.graph.Graph → list<hydra.core.Type> → boolean))
   hydra.checking.typesEffectivelyEqual : ((hydra.graph.Graph → hydra.core.Type → hydra.core.Type → boolean))
+  hydra.classes.classIsSatisfiedByType : ((hydra.core.Name → hydra.core.Type → boolean))
   hydra.classes.equality : (hydra.typing.TypeClass)
+  hydra.classes.fractional : (hydra.typing.TypeClass)
+  hydra.classes.integral : (hydra.typing.TypeClass)
   hydra.classes.numeric : (hydra.typing.TypeClass)
   hydra.classes.ordering : (hydra.typing.TypeClass)
   hydra.codegen.buildSchemaMap : ((hydra.graph.Graph → map<hydra.core.Name, hydra.core.Type>))
@@ -703,6 +713,7 @@ Terms:
   hydra.codegen.modulesToGraph : ((hydra.graph.Graph → list<hydra.packaging.Module> → list<hydra.packaging.Module> → hydra.graph.Graph))
   hydra.codegen.refreshModule : ((list<hydra.core.Binding> → hydra.packaging.Module → hydra.packaging.Module))
   hydra.codegen.transitiveDeps : (((hydra.packaging.Module → list<hydra.packaging.ModuleName>) → map<hydra.packaging.ModuleName, hydra.packaging.Module> → list<hydra.packaging.Module> → set<hydra.packaging.ModuleName>))
+  hydra.constants.fieldNameValue : (string)
   hydra.constants.ignoredVariable : (string)
   hydra.constants.keyClasses : (hydra.core.Name)
   hydra.constants.keyDebugId : (hydra.core.Name)
@@ -802,6 +813,7 @@ Terms:
   hydra.decode.error.core.emptyTypeAnnotationError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.EmptyTypeAnnotationError>))
   hydra.decode.error.core.emptyTypeNameInTermError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.EmptyTypeNameInTermError>))
   hydra.decode.error.core.emptyUnionTypeError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.EmptyUnionTypeError>))
+  hydra.decode.error.core.extraRecordFieldsError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.ExtraRecordFieldsError>))
   hydra.decode.error.core.invalidForallParameterNameError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.InvalidForallParameterNameError>))
   hydra.decode.error.core.invalidLambdaParameterNameError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.InvalidLambdaParameterNameError>))
   hydra.decode.error.core.invalidLetBindingNameError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.InvalidLetBindingNameError>))
@@ -812,8 +824,10 @@ Terms:
   hydra.decode.error.core.invalidTypeSchemeVariableNameError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.InvalidTypeSchemeVariableNameError>))
   hydra.decode.error.core.literalTypeMismatchError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.LiteralTypeMismatchError>))
   hydra.decode.error.core.missingCaseBranchesError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.MissingCaseBranchesError>))
+  hydra.decode.error.core.missingRecordFieldsError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.MissingRecordFieldsError>))
   hydra.decode.error.core.nestedTermAnnotationError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.NestedTermAnnotationError>))
   hydra.decode.error.core.nestedTypeAnnotationError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.NestedTypeAnnotationError>))
+  hydra.decode.error.core.nominalTypeKindMismatchError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.NominalTypeKindMismatchError>))
   hydra.decode.error.core.nonComparableMapKeyTypeError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.NonComparableMapKeyTypeError>))
   hydra.decode.error.core.nonComparableSetElementTypeError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.NonComparableSetElementTypeError>))
   hydra.decode.error.core.redundantWrapUnwrapError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.RedundantWrapUnwrapError>))
@@ -822,6 +836,7 @@ Terms:
   hydra.decode.error.core.termVariableShadowingError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.TermVariableShadowingError>))
   hydra.decode.error.core.typeVariableShadowingInForallError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.TypeVariableShadowingInForallError>))
   hydra.decode.error.core.typeVariableShadowingInTypeLambdaError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.TypeVariableShadowingInTypeLambdaError>))
+  hydra.decode.error.core.undeclaredVariantError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.UndeclaredVariantError>))
   hydra.decode.error.core.undefinedFieldError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.UndefinedFieldError>))
   hydra.decode.error.core.undefinedTermVariableError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.UndefinedTermVariableError>))
   hydra.decode.error.core.undefinedTypeVariableError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.UndefinedTypeVariableError>))
@@ -832,7 +847,9 @@ Terms:
   hydra.decode.error.core.unexpectedTypeVariantError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.UnexpectedTypeVariantError>))
   hydra.decode.error.core.unknownCaseAlternativeError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.UnknownCaseAlternativeError>))
   hydra.decode.error.core.unknownPrimitiveNameError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.UnknownPrimitiveNameError>))
+  hydra.decode.error.core.unknownProjectedFieldError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.UnknownProjectedFieldError>))
   hydra.decode.error.core.unnecessaryIdentityApplicationError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.UnnecessaryIdentityApplicationError>))
+  hydra.decode.error.core.unresolvedNominalTypeError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.UnresolvedNominalTypeError>))
   hydra.decode.error.core.untypedTermVariableError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.UntypedTermVariableError>))
   hydra.decode.error.core.voidInNonBottomPositionError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.core.VoidInNonBottomPositionError>))
   hydra.decode.error.file.fileError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.file.FileError>))
@@ -1134,6 +1151,7 @@ Terms:
   hydra.encode.error.core.emptyTypeAnnotationError : ((hydra.error.core.EmptyTypeAnnotationError → hydra.core.Term))
   hydra.encode.error.core.emptyTypeNameInTermError : ((hydra.error.core.EmptyTypeNameInTermError → hydra.core.Term))
   hydra.encode.error.core.emptyUnionTypeError : ((hydra.error.core.EmptyUnionTypeError → hydra.core.Term))
+  hydra.encode.error.core.extraRecordFieldsError : ((hydra.error.core.ExtraRecordFieldsError → hydra.core.Term))
   hydra.encode.error.core.invalidForallParameterNameError : ((hydra.error.core.InvalidForallParameterNameError → hydra.core.Term))
   hydra.encode.error.core.invalidLambdaParameterNameError : ((hydra.error.core.InvalidLambdaParameterNameError → hydra.core.Term))
   hydra.encode.error.core.invalidLetBindingNameError : ((hydra.error.core.InvalidLetBindingNameError → hydra.core.Term))
@@ -1144,8 +1162,10 @@ Terms:
   hydra.encode.error.core.invalidTypeSchemeVariableNameError : ((hydra.error.core.InvalidTypeSchemeVariableNameError → hydra.core.Term))
   hydra.encode.error.core.literalTypeMismatchError : ((hydra.error.core.LiteralTypeMismatchError → hydra.core.Term))
   hydra.encode.error.core.missingCaseBranchesError : ((hydra.error.core.MissingCaseBranchesError → hydra.core.Term))
+  hydra.encode.error.core.missingRecordFieldsError : ((hydra.error.core.MissingRecordFieldsError → hydra.core.Term))
   hydra.encode.error.core.nestedTermAnnotationError : ((hydra.error.core.NestedTermAnnotationError → hydra.core.Term))
   hydra.encode.error.core.nestedTypeAnnotationError : ((hydra.error.core.NestedTypeAnnotationError → hydra.core.Term))
+  hydra.encode.error.core.nominalTypeKindMismatchError : ((hydra.error.core.NominalTypeKindMismatchError → hydra.core.Term))
   hydra.encode.error.core.nonComparableMapKeyTypeError : ((hydra.error.core.NonComparableMapKeyTypeError → hydra.core.Term))
   hydra.encode.error.core.nonComparableSetElementTypeError : ((hydra.error.core.NonComparableSetElementTypeError → hydra.core.Term))
   hydra.encode.error.core.redundantWrapUnwrapError : ((hydra.error.core.RedundantWrapUnwrapError → hydra.core.Term))
@@ -1154,6 +1174,7 @@ Terms:
   hydra.encode.error.core.termVariableShadowingError : ((hydra.error.core.TermVariableShadowingError → hydra.core.Term))
   hydra.encode.error.core.typeVariableShadowingInForallError : ((hydra.error.core.TypeVariableShadowingInForallError → hydra.core.Term))
   hydra.encode.error.core.typeVariableShadowingInTypeLambdaError : ((hydra.error.core.TypeVariableShadowingInTypeLambdaError → hydra.core.Term))
+  hydra.encode.error.core.undeclaredVariantError : ((hydra.error.core.UndeclaredVariantError → hydra.core.Term))
   hydra.encode.error.core.undefinedFieldError : ((hydra.error.core.UndefinedFieldError → hydra.core.Term))
   hydra.encode.error.core.undefinedTermVariableError : ((hydra.error.core.UndefinedTermVariableError → hydra.core.Term))
   hydra.encode.error.core.undefinedTypeVariableError : ((hydra.error.core.UndefinedTypeVariableError → hydra.core.Term))
@@ -1164,7 +1185,9 @@ Terms:
   hydra.encode.error.core.unexpectedTypeVariantError : ((hydra.error.core.UnexpectedTypeVariantError → hydra.core.Term))
   hydra.encode.error.core.unknownCaseAlternativeError : ((hydra.error.core.UnknownCaseAlternativeError → hydra.core.Term))
   hydra.encode.error.core.unknownPrimitiveNameError : ((hydra.error.core.UnknownPrimitiveNameError → hydra.core.Term))
+  hydra.encode.error.core.unknownProjectedFieldError : ((hydra.error.core.UnknownProjectedFieldError → hydra.core.Term))
   hydra.encode.error.core.unnecessaryIdentityApplicationError : ((hydra.error.core.UnnecessaryIdentityApplicationError → hydra.core.Term))
+  hydra.encode.error.core.unresolvedNominalTypeError : ((hydra.error.core.UnresolvedNominalTypeError → hydra.core.Term))
   hydra.encode.error.core.untypedTermVariableError : ((hydra.error.core.UntypedTermVariableError → hydra.core.Term))
   hydra.encode.error.core.voidInNonBottomPositionError : ((hydra.error.core.VoidInNonBottomPositionError → hydra.core.Term))
   hydra.encode.error.file.fileError : ((hydra.error.file.FileError → hydra.core.Term))
@@ -1457,12 +1480,14 @@ Terms:
   hydra.formatting.escapeWithUnderscore : ((set<string> → string → string))
   hydra.formatting.indentLines : ((string → string))
   hydra.formatting.javaStyleComment : ((string → string))
+  hydra.formatting.lines : ((string → list<string>))
   hydra.formatting.mapFirstLetter : (((string → string) → string → string))
   hydra.formatting.nonAlnumToUnderscores : ((string → string))
   hydra.formatting.normalizeComment : ((string → string))
   hydra.formatting.sanitizeWithUnderscores : ((set<string> → string → string))
   hydra.formatting.showList : (forall t0. ((t0 → string) → list<t0> → string))
   hydra.formatting.stripLeadingAndTrailingWhitespace : ((string → string))
+  hydra.formatting.unlines : ((list<string> → string))
   hydra.formatting.withCharacterAliases : ((string → string))
   hydra.formatting.wrapLine : ((int32 → string → string))
   hydra.hoisting.augmentBindingsWithNewFreeVars : ((hydra.graph.Graph → set<hydra.core.Name> → list<hydra.core.Binding> → (list<hydra.core.Binding>, hydra.typing.TermSubst)))
@@ -1489,6 +1514,7 @@ Terms:
   hydra.inference.bindConstraints : ((hydra.typing.InferenceContext → hydra.graph.Graph → list<hydra.typing.TypeConstraint> → either<hydra.errors.Error, hydra.typing.TypeSubst>))
   hydra.inference.bindUnboundTypeVariables : ((hydra.graph.Graph → hydra.core.Term → hydra.core.Term))
   hydra.inference.buildTypeApplicationTerm : ((list<hydra.core.Name> → hydra.core.Term → hydra.core.Term))
+  hydra.inference.dischargeClassConstraints : ((hydra.typing.InferenceContext → hydra.typing.TypeSubst → map<hydra.core.Name, hydra.core.TypeVariableConstraints> → either<hydra.errors.Error, unit>))
   hydra.inference.extendContext : ((list<(hydra.core.Name, hydra.core.TypeScheme)> → hydra.graph.Graph → hydra.graph.Graph))
   hydra.inference.finalizeInferredTerm : (forall t0. (t0 → hydra.graph.Graph → hydra.core.Term → either<hydra.errors.Error, hydra.core.Term>))
   hydra.inference.forInferredTerm : (forall t0. (hydra.typing.InferenceContext → hydra.graph.Graph → hydra.core.Term → string → (hydra.typing.InferenceResult → t0) → either<hydra.errors.Error, (t0, hydra.typing.InferenceContext)>))
@@ -1541,7 +1567,7 @@ Terms:
   hydra.json.decode.expectNumber : ((hydra.json.model.Value → either<string, decimal>))
   hydra.json.decode.expectObject : ((hydra.json.model.Value → either<string, map<string, hydra.json.model.Value>>))
   hydra.json.decode.expectString : ((hydra.json.model.Value → either<string, string>))
-  hydra.json.decode.fromJson : ((map<hydra.core.Name, hydra.core.Type> → hydra.core.Name → hydra.core.Type → hydra.json.model.Value → either<string, hydra.core.Term>))
+  hydra.json.decode.fromJson : ((map<hydra.core.Name, hydra.core.Type> → boolean → hydra.core.Name → hydra.core.Type → hydra.json.model.Value → either<string, hydra.core.Term>))
   hydra.json.decode.parseSpecialFloat : ((string → optional<float64>))
   hydra.json.decode.parseSpecialFloat32 : ((string → optional<float32>))
   hydra.json.decoding.decodeArray : (forall t0. ((hydra.json.model.Value → either<string, t0>) → hydra.json.model.Value → either<string, list<t0>>))
@@ -1554,7 +1580,7 @@ Terms:
   hydra.json.encode.encodeInteger : (forall t0. (hydra.core.IntegerValue → either<t0, hydra.json.model.Value>))
   hydra.json.encode.encodeLiteral : (forall t0. (hydra.core.Literal → either<t0, hydra.json.model.Value>))
   hydra.json.encode.requiresJsonStringSentinel : ((string → boolean))
-  hydra.json.encode.toJson : ((map<hydra.core.Name, hydra.core.Type> → hydra.core.Name → hydra.core.Type → hydra.core.Term → either<string, hydra.json.model.Value>))
+  hydra.json.encode.toJson : ((map<hydra.core.Name, hydra.core.Type> → boolean → hydra.core.Name → hydra.core.Type → hydra.core.Term → either<string, hydra.json.model.Value>))
   hydra.json.encode.toJsonUntyped : ((hydra.core.Term → either<string, hydra.json.model.Value>))
   hydra.json.parser.digit : ((hydra.parsing.Parser @ int32))
   hydra.json.parser.digits : ((hydra.parsing.Parser @ string))
@@ -1652,6 +1678,7 @@ Terms:
   hydra.parsers.fail : (forall t0. (string → (hydra.parsing.Parser @ t0)))
   hydra.parsers.lazy : (forall t0. ((unit → (hydra.parsing.Parser @ t0)) → (hydra.parsing.Parser @ t0)))
   hydra.parsers.many : (forall t0. ((hydra.parsing.Parser @ t0) → (hydra.parsing.Parser @ list<t0>)))
+  hydra.parsers.manyLoop : (forall t0. ((hydra.parsing.Parser @ t0) → list<int32> → list<t0> → (hydra.parsing.ParseResult @ list<t0>)))
   hydra.parsers.map : (forall t0,t1. ((t0 → t1) → (hydra.parsing.Parser @ t0) → (hydra.parsing.Parser @ t1)))
   hydra.parsers.optional : (forall t0. ((hydra.parsing.Parser @ t0) → (hydra.parsing.Parser @ optional<t0>)))
   hydra.parsers.pure : (forall t0. (t0 → (hydra.parsing.Parser @ t0)))
@@ -1734,6 +1761,7 @@ Terms:
   hydra.print.error.core.emptyTypeAnnotationError : (forall t0. (t0 → string))
   hydra.print.error.core.emptyTypeNameInTermError : (forall t0. (t0 → string))
   hydra.print.error.core.emptyUnionTypeError : (forall t0. (t0 → string))
+  hydra.print.error.core.extraRecordFieldsError : ((hydra.error.core.ExtraRecordFieldsError → string))
   hydra.print.error.core.invalidForallParameterNameError : ((hydra.error.core.InvalidForallParameterNameError → string))
   hydra.print.error.core.invalidLambdaParameterNameError : ((hydra.error.core.InvalidLambdaParameterNameError → string))
   hydra.print.error.core.invalidLetBindingNameError : ((hydra.error.core.InvalidLetBindingNameError → string))
@@ -1742,8 +1770,10 @@ Terms:
   hydra.print.error.core.invalidTypeLambdaParameterNameError : ((hydra.error.core.InvalidTypeLambdaParameterNameError → string))
   hydra.print.error.core.invalidTypeSchemeVariableNameError : ((hydra.error.core.InvalidTypeSchemeVariableNameError → string))
   hydra.print.error.core.missingCaseBranchesError : ((hydra.error.core.MissingCaseBranchesError → string))
+  hydra.print.error.core.missingRecordFieldsError : ((hydra.error.core.MissingRecordFieldsError → string))
   hydra.print.error.core.nestedTermAnnotationError : (forall t0. (t0 → string))
   hydra.print.error.core.nestedTypeAnnotationError : (forall t0. (t0 → string))
+  hydra.print.error.core.nominalTypeKindMismatchError : ((hydra.error.core.NominalTypeKindMismatchError → string))
   hydra.print.error.core.nonComparableMapKeyTypeError : ((hydra.error.core.NonComparableMapKeyTypeError → string))
   hydra.print.error.core.nonComparableSetElementTypeError : ((hydra.error.core.NonComparableSetElementTypeError → string))
   hydra.print.error.core.redundantWrapUnwrapError : ((hydra.error.core.RedundantWrapUnwrapError → string))
@@ -1752,6 +1782,7 @@ Terms:
   hydra.print.error.core.termVariableShadowingError : ((hydra.error.core.TermVariableShadowingError → string))
   hydra.print.error.core.typeVariableShadowingInForallError : ((hydra.error.core.TypeVariableShadowingInForallError → string))
   hydra.print.error.core.typeVariableShadowingInTypeLambdaError : ((hydra.error.core.TypeVariableShadowingInTypeLambdaError → string))
+  hydra.print.error.core.undeclaredVariantError : ((hydra.error.core.UndeclaredVariantError → string))
   hydra.print.error.core.undefinedFieldError : ((hydra.error.core.UndefinedFieldError → string))
   hydra.print.error.core.undefinedTermVariableError : ((hydra.error.core.UndefinedTermVariableError → string))
   hydra.print.error.core.undefinedTypeVariableError : ((hydra.error.core.UndefinedTypeVariableError → string))
@@ -1762,7 +1793,9 @@ Terms:
   hydra.print.error.core.unexpectedTypeVariantError : ((hydra.error.core.UnexpectedTypeVariantError → string))
   hydra.print.error.core.unknownCaseAlternativeError : ((hydra.error.core.UnknownCaseAlternativeError → string))
   hydra.print.error.core.unknownPrimitiveNameError : ((hydra.error.core.UnknownPrimitiveNameError → string))
+  hydra.print.error.core.unknownProjectedFieldError : ((hydra.error.core.UnknownProjectedFieldError → string))
   hydra.print.error.core.unnecessaryIdentityApplicationError : (forall t0. (t0 → string))
+  hydra.print.error.core.unresolvedNominalTypeError : ((hydra.error.core.UnresolvedNominalTypeError → string))
   hydra.print.error.core.untypedTermVariableError : ((hydra.error.core.UntypedTermVariableError → string))
   hydra.print.error.core.voidInNonBottomPositionError : (forall t0. (t0 → string))
   hydra.print.error.packaging.conflictingModuleNameError : ((hydra.error.packaging.ConflictingModuleNameError → string))
@@ -1882,6 +1915,7 @@ Terms:
   hydra.resolution.fullyStripType : ((hydra.core.Type → hydra.core.Type))
   hydra.resolution.instantiateType : ((hydra.typing.InferenceContext → hydra.core.Type → (hydra.core.Type, hydra.typing.InferenceContext)))
   hydra.resolution.instantiateTypeScheme : ((hydra.typing.InferenceContext → hydra.core.TypeScheme → (hydra.core.TypeScheme, hydra.typing.InferenceContext)))
+  hydra.resolution.mapKeyResolvesToString : ((map<hydra.core.Name, hydra.core.Type> → hydra.core.Type → boolean))
   hydra.resolution.nominalApplication : ((hydra.core.Name → list<hydra.core.Type> → hydra.core.Type))
   hydra.resolution.requireRecordType : (forall t0. (t0 → hydra.graph.Graph → hydra.core.Name → either<hydra.errors.Error, list<hydra.core.FieldType>>))
   hydra.resolution.requireRowType : (forall t0,t1. (t0 → string → (hydra.core.Type → optional<t1>) → hydra.graph.Graph → hydra.core.Name → either<hydra.errors.Error, t1>))
@@ -1889,6 +1923,7 @@ Terms:
   hydra.resolution.requireType : (forall t0. (t0 → hydra.graph.Graph → hydra.core.Name → either<hydra.errors.Error, hydra.core.Type>))
   hydra.resolution.requireUnionField : (forall t0. (t0 → hydra.graph.Graph → hydra.core.Name → hydra.core.Name → either<hydra.errors.Error, hydra.core.Type>))
   hydra.resolution.requireUnionType : (forall t0. (t0 → hydra.graph.Graph → hydra.core.Name → either<hydra.errors.Error, list<hydra.core.FieldType>>))
+  hydra.resolution.resolveBaseType : ((map<hydra.core.Name, hydra.core.Type> → hydra.core.Type → hydra.core.Type))
   hydra.resolution.resolveType : ((hydra.graph.Graph → hydra.core.Type → optional<hydra.core.Type>))
   hydra.resolution.typeToTypeScheme : ((hydra.core.Type → hydra.core.TypeScheme))
   hydra.rewriting.applyInsideTypeLambdasAndAnnotations : (((hydra.core.Term → hydra.core.Term) → hydra.core.Term → hydra.core.Term))
@@ -1910,6 +1945,8 @@ Terms:
   hydra.rewriting.subterms : ((hydra.core.Term → list<hydra.core.Term>))
   hydra.rewriting.subtermsWithSteps : ((hydra.core.Term → list<(hydra.paths.SubtermStep, hydra.core.Term)>))
   hydra.rewriting.subtypes : ((hydra.core.Type → list<hydra.core.Type>))
+  hydra.rewriting.wrapTermToRecord : ((hydra.core.Name → hydra.core.Term → hydra.core.Term))
+  hydra.rewriting.wrapTypeToRecord : ((hydra.core.Type → hydra.core.Type))
   hydra.scoping.extendGraphForLambda : ((hydra.graph.Graph → hydra.core.Lambda → hydra.graph.Graph))
   hydra.scoping.extendGraphForLet : (((hydra.graph.Graph → hydra.core.Binding → optional<hydra.core.Term>) → hydra.graph.Graph → hydra.core.Let → hydra.graph.Graph))
   hydra.scoping.extendGraphForTypeLambda : ((hydra.graph.Graph → hydra.core.TypeLambda → hydra.graph.Graph))
@@ -2020,9 +2057,9 @@ Terms:
   hydra.templates.graphToSchema : (forall t0. (t0 → hydra.graph.Graph → list<hydra.core.Binding> → either<hydra.errors.DecodingError, map<hydra.core.Name, hydra.core.Type>>))
   hydra.templates.instantiateTemplate : (forall t0. (t0 → boolean → map<hydra.core.Name, hydra.core.Type> → hydra.core.Name → hydra.core.Type → either<hydra.errors.Error, hydra.core.Term>))
   hydra.unification.joinTypes : (forall t0. (t0 → hydra.core.Type → hydra.core.Type → string → either<hydra.errors.UnificationError, list<hydra.typing.TypeConstraint>>))
-  hydra.unification.unifyTypeConstraints : (forall t0,t1. (t0 → map<hydra.core.Name, t1> → list<hydra.typing.TypeConstraint> → either<hydra.errors.UnificationError, hydra.typing.TypeSubst>))
-  hydra.unification.unifyTypeLists : (forall t0,t1. (t0 → map<hydra.core.Name, t1> → list<hydra.core.Type> → list<hydra.core.Type> → string → either<hydra.errors.UnificationError, hydra.typing.TypeSubst>))
-  hydra.unification.unifyTypes : (forall t0,t1. (t0 → map<hydra.core.Name, t1> → hydra.core.Type → hydra.core.Type → string → either<hydra.errors.UnificationError, hydra.typing.TypeSubst>))
+  hydra.unification.unifyTypeConstraints : (forall t0. (t0 → map<hydra.core.Name, hydra.core.TypeScheme> → list<hydra.typing.TypeConstraint> → either<hydra.errors.UnificationError, hydra.typing.TypeSubst>))
+  hydra.unification.unifyTypeLists : (forall t0. (t0 → map<hydra.core.Name, hydra.core.TypeScheme> → list<hydra.core.Type> → list<hydra.core.Type> → string → either<hydra.errors.UnificationError, hydra.typing.TypeSubst>))
+  hydra.unification.unifyTypes : (forall t0. (t0 → map<hydra.core.Name, hydra.core.TypeScheme> → hydra.core.Type → hydra.core.Type → string → either<hydra.errors.UnificationError, hydra.typing.TypeSubst>))
   hydra.unification.variableOccursInType : ((hydra.core.Name → hydra.core.Type → boolean))
   hydra.validate.core.appendFinding : (forall t0. (hydra.validation.ValidationProfile → (hydra.validation.ValidationResult @ t0) → optional<(hydra.core.Name, t0)> → (hydra.validation.ValidationResult @ t0)))
   hydra.validate.core.appendFindingType : (forall t0. (hydra.validation.ValidationProfile → (hydra.validation.ValidationResult @ t0) → optional<(hydra.core.Name, t0)> → (hydra.validation.ValidationResult @ t0)))
@@ -2044,6 +2081,8 @@ Terms:
   hydra.validate.core.firstTypeError : (forall t0. (list<optional<t0>> → optional<t0>))
   hydra.validate.core.isValidName : ((hydra.core.Name → boolean))
   hydra.validate.core.kernelDefaultCoreProfile : (hydra.validation.ValidationProfile)
+  hydra.validate.core.resolveNominalType : ((hydra.graph.Graph → hydra.core.Name → optional<hydra.core.Type>))
+  hydra.validate.core.resolveRecordFields : ((hydra.graph.Graph → hydra.core.Name → optional<list<hydra.core.FieldType>>))
   hydra.validate.core.resolveUnionFields : ((hydra.graph.Graph → hydra.core.Name → optional<list<hydra.core.FieldType>>))
   hydra.validate.core.term : ((hydra.validation.ValidationProfile → boolean → hydra.graph.Graph → hydra.core.Term → (hydra.validation.ValidationResult @ hydra.error.core.InvalidTermError)))
   hydra.validate.core.type : ((hydra.validation.ValidationProfile → (hydra.validation.ValidationResult @ hydra.error.core.InvalidTypeError) → set<hydra.core.Name> → hydra.core.Type → (hydra.validation.ValidationResult @ hydra.error.core.InvalidTypeError)))
