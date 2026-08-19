@@ -644,10 +644,17 @@ find_run_dir() {
 
 # json_escape is defined earlier (the prep block needs it).
 
-# Compare generated output against baseline
+# Compare generated output against baseline. The human-readable report goes to
+# stderr (so it reaches the console/log via the caller's `tee`); only the JSON
+# summary is written to stdout, for clean command-substitution capture.
+#
+# $3 (diff_file), if given, receives a unified diff (`diff -u <baseline>
+# <generated>`) for every differing file, appended one after another so the
+# run directory keeps a durable, line-level record of what changed (#671).
 compare_output() {
     local host=$1
     local target=$2
+    local diff_file=$3
     local demo_dir="$OUTPUT_BASE/${host}-to-${target}"
     local ext
     ext=$(ext_for_target "$target")
@@ -657,6 +664,10 @@ compare_output() {
 
     local total=0 identical=0 different=0 missing_in_baseline=0
     local diff_files=()
+
+    if [ -n "$diff_file" ]; then
+        : > "$diff_file"
+    fi
 
     while IFS= read -r f; do
         local rel="${f#$demo_dir/}"
@@ -682,23 +693,30 @@ compare_output() {
             else
                 different=$((different + 1))
                 diff_files+=("$mod_path")
+                if [ -n "$diff_file" ]; then
+                    {
+                        echo "=== $mod_path ==="
+                        diff -u "$ref" "$f" || true
+                        echo ""
+                    } >> "$diff_file"
+                fi
             fi
         else
             missing_in_baseline=$((missing_in_baseline + 1))
         fi
     done < <(find "$demo_dir" -name "*${ext}" 2>/dev/null | sort)
 
-    echo "  Comparison against baseline ($baseline_proj/src/main):"
-    echo "    Matched to baseline:  $total"
-    echo "    Identical:            $identical"
+    echo "  Comparison against baseline ($baseline_proj/src/main):" >&2
+    echo "    Matched to baseline:  $total" >&2
+    echo "    Identical:            $identical" >&2
     if [ "$different" -gt 0 ]; then
-        echo "    Different:            $different"
+        echo "    Different:            $different" >&2
         for df in "${diff_files[@]}"; do
-            echo "      DIFF: $df"
+            echo "      DIFF: $df" >&2
         done
     fi
     if [ "$missing_in_baseline" -gt 0 ]; then
-        echo "    No baseline found:    $missing_in_baseline"
+        echo "    No baseline found:    $missing_in_baseline" >&2
     fi
 
     # Return JSON fragment
@@ -960,18 +978,26 @@ ENDJSON
                 local gen_json
                 gen_json=$(parse_bootstrap_log "$logfile")
 
-                # Capture compare_output: print to stdout AND capture the last line (JSON)
-                local comp_output
-                comp_output=$(compare_output "$host" "$target")
-                # Print all lines (the human-readable part is already printed by compare_output)
+                # compare_output writes its human-readable report to stderr (tee'd
+                # into the log below) and per-file unified diffs to $diff_path; only
+                # the JSON summary comes back on stdout, for clean capture (#671).
+                local diff_path="$RUN_DIR/${path_key}.diff"
                 local comp_json
-                comp_json=$(echo "$comp_output" | tail -1)
+                comp_json=$(compare_output "$host" "$target" "$diff_path" 2> >(tee -a "$logfile" >&2))
 
                 local status="pass"
                 local diff_count
                 diff_count=$(echo "$comp_json" | python3 -c "import json,sys; print(json.load(sys.stdin).get('different',0))" 2>/dev/null || echo "0")
                 if [ "$diff_count" -gt 0 ]; then
                     status="diff"
+                    comp_json=$(echo "$comp_json" | python3 -c "
+import json, sys
+obj = json.load(sys.stdin)
+obj['diffFile'] = sys.argv[1]
+print(json.dumps(obj))
+" "${path_key}.diff")
+                else
+                    rm -f "$diff_path"
                 fi
 
                 # Extract test run time from the log
