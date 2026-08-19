@@ -664,7 +664,9 @@ compare_output() {
         case "$target" in
             haskell)     lang_dir="haskell" ;;
             java)        lang_dir="java" ;;
+            scala)       lang_dir="scala" ;;
             python)      lang_dir="python" ;;
+            typescript)  lang_dir="typescript" ;;
             clojure)     lang_dir="clojure" ;;
             scheme)      lang_dir="scheme" ;;
             common-lisp) lang_dir="common-lisp" ;;
