@@ -15,6 +15,60 @@ they are documented here for completeness.
 
 ---
 
+## [0.17.5] - 2026-08-19
+
+Point release on the 0.17.x line. Two language-surface changes lead: sum-type eliminators unify on
+`match` (scrutinee-first), and the primitive set is tentatively finalized — `strings.lines`/`unlines`
+are removed in favour of `hydra.formatting` term helpers. A symlink-aware filesystem family lands
+across all ten hosts, and Hydra's own build system continues its migration into Hydra.
+
+**Backward-incompatible.** The `cases` -> `match` rename and the `strings.lines`/`unlines` removal
+both change the published kernel surface. Code written against 0.17.4 that uses `Optionals.cases`
+or `strings.lines`/`strings.unlines` must be updated.
+
+### Highlights
+
+- **Sum-type eliminators unify on `match`** ([#615](https://github.com/CategoricalData/hydra/issues/615)):
+  the `cases`/`match` helper pair is flipped to a single scrutinee-first `match` convention across the
+  Haskell, Java, Python, and Scala DSLs, the `optionals.cases` -> `optionals.match` kernel primitive,
+  and the corresponding implementations in TypeScript and all four Lisp dialects.
+- **Primitive set tentatively finalized** ([#417](https://github.com/CategoricalData/hydra/issues/417)):
+  `strings.lines` and `strings.unlines` are removed as primitives; their semantics are preserved as
+  `hydra.formatting.lines`/`unlines` term helpers, with overlay implementations dropped across all ten
+  hosts and callers repointed.
+- **Symlink-aware filesystem primitives** ([#666](https://github.com/CategoricalData/hydra/issues/666)):
+  `status(followLinks)`, `createSymlink`, and `readSymlink` land with native implementations for every
+  host — Haskell, Java, Python, Scala, TypeScript, Clojure, Common Lisp, Scheme, and Emacs Lisp.
+- **Build system promotion continues** ([#416](https://github.com/CategoricalData/hydra/issues/416)):
+  adds `hydra.build.walk` extension-glob helpers (`extensionOf`/`filterByExtension`/`matchesExtension`)
+  and `hydra.build.comparereportlogic`, a set of pure snapshot-compare decision helpers.
+
+### Bug fixes
+
+- **`math.range` was inclusive of both bounds** ([#647](https://github.com/CategoricalData/hydra/issues/647)),
+  silently fabricating an extra element in index arithmetic.
+- **Java coder TCO-`cases` codegen** dropped enclosing-method type parameters from union-variant casts
+  (found via [#666](https://github.com/CategoricalData/hydra/issues/666)).
+- **`ShaclRdf` promoted to a DSL module** ([#652](https://github.com/CategoricalData/hydra/issues/652))
+  so the SHACL pipeline works outside Haskell.
+- **Cold-seed shim portability**: the R22 bootstrap shim used GNU-only `\+` and `\b`, which fail under
+  BSD `sed` on macOS ([#417](https://github.com/CategoricalData/hydra/issues/417)).
+- **Bootstrap Haskell target missing `unix`**: the demo's static `package.yaml` was not updated when
+  `System.Posix.Files` entered the kernel overlay, breaking every `*-to-haskell` bootstrap cell
+  ([#670](https://github.com/CategoricalData/hydra/issues/670)).
+
+### Known issues
+
+- A pre-#630 post-generation text pass rewrites `hydra.lib.<sub>` -> `hydra.overlay.<lang>.lib.<sub>`
+  in generated **doc comments** as well as code, because its quote-prefix guard does not recognize
+  mid-sentence prose references. Affects two kernel doc strings
+  (`hydra.error.system`, `hydra.error.packaging`); cosmetic only, no behavioral impact. Tracked as
+  part of [#633](https://github.com/CategoricalData/hydra/issues/633).
+- Bootstrap comparison diff detail is not persisted to the run directory
+  ([#671](https://github.com/CategoricalData/hydra/issues/671)).
+
+---
+
 ## [0.17.4] - 2026-08-09
 
 Point release on the 0.17.x line. Fixes an inference bug that mis-typed generated Java and Python for
