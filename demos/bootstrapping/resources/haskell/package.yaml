@@ -29,6 +29,7 @@ dependencies:
   - split                         >= 0.2.3 && < 0.3
   - text                          >= 2.0.2 && < 2.2
   - time                          >= 1.12.0 && < 1.13
+  - unix                          >= 2.8.0 && < 2.9
   - vector                        >= 0.12.0 && < 0.14
 
 library:
