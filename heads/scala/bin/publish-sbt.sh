@@ -213,7 +213,7 @@ if [ "$DO_UPLOAD" = true ]; then
     _sign_probe="$(mktemp)"; printf 'hydra-release-signing-probe\n' > "$_sign_probe"
     _sign_key_flag=()
     [ -n "${HYDRA_PGP_KEY:-}" ] && _sign_key_flag=(--local-user "$HYDRA_PGP_KEY")
-    if gpg --batch --yes "${_sign_key_flag[@]}" --detach-sign --armor \
+    if gpg --batch --yes ${_sign_key_flag[@]+"${_sign_key_flag[@]}"} --detach-sign --armor \
            -o "$_sign_probe.asc" "$_sign_probe" 2>"$_sign_probe.err" \
        && gpg --verify "$_sign_probe.asc" "$_sign_probe" 2>/dev/null; then
         echo "  PGP signing OK (gpg-agent produced and verified a signature)"
