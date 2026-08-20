@@ -238,7 +238,7 @@ for pkg in "${PUBLISH_SET[@]}"; do
     req_args=()
     [ "$pkg" = "hydra-kernel" ] && [ -f "$REQ_SYMS" ] && req_args=(--required-symbols "$REQ_SYMS")
     if python3 "$HYDRA_ROOT/bin/check-artifact-complete.py" \
-          --manifest "$manifest" --artifact "$jar" --kind java-jar "${req_args[@]}"; then :; else
+          --manifest "$manifest" --artifact "$jar" --kind java-jar ${req_args[@]+"${req_args[@]}"}; then :; else
         echo "  ARTIFACT INCOMPLETE: $pkg-$VERSION.jar missing declared modules/#417 symbols — refusing to publish" >&2
         gate_fail=1
     fi
