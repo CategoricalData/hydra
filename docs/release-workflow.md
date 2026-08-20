@@ -33,9 +33,17 @@ Releases are currently performed from the `main` branch and involve the followin
 1. Run the bootstrap host×target coverage (see "Bootstrap coverage" below): the triad plus enough
    individual cells to demonstrate every supported language works **both as a host and as a target**.
 1. Update `CHANGELOG.md` (see "Updating the changelog" below).
-1. Commit all changes and tag the release
-   (e.g. `git tag 0.13.0 -m '0.13.0 release' HEAD`, then `git push && git push --tags`).
+1. Commit all changes and push (but do **not** tag yet — see below).
 1. Publish implementation-specific code artifacts (see the Haskell, Java, and Python sections below).
+1. **Tag the release, once every package has published successfully**
+   (e.g. `git tag 0.17.5 -m '0.17.5 release' HEAD`, then `git push --tags`).
+   **Tag last, not before publishing.** Registry uploads are irreversible, but a release
+   run routinely turns up something small that needs fixing partway through — a metadata
+   slip, a missing exclusion, a stale bundled file. If the tag already exists, that fix
+   forces you to move or supersede a published tag; if it does not, the fix is just
+   another commit and the tag lands on the finished result. Tags are cheap to create and
+   awkward to move, so they go last. (Note this means the source archive, which is
+   `git archive HEAD`, must be rebuilt **and re-signed** if any fix lands mid-release.)
 1. After the published artifacts are visible in their registries, update
    [Releases](https://github.com/CategoricalData/hydra/wiki/Releases)
    with the new release, tag, changelog heading, and package links
@@ -58,7 +66,7 @@ step above). A release tags the repository *as-is*.
 # Recommended release commands
 bin/sync-all.sh                    # Regenerate all implementations
 bin/prepare-release.sh             # Verify + build upload-ready artifacts
-# Update CHANGELOG.md, commit, tag, push, publish
+# Update CHANGELOG.md, commit, push, publish all packages, THEN tag (tag last — see Overview)
 # After publication, update the wiki Releases page
 bin/bump-version.sh 0.14.0         # Open the next dev cycle (run immediately after tagging)
 ```
