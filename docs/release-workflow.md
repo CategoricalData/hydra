@@ -18,7 +18,37 @@ head under [#126](https://github.com/CategoricalData/hydra/issues/126); Hydra-Go
 
 ## Overview
 
-Releases are currently performed from the `main` branch and involve the following steps:
+### Where a release is performed: a throwaway local release branch
+
+A release is cut from a **fresh, local-only branch created from `main`**, in its own worktree —
+by convention `release-<version>` (e.g. `release-0.17.5`).
+
+**Why a fresh branch and worktree, rather than releasing from `main` in place:** a new worktree
+starts with no `dist/` tree, no `.stack-work`, no `build/`, no digest or test caches. That
+guarantees the release artifacts are built **from scratch**, so a stale generated file or a
+warm cache cannot silently contribute to what ships. A long-lived working tree accumulates
+exactly the kind of drift the release gates are meant to catch, and a cache hit can mask it.
+
+**The branch is local only.** Do not push it as a remote branch. Release work lands on `main`:
+
+```bash
+git push origin HEAD:main    # explicit refspec: the release branch has no upstream
+```
+
+**Delete the branch (and its worktree) once every artifact is published** and the tag is
+pushed. It has no further purpose; `main` plus the tag are the durable record.
+
+```bash
+git worktree remove worktrees/release-<version>
+git branch -D release-<version>
+```
+
+Note this means the release branch typically carries more than a changelog commit: fixes found
+by the release gates themselves land here first, then go to `main` with everything else.
+
+### Steps
+
+The steps below assume that setup:
 
 1. Finalize any changes to the Hydra kernel
    (whose source of truth is the `Hydra/Sources/Kernel` directory in Hydra-Haskell).
@@ -33,7 +63,8 @@ Releases are currently performed from the `main` branch and involve the followin
 1. Run the bootstrap host×target coverage (see "Bootstrap coverage" below): the triad plus enough
    individual cells to demonstrate every supported language works **both as a host and as a target**.
 1. Update `CHANGELOG.md` (see "Updating the changelog" below).
-1. Commit all changes and push (but do **not** tag yet — see below).
+1. Commit all changes and push to `main` — `git push origin HEAD:main` — but do **not** tag
+   yet (see below). Push the *commits*, never the release branch itself.
 1. **Sign the source archive now, before publishing** — even though the tag comes last.
    Two *different* signatures are involved and it is easy to conflate them:
    - **Per-artifact PGP**, which Maven Central *requires* on every JAR/POM. Gradle
@@ -50,7 +81,7 @@ Releases are currently performed from the `main` branch and involve the followin
    See [PGP signing for Maven Central](#pgp-signing-for-maven-central-one-publishers-local-convention).
 1. Publish implementation-specific code artifacts (see the Haskell, Java, and Python sections below).
 1. **Tag the release, once every package has published successfully**
-   (e.g. `git tag 0.17.5 -m '0.17.5 release' HEAD`, then `git push --tags`).
+   (e.g. `git tag 0.17.5 -m '0.17.5 release' HEAD`, then `git push origin 0.17.5`).
    **Tag last, not before publishing.** Registry uploads are irreversible, but a release
    run routinely turns up something small that needs fixing partway through — a metadata
    slip, a missing exclusion, a stale bundled file. If the tag already exists, that fix
@@ -63,6 +94,8 @@ Releases are currently performed from the `main` branch and involve the followin
    [Releases](https://github.com/CategoricalData/hydra/wiki/Releases)
    with the new release, tag, changelog heading, and package links
    (see "Updating the release index" below).
+1. **Delete the release branch and its worktree** — it is local-only scratch and its
+   contents are now on `main` plus the tag (see [above](#where-a-release-is-performed-a-throwaway-local-release-branch)).
 1. **Open the next development cycle**: immediately after tagging, run
    `bin/bump-version.sh <next-version>` (see "Version synchronization" below) so that all
    post-release dev-cycle source is versioned *ahead* of the release just cut. This is
@@ -78,7 +111,7 @@ already holds the version being released, set by the previous cycle's cycle-open
 step above). A release tags the repository *as-is*.
 
 ```bash
-# Recommended release commands
+# Recommended release commands (from a FRESH worktree on a local release-<version> branch)
 bin/sync-all.sh                    # Regenerate all implementations
 bin/prepare-release.sh             # Verify + build upload-ready artifacts
 # Update CHANGELOG.md, commit, push, SIGN the source archive (warms gpg-agent for Maven),
