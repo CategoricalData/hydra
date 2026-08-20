@@ -645,7 +645,7 @@ Two layouts exist, both carrying the two version fields and a content-hash core:
 | `hashes` | object | hashes | Map of module namespace → content hash (hex), sorted by namespace. |
 | `selfHash` | string | both | Hash over this package's own `hashes`; empty on legacy digests. |
 | `depHash:<pkg>` | string | both | Recorded `selfHash` of dependency `<pkg>` at write time. The `depHash:` prefix keeps these distinct from namespace keys; transitive invalidation compares them against deps' current `selfHash`. |
-| `generator` | string | inputs/outputs | Per-target generator-stamp identity (see [build-system.md](build-system.md)). |
+| `generator` | string | inputs/outputs | Per-target generator-stamp identity (see [build-system.md](../build-system.md)). |
 | `inputs` | object | inputs/outputs | Map of input path → `{ "kind": ..., "hash": ... }`. |
 | `outputs` | object | inputs/outputs | Map of output path → `{ "kind": ..., "hash": ... }`. |
 
@@ -663,4 +663,4 @@ Two layouts exist, both carrying the two version fields and a content-hash core:
 ```
 
 See [Format versioning](#format-versioning) for the distinction between the two version fields and the
-bump rules, and [build-system.md](build-system.md) for the digest's role in the cache hierarchy.
+bump rules, and [build-system.md](../build-system.md) for the digest's role in the cache hierarchy.

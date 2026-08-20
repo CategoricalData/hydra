@@ -56,14 +56,19 @@ or `strings.lines`/`strings.unlines` must be updated.
 - **Bootstrap Haskell target missing `unix`**: the demo's static `package.yaml` was not updated when
   `System.Posix.Files` entered the kernel overlay, breaking every `*-to-haskell` bootstrap cell
   ([#670](https://github.com/CategoricalData/hydra/issues/670)).
+- **Bootstrap comparison scored Scala and TypeScript cells as passing without comparing anything**:
+  `compare_output`'s target switch was missing both languages, so the baseline path was malformed,
+  every file counted as "no baseline found", and a zero-file comparison reported `pass`. A Scala or
+  TypeScript *target* cell could never fail ([#671](https://github.com/CategoricalData/hydra/issues/671)).
 
 ### Known issues
 
 - A pre-#630 post-generation text pass rewrites `hydra.lib.<sub>` -> `hydra.overlay.<lang>.lib.<sub>`
   in generated **doc comments** as well as code, because its quote-prefix guard does not recognize
-  mid-sentence prose references. Affects two kernel doc strings
-  (`hydra.error.system`, `hydra.error.packaging`); cosmetic only, no behavioral impact. Tracked as
-  part of [#633](https://github.com/CategoricalData/hydra/issues/633).
+  mid-sentence prose references. Affects two kernel doc strings in `src/main`
+  (`hydra.error.system`, `hydra.error.packaging`) plus ~20 generated docstrings in the test tree;
+  cosmetic only, no behavioral impact. Tracked as part of
+  [#633](https://github.com/CategoricalData/hydra/issues/633).
 - Bootstrap comparison diff detail is not persisted to the run directory
   ([#671](https://github.com/CategoricalData/hydra/issues/671)).
 
