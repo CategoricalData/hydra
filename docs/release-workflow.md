@@ -34,6 +34,20 @@ Releases are currently performed from the `main` branch and involve the followin
    individual cells to demonstrate every supported language works **both as a host and as a target**.
 1. Update `CHANGELOG.md` (see "Updating the changelog" below).
 1. Commit all changes and push (but do **not** tag yet — see below).
+1. **Sign the source archive now, before publishing** — even though the tag comes last.
+   Two *different* signatures are involved and it is easy to conflate them:
+   - **Per-artifact PGP**, which Maven Central *requires* on every JAR/POM. Gradle
+     (`useGpgCmd()`) and sbt (`sbt-pgp`) both shell out to `gpg` → gpg-agent during publish.
+     Hackage, PyPI, and npm need no PGP at all.
+   - **The source-archive signature** (`hydra-<version>-src.tar.asc`), the release of record.
+     No publish script consumes it; it is verified by the tag-triggered
+     `.github/workflows/release-verify.yml` and attached to the GitHub Release.
+
+   Signing the archive first does double duty: it proves the key works *and* warms
+   gpg-agent's passphrase cache, which is what lets Gradle and sbt sign ~22 artifacts
+   non-interactively. A signing failure partway through an aggregated Central Portal
+   deployment leaves a locked/partial deployment that must be dropped in the Portal UI.
+   See [PGP signing for Maven Central](#pgp-signing-for-maven-central-one-publishers-local-convention).
 1. Publish implementation-specific code artifacts (see the Haskell, Java, and Python sections below).
 1. **Tag the release, once every package has published successfully**
    (e.g. `git tag 0.17.5 -m '0.17.5 release' HEAD`, then `git push --tags`).
@@ -43,7 +57,8 @@ Releases are currently performed from the `main` branch and involve the followin
    forces you to move or supersede a published tag; if it does not, the fix is just
    another commit and the tag lands on the finished result. Tags are cheap to create and
    awkward to move, so they go last. (Note this means the source archive, which is
-   `git archive HEAD`, must be rebuilt **and re-signed** if any fix lands mid-release.)
+   `git archive HEAD`, must be rebuilt **and re-signed** if any fix lands mid-release —
+   cheap, and the agent is already unlocked from the pre-publish signing step.)
 1. After the published artifacts are visible in their registries, update
    [Releases](https://github.com/CategoricalData/hydra/wiki/Releases)
    with the new release, tag, changelog heading, and package links
@@ -66,7 +81,8 @@ step above). A release tags the repository *as-is*.
 # Recommended release commands
 bin/sync-all.sh                    # Regenerate all implementations
 bin/prepare-release.sh             # Verify + build upload-ready artifacts
-# Update CHANGELOG.md, commit, push, publish all packages, THEN tag (tag last — see Overview)
+# Update CHANGELOG.md, commit, push, SIGN the source archive (warms gpg-agent for Maven),
+# publish all packages, THEN tag (tag last — see Overview)
 # After publication, update the wiki Releases page
 bin/bump-version.sh 0.14.0         # Open the next dev cycle (run immediately after tagging)
 ```
@@ -271,6 +287,12 @@ and produces the upload-ready artifacts in `release-artifacts/`:
    `HYDRA_RELEASE_SIGNING_KEY` (else gpg's default); a missing key degrades to a
    warning so the script stays runnable outside a real release, but a real release
    must be signed. See "Verifying a release" below.
+   **Run `prepare-release.sh` from an interactive terminal if you want it to sign.**
+   gpg needs a TTY for pinentry; under `nohup`/a detached runner it fails with
+   `gpg: cannot open '/dev/tty'` and the step degrades to the unsigned warning even
+   though the key is present and fine. Signing the archive by hand afterwards is
+   equivalent — and is the normal path anyway, since the archive must be rebuilt and
+   re-signed if any fix lands during the release (see the Overview).
 13. **Per-host published-package self-containment** —
    runs each host's `verify-distribution.sh` gate, which builds that host's
    publish-set packages from the `dist/` tree alone and proves they are
