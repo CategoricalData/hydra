@@ -232,66 +232,11 @@ done
 # `while read` under `set -euo pipefail`, killed the script — the shim itself broke
 # on its own now-unneeded condition).
 
-# R22 (#417) Formatting Prelude-hiding shim — REMOVE when stack.yaml pins >= 0.17.5.
-# ---------------------------------------------------------------------------------
-# R22 makes lines/unlines non-primitive term helpers in hydra.formatting, shadowing
-# Prelude. Generated Hydra/Formatting.hs must therefore `import Prelude hiding (...
-# lines ... unlines)`. The R22-aware Haskell coder (Sources/Haskell/Coder.hs adds
-# "lines","unlines" to its fixed hiding list) emits that natively — but only ONCE a
-# host carrying that coder is published. The pin below is 0.17.4, whose PUBLISHED
-# coder predates R22 and emits the hiding WITHOUT lines/unlines, so the seeded
-# Formatting.hs is ambiguous ("Ambiguous occurrence lines/unlines") the moment R22's
-# source defines them — exactly the CI cold-clone red that reverted the first R22 land.
-# This shim injects the two names into the seeded kernel Formatting.hs hiding clause
-# so the published-coder cold-clone compiles. It is the #497/#624/X3-style
-# add-then-retire-on-publish bootstrap patch (a deliberate, temporary edit of the
-# EPHEMERAL seeded copy, overwritten by the next real sync — NOT a post-gen patch of
-# a tracked artifact).
-#
-# SELF-BREAKING RETIREMENT GUARD: once stack.yaml pins a host with the R22 coder
-# (>= 0.17.5), the seeder emits the hiding WITH lines/unlines natively, so the
-# pre-injection pattern (a hiding clause lacking them) is absent. We assert that
-# absence-of-need explicitly and HARD-FAIL with a delete-me instruction, so the pin
-# bump to 0.17.5 CANNOT silently leave a dead shim behind — it must be removed to get
-# a green seed (the same forcing function that retired #624/X3).
-FMT_HS="$REPO_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Formatting.hs"
-# hiding_has_both: true iff the Formatting.hs Prelude-hiding clause lists BOTH `lines`
-# and `unlines` as distinct comma-delimited items. Matching each as [(, ]NAME[,)] (not
-# \bNAME\b) is deliberate: `unlines` contains `lines`, so a naive `.*lines.*unlines`
-# is ambiguous — the list-item boundary makes the two checks independent and exact.
-hiding_has_both() {
-    grep -qE 'hiding[[:space:]]*\(.*[(, ]lines[,)]' "$1" \
-      && grep -qE 'hiding[[:space:]]*\(.*[(, ]unlines[,)]' "$1"
-}
-if [ -f "$FMT_HS" ]; then
-    if hiding_has_both "$FMT_HS"; then
-        echo "  [R22-shim] seeded Formatting.hs already hides lines/unlines — the pinned coder"
-        echo "            is R22-aware (>= 0.17.5). This shim is OBSOLETE: delete the R22 block"
-        echo "            in cold-seed-dist-haskell.sh (see #497/#624/X3 retirement precedent)." >&2
-        exit 1
-    fi
-    echo "  [R22-shim] injecting lines/unlines into seeded Formatting.hs Prelude hiding (#417, retire at 0.17.5)"
-    # Insert `lines` before `map` and `unlines` after `sum` in the hiding list, matching
-    # the R22 coder's native output order: ..., fail, lines, map, ..., sum, unlines.
-    #
-    # PORTABILITY: these patterns must stay POSIX BRE. Two GNU-only constructs broke
-    # this shim on macOS (BSD sed) while it worked in CI (GNU sed), so the failure was
-    # invisible to Linux-only validation:
-    #   * `\+`  -> not a BRE repetition operator in BSD sed; use `\{1,\}`.
-    #   * `\b`  -> word-boundary is a GNU extension BSD sed does not implement at all.
-    # `fail`/`sum` need no boundary guard here: both are anchored by the literal
-    # ", map," / ")" that follows, so dropping `\b` does not loosen the match.
-    # Symptom when this regresses: both substitutions silently no-op, hiding_has_both
-    # fails, and the seed aborts with "did not match the expected pattern".
-    sed_inplace 's/\(import[[:space:]]\{1,\}Prelude[[:space:]]\{1,\}hiding[[:space:]]*(.*fail\), map,/\1, lines, map,/' "$FMT_HS"
-    sed_inplace 's/\(import[[:space:]]\{1,\}Prelude[[:space:]]\{1,\}hiding[[:space:]]*(.*sum\))/\1, unlines)/' "$FMT_HS"
-    # Verify the injection actually landed (fail loudly rather than seed a broken tree).
-    if ! hiding_has_both "$FMT_HS"; then
-        echo "  [R22-shim] ERROR: failed to inject lines/unlines into Formatting.hs hiding clause;" >&2
-        echo "            the seeded hiding line did not match the expected pattern — inspect $FMT_HS." >&2
-        exit 1
-    fi
-fi
+# (R22/#417 Formatting Prelude-hiding shim removed 0.17.5: stack.yaml now pins the
+# R22-aware published coder (>= 0.17.5), which emits `import Prelude hiding (... lines
+# ... unlines)` natively, so the seeded Formatting.hs needs no injection. The shim's
+# own self-breaking retirement guard fired once pins hit 0.17.5 — retired here per its
+# instruction, matching the #497/#624/X3 add-then-retire-on-publish precedent.)
 
 # 4. Emit each package's package.yaml manifest so every dist/haskell/<pkg>/ is a
 #    self-contained buildable package (Default A). Covers all 16, including the
