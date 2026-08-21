@@ -15,6 +15,7 @@ import Hydra.Testing (TestGroup(..))
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Decoding as Decoding
+import qualified Hydra.Build.Walk as GenWalk
 import qualified Hydra.Digest as Digest
 import qualified Hydra.DigestFormat as DigestFormat
 import qualified Hydra.Dsls as Dsls
@@ -1311,10 +1312,11 @@ discoverPackagesWithDigests distJsonRoot = do
     exists <- SD.doesDirectoryExist distJsonRoot
     if not exists then return [] else do
       entries <- SD.listDirectory distJsonRoot
-      fmap Y.catMaybes $ CM.forM entries $ \entry -> do
+      kept <- fmap Y.catMaybes $ CM.forM entries $ \entry -> do
         let dpath = perPackageDigestPath distJsonRoot entry
         dExists <- SD.doesFileExist dpath
         return $ if dExists then Just entry else Nothing
+      return (GenWalk.sortPaths kept)                       -- deterministic order (#666)
 
 -- | After a successful regen, write per-package digest files. Each
 -- package's digest hashes its own source modules (the modules that route

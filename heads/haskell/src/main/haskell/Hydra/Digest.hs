@@ -41,6 +41,7 @@ module Hydra.Digest (
 ) where
 
 import Hydra.Packaging (Module(..), ModuleName(..))
+import qualified Hydra.Build.Walk as GenWalk
 
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.Char8 as BLC
@@ -96,7 +97,7 @@ discoverModuleNameFiles = do
                                FP.</> "haskell" FP.</> "Hydra" FP.</> "Sources"
       isDir <- SD.doesDirectoryExist srcDir
       if not isDir then return [] else do
-        files <- listFilesWithSuffix ".hs" srcDir
+        files <- GenWalk.filterByExtension "hs" <$> listFilesRecursive srcDir
         Y.catMaybes <$> mapM extractNs files
 
     -- Scan a package's native (.java/.py) self-host coder sources, which live
@@ -108,25 +109,15 @@ discoverModuleNameFiles = do
                                 FP.</> "java" FP.</> "hydra" FP.</> "sources"
           pyDir   = packagesRoot FP.</> pkg FP.</> "src" FP.</> "main"
                                 FP.</> "python" FP.</> "hydra" FP.</> "sources"
-      javaPairs <- scanNativeDir ".java" extractNativeNs javaDir
-      pyPairs   <- scanNativeDir ".py"   extractNativeNs pyDir
+      javaPairs <- scanNativeDir "java" extractNativeNs javaDir
+      pyPairs   <- scanNativeDir "py"   extractNativeNs pyDir
       return $ javaPairs ++ pyPairs
 
-    scanNativeDir suffix extract dir = do
+    scanNativeDir ext extract dir = do
       isDir <- SD.doesDirectoryExist dir
       if not isDir then return [] else do
-        files <- listFilesWithSuffix suffix dir
+        files <- GenWalk.filterByExtension ext <$> listFilesRecursive dir
         Y.catMaybes <$> mapM extract files
-
-    listFilesWithSuffix suffix dir = do
-      entries <- SD.listDirectory dir
-      subResults <- CM.forM entries $ \e -> do
-        let p = dir FP.</> e
-        isDir <- SD.doesDirectoryExist p
-        if isDir
-          then listFilesWithSuffix suffix p
-          else if suffix `L.isSuffixOf` e then return [p] else return []
-      return $ concat subResults
 
     extractNs :: FilePath -> IO (Maybe (ModuleName, FilePath))
     extractNs fp = do
@@ -246,7 +237,7 @@ hashPackageJsonContent distJsonRoot pkg = do
     let jsonRoot = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
     exists <- SD.doesDirectoryExist jsonRoot
     if not exists then return M.empty else do
-      files <- listFilesWithExt ".json" jsonRoot
+      files <- GenWalk.filterByExtension "json" <$> listFilesRecursive jsonRoot
       pairs <- CM.forM files $ \fp -> do
         result <- E.try (hashFile fp) :: IO (Either E.SomeException String)
         case result of
@@ -256,16 +247,6 @@ hashPackageJsonContent distJsonRoot pkg = do
                 key = ModuleName (jsonContentKeyPrefix ++ rel)
             return $ Just (key, h)
       return $ M.fromList (Y.catMaybes pairs)
-  where
-    listFilesWithExt suffix dir = do
-      entries <- SD.listDirectory dir
-      subResults <- CM.forM entries $ \e -> do
-        let p = dir FP.</> e
-        isDir <- SD.doesDirectoryExist p
-        if isDir
-          then listFilesWithExt suffix p
-          else if suffix `L.isSuffixOf` e then return [p] else return []
-      return $ concat subResults
 
 
 -- | Digest path for a single-tree writer: lives under the package's

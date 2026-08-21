@@ -107,7 +107,7 @@ done
 # #512 widened the grep: the original pattern matched only Hydra.Build.*, letting
 # Hydra.{Encode,Decode,Dsl}.Build.* imports (equally hydra-build-owned) sail past
 # unchecked.
-ALLOWED_BUILD_IMPORTS='Hydra\.Build\.Routing|Hydra\.Build\.Format|Hydra\.Encode\.Build\.Format|Hydra\.Decode\.Build\.Format'
+ALLOWED_BUILD_IMPORTS='Hydra\.Build\.Routing|Hydra\.Build\.Walk|Hydra\.Build\.Format|Hydra\.Encode\.Build\.Format|Hydra\.Decode\.Build\.Format'
 for m in Generation PackageRouting TargetFilePaths Digest DigestFormat; do
     disallowed=$(grep -E '^import qualified Hydra\.(Build|Encode\.Build|Decode\.Build|Dsl\.Build)\.' "$HEADMODS/$m.hs" | grep -vE "$ALLOWED_BUILD_IMPORTS" || true)
     if [ -n "$disallowed" ]; then
