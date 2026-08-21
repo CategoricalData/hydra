@@ -601,7 +601,13 @@ reconcileOrphans outputDir keepRel protectRel = do
           | p <- onDiskAbs
           , let rel = FP.normalise (makeRelativeTo outputDir p)
           , not (S.member rel keepRel)
+          -- protectRel entries are package-relative names (e.g. "manifest.json",
+          -- "languages.json"). Match on the basename too, so protection holds even
+          -- when makeRelativeTo cannot strip the prefix (outputDir relative but the
+          -- listed path absolute), which would otherwise leave rel as a full path
+          -- that never matches a protect entry (#416: languages.json was pruned).
           , not (S.member rel protectRel)
+          , not (S.member (FP.takeFileName rel) protectRel)
           ]
     CM.forM_ orphans $ \p ->
       SD.removeFile p `E.catch` \(_ :: E.IOException) -> return ()

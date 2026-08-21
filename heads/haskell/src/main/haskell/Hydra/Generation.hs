@@ -1813,11 +1813,13 @@ jsonReconcileSkipPackages = S.fromList ["hydra-jvm", "hydra-java", "hydra-python
 
 -- | Files (relative to a package's src/main/json) that legitimately live in
 -- the JSON tree but are NOT written by update-json-main, so the #405
--- reconcile must never delete them. manifest.json is written per package by
--- the separate update-json-manifest exe (one namespace listing per package);
--- it has no owning Module and would otherwise look like an orphan.
+-- reconcile must never delete them. Both are written by the separate
+-- update-json-manifest exe and have no owning Module, so they would otherwise
+-- look like orphans: manifest.json (one namespace listing per package) and
+-- hydra-build's languages.json (#416: the language scope lists the build shell
+-- scripts read via jq).
 jsonReconcileProtect :: S.Set FilePath
-jsonReconcileProtect = S.fromList [FP.normalise "manifest.json"]
+jsonReconcileProtect = S.fromList [FP.normalise "manifest.json", FP.normalise "languages.json"]
 
 -- | Delete orphaned .json files under each reconciled package's src/main/json.
 --
