@@ -342,8 +342,8 @@
 (for-each
   (lambda (sub)
     (hydra-load-def-module (string-append *gen-main-base* "lib/" sub ".scm")))
-  '("chars" "effects" "eithers" "equality" "files" "functions" "hashing" "lists" "literals" "logic" "maps"
-    "math" "optionals" "ordering" "pairs" "regex" "sets" "strings" "system" "text"))
+  '("chars" "defaults" "effects" "eithers" "equality" "files" "functions" "hashing" "lists" "literals"
+    "logic" "maps" "math" "optionals" "ordering" "pairs" "regex" "sets" "strings" "system" "text"))
 (hydra-load-native-lib (string-append *gen-main-base* "overlay/scheme/libraries.scm"))
 
 ;; Load coder modules based on target. Coder modules use define-record-type
