@@ -48,6 +48,12 @@ HASKELL_RESOURCES="$SCRIPT_DIR/../resources/haskell"
 
 source "$HYDRA_ROOT/bin/lib/common.sh"
 
+# #670: keep the demo's Hackage dependency list in sync with the head's
+# heads/haskell/package.yaml (the hand-maintained root). Runs before the
+# cache hash below so drift in the head's deps invalidates the cache too
+# (HASKELL_RESOURCES is one of the hashed paths).
+python3 "$HYDRA_ROOT/bin/lib/sync-haskell-bootstrap-demo-deps.py"
+
 # Compute a cache hash over every path the overlay sequence below reads from,
 # plus this script itself. A change to any of those invalidates the cache
 # and triggers a full wipe-and-overlay.
