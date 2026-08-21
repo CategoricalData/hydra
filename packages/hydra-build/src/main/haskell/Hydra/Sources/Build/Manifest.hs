@@ -46,6 +46,7 @@ import qualified Hydra.Sources.Build.Modules as BuildModules
 import qualified Hydra.Sources.Build.PackagingProfile as BuildPackagingProfile
 import qualified Hydra.Sources.Build.PublishSets as BuildPublishSets
 import qualified Hydra.Sources.Build.Reconcile as BuildReconcile
+import qualified Hydra.Sources.Build.Registry as BuildRegistry
 import qualified Hydra.Sources.Build.Routing as BuildRouting
 import qualified Hydra.Sources.Build.SyncMatrix as BuildSyncMatrix
 import qualified Hydra.Sources.Build.VersionConsistency as BuildVersionConsistency
@@ -71,6 +72,7 @@ mainModules = [
   BuildPackagingProfile.module_,
   BuildPublishSets.module_,
   BuildReconcile.module_,
+  BuildRegistry.module_,
   BuildRouting.module_,
   BuildSyncMatrix.module_,
   BuildVersionConsistency.module_,

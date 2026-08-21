@@ -15,6 +15,7 @@
     "hydra.build.packagingProfile",
     "hydra.build.publishsets",
     "hydra.build.reconcile",
+    "hydra.build.registry",
     "hydra.build.routing",
     "hydra.build.syncmatrix",
     "hydra.build.versionconsistency",
