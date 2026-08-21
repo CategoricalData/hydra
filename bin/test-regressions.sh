@@ -13,12 +13,13 @@
 #   bin/test-json-content-invalidates-render.sh (guards #469, needs synced dist/json; SKIPs cleanly otherwise)
 #   bin/test-stale-output-prune.sh            (guards #357, hermetic)
 #   bin/test-test-digest-freshness.sh         (guards #551, needs synced dist/json; SKIPs cleanly otherwise)
+#   bin/test-haskell-bootstrap-demo-deps-sync.sh (guards #670, hermetic)
 #
-# All five build their own Haskell executables from current source before
-# exec'ing them, so this script does not require a pre-built stack project —
-# only a Haskell toolchain. Run after a sync (so dist/json/ is populated) to
-# exercise the #405, #469, and #551 cases; without a sync those three SKIP
-# rather than fail.
+# The first five build their own Haskell executables from current source
+# before exec'ing them, so this script does not require a pre-built stack
+# project — only a Haskell toolchain. Run after a sync (so dist/json/ is
+# populated) to exercise the #405, #469, and #551 cases; without a sync those
+# three SKIP rather than fail. #670's script is pure Python and needs neither.
 #
 # Usage:
 #   bin/test-regressions.sh
@@ -33,6 +34,7 @@ SCRIPTS=(
     "test-json-content-invalidates-render.sh"
     "test-stale-output-prune.sh"
     "test-test-digest-freshness.sh"
+    "test-haskell-bootstrap-demo-deps-sync.sh"
 )
 
 declare -a RESULTS=()
