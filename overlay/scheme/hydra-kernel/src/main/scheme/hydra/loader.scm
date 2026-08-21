@@ -944,6 +944,19 @@
             remaining)
           (error "hydra-eval-with-retry: unresolved forms after 10 retries"))))))
 
+;; Guile-family modules that overlay/scheme/lib/*.scm files pull in via `(only (<mod>) ...)`
+;; import clauses for bindings not in R7RS (POSIX I/O, pipes, binary ports, bytevector ops,
+;; regex). hydra-load-native-lib re-imports only clauses naming one of these, matching the
+;; original flat loader's deliberate allowlist (see its docstring below): (hydra ...) imports
+;; are skipped (kernel is flat-loaded; those would double-load record types), and SRFI/scheme
+;; bindings some guile builds may lack (e.g. srfi-60/151 bitwise, ice-9 vlist) are instead
+;; provided ambiently by bootstrap.scm's own use-modules calls.
+(define hydra-native-lib-importable-modules
+  '((guile) (ice-9 popen) (ice-9 binary-ports) (ice-9 regex) (rnrs bytevectors)))
+
+(define (hydra-native-lib-importable? modname)
+  (member modname hydra-native-lib-importable-modules))
+
 (define (hydra-load-native-lib path)
   "Load a native library file, stripping define-library wrapper but NOT renaming definitions.
    Native libs already use fully-qualified names for their exports and may have
@@ -954,10 +967,12 @@
         (let ((form (read port)))
           (unless (eof-object? form)
             (cond
-              ;; Strip define-library: eval ONLY its (only (guile) ...) import clauses, then its
-              ;; (begin ...) body. The effectful impls (overlay/scheme/lib/{files,system}) need
-              ;; (import (only (guile) getcwd chdir getenv environ ...)) for POSIX I/O builtins not in
-              ;; R7RS. Everything else is deliberately skipped, matching the original flat loader: the
+              ;; Strip define-library: eval ONLY import clauses naming a module in
+              ;; hydra-native-lib-importable-modules, then its (begin ...) body. The effectful
+              ;; impls (overlay/scheme/lib/{files,system,regex}) need bindings like
+              ;; (only (guile) getcwd chdir getenv environ ...) or (only (ice-9 binary-ports)
+              ;; get-bytevector-all ...) for POSIX I/O, pipes, and binary/regex ops not in R7RS.
+              ;; Everything else is deliberately skipped, matching the original flat loader: the
               ;; kernel is flat-loaded (so (hydra ...) imports would double-load record types) and other
               ;; SRFI/scheme bindings (e.g. srfi-60/151 bitwise) are provided ambiently by bootstrap.scm's
               ;; use-modules — eval'ing those imports here would fail on guile builds lacking the module.
@@ -968,7 +983,8 @@
                      (for-each
                        (lambda (imp)
                          (when (and (pair? imp) (eq? (car imp) 'only)
-                                    (pair? (cdr imp)) (pair? (cadr imp)) (eq? (car (cadr imp)) 'guile))
+                                    (pair? (cdr imp)) (pair? (cadr imp))
+                                    (hydra-native-lib-importable? (cadr imp)))
                            (eval (list 'import imp) (interaction-environment))))
                        (cdr clause))))
                  (cddr form))
