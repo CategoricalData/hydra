@@ -24,7 +24,10 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_HASKELL_DIR="$HYDRA_ROOT/heads/haskell"
 
-DEFAULT_HOSTS="haskell,java,python"
+# Default host set read from the generated hydra.build language registry (#416):
+# .benchDefault is the bootstrapping-triad bench scope (lisp excluded — too slow).
+LANGUAGES_JSON="$HYDRA_ROOT/dist/json/hydra-build/src/main/json/languages.json"
+DEFAULT_HOSTS="$(jq -r '.benchDefault | join(",")' "$LANGUAGES_JSON")"
 HOSTS="$DEFAULT_HOSTS"
 
 while [ $# -gt 0 ]; do

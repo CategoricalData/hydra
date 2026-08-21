@@ -50,7 +50,10 @@ RUNS_DIR="$REPO_ROOT/benchmark/inference-runs"
 
 source "$REPO_ROOT/bin/lib/common.sh"
 
-ALL_HOSTS="haskell,java,python,python-pypy,common-lisp,emacs-lisp"
+# Host set read from the generated hydra.build language registry (#416):
+# .inferenceBench is the set with an inference benchmark (incl python-pypy pseudo-host).
+LANGUAGES_JSON="$REPO_ROOT/dist/json/hydra-build/src/main/json/languages.json"
+ALL_HOSTS="$(jq -r '.inferenceBench | join(",")' "$LANGUAGES_JSON")"
 DEFAULT_HOSTS="haskell,java,python"
 ALL_SERIES="linearChain,polymorphicChain,fanOut"
 DEFAULT_SERIES="linearChain"

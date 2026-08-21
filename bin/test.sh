@@ -48,7 +48,13 @@ HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 # and #289). CI runs no Go test job either, so including it here made `/test all`
 # report a spurious FAIL that the actual release/CI bar never sees. Re-add `go` once
 # the Go head hosts the suite.
-ALL_TARGETS="haskell java python scala typescript clojure scheme common-lisp emacs-lisp"
+# The language sets are read from the generated hydra.build language registry
+# (dist/json/hydra-build/.../languages.json), so the scope lives in translingual
+# data instead of hardcoded here (#416). .testMatrix is this script's target set
+# (every language except go); .lisp is the canonical lisp-dialect order.
+LANGUAGES_JSON="$HYDRA_ROOT/dist/json/hydra-build/src/main/json/languages.json"
+ALL_TARGETS="$(jq -r '.testMatrix | join(" ")' "$LANGUAGES_JSON")"
+LISP_TARGETS="$(jq -r '.lisp | join(" ")' "$LANGUAGES_JSON")"
 
 usage() {
     sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
@@ -100,7 +106,7 @@ expand_targets() {
     for t in "${TOKENS[@]}"; do
         case "$t" in
             all) out="$out $ALL_TARGETS" ;;
-            lisp) out="$out clojure scheme common-lisp emacs-lisp" ;;
+            lisp) out="$out $LISP_TARGETS" ;;
             haskell|java|python|scala|go|typescript|clojure|scheme|common-lisp|emacs-lisp)
                 out="$out $t" ;;
             *)

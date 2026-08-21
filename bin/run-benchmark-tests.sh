@@ -28,8 +28,11 @@ RUNS_DIR="$REPO_ROOT/benchmark/runs"
 
 source "$REPO_ROOT/bin/lib/common.sh"
 
-ALL_HOSTS="haskell,java,python,clojure,common-lisp,emacs-lisp,scheme"
-LISP_HOSTS="clojure,common-lisp,emacs-lisp,scheme"
+# Host sets read from the generated hydra.build language registry (#416):
+# .benchHosts is the set with a kernel benchmark suite; .lisp is the lisp dialects.
+LANGUAGES_JSON="$REPO_ROOT/dist/json/hydra-build/src/main/json/languages.json"
+ALL_HOSTS="$(jq -r '.benchHosts | join(",")' "$LANGUAGES_JSON")"
+LISP_HOSTS="$(jq -r '.lisp | join(",")' "$LANGUAGES_JSON")"
 
 # Check for dashboard subcommand first
 if [ "${1:-}" = "dashboard" ]; then
