@@ -71,8 +71,9 @@ The steps below assume that setup:
      (`useGpgCmd()`) and sbt (`sbt-pgp`) both shell out to `gpg` → gpg-agent during publish.
      Hackage, PyPI, and npm need no PGP at all.
    - **The source-archive signature** (`hydra-<version>-src.tar.asc`), the release of record.
-     No publish script consumes it; it is verified by the tag-triggered
-     `.github/workflows/release-verify.yml` and attached to the GitHub Release.
+     No publish script consumes it, and **nothing downstream requires it today** — see
+     [GitHub Releases](#github-releases-not-used-yet) below. Keep it with the other
+     `release-artifacts/`.
 
    Signing the archive first does double duty: it proves the key works *and* warms
    gpg-agent's passphrase cache, which is what lets Gradle and sbt sign ~22 artifacts
@@ -342,9 +343,11 @@ contains every host's sources: Haskell, Java, Python, Scala, TypeScript, Lisp):
 - `release-artifacts/hydra-<version>-src.tar.asc`       — its detached GPG signature (if signed).
   The signature covers the **uncompressed** `.tar`, not the `.tar.gz`, because `git archive`'s gzip
   layer is not byte-reproducible across git/gzip versions (so a `.tar.gz` signature could never
-  re-verify on another machine); the `.tar` is content-deterministic. Attach the `.asc` to the GitHub
-  Release for the tag — the `release-verify` workflow downloads it and verifies against its own
-  freshly-rebuilt `.tar`.
+  re-verify on another machine); the `.tar` is content-deterministic. **Hydra does not currently
+  create GitHub Releases**, so this file simply stays in `release-artifacts/`; *if* a Release is
+  created for the tag, attaching the `.asc` lets the `release-verify` workflow download it and
+  hard-verify against its own freshly-rebuilt `.tar`. See
+  [GitHub Releases](#github-releases-not-used-yet).
 
 plus, for each package in the curated Hackage set (`publish-hackage.sh --list`),
 staged under `dist/haskell/` (the Haskell channel's own dist tree, NOT
@@ -353,8 +356,9 @@ staged under `dist/haskell/` (the Haskell channel's own dist tree, NOT
 - `dist/haskell/<pkg>-<version>.tar.gz`      — the Hackage sdist
 - `dist/haskell/<pkg>-<version>-docs.tar.gz` — the Haddock-for-Hackage docs
 
-**Only the source archive is a GitHub-release deliverable** (attach the `-src`
-trio — tarball + `.sha512` + `.asc`). The per-package Hackage sdists staged in
+**Only the source archive would be a GitHub-release deliverable** (the `-src`
+trio — tarball + `.sha512` + `.asc`) *if* Releases were used; today they are not
+(see [GitHub Releases](#github-releases-not-used-yet)). The per-package Hackage sdists staged in
 `dist/haskell/`
 are *channel plumbing*: inputs to `cabal upload`, not release attachments. They
 live here only because Step 10 assembled them to verify Hackage's case-sensitive
@@ -409,6 +413,39 @@ self-host-only dialects (TypeScript, Clojure, Common Lisp, Scheme) and Emacs Lis
 **not** expected to generate arbitrary other languages. Do not treat a failing `self-host-only-dialect →
 some-other-language` cell as a release blocker; that is a future enhancement, not a regression. Demonstrate
 cross-gen with the `L → python` cells above and stop there.
+
+## GitHub Releases (not used yet)
+
+**Hydra does not create GitHub Release objects.** A release is marked by a **git tag** and by
+the packages on the five registries; no Release has ever been created (`gh release list` is
+empty as of 0.17.5). Nothing in the release process depends on one:
+
+| what people expect from a Release | how Hydra actually provides it |
+|---|---|
+| release notes | `CHANGELOG.md` and the wiki [Releases](https://github.com/CategoricalData/hydra/wiki/Releases) page |
+| downloadable source | GitHub auto-generates source tarballs for **every tag** — no Release object needed |
+| a version marker | the tag |
+| the packages themselves | the five registries, which are the real distribution path |
+
+The wiki's `[GitHub tag]` links point at `…/releases/tag/<version>`, which GitHub renders for a
+bare tag whether or not a Release exists.
+
+**The one thing a Release would add** is somewhere to host the detached signature
+`hydra-<version>-src.tar.asc`. That file cannot be committed: it signs a `git archive` of the
+tagged tree, so committing it changes `HEAD` and invalidates itself. A Release asset is the
+conventional home for such a file, which is why `.github/workflows/release-verify.yml` looks
+for one there.
+
+That check is **deliberately non-fatal**. When no signature is attached, the workflow logs
+`NOTE: no detached signature … attached yet` and passes; it only hard-verifies when an `.asc`
+is present. So the current state — signed archive kept locally in `release-artifacts/`, no
+Release object — is consistent and green.
+
+Publishing signatures is a deliverable of
+[#441](https://github.com/CategoricalData/hydra/issues/441) (Apache Incubator preparation),
+where a verifiable signed source archive is a requirement. Until Hydra pursues that, creating
+Releases is optional. **If you do start attaching signatures, note that the signing key must
+be one whose public half is in `KEYS`** — the workflow imports `KEYS` before verifying.
 
 ## Verifying a release
 
