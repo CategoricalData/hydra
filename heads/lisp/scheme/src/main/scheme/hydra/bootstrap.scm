@@ -260,9 +260,9 @@
   ;; All hydra.overlay.scheme.lib.* impls (the registry references every one's impl procedure).
   ;; Must include the effectful/newer libs (effects/files/system #494/#498, hashing, text) or the
   ;; registry fails with "Unbound variable: hydra_lib_<sub>_<fn>".
-  '("chars.scm" "effects.scm" "eithers.scm" "equality.scm" "files.scm" "hashing.scm" "lists.scm"
-    "literals.scm" "logic.scm" "maps.scm" "math.scm" "optionals.scm" "pairs.scm" "regex.scm"
-    "sets.scm" "strings.scm" "system.scm" "text.scm"))
+  '("chars.scm" "effects.scm" "eithers.scm" "equality.scm" "files.scm" "functions.scm" "hashing.scm"
+    "lists.scm" "literals.scm" "logic.scm" "maps.scm" "math.scm" "optionals.scm" "ordering.scm"
+    "pairs.scm" "regex.scm" "sets.scm" "strings.scm" "system.scm" "text.scm"))
 
 ;; Load core modules via loader
 (hydra-load-gen-main *gen-main-base*)
