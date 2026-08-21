@@ -6,7 +6,6 @@ import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Strings  as Strings
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
@@ -14,6 +13,7 @@ import qualified Data.List                   as L
 
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Build.LangExpansion as LangExpansion
+import qualified Hydra.Sources.Build.Registry as Registry
 
 
 -- | The pure sync-matrix planning core (#416 P1 / syncmatrix): the (package,
@@ -52,7 +52,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$>
-              ([ModuleName "hydra.build.langexpansion", Strip.ns] L.++ kernelTypesModuleNames),
+              ([ModuleName "hydra.build.langexpansion", ModuleName "hydra.build.registry", Strip.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Pure sync-matrix (package, target) planning core shared by the sync driver")}
   where
    definitions = [
@@ -93,18 +93,18 @@ kernelCells = define "kernelCells" $
 -- | The distribution package name for a language: @hydra-<language>@.
 packageForLanguage :: TypedTermDefinition (String -> String)
 packageForLanguage = define "packageForLanguage" $
-  doc "The distribution package name for a language: hydra-<language>" $
-  "lang" ~> Strings.concat2 (string "hydra-") (var "lang")
+  doc "The distribution package for a language's coder, read from the registry (data-driven; corrects the former hydra-<lang> rule for the Lisp dialects, which all share hydra-lisp)" $
+  "lang" ~> Registry.coderPackageFor @@ var "lang"
 
 -- | Rule 2: @(hydra-L, haskell)@ for every language L in the union — each
 -- language's coder generated in Haskell (the Haskell head drives every
 -- downstream generation).
 rootCoderCells :: TypedTermDefinition ([String] -> [(String, String)])
 rootCoderCells = define "rootCoderCells" $
-  doc "Rule 2: (hydra-L, haskell) for every L in (hosts union targets)" $
+  doc "Rule 2: (hydra-L, <rootCoderHost>) for every L in (hosts union targets) — the root coder host is read from the registry, not hardcoded" $
   "langUnion" ~>
     Lists.map
-      ("lang" ~> pair (packageForLanguage @@ var "lang") (string "haskell"))
+      ("lang" ~> pair (packageForLanguage @@ var "lang") (asTerm Registry.rootCoderHost))
       (var "langUnion")
 
 -- | The full sync matrix for a @(hosts, targets)@ request: the deduped union of

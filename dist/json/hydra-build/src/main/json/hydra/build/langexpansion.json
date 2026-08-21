@@ -6,6 +6,7 @@
     "seeAlso": []},
   "dependencies": [
     {"module": "hydra.strip"},
+    {"module": "hydra.build.registry"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
@@ -42,20 +43,13 @@
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"list": {"literal": "string"}}}},
         "body": {
           "annotated": {
-            "body": {
-              "list": [
-                {"literal": {"string": "haskell"}},
-                {"literal": {"string": "java"}},
-                {"literal": {"string": "python"}},
-                {"literal": {"string": "scala"}},
-                {"literal": {"string": "go"}},
-                {"literal": {"string": "typescript"}},
-                {"literal": {"string": "clojure"}},
-                {"literal": {"string": "scheme"}},
-                {"literal": {"string": "common-lisp"}},
-                {"literal": {"string": "emacs-lisp"}}]},
+            "body": {"variable": "hydra.build.registry.allLanguageNames"},
             "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The canonical set of all target languages"}}}]}}}}},
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "The canonical set of all target languages, read from the registry (the language names, in registry order)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.build.langexpansion.expandLangAlias",
@@ -206,17 +200,13 @@
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"list": {"literal": "string"}}}},
         "body": {
           "annotated": {
-            "body": {
-              "list": [
-                {"literal": {"string": "clojure"}},
-                {"literal": {"string": "common-lisp"}},
-                {"literal": {"string": "emacs-lisp"}},
-                {"literal": {"string": "scheme"}}]},
+            "body": {"variable": "hydra.build.registry.lispDialectNames"},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "The four Lisp dialects the 'lisp' alias expands to"}}}]}}}}},
+                  "value": {
+                    "literal": {"string": "The Lisp dialects the 'lisp' alias expands to, read from the registry (the family=lisp language names)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.build.langexpansion.validateLangs",

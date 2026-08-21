@@ -292,70 +292,6 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "first": {"literal": {"string": "clojure"}},
-                            "second": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"pair": {"first": {"literal": {"string": "hydra-lisp"}}, "second": {"literal": {"string": "lisp"}}}},
-                                    "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}}}},
-                        "type": {"literal": "string"}}},
-                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
-                {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {
-                        "body": {
-                          "pair": {
-                            "first": {"literal": {"string": "common-lisp"}},
-                            "second": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"pair": {"first": {"literal": {"string": "hydra-lisp"}}, "second": {"literal": {"string": "lisp"}}}},
-                                    "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}}}},
-                        "type": {"literal": "string"}}},
-                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
-                {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {
-                        "body": {
-                          "pair": {
-                            "first": {"literal": {"string": "emacs-lisp"}},
-                            "second": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"pair": {"first": {"literal": {"string": "hydra-lisp"}}, "second": {"literal": {"string": "lisp"}}}},
-                                    "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}}}},
-                        "type": {"literal": "string"}}},
-                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
-                {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {
-                        "body": {
-                          "pair": {
-                            "first": {"literal": {"string": "go"}},
-                            "second": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"pair": {"first": {"literal": {"string": "hydra-go"}}, "second": {"literal": {"string": "go"}}}},
-                                    "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}}}},
-                        "type": {"literal": "string"}}},
-                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
-                {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {
-                        "body": {
-                          "pair": {
                             "first": {"literal": {"string": "haskell"}},
                             "second": {
                               "typeApplication": {
@@ -420,12 +356,12 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
-                            "first": {"literal": {"string": "scheme"}},
+                            "first": {"literal": {"string": "go"}},
                             "second": {
                               "typeApplication": {
                                 "body": {
                                   "typeApplication": {
-                                    "body": {"pair": {"first": {"literal": {"string": "hydra-lisp"}}, "second": {"literal": {"string": "lisp"}}}},
+                                    "body": {"pair": {"first": {"literal": {"string": "hydra-go"}}, "second": {"literal": {"string": "go"}}}},
                                     "type": {"literal": "string"}}},
                                 "type": {"literal": "string"}}}}},
                         "type": {"literal": "string"}}},
@@ -445,13 +381,78 @@
                                     "type": {"literal": "string"}}},
                                 "type": {"literal": "string"}}}}},
                         "type": {"literal": "string"}}},
+                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"literal": {"string": "clojure"}},
+                            "second": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"pair": {"first": {"literal": {"string": "hydra-lisp"}}, "second": {"literal": {"string": "lisp"}}}},
+                                    "type": {"literal": "string"}}},
+                                "type": {"literal": "string"}}}}},
+                        "type": {"literal": "string"}}},
+                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"literal": {"string": "scheme"}},
+                            "second": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"pair": {"first": {"literal": {"string": "hydra-lisp"}}, "second": {"literal": {"string": "lisp"}}}},
+                                    "type": {"literal": "string"}}},
+                                "type": {"literal": "string"}}}}},
+                        "type": {"literal": "string"}}},
+                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"literal": {"string": "common-lisp"}},
+                            "second": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"pair": {"first": {"literal": {"string": "hydra-lisp"}}, "second": {"literal": {"string": "lisp"}}}},
+                                    "type": {"literal": "string"}}},
+                                "type": {"literal": "string"}}}}},
+                        "type": {"literal": "string"}}},
+                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"literal": {"string": "emacs-lisp"}},
+                            "second": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"pair": {"first": {"literal": {"string": "hydra-lisp"}}, "second": {"literal": {"string": "lisp"}}}},
+                                    "type": {"literal": "string"}}},
+                                "type": {"literal": "string"}}}}},
+                        "type": {"literal": "string"}}},
                     "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}]},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
                   "value": {
-                    "literal": {"string": "Per-language build identity as (name, coderPackage, family) triples: the single source of language names"}}}]}}}}},
+                    "literal": {
+                      "string": "Per-language build identity as (name, coderPackage, family) triples, in native ALL_LANGS order: the single source of language names"}}}]}}}}},
     {
       "term": {
         "name": "hydra.build.registry.lispDialectNames",
@@ -459,68 +460,17 @@
         "body": {
           "annotated": {
             "body": {
-              "application": {
-                "function": {
-                  "application": {
-                    "function": {
-                      "typeApplication": {
-                        "body": {
-                          "typeApplication": {
-                            "body": {"variable": "hydra.lib.lists.map"},
-                            "type": {
-                              "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}},
-                        "type": {"literal": "string"}}},
-                    "argument": {
-                      "lambda": {
-                        "parameter": "p",
-                        "domain": {
-                          "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
-                        "body": {
-                          "application": {
-                            "function": {
-                              "typeApplication": {
-                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": "string"}}},
-                                "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
-                            "argument": {"variable": "p"}}}}}}},
-                "argument": {
-                  "application": {
-                    "function": {
-                      "application": {
-                        "function": {
-                          "typeApplication": {
-                            "body": {"variable": "hydra.lib.lists.filter"},
-                            "type": {
-                              "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}},
-                        "argument": {
-                          "lambda": {
-                            "parameter": "p",
-                            "domain": {
-                              "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
-                            "body": {
-                              "application": {
-                                "function": {
-                                  "application": {
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
-                                    "argument": {
-                                      "application": {
-                                        "function": {
-                                          "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": "string"}}},
-                                            "type": {"literal": "string"}}},
-                                        "argument": {
-                                          "application": {
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": "string"}}},
-                                                "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
-                                            "argument": {"variable": "p"}}}}}}},
-                                "argument": {"literal": {"string": "lisp"}}}}}}}},
-                    "argument": {"variable": "hydra.build.registry.languageProfiles"}}}}},
+              "list": [
+                {"literal": {"string": "clojure"}},
+                {"literal": {"string": "common-lisp"}},
+                {"literal": {"string": "emacs-lisp"}},
+                {"literal": {"string": "scheme"}}]},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "The language names whose family is 'lisp' (drives the 'lisp' alias)"}}}]}}}}},
+                  "value": {
+                    "literal": {"string": "The Lisp-dialect names in native 'lisp'-alias order (clojure, common-lisp, emacs-lisp, scheme)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.build.registry.rootCoderHost",

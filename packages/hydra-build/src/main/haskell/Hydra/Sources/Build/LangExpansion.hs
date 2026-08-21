@@ -12,6 +12,7 @@ import           Prelude hiding ((++))
 import qualified Data.List                   as L
 
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
+import qualified Hydra.Sources.Build.Registry as Registry
 
 
 -- | Pure language/host list-expansion utilities shared by the sync/test/bench
@@ -33,7 +34,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, ModuleName "hydra.build.registry"] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Pure language/host list-expansion utilities shared by the sync/test/bench drivers")}
   where
    definitions = [
@@ -49,10 +50,8 @@ module_ = Module {
 -- constant): the nine hosts plus the Go head bud.
 allLanguages :: TypedTermDefinition [String]
 allLanguages = define "allLanguages" $
-  doc "The canonical set of all target languages" $
-  list (string <$> [
-    "haskell", "java", "python", "scala", "go", "typescript",
-    "clojure", "scheme", "common-lisp", "emacs-lisp"])
+  doc "The canonical set of all target languages, read from the registry (the language names, in registry order)" $
+  asTerm Registry.allLanguageNames
 
 -- | Expand a single language token: @all@ to every language, @lisp@ to the four
 -- dialects, anything else to itself (a singleton list).
@@ -92,8 +91,8 @@ langUnion = define "langUnion" $
 -- | The four Lisp dialects that the @lisp@ alias expands to.
 lispDialects :: TypedTermDefinition [String]
 lispDialects = define "lispDialects" $
-  doc "The four Lisp dialects the 'lisp' alias expands to" $
-  list (string <$> ["clojure", "common-lisp", "emacs-lisp", "scheme"])
+  doc "The Lisp dialects the 'lisp' alias expands to, read from the registry (the family=lisp language names)" $
+  asTerm Registry.lispDialectNames
 
 -- | Validate a token list: expand it, then return the unknown tokens (empty
 -- when all are valid). The caller decides how to fail on a non-empty result.

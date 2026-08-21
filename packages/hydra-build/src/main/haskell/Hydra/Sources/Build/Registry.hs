@@ -65,20 +65,26 @@ module_ = Module {
 -- got WRONG); @family@ groups languages that share build treatment (@jvm@,
 -- @python@, @lisp@, @haskell@, @typescript@, @go@). This is the ONLY place a
 -- language name is written down.
+--
+-- ORDER IS SIGNIFICANT and matches the native @ALL_LANGS@ order in @bin/sync.sh@
+-- (haskell, java, python, scala first — higher-value hosts assembled first — then
+-- go, typescript, then the Lisp dialects). @allLanguageNames@ preserves this order,
+-- so @expandLangAlias "all"@ and the sync matrix keep the native ordering that the
+-- driver's @LANG_UNION@ deliberately does not sort. Do NOT alphabetize this list.
 languageProfiles :: TypedTermDefinition [(String, String, String)]
 languageProfiles = define "languageProfiles" $
-  doc "Per-language build identity as (name, coderPackage, family) triples: the single source of language names" $
+  doc "Per-language build identity as (name, coderPackage, family) triples, in native ALL_LANGS order: the single source of language names" $
   list [
-    triple (string "clojure")     (string "hydra-lisp")       (string "lisp"),
-    triple (string "common-lisp") (string "hydra-lisp")       (string "lisp"),
-    triple (string "emacs-lisp")  (string "hydra-lisp")       (string "lisp"),
-    triple (string "go")          (string "hydra-go")         (string "go"),
     triple (string "haskell")     (string "hydra-haskell")    (string "haskell"),
     triple (string "java")        (string "hydra-java")       (string "jvm"),
     triple (string "python")      (string "hydra-python")     (string "python"),
     triple (string "scala")       (string "hydra-scala")      (string "jvm"),
+    triple (string "go")          (string "hydra-go")         (string "go"),
+    triple (string "typescript")  (string "hydra-typescript") (string "typescript"),
+    triple (string "clojure")     (string "hydra-lisp")       (string "lisp"),
     triple (string "scheme")      (string "hydra-lisp")       (string "lisp"),
-    triple (string "typescript")  (string "hydra-typescript") (string "typescript")]
+    triple (string "common-lisp") (string "hydra-lisp")       (string "lisp"),
+    triple (string "emacs-lisp")  (string "hydra-lisp")       (string "lisp")]
 
 -- | Every language name in the registry, in registry order (the former @ALL_LANGS@
 -- bash constant): @map first languageProfiles@. Neutral logic uses this instead of
@@ -88,14 +94,14 @@ allLanguageNames = define "allLanguageNames" $
   doc "Every language name in the registry (the former ALL_LANGS constant)" $
   Lists.map ("p" ~> Pairs.first (var "p")) (asTerm languageProfiles)
 
--- | The four Lisp-dialect names: the registry rows whose family is @lisp@. Drives
--- the @lisp@ alias expansion without hardcoding the dialect list.
+-- | The four Lisp-dialect names in the order the native @lisp@ alias expands them
+-- (@clojure common-lisp emacs-lisp scheme@ — see @bin/sync.sh@ expand_langs, which
+-- differs from the Lisp tail order in @allLanguageNames@/@ALL_LANGS@). All four have
+-- family @lisp@ in 'languageProfiles'; this constant pins the alias-expansion order.
 lispDialectNames :: TypedTermDefinition [String]
 lispDialectNames = define "lispDialectNames" $
-  doc "The language names whose family is 'lisp' (drives the 'lisp' alias)" $
-  Lists.map ("p" ~> Pairs.first (var "p"))
-    (Lists.filter ("p" ~> Equality.equal (Pairs.second (Pairs.second (var "p"))) (string "lisp"))
-      (asTerm languageProfiles))
+  doc "The Lisp-dialect names in native 'lisp'-alias order (clojure, common-lisp, emacs-lisp, scheme)" $
+  list (string <$> ["clojure", "common-lisp", "emacs-lisp", "scheme"])
 
 -- | The distribution package a language's coder lives in: the @coderPackage@ field
 -- of its profile, or @hydra-<name>@ as a fallback for an unknown name (matching the
