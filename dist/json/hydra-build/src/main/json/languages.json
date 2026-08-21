@@ -1,0 +1,7 @@
+{
+  "all": ["haskell", "java", "python", "scala", "go", "typescript", "clojure", "scheme", "common-lisp", "emacs-lisp"],
+  "lisp": ["clojure", "common-lisp", "emacs-lisp", "scheme"],
+  "testMatrix": ["haskell", "java", "python", "scala", "typescript", "clojure", "scheme", "common-lisp", "emacs-lisp"],
+  "benchHosts": ["haskell", "java", "python", "clojure", "common-lisp", "emacs-lisp", "scheme"],
+  "inferenceBench": ["haskell", "java", "python", "python-pypy", "common-lisp", "emacs-lisp"],
+  "benchDefault": ["haskell", "java", "python"]}

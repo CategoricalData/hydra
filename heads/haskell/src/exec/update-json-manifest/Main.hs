@@ -8,7 +8,7 @@
 module Main where
 
 import Hydra.Generation (generateEncoderModules, generateDecoderModules)
-import Hydra.ManifestGeneration (writePerPackageManifestsJson)
+import Hydra.ManifestGeneration (writeLanguagesJson, writePerPackageManifestsJson)
 import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
@@ -88,5 +88,8 @@ main = do
   -- non-kernel package to contribute testModules here.
   let allTestModules = testModules ++ hydraBuildTestModules
   writePerPackageManifestsJson routingMap defaultDistJsonRoot dslSrcMods encSrcMods mainUniverse allTestModules
+  -- #416 piece 3 step 2: emit the language scope lists the build shell scripts
+  -- read via jq, so they stop hardcoding language enumerations (Option A bridge).
+  writeLanguagesJson defaultDistJsonRoot
   putStrLn ""
   putStrLn "=== Done! ==="

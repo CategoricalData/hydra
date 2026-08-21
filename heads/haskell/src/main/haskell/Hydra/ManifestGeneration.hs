@@ -3,6 +3,7 @@
 -- 'Hydra.Build.ManifestWriter' coupling. Used only by the update-json-manifest
 -- driver, which always runs against a local (non-cold-seed) build.
 module Hydra.ManifestGeneration (
+  writeLanguagesJson,
   writePerPackageManifestsJson,
 ) where
 
@@ -12,6 +13,7 @@ import Hydra.PackageRouting (RoutingMap, groupByPackageIn)
 import qualified Hydra.Build.ManifestWriter as GenManifestWriter
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
+import qualified Hydra.Sources.Build.Registry as Registry
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -75,3 +77,33 @@ writePerPackageManifestsJson routingMap distJsonRoot dslSourceModules encodingSo
   where
     insertAfter key kv (f@(k, _):fs) = f : if k == key then kv : fs else insertAfter key kv fs
     insertAfter _ kv [] = [kv]
+
+-- | Write the evaluated language scope lists to
+-- @dist/json/hydra-build/src/main/json/languages.json@ (#416 piece 3 step 2).
+--
+-- This is the generated data artifact the build shell scripts read (via @jq@)
+-- instead of hardcoding language enumerations: the canonical bash<->hydra bridge
+-- (Josh-ratified Option A). The lists come straight from
+-- 'Hydra.Sources.Build.Registry' raw @[String]@ bindings — the same single source
+-- of truth the DSL defs wrap — so the artifact and the generated hydra.build.registry
+-- module can never drift. Keys are the alias/scope names the scripts already use;
+-- each array preserves the native per-script order exactly (byte-parity with the
+-- retired hardcoded values). Emitted with the same 'Hydra.Json.Writer' the manifests
+-- use, so it is a normal generated dist/json artifact (tracked, like manifest.json).
+writeLanguagesJson :: FilePath -> IO ()
+writeLanguagesJson distJsonRoot = do
+    let jsonVal = Json.ValueObject [
+          ("all",            arr Registry.allLanguageNameList),
+          ("lisp",           arr Registry.lispDialectNameList),
+          ("testMatrix",     arr Registry.testMatrixNameList),
+          ("benchHosts",     arr Registry.benchHostNameList),
+          ("inferenceBench", arr Registry.inferenceBenchHostNameList),
+          ("benchDefault",   arr Registry.benchDefaultNameList)]
+        jsonStr = JsonWriter.printJson jsonVal
+        pkgDir  = distJsonRoot FP.</> "hydra-build" FP.</> "src" FP.</> "main" FP.</> "json"
+        filePath = pkgDir FP.</> "languages.json"
+    SD.createDirectoryIfMissing True pkgDir
+    writeFile filePath (jsonStr ++ "\n")
+    putStrLn $ "Wrote languages: " ++ filePath
+  where
+    arr names = Json.ValueArray (Json.ValueString <$> names)
