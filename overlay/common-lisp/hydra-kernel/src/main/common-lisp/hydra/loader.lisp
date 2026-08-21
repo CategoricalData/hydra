@@ -695,7 +695,13 @@ forward references."
                      "scala/serde.lisp" "scala/coder.lisp"
                      "lisp/syntax.lisp" "lisp/language.lisp"
                      "lisp/serde.lisp" "lisp/coder.lisp"
-                     "org/json/decoding.lisp"))
+                     "org/json/decoding.lisp"
+                     ;; #416: hydra.build.registry is a leaf that hydra.build.langexpansion
+                     ;; and hydra.build.syncmatrix consume via cross-module refs. The flat
+                     ;; loader otherwise loads the build/ modules alphabetically, which puts
+                     ;; the consumer (langexpansion) before the dependency (registry) and
+                     ;; leaves REGISTRY_* unbound. Pin registry to load first.
+                     "build/registry.lisp"))
          ;; Collect ALL .lisp files from gen-main.
          (all-files (collect-lisp-files base))
          ;; #434/#473: the hand-written runtime lives under the dialect tier

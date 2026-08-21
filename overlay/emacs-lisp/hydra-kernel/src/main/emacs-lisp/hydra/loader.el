@@ -563,7 +563,13 @@ Signals an error if any form remains unresolved after 10 retry passes."
     "python/environment.el" "python/utils.el"
     "python/serde.el" "python/coder.el"
     "scala/syntax.el" "scala/language.el"
-    "scala/utils.el" "scala/serde.el" "scala/coder.el")
+    "scala/utils.el" "scala/serde.el" "scala/coder.el"
+    ;; #416: hydra.build.registry is a leaf that hydra.build.langexpansion and
+    ;; hydra.build.syncmatrix consume via cross-module refs. The flat loader
+    ;; otherwise loads the build/ modules alphabetically, putting the consumer
+    ;; (langexpansion) before the dependency (registry) and leaving REGISTRY_*
+    ;; unbound. Pin registry to load first.
+    "build/registry.el")
   "Priority ordering for gen-main module loading.")
 
 (defvar hydra-skip-gen-main-files nil
