@@ -51,12 +51,16 @@ module_ = Module {
   where
    definitions = [
      toDefinition allLanguageNames,
+     toDefinition benchDefaultNames,
+     toDefinition benchHostNames,
      toDefinition coderPackageFor,
      toDefinition familyFor,
+     toDefinition inferenceBenchHostNames,
      toDefinition isLispDialect,
      toDefinition languageProfiles,
      toDefinition lispDialectNames,
-     toDefinition rootCoderHost]
+     toDefinition rootCoderHost,
+     toDefinition testMatrixNames]
 
 -- | The registry as data: one @(name, coderPackage, family)@ triple per language.
 -- @name@ is the canonical language token (the former ad-hoc bash identifiers);
@@ -102,6 +106,51 @@ lispDialectNames :: TypedTermDefinition [String]
 lispDialectNames = define "lispDialectNames" $
   doc "The Lisp-dialect names in native 'lisp'-alias order (clojure, common-lisp, emacs-lisp, scheme)" $
   list (string <$> ["clojure", "common-lisp", "emacs-lisp", "scheme"])
+
+-- Per-script scope lists (#416 piece 3): each build script tests/benchmarks a
+-- DIFFERENT subset of languages, in its own order — these are NOT one shared @all@.
+-- Each constant is the evaluated language set the corresponding bash driver
+-- currently hardcodes; encoding them here retires those hardcoded lists (the scope
+-- is data, the per-script difference a legitimate property, not a neutral-logic
+-- branch). Explicit ordered lists (not a boolean-per-language) because two of the
+-- scopes carry order and one (inference) includes the @python-pypy@ pseudo-host,
+-- which a plain family/name boolean cannot express. Order matches each script's
+-- native constant exactly, for byte-parity.
+
+-- | The languages the kernel test suite runs as targets (@bin/test.sh@ @ALL_TARGETS@):
+-- every language except @go@ (the head bud does not host the suite).
+testMatrixNames :: TypedTermDefinition [String]
+testMatrixNames = define "testMatrixNames" $
+  doc "Languages the kernel testSuite runs as targets (test.sh ALL_TARGETS; all except go)" $
+  list (string <$> [
+    "haskell", "java", "python", "scala", "typescript",
+    "clojure", "scheme", "common-lisp", "emacs-lisp"])
+
+-- | The hosts with a kernel benchmark suite (@bin/run-benchmark-tests.sh@ @ALL_HOSTS@):
+-- the three self-hosting non-JVM-plus-JVM hosts plus the four Lisp dialects (no
+-- scala/go/typescript bench suite).
+benchHostNames :: TypedTermDefinition [String]
+benchHostNames = define "benchHostNames" $
+  doc "Hosts with a kernel benchmark suite (run-benchmark-tests.sh ALL_HOSTS)" $
+  list (string <$> [
+    "haskell", "java", "python",
+    "clojure", "common-lisp", "emacs-lisp", "scheme"])
+
+-- | The hosts with an inference benchmark (@bin/run-inference-bench.sh@ @ALL_HOSTS@).
+-- Includes the @python-pypy@ pseudo-host (a distinct bench runner that maps back to
+-- python's bench package); excludes scala/go/typescript/clojure/scheme.
+inferenceBenchHostNames :: TypedTermDefinition [String]
+inferenceBenchHostNames = define "inferenceBenchHostNames" $
+  doc "Hosts with an inference benchmark (run-inference-bench.sh ALL_HOSTS; includes python-pypy pseudo-host)" $
+  list (string <$> [
+    "haskell", "java", "python", "python-pypy", "common-lisp", "emacs-lisp"])
+
+-- | The default bench scope (@bin/sync-bench.sh@ @DEFAULT_HOSTS@): the bootstrapping
+-- triad only (lisp excluded — the coders are too slow for the default bench sync).
+benchDefaultNames :: TypedTermDefinition [String]
+benchDefaultNames = define "benchDefaultNames" $
+  doc "Default bench scope (sync-bench.sh DEFAULT_HOSTS; the haskell/java/python triad)" $
+  list (string <$> ["haskell", "java", "python"])
 
 -- | The distribution package a language's coder lives in: the @coderPackage@ field
 -- of its profile, or @hydra-<name>@ as a fallback for an unknown name (matching the

@@ -74,6 +74,38 @@
                   "value": {"literal": {"string": "Every language name in the registry (the former ALL_LANGS constant)"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.build.registry.benchDefaultNames",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"list": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {"list": [{"literal": {"string": "haskell"}}, {"literal": {"string": "java"}}, {"literal": {"string": "python"}}]},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Default bench scope (sync-bench.sh DEFAULT_HOSTS; the haskell/java/python triad)"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.registry.benchHostNames",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"list": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "list": [
+                {"literal": {"string": "haskell"}},
+                {"literal": {"string": "java"}},
+                {"literal": {"string": "python"}},
+                {"literal": {"string": "clojure"}},
+                {"literal": {"string": "common-lisp"}},
+                {"literal": {"string": "emacs-lisp"}},
+                {"literal": {"string": "scheme"}}]},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Hosts with a kernel benchmark suite (run-benchmark-tests.sh ALL_HOSTS)"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.build.registry.coderPackageFor",
         "signature": {
           "typeParameters": [],
@@ -247,6 +279,26 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "The build family of a language (jvm/python/lisp/haskell/typescript/go; empty for unknown)"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.registry.inferenceBenchHostNames",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"list": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "list": [
+                {"literal": {"string": "haskell"}},
+                {"literal": {"string": "java"}},
+                {"literal": {"string": "python"}},
+                {"literal": {"string": "python-pypy"}},
+                {"literal": {"string": "common-lisp"}},
+                {"literal": {"string": "emacs-lisp"}}]},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Hosts with an inference benchmark (run-inference-bench.sh ALL_HOSTS; includes python-pypy pseudo-host)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.build.registry.isLispDialect",
@@ -482,4 +534,26 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "The single host that drives root-coder generation (the former hardcoded 'haskell')"}}}]}}}}}]}
+                  "value": {"literal": {"string": "The single host that drives root-coder generation (the former hardcoded 'haskell')"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.registry.testMatrixNames",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"list": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "list": [
+                {"literal": {"string": "haskell"}},
+                {"literal": {"string": "java"}},
+                {"literal": {"string": "python"}},
+                {"literal": {"string": "scala"}},
+                {"literal": {"string": "typescript"}},
+                {"literal": {"string": "clojure"}},
+                {"literal": {"string": "scheme"}},
+                {"literal": {"string": "common-lisp"}},
+                {"literal": {"string": "emacs-lisp"}}]},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Languages the kernel testSuite runs as targets (test.sh ALL_TARGETS; all except go)"}}}]}}}}}]}
