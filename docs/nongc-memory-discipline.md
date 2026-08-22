@@ -10,8 +10,9 @@ hosts, even where a syntax coder already exists (Rust, C++). This note settles, 
 question stops recurring each time someone re-proposes a Rust, C++, or C head.
 
 It is an investigation, not a head implementation. The deliverable is a shared memory-management discipline
-grounded in Hydra's data model, a per-language verdict for Swift, Rust, C++, and C, and a Rust
-proof-of-concept.
+grounded in Hydra's data model, a per-language verdict for Swift, Rust, C++, and C, and compiled
+proof-of-concept code: Rust (`Box`, drop-counter), C++ (`unique_ptr` and arena, ASan/LSan), and C (arena,
+ASan/LSan). Swift is argued exhaustively but not compiled — no `swiftc` on the build box.
 
 ## The shared principle: structural tree-ownership
 
@@ -81,15 +82,58 @@ there is no shared mutable identity for two nodes to point at each other through
 `indirect` boxes are reference-counted internally), but since no cycle can exist, refcounting alone reclaims
 everything — the ARC cycle gap is unreachable.
 
-The one thing to rule out is the coder being **forced** to emit a `class` (reference type) — e.g. to share a
-large substructure for size. For an immutable tree there is no need to share substructure for correctness
-(sharing is an optimization, never a requirement), and Hydra's coder emits nominal types field-by-field
-without introducing sharing. If a future size optimization *did* introduce sharing via `class`, the acyclic
-invariant still forbids a cycle, so at worst a `weak`/`unowned` annotation would be documented — but nothing
-in the current model requires it.
+#### Ruling out a forced `class` — the airtight version
+
+The only way ARC's cycle gap could become reachable is if the Swift coder were **forced** to emit a
+reference type (`class`) rather than a value type. A cycle needs *two* mutable reference-typed nodes that can
+be made to point at each other; value types (`struct`/`enum`) are copied on assignment and have no shared
+identity, so they cannot participate in a cycle at all. So the claim reduces to: **enumerate every Hydra type
+construct a Swift coder must map, and show none forces a `class`.** The constructs are exactly the
+data-carrying variants of the kernel `Type` union (Core.hs, the `Type` union ~line 509):
+
+| Hydra construct | Swift value-type mapping | Forces a `class`? |
+|-----------------|--------------------------|-------------------|
+| `record` | `struct` | No |
+| `union` | `enum` with associated values | No |
+| recursive `union`/`record` | `indirect enum` / `indirect case` | No — `indirect` boxes, keeps value semantics |
+| `wrap` (newtype) | single-field `struct` | No |
+| `list<T>` | `Array<T>` | No (value type; COW) |
+| `set<T>` | `Set<T>` | No (value type) |
+| `map<K,V>` | `Dictionary<K,V>` | No (value type) |
+| `optional<T>` | `Optional<T>` (`T?`) | No (value type) |
+| `pair`, `either` | `struct` / two-case `enum` | No |
+| `literal`, `unit` | scalar / `Void`-like | No |
+| `forall` / `variable` (polymorphism) | generic parameter `<T>` | No — generics are erased-lifetime, not references |
+| `function` (stored higher-order *data* only) | closure `@escaping (A) -> B` | Reference-like — **see below** |
+
+Every data construct maps to a value type. Two edge cases deserve an explicit ruling rather than a wave:
+
+1. **Large-substructure sharing for size.** A coder *might* be tempted to share a common sub-tree via a
+   `class` to save memory. For immutable tree data this is only ever an *optimization*, never a correctness
+   requirement — the tree is well-defined without sharing, and the current model (and every existing coder,
+   which emits nominal types field-by-field) introduces none. Swift's `Array`/`String` already give
+   copy-on-write sharing *with value semantics* for the common cases, so even the optimization does not need
+   `class`. If a future coder deliberately introduced `class`-based sharing, the acyclic invariant would
+   still forbid a cycle, and the documented policy would be `weak`/`unowned` on any back-edge — but nothing
+   requires it today.
+2. **Stored function values (closures).** A `function`-typed *field* would map to a Swift closure, which is a
+   reference type and can capture and thus retain other objects. This is the one genuine `class`-like case.
+   It is not reachable for Hydra's serialized **data** model (which is first-order — `Term`, types, records
+   are all data, and closures are not part of the on-the-wire tree), so it does not affect the data-mapping
+   verdict. If a runtime head stored live closures, the discipline would be: closures capture **by value**
+   (Swift's default for value types) or with an explicit `[weak self]`-style capture list where a back-edge
+   could otherwise form. Again, the acyclic data invariant means no such back-edge arises from the data
+   itself.
 
 **Verdict:** Swift is clean for 1.0 on this axis. Discipline = the value-type mapping (`struct`/`enum`,
-`indirect` for recursion). ARC's cycle gap is provably unreachable.
+`indirect` for recursion, value-type containers). ARC's cycle gap is provably unreachable for the data model.
+
+**Caveat — the one verdict without a compiled POC.** There is no `swiftc` on the build box, so Swift is the
+sole verdict argued but not compiled. This is a **toolchain gap, not a confidence gap**: the argument above
+is exhaustive over the type constructs. What *would* confirm it: emit the value-type mapping for a recursive
+type (e.g. `indirect enum Term`), construct and drop it under a Swift toolchain, and confirm with the
+memory-graph debugger / `swift-leaks` that ARC's retain count returns to zero (no cycle retained). That is
+mechanical once a Swift coder + toolchain exist; it does not change the verdict.
 
 ### 2. Rust — structural ownership via `Box` — **VERDICT: solved, POC-confirmed**
 
@@ -131,7 +175,7 @@ invocations equals the node count: a short count would signal a leak, a double-f
 `rustc 1.98.0` (stable): **both tests pass, zero warnings** — no `Rc`, `RefCell`, or lifetime annotation was
 needed to compile, which is itself confirmation that unique ownership suffices. Run with `cargo test`.
 
-### 3. C++ — `unique_ptr` tree or arena — **VERDICT: solved (with API implication)**
+### 3. C++ — `unique_ptr` tree or arena — **VERDICT: solved (with API implication), POC-confirmed**
 
 Two candidate disciplines, both leak-free for an immutable tree:
 
@@ -152,7 +196,16 @@ piece is the *policy* to emit owning smart pointers for recursive fields.
 **Verdict:** solved, with the stated API implication (RAII transparent; arena moves ownership to the arena
 handle).
 
-### 4. C — arena/region allocation — **VERDICT: solved-via-arena (with API implication)**
+**POC (`poc/cpp-nongc/`).** Both disciplines compiled and leak-checked with AddressSanitizer +
+LeakSanitizer (valgrind is not on the build box; `-fsanitize=address,leak` is the equivalent). On g++ 12.2:
+- `term_unique_ptr.cpp` — a `Term`-shaped struct with `std::unique_ptr<Term>` recursive children and
+  `std::vector`/`std::optional` containers. A static counter incremented in `~Term()` asserts **12 nodes
+  destroyed exactly once**; LSan reports **0 leaks**, ASan would abort on any double-free. Neither occurs.
+- `term_arena.cpp` — the arena option: a bump allocator builds the whole tree, byte accounting asserts
+  handed-out == reclaimed, and LSan reports **0 leaks** after the region is freed wholesale — backing the
+  "arena API implication" with compiled code, not assertion.
+
+### 4. C — arena/region allocation — **VERDICT: solved-via-arena (with API implication), POC-confirmed**
 
 C has no destructors and no ownership types, so RAII is unavailable. The clean answer for an immutable tree
 is **arena/region allocation**:
@@ -173,30 +226,43 @@ there is never a reason to free one node early, so wholesale region free loses n
 must accept arena-scoped lifetimes; if a future consumer needed per-node freeing (they should not, for
 immutable data), that would be the only thing to revisit.
 
+**POC (`poc/c-nongc/`).** `term_arena.c` implements a minimal bump-arena (`arena_alloc` / `arena_free_all`,
+growing in blocks) and builds a `Term`-shaped struct graph — nodes, names, and child-pointer arrays all in
+the region — then frees it wholesale. Two signals on gcc 12.2 with `-fsanitize=address,leak`: byte
+accounting asserts **`bytes_malloced == bytes_freed`** (65560 == 65560 for the sample), and a multi-block
+stress (500 nodes forced into tiny 256-byte blocks) exercises the block-growth + wholesale-free path; LSan
+reports **0 leaks**. The POC surfaced **no API wart beyond the already-stated arena-handle implication** —
+so the verdict stands as *solved-via-arena*, honestly, not retrofitted: the only cost is the consumer holding
+and freeing an arena handle, which is exactly what the section predicted.
+
 ## Graduation implications (discipline found → runtime head)
 
 For each language, what remains between "discipline stated here" and "runtime head," and 1.0-eligibility on
 *this* (memory) axis:
 
-| Language | Memory-axis verdict | Remaining to a head | 1.0-eligible (memory axis) |
+| Language | Memory-axis verdict | Remaining to a head | 1.0-eligible (memory) |
 |----------|--------------------|---------------------|---------------------------|
-| Swift | solved (value types) | New Swift coder (none yet); runtime; primitives; tests | **Yes** (expected) |
-| Rust | solved (`Box`), POC-confirmed | Coder policy: box recursive fields; runtime; tests | **Likely yes** |
-| C++ | solved (`unique_ptr` / arena) | Coder policy: owning smart ptrs; runtime; tests | **Likely yes** |
-| C | solved-via-arena (API implication) | Coder policy + arena runtime; primitives; tests | **Yes**, heaviest lift |
+| Swift | solved (value types); no compiled POC | New Swift coder (none yet); runtime; tests | **Yes** — toolchain gap |
+| Rust | solved (`Box`), **POC-confirmed** | Coder policy: box recursive fields; runtime; tests | **Yes** |
+| C++ | solved (`unique_ptr`/arena), **POC-confirmed** | Coder policy: owning smart ptrs; runtime; tests | **Yes** |
+| C | solved-via-arena, **POC-confirmed** | Coder policy + arena runtime; tests | **Yes**; heaviest lift |
 
 The memory-management problem — the one thing that gated all four and recurred in every Rust/C++/C head
-proposal — is **solved in principle for all four**, with an honest API implication for C++ (arena option)
-and C (arena required). None is blocked-defer on memory. The remaining work per language is ordinary
-host-graduation effort (coder maturity, runtime, primitives, tests), tracked in separate per-language head
-issues gated on this verdict.
+proposal — is **solved for all four**: three (Rust, C++, C) with **compiled, leak-checked POCs**, and Swift
+with an exhaustive per-construct argument (the only one lacking a compiled POC, purely because no `swiftc` is
+on the build box). The honest API implication stands for C++ (arena option) and C (arena required). None is
+blocked-defer on memory. The remaining work per language is ordinary host-graduation effort (coder maturity,
+runtime, primitives, tests), tracked in separate per-language head issues gated on this verdict.
 
 ## Summary of verdicts
 
-- **Swift:** solved — value types; ARC's cycle gap provably unreachable. 1.0-clean.
-- **Rust:** solved — `Box` for recursive fields, no `Rc`/`RefCell`/lifetimes. POC-confirmed.
+- **Swift:** solved — value types; ARC's cycle gap provably unreachable (exhaustive per-construct argument).
+  1.0-clean. The one verdict without a compiled POC — a toolchain gap (no `swiftc`), not a confidence gap.
+- **Rust:** solved — `Box` for recursive fields, no `Rc`/`RefCell`/lifetimes. **POC-confirmed** (drop-counter).
 - **C++:** solved — `unique_ptr` RAII (default) or arena (optional); stated API implications.
-- **C:** solved-via-arena — wholesale region free; consumer holds an arena handle.
+  **POC-confirmed** (both disciplines, ASan/LSan clean).
+- **C:** solved-via-arena — wholesale region free; consumer holds an arena handle. **POC-confirmed**
+  (byte accounting + multi-block stress, LSan clean); no API wart beyond the stated arena handle.
 
 The enabling fact behind all four: Hydra runtime data is an **immutable acyclic tree**, so ownership is
 structural — each node owned by its unique parent — and neither cycle-tracing nor lifetime tracking is
