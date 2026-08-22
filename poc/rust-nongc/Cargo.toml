@@ -1,0 +1,8 @@
+[package]
+name = "hydra-nongc-poc"
+version = "0.1.0"
+edition = "2021"
+description = "Proof-of-concept for #678: leak-free construct-and-drop of a recursive Hydra-shaped type in Rust using the Box structural-ownership discipline."
+
+# Deliberately zero dependencies: the POC proves the discipline with std alone.
+[dependencies]
