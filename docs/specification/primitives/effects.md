@@ -20,6 +20,28 @@ so the usual pure-term transformations are valid over effect-building code.
 (Purity is independent of implementation strategy: a host may implement these combinators
 natively rather than from a default implementation.)
 
+#### Conformance obligations
+
+A host interpreter of `effect<t>` must honor the following, in addition to the purity of the
+combinators above:
+
+- **Purity of construction.** Building or composing any effect description in this module —
+  without an executor running it — performs no host interaction and is referentially transparent.
+  Only an executor performing the described computation may interact with the host.
+- **Order.** When a combinator specifies an order between the effects it composes, an executor
+  performs them in exactly that order.
+- **Exactly-once.** Each composed effect is performed exactly once per execution of the
+  description — never skipped, never repeated.
+- **Deferral.** An effect that is specified to run after another must not be performed (nor its
+  producing function evaluated for effect) until the prior effect has run to completion and its
+  value is available.
+
+These obligations are observable — the effects are real host interactions — so they are
+normative, not advisory.
+`effect<t>` is total: a leaf effect always completes and yields a value (for `hydra.lib.files`,
+an `either<FileError, t>`); the obligations govern order, multiplicity, and deferral, not failure
+short-circuiting.
+
 #### apply — **Draft**
 
 `∀t1,t2. effect<t1 → t2> → effect<t1> → effect<t2>`
@@ -30,7 +52,8 @@ Applicative apply for effects.
 Describes an effectful computation which first interprets `ef` to produce a function, then
 interprets `ex` to produce an argument, and returns the result of applying the function to the
 argument.
-The effects are sequenced in that order: `ef` first, then `ex`.
+The effects are sequenced in that order: `ef` first, then `ex` — each performed exactly once, and
+`ex` is not performed before `ef` has completed.
 
 Since: 0.17
 
@@ -41,10 +64,12 @@ Since: 0.17
 Usage: `bind e f`
 
 Sequence two effectful computations.
-Describes an effectful computation which first interprets `e`, then passes its result to `f`
-to obtain the next effect.
-Host interpreters provide the operational meaning; Hydra uses the type `effect<t>` to keep the
-effect boundary explicit.
+Describes an effectful computation which performs `e`'s effect to completion and obtains its
+value, then invokes `f` exactly once with that value to obtain the next effect, and performs that
+effect after `e`'s.
+An executor must not evaluate `f`, nor perform its effect, before `e` has run.
+The *operational* meaning of a leaf effect remains host-provided; what `bind` fixes is the order,
+the exactly-once invocation of `f`, and the deferral of `f` until `e`'s value is available.
 
 Since: 0.17
 
@@ -57,7 +82,7 @@ Usage: `compose f g x`
 Kleisli composition for effects.
 `compose f g x` describes an effectful computation equivalent to `bind (f x) g`: the effect
 described by `f x` is interpreted first, and its result is passed to `g` to obtain the second
-effect.
+effect; the two effects are performed once each, in that order.
 
 Since: 0.17
 
@@ -69,7 +94,8 @@ Usage: `foldList f acc xs`
 
 Left-fold over a list with an effect-returning function.
 Describes an effectful left fold over `xs`, sequencing the applications of `f` from left to
-right in list order and threading the accumulator through each step.
+right in list order and threading the accumulator through each step; each element's effect is
+performed exactly once.
 The described computation produces the final accumulator.
 
 Since: 0.18 (renamed from `hydra.lib.effects.foldl`)
@@ -82,6 +108,7 @@ Usage: `map f e`
 
 Map a pure function over the result of an effect.
 Describes an effectful computation which interprets `e` and applies `f` to its result.
+`e` is performed exactly once and `f` triggers no effect.
 `map f e` is equivalent to `bind e (λx → pure (f x))`.
 
 Since: 0.17
@@ -94,7 +121,8 @@ Usage: `mapList f xs`
 
 Map an effect-returning function over a list.
 Describes an effectful computation which applies `f` to each element of `xs` from left to right,
-sequencing the effects in list order, and collects the results in the corresponding order.
+sequencing the effects in list order, each exactly once, and collects the results in the
+corresponding order.
 
 Since: 0.17
 
@@ -105,8 +133,8 @@ Since: 0.17
 Usage: `mapOptional f m`
 
 Map an effect-returning function over an optional.
-Describes an effectful computation which returns `none` when `m` is `none` (interpreting no
-effect from `f`), or applies `f` to the contained value and wraps the result in `given`.
+Describes an effectful computation which performs no effect when `m` is `none`; when `m` is
+`given x`, it performs `f x`'s effect exactly once and wraps the result in `given`.
 
 Since: 0.17
 
