@@ -355,6 +355,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Refactor modules/namespaces | [docs/recipes/refactoring.md](docs/recipes/refactoring.md) (includes namespace refactoring) |
 | Clean up repo / find stale files | [docs/recipes/maintenance.md](docs/recipes/maintenance.md) |
 | New target language | [docs/recipes/new-implementation.md](docs/recipes/new-implementation.md) |
+| Target a non-GC language (Swift/Rust/C++/C): memory discipline + per-language verdict | [docs/nongc-memory-discipline.md](docs/nongc-memory-discipline.md) — structural tree-ownership; why GC hosts are clean and what the others need |
 | Test suite structure | [docs/test-suite-architecture.md](docs/test-suite-architecture.md) |
 | Coding style + import conventions | [Coding style wiki](https://github.com/CategoricalData/hydra/wiki/Coding-style) |
 | Build/test commands per language | per-package READMEs under `packages/hydra-<lang>/README.md` |
