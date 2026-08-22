@@ -128,12 +128,8 @@ Part III — The library:
 
 Part IV — Interchange:
 
+- [Serialization](serialization.md) — serializability of types; the encode/decode contract
 - [JSON format](json-format.md) — the wire format
-
-Part V — Evolution:
-
-- [Backward compatibility and deprecation](compatibility.md) — the 1.x additivity calculus,
-  the deprecation and rename mechanism, and the release-gating enforcement model
 
 Planned (deferred beyond the current release): effects · graphs and modules ·
 reduction semantics · standard mappings (property graphs, RDF) ·
