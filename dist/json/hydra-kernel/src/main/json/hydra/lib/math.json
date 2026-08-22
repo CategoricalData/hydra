@@ -116,8 +116,10 @@
           "comments": [
             "IEEE 754 binary64 addition. The result is the value of x + y rounded to the nearest representable float64 under the roundTiesToEven rounding-direction attribute.",
             "Adding infinities of opposite sign (+∞ + -∞ or -∞ + +∞) produces a NaN; adding any value to NaN produces a NaN. The sum of two zeros is +0, except (-0) + (-0) = -0.",
-            "The operation is total: it never raises, but it may produce NaN. Corresponds to the IEEE 754 ੵ.4.1 addition operation and to Haskell's (+) :: Double -> Double -> Double."],
-          "seeAlso": []},
+            "The operation is total: it never raises, but it may produce NaN. Corresponds to the IEEE 754 ੵ.4.1 addition operation and to Haskell's (+) :: Double -> Double -> Double.",
+            "Deprecated since 0.18. Use: hydra.lib.math.add."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -472,8 +474,10 @@
           "comments": [
             "IEEE 754 binary64 multiplication. The result is the value of x * y rounded to the nearest representable float64 under the roundTiesToEven rounding-direction attribute.",
             "Multiplying 0 by ±∞ (in either order) produces a NaN (with invalid-operation exception in IEEE 754); multiplying any value by NaN produces a NaN. The result's sign is the XOR of the operand signs (ଐ * ଐ = ଐ accordingly).",
-            "The operation is total: it never raises, but it may produce NaN or ±∞. Corresponds to the IEEE 754 ੵ.4.1 multiplication operation and to Haskell's (*) :: Double -> Double -> Double."],
-          "seeAlso": []},
+            "The operation is total: it never raises, but it may produce NaN or ±∞. Corresponds to the IEEE 754 ੵ.4.1 multiplication operation and to Haskell's (*) :: Double -> Double -> Double.",
+            "Deprecated since 0.18. Use: hydra.lib.math.mul."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -505,8 +509,10 @@
           "description": "Negate a floating-point number.",
           "comments": [
             "Sign reversal of a float64. Equivalent to IEEE 754 ੵ.5.1 negate: flips the sign bit, so negate(ଐ) = ଐ (sign flips), negate(±∞) = ±∞ (sign flips), and negate(NaN) is a NaN (sign may flip; payload preserved).",
-            "This is a bit-level operation that does not raise any floating-point exception. Corresponds to Haskell's negate :: Double -> Double."],
-          "seeAlso": []},
+            "This is a bit-level operation that does not raise any floating-point exception. Corresponds to Haskell's negate :: Double -> Double.",
+            "Deprecated since 0.18. Use: hydra.lib.math.negate."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the value to negate", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
@@ -775,8 +781,10 @@
           "comments": [
             "IEEE 754 binary64 subtraction, defined as x + (-y). The result is correctly rounded to the nearest representable float64 under roundTiesToEven.",
             "Subtracting infinities of the same sign (+∞ - +∞ or -∞ - -∞) produces a NaN; subtracting any value involving NaN produces a NaN. The difference of two equal finite values is +0 (or -0 under round-toward-negative, which is not the default).",
-            "The operation is total: it never raises, but it may produce NaN. Corresponds to the IEEE 754 ੵ.4.1 subtraction operation and to Haskell's (-) :: Double -> Double -> Double."],
-          "seeAlso": []},
+            "The operation is total: it never raises, but it may produce NaN. Corresponds to the IEEE 754 ੵ.4.1 subtraction operation and to Haskell's (-) :: Double -> Double -> Double.",
+            "Deprecated since 0.18. Use: hydra.lib.math.sub."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [

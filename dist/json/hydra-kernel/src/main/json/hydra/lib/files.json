@@ -58,8 +58,10 @@
         "metadata": {
           "description": "Copy a file, or a directory tree, to a destination path.",
           "comments": [
-            "copy(recursive, source, destination) describes an effectful computation which attempts to copy source to destination. When recursive is false, source must be a single file. When recursive is true, source may be a directory, whose entire tree is copied. Copying is performed by the host operating system rather than by reading and rewriting contents, preserving binary data and avoiding a round trip through the language runtime. A recoverable file-system failure is returned as left(error); success is returned as right(unit)."],
-          "seeAlso": []},
+            "copy(recursive, source, destination) describes an effectful computation which attempts to copy source to destination. When recursive is false, source must be a single file. When recursive is true, source may be a directory, whose entire tree is copied. Copying is performed by the host operating system rather than by reading and rewriting contents, preserving binary data and avoiding a round trip through the language runtime. A recoverable file-system failure is returned as left(error); success is returned as right(unit).",
+            "Deprecated since 0.18. Use: copyFile."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [

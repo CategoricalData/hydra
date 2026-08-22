@@ -807,8 +807,12 @@
         "name": "hydra.lib.lists.singleton",
         "metadata": {
           "description": "Construct a single-element list.",
-          "comments": ["singleton(x) = [x]. Identical to pure for lists.", "Total. Corresponds to Haskell's singleton :: a -> [a]."],
-          "seeAlso": []},
+          "comments": [
+            "singleton(x) = [x]. Identical to pure for lists.",
+            "Total. Corresponds to Haskell's singleton :: a -> [a].",
+            "Deprecated since 0.18. Use: hydra.lib.lists.pure."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "x", "description": "the value to wrap in a single-element list", "type": {"variable": "x"}, "isLazy": false}],

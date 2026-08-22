@@ -440,8 +440,10 @@
           "comments": [
             "readBigint(s) returns Just(x) where x is the bigint parsed from s, or Nothing if s is not a valid bigint literal.",
             "Accepted syntax follows the Haskell Show/Read convention: an optional leading minus sign followed by a sequence of decimal digits. Whitespace is not stripped; leading or trailing whitespace causes parse failure.",
-            "Total."],
-          "seeAlso": []},
+            "Total.",
+            "Deprecated since 0.18. Use: parseBigint."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -456,8 +458,10 @@
           "comments": [
             "readDecimal(s) returns Just(x) where x is the decimal parsed from s, or Nothing on parse failure.",
             "Accepted syntax is the standard decimal literal: an optional sign, an integer part, an optional fractional part, and an optional exponent (e.g. -1.5, 2e10, 0.0).",
-            "Total."],
-          "seeAlso": []},
+            "Total.",
+            "Deprecated since 0.18. Use: parseDecimal."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -472,8 +476,10 @@
           "comments": [
             "readFloat32(s) returns Just(x) where x is the IEEE 754 binary32 value closest to the number parsed from s under roundTiesToEven, or Nothing on parse failure.",
             "Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their capitalization are host-defined.",
-            "Total."],
-          "seeAlso": []},
+            "Total.",
+            "Deprecated since 0.18. Use: parseFloat32."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -488,8 +494,10 @@
           "comments": [
             "readFloat64(s) returns Just(x) where x is the IEEE 754 binary64 value closest to the number parsed from s under roundTiesToEven, or Nothing on parse failure.",
             "Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their capitalization are host-defined.",
-            "Total."],
-          "seeAlso": []},
+            "Total.",
+            "Deprecated since 0.18. Use: parseFloat64."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -503,8 +511,10 @@
           "description": "Parse a string as an int16.",
           "comments": [
             "readInt16(s) returns Just(x) where x is the int16 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^15, 2^15-1].",
-            "Total."],
-          "seeAlso": []},
+            "Total.",
+            "Deprecated since 0.18. Use: parseInt16."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -518,8 +528,10 @@
           "description": "Parse a string as an int32.",
           "comments": [
             "readInt32(s) returns Just(x) where x is the int32 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^31, 2^31-1].",
-            "Total."],
-          "seeAlso": []},
+            "Total.",
+            "Deprecated since 0.18. Use: parseInt32."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -533,8 +545,10 @@
           "description": "Parse a string as an int64.",
           "comments": [
             "readInt64(s) returns Just(x) where x is the int64 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^63, 2^63-1].",
-            "Total."],
-          "seeAlso": []},
+            "Total.",
+            "Deprecated since 0.18. Use: parseInt64."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -548,8 +562,10 @@
           "description": "Parse a string as an int8.",
           "comments": [
             "readInt8(s) returns Just(x) where x is the int8 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-128, 127].",
-            "Total."],
-          "seeAlso": []},
+            "Total.",
+            "Deprecated since 0.18. Use: parseInt8."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -563,8 +579,10 @@
           "description": "Parse a string as a uint16.",
           "comments": [
             "readUint16(s) returns Just(x) where x is the uint16 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^16-1].",
-            "Total."],
-          "seeAlso": []},
+            "Total.",
+            "Deprecated since 0.18. Use: parseUint16."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -578,8 +596,10 @@
           "description": "Parse a string as a uint32.",
           "comments": [
             "readUint32(s) returns Just(x) where x is the uint32 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^32-1].",
-            "Total."],
-          "seeAlso": []},
+            "Total.",
+            "Deprecated since 0.18. Use: parseUint32."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -593,8 +613,10 @@
           "description": "Parse a string as a uint64.",
           "comments": [
             "readUint64(s) returns Just(x) where x is the uint64 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^64-1].",
-            "Total."],
-          "seeAlso": []},
+            "Total.",
+            "Deprecated since 0.18. Use: parseUint64."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -608,8 +630,10 @@
           "description": "Parse a string as a uint8.",
           "comments": [
             "readUint8(s) returns Just(x) where x is the uint8 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 255].",
-            "Total."],
-          "seeAlso": []},
+            "Total.",
+            "Deprecated since 0.18. Use: parseUint8."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -623,8 +647,10 @@
           "description": "Render a bigint as a string.",
           "comments": [
             "showBigint(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits. No leading zeros are produced (except for the value 0 itself, which renders as \"0\").",
-            "Total. The inverse of readBigint."],
-          "seeAlso": []},
+            "Total. The inverse of readBigint.",
+            "Deprecated since 0.18. Use: printBigint."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the bigint to render", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
@@ -638,8 +664,10 @@
           "description": "Render a decimal as a string.",
           "comments": [
             "showDecimal(x) returns the canonical decimal representation of x as a string. The exact form (use of scientific notation, trailing zeros, etc.) is host-defined but always round-trips with readDecimal.",
-            "Total."],
-          "seeAlso": []},
+            "Total.",
+            "Deprecated since 0.18. Use: printDecimal."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the decimal to render", "type": {"literal": "decimal"}, "isLazy": false}],
@@ -653,8 +681,10 @@
           "description": "Render a float32 as a string.",
           "comments": [
             "showFloat32(x) returns a string representation of x. Finite values use the shortest decimal that round-trips through readFloat32 back to x. Special values render as \"NaN\", \"Infinity\", or \"-Infinity\" (capitalization is host-defined).",
-            "Total."],
-          "seeAlso": []},
+            "Total.",
+            "Deprecated since 0.18. Use: printFloat32."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the float32 to render", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
@@ -668,8 +698,10 @@
           "description": "Render a float64 as a string.",
           "comments": [
             "showFloat64(x) returns a string representation of x. Finite values use the shortest decimal that round-trips through readFloat64 back to x. Special values render as \"NaN\", \"Infinity\", or \"-Infinity\" (capitalization is host-defined).",
-            "Total."],
-          "seeAlso": []},
+            "Total.",
+            "Deprecated since 0.18. Use: printFloat64."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the float64 to render", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
@@ -683,8 +715,10 @@
           "description": "Render an int16 as a string.",
           "comments": [
             "showInt16(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
-            "Total. The inverse of readInt16."],
-          "seeAlso": []},
+            "Total. The inverse of readInt16.",
+            "Deprecated since 0.18. Use: printInt16."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the int16 to render", "type": {"literal": {"integer": "int16"}}, "isLazy": false}],
@@ -698,8 +732,10 @@
           "description": "Render an int32 as a string.",
           "comments": [
             "showInt32(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
-            "Total. The inverse of readInt32."],
-          "seeAlso": []},
+            "Total. The inverse of readInt32.",
+            "Deprecated since 0.18. Use: printInt32."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the int32 to render", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
@@ -713,8 +749,10 @@
           "description": "Render an int64 as a string.",
           "comments": [
             "showInt64(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
-            "Total. The inverse of readInt64."],
-          "seeAlso": []},
+            "Total. The inverse of readInt64.",
+            "Deprecated since 0.18. Use: printInt64."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the int64 to render", "type": {"literal": {"integer": "int64"}}, "isLazy": false}],
@@ -728,8 +766,10 @@
           "description": "Render an int8 as a string.",
           "comments": [
             "showInt8(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
-            "Total. The inverse of readInt8."],
-          "seeAlso": []},
+            "Total. The inverse of readInt8.",
+            "Deprecated since 0.18. Use: printInt8."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the int8 to render", "type": {"literal": {"integer": "int8"}}, "isLazy": false}],
@@ -741,8 +781,12 @@
         "name": "hydra.lib.literals.showUint16",
         "metadata": {
           "description": "Render a uint16 as a string.",
-          "comments": ["showUint16(x) returns the canonical decimal representation of x.", "Total. The inverse of readUint16."],
-          "seeAlso": []},
+          "comments": [
+            "showUint16(x) returns the canonical decimal representation of x.",
+            "Total. The inverse of readUint16.",
+            "Deprecated since 0.18. Use: printUint16."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the uint16 to render", "type": {"literal": {"integer": "uint16"}}, "isLazy": false}],
@@ -754,8 +798,12 @@
         "name": "hydra.lib.literals.showUint32",
         "metadata": {
           "description": "Render a uint32 as a string.",
-          "comments": ["showUint32(x) returns the canonical decimal representation of x.", "Total. The inverse of readUint32."],
-          "seeAlso": []},
+          "comments": [
+            "showUint32(x) returns the canonical decimal representation of x.",
+            "Total. The inverse of readUint32.",
+            "Deprecated since 0.18. Use: printUint32."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the uint32 to render", "type": {"literal": {"integer": "uint32"}}, "isLazy": false}],
@@ -767,8 +815,12 @@
         "name": "hydra.lib.literals.showUint64",
         "metadata": {
           "description": "Render a uint64 as a string.",
-          "comments": ["showUint64(x) returns the canonical decimal representation of x.", "Total. The inverse of readUint64."],
-          "seeAlso": []},
+          "comments": [
+            "showUint64(x) returns the canonical decimal representation of x.",
+            "Total. The inverse of readUint64.",
+            "Deprecated since 0.18. Use: printUint64."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the uint64 to render", "type": {"literal": {"integer": "uint64"}}, "isLazy": false}],
@@ -780,8 +832,12 @@
         "name": "hydra.lib.literals.showUint8",
         "metadata": {
           "description": "Render a uint8 as a string.",
-          "comments": ["showUint8(x) returns the canonical decimal representation of x.", "Total. The inverse of readUint8."],
-          "seeAlso": []},
+          "comments": [
+            "showUint8(x) returns the canonical decimal representation of x.",
+            "Total. The inverse of readUint8.",
+            "Deprecated since 0.18. Use: printUint8."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the uint8 to render", "type": {"literal": {"integer": "uint8"}}, "isLazy": false}],

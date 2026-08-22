@@ -235,8 +235,10 @@
           "comments": [
             "either(f, g, e) returns f(x) if e is Left x and g(y) if e is Right y.",
             "The fundamental eliminator for the either type; every other primitive in this namespace can be derived from it.",
-            "Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c."],
-          "seeAlso": []},
+            "Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c.",
+            "Deprecated since 0.18. Use: cases."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [

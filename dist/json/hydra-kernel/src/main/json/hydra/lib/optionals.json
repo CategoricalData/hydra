@@ -421,8 +421,10 @@
           "description": "Map a partial function over a list, keeping only the present results.",
           "comments": [
             "mapOptional(f, xs) applies f to each element of xs and returns the list of contained values from given results in original order; none results are discarded.",
-            "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b]."],
-          "seeAlso": []},
+            "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b].",
+            "Deprecated since 0.18. Use: hydra.lib.lists.mapGivens."],
+          "seeAlso": [],
+          "lifecycle": {"deprecatedSince": "0.18"}},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
