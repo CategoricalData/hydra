@@ -1,0 +1,6 @@
+# Compiled POC binaries — build with the commands in README.md; do not track.
+*.o
+*.out
+cpp_uptr
+cpp_arena
+a.out

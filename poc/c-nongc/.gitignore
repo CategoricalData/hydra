@@ -1,0 +1,5 @@
+# Compiled POC binaries — build with the commands in README.md; do not track.
+*.o
+*.out
+c_arena
+a.out
