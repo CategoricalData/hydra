@@ -398,10 +398,10 @@ const logicPrimitives = (): readonly Primitive[] => {
 // (mirroring Java's NumericDispatch.rewrapInteger); bigint is arbitrary precision, no narrowing.
 type NumericOp = "add" | "sub" | "mul" | "negate" | "abs" | "signum";
 
-const INT_WIDTH_BITS: Record<string, number> = { int8: 8, int16: 16, int32: 32, int64: 64 };
+export const INT_WIDTH_BITS: Record<string, number> = { int8: 8, int16: 16, int32: 32, int64: 64 };
 const UINT_WIDTH_BITS: Record<string, number> = { uint8: 8, uint16: 16, uint32: 32, uint64: 64 };
 
-const wrapInt = (widthTag: string, r: bigint): number | bigint => {
+export const wrapInt = (widthTag: string, r: bigint): number | bigint => {
   if (widthTag === "bigint") return r;
   const signedBits = INT_WIDTH_BITS[widthTag];
   if (signedBits !== undefined) {
@@ -500,12 +500,12 @@ const numericUnary = (opName: string, op: NumericOp) =>
 
 type IntegralOp = "div" | "mod" | "rem";
 
-const floorDivBig = (a: bigint, b: bigint): bigint => {
+export const floorDivBig = (a: bigint, b: bigint): bigint => {
   const q = a / b;
   return (a % b !== 0n) && ((a < 0n) !== (b < 0n)) ? q - 1n : q;
 };
 
-const floorModBig = (a: bigint, b: bigint): bigint => {
+export const floorModBig = (a: bigint, b: bigint): bigint => {
   const r = a % b;
   return r !== 0n && ((r < 0n) !== (b < 0n)) ? r + b : r;
 };
