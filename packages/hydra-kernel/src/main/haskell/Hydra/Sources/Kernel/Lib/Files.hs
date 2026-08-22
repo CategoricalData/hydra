@@ -49,7 +49,7 @@ appendFile = define "appendFile" "Append bytes to the end of a file."
   \ returned as left(error); success is returned as right(unit)."]
 
 copy :: PrimitiveDefinition
-copy = define "copy" "Copy a file, or a directory tree, to a destination path."
+copy = deprecatedSince "0.18" "copyFile" $ define "copy" "Copy a file, or a directory tree, to a destination path."
   (sigWithParams [("recursive", "whether to copy a directory tree rather than a single file"),
                   ("source", "the path to copy from"),
                   ("destination", "the path to copy to")] $

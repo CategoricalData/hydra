@@ -322,7 +322,7 @@ reverse = define "reverse" "Reverse a list."
    "Total. Corresponds to Haskell's reverse :: [a] -> [a]."]
 
 singleton :: PrimitiveDefinition
-singleton = define "singleton" "Construct a single-element list."
+singleton = deprecatedSince "0.18" "hydra.lib.lists.pure" $ define "singleton" "Construct a single-element list."
   (sigWithParams [("x", "the value to wrap in a single-element list")] $ TypeScheme [Name "x"] (tx Types.~> l tx) Nothing)
   ["singleton(x) = [x]. Identical to pure for lists.",
    "Total. Corresponds to Haskell's singleton :: a -> [a]."]

@@ -435,6 +435,24 @@ primitiveWithDefaultInModule :: Module -> String -> String -> TermSignature -> [
 primitiveWithDefaultInModule mod localName description sig comments (TypedTerm impl) =
   (primitiveInModule mod localName description sig comments) { primitiveDefinitionDefaultImplementation = Just impl }
 
+-- | Stamp a primitive as deprecated since the given version, pointing at its replacement.
+-- Sets @LifecycleInfo.deprecatedSince@ in the primitive's entity metadata and records the
+-- replacement as a @Use:@ comment, so the deprecation is both machine-checkable (the stamp)
+-- and legible in the generated documentation (the comment). See the compatibility specification
+-- (docs/specification/compatibility.md §3) for the deprecation policy.
+-- Example: member = deprecatedSince "0.18" "hydra.lib.lists.member" $ define "elem" ...
+deprecatedSince :: String -> String -> PrimitiveDefinition -> PrimitiveDefinition
+deprecatedSince ver useReplacement pd =
+    pd {primitiveDefinitionMetadata = Just meta'}
+  where
+    lifecycle = LifecycleInfo Nothing (Just (Version ver))
+    useComment = L.concat ["Deprecated since ", ver, ". Use: ", useReplacement, "."]
+    meta' = case primitiveDefinitionMetadata pd of
+      Just m -> m {
+        entityMetadataComments = L.concat [entityMetadataComments m, [useComment]],
+        entityMetadataLifecycle = Just lifecycle}
+      Nothing -> EntityMetadata Nothing [useComment] [] (Just lifecycle)
+
 -- | Define an impure primitive (no default implementation) within a module.
 -- Example: defineImpure = impurePrimitiveInModule module_
 impurePrimitiveInModule :: Module -> String -> String -> TermSignature -> [String] -> PrimitiveDefinition

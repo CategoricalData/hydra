@@ -147,7 +147,7 @@ mapList = defineWithDefault "mapList" "Traverse a list in the optional monad."
       (var "xs"))
 
 mapOptional :: PrimitiveDefinition
-mapOptional = defineWithDefault "mapOptional" "Map a partial function over a list, keeping only the present results."
+mapOptional = deprecatedSince "0.18" "hydra.lib.lists.mapGivens" $ defineWithDefault "mapOptional" "Map a partial function over a list, keeping only the present results."
   (sigWithParams [("f", "the partial function to apply to each element"), ("xs", "the list to map over")] $ TypeScheme [Name "x", Name "y"]
     ((tx Types.~> Types.optional ty) Types.~> Types.list tx Types.~> Types.list ty)
     Nothing)

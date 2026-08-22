@@ -134,7 +134,7 @@ add = define "add" "Numeric addition." numericTo2
    "The operation is total. Corresponds to Haskell's (+) :: Num a => a -> a -> a."]
 
 addFloat64 :: PrimitiveDefinition
-addFloat64 = define "addFloat64" "Floating-point addition." (f64To2 [("x", "the first addend"), ("y", "the second addend")])
+addFloat64 = deprecatedSince "0.18" "hydra.lib.math.add" $ define "addFloat64" "Floating-point addition." (f64To2 [("x", "the first addend"), ("y", "the second addend")])
   ["IEEE 754 binary64 addition. The result is the value of x + y rounded to the nearest representable\
   \ float64 under the roundTiesToEven rounding-direction attribute.",
    "Adding infinities of opposite sign (+\x221E + -\x221E or -\x221E + +\x221E) produces a NaN; adding\
@@ -304,7 +304,7 @@ mul = define "mul" "Numeric multiplication." numericTo2
    "The operation is total. Corresponds to Haskell's (*) :: Num a => a -> a -> a."]
 
 mulFloat64 :: PrimitiveDefinition
-mulFloat64 = define "mulFloat64" "Floating-point multiplication." (f64To2 [("x", "the first factor"), ("y", "the second factor")])
+mulFloat64 = deprecatedSince "0.18" "hydra.lib.math.mul" $ define "mulFloat64" "Floating-point multiplication." (f64To2 [("x", "the first factor"), ("y", "the second factor")])
   ["IEEE 754 binary64 multiplication. The result is the value of x * y rounded to the nearest\
   \ representable float64 under the roundTiesToEven rounding-direction attribute.",
    "Multiplying 0 by \xB1\x221E (in either order) produces a NaN (with invalid-operation exception in\
@@ -324,7 +324,7 @@ negate = define "negate" "Numeric negation." numericTo
    "Corresponds to Haskell's negate :: Num a => a -> a."]
 
 negateFloat64 :: PrimitiveDefinition
-negateFloat64 = define "negateFloat64" "Negate a floating-point number." (f64To [("x", "the value to negate")])
+negateFloat64 = deprecatedSince "0.18" "hydra.lib.math.negate" $ define "negateFloat64" "Negate a floating-point number." (f64To [("x", "the value to negate")])
   ["Sign reversal of a float64. Equivalent to IEEE 754 \xA75.5.1 negate: flips the sign bit, so\
   \ negate(\xB10) = \xB10 (sign flips), negate(\xB1\x221E) = \xB1\x221E (sign flips), and negate(NaN) is\
   \ a NaN (sign may flip; payload preserved).",
@@ -444,7 +444,7 @@ sub = define "sub" "Numeric subtraction." numericTo2
    "The operation is total. Corresponds to Haskell's (-) :: Num a => a -> a -> a."]
 
 subFloat64 :: PrimitiveDefinition
-subFloat64 = define "subFloat64" "Floating-point subtraction." (f64To2 [("x", "the minuend"), ("y", "the subtrahend")])
+subFloat64 = deprecatedSince "0.18" "hydra.lib.math.sub" $ define "subFloat64" "Floating-point subtraction." (f64To2 [("x", "the minuend"), ("y", "the subtrahend")])
   ["IEEE 754 binary64 subtraction, defined as x + (-y). The result is correctly rounded to the nearest\
   \ representable float64 under roundTiesToEven.",
    "Subtracting infinities of the same sign (+\x221E - +\x221E or -\x221E - -\x221E) produces a NaN;\

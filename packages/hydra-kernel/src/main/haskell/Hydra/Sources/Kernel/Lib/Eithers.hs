@@ -105,7 +105,7 @@ compose = defineWithDefault "compose" "Kleisli composition for either."
     Eithers.bind (var "f" @@ var "x") (var "g"))
 
 either :: PrimitiveDefinition
-either = define "either" "Eliminate an either value by applying one of two functions."
+either = deprecatedSince "0.18" "cases" $ define "either" "Eliminate an either value by applying one of two functions."
   (sigWithParams [("f", "the function to apply to a Left value"), ("g", "the function to apply to a Right value"), ("e", "the either value to eliminate")] $ TypeScheme [Name "x", Name "y", Name "z"]
     ((tx Types.~> tz) Types.~> (ty Types.~> tz) Types.~> ee tx ty Types.~> tz) Nothing)
   ["either(f, g, e) returns f(x) if e is Left x and g(y) if e is Right y.",
