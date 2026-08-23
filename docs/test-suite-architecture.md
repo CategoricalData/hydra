@@ -150,6 +150,24 @@ A test case is one of two variants of the `TestCase` union:
   them](#the-field-terms-and-two-ways-the-mapping-translates-them) below for how Hydra maps
   these field terms into each target (effectful cases use only the native mapping).
 
+### Why comparison by string rendering is sound
+
+The suite compares `actual` and `expected` by **string equality** (of the rendered result), not by a
+structural value-equality check. This is deliberate and sound, for two reasons, and does **not** create a
+gap where a host with a subtly wrong value-equality could pass:
+
+1. **The rendering is information-preserving.** Types and terms are rendered through Hydra's textual
+   syntax (`hydra.print.*`), for which `parse (print x) == x` holds by design (the round-trip law; see the
+   `printable` capability and the [serialization spec](https://github.com/CategoricalData/hydra/blob/main/docs/specification/serialization.md)).
+   Two values render to the same string exactly when they are the same value — so string equality of the
+   renderings *is* value equality, not a lossy proxy for it.
+2. **The renderer is translingual.** `hydra.print.*` is itself Hydra code, generated into every host and
+   covered by the conformance suite, so the rendering behaves identically on every host. A per-host
+   discrepancy in rendering would itself be a conformance failure, caught by the suite.
+
+So "compared for equality" as string equality is a faithful equality check, not a weaker one. (This note
+exists to forestall re-raising string comparison as a soundness concern; it was examined and found sound.)
+
 The kernel schema
 (`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Testing.hs`)
 declares:
