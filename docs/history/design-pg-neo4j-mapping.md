@@ -1,8 +1,9 @@
 # Proposal: a mapping between `hydra.pg.model` (TinkerPop) and `hydra.neo4j.model`
 
-Status: implemented as `hydra.neo4j.pg` (first pass). For #510. This document is the design record;
-the shipped feature is documented in the [hydra-pg README](../../packages/hydra-pg/README.md). Some
-details below describe earlier design iterations (e.g. the open questions) and are kept for rationale.
+Status: implemented as `hydra.neo4j.pg` (module `Hydra.Sources.Neo4j.Pg`). For #510. This document is the
+settled design record; the shipped feature is documented in the [hydra-pg README](../../packages/hydra-pg/README.md).
+The design questions this record once left open are now answered by the shipped code — see
+[How the design questions resolved](#how-the-design-questions-resolved) at the end.
 
 ## Goal
 
@@ -170,15 +171,21 @@ The connection to validation: a Neo4j graph that `neo4jToGraph` rejects is one H
   **Sequencing note:** #518 is a natural prerequisite — build the mapping on the fixed `Coder` rather than
   a throwaway local type.
 
-## Open questions for discussion
+## How the design questions resolved
 
-1. **Edge-label expansion shape.** For overloaded types, is `out ++ Type ++ In` (`personLikesMovie`) the
-   right form, or `Type` first, or a delimiter? (Only affects the Neo4j → PG label *spelling*, since we
-   don't parse it back.)
-2. **Where it lives.** A new module — `hydra.neo4j.mapping` or `hydra.pg.neo4j.mapping`? Pure,
-   translingual, no effects, like the validator.
-3. **Sequencing vs. #518.** Build after #518 fixes `Coder` (clean, reuses the kernel `Coder` —
-   preferred), or build now against a local context-free coder and switch later?
-4. **Forward laws to property-test.** Which guarantees do we commit to — e.g. "a graph that maps
-   successfully yields a well-formed target graph", "single-label round-trips preserve labels/ids/values
-   under inverse coders", "multi-label nodes are always rejected"?
+The four questions this record originally left open were all settled by the shipped `hydra.neo4j.pg`:
+
+1. **Edge-label expansion shape.** The `out ++ Type ++ In` form won (`personLikesMovie`) — the label
+   spelling used by `relationshipToEdge` for overloaded types. Since PG → Neo4j never parses the label
+   back, the spelling is a one-way convention, and this form reads most naturally.
+2. **Where it lives.** The mapping shipped as `hydra.neo4j.pg` (module `Hydra.Sources.Neo4j.Pg`) — neither
+   of the two originally floated names (`hydra.neo4j.mapping`, `hydra.pg.neo4j.mapping`). It is pure and
+   translingual, like the validator.
+3. **Sequencing vs. #518.** #518 closed (the `Coder` de-parameterization landed), but `Neo4jMapping`
+   **kept** the four-function pair shape (`encodeId`/`decodeId`/`encodeValue`/`decodeValue`) rather than
+   collapsing to `{ idCoder, valueCoder }`. The explicit pairs proved clearer at the call sites than
+   re-bundling into `Coder`s, so the "collapse once #518 lands" step was not taken.
+4. **Forward laws.** The shipped characterization commits to the *forward* guarantees only (a graph that
+   maps successfully yields a well-formed target graph; multi-label nodes are always rejected), and does
+   **not** claim or test round-trip identity — consistent with the "not invertible, by design" section
+   above.
