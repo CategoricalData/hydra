@@ -650,7 +650,7 @@ generateTypeNameToken = define "generateTypeNameToken" $
   "ts" <~ (Core.typeScheme
     (collectForallVars @@ var "origType")
     (wrapInTypedName (nominalResultType @@ var "typeName" @@ var "origType"))
-    nothing) $
+    Maps.empty) $
   Core.binding
     (var "tokenName")
     (var "body")

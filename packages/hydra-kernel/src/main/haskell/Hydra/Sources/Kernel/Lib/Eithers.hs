@@ -32,8 +32,8 @@ module_ = Module {
     -- constraint, so this polymorphic def needs a concrete type here to satisfy GHC. `Int` is arbitrary
     -- and carries no meaning — the emitted primitive is type-agnostic and fully polymorphic. See #467.
     definitions = [apply, bimap, bind, compose, either, foldList, isLeft,
-                   isRight, left, lefts, map, mapList, mapOptional, mapSet, partition, right,
-                   rights]
+                   isRight, Hydra.Sources.Kernel.Lib.Eithers.left, lefts, map, mapList, mapOptional, mapSet, partition,
+                   Hydra.Sources.Kernel.Lib.Eithers.right, rights]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -75,8 +75,8 @@ bimap = defineWithDefault "bimap" "Map over both sides of an either value."
   \ Either c d."]
   ("f" ~> "g" ~> "e" ~>
     Eithers.either
-      ("x" ~> left (var "f" @@ var "x"))
-      ("y" ~> right (var "g" @@ var "y"))
+      ("x" ~> Phantoms.left (var "f" @@ var "x"))
+      ("y" ~> Phantoms.right (var "g" @@ var "y"))
       (var "e"))
 
 bind :: PrimitiveDefinition
@@ -89,7 +89,7 @@ bind = defineWithDefault "bind" "Bind (flatMap) for either: if Right, apply the 
    "Total. Corresponds to Haskell's (>>=) :: Either a b -> (b -> Either a c) -> Either a c."]
   ("e" ~> "f" ~>
     Eithers.either
-      ("x" ~> left (var "x"))
+      ("x" ~> Phantoms.left (var "x"))
       (var "f")
       (var "e"))
 
@@ -125,7 +125,7 @@ foldList = defineWithDefault "foldList" "Left-fold over a list with an Either-re
     Lists.foldl
       ("acc" ~> "el" ~>
         Eithers.bind (var "acc") ("a" ~> var "f" @@ var "a" @@ var "el"))
-      (right (var "acc0"))
+      (Phantoms.right (var "acc0"))
       (var "xs"))
 
 isLeft :: PrimitiveDefinition
@@ -176,8 +176,8 @@ map = defineWithDefault "map" "Map a function over the Right side of an either (
    "Total. Corresponds to Haskell's fmap :: (a -> b) -> Either e a -> Either e b."]
   ("f" ~> "e" ~>
     Eithers.either
-      ("x" ~> left (var "x"))
-      ("y" ~> right (var "f" @@ var "y"))
+      ("x" ~> Phantoms.left (var "x"))
+      ("y" ~> Phantoms.right (var "f" @@ var "y"))
       (var "e"))
 
 mapList :: PrimitiveDefinition
@@ -193,7 +193,7 @@ mapList = defineWithDefault "mapList" "Map a function returning either over a li
       ("x" ~> "acc" ~>
         Eithers.bind (var "f" @@ var "x") $
           "y" ~> Eithers.map ("ys" ~> Lists.cons (var "y") (var "ys")) (var "acc"))
-      (right (list ([] :: [TypedTerm b])))
+      (Phantoms.right (list ([] :: [TypedTerm b])))
       (var "xs"))
 
 mapOptional :: PrimitiveDefinition
@@ -205,16 +205,18 @@ mapOptional = defineWithDefault "mapOptional" "Map a function returning either o
    "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."]
   ("f" ~> "m" ~>
     Optionals.match (var "m")
-      (right nothing)
+      (Phantoms.right nothing)
       ("x" ~> Eithers.map ("y" ~> just (var "y")) (var "f" @@ var "x")))
 
 mapSet :: PrimitiveDefinition
 mapSet = defineWithDefault "mapSet" "Map a function returning either over a set, collecting results or short-circuiting on Left."
-  (sigWithParams [("f", "the either-returning function to apply to each element"), ("s", "the set to map over")] $ TypeScheme [Name "x", Name "y", Name "z"]
-    ((tx Types.~> ee tz ty) Types.~> Types.set tx Types.~> ee tz (Types.set ty)) mempty)
+  (sigWithParams [("f", "the either-returning function to apply to each element"), ("s", "the set to map over")] $
+    Types.polyConstrained [("x", [Name "ordering"]), ("y", [Name "ordering"]), ("z", [])]
+    ((tx Types.~> ee tz ty) Types.~> Types.set tx Types.~> ee tz (Types.set ty)))
   ["mapSet(f, s) applies f to each element of s in unspecified order. If every application returns\
   \ Right, the result is Right of the set of contained values (deduplicated by the result type's\
   \ ordering); the first application returning Left short-circuits the whole result to that Left.",
+   "Requires an 'ordering' constraint on the input and output element types.",
    "Total. Corresponds to Haskell's traverse-style operation specialised to Set."]
   (("f" ~> "s" ~>
     Eithers.map
@@ -223,7 +225,7 @@ mapSet = defineWithDefault "mapSet" "Map a function returning either over a set,
         ("x" ~> "acc" ~>
           Eithers.bind (var "f" @@ var "x") $
             "y" ~> Eithers.map ("ys" ~> Lists.cons (var "y") (var "ys")) (var "acc"))
-        (right (list ([] :: [TypedTerm Int])))
+        (Phantoms.right (list ([] :: [TypedTerm Int])))
         (Sets.toList (var "s" :: TypedTerm (S.Set Int))))) :: TypedTerm ((Int -> Either Int Int) -> S.Set Int -> Either Int (S.Set Int)))
 
 partition :: PrimitiveDefinition

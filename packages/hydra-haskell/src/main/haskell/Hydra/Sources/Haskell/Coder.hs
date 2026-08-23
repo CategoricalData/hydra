@@ -253,9 +253,14 @@ constructModule = haskellCoderDefinition "constructModule" $
         list [
           pair (pair (string "Prelude") nothing) (list $ string <$> [
             "Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "lines", "map", "pure", "sum", "unlines"])],
-        -- Data.Scientific is always imported (modules that don't use it produce an unused-import warning)
+        -- Data.Scientific and Data.Void are always imported (modules that don't use them
+        -- produce an unused-import warning). Void is unconditional rather than gated on
+        -- HaskellModuleMetadata.usesVoid because the synthesized Hydra.Dsl.Lib.* wrapper
+        -- modules (Dsls.hs's dslModule) reference Void in phantom-typed signatures without
+        -- flowing through gatherMetadata's usesVoid detection.
         list [
-          pair (pair (string "Data.Scientific") (just $ string "Sci")) (list ([] :: [TypedTerm String]))],
+          pair (pair (string "Data.Scientific") (just $ string "Sci")) (list ([] :: [TypedTerm String])),
+          pair (pair (string "Data.Void") (nothing :: TypedTerm (Maybe String))) (list ([] :: [TypedTerm String]))],
         -- Conditional standard imports based on metadata
         var "condImport"
           @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesByteString @@ var "meta")
@@ -269,9 +274,6 @@ constructModule = haskellCoderDefinition "constructModule" $
         var "condImport"
           @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "meta")
           @@ pair (pair (string "Data.Set") (just $ string "S")) (list ([] :: [TypedTerm String])),
-        var "condImport"
-          @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesVoid @@ var "meta")
-          @@ pair (pair (string "Data.Void") (nothing :: TypedTerm (Maybe String))) (list ([] :: [TypedTerm String])),
         -- Conditionally add Hydra.Overlay.Haskell.Lib.Literals import (the native runtime
         -- for hydra.lib.literals) if binary or decimal literals are present.
         Logic.ifElse (Logic.or
@@ -969,7 +971,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
           "hterm" <<~ encodeTerm @@ int32 0 @@ var "namespaces" @@ var "term'" @@ var "cx" @@ var "g" $ lets [
          "vb">: HaskellUtilsSource.simpleValueBinding @@ var "hname'" @@ var "hterm" @@ var "bindings",
          -- Extract constraints from the TypeScheme and convert to class assertions
-         "schemeConstraints">: optCases (var "typ") Maps.empty ("ts" ~> Core.typeSchemeConstraints (var "ts")),
+         "schemeConstraints">: optCases (var "typ") (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints)) ("ts" ~> Core.typeSchemeConstraints (var "ts")),
          "schemeClasses">: typeSchemeConstraintsToClassMap @@ var "schemeConstraints"] $
          "explicitClasses" <<~ Annotations.getTypeClasses @@ var "cx" @@ var "g" @@ (Strip.removeTypesFromTerm @@ var "term") $
          -- Combine constraints from TypeScheme with any explicit annotations

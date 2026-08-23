@@ -586,7 +586,7 @@ lowerPrimitiveDefinitions = define "lowerPrimitiveDefinitions" $
   "primDefSig" <~ Scoping.typeSchemeToTermSignature @@ Core.typeScheme
     (list ([] :: [TypedTerm Name]))
     (Core.typeVariable (wrap _Name (string "hydra.packaging.PrimitiveDefinition")))
-    nothing $
+    Maps.empty $
   "origDefs" <~ Packaging.moduleDefinitions (var "m") $
   "hasPrim" <~ Lists.foldl
     ("acc" ~> "d" ~> Logic.or (var "acc")
@@ -716,7 +716,7 @@ moduleToSourceModule = define "moduleToSourceModule" $
     (just (Scoping.typeSchemeToTermSignature @@ Core.typeScheme
       (list ([] :: [TypedTerm Name]))
       (Core.typeVariable (wrap _Name (string "hydra.packaging.Module")))
-      nothing))
+      Maps.empty))
     (encoderFor _Module @@ var "m")) $
   Packaging.module_
     (var "sourceNs")

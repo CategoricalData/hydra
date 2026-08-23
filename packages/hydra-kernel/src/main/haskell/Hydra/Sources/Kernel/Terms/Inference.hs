@@ -309,7 +309,7 @@ dischargeClassConstraints = define "dischargeClassConstraints" $
               (Strings.concat $ list [
                 (string "Type "), PrintCore.type_ @@ var "resolvedType",
                 (string " does not satisfy constraint "), Core.unName (var "className")])))) $
-        Eithers.bind (Eithers.mapSet (var "checkClass") (Core.typeVariableConstraintsClasses $ var "varConstraints"))
+        Eithers.bind (Eithers.mapSet (var "checkClass") (Core.typeVariableConstraintsClasses $ var "varConstraints") :: TypedTerm (Prelude.Either Error (S.Set ())))
           ("_" ~> right unit))) $
   Eithers.bind (Eithers.mapList (var "checkOne") (Maps.toList $ (var "constraints" :: TypedTerm (M.Map Name TypeVariableConstraints))))
     ("_" ~> right unit)

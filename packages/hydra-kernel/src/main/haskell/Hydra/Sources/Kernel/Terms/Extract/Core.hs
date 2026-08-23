@@ -721,7 +721,8 @@ setOf = define "setOf" $
   doc "Extract a set of values from a term, mapping a function over each element" $
   "f" ~> "graph" ~> "term" ~>
   "els" <<~ set @@ var "graph" @@ var "term" $
-  Eithers.mapSet (var "f" :: TypedTerm (Term -> Either Error x)) (var "els" :: TypedTerm (S.Set Term))
+  (Eithers.mapSet (var "f" :: TypedTerm (Term -> Either Error x)) (var "els" :: TypedTerm (S.Set Term))
+    :: TypedTerm (Prelude.Either Error (S.Set x)))
 
 setType :: TypedTermDefinition (Type -> Prelude.Either Error Type)
 setType = define "setType" $

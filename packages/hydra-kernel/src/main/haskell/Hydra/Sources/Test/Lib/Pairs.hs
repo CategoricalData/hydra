@@ -53,7 +53,7 @@ showIntIntPair = Phantoms.lambda "p" $ Strings.concat (Phantoms.list [
 showIntStrPair :: TypedTerm ((Int, String) -> String)
 showIntStrPair = Phantoms.lambda "p" $ Strings.concat (Phantoms.list [
   Phantoms.string "(",
-  Literals.showInt32 (Pairs.first (Phantoms.var "p")),
+  Literals.printInt32 (Pairs.first (Phantoms.var "p")),
   Phantoms.string ", ",
   Pairs.second (Phantoms.var "p"),
   Phantoms.string ")"])

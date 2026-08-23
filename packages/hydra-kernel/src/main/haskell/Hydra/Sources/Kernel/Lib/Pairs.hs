@@ -22,7 +22,7 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.pairs module.")}
   where
-    definitions = [bimap, first, pair, second]
+    definitions = [bimap, first, Hydra.Sources.Kernel.Lib.Pairs.pair, second]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -39,10 +39,10 @@ bimap = defineWithDefault "bimap" "Map over both elements of a pair."
      (Types.var "b" Types.~> Types.var "d") Types.~>
      Types.pair (Types.var "a") (Types.var "b") Types.~>
      Types.pair (Types.var "c") (Types.var "d"))
-    Nothing)
+    mempty)
   ["bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs.",
    "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d)."]
-  ("f" ~> "g" ~> "p" ~> pair
+  ("f" ~> "g" ~> "p" ~> Phantoms.pair
     (var "f" @@ Pairs.first (var "p"))
     (var "g" @@ Pairs.second (var "p")))
 
@@ -58,7 +58,7 @@ pair :: PrimitiveDefinition
 pair = define "pair" "Construct a pair from two values."
   (sigWithParams [("x", "the first element"), ("y", "the second element")] $ TypeScheme [Name "a", Name "b"]
     (Types.var "a" Types.~> Types.var "b" Types.~> Types.pair (Types.var "a") (Types.var "b"))
-    Nothing)
+    mempty)
   ["pair(x, y) returns the pair (x, y).",
    "The type-free pair constructor, useful point-free (e.g. zipWith(pair, xs, ys)).",
    "Total. Corresponds to Haskell's (,) :: a -> b -> (a, b)."]

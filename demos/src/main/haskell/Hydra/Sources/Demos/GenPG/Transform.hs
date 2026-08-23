@@ -422,7 +422,7 @@ parseCsvChar = define "parseCsvChar" $
           (-- Inside quotes - this ends the quoted section
             pair (pair (var "acc") (var "field")) (boolean False))
           (-- Not inside quotes - start quoted section (only if field is empty)
-            Logic.ifElse (Strings.null $ var "field")
+            Logic.ifElse (Strings.isEmpty $ var "field")
               (pair (pair (var "acc") (var "field")) (boolean True))
               (-- Quote inside non-empty unquoted field - just add it (simplified behavior)
                 pair (pair (var "acc") (Strings.concat2 (var "field") (string "\""))) (var "inQuotes"))))
@@ -438,7 +438,7 @@ normalizeField :: TypedTermDefinition (String -> Maybe String)
 normalizeField = define "normalizeField" $
   doc "Normalize a CSV field value - empty becomes Nothing" $
   "s" ~>
-    Logic.ifElse (Strings.null $ var "s")
+    Logic.ifElse (Strings.isEmpty $ var "s")
       nothing
       (just $ var "s")
 
@@ -477,7 +477,7 @@ listAny :: TypedTermDefinition ((a -> Bool) -> [a] -> Bool)
 listAny = define "listAny" $
   doc "Check if any element in a list satisfies a predicate" $
   "pred" ~> "xs" ~>
-    Logic.not $ Lists.null $ Lists.filter (var "pred") (var "xs")
+    Logic.not $ Lists.isEmpty $ Lists.filter (var "pred") (var "xs")
 
 -- | Parse a single CSV line, returning Nothing for empty/whitespace-only lines
 parseSingleLine :: TypedTermDefinition (String -> Either String (Maybe [Maybe String]))
@@ -485,7 +485,7 @@ parseSingleLine = define "parseSingleLine" $
   doc "Parse a single CSV line, returning Nothing for empty lines" $
   "line" ~>
     "trimmed" <~ (stripWhitespace @@ var "line") $
-    Logic.ifElse (Strings.null $ var "trimmed")
+    Logic.ifElse (Strings.isEmpty $ var "trimmed")
       (right nothing)
       (Eithers.map ("x" ~> just (var "x")) (parseCsvLine @@ var "trimmed"))
 

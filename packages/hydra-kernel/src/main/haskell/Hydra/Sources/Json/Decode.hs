@@ -510,6 +510,7 @@ fromJson = define "fromJson" $
           (left $ string "duplicate key in compact map object")) $
       match _Value (var "value")
         (Just $ left $ string "expected object or array for map") [
+        _Value_null>>: constant (right $ Core.termMap Maps.empty),
         _Value_array>>: "arr" ~> var "decodeArrayForm" @@ var "arr",
         _Value_object>>: "obj" ~>
           Logic.ifElse (var "compact")

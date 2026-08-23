@@ -38,7 +38,7 @@ t3 = Types.var "t3"
 absurd :: PrimitiveDefinition
 absurd = define "absurd" "Eliminate a value of the uninhabited void type, producing any type."
   (sigWithParams [("v", "a value of the void type; unreachable in any well-typed program")] $
-    TypeScheme [Name "t1"] (Types.void Types.~> t1) Nothing)
+    TypeScheme [Name "t1"] (Types.void Types.~> t1) mempty)
   ["absurd(v) is the unique function from void to any type t1; since void has no\
   \ inhabitants, this function can never actually be applied in a well-typed program.",
    "Its purpose is to discharge an impossible branch in otherwise-total code, such as the\
