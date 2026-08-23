@@ -891,11 +891,9 @@ encoderTypeScheme = define "encoderTypeScheme" $
 
     -- Build constraints map: {varName -> TypeVariableConstraints {classes = {ordering}}}
     "constraints">:
-      Logic.ifElse (Lists.null (var "ordVars"))
-        nothing
-        (just ((Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
-          (var "ordVars")) :: TypedTerm (M.Map Name TypeVariableConstraints)))] $
+      ((Maps.fromList $ Lists.map
+        ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
+        (var "ordVars")) :: TypedTerm (M.Map Name TypeVariableConstraints))] $
   Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
 
 -- | Collect forall type variables from a type
@@ -917,11 +915,9 @@ encoderTypeSchemeNamed = define "encoderTypeSchemeNamed" $
       ("v" ~> Lists.member (var "v" :: TypedTerm Name) (var "typeVars" :: TypedTerm [Name]))
       (var "allOrdVars"),
     "constraints">:
-      Logic.ifElse (Lists.null (var "ordVars"))
-        nothing
-        (just ((Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
-          (var "ordVars")) :: TypedTerm (M.Map Name TypeVariableConstraints)))] $
+      ((Maps.fromList $ Lists.map
+        ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
+        (var "ordVars")) :: TypedTerm (M.Map Name TypeVariableConstraints))] $
   Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
 -- | Filter bindings to only encodable type definitions
 -- A binding is encodable if it is a native type AND is serializable (no function types in dependencies)

@@ -19,7 +19,6 @@ import hydra.core.TypeClassConstraint;
 import hydra.core.TypeScheme;
 import hydra.core.TypeVariableConstraints;
 import hydra.overlay.java.util.ConsList;
-import hydra.overlay.java.util.Optional;
 import hydra.overlay.java.util.PersistentMap;
 import hydra.overlay.java.util.PersistentSet;
 
@@ -438,7 +437,7 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme mono(Type body) {
-        return new TypeScheme(Collections.emptyList(), body, Optional.none());
+        return new TypeScheme(Collections.emptyList(), body, PersistentMap.<Name, TypeVariableConstraints>empty());
     }
 
     /**
@@ -453,7 +452,7 @@ public interface Types {
         for (String v : vs) {
             reversed = ConsList.cons(name(v), reversed);
         }
-        return new TypeScheme(reversed.reverse(), body, Optional.none());
+        return new TypeScheme(reversed.reverse(), body, PersistentMap.<Name, TypeVariableConstraints>empty());
     }
 
     /**
@@ -486,7 +485,7 @@ public interface Types {
                 constraintMap = constraintMap.insert(varName, new TypeVariableConstraints(toConstraints(entry.getValue())));
             }
         }
-        return new TypeScheme(varsRev.reverse(), body, Optional.given(constraintMap));
+        return new TypeScheme(varsRev.reverse(), body, constraintMap);
     }
 
     Set<Name> ORD = PersistentSet.singleton(name("ordering"));
@@ -537,7 +536,7 @@ public interface Types {
     static TypeScheme constrained1(String v1, Set<Name> c1, Type body) {
         PersistentMap<Name, TypeVariableConstraints> cm = PersistentMap.<Name, TypeVariableConstraints>empty();
         if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableConstraints(toConstraints(c1)));
-        return new TypeScheme(ConsList.of(name(v1)), body, Optional.given(cm));
+        return new TypeScheme(ConsList.of(name(v1)), body, cm);
     }
 
     /**
@@ -547,7 +546,7 @@ public interface Types {
         PersistentMap<Name, TypeVariableConstraints> cm = PersistentMap.<Name, TypeVariableConstraints>empty();
         if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableConstraints(toConstraints(c1)));
         if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableConstraints(toConstraints(c2)));
-        return new TypeScheme(ConsList.of(name(v1), name(v2)), body, Optional.given(cm));
+        return new TypeScheme(ConsList.of(name(v1), name(v2)), body, cm);
     }
 
     /**
@@ -558,7 +557,7 @@ public interface Types {
         if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableConstraints(toConstraints(c1)));
         if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableConstraints(toConstraints(c2)));
         if (!c3.isEmpty()) cm = cm.insert(name(v3), new TypeVariableConstraints(toConstraints(c3)));
-        return new TypeScheme(ConsList.of(name(v1), name(v2), name(v3)), body, Optional.given(cm));
+        return new TypeScheme(ConsList.of(name(v1), name(v2), name(v3)), body, cm);
     }
 
     /**
@@ -571,7 +570,7 @@ public interface Types {
         if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableConstraints(toConstraints(c2)));
         if (!c3.isEmpty()) cm = cm.insert(name(v3), new TypeVariableConstraints(toConstraints(c3)));
         if (!c4.isEmpty()) cm = cm.insert(name(v4), new TypeVariableConstraints(toConstraints(c4)));
-        return new TypeScheme(ConsList.of(name(v1), name(v2), name(v3), name(v4)), body, Optional.given(cm));
+        return new TypeScheme(ConsList.of(name(v1), name(v2), name(v3), name(v4)), body, cm);
     }
 
     /**
@@ -581,7 +580,7 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme scheme(String var, Type body) {
-        return new TypeScheme(Arrays.asList(name(var)), body, Optional.none());
+        return new TypeScheme(Arrays.asList(name(var)), body, PersistentMap.<Name, TypeVariableConstraints>empty());
     }
 
     /**
@@ -592,7 +591,7 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme scheme(String var1, String var2, Type body) {
-        return new TypeScheme(Arrays.asList(name(var1), name(var2)), body, Optional.none());
+        return new TypeScheme(Arrays.asList(name(var1), name(var2)), body, PersistentMap.<Name, TypeVariableConstraints>empty());
     }
 
     /**
@@ -604,7 +603,7 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme scheme(String var1, String var2, String var3, Type body) {
-        return new TypeScheme(Arrays.asList(name(var1), name(var2), name(var3)), body, Optional.none());
+        return new TypeScheme(Arrays.asList(name(var1), name(var2), name(var3)), body, PersistentMap.<Name, TypeVariableConstraints>empty());
     }
 
     /**
@@ -617,7 +616,7 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme scheme(String var1, String var2, String var3, String var4, Type body) {
-        return new TypeScheme(Arrays.asList(name(var1), name(var2), name(var3), name(var4)), body, Optional.none());
+        return new TypeScheme(Arrays.asList(name(var1), name(var2), name(var3), name(var4)), body, PersistentMap.<Name, TypeVariableConstraints>empty());
     }
 
     /**

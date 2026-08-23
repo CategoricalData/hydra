@@ -106,10 +106,10 @@ object Types:
   // ===== Type schemes =====
 
   def mono(body: Type): TypeScheme =
-    TypeScheme(Seq.empty, body, None)
+    TypeScheme(Seq.empty, body, Map.empty)
 
   def poly(vs: Seq[String], body: Type): TypeScheme =
-    TypeScheme(vs.map(Terms.name), body, None)
+    TypeScheme(vs.map(Terms.name), body, Map.empty)
 
   /** Convert a Set of class identifier Names into a list of TypeClassConstraint.simple values. */
   def toConstraints(classes: Set[Name]): Seq[TypeClassConstraint] =
@@ -122,7 +122,7 @@ object Types:
         case (v, cs) if cs.nonEmpty =>
           Terms.name(v) -> TypeVariableConstraints(toConstraints(cs))
       }
-    TypeScheme(vars, body, Some(constraintMap))
+    TypeScheme(vars, body, constraintMap)
 
   val ORD: Set[Name] = Set("ordering")
   val EQ:  Set[Name] = Set("equality")
@@ -134,7 +134,7 @@ object Types:
   def constrained1(v1: String, c1: Set[Name], body: Type): TypeScheme =
     var cm: Map[Name, TypeVariableConstraints] = Map.empty
     if c1.nonEmpty then cm = cm + (Terms.name(v1) -> TypeVariableConstraints(toConstraints(c1)))
-    TypeScheme(Seq(Terms.name(v1)), body, Some(cm))
+    TypeScheme(Seq(Terms.name(v1)), body, cm)
 
   // constrained2/3/4 are currently unused by the hydra-scala coder sources (kept for
   // cross-language parity with the Java/Python DSLs — see #553 audit). Confirm before deleting.
@@ -142,7 +142,7 @@ object Types:
     var cm: Map[Name, TypeVariableConstraints] = Map.empty
     if c1.nonEmpty then cm = cm + (Terms.name(v1) -> TypeVariableConstraints(toConstraints(c1)))
     if c2.nonEmpty then cm = cm + (Terms.name(v2) -> TypeVariableConstraints(toConstraints(c2)))
-    TypeScheme(Seq(Terms.name(v1), Terms.name(v2)), body, Some(cm))
+    TypeScheme(Seq(Terms.name(v1), Terms.name(v2)), body, cm)
 
   def constrained3(v1: String, c1: Set[Name], v2: String, c2: Set[Name],
                    v3: String, c3: Set[Name], body: Type): TypeScheme =
@@ -150,7 +150,7 @@ object Types:
     if c1.nonEmpty then cm = cm + (Terms.name(v1) -> TypeVariableConstraints(toConstraints(c1)))
     if c2.nonEmpty then cm = cm + (Terms.name(v2) -> TypeVariableConstraints(toConstraints(c2)))
     if c3.nonEmpty then cm = cm + (Terms.name(v3) -> TypeVariableConstraints(toConstraints(c3)))
-    TypeScheme(Seq(Terms.name(v1), Terms.name(v2), Terms.name(v3)), body, Some(cm))
+    TypeScheme(Seq(Terms.name(v1), Terms.name(v2), Terms.name(v3)), body, cm)
 
   def constrained4(v1: String, c1: Set[Name], v2: String, c2: Set[Name],
                    v3: String, c3: Set[Name], v4: String, c4: Set[Name], body: Type): TypeScheme =
@@ -159,21 +159,21 @@ object Types:
     if c2.nonEmpty then cm = cm + (Terms.name(v2) -> TypeVariableConstraints(toConstraints(c2)))
     if c3.nonEmpty then cm = cm + (Terms.name(v3) -> TypeVariableConstraints(toConstraints(c3)))
     if c4.nonEmpty then cm = cm + (Terms.name(v4) -> TypeVariableConstraints(toConstraints(c4)))
-    TypeScheme(Seq(Terms.name(v1), Terms.name(v2), Terms.name(v3), Terms.name(v4)), body, Some(cm))
+    TypeScheme(Seq(Terms.name(v1), Terms.name(v2), Terms.name(v3), Terms.name(v4)), body, cm)
 
   def scheme(body: Type): TypeScheme = mono(body)
 
   def scheme(v: String, body: Type): TypeScheme =
-    TypeScheme(Seq(Terms.name(v)), body, None)
+    TypeScheme(Seq(Terms.name(v)), body, Map.empty)
 
   def scheme(v1: String, v2: String, body: Type): TypeScheme =
-    TypeScheme(Seq(Terms.name(v1), Terms.name(v2)), body, None)
+    TypeScheme(Seq(Terms.name(v1), Terms.name(v2)), body, Map.empty)
 
   def scheme(v1: String, v2: String, v3: String, body: Type): TypeScheme =
-    TypeScheme(Seq(Terms.name(v1), Terms.name(v2), Terms.name(v3)), body, None)
+    TypeScheme(Seq(Terms.name(v1), Terms.name(v2), Terms.name(v3)), body, Map.empty)
 
   def scheme(v1: String, v2: String, v3: String, v4: String, body: Type): TypeScheme =
-    TypeScheme(Seq(Terms.name(v1), Terms.name(v2), Terms.name(v3), Terms.name(v4)), body, None)
+    TypeScheme(Seq(Terms.name(v1), Terms.name(v2), Terms.name(v3), Terms.name(v4)), body, Map.empty)
 
   // ===== Collection types =====
 

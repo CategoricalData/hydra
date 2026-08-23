@@ -47,7 +47,7 @@ datatype gname lname typ = TypeDefinition {
     typeDefinitionBody = TypeScheme {
       typeSchemeVariables = [],
       typeSchemeBody = typ,
-      typeSchemeConstraints = Nothing}}
+      typeSchemeConstraints = M.empty}}
 
 -- | Define a type in a namespace
 defineType :: ModuleName -> String -> Type -> TypeDefinition

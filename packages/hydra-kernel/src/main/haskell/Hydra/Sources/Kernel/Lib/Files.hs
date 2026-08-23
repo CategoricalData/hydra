@@ -41,7 +41,7 @@ appendFile :: PrimitiveDefinition
 appendFile = define "appendFile" "Append bytes to the end of a file."
   (sigWithParams [("path", "the path of the file to append to"),
                   ("contents", "the raw bytes to append")] $
-    TypeScheme [] (filePath Types.~> Types.binary Types.~> result Types.unit) Nothing)
+    TypeScheme [] (filePath Types.~> Types.binary Types.~> result Types.unit) mempty)
   ["appendFile(path, contents) describes an effectful computation which attempts to append the raw\
   \ bytes contents to the end of the file at path, creating the file if it does not exist. Unlike\
   \ writeFile, existing contents are preserved. File I/O is byte-oriented; to append text, encode\
@@ -54,7 +54,7 @@ copy = deprecatedSince "0.18" "copyFile" $ define "copy" "Copy a file, or a dire
                   ("source", "the path to copy from"),
                   ("destination", "the path to copy to")] $
     TypeScheme []
-    (Types.boolean Types.~> filePath Types.~> filePath Types.~> result Types.unit) Nothing)
+    (Types.boolean Types.~> filePath Types.~> filePath Types.~> result Types.unit) mempty)
   ["copy(recursive, source, destination) describes an effectful computation which attempts to copy\
   \ source to destination. When recursive is false, source must be a single file. When recursive\
   \ is true, source may be a directory, whose entire tree is copied. Copying is performed by the\
@@ -67,7 +67,7 @@ createDirectory = define "createDirectory" "Create a directory."
   (sigWithParams [("recursive", "whether to create missing parent directories as well"),
                   ("path", "the path of the directory to create")] $
     TypeScheme []
-    (Types.boolean Types.~> filePath Types.~> result Types.unit) Nothing)
+    (Types.boolean Types.~> filePath Types.~> result Types.unit) mempty)
   ["createDirectory(recursive, path) describes an effectful computation which attempts to create a\
   \ directory at path. When recursive is false this corresponds to POSIX mkdir: it fails if path\
   \ already exists or if a parent is missing. When recursive is true, any missing parent\
@@ -79,7 +79,7 @@ createSymlink :: PrimitiveDefinition
 createSymlink = define "createSymlink" "Create a symbolic link."
   (sigWithParams [("target", "the path that the new symbolic link will point to"),
                   ("link", "the path of the symbolic link to create")] $
-    TypeScheme [] (filePath Types.~> filePath Types.~> result Types.unit) Nothing)
+    TypeScheme [] (filePath Types.~> filePath Types.~> result Types.unit) mempty)
   ["createSymlink(target, link) describes an effectful computation which attempts to create a\
   \ symbolic link at link, pointing to target (POSIX symlink). target is stored verbatim; it may\
   \ be a relative path, and it need not exist. There is no force flag: if link already exists\
@@ -94,7 +94,7 @@ createSymlink = define "createSymlink" "Create a symbolic link."
 exists :: PrimitiveDefinition
 exists = define "exists" "Test whether a path exists."
   (sigWithParams [("path", "the path to test for existence")] $
-    TypeScheme [] (filePath Types.~> result Types.boolean) Nothing)
+    TypeScheme [] (filePath Types.~> result Types.boolean) mempty)
   ["exists(path) describes an effectful computation which reports whether anything exists at path,\
   \ whether a file, directory, or other type of file. It does not error when the path is absent;\
   \ a missing path is reported as right(false). Use status to obtain the type of an existing path.\
@@ -103,7 +103,7 @@ exists = define "exists" "Test whether a path exists."
 listDirectory :: PrimitiveDefinition
 listDirectory = define "listDirectory" "List the immediate entries of a directory."
   (sigWithParams [("path", "the path of the directory to list")] $
-    TypeScheme [] (filePath Types.~> result (Types.list filePath)) Nothing)
+    TypeScheme [] (filePath Types.~> result (Types.list filePath)) mempty)
   ["listDirectory(path) describes an effectful computation which returns the immediate entries of\
   \ the directory at path, excluding the special entries \".\" and \"..\". The result is one level\
   \ deep and is not ordered; to traverse a tree recursively, recurse using status. A recoverable\
@@ -112,7 +112,7 @@ listDirectory = define "listDirectory" "List the immediate entries of a director
 readFile :: PrimitiveDefinition
 readFile = define "readFile" "Read the complete contents of a file as raw bytes."
   (sigWithParams [("path", "the path of the file to read")] $
-    TypeScheme [] (filePath Types.~> result Types.binary) Nothing)
+    TypeScheme [] (filePath Types.~> result Types.binary) mempty)
   ["readFile(path) describes an effectful computation which attempts to read the entire contents of\
   \ the file at path as raw bytes, with no character decoding or newline translation. To interpret\
   \ the result as text, decode it (e.g. via hydra.lib.text.decodeUtf8). A recoverable file-system\
@@ -121,7 +121,7 @@ readFile = define "readFile" "Read the complete contents of a file as raw bytes.
 readSymlink :: PrimitiveDefinition
 readSymlink = define "readSymlink" "Read the target of a symbolic link."
   (sigWithParams [("path", "the path of the symbolic link to read")] $
-    TypeScheme [] (filePath Types.~> result filePath) Nothing)
+    TypeScheme [] (filePath Types.~> result filePath) mempty)
   ["readSymlink(path) describes an effectful computation which attempts to read the target of the\
   \ symbolic link at path (POSIX readlink). This is a single-hop, unresolved read: the target is\
   \ returned exactly as stored, with no chain resolution or canonicalization; a relative target\
@@ -136,7 +136,7 @@ removeDirectory = define "removeDirectory" "Remove a directory."
   (sigWithParams [("recursive", "whether to remove the directory's contents as well"),
                   ("path", "the path of the directory to remove")] $
     TypeScheme []
-    (Types.boolean Types.~> filePath Types.~> result Types.unit) Nothing)
+    (Types.boolean Types.~> filePath Types.~> result Types.unit) mempty)
   ["removeDirectory(recursive, path) describes an effectful computation which attempts to remove the\
   \ directory at path. When recursive is false this corresponds to POSIX rmdir: it fails unless the\
   \ directory is empty. When recursive is true, the directory and its entire contents are removed\
@@ -147,7 +147,7 @@ removeDirectory = define "removeDirectory" "Remove a directory."
 removeFile :: PrimitiveDefinition
 removeFile = define "removeFile" "Remove a file."
   (sigWithParams [("path", "the path of the file to remove")] $
-    TypeScheme [] (filePath Types.~> result Types.unit) Nothing)
+    TypeScheme [] (filePath Types.~> result Types.unit) mempty)
   ["removeFile(path) describes an effectful computation which attempts to remove the file at path\
   \ (POSIX unlink). A recoverable file-system failure is returned as left(error); success is\
   \ returned as right(unit)."]
@@ -156,7 +156,7 @@ rename :: PrimitiveDefinition
 rename = define "rename" "Rename or move a file or directory."
   (sigWithParams [("source", "the path to rename from"),
                   ("destination", "the path to rename to")] $
-    TypeScheme [] (filePath Types.~> filePath Types.~> result Types.unit) Nothing)
+    TypeScheme [] (filePath Types.~> filePath Types.~> result Types.unit) mempty)
   ["rename(source, destination) describes an effectful computation which attempts to rename the\
   \ file or directory at source to destination. When source and destination are on the same file\
   \ system this is atomic (POSIX rename) and cannot be reproduced by a copy followed by a delete.\
@@ -168,7 +168,7 @@ status = define "status" "Retrieve metadata about a file or directory."
   (sigWithParams [("followLinks", "whether to resolve symbolic links (true reproduces the\
                   \ previous, follow, behavior; false inspects the entry itself)"),
                   ("path", "the path to retrieve metadata for")] $
-    TypeScheme [] (Types.boolean Types.~> filePath Types.~> result fileStatus) Nothing)
+    TypeScheme [] (Types.boolean Types.~> filePath Types.~> result fileStatus) mempty)
   ["status(followLinks, path) describes an effectful computation which retrieves metadata about\
   \ the file system entry at path, including its type, size, and modification time. When\
   \ followLinks is true, this corresponds to POSIX stat: if path is a symbolic link, the metadata\
@@ -186,7 +186,7 @@ writeFile :: PrimitiveDefinition
 writeFile = define "writeFile" "Write raw bytes as the complete contents of a file."
   (sigWithParams [("path", "the path of the file to write"),
                   ("contents", "the raw bytes to write as the file's contents")] $
-    TypeScheme [] (filePath Types.~> Types.binary Types.~> result Types.unit) Nothing)
+    TypeScheme [] (filePath Types.~> Types.binary Types.~> result Types.unit) mempty)
   ["writeFile(path, contents) describes an effectful computation which attempts to replace the file\
   \ at path with the raw bytes contents, with no character encoding or newline translation. To\
   \ write text, encode it to bytes first (e.g. via hydra.lib.text.encodeUtf8). A recoverable\

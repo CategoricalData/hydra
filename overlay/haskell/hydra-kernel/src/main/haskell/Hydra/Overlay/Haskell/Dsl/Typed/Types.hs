@@ -180,7 +180,7 @@ mono :: TypedTerm Type -> TypedTerm TypeScheme
 mono t = Phantoms.record _TypeScheme [
   Phantoms.field _TypeScheme_variables $ Phantoms.list ([] :: [TypedTerm Name]),
   Phantoms.field _TypeScheme_body t,
-  Phantoms.field _TypeScheme_constraints Phantoms.nothing]
+  Phantoms.field _TypeScheme_constraints (Phantoms.map M.empty)]
 
 -- | Term-encoded non-negative 32-bit integer type
 -- Currently an alias for int32; intended for semantic annotation
@@ -205,7 +205,7 @@ poly :: [String] -> TypedTerm Type -> TypedTerm TypeScheme
 poly params t = Phantoms.record _TypeScheme [
   Phantoms.field _TypeScheme_variables (Phantoms.list (name <$> params)),
   Phantoms.field _TypeScheme_body t,
-  Phantoms.field _TypeScheme_constraints Phantoms.nothing]
+  Phantoms.field _TypeScheme_constraints (Phantoms.map M.empty)]
 
 -- | Create a term-encoded polymorphic type scheme with class constraints
 -- Example: polyConstrained ["k", "v"] [("k", ["ordering"])] (map (var "k") (var "v"))
@@ -215,7 +215,7 @@ polyConstrained params constraints t = Phantoms.record _TypeScheme [
   Phantoms.field _TypeScheme_body t,
   Phantoms.field _TypeScheme_constraints constraintsTerm]
   where
-    constraintsTerm = Phantoms.just $ Phantoms.map $ M.fromList
+    constraintsTerm = Phantoms.map $ M.fromList
       [(name v, Core.typeVariableConstraints (Phantoms.list (Core.typeClassConstraintSimple . name <$> classes)))
       | (v, classes) <- constraints]
 

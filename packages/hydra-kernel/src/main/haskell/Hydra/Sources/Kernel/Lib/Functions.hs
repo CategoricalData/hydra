@@ -40,7 +40,7 @@ compose = defineWithDefault "compose" "Compose two functions."
   (sigWithParams [("g", "the outer function, applied to the result of f"),
                   ("f", "the inner function, applied to x first"),
                   ("x", "the argument to which f is applied")] $ TypeScheme [Name "t1", Name "t2", Name "t3"]
-    ((t2 Types.~> t3) Types.~> (t1 Types.~> t2) Types.~> t1 Types.~> t3) Nothing)
+    ((t2 Types.~> t3) Types.~> (t1 Types.~> t2) Types.~> t1 Types.~> t3) mempty)
   ["compose(g, f, x) = g(f(x)); this defining equation is the specification.",
    "The outer function comes first: f is applied to x, and g is applied to the result.",
    "This is ordinary function composition, distinct from the Kleisli compose primitives of the\
@@ -52,7 +52,7 @@ const :: PrimitiveDefinition
 const = defineWithDefault "const" "Return the first argument, ignoring the second."
   (sigWithParams [("x", "the value to return"),
                   ("y", "the ignored second argument")] $ TypeScheme [Name "t1", Name "t2"]
-    (t1 Types.~> t2 Types.~> t1) Nothing)
+    (t1 Types.~> t2 Types.~> t1) mempty)
   ["const(x, y) = x; this defining equation is the specification.",
    "Partially applied, const(x) is the constant function which returns x on every input.",
    "Total. Corresponds to Haskell's const :: a -> b -> a."]
@@ -63,14 +63,14 @@ flip = defineWithDefault "flip" "Swap the argument order of a binary function."
   (sigWithParams [("f", "the binary function whose argument order is swapped"),
                   ("x", "the argument passed as f's second argument"),
                   ("y", "the argument passed as f's first argument")] $ TypeScheme [Name "t1", Name "t2", Name "t3"]
-    ((t1 Types.~> t2 Types.~> t3) Types.~> t2 Types.~> t1 Types.~> t3) Nothing)
+    ((t1 Types.~> t2 Types.~> t3) Types.~> t2 Types.~> t1 Types.~> t3) mempty)
   ["flip(f, x, y) = f(y, x); this defining equation is the specification.",
    "Total. Corresponds to Haskell's flip :: (a -> b -> c) -> b -> a -> c."]
   ("f" ~> "x" ~> "y" ~> (var "f" @@ var "y" @@ var "x"))
 
 identity :: PrimitiveDefinition
 identity = defineWithDefault "identity" "Return the argument unchanged."
-  (sigWithParams [("x", "the value to return unchanged")] $ TypeScheme [Name "t1"] (t1 Types.~> t1) Nothing)
+  (sigWithParams [("x", "the value to return unchanged")] $ TypeScheme [Name "t1"] (t1 Types.~> t1) mempty)
   ["identity(x) = x; this defining equation is the specification. The polymorphic identity function.",
    "identity is the unit of compose: compose(identity, f) and compose(f, identity) are both f.",
    "Total. Corresponds to Haskell's id :: a -> a."]

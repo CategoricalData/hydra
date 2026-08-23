@@ -43,7 +43,7 @@ inferType term = do
 -- | Strip class constraints from a TypeScheme, since the reference Algorithm W
 --   implementation does not track type class constraints.
 stripConstraints :: TypeScheme -> TypeScheme
-stripConstraints ts = ts { typeSchemeConstraints = Nothing }
+stripConstraints ts = ts { typeSchemeConstraints = M.empty }
 
 expectType :: Term -> TypeScheme -> H.SpecWith ()
 expectType term ts = do

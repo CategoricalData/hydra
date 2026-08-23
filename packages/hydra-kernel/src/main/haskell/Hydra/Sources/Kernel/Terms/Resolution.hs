@@ -232,13 +232,11 @@ instantiateTypeScheme = define "instantiateTypeScheme" $
   -- Build a name-to-name substitution for renaming constraint keys
   "nameSubst" <~ (Maps.fromList (Lists.zip (var "oldVars") (var "newVars")) :: TypedTerm (M.Map Name Name)) $
   -- Rename the keys in the constraints map using the name substitution
-  "renamedConstraints" <~ Optionals.map
-    ("oldConstraints" ~> (Maps.fromList (Lists.map
-      ("kv" ~> pair
-        (Optionals.withDefault (Pairs.first $ var "kv") (Maps.lookup (Pairs.first $ var "kv" :: TypedTerm Name) (var "nameSubst")))
-        (Pairs.second $ var "kv"))
-      (Maps.toList (var "oldConstraints" :: TypedTerm (M.Map Name TypeVariableConstraints)))) :: TypedTerm (M.Map Name TypeVariableConstraints)))
-    (Core.typeSchemeConstraints (var "scheme")) $
+  "renamedConstraints" <~ (Maps.fromList (Lists.map
+    ("kv" ~> pair
+      (Optionals.withDefault (Pairs.first $ var "kv") (Maps.lookup (Pairs.first $ var "kv" :: TypedTerm Name) (var "nameSubst")))
+      (Pairs.second $ var "kv"))
+    (Maps.toList (Core.typeSchemeConstraints (var "scheme") :: TypedTerm (M.Map Name TypeVariableConstraints)))) :: TypedTerm (M.Map Name TypeVariableConstraints)) $
   pair
     (Core.typeScheme (var "newVars")
       (Substitution.substInType @@ var "subst" @@ Core.typeSchemeBody (var "scheme"))
@@ -351,7 +349,7 @@ typeToTypeScheme = define "typeToTypeScheme" $
   doc "Convert a (System F -style) type to a type scheme" $
   "t0" ~>
   "helper" <~ ("vars" ~> "t" ~> match _Type (Strip.deannotateType @@ var "t")
-    (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "t") Phantoms.nothing) [
+    (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "t") Maps.empty) [
     _Type_forall>>: "ft" ~> var "helper"
       @@ (Lists.cons (Core.forallTypeParameter $ var "ft") $ var "vars")
       @@ (Core.forallTypeBody $ var "ft")]) $

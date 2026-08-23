@@ -297,7 +297,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
                   pair (var "newName") (var "meta"))
                 (Maps.toList $ (var "constraintMap" :: TypedTerm (M.Map Name TypeVariableConstraints))) :: TypedTerm (M.Map Name TypeVariableConstraints))) $
             "oldConstraints" <~ Core.typeSchemeConstraints (var "ts") $
-            "newConstraints" <~ Optionals.map (var "renameConstraintKeys") (var "oldConstraints") $
+            "newConstraints" <~ var "renameConstraintKeys" @@ var "oldConstraints" $
             "b1"       <~ Core.binding
               (Core.bindingName $ var "b")
               (var "newVal")

@@ -71,7 +71,7 @@ hydraCoreGraph = elementsToGraph bootstrapGraph M.empty
           annotatedTermBody = EncodeCore.type_ (typeSchemeBody (typeDefinitionBody td)),
           annotatedTermAnnotation = TermMap $ M.fromList [
             (TermVariable (Name "type"), TermVariable (Name "hydra.core.Type"))]},
-        bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) Nothing)}
+        bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) M.empty)}
 
 annotatedTerm :: TypeDefinition
 annotatedTerm = define "AnnotatedTerm" $
@@ -605,8 +605,8 @@ typeScheme = define "TypeScheme" $
       doc "The type expression"
       type_,
     "constraints">:
-      doc "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names." $
-      T.optional $ T.map name typeVariableConstraints]
+      doc "Constraints on type variables, including typeclass constraints. The map keys are type variable names; an empty map means no constraints." $
+      T.map name typeVariableConstraints]
 
 typeVariableConstraints :: TypeDefinition
 typeVariableConstraints = define "TypeVariableConstraints" $

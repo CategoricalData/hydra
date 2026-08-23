@@ -674,7 +674,7 @@ module_ = Module {
       toPrimitive "Compute the logical OR of two boolean values." orSig or_]
 
 andSig :: TermSignature
-andSig = sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing
+andSig = sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) M.empty
 
 and_ :: TypedTermDefinition (Bool -> Bool -> Bool)
 and_ = define "and" $
@@ -1384,7 +1384,7 @@ Because these derived modules are produced mechanically from a known type, the s
 is the authority on their types. Each derived Source module contains a single `module_`
 `TermDefinition` whose term has type `hydra.packaging.Module`. The synthesizer
 (`moduleToSourceModule` in `Hydra.Sources.Kernel.Terms.Generation`) must set
-`termDefinitionTypeScheme = Just (TypeScheme [] (TypeVariable "hydra.packaging.Module") Nothing)`
+`termDefinitionTypeScheme = Just (TypeScheme [] (TypeVariable "hydra.packaging.Module") M.empty)`
 on that binding, so downstream consumers can skip type inference rather than re-derive it
 from the term's large encoded structure. Leaving the field as `Nothing` forces a full
 `inferModulesIO` pass per derived module — manageable locally but memory-prohibitive on

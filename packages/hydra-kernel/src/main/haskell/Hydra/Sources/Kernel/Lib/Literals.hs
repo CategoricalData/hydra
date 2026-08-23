@@ -43,7 +43,7 @@ define = primitiveInModule module_
 
 -- Build a monomorphic signature `a -> b` with an authored (name, description) pair for the single value parameter.
 fn :: (String, String) -> Type -> Type -> TermSignature
-fn param a b = sigWithParams [param] $ TypeScheme [] (a Types.~> b) Nothing
+fn param a b = sigWithParams [param] $ TypeScheme [] (a Types.~> b) mempty
 
 base64ToBinary :: PrimitiveDefinition
 base64ToBinary = define "base64ToBinary" "Decode a base64 ASCII string to binary data." (fn ("s", "the base64 string to decode") Types.string Types.binary)

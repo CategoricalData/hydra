@@ -33,7 +33,7 @@ defineWithDefault = primitiveWithDefaultInModule module_
 and :: PrimitiveDefinition
 and = defineWithDefault "and" "Compute the logical AND of two boolean values."
   (sigWithParams [("p", "the first boolean operand"),
-                  ("q", "the second boolean operand")] $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing)
+                  ("q", "the second boolean operand")] $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) mempty)
   ["and(p, q) returns true iff both p and q are true.",
    "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use\
    \ ifElse.",
@@ -48,7 +48,7 @@ ifElse = define "ifElse" "Compute a conditional expression."
                                           ("t", "the value returned when p is true"),
                                           ("f", "the value returned when p is false")] $ TypeScheme [Name "x"]
     (Types.boolean Types.~> Types.var "x" Types.~> Types.var "x" Types.~> Types.var "x")
-    Nothing)
+    mempty)
   ["ifElse(p, t, f) returns t if p is true, or f if p is false.",
    "The unselected branch is not necessarily evaluated; ifElse is the standard way to express\
    \ short-circuiting boolean logic and branching in Hydra.",
@@ -56,7 +56,7 @@ ifElse = define "ifElse" "Compute a conditional expression."
 
 not_ :: PrimitiveDefinition
 not_ = defineWithDefault "not" "Compute the logical NOT of a boolean value."
-  (sigWithParams [("p", "the boolean value to negate")] $ TypeScheme [] (Types.boolean Types.~> Types.boolean) Nothing)
+  (sigWithParams [("p", "the boolean value to negate")] $ TypeScheme [] (Types.boolean Types.~> Types.boolean) mempty)
   ["not(p) returns false if p is true, or true if p is false.",
    "Total. Corresponds to Haskell's not :: Bool -> Bool."]
   ("a" ~> Logic.ifElse (var "a") false true)
@@ -64,7 +64,7 @@ not_ = defineWithDefault "not" "Compute the logical NOT of a boolean value."
 or_ :: PrimitiveDefinition
 or_ = defineWithDefault "or" "Compute the logical OR of two boolean values."
   (sigWithParams [("p", "the first boolean operand"),
-                  ("q", "the second boolean operand")] $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing)
+                  ("q", "the second boolean operand")] $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) mempty)
   ["or(p, q) returns true iff at least one of p and q is true.",
    "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use\
    \ ifElse.",

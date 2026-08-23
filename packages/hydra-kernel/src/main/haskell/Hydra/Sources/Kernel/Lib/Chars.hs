@@ -38,11 +38,11 @@ define = primitiveInModule module_
 
 -- Int32 -> Boolean
 intToBool :: [(String, String)] -> TermSignature
-intToBool params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.boolean) Nothing
+intToBool params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.boolean) mempty
 
 -- Int32 -> Int32
 intToInt :: [(String, String)] -> TermSignature
-intToInt params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.int32) Nothing
+intToInt params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.int32) mempty
 
 isAlpha :: PrimitiveDefinition
 isAlpha = define "isAlpha" "Check whether a character is alphabetic."

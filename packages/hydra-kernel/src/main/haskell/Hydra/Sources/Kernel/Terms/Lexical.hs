@@ -163,7 +163,7 @@ dereferenceSchemaType = define "dereferenceSchemaType" $
   doc "Resolve a schema type through a chain of zero or more typedefs" $
   "name" ~> "types" ~>
   "forType" <~ ("t" ~> match _Type (var "t")
-    (Just (just (Core.typeScheme (list ([] :: [TypedTerm Name])) (var "t") Phantoms.nothing))) [
+    (Just (just (Core.typeScheme (list ([] :: [TypedTerm Name])) (var "t") Maps.empty))) [
     _Type_annotated>>: "at" ~> var "forType" @@ (Core.annotatedTypeBody (var "at")),
     _Type_forall>>: "ft" ~> Optionals.map
       ("ts" ~> Core.typeScheme

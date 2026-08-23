@@ -62,7 +62,7 @@ allTests = define "allTests" $
       joinTypesTests]
 
 -- | Build schema types map from a list of names.
--- Each name gets TypeScheme [] (TypeVariable name) Nothing -- a transparent (self-referential)
+-- Each name gets TypeScheme [] (TypeVariable name) mempty -- a transparent (self-referential)
 -- alias, standing in for a nominal type like Vertex whose body is a plain structural type.
 buildSchemaMap :: TypedTerm [Name] -> TypedTerm (M.Map Name TypeScheme)
 buildSchemaMap names = Maps.fromList (Lists.map

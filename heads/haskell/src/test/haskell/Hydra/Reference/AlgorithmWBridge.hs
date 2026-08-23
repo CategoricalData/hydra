@@ -139,8 +139,8 @@ toType ty = case ty of
 -- | Convert a System F type expression to a Hydra type scheme
 toTypeScheme :: FTy -> Core.TypeScheme
 toTypeScheme ty = case ty of
-  FForall vars body -> Core.TypeScheme (Core.Name <$> vars) (toType body) Nothing
-  _ -> Core.TypeScheme [] (toType ty) Nothing
+  FForall vars body -> Core.TypeScheme (Core.Name <$> vars) (toType body) M.empty
+  _ -> Core.TypeScheme [] (toType ty) M.empty
 
 termToInferredFExpr :: HydraContext -> Core.Term -> IO (FExpr, FTy)
 termToInferredFExpr context term = do

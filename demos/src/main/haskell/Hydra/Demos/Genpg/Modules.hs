@@ -103,7 +103,7 @@ listTableTypeScheme :: TypeScheme
 listTableTypeScheme = TypeScheme {
   typeSchemeVariables = [],
   typeSchemeBody = TypeList (TypeVariable (Name "hydra.tabular.TableType")),
-  typeSchemeConstraints = Nothing
+  typeSchemeConstraints = mempty
 }
 
 
@@ -114,7 +114,7 @@ graphSchemaTypeScheme = TypeScheme {
   typeSchemeBody = TypeApplication (ApplicationType
     (TypeVariable (Name "hydra.pg.model.GraphSchema"))
     (TypeVariable (Name "hydra.core.Type"))),
-  typeSchemeConstraints = Nothing
+  typeSchemeConstraints = mempty
 }
 
 
@@ -125,5 +125,5 @@ lazyGraphTermScheme = TypeScheme {
   typeSchemeBody = TypeApplication (ApplicationType
     (TypeVariable (Name "hydra.pg.model.LazyGraph"))
     (TypeVariable (Name "hydra.core.Term"))),
-  typeSchemeConstraints = Nothing
+  typeSchemeConstraints = mempty
 }

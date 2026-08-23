@@ -26,6 +26,7 @@ import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Hoisting as Hoisting
 import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Lib.Math as DefMath
+import qualified Hydra.Dsl.Lib.Maps as Maps
 
 
 ns :: ModuleName
@@ -960,8 +961,8 @@ mkLetUntyped bindings body = Core.let_ (Phantoms.list $ mkBinding <$> bindings) 
 
 -- | Helper for creating a monomorphic type scheme
 monoType :: TypedTerm Type -> TypedTerm (Maybe TypeScheme)
-monoType typ = Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TypedTerm Name])) typ Phantoms.nothing
+monoType typ = Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TypedTerm Name])) typ Maps.empty
 
 -- | Helper for creating a polymorphic type scheme
 polyType :: [String] -> TypedTerm Type -> TypedTerm (Maybe TypeScheme)
-polyType vars typ = Phantoms.just $ Core.typeScheme (Phantoms.list $ nm <$> vars) typ Phantoms.nothing
+polyType vars typ = Phantoms.just $ Core.typeScheme (Phantoms.list $ nm <$> vars) typ Maps.empty

@@ -1003,7 +1003,7 @@ schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   "tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Environment.graphAsTypes @@ var "graph" @@ (Lexical.graphToBindings @@ var "graph")) $
   "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
-  "toDef" <~ ("pair" ~> Packaging.typeDefinition (Pairs.first $ var "pair") nothing (Core.typeScheme (list ([] :: [TypedTerm Name])) (Pairs.second $ var "pair") nothing)) $
+  "toDef" <~ ("pair" ~> Packaging.typeDefinition (Pairs.first $ var "pair") nothing (Core.typeScheme (list ([] :: [TypedTerm Name])) (Pairs.second $ var "pair") Maps.empty)) $
   right $ pair
     (var "tmap1")
     (Lists.map

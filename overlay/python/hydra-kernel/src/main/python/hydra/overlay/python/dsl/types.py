@@ -43,7 +43,7 @@ from hydra.core import (
     TypeVoid,
     TypeWrap,
 )
-from hydra.overlay.python.dsl.python import FrozenDict, Given, None_
+from hydra.overlay.python.dsl.python import FrozenDict
 
 # Type alias: anything that can be used as a Type
 # Mirrors Haskell's AsType typeclass: Type, Binding, or str
@@ -180,7 +180,7 @@ def mono(t: Type) -> TypeScheme:
 
     Example: mono(int32())
     """
-    return TypeScheme((), t, None_())
+    return TypeScheme((), t, FrozenDict())
 
 
 def poly(vs: Sequence[str], t: Type) -> TypeScheme:
@@ -189,7 +189,7 @@ def poly(vs: Sequence[str], t: Type) -> TypeScheme:
     Example: poly(["a", "b"], function(var("a"), var("b")))
     This represents a type forall a b. a -> b that can be instantiated with different types.
     """
-    return TypeScheme(tuple(Name(v) for v in vs), t, None_())
+    return TypeScheme(tuple(Name(v) for v in vs), t, FrozenDict())
 
 
 def poly_constrained(vs_with_constraints: Sequence[tuple[str, list[Name]]], t: Type) -> TypeScheme:
@@ -203,7 +203,7 @@ def poly_constrained(vs_with_constraints: Sequence[tuple[str, list[Name]]], t: T
         Name(v): TypeVariableConstraints(tuple(TypeClassConstraintSimple(c) for c in classes))
         for v, classes in vs_with_constraints if classes
     })
-    return TypeScheme(vars, t, Given(constraint_map) if constraint_map else None_())
+    return TypeScheme(vars, t, constraint_map)
 
 
 def bigint() -> Type:

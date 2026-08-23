@@ -29,7 +29,7 @@ typeToScheme = go []
   where
     go vars (TypeForall (ForallType var body)) = go (vars ++ [var]) body
     go vars (TypeAnnotated (AnnotatedType body _)) = go vars body
-    go vars body = TypeScheme vars body Nothing
+    go vars body = TypeScheme vars body M.empty
 
 -- | The test graph with primitives, schema types, and kernel term bindings.
 -- The testTerms argument is accepted for signature parity with the DSL

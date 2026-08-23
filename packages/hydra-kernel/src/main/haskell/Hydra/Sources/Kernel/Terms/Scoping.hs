@@ -193,7 +193,7 @@ fTypeToTypeScheme = define "fTypeToTypeScheme" $
     (Just $ var "t") [
     _Type_annotated>>: "at" ~> var "stripAnnotations" @@ (Core.annotatedTypeBody $ var "at")]) $
   "gatherForall" <~ ("vars" ~> "typ" ~> match _Type (var "stripAnnotations" @@ var "typ")
-     (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "typ") Phantoms.nothing) [
+     (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "typ") Maps.empty) [
      _Type_forall>>: "ft" ~> var "gatherForall" @@
        (Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars")) @@
        (Core.forallTypeBody $ var "ft")]) $
@@ -212,18 +212,11 @@ termSignatureToTypeScheme = define "termSignatureToTypeScheme" $
     ("acc" ~> "p" ~> Core.typeFunction $ Core.functionType (Typing.parameterType $ var "p") (var "acc"))
     (Typing.resultType $ var "result")
     (Lists.reverse $ var "params") $
-  -- Build the optional constraints map. If no type parameter carries any constraints, emit nothing;
-  -- otherwise build a map from each type parameter's name to its TypeVariableConstraints.
-  "hasConstraints" <~ Lists.foldl
-    ("acc" ~> "tp" ~> Logic.or (var "acc") (Logic.not $ Lists.null $ Typing.typeParameterConstraints $ var "tp"))
-    false
-    (var "typeParams") $
-  "constraints" <~ Logic.ifElse (var "hasConstraints")
-    (Phantoms.just (Maps.fromList (Lists.map
-      ("tp" ~> pair (Typing.typeParameterName $ var "tp")
-        (Core.typeVariableConstraints $ Typing.typeParameterConstraints $ var "tp"))
-      (var "typeParams")) :: TypedTerm (M.Map Name TypeVariableConstraints)))
-    Phantoms.nothing $
+  -- Build a map from each type parameter's name to its TypeVariableConstraints.
+  "constraints" <~ (Maps.fromList (Lists.map
+    ("tp" ~> pair (Typing.typeParameterName $ var "tp")
+      (Core.typeVariableConstraints $ Typing.typeParameterConstraints $ var "tp"))
+    (var "typeParams")) :: TypedTerm (M.Map Name TypeVariableConstraints)) $
   Core.typeScheme (var "variables") (var "body") (var "constraints")
 
 typeSchemeToFType :: TypedTermDefinition (TypeScheme -> Type)
@@ -245,7 +238,7 @@ typeSchemeToTermSignature = define "typeSchemeToTermSignature" $
   "ts" ~>
   "variables" <~ Core.typeSchemeVariables (var "ts") $
   "body" <~ Core.typeSchemeBody (var "ts") $
-  "constraintsMap" <~ Optionals.withDefault Maps.empty (Core.typeSchemeConstraints $ var "ts") $
+  "constraintsMap" <~ Core.typeSchemeConstraints (var "ts") $
   -- Build TypeParameters, looking up each variable's class constraints in the constraints map.
   "typeParams" <~ Lists.map
     ("v" ~> Typing.typeParameter (var "v") $ optCases

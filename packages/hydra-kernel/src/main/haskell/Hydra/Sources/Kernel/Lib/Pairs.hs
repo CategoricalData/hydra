@@ -50,7 +50,7 @@ first :: PrimitiveDefinition
 first = define "first" "Get the first element of a pair."
   (sigWithParams [("p", "the pair whose first element is returned")] $ TypeScheme [Name "a", Name "b"]
     (Types.pair (Types.var "a") (Types.var "b") Types.~> Types.var "a")
-    Nothing)
+    mempty)
   ["first(p) returns the first component of the pair p.",
    "Total. Corresponds to Haskell's fst :: (a, b) -> a."]
 
@@ -58,6 +58,6 @@ second :: PrimitiveDefinition
 second = define "second" "Get the second element of a pair."
   (sigWithParams [("p", "the pair whose second element is returned")] $ TypeScheme [Name "a", Name "b"]
     (Types.pair (Types.var "a") (Types.var "b") Types.~> Types.var "b")
-    Nothing)
+    mempty)
   ["second(p) returns the second component of the pair p.",
    "Total. Corresponds to Haskell's snd :: (a, b) -> b."]

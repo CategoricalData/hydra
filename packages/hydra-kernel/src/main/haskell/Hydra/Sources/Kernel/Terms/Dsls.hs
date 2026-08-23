@@ -309,7 +309,7 @@ dslSignatureTypeScheme = define "dslSignatureTypeScheme" $
     ("paramType" ~> "acc" ~> Core.typeFunction $ Core.functionType (wrapInTypedTerm (var "paramType")) (var "acc"))
     (var "wrappedResult")
     (var "paramTypes")) $
-  Core.typeScheme (var "typeVars") (var "funType") nothing
+  Core.typeScheme (var "typeVars") (var "funType") Maps.empty
 
 -- | Generate a fully qualified binding name for a DSL function from a type name
 -- For example, "hydra.core.AnnotatedTerm" -> "hydra.dsl.core.annotatedTerm"
@@ -326,7 +326,7 @@ dslTypeScheme = define "dslTypeScheme" $
     ("paramType" ~> "acc" ~> Core.typeFunction $ Core.functionType (wrapInTypedTerm (var "paramType")) (var "acc"))
     (var "wrappedResult")
     (var "paramTypes")) $
-  Core.typeScheme (var "typeVars") (var "funType") nothing
+  Core.typeScheme (var "typeVars") (var "funType") Maps.empty
 
 -- | Collect forall type variables from a type (stripping annotations)
 -- | Filter bindings to only DSL-eligible type definitions

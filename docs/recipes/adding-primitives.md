@@ -171,7 +171,7 @@ defineWithDefault = primitiveWithDefaultInModule module_
 
 and :: PrimitiveDefinition
 and = defineWithDefault "and" "Compute the logical AND of two boolean values."
-  (sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) Nothing)
+  (sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) M.empty)
   ["and(p, q) returns true iff both p and q are true. ..."]
   ("a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TypedTerm Bool) false)
 
@@ -385,7 +385,7 @@ define = primitiveInModule module_
 
 isAlphaNum :: PrimitiveDefinition
 isAlphaNum = define "isAlphaNum" "Check whether a character is alphanumeric."
-  (sig $ TypeScheme [] (Types.int32 Types.~> Types.boolean) Nothing)
+  (sig $ TypeScheme [] (Types.int32 Types.~> Types.boolean) M.empty)
   ["True if the argument is a Unicode letter or digit, false otherwise. ..."]
 ```
 
@@ -402,7 +402,7 @@ bimap = defineWithDefault "bimap" "Map over both elements of a pair."
      (Types.var "b" Types.~> Types.var "d") Types.~>
      Types.pair (Types.var "a") (Types.var "b") Types.~>
      Types.pair (Types.var "c") (Types.var "d"))
-    Nothing)
+    M.empty)  -- empty map means no constraints
   ["bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). ..."]
   ("f" ~> "g" ~> "p" ~> pair (var "f" @@ Pairs.first (var "p"))
                               (var "g" @@ Pairs.second (var "p")))

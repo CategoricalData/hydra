@@ -92,7 +92,7 @@
              (vars (if (and (pair? variables) (not (null? variables)))
                        variables
                        detected-vars)))
-        (make-hydra_core_type_scheme vars fun-type (alist->maybe-constraints constraints))))
+        (make-hydra_core_type_scheme vars fun-type (alist->constraint-map constraints))))
 
     (define (build-prim-def pname variables inputs output . rest)
       "Build a PrimitiveDefinition from name + TermCoder types (#156 shape)."
@@ -101,13 +101,13 @@
              (sig (hydra_scoping_type_scheme_to_term_signature ts)))
         (make-hydra_packaging_primitive_definition pname (list 'none) sig #t #t (list 'none))))
 
-    ;; Convert an alist of (varname . TypeVariableConstraints) into the wrapped
-    ;; Option[Map[Name, TypeVariableConstraints]] shape that TypeScheme expects.
-    ;; Returns (nothing) for no constraints or (just <map>).
-    (define (alist->maybe-constraints alist)
+    ;; Convert an alist of (varname . TypeVariableConstraints) into the plain
+    ;; Map[Name, TypeVariableConstraints] shape that TypeScheme expects (#683).
+    ;; An empty alist (or #f) yields the empty map.
+    (define (alist->constraint-map alist)
       (if (or (not alist) (null? alist))
-          (list 'none)
-          (list 'given (hydra_overlay_scheme_lib_maps_from_list alist))))
+          hydra_overlay_scheme_lib_maps_empty
+          (hydra_overlay_scheme_lib_maps_from_list alist)))
 
     ;; ============================================================================
     ;; Error helpers

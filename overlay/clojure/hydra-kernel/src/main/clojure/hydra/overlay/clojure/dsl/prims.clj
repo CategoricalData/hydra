@@ -35,7 +35,7 @@
 (defn- make-type-scheme
   "Build a TypeScheme with the correct arity for primitive dispatch."
   [arity]
-  (->hydra_core_type_scheme [] (make-arity-type arity) nil))
+  (->hydra_core_type_scheme [] (make-arity-type arity) {}))
 
 (defn- collect-type-vars-ordered
   "Collect type variable names from a Hydra type in order of first appearance."
@@ -91,16 +91,12 @@
          detected-vars (filterv #(not (.contains ^String % ".")) (collect-type-vars-ordered fun-type))
          vars (if (seq variables) (vec variables) (vec detected-vars))
          ;; Build constraints map: {name -> TypeVariableConstraints}. Wrap each class name
-         ;; into a TypeClassConstraint.simple variant per #156.
-         constraint-map (when (seq constraints)
-                          (into {} (map (fn [[k v]]
-                                         [k (->hydra_core_type_variable_constraints (wrap-constraints v))])
-                                       constraints)))
-         ;; TypeScheme.constraints is Maybe(Map): wrap as (:given m) or (:none).
-         maybe-constraints (if constraint-map
-                             (list :given constraint-map)
-                             (list :none))]
-     (->hydra_core_type_scheme vars fun-type maybe-constraints))))
+         ;; into a TypeClassConstraint.simple variant per #156. TypeScheme.constraints is a
+         ;; plain Map (#683); an empty map means "no constraints".
+         constraint-map (into {} (map (fn [[k v]]
+                                        [k (->hydra_core_type_variable_constraints (wrap-constraints v))])
+                                      constraints))]
+     (->hydra_core_type_scheme vars fun-type constraint-map))))
 
 (defn- build-prim-def
   "Build a PrimitiveDefinition (#156 shape) from name + signature."

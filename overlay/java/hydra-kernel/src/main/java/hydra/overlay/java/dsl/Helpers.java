@@ -16,7 +16,6 @@ import hydra.typing.TermSignature;
 import hydra.overlay.java.util.Optional;
 
 import java.util.Collections;
-import java.util.Map;
 
 /**
  * Hand-written Java DSL helpers for assembling Hydra type and term
@@ -67,7 +66,7 @@ public final class Helpers {
         TypeScheme ts = new TypeScheme(
             Collections.emptyList(),
             typ,
-            Optional.<Map<Name, TypeVariableConstraints>>none());
+            Collections.<Name, TypeVariableConstraints>emptyMap());
         return new Definition.Type(new TypeDefinition(fqName, Optional.<EntityMetadata>none(), ts));
     }
 
@@ -99,6 +98,6 @@ public final class Helpers {
         return new TypeScheme(
             variables,
             body,
-            Optional.<Map<Name, TypeVariableConstraints>>none());
+            Collections.<Name, TypeVariableConstraints>emptyMap());
     }
 }

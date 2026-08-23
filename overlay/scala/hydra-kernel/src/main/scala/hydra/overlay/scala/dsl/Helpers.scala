@@ -34,7 +34,7 @@ object Helpers:
   /** Build a type Definition in the given namespace. */
   def typeDef(ns: ModuleName, localName: String, typ: Type): Definition =
     val fqName: Name = ns + "." + localName
-    val ts = TypeScheme(Seq.empty, typ, None)
+    val ts = TypeScheme(Seq.empty, typ, Map.empty)
     Definition.`type`(TypeDefinition(fqName, None, ts))
 
   /** Build a term Definition with no type scheme (inference fills it in). */
@@ -50,7 +50,7 @@ object Helpers:
 
   /** Build a TypeScheme from a variables list and a body type. */
   def typeScheme(variables: Seq[Name], body: Type): TypeScheme =
-    TypeScheme(variables, body, None)
+    TypeScheme(variables, body, Map.empty)
 
   /** ModuleDependency on the given module, without a package qualifier. */
   def unqualifiedDep(module: ModuleName): ModuleDependency =

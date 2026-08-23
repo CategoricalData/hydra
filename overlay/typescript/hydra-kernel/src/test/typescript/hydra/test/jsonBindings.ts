@@ -275,11 +275,14 @@ const stripTypeAbstractions = (t: unknown): unknown => {
 
 // Convert a JSON TypeScheme to runtime form. The body Type is converted
 // recursively; `variables` is a list of bare strings that need to be
-// wrapped as {value: ...} Names; `constraints` is in Aeson's encoding of
-// `Optional (Map TypeVariable ConstraintSet)`:
-//   - omitted or `null`     → None → {tag: "none"}
-//   - `[]` (empty map)      → Given emptyMap → {tag: "given", value: <empty CanonMap>}
-//   - `[{key, value: {classes}}]` → Given map → {tag: "given", value: <CanonMap>}
+// wrapped as {value: ...} Names; `constraints` is a mandatory
+// `Map TypeVariable ConstraintSet` (an absent/empty map means no
+// constraints), which the untyped/term-level encoder always emits as an
+// entry-array (see docs/specification/json-format.md "Maps" — the
+// compact string-keyed object form is limited to the typed,
+// schema-directed coders):
+//   - omitted, `null`, or `[]` → empty map
+//   - `[{key, value: {classes}}]` → map with entries
 const convertTypeScheme = (ts: unknown): unknown => {
   if (ts === null || typeof ts !== "object") return ts;
   const obj = ts as Record<string, unknown>;
@@ -291,7 +294,7 @@ const convertTypeScheme = (ts: unknown): unknown => {
   out.body = obj.body === undefined ? undefined : convert(obj.body);
   const csRaw = obj.constraints;
   if (csRaw === undefined || csRaw === null) {
-    out.constraints = { tag: "none" };
+    out.constraints = libMaps.empty;
   } else if (Array.isArray(csRaw)) {
     // List of {key, value: {classes: [...]}} pairs
     const pairs: Array<readonly [Name, unknown]> = [];
@@ -306,7 +309,7 @@ const convertTypeScheme = (ts: unknown): unknown => {
         pairs.push([k, { classes: libSets.fromList(classNames) }] as const);
       }
     }
-    out.constraints = { tag: "given", value: libMaps.fromList(pairs) };
+    out.constraints = libMaps.fromList(pairs);
   } else {
     out.constraints = convert(csRaw);
   }

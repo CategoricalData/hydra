@@ -459,7 +459,7 @@ object Libraries:
   private val tUnit: Type = Type.unit
   private val tComparison: Type = Type.variable("hydra.util.Comparison")
 
-  private def tScheme(vars: Seq[String], t: Type): TypeScheme = TypeScheme(vars, t, None)
+  private def tScheme(vars: Seq[String], t: Type): TypeScheme = TypeScheme(vars, t, Map.empty)
   private def tMono(t: Type): TypeScheme = tScheme(Seq.empty, t)
 
   private def tSchemeConstrained(vars: Seq[(String, Seq[String])], t: Type): TypeScheme =
@@ -467,7 +467,7 @@ object Libraries:
     val constraints = vars.collect { case (name, classes) if classes.nonEmpty =>
       name -> TypeVariableConstraints(classes.map(c => TypeClassConstraint.simple(c)))
     }.toMap
-    TypeScheme(varNames, t, if constraints.isEmpty then None else Some(constraints))
+    TypeScheme(varNames, t, constraints)
 
   // ===== Chars primitives =====
 

@@ -6169,7 +6169,7 @@ public class Coder {
                                                     Type.VARIABLE,
                                                     wrap(Name.TYPE_,
                                                         string("hydra.core.Unit")))),
-                                            field(TypeScheme.CONSTRAINTS, nothing())), lambda("sig",
+                                            field(TypeScheme.CONSTRAINTS, hydra.dsl.lib.Maps.empty())), lambda("sig",
                                             hydra.dsl.Scoping.termSignatureToTypeScheme(
                                                 var("sig"))))),
                                 field("term",
@@ -6303,9 +6303,7 @@ public class Coder {
                                                                                 var("overgenSubst")))),
                                                                     var("tparams")))),
     field("constraints",
-                                                            Optionals.withDefault(
-                                                                hydra.dsl.lib.Maps.empty(),
-                                                                proj(TypeScheme.TYPE_, TypeScheme.CONSTRAINTS, "ts"))),
+                                                            proj(TypeScheme.TYPE_, TypeScheme.CONSTRAINTS, "ts")),
     field("jparams",
                                                             Lists.map(
                                                                 lambda("v",

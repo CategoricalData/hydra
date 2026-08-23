@@ -363,9 +363,7 @@ generalize = define "generalize" $
   "relevantConstraints" <~ (Maps.fromList (Optionals.givens $ Lists.map
     ("v" ~> Optionals.map ("meta" ~> pair (var "v") (var "meta")) $ Maps.lookup (var "v" :: TypedTerm Name) (var "allConstraints"))
     (var "vars")) :: TypedTerm (M.Map Name TypeVariableConstraints)) $
-  -- Only include constraints if there are any
-  "constraintsMaybe" <~ Logic.ifElse (Maps.null $ (var "relevantConstraints" :: TypedTerm (M.Map Name TypeVariableConstraints))) Phantoms.nothing (just $ var "relevantConstraints") $
-  Core.typeScheme (var "vars") (var "typ") (var "constraintsMaybe")
+  Core.typeScheme (var "vars") (var "typ") (var "relevantConstraints")
 
 -- | Extract the first element of a list, or fail with a descriptive error if
 -- the list is empty. Used to destructure lists whose non-emptiness is
@@ -737,7 +735,7 @@ inferTypeOfLambda = define "inferTypeOfLambda" $
   "vdom" <~ Pairs.first (var "vdomResult") $
   "fcx2" <~ Pairs.second (var "vdomResult") $
   "dom" <~ Core.typeVariable (var "vdom") $
-  "cx2" <~ (extendContext @@ list [pair (var "var") (Core.typeScheme (list ([] :: [TypedTerm Name])) (var "dom") Phantoms.nothing)] @@ var "cx") $
+  "cx2" <~ (extendContext @@ list [pair (var "var") (Core.typeScheme (list ([] :: [TypedTerm Name])) (var "dom") Maps.empty)] @@ var "cx") $
   -- Descend into the lambda body with lambdaBody step on the trace
   "fcxBody" <~ Names.pushSubtermStep @@ Paths.subtermStepLambdaBody @@ var "fcx2" $
   "result" <<~ inferTypeOfTerm @@ var "fcxBody" @@ var "cx2" @@ var "body" @@ (string "lambda body") $
@@ -831,7 +829,7 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
   "tbins0" <~ Lists.map (reify Core.typeVariable) (var "bvars") $
 
   "cx1" <~ (extendContext
-    @@ (Lists.zip (var "bnames") $ Lists.map ("t" ~> Core.typeScheme (list ([] :: [TypedTerm Name])) (var "t") Phantoms.nothing) (var "tbins0"))
+    @@ (Lists.zip (var "bnames") $ Lists.map ("t" ~> Core.typeScheme (list ([] :: [TypedTerm Name])) (var "t") Maps.empty) (var "tbins0"))
     @@ (var "cx0")) $
 
   -- Phase 2: Infer actual types
@@ -864,7 +862,7 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
   "composedSubst" <~ Substitution.composeTypeSubst @@ var "s1" @@ var "s2" $
   "originalBindingConstraints" <~ Lists.foldl
     ("acc" ~> "b" ~>
-      Optionals.match (Core.bindingTypeScheme $ var "b") (var "acc") ("ts" ~> Optionals.match (Core.typeSchemeConstraints $ var "ts") (var "acc") ("c" ~> mergeClassConstraints @@ var "acc" @@ var "c")))
+      Optionals.match (Core.bindingTypeScheme $ var "b") (var "acc") ("ts" ~> mergeClassConstraints @@ var "acc" @@ (Core.typeSchemeConstraints $ var "ts")))
     (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))
     (var "bins0") $
   "originalConstraintsSubst" <~ Substitution.substInClassConstraints @@ var "composedSubst" @@ var "originalBindingConstraints" $
@@ -1227,7 +1225,7 @@ inferTypeOfVariable = define "inferTypeOfVariable" $
         "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
         "ts" <~ Pairs.first (var "tsResult") $
         "fcx2" <~ Pairs.second (var "tsResult") $
-        "constraints" <~ Optionals.withDefault Maps.empty (Core.typeSchemeConstraints $ var "ts") $
+        "constraints" <~ Core.typeSchemeConstraints (var "ts") $
         right (yieldCheckedWithConstraints
           @@ var "fcx2"
           @@ (buildTypeApplicationTerm
@@ -1241,7 +1239,7 @@ inferTypeOfVariable = define "inferTypeOfVariable" $
       "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx" @@ var "scheme" $
       "ts" <~ Pairs.first (var "tsResult") $
       "fcx2" <~ Pairs.second (var "tsResult") $
-      "constraints" <~ Optionals.withDefault Maps.empty (Core.typeSchemeConstraints $ var "ts") $
+      "constraints" <~ Core.typeSchemeConstraints (var "ts") $
       right (Typing.inferenceResult
         (buildTypeApplicationTerm
           @@ Core.typeSchemeVariables (var "ts")
@@ -1308,7 +1306,7 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
     "originalBindingConstraints" <<~ Optionals.match (Core.bindingTypeScheme $ var "binding") (right (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))) ("ts" ~>
         "tsResult" <~ Resolution.instantiateTypeScheme @@ var "fcx2" @@ var "ts" $
         "instantiatedTs" <~ Pairs.first (var "tsResult") $
-        "freshConstraints" <~ Optionals.withDefault Maps.empty (Core.typeSchemeConstraints $ var "instantiatedTs") $
+        "freshConstraints" <~ Core.typeSchemeConstraints (var "instantiatedTs") $
         -- Unify the instantiated type with the inferred type to map fresh variables
         "unifySubst" <<~ Eithers.bimap
           ("_e" ~> wrapUnifError (var "fcx2") (var "_e"))

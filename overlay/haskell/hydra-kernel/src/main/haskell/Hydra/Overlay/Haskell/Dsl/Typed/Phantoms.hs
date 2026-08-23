@@ -460,13 +460,13 @@ impurePrimitiveInModule mod localName description sig comments =
   (primitiveInModule mod localName description sig comments) { primitiveDefinitionIsPure = False }
 
 -- | Convert a TypeScheme to a TermSignature. Exported for use in primitive modules.
--- Example: sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean) Nothing
+-- Example: sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean) mempty
 sig :: TypeScheme -> TermSignature
 sig = typeSchemeToTermSignature
 
 -- | Convert a TypeScheme to a TermSignature with lazy parameters at the given (0-based) positions.
 -- Coders that distinguish strict from lazy evaluation thunk exactly these arguments.
--- Example: lazySig [1, 2] $ TypeScheme [Name "x"] (Types.boolean Types.~> ...) Nothing
+-- Example: lazySig [1, 2] $ TypeScheme [Name "x"] (Types.boolean Types.~> ...) mempty
 lazySig :: [Int] -> TypeScheme -> TermSignature
 lazySig idxs ts = markLazyParams idxs (sig ts)
 
@@ -482,7 +482,7 @@ markLazyParams idxs ts = ts {
 -- Arity-checked: fails immediately if the number of pairs does not match the number of value
 -- parameters peeled from the type (this catches signature/name drift at DSL-load time).
 -- Example: sigWithParams [("x", "the value to compare"), ("y", "the value to compare against")] $
---            TypeScheme [Name "x"] (tx ~> tx ~> boolean) Nothing
+--            TypeScheme [Name "x"] (tx ~> tx ~> boolean) mempty
 sigWithParams :: [(String, String)] -> TypeScheme -> TermSignature
 sigWithParams pairs ts =
     let s = sig ts

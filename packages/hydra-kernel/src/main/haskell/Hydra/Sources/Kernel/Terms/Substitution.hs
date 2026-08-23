@@ -223,7 +223,7 @@ substInTypeScheme = define "substInTypeScheme" $
       (Core.typeSchemeVariables $ var "ts")
       (substInType @@ var "scopedSubst" @@ (Core.typeSchemeBody $ var "ts"))
       -- Also apply the substitution to the constraints
-      (Optionals.map (substInClassConstraints @@ var "scopedSubst") (Core.typeSchemeConstraints $ var "ts"))
+      (substInClassConstraints @@ var "scopedSubst" @@ (Core.typeSchemeConstraints $ var "ts"))
 
 substTypesInTerm :: TypedTermDefinition (TypeSubst -> Term -> Term)
 substTypesInTerm = define "substTypesInTerm" $

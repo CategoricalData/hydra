@@ -190,7 +190,7 @@ rightT resultType t = MetaTerms.tyapps (DeepCore.right t)
 letsT :: [(String, TypedTerm Type, TypedTerm Term)] -> TypedTerm Term -> TypedTerm Term
 letsT bindings body = Core.termLet $ Core.let_
   (Phantoms.list [ Core.binding (Core.name (string n)) v
-                     (just (Core.typeScheme (Phantoms.list ([] :: [TypedTerm Name])) ty nothing))
+                     (just (Core.typeScheme (Phantoms.list ([] :: [TypedTerm Name])) ty Maps.empty))
                  | (n, ty, v) <- bindings ])
   body
 

@@ -210,7 +210,7 @@ isNativeType = define "isNativeType" $
       (constant true)
       (getTermAnnotation @@ Constants.keyFirstClassType @@ (Core.bindingTerm (var "el")))) $
   Optionals.match (Core.bindingTypeScheme (var "el")) false ("ts" ~> Logic.and
-      (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
+      (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Maps.empty))
       (Logic.not (var "isFlaggedAsFirstClassType")))
 
 normalizeTermAnnotations :: TypedTermDefinition (Term -> Term)
@@ -378,4 +378,4 @@ typeBinding =
   "dataTerm" <~ normalizeTermAnnotations @@ (Core.termAnnotated (Core.annotatedTerm
     (encoderFor _Type @@ var "typ")
     (wrapAnnotationMap @@ Maps.fromList (list [pair (Constants.keyType) (var "schemaTerm")])))) $
-  Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable $ Core.nameLift _Type) Phantoms.nothing))
+  Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable $ Core.nameLift _Type) Maps.empty))

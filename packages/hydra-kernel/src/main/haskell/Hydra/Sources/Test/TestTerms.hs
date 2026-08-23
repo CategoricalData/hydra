@@ -13,6 +13,7 @@ import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
+import qualified Hydra.Dsl.Lib.Maps         as Maps
 import qualified Hydra.Dsl.Packaging        as DPackaging
 import           Prelude hiding ((++))
 
@@ -57,7 +58,7 @@ testElementArthur = defineTerm "testElementArthur" $
   Core.binding
     (name "firstName")
     testDataArthur
-    (Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TypedTerm Name])) (Core.typeVariable TestTypes.testTypePersonName) Phantoms.nothing)
+    (Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TypedTerm Name])) (Core.typeVariable TestTypes.testTypePersonName) Maps.empty)
 
 testElementFirstName :: TypedTermDefinition Binding
 testElementFirstName = defineTerm "testElementFirstName" $
@@ -65,4 +66,4 @@ testElementFirstName = defineTerm "testElementFirstName" $
     (name "firstName")
     (project TestTypes.testTypePersonName (name "firstName"))
     (Phantoms.just $ Core.typeScheme (Phantoms.list ([] :: [TypedTerm Name]))
-      (Core.typeFunction $ Core.functionType (Core.typeVariable TestTypes.testTypePersonName) T.string) Phantoms.nothing)
+      (Core.typeFunction $ Core.functionType (Core.typeVariable TestTypes.testTypePersonName) T.string) Maps.empty)

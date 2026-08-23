@@ -185,7 +185,7 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
   doc "Convert a schema graph to a typing environment (Either version)" $
   "g" ~>
   "toTypeScheme" <~ ("vars" ~> "typ" ~> match _Type (Strip.deannotateType @@ var "typ")
-    (Just (Core.typeScheme (Lists.reverse (var "vars")) (var "typ") Phantoms.nothing)) [
+    (Just (Core.typeScheme (Lists.reverse (var "vars")) (var "typ") Maps.empty)) [
     _Type_forall>>: "ft" ~> var "toTypeScheme"
       @@ Lists.cons (Core.forallTypeParameter (var "ft")) (var "vars")
       @@ Core.forallTypeBody (var "ft")]) $
@@ -211,10 +211,10 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
     "mts" <<~  optCases (Core.bindingTypeScheme (var "el"))
       (Eithers.map ("typ" ~> just $ Scoping.fTypeToTypeScheme @@ var "typ") $ var "decodeType" @@ (Core.bindingTerm (var "el")))
       ("ts" ~> Logic.ifElse
-        (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (Core.nameLift _TypeScheme)) Phantoms.nothing))
+        (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (Core.nameLift _TypeScheme)) Maps.empty))
         (Eithers.map (reify just) (var "decodeTypeScheme" @@ Core.bindingTerm (var "el")))
         (Logic.ifElse
-          (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
+          (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TypedTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Maps.empty))
           (Eithers.map ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TypedTerm Name]) @@ var "decoded")) (var "decodeType" @@ Core.bindingTerm (var "el")))
           (var "forTerm" @@ (Strip.deannotateTerm @@ (Core.bindingTerm (var "el")))))) $
     right $ Optionals.map ("ts" ~> pair (Core.bindingName (var "el")) (var "ts")) (var "mts")) $

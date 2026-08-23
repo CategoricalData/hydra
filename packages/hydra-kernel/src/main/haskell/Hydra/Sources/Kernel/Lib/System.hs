@@ -43,7 +43,7 @@ result t = effect (Types.either_ systemError t)
 execute :: PrimitiveDefinition
 execute = define "execute" "Run a program to completion and capture its result."
   (sigWithParams [("command", "the program and arguments to run")] $
-    TypeScheme [] (command Types.~> effect (Types.either_ systemError processResult)) Nothing)
+    TypeScheme [] (command Types.~> effect (Types.either_ systemError processResult)) mempty)
   ["execute(command) describes an effectful computation which runs the program described by command\
   \ to completion and returns its result. This is the POSIX \"execute a command\" operation at the\
   \ posix_spawn / system() altitude\
@@ -61,7 +61,7 @@ execute = define "execute" "Run a program to completion and capture its result."
 exit :: PrimitiveDefinition
 exit = define "exit" "Terminate the current process with a status code."
   (sigWithParams [("code", "the status code to terminate the process with")] $
-    TypeScheme [] (statusCode Types.~> effect Types.unit) Nothing)
+    TypeScheme [] (statusCode Types.~> effect Types.unit) mempty)
   ["exit(code) describes an effectful computation which terminates the current process immediately\
   \ with the given status, exactly as the POSIX exit() function (XSH,\
   \ https://pubs.opengroup.org/onlinepubs/9799919799/functions/exit.html). The status is reported\
@@ -71,7 +71,7 @@ exit = define "exit" "Terminate the current process with a status code."
 
 getEnvironment :: PrimitiveDefinition
 getEnvironment = define "getEnvironment" "Get the full set of environment variables."
-  (sig $ TypeScheme [] (effect (Types.map environmentVariable Types.string)) Nothing)
+  (sig $ TypeScheme [] (effect (Types.map environmentVariable Types.string)) mempty)
   ["getEnvironment describes an effectful computation which returns the entire environment of the\
   \ current process -- the POSIX environment list environ (XBD section 8, Environment Variables,\
   \ https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html) -- as a map from\
@@ -82,7 +82,7 @@ getEnvironment = define "getEnvironment" "Get the full set of environment variab
 getEnvironmentVariable :: PrimitiveDefinition
 getEnvironmentVariable = define "getEnvironmentVariable" "Look up a single environment variable by name."
   (sigWithParams [("name", "the name of the environment variable to look up")] $
-    TypeScheme [] (environmentVariable Types.~> effect (Types.optional Types.string)) Nothing)
+    TypeScheme [] (environmentVariable Types.~> effect (Types.optional Types.string)) mempty)
   ["getEnvironmentVariable(name) describes an effectful computation which returns the value of the\
   \ environment variable name, or none if it is not present -- the POSIX getenv() function (XSH,\
   \ https://pubs.opengroup.org/onlinepubs/9799919799/functions/getenv.html). A variable that is\
@@ -91,7 +91,7 @@ getEnvironmentVariable = define "getEnvironmentVariable" "Look up a single envir
 
 getTime :: PrimitiveDefinition
 getTime = define "getTime" "Get the current wall-clock time."
-  (sig $ TypeScheme [] (effect timespec) Nothing)
+  (sig $ TypeScheme [] (effect timespec) mempty)
   ["getTime describes an effectful computation which returns the current wall-clock time as a\
   \ Timespec (seconds and nanoseconds since the Unix Epoch) -- the POSIX clock_gettime() function\
   \ with the CLOCK_REALTIME clock (XSH,\
@@ -102,7 +102,7 @@ getTime = define "getTime" "Get the current wall-clock time."
 
 getWorkingDirectory :: PrimitiveDefinition
 getWorkingDirectory = define "getWorkingDirectory" "Get the current working directory."
-  (sig $ TypeScheme [] (effect (Types.either_ systemError filePath)) Nothing)
+  (sig $ TypeScheme [] (effect (Types.either_ systemError filePath)) mempty)
   ["getWorkingDirectory describes an effectful computation which returns the absolute pathname of\
   \ the current working directory -- the POSIX getcwd() function (XSH,\
   \ https://pubs.opengroup.org/onlinepubs/9799919799/functions/getcwd.html) -- as a FilePath. A\
@@ -111,7 +111,7 @@ getWorkingDirectory = define "getWorkingDirectory" "Get the current working dire
 
 readStdin :: PrimitiveDefinition
 readStdin = define "readStdin" "Read the complete contents of standard input as raw bytes."
-  (sig $ TypeScheme [] (result Types.binary) Nothing)
+  (sig $ TypeScheme [] (result Types.binary) mempty)
   ["readStdin describes an effectful computation which reads standard input (POSIX file descriptor\
   \ 0) until end-of-file and returns the complete contents as raw bytes, with no character decoding\
   \ or newline translation -- the POSIX read() function (XSH,\
@@ -123,7 +123,7 @@ readStdin = define "readStdin" "Read the complete contents of standard input as 
 writeStderr :: PrimitiveDefinition
 writeStderr = define "writeStderr" "Write raw bytes to standard error."
   (sigWithParams [("bytes", "the raw bytes to write to standard error")] $
-    TypeScheme [] (Types.binary Types.~> result Types.unit) Nothing)
+    TypeScheme [] (Types.binary Types.~> result Types.unit) mempty)
   ["writeStderr(bytes) describes an effectful computation which writes bytes to standard error\
   \ (POSIX file descriptor 2), with no character encoding or newline translation -- the POSIX\
   \ write() function (XSH,\
@@ -135,7 +135,7 @@ writeStderr = define "writeStderr" "Write raw bytes to standard error."
 writeStdout :: PrimitiveDefinition
 writeStdout = define "writeStdout" "Write raw bytes to standard output."
   (sigWithParams [("bytes", "the raw bytes to write to standard output")] $
-    TypeScheme [] (Types.binary Types.~> result Types.unit) Nothing)
+    TypeScheme [] (Types.binary Types.~> result Types.unit) mempty)
   ["writeStdout(bytes) describes an effectful computation which writes bytes to standard output\
   \ (POSIX file descriptor 1), with no character encoding or newline translation -- the POSIX\
   \ write() function (XSH,\

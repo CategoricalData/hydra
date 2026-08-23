@@ -155,11 +155,11 @@ const tyForall = (name: string, body: Type): Type =>
 const tyFnCurried = (...ts: Type[]): Type =>
   ts.reduceRight((acc, cur) => tyFn(cur, acc));
 const scheme = (t: Type, vars: readonly string[] = []): TypeScheme =>
-  ({ variables: vars.map((v) => ({ value: v } as never)), body: t, constraints: { tag: "none" } } as never);
+  ({ variables: vars.map((v) => ({ value: v } as never)), body: t, constraints: libMaps.empty } as never);
 
 // Build a TypeScheme with class constraints. `cs` is a list of [typeVar, [className, ...]] pairs.
-// At runtime, constraints have type `Optional<Map<Name, TypeVariableConstraints>>`,
-// where `TypeVariableConstraints.classes` is a *list* of `TypeClassConstraint`
+// At runtime, constraints have type `Map<Name, TypeVariableConstraints>` (an empty map means no
+// constraints), where `TypeVariableConstraints.classes` is a *list* of `TypeClassConstraint`
 // (each `{tag: "simple", value: <Name>}`) — not a set of Names. The
 // inference engine constructs the same shape in inference.ts (e.g.
 // `{classes: [{tag: "simple", value: {value: "ordering"}}]}`), and both
@@ -173,7 +173,7 @@ const schemeC = (t: Type, vars: readonly string[], cs: readonly (readonly [strin
   return {
     variables: vars.map((v) => ({ value: v } as never)),
     body: t,
-    constraints: { tag: "given", value: m },
+    constraints: m,
   } as never;
 };
 

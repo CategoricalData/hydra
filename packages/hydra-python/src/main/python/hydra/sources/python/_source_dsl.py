@@ -12,7 +12,7 @@ Conventions:
 """
 
 from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
-from hydra.overlay.python.dsl.python import None_
+from hydra.overlay.python.dsl.python import FrozenDict, None_
 from hydra.core import Name, Type, TypeScheme
 from hydra.packaging import DefinitionType, ModuleDependency, ModuleName, TypeDefinition
 import hydra.dsl.python.syntax as PySyn
@@ -149,7 +149,7 @@ def make_type_def(ns: ModuleName):
     """
     def _def(local_name: str, typ: Type) -> DefinitionType:
         name = Name(f"{ns.value}.{local_name}")
-        ts = TypeScheme((), typ, None_())
+        ts = TypeScheme((), typ, FrozenDict())
         return DefinitionType(TypeDefinition(name, None_(), ts))
     return _def
 

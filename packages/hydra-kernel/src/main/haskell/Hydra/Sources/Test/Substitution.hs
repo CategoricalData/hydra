@@ -49,7 +49,7 @@ nm s = Core.name $ string s
 
 -- | Build a TypeScheme DSL value
 scheme :: [String] -> TypedTerm Type -> TypedTerm TypeScheme
-scheme vars body = Core.typeScheme (list [nm v | v <- vars]) body nothing
+scheme vars body = Core.typeScheme (list [nm v | v <- vars]) body Maps.empty
 
 -- | Apply substInType and show the result as a string
 showSubstInType :: [(String, TypedTerm Type)] -> TypedTerm Type -> TypedTerm String

@@ -52,39 +52,39 @@ numericTo2 = sig $ Types.polyConstrained [("x", [Name "numeric"])] (tx Types.~> 
 
 -- Shared monomorphic signatures.
 f64Const :: TermSignature
-f64Const = sig $ TypeScheme [] Types.float64 Nothing
+f64Const = sig $ TypeScheme [] Types.float64 mempty
 
 f64To :: [(String, String)] -> TermSignature
-f64To params = sigWithParams params $ TypeScheme [] (Types.float64 Types.~> Types.float64) Nothing
+f64To params = sigWithParams params $ TypeScheme [] (Types.float64 Types.~> Types.float64) mempty
 
 f64To2 :: [(String, String)] -> TermSignature
-f64To2 params = sigWithParams params $ TypeScheme [] (Types.float64 Types.~> Types.float64 Types.~> Types.float64) Nothing
+f64To2 params = sigWithParams params $ TypeScheme [] (Types.float64 Types.~> Types.float64 Types.~> Types.float64) mempty
 
 int32F32ToF32 :: [(String, String)] -> TermSignature
-int32F32ToF32 params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.float32 Types.~> Types.float32) Nothing
+int32F32ToF32 params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.float32 Types.~> Types.float32) mempty
 
 int32F64ToF64 :: [(String, String)] -> TermSignature
-int32F64ToF64 params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.float64 Types.~> Types.float64) Nothing
+int32F64ToF64 params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.float64 Types.~> Types.float64) mempty
 
 int32To :: [(String, String)] -> TermSignature
-int32To params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.int32) Nothing
+int32To params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.int32) mempty
 
 int32To2 :: [(String, String)] -> TermSignature
-int32To2 params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.int32 Types.~> Types.int32) Nothing
+int32To2 params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.int32 Types.~> Types.int32) mempty
 
 int32To2List :: [(String, String)] -> TermSignature
 int32To2List params = sigWithParams params $ TypeScheme []
-  (Types.int32 Types.~> Types.int32 Types.~> Types.list Types.int32) Nothing
+  (Types.int32 Types.~> Types.int32 Types.~> Types.list Types.int32) mempty
 
 int32To2Maybe :: [(String, String)] -> TermSignature
 int32To2Maybe params = sigWithParams params $ TypeScheme []
-  (Types.int32 Types.~> Types.int32 Types.~> Types.optional Types.int32) Nothing
+  (Types.int32 Types.~> Types.int32 Types.~> Types.optional Types.int32) mempty
 
 int32ToBool :: [(String, String)] -> TermSignature
-int32ToBool params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.boolean) Nothing
+int32ToBool params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.boolean) mempty
 
 int32ToMaybe :: [(String, String)] -> TermSignature
-int32ToMaybe params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.optional Types.int32) Nothing
+int32ToMaybe params = sigWithParams params $ TypeScheme [] (Types.int32 Types.~> Types.optional Types.int32) mempty
 
 fractionalTo2 :: TermSignature
 fractionalTo2 = sig $ Types.polyConstrained [("x", [Name "fractional"])]

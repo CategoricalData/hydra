@@ -1426,7 +1426,7 @@ Type schemes allow polymorphic types:
 -- Identity function: ∀a. a -> a (verbose)
 idScheme = TypeScheme {
   typeVariables = [Name "a"],
-  typeConstraints = [],
+  typeConstraints = M.empty,  -- empty map means no constraints
   type_ = T.function (T.variable "a") (T.variable "a")
 }
 

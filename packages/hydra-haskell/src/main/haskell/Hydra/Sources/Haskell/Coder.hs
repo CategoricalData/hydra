@@ -939,7 +939,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
           "hterm" <<~ encodeTerm @@ int32 0 @@ var "namespaces" @@ var "term'" @@ var "cx" @@ var "g" $ lets [
          "vb">: HaskellUtilsSource.simpleValueBinding @@ var "hname'" @@ var "hterm" @@ var "bindings",
          -- Extract constraints from the TypeScheme and convert to class assertions
-         "schemeConstraints">: optCases (var "typ") Phantoms.nothing ("ts" ~> Core.typeSchemeConstraints (var "ts")),
+         "schemeConstraints">: optCases (var "typ") Maps.empty ("ts" ~> Core.typeSchemeConstraints (var "ts")),
          "schemeClasses">: typeSchemeConstraintsToClassMap @@ var "schemeConstraints"] $
          "explicitClasses" <<~ Annotations.getTypeClasses @@ var "cx" @@ var "g" @@ (Strip.removeTypesFromTerm @@ var "term") $
          -- Combine constraints from TypeScheme with any explicit annotations
@@ -1141,20 +1141,19 @@ typeDecl = haskellCoderDefinition "typeDecl" $
     right $ var "decl"
 
 -- | Extract TypeScheme class constraints into the Map format used by encodeTypeWithClassAssertions.
--- TypeScheme constraints are Maybe (Map Name TypeVariableConstraints), where TypeVariableConstraints
+-- TypeScheme constraints are a Map Name TypeVariableConstraints, where TypeVariableConstraints
 -- has a 'classes' field of type Set TypeClassConstraint. Each TypeClassConstraint.simple
 -- carries the name of a built-in type class binding under hydra.classes.
-typeSchemeConstraintsToClassMap :: TypedTermDefinition (Maybe (M.Map Name TypeVariableConstraints) -> M.Map Name (S.Set Name))
+typeSchemeConstraintsToClassMap :: TypedTermDefinition (M.Map Name TypeVariableConstraints -> M.Map Name (S.Set Name))
 typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsToClassMap" $
   doc "Project type scheme constraints to a map of type variables to typeclass names" $
-  "maybeConstraints" ~> lets [
+  "constraints" ~> lets [
     "constraintToName">: "tcc" ~> cases _TypeClassConstraint Nothing [
       _TypeClassConstraint_simple>>: "className" ~> just (var "className")] @@ (var "tcc")] $
-    Optionals.match (var "maybeConstraints") (Maps.empty :: TypedTerm (M.Map Name (S.Set Name))) ("constraints" ~>
-        Maps.map
-          ("meta" ~> ((Sets.fromList $
-            Optionals.givens $ Lists.map (var "constraintToName") $ Core.typeVariableConstraintsClasses (var "meta")) :: TypedTerm (S.Set Name)))
-          (var "constraints" :: TypedTerm (M.Map Name TypeVariableConstraints)))
+    Maps.map
+      ("meta" ~> ((Sets.fromList $
+        Optionals.givens $ Lists.map (var "constraintToName") $ Core.typeVariableConstraintsClasses (var "meta")) :: TypedTerm (S.Set Name)))
+      (var "constraints" :: TypedTerm (M.Map Name TypeVariableConstraints))
 
 useCoreImport :: TypedTermDefinition Bool
 useCoreImport = haskellCoderDefinition "useCoreImport" $

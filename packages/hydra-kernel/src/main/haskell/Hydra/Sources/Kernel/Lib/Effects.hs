@@ -37,7 +37,7 @@ apply = define "apply" "Applicative apply for effects."
   (sigWithParams [("ef", "the effect producing the function to apply"),
                   ("ex", "the effect producing the argument")]
     $ TypeScheme [Name "x", Name "y"]
-    (effect (tx Types.~> ty) Types.~> effect tx Types.~> effect ty) Nothing)
+    (effect (tx Types.~> ty) Types.~> effect tx Types.~> effect ty) mempty)
   ["apply(ef, ex) describes an effectful computation which first interprets ef to produce a\
   \ function, then interprets ex to produce an argument, and returns the result of applying the\
   \ function to the argument."]
@@ -47,7 +47,7 @@ bind = define "bind" "Sequence two effectful computations."
   (sigWithParams [("e", "the effect to interpret first"),
                   ("f", "the function producing the next effect from e's result")]
     $ TypeScheme [Name "x", Name "y"]
-    (effect tx Types.~> (tx Types.~> effect ty) Types.~> effect ty) Nothing)
+    (effect tx Types.~> (tx Types.~> effect ty) Types.~> effect ty) mempty)
   ["bind(e, f) describes an effectful computation which first interprets e, then passes its\
   \ result to f to obtain the next effect.",
    "Host interpreters provide the operational meaning; Hydra uses the type effect<t> to keep the\
@@ -59,7 +59,7 @@ compose = define "compose" "Kleisli composition for effects."
                   ("g", "the second effect-returning function"),
                   ("x", "the input to the composed computation")]
     $ TypeScheme [Name "x", Name "y", Name "z"]
-    ((tx Types.~> effect ty) Types.~> (ty Types.~> effect tz) Types.~> tx Types.~> effect tz) Nothing)
+    ((tx Types.~> effect ty) Types.~> (ty Types.~> effect tz) Types.~> tx Types.~> effect tz) mempty)
   ["compose(f, g, x) describes an effectful computation equivalent to bind(f(x), g)."]
 
 foldList :: PrimitiveDefinition
@@ -68,7 +68,7 @@ foldList = define "foldList" "Left-fold over a list with an effect-returning fun
                   ("acc0", "the initial accumulator value"),
                   ("xs", "the list to fold over")]
     $ TypeScheme [Name "x", Name "y"]
-    ((tx Types.~> ty Types.~> effect tx) Types.~> tx Types.~> Types.list ty Types.~> effect tx) Nothing)
+    ((tx Types.~> ty Types.~> effect tx) Types.~> tx Types.~> Types.list ty Types.~> effect tx) mempty)
   ["foldList(f, acc0, xs) describes an effectful left fold over xs, sequencing applications of f from\
   \ left to right."]
 
@@ -77,7 +77,7 @@ map = define "map" "Map a pure function over the result of an effect."
   (sigWithParams [("f", "the pure function to apply to the effect's result"),
                   ("e", "the effect to interpret")]
     $ TypeScheme [Name "x", Name "y"]
-    ((tx Types.~> ty) Types.~> effect tx Types.~> effect ty) Nothing)
+    ((tx Types.~> ty) Types.~> effect tx Types.~> effect ty) mempty)
   ["map(f, e) describes an effectful computation which interprets e and applies f to its result.",
    "Equivalent to bind(e, \\x -> pure(f x))."]
 
@@ -86,7 +86,7 @@ mapList = define "mapList" "Map an effect-returning function over a list."
   (sigWithParams [("f", "the effect-returning function to apply to each element"),
                   ("xs", "the list to map over")]
     $ TypeScheme [Name "x", Name "y"]
-    ((tx Types.~> effect ty) Types.~> Types.list tx Types.~> effect (Types.list ty)) Nothing)
+    ((tx Types.~> effect ty) Types.~> Types.list tx Types.~> effect (Types.list ty)) mempty)
   ["mapList(f, xs) describes an effectful computation which applies f to each element of xs from\
   \ left to right and collects the results."]
 
@@ -95,7 +95,7 @@ mapOptional = define "mapOptional" "Map an effect-returning function over an opt
   (sigWithParams [("f", "the effect-returning function to apply to the contained value"),
                   ("m", "the optional to map over")]
     $ TypeScheme [Name "x", Name "y"]
-    ((tx Types.~> effect ty) Types.~> Types.optional tx Types.~> effect (Types.optional ty)) Nothing)
+    ((tx Types.~> effect ty) Types.~> Types.optional tx Types.~> effect (Types.optional ty)) mempty)
   ["mapOptional(f, m) describes an effectful computation which returns none when m is none, or\
   \ applies f to the contained value and wraps the result in given."]
 
@@ -113,6 +113,6 @@ mapSet = define "mapSet" "Map an effect-returning function over a set."
 pure :: PrimitiveDefinition
 pure = define "pure" "Lift a pure value into an effect."
   (sigWithParams [("x", "the pure value to lift into an effect")]
-    $ TypeScheme [Name "x"] (tx Types.~> effect tx) Nothing)
+    $ TypeScheme [Name "x"] (tx Types.~> effect tx) mempty)
   ["pure(x) describes an effectful computation which succeeds with x without requiring host\
   \ interaction."]

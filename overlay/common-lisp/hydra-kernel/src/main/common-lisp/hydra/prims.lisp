@@ -90,19 +90,15 @@
          (vars (if variables variables detected-vars))
          ;; Build constraints map. After #156, TypeVariableConstraints.classes is
          ;; a Seq[TypeClassConstraint], not Set[String]; wrap each class name.
+         ;; TypeScheme.constraints is a plain Map (#683); an empty map means "no constraints".
          (constraint-map
-          (when constraints
-            (funcall hydra_overlay_common_lisp_lib_maps_from_list
-                     (mapcar (lambda (entry)
-                               (list (first entry)
-                                     (make-type_variable_constraints
-                                      (wrap-constraints (cdr entry)))))
-                             constraints))))
-         ;; TypeScheme.constraints is Maybe(Map): wrap as (:given m) or (:none).
-         (maybe-constraints (if constraint-map
-                                (list :given constraint-map)
-                                (list :none))))
-    (make-type_scheme vars fun-type maybe-constraints)))
+          (funcall hydra_overlay_common_lisp_lib_maps_from_list
+                   (mapcar (lambda (entry)
+                             (list (first entry)
+                                   (make-type_variable_constraints
+                                    (wrap-constraints (cdr entry)))))
+                           constraints))))
+    (make-type_scheme vars fun-type constraint-map)))
 
 (defun build-prim-def (pname variables inputs output constraints)
   "Build a PrimitiveDefinition (#156 shape) from name + signature."

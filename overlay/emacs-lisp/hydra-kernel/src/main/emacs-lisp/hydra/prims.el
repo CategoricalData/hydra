@@ -28,7 +28,7 @@
     (list :function (make-hydra_core_function_type (list :unit) (make-arity-type (1- n))))))
 
 (defun make-prim-type-scheme (arity)
-  (make-hydra_core_type_scheme nil (make-arity-type arity) (list :none)))
+  (make-hydra_core_type_scheme nil (make-arity-type arity) nil))
 
 (defun make-prim-def-from-arity (name arity)
   "Build a PrimitiveDefinition (#156 shape) from name + arity (for annotation primitives)."
@@ -87,19 +87,15 @@
          (detected-vars (cl-remove-if (lambda (v) (string-match-p "\\." v)) all-vars))
          (vars (if variables variables detected-vars))
          ;; After #156, TypeVariableConstraints.classes is Seq[TypeClassConstraint].
+         ;; TypeScheme.constraints is a plain Map (#683); an empty map means "no constraints".
          (constraint-map
-          (when constraints
-            (funcall hydra_overlay_emacs_lisp_lib_maps_from_list
-                     (mapcar (lambda (entry)
-                               (list (car entry)
-                                     (make-hydra_core_type_variable_constraints
-                                      (wrap-constraints (cdr entry)))))
-                             constraints))))
-         ;; TypeScheme.constraints is Maybe(Map): wrap as (:given m) or (:none).
-         (maybe-constraints (if constraint-map
-                                (list :given constraint-map)
-                                (list :none))))
-    (make-hydra_core_type_scheme vars fun-type maybe-constraints)))
+          (funcall hydra_overlay_emacs_lisp_lib_maps_from_list
+                   (mapcar (lambda (entry)
+                             (list (car entry)
+                                   (make-hydra_core_type_variable_constraints
+                                    (wrap-constraints (cdr entry)))))
+                           constraints))))
+    (make-hydra_core_type_scheme vars fun-type constraint-map)))
 
 (defun build-prim-def (pname variables inputs output constraints)
   "Build a PrimitiveDefinition (#156 shape) from name + signature."

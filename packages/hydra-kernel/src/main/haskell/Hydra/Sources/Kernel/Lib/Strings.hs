@@ -28,10 +28,10 @@ define = primitiveInModule module_
 
 -- Monomorphic signature helpers
 fn :: [(String, String)] -> Type -> Type -> TermSignature
-fn params a b = sigWithParams params $ TypeScheme [] (a Types.~> b) Nothing
+fn params a b = sigWithParams params $ TypeScheme [] (a Types.~> b) mempty
 
 fn2 :: [(String, String)] -> Type -> Type -> Type -> TermSignature
-fn2 params a b c = sigWithParams params $ TypeScheme [] (a Types.~> b Types.~> c) Nothing
+fn2 params a b c = sigWithParams params $ TypeScheme [] (a Types.~> b Types.~> c) mempty
 
 charAt :: PrimitiveDefinition
 charAt = define "charAt" "Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds."

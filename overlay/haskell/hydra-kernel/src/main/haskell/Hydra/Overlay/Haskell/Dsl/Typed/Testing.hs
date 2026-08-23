@@ -334,7 +334,7 @@ alphaCase cname term oldVar newVar result = universalCase cname
 
 encodedTestGroupToBinding :: ModuleName -> String -> TypedTerm TestGroup -> Binding
 encodedTestGroupToBinding ns lname group = Binding name (unTypedTerm group)
-    $ Just $ TypeScheme [] typ Nothing
+    $ Just $ TypeScheme [] typ M.empty
   where
     name = unqualifyName $ QualifiedName (Just ns) lname
     typ = TypeVariable _TestGroup

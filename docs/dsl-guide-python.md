@@ -611,7 +611,7 @@ Type-level modules define Hydra data types using the Direct Types DSL.
 
 ```python
 from hydra.core import Name, Type, TypeScheme
-from hydra.overlay.python.dsl.python import Given, None_
+from hydra.overlay.python.dsl.python import FrozenDict
 from hydra.packaging import DefinitionType, ModuleName, TypeDefinition
 import hydra.overlay.python.dsl.types as T
 
@@ -624,7 +624,7 @@ def _typeref(local: str) -> Type:
 def _def(local_name: str, typ: Type) -> DefinitionType:
     """Build a DefinitionType for a named type definition."""
     name = Name(f"{NS.value}.{local_name}")
-    ts = TypeScheme((), typ, None_())
+    ts = TypeScheme((), typ, FrozenDict({}))  # empty map means no constraints
     return DefinitionType(TypeDefinition(name, ts))
 
 # Type definitions are collected into the module's `definitions` list; references to
