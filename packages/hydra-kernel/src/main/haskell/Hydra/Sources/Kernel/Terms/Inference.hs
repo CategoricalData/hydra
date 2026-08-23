@@ -309,7 +309,7 @@ dischargeClassConstraints = define "dischargeClassConstraints" $
               (Strings.concat $ list [
                 (string "Type "), PrintCore.type_ @@ var "resolvedType",
                 (string " does not satisfy constraint "), Core.unName (var "className")])))) $
-        Eithers.bind (Eithers.mapList (var "checkClass") (Core.typeVariableConstraintsClasses $ var "varConstraints"))
+        Eithers.bind (Eithers.mapSet (var "checkClass") (Core.typeVariableConstraintsClasses $ var "varConstraints"))
           ("_" ~> right unit))) $
   Eithers.bind (Eithers.mapList (var "checkOne") (Maps.toList $ (var "constraints" :: TypedTerm (M.Map Name TypeVariableConstraints))))
     ("_" ~> right unit)
@@ -627,7 +627,7 @@ inferTypeOfCollection = define "inferTypeOfCollection" $
   "fcx2" <~ Pairs.second (var "varResult") $
   "classConstraints" <~ Logic.ifElse (Sets.null $ (var "classNames" :: TypedTerm (S.Set Name)))
     (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))
-    (Maps.singleton (var "var") (Core.typeVariableConstraints $ Lists.map ("n" ~> Core.typeClassConstraintSimple (var "n")) $ Sets.toList $ (var "classNames" :: TypedTerm (S.Set Name)))) $
+    (Maps.singleton (var "var") (Core.typeVariableConstraints $ Sets.map ("n" ~> Core.typeClassConstraintSimple (var "n")) (var "classNames" :: TypedTerm (S.Set Name)))) $
   Logic.ifElse (Lists.null $ var "els")
     (right (yieldWithConstraints
       @@ var "fcx2"
@@ -967,7 +967,7 @@ inferTypeOfMap = define "inferTypeOfMap" $
   "vvarResult" <~ Names.freshName @@ var "fcx2" $
   "vvar" <~ Pairs.first (var "vvarResult") $
   "fcx3" <~ Pairs.second (var "vvarResult") $
-  "keyConstraints" <~ (Maps.singleton (var "kvar") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]) :: TypedTerm (M.Map Name TypeVariableConstraints)) $
+  "keyConstraints" <~ (Maps.singleton (var "kvar") (Core.typeVariableConstraints $ Sets.singleton $ Core.typeClassConstraintSimple $ Core.name (string "ordering")) :: TypedTerm (M.Map Name TypeVariableConstraints)) $
   Logic.ifElse (Maps.null $ (var "m" :: TypedTerm (M.Map Term Term)))
     (right (yieldWithConstraints
       @@ var "fcx3"
@@ -1367,7 +1367,7 @@ mergeClassConstraints = define "mergeClassConstraints" $
       "k" <~ Pairs.first (var "pair") $
       "v" <~ Pairs.second (var "pair") $
       Optionals.match (Maps.lookup (var "k" :: TypedTerm Name) (var "acc")) (Maps.insert (var "k") (var "v") (var "acc" :: TypedTerm (M.Map Name TypeVariableConstraints))) ("existing" ~>
-          "merged" <~ Core.typeVariableConstraints (Lists.distinct $ Lists.concat2 (Core.typeVariableConstraintsClasses $ var "existing") (Core.typeVariableConstraintsClasses $ var "v")) $
+          "merged" <~ Core.typeVariableConstraints (Sets.union (Core.typeVariableConstraintsClasses $ var "existing") (Core.typeVariableConstraintsClasses $ var "v")) $
           Maps.insert (var "k") (var "merged") (var "acc" :: TypedTerm (M.Map Name TypeVariableConstraints))))
     (var "m1")
     (Maps.toList $ (var "m2" :: TypedTerm (M.Map Name TypeVariableConstraints)))

@@ -892,7 +892,7 @@ encoderTypeScheme = define "encoderTypeScheme" $
     -- Build constraints map: {varName -> TypeVariableConstraints {classes = {ordering}}}
     "constraints">:
       ((Maps.fromList $ Lists.map
-        ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
+        ("v" ~> pair (var "v") (Core.typeVariableConstraints $ Sets.singleton $ Core.typeClassConstraintSimple $ Core.name (string "ordering")))
         (var "ordVars")) :: TypedTerm (M.Map Name TypeVariableConstraints))] $
   Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
 
@@ -916,7 +916,7 @@ encoderTypeSchemeNamed = define "encoderTypeSchemeNamed" $
       (var "allOrdVars"),
     "constraints">:
       ((Maps.fromList $ Lists.map
-        ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
+        ("v" ~> pair (var "v") (Core.typeVariableConstraints $ Sets.singleton $ Core.typeClassConstraintSimple $ Core.name (string "ordering")))
         (var "ordVars")) :: TypedTerm (M.Map Name TypeVariableConstraints))] $
   Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
 -- | Filter bindings to only encodable type definitions

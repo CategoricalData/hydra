@@ -200,7 +200,7 @@ polyConstrained vsWithConstraints t = TypeScheme vars (asType t) constraintMap
   where
     vars = Name . fst <$> vsWithConstraints
     constraintMap = M.fromList
-      [(Name v, TypeVariableConstraints (TypeClassConstraintSimple <$> classes)) | (v, classes) <- vsWithConstraints, not (L.null classes)]
+      [(Name v, TypeVariableConstraints (S.fromList (TypeClassConstraintSimple <$> classes))) | (v, classes) <- vsWithConstraints, not (L.null classes)]
 
 -- | Create a product type using nested pairs (deprecated: use pair directly)
 -- Example: product [string, int32, boolean] creates pair string (pair int32 boolean)

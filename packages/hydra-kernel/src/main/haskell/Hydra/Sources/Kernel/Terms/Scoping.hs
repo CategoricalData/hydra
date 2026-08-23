@@ -215,7 +215,7 @@ termSignatureToTypeScheme = define "termSignatureToTypeScheme" $
   -- Build a map from each type parameter's name to its TypeVariableConstraints.
   "constraints" <~ (Maps.fromList (Lists.map
     ("tp" ~> pair (Typing.typeParameterName $ var "tp")
-      (Core.typeVariableConstraints $ Typing.typeParameterConstraints $ var "tp"))
+      (Core.typeVariableConstraints $ Sets.fromList $ Typing.typeParameterConstraints $ var "tp"))
     (var "typeParams")) :: TypedTerm (M.Map Name TypeVariableConstraints)) $
   Core.typeScheme (var "variables") (var "body") (var "constraints")
 
@@ -244,7 +244,7 @@ typeSchemeToTermSignature = define "typeSchemeToTermSignature" $
     ("v" ~> Typing.typeParameter (var "v") $ optCases
       (Maps.lookup (var "v" :: TypedTerm Name) (var "constraintsMap"))
       (list ([] :: [TypedTerm TypeClassConstraint]))
-      ("tvm" ~> Core.typeVariableConstraintsClasses $ var "tvm"))
+      ("tvm" ~> Sets.toList $ Core.typeVariableConstraintsClasses $ var "tvm"))
     (var "variables") $
   -- Peel function arrows off the body, accumulating parameter types in reverse order.
   "peel" <~ ("acc" ~> "t" ~> match _Type (var "t")

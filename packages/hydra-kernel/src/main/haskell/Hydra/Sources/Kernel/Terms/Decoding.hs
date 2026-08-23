@@ -1066,11 +1066,9 @@ decoderTypeScheme = define "decoderTypeScheme" $
       (var "allOrdVars") $
     -- Build constraints: for each ordVar, add Ord constraint (uses original var names, normalization renames them)
     "constraints" <~ (
-      Logic.ifElse (Lists.null (var "ordVars"))
-        Phantoms.nothing
-        (just ((Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
-          (var "ordVars")) :: TypedTerm (M.Map Name TypeVariableConstraints)))) $
+      (Maps.fromList $ Lists.map
+        ("v" ~> pair (var "v") (Core.typeVariableConstraints $ Sets.singleton $ Core.typeClassConstraintSimple $ Core.name (string "ordering")))
+        (var "ordVars")) :: TypedTerm (M.Map Name TypeVariableConstraints)) $
     Core.typeScheme
       (var "typeVars")
       (decoderType @@ var "typ")
@@ -1088,11 +1086,9 @@ decoderTypeSchemeNamed = define "decoderTypeSchemeNamed" $
       ("v" ~> Lists.member (var "v" :: TypedTerm Name) (var "typeVars" :: TypedTerm [Name]))
       (var "allOrdVars") $
     "constraints" <~ (
-      Logic.ifElse (Lists.null (var "ordVars"))
-        Phantoms.nothing
-        (just ((Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableConstraints $ list [Core.typeClassConstraintSimple $ Core.name (string "ordering")]))
-          (var "ordVars")) :: TypedTerm (M.Map Name TypeVariableConstraints)))) $
+      (Maps.fromList $ Lists.map
+        ("v" ~> pair (var "v") (Core.typeVariableConstraints $ Sets.singleton $ Core.typeClassConstraintSimple $ Core.name (string "ordering")))
+        (var "ordVars")) :: TypedTerm (M.Map Name TypeVariableConstraints)) $
     Core.typeScheme
       (var "typeVars")
       (decoderTypeNamed @@ var "ename" @@ var "typ")

@@ -1152,7 +1152,7 @@ typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsT
       _TypeClassConstraint_simple>>: "className" ~> just (var "className")] @@ (var "tcc")] $
     Maps.map
       ("meta" ~> ((Sets.fromList $
-        Optionals.givens $ Lists.map (var "constraintToName") $ Core.typeVariableConstraintsClasses (var "meta")) :: TypedTerm (S.Set Name)))
+        Optionals.givens $ Lists.map (var "constraintToName") $ Sets.toList $ Core.typeVariableConstraintsClasses (var "meta")) :: TypedTerm (S.Set Name)))
       (var "constraints" :: TypedTerm (M.Map Name TypeVariableConstraints))
 
 useCoreImport :: TypedTermDefinition Bool

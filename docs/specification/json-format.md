@@ -457,6 +457,13 @@ Most ordering questions are settled by other rules above:
   [ordering-and-equality.md](ordering-and-equality.md).
   (Host source maps iterate in this order by construction, so this states normatively
   what implementations already do; see [Maps](#maps).)
+- `Type.set` / `Term.set` arrays likewise appear in **canonical order**: a set encodes as a
+  plain JSON array (see [Empty values](#empty-values)), with elements ascending by the same
+  canonical total order used for maps, per
+  [ordering-and-equality.md](ordering-and-equality.md#built-in-type-constructors). This is
+  what distinguishes a set's wire encoding from a list's: a list preserves source/author
+  order, a set's array is always the canonical ascending sequence regardless of construction
+  order.
 - Tagged-union objects have exactly one key.
 
 Two further cases are not covered by those rules and need their own pinning:

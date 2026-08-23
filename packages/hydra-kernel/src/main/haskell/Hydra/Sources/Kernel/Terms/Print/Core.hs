@@ -463,7 +463,7 @@ typeScheme = define "typeScheme" $
     Core.unName (var "v")]) $
   "toConstraintPairs" <~ ("p" ~> Lists.map
     (var "toConstraintPair" @@ (Pairs.first $ var "p")) $
-    Core.typeVariableConstraintsClasses $ Pairs.second $ var "p") $
+    Sets.toList $ Core.typeVariableConstraintsClasses $ Pairs.second $ var "p") $
   "tc" <~ Lists.concat (Lists.map (var "toConstraintPairs") $ Maps.toList (Core.typeSchemeConstraints (var "ts") :: TypedTerm (M.Map Name TypeVariableConstraints))) $
   Strings.concat $ list [
     string "(",

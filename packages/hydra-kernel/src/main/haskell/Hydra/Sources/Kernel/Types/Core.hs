@@ -614,7 +614,7 @@ typeVariableConstraints = define "TypeVariableConstraints" $
   T.record [
     "classes">:
       doc "The typeclass constraints on this type variable" $
-      T.list typeClassConstraint]
+      T.set typeClassConstraint]
 
 wrappedTerm :: TypeDefinition
 wrappedTerm = define "WrappedTerm" $
