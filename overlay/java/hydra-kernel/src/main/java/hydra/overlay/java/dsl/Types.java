@@ -883,6 +883,14 @@ public interface Types {
     }
 
     /**
+     * Void (uninhabited, or bottom) type.
+     * @return the void type
+     */
+    static Type void_() {
+        return new Type.Void_();
+    }
+
+    /**
      * Create an enumerated type with the given variant names.
      * Example: enum_("red", "green", "blue")
      * @param names the variant names

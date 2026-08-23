@@ -9,6 +9,21 @@
 Function combinators: the `identity`/`compose`/`const`/`flip` basis.
 These primitives manipulate functions themselves, independently of any particular data type.
 
+#### absurd — **Draft**
+
+`∀t1. void → t1`
+
+Usage: `absurd v`
+
+Eliminate a value of the uninhabited `void` type, producing any type. `absurd v` is the
+unique function from `void` to any type `t1`; since `void` has no inhabitants, this
+function can never actually be applied in a well-typed program.
+Its purpose is to discharge an impossible branch in otherwise-total code, such as the
+`left` case of an `either<void, a>` that can never occur.
+The eliminator dual to the (nonexistent) introducer for `void`.
+
+Since: 0.18
+
 #### compose — **Draft**
 
 `∀t1,t2,t3. (t2 → t3) → (t1 → t2) → t1 → t3`

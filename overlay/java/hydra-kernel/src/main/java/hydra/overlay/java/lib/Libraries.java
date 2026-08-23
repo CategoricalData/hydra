@@ -1,6 +1,7 @@
 package hydra.overlay.java.lib;
 
 import hydra.overlay.java.lib.equality.Equal;
+import hydra.overlay.java.lib.functions.Absurd;
 import hydra.overlay.java.lib.functions.Identity;
 import hydra.overlay.java.lib.ordering.Compare;
 import hydra.overlay.java.lib.ordering.Gt;
@@ -172,6 +173,7 @@ public class Libraries {
 
     private static List<PrimitiveFunction> functionsPrimitives() {
         return Arrays.asList(
+                new Absurd(),
                 new Identity());
     }
 

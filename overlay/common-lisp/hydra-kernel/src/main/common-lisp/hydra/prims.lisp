@@ -381,6 +381,12 @@
     (lambda (cx) (declare (ignore cx)) (lambda (g) (declare (ignore g)) (lambda (t_) (list :right t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (t_) (list :right t_)))))
 
+;; TermCoder for the void type. Never legitimately exercised: void has no inhabitants.
+(defun tc-void ()
+  (make-term_coder (list :void nil)
+    (lambda (cx) (declare (ignore cx)) (lambda (g) (declare (ignore g)) (lambda (t_) (list :right t_))))
+    (lambda (cx) (declare (ignore cx)) (lambda (t_) (list :right t_)))))
+
 ;; Term/variable passthrough coders
 
 (defun tc-variable (name)

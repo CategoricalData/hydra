@@ -123,6 +123,7 @@
         ord-x {"x" ["ordering"]}
         eq-x {"x" ["equality"]}]
     {(prim-name 'hydra.lib.equality/hydra_lib_equality_equal)    (p/prim2 (prim-name 'hydra.lib.equality/hydra_lib_equality_equal)    (fn [a b] ((equality/hydra_overlay_clojure_lib_equality_equal a) b))    [] x x (p/tc-boolean) eq-x)
+     (prim-name 'hydra.lib.functions/hydra_lib_functions_absurd)   (p/prim1 (prim-name 'hydra.lib.functions/hydra_lib_functions_absurd)   functions/hydra_overlay_clojure_lib_functions_absurd   [] (p/tc-void) x)
      (prim-name 'hydra.lib.functions/hydra_lib_functions_identity) (p/prim1 (prim-name 'hydra.lib.functions/hydra_lib_functions_identity) functions/hydra_overlay_clojure_lib_functions_identity [] x x)
      (prim-name 'hydra.lib.ordering/hydra_lib_ordering_compare)  (p/prim2 (prim-name 'hydra.lib.ordering/hydra_lib_ordering_compare)  (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_compare a) b))  [] x x (p/tc-comparison) ord-x)
      (prim-name 'hydra.lib.ordering/hydra_lib_ordering_gt)       (p/prim2 (prim-name 'hydra.lib.ordering/hydra_lib_ordering_gt)       (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_gt a) b))       [] x x (p/tc-boolean) ord-x)

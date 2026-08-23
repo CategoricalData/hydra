@@ -20,7 +20,7 @@
           tc-uint8 tc-uint16 tc-uint32 tc-uint64
           tc-string tc-binary
           tc-list tc-set tc-map tc-optional tc-either tc-pair
-          tc-effect tc-unit tc-named
+          tc-effect tc-unit tc-void tc-named
           tc-variable tc-term tc-comparison
           tc-function tc-function-with-reduce
           prim0 prim1 prim2 prim3 lazy-args default-fallback-primitive)
@@ -358,6 +358,13 @@
     (define (tc-named type-name)
       (make-hydra_graph_term_coder
        (list 'variable type-name)
+        (lambda (cx) (lambda (g) (lambda (t) (list 'right t))))
+        (lambda (cx) (lambda (t) (list 'right t)))))
+
+    ;; TermCoder for the void type. Never legitimately exercised: void has no inhabitants.
+    (define (tc-void)
+      (make-hydra_graph_term_coder
+       (list 'void '())
         (lambda (cx) (lambda (g) (lambda (t) (list 'right t))))
         (lambda (cx) (lambda (t) (list 'right t)))))
 

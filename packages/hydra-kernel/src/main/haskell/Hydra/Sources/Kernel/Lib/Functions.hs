@@ -21,7 +21,7 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.functions module.")}
   where
-    definitions = [compose, const, flip, identity]
+    definitions = [absurd, compose, const, flip, identity]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -34,6 +34,18 @@ t1, t2, t3 :: Type
 t1 = Types.var "t1"
 t2 = Types.var "t2"
 t3 = Types.var "t3"
+
+absurd :: PrimitiveDefinition
+absurd = define "absurd" "Eliminate a value of the uninhabited void type, producing any type."
+  (sigWithParams [("v", "a value of the void type; unreachable in any well-typed program")] $
+    TypeScheme [Name "t1"] (Types.void Types.~> t1) Nothing)
+  ["absurd(v) is the unique function from void to any type t1; since void has no\
+  \ inhabitants, this function can never actually be applied in a well-typed program.",
+   "Its purpose is to discharge an impossible branch in otherwise-total code, such as the\
+  \ left case of an either<void, a> that can never occur.",
+   "The eliminator dual to the (nonexistent) introducer for void.",
+   "Total, vacuously: there is no well-typed argument on which absurd could be called.\
+  \ Corresponds to Haskell's Data.Void.absurd :: Void -> a."]
 
 compose :: PrimitiveDefinition
 compose = defineWithDefault "compose" "Compose two functions."

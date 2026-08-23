@@ -32,6 +32,11 @@ module_ = Module {
 
 -- Test groups for hydra.lib.functions primitives
 
+-- Note: hydra.lib.functions.absurd (void -> x) is deliberately untested in the common suite.
+-- void is uninhabited: no well-typed term can construct a value of type void to pass as its
+-- argument, so there is no valid input for a primCase to exercise. Its native implementations
+-- are still shipped across every host, and its type-correctness is exercised indirectly by any
+-- consumer that eliminates a void-containing type.
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.functions primitives" $

@@ -136,6 +136,7 @@ module_ = Module {
       toDefinition setMetaUsesInt,
       toDefinition setMetaUsesMap,
       toDefinition setMetaUsesSet,
+      toDefinition setMetaUsesVoid,
       toDefinition toDataDeclaration,
 --      toDefinition toTypeDeclarations,
       toDefinition toTypeDeclarationsFrom,
@@ -268,6 +269,9 @@ constructModule = haskellCoderDefinition "constructModule" $
         var "condImport"
           @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "meta")
           @@ pair (pair (string "Data.Set") (just $ string "S")) (list ([] :: [TypedTerm String])),
+        var "condImport"
+          @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesVoid @@ var "meta")
+          @@ pair (pair (string "Data.Void") (nothing :: TypedTerm (Maybe String))) (list ([] :: [TypedTerm String])),
         -- Conditionally add Hydra.Overlay.Haskell.Lib.Literals import (the native runtime
         -- for hydra.lib.literals) if binary or decimal literals are present.
         Logic.ifElse (Logic.or
@@ -293,7 +297,8 @@ emptyMetadata = haskellCoderDefinition "emptyMetadata" $
     HE._HaskellModuleMetadata_usesByteString>>: false,
     HE._HaskellModuleMetadata_usesInt>>: false,
     HE._HaskellModuleMetadata_usesMap>>: false,
-    HE._HaskellModuleMetadata_usesSet>>: false]
+    HE._HaskellModuleMetadata_usesSet>>: false,
+    HE._HaskellModuleMetadata_usesVoid>>: false]
 
 encodeCaseExpression :: TypedTermDefinition (Int -> HaskellNamespaces -> CaseStatement -> H.Expression -> InferenceContext -> Graph -> Either Error H.Expression)
 encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
@@ -735,7 +740,9 @@ extendMetaForType = haskellCoderDefinition "extendMetaForType" $
       _Type_map>>: constant $
         setMetaUsesMap @@ true @@ var "meta",
       _Type_set>>: constant $
-        setMetaUsesSet @@ true @@ var "meta"]
+        setMetaUsesSet @@ true @@ var "meta",
+      _Type_void>>: constant $
+        setMetaUsesVoid @@ true @@ var "meta"]
 
 findOrdVariables :: TypedTermDefinition (Type -> S.Set Name)
 findOrdVariables = haskellCoderDefinition "findOrdVariables" $
@@ -860,7 +867,9 @@ setMetaUsesByteString = haskellCoderDefinition "setMetaUsesByteString" $
       HE._HaskellModuleMetadata_usesMap>>:
         project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesMap @@ var "m",
       HE._HaskellModuleMetadata_usesSet>>:
-        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "m"]
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "m",
+      HE._HaskellModuleMetadata_usesVoid>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesVoid @@ var "m"]
 
 setMetaUsesInt :: TypedTermDefinition (Bool -> HE.HaskellModuleMetadata -> HE.HaskellModuleMetadata)
 setMetaUsesInt = haskellCoderDefinition "setMetaUsesInt" $
@@ -873,7 +882,9 @@ setMetaUsesInt = haskellCoderDefinition "setMetaUsesInt" $
       HE._HaskellModuleMetadata_usesMap>>:
         project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesMap @@ var "m",
       HE._HaskellModuleMetadata_usesSet>>:
-        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "m"]
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "m",
+      HE._HaskellModuleMetadata_usesVoid>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesVoid @@ var "m"]
 
 setMetaUsesMap :: TypedTermDefinition (Bool -> HE.HaskellModuleMetadata -> HE.HaskellModuleMetadata)
 setMetaUsesMap = haskellCoderDefinition "setMetaUsesMap" $
@@ -886,7 +897,9 @@ setMetaUsesMap = haskellCoderDefinition "setMetaUsesMap" $
         project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesInt @@ var "m",
       HE._HaskellModuleMetadata_usesMap>>: var "b",
       HE._HaskellModuleMetadata_usesSet>>:
-        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "m"]
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "m",
+      HE._HaskellModuleMetadata_usesVoid>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesVoid @@ var "m"]
 
 setMetaUsesSet :: TypedTermDefinition (Bool -> HE.HaskellModuleMetadata -> HE.HaskellModuleMetadata)
 setMetaUsesSet = haskellCoderDefinition "setMetaUsesSet" $
@@ -899,7 +912,24 @@ setMetaUsesSet = haskellCoderDefinition "setMetaUsesSet" $
         project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesInt @@ var "m",
       HE._HaskellModuleMetadata_usesMap>>:
         project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesMap @@ var "m",
-      HE._HaskellModuleMetadata_usesSet>>: var "b"]
+      HE._HaskellModuleMetadata_usesSet>>: var "b",
+      HE._HaskellModuleMetadata_usesVoid>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesVoid @@ var "m"]
+
+setMetaUsesVoid :: TypedTermDefinition (Bool -> HE.HaskellModuleMetadata -> HE.HaskellModuleMetadata)
+setMetaUsesVoid = haskellCoderDefinition "setMetaUsesVoid" $
+  doc "Set the usesVoid flag in Haskell module metadata" $
+  "b" ~> "m" ~>
+    record HE._HaskellModuleMetadata [
+      HE._HaskellModuleMetadata_usesByteString>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesByteString @@ var "m",
+      HE._HaskellModuleMetadata_usesInt>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesInt @@ var "m",
+      HE._HaskellModuleMetadata_usesMap>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesMap @@ var "m",
+      HE._HaskellModuleMetadata_usesSet>>:
+        project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "m",
+      HE._HaskellModuleMetadata_usesVoid>>: var "b"]
 
 toDataDeclaration :: TypedTermDefinition (HaskellNamespaces -> TermDefinition -> InferenceContext -> Graph -> Either Error H.Declaration)
 toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $

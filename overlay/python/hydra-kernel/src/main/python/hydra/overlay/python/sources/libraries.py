@@ -67,7 +67,7 @@ def register_equality_primitives() -> dict[Name, Primitive]:
 
 
 def register_functions_primitives() -> dict[Name, Primitive]:
-    """Register all functions primitive functions. identity is provided natively;
+    """Register all functions primitive functions. absurd/identity are provided natively;
     compose/const/flip carry kernel default implementations and need no overlay. For #417."""
     from hydra.overlay.python.lib import functions
     from hydra.lib import functions as def_functions
@@ -76,6 +76,11 @@ def register_functions_primitives() -> dict[Name, Primitive]:
 
     x = prims.variable("x")
     _x = prims.v("x")
+
+    primitives[def_functions.absurd.name] = prims.prim1(
+        def_functions.absurd.name, functions.absurd, [_x],
+        prims.void(), x
+    )
 
     primitives[def_functions.identity.name] = prims.prim1(
         def_functions.identity.name, functions.identity, [_x],

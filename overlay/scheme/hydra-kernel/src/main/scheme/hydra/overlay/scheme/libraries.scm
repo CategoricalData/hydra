@@ -184,6 +184,7 @@
     (define (register-functions)
       (let ((x (tc-variable "x")))
         (list
+          (cons (prim-name def:hydra_lib_functions_absurd) (prim1 (prim-name def:hydra_lib_functions_absurd) hydra_overlay_scheme_lib_functions_absurd #f (tc-void) x))
           (cons (prim-name def:hydra_lib_functions_identity) (prim1 (prim-name def:hydra_lib_functions_identity) hydra_overlay_scheme_lib_functions_identity #f x x)))))
 
     ;; #417: comparison primitives moved from hydra.lib.equality to hydra.lib.ordering.

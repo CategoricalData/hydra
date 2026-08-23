@@ -306,6 +306,12 @@
     (lambda (_cx) (lambda (_g) (lambda (t_) (list :right t_))))
     (lambda (_cx) (lambda (t_) (list :right t_)))))
 
+;; TermCoder for the void type. Never legitimately exercised: void has no inhabitants.
+(defun tc-void ()
+  (make-hydra_graph_term_coder (list :void nil)
+    (lambda (_cx) (lambda (_g) (lambda (t_) (list :right t_))))
+    (lambda (_cx) (lambda (t_) (list :right t_)))))
+
 ;; Term/variable passthrough coders
 
 (defun tc-variable (name)

@@ -151,6 +151,7 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
   (let (
         (x (tc-variable "x")))
     (list
+      (cons (prim-name hydra_lib_functions_absurd) (prim1 (prim-name hydra_lib_functions_absurd) hydra_overlay_emacs_lisp_lib_functions_absurd nil (tc-void) x))
       (cons (prim-name hydra_lib_functions_identity) (prim1 (prim-name hydra_lib_functions_identity) #'identity                 nil x x)))))
 
 (defun register-ordering ()

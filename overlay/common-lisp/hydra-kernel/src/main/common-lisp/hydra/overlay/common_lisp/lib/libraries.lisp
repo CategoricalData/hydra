@@ -160,6 +160,7 @@
   (let (
         (x (tc-variable "x")))
     (list
+      (cons (prim-name hydra_lib_functions_absurd) (prim1 (prim-name hydra_lib_functions_absurd) hydra_overlay_common_lisp_lib_functions_absurd nil (tc-void) x))
       (cons (prim-name hydra_lib_functions_identity) (prim1 (prim-name hydra_lib_functions_identity) #'identity nil x x)))))
 
 ;; ============================================================================

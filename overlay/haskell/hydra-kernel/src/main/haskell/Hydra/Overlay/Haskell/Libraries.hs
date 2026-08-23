@@ -163,6 +163,7 @@ hydraLibOrdering = standardLibrary [
 
 hydraLibFunctions :: Library
 hydraLibFunctions = standardLibrary [
+    prim1 DefFunctions.absurd   Functions.absurd   x_ y_,
     prim3 DefFunctions.compose  Functions.compose  (funT y_ z_) (funT x_ y_) x_ z_,
     prim2 DefFunctions.const    Functions.const    x_ y_ x_,
     prim3 DefFunctions.flip     Functions.flip     (funT x_ (funT y_ z_)) y_ x_ z_,

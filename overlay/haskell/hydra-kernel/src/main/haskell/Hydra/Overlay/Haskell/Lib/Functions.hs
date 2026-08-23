@@ -5,6 +5,10 @@ module Hydra.Overlay.Haskell.Lib.Functions where
 import qualified Prelude as P
 
 
+-- | Eliminate a value of the uninhabited void type. Unreachable in any well-typed program.
+absurd :: a -> b
+absurd _ = P.error "hydra.lib.functions.absurd: void has no inhabitants"
+
 -- | Compose two functions: compose g f x = g (f x).
 compose :: (b -> c) -> (a -> b) -> a -> c
 compose g f = \x -> g (f x)

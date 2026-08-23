@@ -225,6 +225,8 @@ object Types:
 
   def unit: Type = Type.unit
 
+  def void: Type = Type.void
+
   /** Enumerated type from variant names (each carries unit). */
   def enum_(names: String*): Type =
     union(names.map(n => field(n, unit))*)

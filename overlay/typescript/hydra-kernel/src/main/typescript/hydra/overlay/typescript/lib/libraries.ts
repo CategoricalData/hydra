@@ -141,6 +141,7 @@ const tyBool: Type = { tag: "literal", value: { tag: "boolean" } as never } as n
 const tyString: Type = { tag: "literal", value: { tag: "string" } as never } as never;
 const tyBinary: Type = { tag: "literal", value: { tag: "binary" } as never } as never;
 const tyUnit: Type = { tag: "unit" } as never;
+const tyVoid: Type = { tag: "void" } as never;
 const tyFn = (a: Type, b: Type): Type =>
   ({ tag: "function", value: { domain: a, codomain: b } as never } as never);
 const tyList = (a: Type): Type =>
@@ -1040,6 +1041,9 @@ const equalityPrimitives = (): readonly Primitive[] => {
             const arm = c.tag; // "lessThan" | "equalTo" | "greaterThan"
             return right(tInject("hydra.util.Comparison", arm, { tag: "unit" } as never));
           }))),
+    prim("hydra.lib.functions.absurd", scheme(tyFn(tyVoid, a), ["a"]),
+      (_g, args) =>
+        bind(need(args, 0, "absurd"), (a0) => right(libFunctions.absurd(a0)))),
     prim("hydra.lib.functions.identity", scheme(tyFn(a, a), ["a"]),
       (_g, args) =>
         bind(need(args, 0, "identity"), (a0) => right(libFunctions.identity(a0)))),

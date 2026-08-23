@@ -43,4 +43,7 @@ haskellModuleMetadata = define "HaskellModuleMetadata" $
       T.boolean,
     "usesSet">:
       doc "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)" $
+      T.boolean,
+    "usesVoid">:
+      doc "Whether the module uses Data.Void (Void)" $
       T.boolean]

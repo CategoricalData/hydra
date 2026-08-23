@@ -457,6 +457,7 @@ object Libraries:
   private val tFloat64: Type = Type.literal(LiteralType.float(FloatType.float64))
   private val tDecimal: Type = Type.literal(LiteralType.decimal)
   private val tUnit: Type = Type.unit
+  private val tVoid: Type = Type.void
   private val tComparison: Type = Type.variable("hydra.util.Comparison")
 
   private def tScheme(vars: Seq[String], t: Type): TypeScheme = TypeScheme(vars, t, Map.empty)
@@ -534,6 +535,8 @@ object Libraries:
     val x = tVar("x")
     val xPlain = Seq(("x", Seq.empty))
     Map(
+      hydra.lib.functions.absurd.name -> mkPrimImpl(hydra.lib.functions.absurd.name, tSchemeConstrained(xPlain, tFun(tVoid, x)),
+        impl1(_ => throw new IllegalStateException("hydra.lib.functions.absurd: void has no inhabitants"))),
       hydra.lib.functions.identity.name -> mkPrimImpl(hydra.lib.functions.identity.name, tSchemeConstrained(xPlain, tFun(x, x)),
         impl1(a => a)),
     )

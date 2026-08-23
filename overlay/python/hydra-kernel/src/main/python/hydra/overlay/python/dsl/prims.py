@@ -590,6 +590,15 @@ def variable(v: str) -> TermCoder[Term]:
     )
 
 
+def void() -> TermCoder[Term]:
+    """TermCoder for the void type. Never legitimately exercised: void has no inhabitants."""
+    return TermCoder(
+        type=types.void(),
+        encode=lambda cx, g, t: Right(t),
+        decode=lambda cx, t: Right(t)
+    )
+
+
 # Primitive constructors
 
 def prim0(

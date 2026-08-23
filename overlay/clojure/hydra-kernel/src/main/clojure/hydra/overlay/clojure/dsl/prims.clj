@@ -388,6 +388,14 @@
    (fn [cx g t] (list :right t))
    (fn [cx t] (list :right t))))
 
+(defn tc-void
+  "TermCoder for the void type. Never legitimately exercised: void has no inhabitants."
+  []
+  (->hydra_graph_term_coder
+   (list :void nil)
+   (fn [cx g t] (list :right t))
+   (fn [cx t] (list :right t))))
+
 ;; Term/variable passthrough coders
 
 (defn tc-variable
