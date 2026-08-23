@@ -852,7 +852,7 @@ literalToExpr = define "literalToExpr" $
       TS._Literal_null>>: constant $ Serialization.cst @@ string "null",
       TS._Literal_undefined>>: constant $ Serialization.cst @@ string "undefined",
       TS._Literal_bigInt>>: lambda "n" $
-        Serialization.cst @@ (Strings.concat2 (Literals.showBigint $ var "n") (string "n")),
+        Serialization.cst @@ (Strings.concat2 (Literals.printBigint $ var "n") (string "n")),
       TS._Literal_template>>: lambda "t" $ templateLiteralToExpr @@ var "t"]
 
 memberExpressionToExpr :: TypedTermDefinition (TS.MemberExpression -> Expr)
@@ -957,9 +957,9 @@ numericLiteralToExpr = define "numericLiteralToExpr" $
   lambda "n" $
     match TS._NumericLiteral (var "n") Nothing [
       TS._NumericLiteral_integer>>: lambda "i" $
-        Serialization.cst @@ (Literals.showInt64 $ var "i"),
+        Serialization.cst @@ (Literals.printInt64 $ var "i"),
       TS._NumericLiteral_float>>: lambda "f" $
-        Serialization.cst @@ (Literals.showFloat64 $ var "f")]
+        Serialization.cst @@ (Literals.printFloat64 $ var "f")]
 
 
 -- ============================================================================
@@ -1283,7 +1283,7 @@ typeExpressionToString = define "typeExpressionToString" $
               "i">: Pairs.first $ var "acc",
               "soFar">: Pairs.second $ var "acc",
               "this">: Strings.concat $ list [
-                string "_a", Literals.showInt32 (var "i"),
+                string "_a", Literals.printInt32 (var "i"),
                 string ": ",
                 typeExpressionToString @@ var "p"]] $
               pair

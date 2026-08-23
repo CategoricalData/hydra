@@ -296,7 +296,7 @@ jsonNumber = define "jsonNumber" $
              Optionals.match (var "fracPart") (string "") (reify Functions.identity) ++
              Optionals.match (var "expPart") (string "") (reify Functions.identity)) $
           Parsers.pure @@
-            (Json.valueNumber (Optionals.match (Literals.readDecimal (var "numStr")) (decimal 0) (reify Functions.identity)))))))
+            (Json.valueNumber (Optionals.match (Literals.parseDecimal (var "numStr")) (decimal 0) (reify Functions.identity)))))))
 
 -- | Parse a JSON escape character
 -- | Parse a JSON object

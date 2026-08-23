@@ -1270,7 +1270,7 @@ public class Serde {
                 hydra.dsl.Serialization.cst(
                     apply(
                         ref(Serde.javaFloatLiteralText),
-                        Literals.showFloat64(
+                        Literals.printFloat64(
                             apply(unwrap(FloatingPointLiteral.TYPE_), var("fl"))))));
 
     public static final Def floatingPointTypeToExpr = def("floatingPointTypeToExpr")
@@ -1417,7 +1417,7 @@ public class Serde {
                             string("L"),
                             string(""))),
                     hydra.dsl.Serialization.cst(
-                        Strings.concat2(Literals.showBigint(var("i")), var("suffix")))));
+                        Strings.concat2(Literals.printBigint(var("i")), var("suffix")))));
 
     public static final Def integralTypeToExpr = def("integralTypeToExpr")
         .lam("t")

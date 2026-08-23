@@ -104,7 +104,7 @@ applicationToExpr = define "applicationToExpr" $
               termToExpr @@ (project C._IdentArg C._IdentArg_term @@ var "ia")])],
           C._Arg_natural>>: lambda "na2" $ lets [
             "v">: unwrap C._Natural @@ (project C._NaturalArg C._NaturalArg_natural @@ var "na2")] $
-            Serialization.cst @@ (Literals.showBigint (var "v")),
+            Serialization.cst @@ (Literals.printBigint (var "v")),
           C._Arg_term>>: lambda "t1" $ term1ToExpr @@ var "t1"])
         (project C._NormalApplication C._NormalApplication_rhs @@ var "na")],
     C._Application_annotated>>: lambda "aa" $ sp [
@@ -396,7 +396,7 @@ pattern0ToExpr = define "pattern0ToExpr" $
         Lists.map (lambda "p2" $ patternToExpr @@ var "p2") (var "ps")),
     C._Pattern0_number>>: lambda "n" $ lets [
       "v">: unwrap C._Number @@ var "n"] $
-      Serialization.cst @@ (Literals.showFloat64 (var "v")),
+      Serialization.cst @@ (Literals.printFloat64 (var "v")),
     C._Pattern0_string>>: lambda "s" $ sp [
       kw "\"", Serialization.cst @@ (unwrap C._String @@ var "s"), kw "\""]]
 
@@ -576,7 +576,7 @@ term0ToExpr = define "term0ToExpr" $
       match C._PrimitiveNotations (var "pn") Nothing [
         C._PrimitiveNotations_number>>: lambda "n" $ lets [
           "v">: unwrap C._Number @@ var "n"] $
-          Serialization.cst @@ (Literals.showFloat64 (var "v")),
+          Serialization.cst @@ (Literals.printFloat64 (var "v")),
         C._PrimitiveNotations_string>>: lambda "s2" $
           sp [kw "\"", Serialization.cst @@ (unwrap C._String @@ var "s2"), kw "\""]],
     C._Term0_evar>>: lambda "ev" $ kw "?evar",

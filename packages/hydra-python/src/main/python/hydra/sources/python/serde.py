@@ -1183,16 +1183,16 @@ def _number_to_expr():
         _ty("Number"), var("num"), None_(),
         [
             field("float",
-                lam("f", hydra.dsl.serialization.cst(_local("pythonFloatLiteralText")(hydra.dsl.lib.literals.show_float64(var("f"))))),
+                lam("f", hydra.dsl.serialization.cst(_local("pythonFloatLiteralText")(hydra.dsl.lib.literals.print_float64(var("f"))))),
             ),
             field("imaginary",
                 lam("f", hydra.dsl.serialization.cst(Strings.concat2(
-                    _local("pythonFloatLiteralText")(hydra.dsl.lib.literals.show_float64(var("f"))),
+                    _local("pythonFloatLiteralText")(hydra.dsl.lib.literals.print_float64(var("f"))),
                     string("j"),
                 ))),
             ),
             field("integer",
-                lam("i", hydra.dsl.serialization.cst(hydra.dsl.lib.literals.show_bigint(var("i")))),
+                lam("i", hydra.dsl.serialization.cst(hydra.dsl.lib.literals.print_bigint(var("i")))),
             ),
         ],
     )

@@ -112,8 +112,8 @@ int64ToBigint :: Int64 -> Integer
 int64ToBigint = fromIntegral
 
 -- | Parse a string to a bigint (Integer).
-readBigint :: String -> Maybe Integer
-readBigint s = readMaybe s :: Maybe Integer
+parseBigint :: String -> Maybe Integer
+parseBigint s = readMaybe s :: Maybe Integer
 
 -- | Parse a string to a boolean.
 parseBoolean :: String -> Maybe Bool
@@ -122,36 +122,36 @@ parseBoolean s = if s == "true" then Just True
   else Nothing
 
 -- | Parse a string to a decimal (Scientific).
-readDecimal :: String -> Maybe Scientific
-readDecimal s = readMaybe s :: Maybe Scientific
+parseDecimal :: String -> Maybe Scientific
+parseDecimal s = readMaybe s :: Maybe Scientific
 
 -- | Parse a string to a float32 (Float).
-readFloat32 :: String -> Maybe Float
-readFloat32 s = readMaybe s :: Maybe Float
+parseFloat32 :: String -> Maybe Float
+parseFloat32 s = readMaybe s :: Maybe Float
 
 -- | Parse a string to a float64 (Double).
-readFloat64 :: String -> Maybe Double
-readFloat64 s = readMaybe s :: Maybe Double
-
--- | Parse a string to an int8 (-128 to 127).
-readInt8 :: String -> Maybe Int8
-readInt8 s = do
-  n <- readMaybe s :: Maybe Integer
-  if n >= -128 && n <= 127 then Just (fromIntegral n) else Nothing
+parseFloat64 :: String -> Maybe Double
+parseFloat64 s = readMaybe s :: Maybe Double
 
 -- | Parse a string to an int16 (-32768 to 32767).
-readInt16 :: String -> Maybe Int16
-readInt16 s = do
+parseInt16 :: String -> Maybe Int16
+parseInt16 s = do
   n <- readMaybe s :: Maybe Integer
   if n >= -32768 && n <= 32767 then Just (fromIntegral n) else Nothing
 
 -- | Parse a string to an int32.
-readInt32 :: String -> Maybe Int
-readInt32 s = readMaybe s :: Maybe Int
+parseInt32 :: String -> Maybe Int
+parseInt32 s = readMaybe s :: Maybe Int
 
 -- | Parse a string to an int64.
-readInt64 :: String -> Maybe Int64
-readInt64 s = readMaybe s :: Maybe Int64
+parseInt64 :: String -> Maybe Int64
+parseInt64 s = readMaybe s :: Maybe Int64
+
+-- | Parse a string to an int8 (-128 to 127).
+parseInt8 :: String -> Maybe Int8
+parseInt8 s = do
+  n <- readMaybe s :: Maybe Integer
+  if n >= -128 && n <= 127 then Just (fromIntegral n) else Nothing
 
 -- | Parse a string literal.
 parseString :: String -> Maybe String
@@ -159,35 +159,35 @@ parseString s = readMaybe s :: Maybe String
 
 -- Note: Hydra uses wider signed types to represent unsigned values without overflow
 -- Uint8 -> Int16, Uint16 -> Int, Uint32 -> Int64, Uint64 -> Integer
--- The read functions parse as unsigned and validate the range
-
--- | Parse a string to a uint8 (0 to 255).
-readUint8 :: String -> Maybe Int16
-readUint8 s = do
-  n <- readMaybe s :: Maybe Integer
-  if n >= 0 && n <= 255 then Just (fromIntegral n) else Nothing
+-- The parse functions parse as unsigned and validate the range
 
 -- | Parse a string to a uint16 (0 to 65535).
-readUint16 :: String -> Maybe Int
-readUint16 s = do
+parseUint16 :: String -> Maybe Int
+parseUint16 s = do
   n <- readMaybe s :: Maybe Integer
   if n >= 0 && n <= 65535 then Just (fromIntegral n) else Nothing
 
 -- | Parse a string to a uint32 (0 to 4294967295).
-readUint32 :: String -> Maybe Int64
-readUint32 s = do
+parseUint32 :: String -> Maybe Int64
+parseUint32 s = do
   n <- readMaybe s :: Maybe Integer
   if n >= 0 && n <= 4294967295 then Just (fromIntegral n) else Nothing
 
 -- | Parse a string to a uint64 (0 to 18446744073709551615).
-readUint64 :: String -> Maybe Integer
-readUint64 s = do
+parseUint64 :: String -> Maybe Integer
+parseUint64 s = do
   n <- readMaybe s :: Maybe Integer
   if n >= 0 && n <= 18446744073709551615 then Just n else Nothing
 
+-- | Parse a string to a uint8 (0 to 255).
+parseUint8 :: String -> Maybe Int16
+parseUint8 s = do
+  n <- readMaybe s :: Maybe Integer
+  if n >= 0 && n <= 255 then Just (fromIntegral n) else Nothing
+
 -- | Convert a bigint (Integer) to string.
-showBigint :: Integer -> String
-showBigint = show
+printBigint :: Integer -> String
+printBigint = show
 
 -- | Convert a boolean to string.
 printBoolean :: Bool -> String
@@ -198,52 +198,52 @@ printBoolean b = case b of
 -- | Convert a decimal (Scientific) to string. Uses Scientific's default format
 --   (regular notation for small-magnitude values; scientific notation for very
 --   large or very small).
-showDecimal :: Scientific -> String
-showDecimal = show
+printDecimal :: Scientific -> String
+printDecimal = show
 
 -- | Convert a float32 (Float) to string.
-showFloat32 :: Float -> String
-showFloat32 = show
+printFloat32 :: Float -> String
+printFloat32 = show
 
 -- | Convert a float64 (Double) to string.
-showFloat64 :: Double -> String
-showFloat64 = show
-
--- | Convert an int8 to string.
-showInt8 :: Int8 -> String
-showInt8 = show
+printFloat64 :: Double -> String
+printFloat64 = show
 
 -- | Convert an int16 to string.
-showInt16 :: Int16 -> String
-showInt16 = show
+printInt16 :: Int16 -> String
+printInt16 = show
 
 -- | Convert an int32 to string.
-showInt32 :: Int -> String
-showInt32 = show
+printInt32 :: Int -> String
+printInt32 = show
 
 -- | Convert an int64 to string.
-showInt64 :: Int64 -> String
-showInt64 = show
+printInt64 :: Int64 -> String
+printInt64 = show
+
+-- | Convert an int8 to string.
+printInt8 :: Int8 -> String
+printInt8 = show
 
 -- | Convert a string to a quoted string representation.
 printString :: String -> String
 printString = show
 
--- | Convert a uint8 to string.
-showUint8 :: Int16 -> String
-showUint8 = show
-
 -- | Convert a uint16 to string.
-showUint16 :: Int -> String
-showUint16 = show
+printUint16 :: Int -> String
+printUint16 = show
 
 -- | Convert a uint32 to string.
-showUint32 :: Int64 -> String
-showUint32 = show
+printUint32 :: Int64 -> String
+printUint32 = show
 
 -- | Convert a uint64 to string.
-showUint64 :: Integer -> String
-showUint64 = show
+printUint64 :: Integer -> String
+printUint64 = show
+
+-- | Convert a uint8 to string.
+printUint8 :: Int16 -> String
+printUint8 = show
 
 -- | Convert string to binary by base64 decoding.
 -- Returns an empty ByteString if decoding fails.

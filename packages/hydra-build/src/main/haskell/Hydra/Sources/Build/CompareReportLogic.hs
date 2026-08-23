@@ -184,9 +184,9 @@ renderReport = define "renderReport" $
   "total" <~ Pairs.second (Pairs.second (var "report")) $
   "rowLines" <~ Lists.map ("r" ~> renderRow @@ var "r") (var "rows") $
   "summary" <~ Strings.concat (list [
-      Literals.showInt32 (var "byteEqCount"),
+      Literals.printInt32 (var "byteEqCount"),
       string "/",
-      Literals.showInt32 (var "total"),
+      Literals.printInt32 (var "total"),
       string " byte-identical"]) $
   Strings.join (string "\n") (Lists.concat (list [var "rowLines", list [var "summary"]]))
 
@@ -203,7 +203,7 @@ renderRow = define "renderRow" $
   Logic.ifElse (Equality.equal (var "status") (string "differ"))
     (Strings.concat (list [
         var "name", string ": ", var "status",
-        string " (", Literals.showInt32 (var "diffLines"), string " lines differ)"]))
+        string " (", Literals.printInt32 (var "diffLines"), string " lines differ)"]))
     (Strings.concat (list [var "name", string ": ", var "status"]))
 
 -- | Strip a trailing @.json@ from a file entry name, yielding the module name.

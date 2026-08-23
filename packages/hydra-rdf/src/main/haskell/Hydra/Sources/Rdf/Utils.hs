@@ -162,59 +162,59 @@ encodeLiteral = define "encodeLiteral" $
         match _FloatValue (var "f") Nothing [
           _FloatValue_float32>>: lambda "v" $
             record Rdf._Literal [
-              Rdf._Literal_lexicalForm>>: Literals.showFloat32 (var "v"),
+              Rdf._Literal_lexicalForm>>: Literals.printFloat32 (var "v"),
               Rdf._Literal_datatypeIri>>: xmlSchemaDatatypeIri @@ string "float",
               Rdf._Literal_languageTag>>: nothing],
           _FloatValue_float64>>: lambda "v" $
             record Rdf._Literal [
-              Rdf._Literal_lexicalForm>>: Literals.showFloat64 (var "v"),
+              Rdf._Literal_lexicalForm>>: Literals.printFloat64 (var "v"),
               Rdf._Literal_datatypeIri>>: xmlSchemaDatatypeIri @@ string "double",
               Rdf._Literal_languageTag>>: nothing]],
       _Literal_integer>>: lambda "i" $
         match _IntegerValue (var "i") Nothing [
           _IntegerValue_bigint>>: lambda "v" $
             record Rdf._Literal [
-              Rdf._Literal_lexicalForm>>: Literals.showBigint (var "v"),
+              Rdf._Literal_lexicalForm>>: Literals.printBigint (var "v"),
               Rdf._Literal_datatypeIri>>: xmlSchemaDatatypeIri @@ string "integer",
               Rdf._Literal_languageTag>>: nothing],
           _IntegerValue_int8>>: lambda "v" $
             record Rdf._Literal [
-              Rdf._Literal_lexicalForm>>: Literals.showInt8 (var "v"),
+              Rdf._Literal_lexicalForm>>: Literals.printInt8 (var "v"),
               Rdf._Literal_datatypeIri>>: xmlSchemaDatatypeIri @@ string "byte",
               Rdf._Literal_languageTag>>: nothing],
           _IntegerValue_int16>>: lambda "v" $
             record Rdf._Literal [
-              Rdf._Literal_lexicalForm>>: Literals.showInt16 (var "v"),
+              Rdf._Literal_lexicalForm>>: Literals.printInt16 (var "v"),
               Rdf._Literal_datatypeIri>>: xmlSchemaDatatypeIri @@ string "short",
               Rdf._Literal_languageTag>>: nothing],
           _IntegerValue_int32>>: lambda "v" $
             record Rdf._Literal [
-              Rdf._Literal_lexicalForm>>: Literals.showInt32 (var "v"),
+              Rdf._Literal_lexicalForm>>: Literals.printInt32 (var "v"),
               Rdf._Literal_datatypeIri>>: xmlSchemaDatatypeIri @@ string "int",
               Rdf._Literal_languageTag>>: nothing],
           _IntegerValue_int64>>: lambda "v" $
             record Rdf._Literal [
-              Rdf._Literal_lexicalForm>>: Literals.showInt64 (var "v"),
+              Rdf._Literal_lexicalForm>>: Literals.printInt64 (var "v"),
               Rdf._Literal_datatypeIri>>: xmlSchemaDatatypeIri @@ string "long",
               Rdf._Literal_languageTag>>: nothing],
           _IntegerValue_uint8>>: lambda "v" $
             record Rdf._Literal [
-              Rdf._Literal_lexicalForm>>: Literals.showUint8 (var "v"),
+              Rdf._Literal_lexicalForm>>: Literals.printUint8 (var "v"),
               Rdf._Literal_datatypeIri>>: xmlSchemaDatatypeIri @@ string "unsignedByte",
               Rdf._Literal_languageTag>>: nothing],
           _IntegerValue_uint16>>: lambda "v" $
             record Rdf._Literal [
-              Rdf._Literal_lexicalForm>>: Literals.showUint16 (var "v"),
+              Rdf._Literal_lexicalForm>>: Literals.printUint16 (var "v"),
               Rdf._Literal_datatypeIri>>: xmlSchemaDatatypeIri @@ string "unsignedShort",
               Rdf._Literal_languageTag>>: nothing],
           _IntegerValue_uint32>>: lambda "v" $
             record Rdf._Literal [
-              Rdf._Literal_lexicalForm>>: Literals.showUint32 (var "v"),
+              Rdf._Literal_lexicalForm>>: Literals.printUint32 (var "v"),
               Rdf._Literal_datatypeIri>>: xmlSchemaDatatypeIri @@ string "unsignedInt",
               Rdf._Literal_languageTag>>: nothing],
           _IntegerValue_uint64>>: lambda "v" $
             record Rdf._Literal [
-              Rdf._Literal_lexicalForm>>: Literals.showUint64 (var "v"),
+              Rdf._Literal_lexicalForm>>: Literals.printUint64 (var "v"),
               Rdf._Literal_datatypeIri>>: xmlSchemaDatatypeIri @@ string "unsignedLong",
               Rdf._Literal_languageTag>>: nothing]],
       _Literal_string>>: lambda "s" $
@@ -271,7 +271,7 @@ nextBlankNode = define "nextBlankNode" $
   lambda "counter" $
     pair
       (inject Rdf._Resource Rdf._Resource_bnode
-        (wrap Rdf._BlankNode (Strings.concat2 (string "b") (Literals.showInt32 (var "counter")))))
+        (wrap Rdf._BlankNode (Strings.concat2 (string "b") (Literals.printInt32 (var "counter")))))
       (Math.add (var "counter") (int32 1))
 
 -- | Construct a property IRI from a record name and field name

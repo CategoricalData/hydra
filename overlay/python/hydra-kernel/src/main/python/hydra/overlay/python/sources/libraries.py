@@ -1163,114 +1163,114 @@ def register_literals_primitives() -> dict[Name, Primitive]:
     )
 
     # Read primitives
-    primitives[def_literals.read_bigint.name] = prims.prim1(
-        def_literals.read_bigint.name, literals.read_bigint, [],
+    primitives[def_literals.parse_bigint.name] = prims.prim1(
+        def_literals.parse_bigint.name, literals.parse_bigint, [],
         prims.string(), prims.optional(prims.bigint())
     )
     primitives[def_literals.parse_boolean.name] = prims.prim1(
         def_literals.parse_boolean.name, literals.parse_boolean, [],
         prims.string(), prims.optional(prims.boolean())
     )
-    primitives[def_literals.read_decimal.name] = prims.prim1(
-        def_literals.read_decimal.name, literals.read_decimal, [],
+    primitives[def_literals.parse_decimal.name] = prims.prim1(
+        def_literals.parse_decimal.name, literals.parse_decimal, [],
         prims.string(), prims.optional(prims.decimal())
     )
-    primitives[def_literals.read_float32.name] = prims.prim1(
-        def_literals.read_float32.name, literals.read_float32, [],
+    primitives[def_literals.parse_float32.name] = prims.prim1(
+        def_literals.parse_float32.name, literals.parse_float32, [],
         prims.string(), prims.optional(prims.float32())
     )
-    primitives[def_literals.read_float64.name] = prims.prim1(
-        def_literals.read_float64.name, literals.read_float64, [],
+    primitives[def_literals.parse_float64.name] = prims.prim1(
+        def_literals.parse_float64.name, literals.parse_float64, [],
         prims.string(), prims.optional(prims.float64())
     )
-    primitives[def_literals.read_int8.name] = prims.prim1(
-        def_literals.read_int8.name, literals.read_int8, [],
+    primitives[def_literals.parse_int8.name] = prims.prim1(
+        def_literals.parse_int8.name, literals.parse_int8, [],
         prims.string(), prims.optional(prims.int8())
     )
-    primitives[def_literals.read_int16.name] = prims.prim1(
-        def_literals.read_int16.name, literals.read_int16, [],
+    primitives[def_literals.parse_int16.name] = prims.prim1(
+        def_literals.parse_int16.name, literals.parse_int16, [],
         prims.string(), prims.optional(prims.int16())
     )
-    primitives[def_literals.read_int32.name] = prims.prim1(
-        def_literals.read_int32.name, literals.read_int32, [],
+    primitives[def_literals.parse_int32.name] = prims.prim1(
+        def_literals.parse_int32.name, literals.parse_int32, [],
         prims.string(), prims.optional(prims.int32())
     )
-    primitives[def_literals.read_int64.name] = prims.prim1(
-        def_literals.read_int64.name, literals.read_int64, [],
+    primitives[def_literals.parse_int64.name] = prims.prim1(
+        def_literals.parse_int64.name, literals.parse_int64, [],
         prims.string(), prims.optional(prims.int64())
     )
     primitives[def_literals.parse_string.name] = prims.prim1(
         def_literals.parse_string.name, literals.parse_string, [],
         prims.string(), prims.optional(prims.string())
     )
-    primitives[def_literals.read_uint8.name] = prims.prim1(
-        def_literals.read_uint8.name, literals.read_uint8, [],
+    primitives[def_literals.parse_uint8.name] = prims.prim1(
+        def_literals.parse_uint8.name, literals.parse_uint8, [],
         prims.string(), prims.optional(prims.uint8())
     )
-    primitives[def_literals.read_uint16.name] = prims.prim1(
-        def_literals.read_uint16.name, literals.read_uint16, [],
+    primitives[def_literals.parse_uint16.name] = prims.prim1(
+        def_literals.parse_uint16.name, literals.parse_uint16, [],
         prims.string(), prims.optional(prims.uint16())
     )
-    primitives[def_literals.read_uint32.name] = prims.prim1(
-        def_literals.read_uint32.name, literals.read_uint32, [],
+    primitives[def_literals.parse_uint32.name] = prims.prim1(
+        def_literals.parse_uint32.name, literals.parse_uint32, [],
         prims.string(), prims.optional(prims.uint32())
     )
-    primitives[def_literals.read_uint64.name] = prims.prim1(
-        def_literals.read_uint64.name, literals.read_uint64, [],
+    primitives[def_literals.parse_uint64.name] = prims.prim1(
+        def_literals.parse_uint64.name, literals.parse_uint64, [],
         prims.string(), prims.optional(prims.uint64())
     )
 
     # Show primitives
-    primitives[def_literals.show_bigint.name] = prims.prim1(
-        def_literals.show_bigint.name, literals.show_bigint, [],
+    primitives[def_literals.print_bigint.name] = prims.prim1(
+        def_literals.print_bigint.name, literals.print_bigint, [],
         prims.bigint(), prims.string()
     )
     primitives[def_literals.print_boolean.name] = prims.prim1(
         def_literals.print_boolean.name, literals.print_boolean, [],
         prims.boolean(), prims.string()
     )
-    primitives[def_literals.show_decimal.name] = prims.prim1(
-        def_literals.show_decimal.name, literals.show_decimal, [],
+    primitives[def_literals.print_decimal.name] = prims.prim1(
+        def_literals.print_decimal.name, literals.print_decimal, [],
         prims.decimal(), prims.string()
     )
-    primitives[def_literals.show_float32.name] = prims.prim1(
-        def_literals.show_float32.name, literals.show_float32, [],
+    primitives[def_literals.print_float32.name] = prims.prim1(
+        def_literals.print_float32.name, literals.print_float32, [],
         prims.float32(), prims.string()
     )
-    primitives[def_literals.show_float64.name] = prims.prim1(
-        def_literals.show_float64.name, literals.show_float64, [],
+    primitives[def_literals.print_float64.name] = prims.prim1(
+        def_literals.print_float64.name, literals.print_float64, [],
         prims.float64(), prims.string()
     )
-    primitives[def_literals.show_int8.name] = prims.prim1(
-        def_literals.show_int8.name, literals.show_int8, [],
+    primitives[def_literals.print_int8.name] = prims.prim1(
+        def_literals.print_int8.name, literals.print_int8, [],
         prims.int8(), prims.string()
     )
-    primitives[def_literals.show_int16.name] = prims.prim1(
-        def_literals.show_int16.name, literals.show_int16, [],
+    primitives[def_literals.print_int16.name] = prims.prim1(
+        def_literals.print_int16.name, literals.print_int16, [],
         prims.int16(), prims.string()
     )
-    primitives[def_literals.show_int32.name] = prims.prim1(
-        def_literals.show_int32.name, literals.show_int32, [],
+    primitives[def_literals.print_int32.name] = prims.prim1(
+        def_literals.print_int32.name, literals.print_int32, [],
         prims.int32(), prims.string()
     )
-    primitives[def_literals.show_int64.name] = prims.prim1(
-        def_literals.show_int64.name, literals.show_int64, [],
+    primitives[def_literals.print_int64.name] = prims.prim1(
+        def_literals.print_int64.name, literals.print_int64, [],
         prims.int64(), prims.string()
     )
-    primitives[def_literals.show_uint8.name] = prims.prim1(
-        def_literals.show_uint8.name, literals.show_uint8, [],
+    primitives[def_literals.print_uint8.name] = prims.prim1(
+        def_literals.print_uint8.name, literals.print_uint8, [],
         prims.uint8(), prims.string()
     )
-    primitives[def_literals.show_uint16.name] = prims.prim1(
-        def_literals.show_uint16.name, literals.show_uint16, [],
+    primitives[def_literals.print_uint16.name] = prims.prim1(
+        def_literals.print_uint16.name, literals.print_uint16, [],
         prims.uint16(), prims.string()
     )
-    primitives[def_literals.show_uint32.name] = prims.prim1(
-        def_literals.show_uint32.name, literals.show_uint32, [],
+    primitives[def_literals.print_uint32.name] = prims.prim1(
+        def_literals.print_uint32.name, literals.print_uint32, [],
         prims.uint32(), prims.string()
     )
-    primitives[def_literals.show_uint64.name] = prims.prim1(
-        def_literals.show_uint64.name, literals.show_uint64, [],
+    primitives[def_literals.print_uint64.name] = prims.prim1(
+        def_literals.print_uint64.name, literals.print_uint64, [],
         prims.uint64(), prims.string()
     )
     primitives[def_literals.print_string.name] = prims.prim1(

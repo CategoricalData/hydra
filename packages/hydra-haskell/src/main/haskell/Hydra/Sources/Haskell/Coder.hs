@@ -305,7 +305,7 @@ encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
     "toAlt">: "fieldMap" ~> "field" ~> lets [
       "fn">: Core.caseAlternativeName $ var "field",
       "fun'">: Core.caseAlternativeHandler $ var "field",
-      "v0">: Strings.concat2 (string "v") (Literals.showInt32 $ var "depth"),
+      "v0">: Strings.concat2 (string "v") (Literals.printInt32 $ var "depth"),
       "raw">: MetaTerms.apply (var "fun'") (Core.termVariable $ Core.name $ var "v0"),
       "rhsTerm">: Dependencies.simplifyTerm @@ var "raw",
       "v1">: Logic.ifElse (Variables.isFreeVariableInTerm @@ (wrap _Name $ var "v0") @@ var "rhsTerm")
@@ -372,7 +372,7 @@ encodeLiteral = haskellCoderDefinition "encodeLiteral" $
         right $ HaskellUtilsSource.hsapp
           @@ (HaskellUtilsSource.hsvar @@ string "Literals.stringToDecimal")
           @@ (HaskellUtilsSource.hslit @@ (inject H._Literal H._Literal_string
-              $ Literals.showDecimal $ var "d")),
+              $ Literals.printDecimal $ var "d")),
       _Literal_float>>: "fv" ~>
         match _FloatValue (var "fv") Nothing [
           _FloatValue_float32>>: "f" ~>

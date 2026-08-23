@@ -144,11 +144,11 @@ module_ = Module {
      toDefinition classItem,
      toDefinition escapeClassChar,
      toDefinition escapeLiteral,
+     toDefinition printCodePoint,
      toDefinition printRegex,
      toDefinition quantified,
      toDefinition quantifier,
-     toDefinition sequence',
-     toDefinition showCodePoint]
+     toDefinition sequence']
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -157,8 +157,8 @@ cp :: Char -> TypedTerm Int
 cp c = int32 (fromIntegral (fromEnum c))
 
 -- | Render a single codepoint as a one-character string.
-showCodePoint :: TypedTermDefinition (Int -> String)
-showCodePoint = define "showCodePoint" $
+printCodePoint :: TypedTermDefinition (Int -> String)
+printCodePoint = define "printCodePoint" $
   doc "Render a single Unicode code point as a one-character string." $
   "c" ~> Strings.fromList (list [var "c"])
 
@@ -177,8 +177,8 @@ escapeLiteral = define "escapeLiteral" $
           cp '.', cp '^', cp '$', cp '*', cp '+', cp '?',
           cp '(', cp ')', cp '[', cp ']', cp '{', cp '}', cp '|', cp '\\'])] $
     Logic.ifElse (var "isMeta")
-      (Strings.concat2 (string "\\") (showCodePoint @@ var "c"))
-      (showCodePoint @@ var "c")
+      (Strings.concat2 (string "\\") (printCodePoint @@ var "c"))
+      (printCodePoint @@ var "c")
 
 -- | Escape a codepoint for inside a character class. Uniformly escape \ ] ^ - (option ii, no positional rules).
 escapeClassChar :: TypedTermDefinition (Int -> String)
@@ -193,8 +193,8 @@ escapeClassChar = define "escapeClassChar" $
         false
         (list [cp '\\', cp ']', cp '^', cp '-'])] $
     Logic.ifElse (var "isMeta")
-      (Strings.concat2 (string "\\") (showCodePoint @@ var "c"))
-      (showCodePoint @@ var "c")
+      (Strings.concat2 (string "\\") (printCodePoint @@ var "c"))
+      (printCodePoint @@ var "c")
 
 -- | Render a class item: a single (escaped) character, or a range from-to.
 classItem :: TypedTermDefinition (Term -> String)
@@ -246,14 +246,14 @@ quantifier = define "quantifier" $
       _Quantifier_zeroOrMore>>: constant (string "*"),
       _Quantifier_oneOrMore>>: constant (string "+"),
       _Quantifier_exactly>>: "n" ~> Strings.concat $ list [
-        string "{", Literals.showInt32 (var "n"), string "}"],
+        string "{", Literals.printInt32 (var "n"), string "}"],
       _Quantifier_atLeast>>: "n" ~> Strings.concat $ list [
-        string "{", Literals.showInt32 (var "n"), string ",}"],
+        string "{", Literals.printInt32 (var "n"), string ",}"],
       _Quantifier_range>>: "r" ~> Strings.concat $ list [
         string "{",
-        Literals.showInt32 (project _QuantifierRange _QuantifierRange_min @@ var "r"),
+        Literals.printInt32 (project _QuantifierRange _QuantifierRange_min @@ var "r"),
         string ",",
-        Literals.showInt32 (project _QuantifierRange _QuantifierRange_max @@ var "r"),
+        Literals.printInt32 (project _QuantifierRange _QuantifierRange_max @@ var "r"),
         string "}"]]
 
 -- | Render a quantified atom.

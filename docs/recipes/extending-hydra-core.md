@@ -364,7 +364,7 @@ typeOfEitherDef = define "typeOfEither" $
     "n" <~ Lists.length (var "typeArgs") $
     Logic.ifElse (Equality.equal (var "n") (int32 2))
       (right unit)
-      (Phantoms.left $ "either type requires 2 type arguments, got " ++ Literals.showInt32 (var "n"))) $
+      (Phantoms.left $ "either type requires 2 type arguments, got " ++ Literals.printInt32 (var "n"))) $
   Eithers.bind (var "checkLength") ("_" ~>
   Eithers.either_
     ("leftTerm" ~>

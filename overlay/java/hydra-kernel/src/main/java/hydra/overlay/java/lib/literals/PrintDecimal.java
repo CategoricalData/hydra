@@ -22,13 +22,13 @@ import hydra.overlay.java.util.Either;
 /**
  * Primitive function which converts a decimal (arbitrary-precision exact decimal) to its string representation.
  */
-public class ShowDecimal extends PrimitiveFunction {
+public class PrintDecimal extends PrimitiveFunction {
     /**
      * Returns the unique name identifying this primitive function.
-     * @return the function name "hydra.lib.literals.showDecimal"
+     * @return the function name "hydra.lib.literals.printDecimal"
      */
     public Name name() {
-        return hydra.lib.Literals.showDecimal().name;
+        return hydra.lib.Literals.printDecimal().name;
     }
 
     /**

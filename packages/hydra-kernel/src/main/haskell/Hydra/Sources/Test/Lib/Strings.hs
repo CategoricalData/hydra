@@ -58,13 +58,13 @@ allTests = define "allTests" $
     where
       -- Show functions for evalPair
       showInt32 :: TypedTerm (Int -> String)
-      showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
+      showInt32 = Phantoms.lambda "n" $ Literals.printInt32 (Phantoms.var "n")
       showBool :: TypedTerm (Bool -> String)
       showBool = Phantoms.lambda "b" $ Literals.printBoolean (Phantoms.var "b")
       showStringList :: TypedTerm ([String] -> String)
       showStringList = Phantoms.lambda "xs" $ Literals.printString (Strings.join (Phantoms.string ", ") (Phantoms.var "xs"))
       showIntList :: TypedTerm ([Int] -> String)
-      showIntList = Phantoms.lambda "xs" $ Strings.join (Phantoms.string ", ") (Lists.map (Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")) (Phantoms.var "xs"))
+      showIntList = Phantoms.lambda "xs" $ Strings.join (Phantoms.string ", ") (Lists.map (Phantoms.lambda "n" $ Literals.printInt32 (Phantoms.var "n")) (Phantoms.var "xs"))
 
       stringsConcat = subgroup "concat" [
         -- Basic functionality

@@ -146,11 +146,11 @@ module_ = Module {
      toDefinition classItem,
      toDefinition escapeClassChar,
      toDefinition escapeLiteral,
+     toDefinition printCodePoint,
      toDefinition printRegex,
      toDefinition quantified,
      toDefinition quantifier,
-     toDefinition sequence',
-     toDefinition showCodePoint]
+     toDefinition sequence']
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -158,8 +158,8 @@ define = definitionInModule module_
 cp :: Char -> TypedTerm Int
 cp c = int32 (fromIntegral (fromEnum c))
 
-showCodePoint :: TypedTermDefinition (Int -> String)
-showCodePoint = define "showCodePoint" $
+printCodePoint :: TypedTermDefinition (Int -> String)
+printCodePoint = define "printCodePoint" $
   doc "Render a single Unicode code point as a one-character string." $
   "c" ~> Strings.fromList (list [var "c"])
 
@@ -189,8 +189,8 @@ escapeLiteral = define "escapeLiteral" $
         (list [
           cp '.', cp '*', cp '+', cp '?', cp '[', cp ']', cp '^', cp '$', cp '\\'])] $
     Logic.ifElse (var "isMeta")
-      (Strings.concat2 (string "\\") (showCodePoint @@ var "c"))
-      (showCodePoint @@ var "c")
+      (Strings.concat2 (string "\\") (printCodePoint @@ var "c"))
+      (printCodePoint @@ var "c")
 
 -- Inside a character class, Emacs is POSIX-like: escape the class metacharacters \ ] ^ - uniformly.
 escapeClassChar :: TypedTermDefinition (Int -> String)
@@ -203,8 +203,8 @@ escapeClassChar = define "escapeClassChar" $
         false
         (list [cp '\\', cp ']', cp '^', cp '-'])] $
     Logic.ifElse (var "isMeta")
-      (Strings.concat2 (string "\\") (showCodePoint @@ var "c"))
-      (showCodePoint @@ var "c")
+      (Strings.concat2 (string "\\") (printCodePoint @@ var "c"))
+      (printCodePoint @@ var "c")
 
 classItem :: TypedTermDefinition (Term -> String)
 classItem = define "classItem" $
@@ -255,14 +255,14 @@ quantifier = define "quantifier" $
       _Quantifier_zeroOrMore>>: constant (string "*"),
       _Quantifier_oneOrMore>>: constant (string "+"),
       _Quantifier_exactly>>: "n" ~> Strings.concat $ list [
-        string "\\{", Literals.showInt32 (var "n"), string "\\}"],
+        string "\\{", Literals.printInt32 (var "n"), string "\\}"],
       _Quantifier_atLeast>>: "n" ~> Strings.concat $ list [
-        string "\\{", Literals.showInt32 (var "n"), string ",\\}"],
+        string "\\{", Literals.printInt32 (var "n"), string ",\\}"],
       _Quantifier_range>>: "r" ~> Strings.concat $ list [
         string "\\{",
-        Literals.showInt32 (project _QuantifierRange _QuantifierRange_min @@ var "r"),
+        Literals.printInt32 (project _QuantifierRange _QuantifierRange_min @@ var "r"),
         string ",",
-        Literals.showInt32 (project _QuantifierRange _QuantifierRange_max @@ var "r"),
+        Literals.printInt32 (project _QuantifierRange _QuantifierRange_max @@ var "r"),
         string "\\}"]]
 
 quantified :: TypedTermDefinition (Term -> String)

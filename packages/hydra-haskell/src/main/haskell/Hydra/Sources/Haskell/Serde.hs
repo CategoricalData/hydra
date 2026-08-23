@@ -383,18 +383,18 @@ lambdaExpressionToExpr = haskellSerdeDefinition "lambdaExpressionToExpr" $
 --    (var "e")) $
 --  Serialization.cst @@
 --    cases H._Literal (var "lit") Nothing [
---      H._Literal_char>>: lambda "c" $ Literals.printString $ Literals.showUint16 $ var "c", -- Simplified char handling
+--      H._Literal_char>>: lambda "c" $ Literals.printString $ Literals.printUint16 $ var "c", -- Simplified char handling
 --      H._Literal_double>>: "d" ~> var "parensIfNeg"
 --        @@ (Ordering.lt (var "d") (float64 0.0))
---        @@ (Literals.showFloat64 $ var "d"),
+--        @@ (Literals.printFloat64 $ var "d"),
 --      H._Literal_float>>: "f" ~> var "parensIfNeg"
 --        @@ (Ordering.lt (var "f") (float32 0.0))
---        @@ (Literals.showFloat32 $ var "f"),
+--        @@ (Literals.printFloat32 $ var "f"),
 --      H._Literal_int>>: "i" ~> var "parensIfNeg"
 --        @@ (Ordering.lt (var "i") (int32 0))
---        @@ (Literals.showInt32 $ var "i"),
+--        @@ (Literals.printInt32 $ var "i"),
 --
---      H._Literal_integer>>: lambda "i" $ Literals.showBigint $ var "i",
+--      H._Literal_integer>>: lambda "i" $ Literals.printBigint $ var "i",
 --      H._Literal_string>>: lambda "s" $ Literals.printString $ var "s"]
 
 -- KNOWN LIMITATION: when generating Haskell source from Double/Float values,
@@ -425,19 +425,19 @@ literalToExpr = haskellSerdeDefinition "literalToExpr" $
       @@ var "raw") $
   Serialization.cst @@
     match H._Literal (var "lit") Nothing [
-      H._Literal_char>>: "c" ~> Literals.printString $ Literals.showUint16 $ var "c",
+      H._Literal_char>>: "c" ~> Literals.printString $ Literals.printUint16 $ var "c",
       H._Literal_double>>: "d" ~> var "showFloat"
-        @@ (lambda "v" $ Literals.showFloat64 $ var "v")
+        @@ (lambda "v" $ Literals.printFloat64 $ var "v")
         @@ var "d",
       H._Literal_float>>: "f" ~> var "showFloat"
-        @@ (lambda "v" $ Literals.showFloat32 $ var "v")
+        @@ (lambda "v" $ Literals.printFloat32 $ var "v")
         @@ var "f",
       H._Literal_int>>: "i" ~> var "parensIfNeg"
         @@ (Ordering.lt (var "i") (int32 0))
-        @@ (Literals.showInt32 $ var "i"),
+        @@ (Literals.printInt32 $ var "i"),
       H._Literal_integer>>: "i" ~> var "parensIfNeg"
         @@ (Ordering.lt (var "i") (bigint 0))
-        @@ (Literals.showBigint $ var "i"),
+        @@ (Literals.printBigint $ var "i"),
       H._Literal_string>>: lambda "s" $ Literals.printString $ var "s"]
 
 localBindingToExpr :: TypedTermDefinition (H.LocalBinding -> Expr)

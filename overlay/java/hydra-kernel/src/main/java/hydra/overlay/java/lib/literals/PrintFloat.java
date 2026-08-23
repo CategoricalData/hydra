@@ -1,16 +1,16 @@
 package hydra.overlay.java.lib.literals;
 
 /**
- * Formats floating-point numbers to match Hydra's standard {@code show} output.
+ * Formats floating-point numbers to match Hydra's standard {@code print} output.
  * <p>
  * Uses decimal notation for values with absolute value in [0.1, 9999999],
  * and scientific notation (with lowercase 'e') otherwise.
  */
-class ShowFloat {
+class PrintFloat {
     /**
-     * Format a float to match Hydra's {@code show} for Float.
+     * Format a float to match Hydra's {@code print} for Float.
      */
-    static String showFloat32(float value) {
+    static String printFloat32(float value) {
         if (Float.isNaN(value)) return "NaN";
         if (Float.isInfinite(value)) return value > 0 ? "Infinity" : "-Infinity";
         if (value == 0.0f) {
@@ -27,9 +27,9 @@ class ShowFloat {
     }
 
     /**
-     * Format a double to match Hydra's {@code show} for Double.
+     * Format a double to match Hydra's {@code print} for Double.
      */
-    static String showFloat(double value) {
+    static String printFloat(double value) {
         if (Double.isNaN(value)) return "NaN";
         if (Double.isInfinite(value)) return value > 0 ? "Infinity" : "-Infinity";
         if (value == 0.0) {

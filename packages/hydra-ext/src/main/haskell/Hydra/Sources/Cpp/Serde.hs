@@ -811,7 +811,7 @@ integerLiteralToExpr = define "integerLiteralToExpr" $
   doc "Convert an integer literal to an expression" $
   lambda "i" $
     match Cpp._IntegerLiteral (var "i") Nothing [
-      Cpp._IntegerLiteral_decimal>>: lambda "n" $ Serialization.cst @@ (Literals.showBigint (var "n")),
+      Cpp._IntegerLiteral_decimal>>: lambda "n" $ Serialization.cst @@ (Literals.printBigint (var "n")),
       Cpp._IntegerLiteral_hexadecimal>>: lambda "h" $ Serialization.cst @@ (Strings.concat2 (string "0x") (var "h")),
       Cpp._IntegerLiteral_octal>>: lambda "o" $ Serialization.cst @@ (Strings.concat2 (string "0") (var "o")),
       Cpp._IntegerLiteral_binary>>: lambda "b" $ Serialization.cst @@ (Strings.concat2 (string "0b") (var "b"))]
@@ -905,7 +905,7 @@ lineDirectiveToExpr = define "lineDirectiveToExpr" $
     "lineNumber">: project Cpp._LineDirective Cpp._LineDirective_lineNumber @@ var "ld",
     "filename">: project Cpp._LineDirective Cpp._LineDirective_filename @@ var "ld"] $
     Serialization.spaceSep @@ (Lists.concat $ list [
-      list [Serialization.cst @@ string "#line", Serialization.cst @@ (Literals.showInt32 (var "lineNumber"))],
+      list [Serialization.cst @@ string "#line", Serialization.cst @@ (Literals.printInt32 (var "lineNumber"))],
       Optionals.match (var "filename") (list ([] :: [TypedTerm Expr])) (lambda "f" $ list [Serialization.cst @@ (Strings.concat $ list [string "\"", var "f", string "\""])])])
 
 literalToExpr :: TypedTermDefinition (Cpp.Literal -> Expr)
@@ -914,7 +914,7 @@ literalToExpr = define "literalToExpr" $
   lambda "l" $
     match Cpp._Literal (var "l") Nothing [
       Cpp._Literal_integer>>: lambda "i" $ integerLiteralToExpr @@ var "i",
-      Cpp._Literal_floating>>: lambda "f" $ Serialization.cst @@ (Literals.showFloat64 (unwrap Cpp._FloatingLiteral @@ var "f")),
+      Cpp._Literal_floating>>: lambda "f" $ Serialization.cst @@ (Literals.printFloat64 (unwrap Cpp._FloatingLiteral @@ var "f")),
       Cpp._Literal_character>>: lambda "c" $
         Serialization.cst @@ (Strings.concat $ list [string "'", unwrap Cpp._CharacterLiteral @@ var "c", string "'"]),
       Cpp._Literal_string>>: lambda "s" $

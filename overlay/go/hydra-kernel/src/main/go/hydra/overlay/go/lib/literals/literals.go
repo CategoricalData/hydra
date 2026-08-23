@@ -171,9 +171,9 @@ func ReadBigfloat(s string) **big.Float {
 	return &f
 }
 
-// ReadBigint parses a string as a big int.
-// hydra.lib.literals.readBigint : String -> Maybe Bigint
-func ReadBigint(s string) **big.Int {
+// ParseBigint parses a string as a big int.
+// hydra.lib.literals.parseBigint : String -> Maybe Bigint
+func ParseBigint(s string) **big.Int {
 	i, ok := new(big.Int).SetString(strings.TrimSpace(s), 10)
 	if !ok {
 		return nil
@@ -197,9 +197,9 @@ func ReadBoolean(s string) *bool {
 	}
 }
 
-// ReadFloat32 parses a string as a float32.
-// hydra.lib.literals.readFloat32 : String -> Maybe Float32
-func ReadFloat32(s string) *float32 {
+// ParseFloat32 parses a string as a float32.
+// hydra.lib.literals.parseFloat32 : String -> Maybe Float32
+func ParseFloat32(s string) *float32 {
 	f, err := strconv.ParseFloat(strings.TrimSpace(s), 32)
 	if err != nil {
 		return nil
@@ -208,9 +208,9 @@ func ReadFloat32(s string) *float32 {
 	return &f32
 }
 
-// ReadFloat64 parses a string as a float64.
-// hydra.lib.literals.readFloat64 : String -> Maybe Float64
-func ReadFloat64(s string) *float64 {
+// ParseFloat64 parses a string as a float64.
+// hydra.lib.literals.parseFloat64 : String -> Maybe Float64
+func ParseFloat64(s string) *float64 {
 	f, err := strconv.ParseFloat(strings.TrimSpace(s), 64)
 	if err != nil {
 		return nil
@@ -218,9 +218,9 @@ func ReadFloat64(s string) *float64 {
 	return &f
 }
 
-// ReadInt8 parses a string as an int8.
-// hydra.lib.literals.readInt8 : String -> Maybe Int8
-func ReadInt8(s string) *int8 {
+// ParseInt8 parses a string as an int8.
+// hydra.lib.literals.parseInt8 : String -> Maybe Int8
+func ParseInt8(s string) *int8 {
 	i, err := strconv.ParseInt(strings.TrimSpace(s), 10, 8)
 	if err != nil {
 		return nil
@@ -229,9 +229,9 @@ func ReadInt8(s string) *int8 {
 	return &i8
 }
 
-// ReadInt16 parses a string as an int16.
-// hydra.lib.literals.readInt16 : String -> Maybe Int16
-func ReadInt16(s string) *int16 {
+// ParseInt16 parses a string as an int16.
+// hydra.lib.literals.parseInt16 : String -> Maybe Int16
+func ParseInt16(s string) *int16 {
 	i, err := strconv.ParseInt(strings.TrimSpace(s), 10, 16)
 	if err != nil {
 		return nil
@@ -240,9 +240,9 @@ func ReadInt16(s string) *int16 {
 	return &i16
 }
 
-// ReadInt32 parses a string as an int32.
-// hydra.lib.literals.readInt32 : String -> Maybe Int32
-func ReadInt32(s string) *int32 {
+// ParseInt32 parses a string as an int32.
+// hydra.lib.literals.parseInt32 : String -> Maybe Int32
+func ParseInt32(s string) *int32 {
 	i, err := strconv.ParseInt(strings.TrimSpace(s), 10, 32)
 	if err != nil {
 		return nil
@@ -251,9 +251,9 @@ func ReadInt32(s string) *int32 {
 	return &i32
 }
 
-// ReadInt64 parses a string as an int64.
-// hydra.lib.literals.readInt64 : String -> Maybe Int64
-func ReadInt64(s string) *int64 {
+// ParseInt64 parses a string as an int64.
+// hydra.lib.literals.parseInt64 : String -> Maybe Int64
+func ParseInt64(s string) *int64 {
 	i, err := strconv.ParseInt(strings.TrimSpace(s), 10, 64)
 	if err != nil {
 		return nil
@@ -267,9 +267,9 @@ func ReadString(s string) *string {
 	return &s
 }
 
-// ReadUint8 parses a string as a uint8.
-// hydra.lib.literals.readUint8 : String -> Maybe Uint8
-func ReadUint8(s string) *uint8 {
+// ParseUint8 parses a string as a uint8.
+// hydra.lib.literals.parseUint8 : String -> Maybe Uint8
+func ParseUint8(s string) *uint8 {
 	i, err := strconv.ParseUint(strings.TrimSpace(s), 10, 8)
 	if err != nil {
 		return nil
@@ -278,9 +278,9 @@ func ReadUint8(s string) *uint8 {
 	return &u8
 }
 
-// ReadUint16 parses a string as a uint16.
-// hydra.lib.literals.readUint16 : String -> Maybe Uint16
-func ReadUint16(s string) *uint16 {
+// ParseUint16 parses a string as a uint16.
+// hydra.lib.literals.parseUint16 : String -> Maybe Uint16
+func ParseUint16(s string) *uint16 {
 	i, err := strconv.ParseUint(strings.TrimSpace(s), 10, 16)
 	if err != nil {
 		return nil
@@ -289,9 +289,9 @@ func ReadUint16(s string) *uint16 {
 	return &u16
 }
 
-// ReadUint32 parses a string as a uint32.
-// hydra.lib.literals.readUint32 : String -> Maybe Uint32
-func ReadUint32(s string) *uint32 {
+// ParseUint32 parses a string as a uint32.
+// hydra.lib.literals.parseUint32 : String -> Maybe Uint32
+func ParseUint32(s string) *uint32 {
 	i, err := strconv.ParseUint(strings.TrimSpace(s), 10, 32)
 	if err != nil {
 		return nil
@@ -300,9 +300,9 @@ func ReadUint32(s string) *uint32 {
 	return &u32
 }
 
-// ReadUint64 parses a string as a uint64.
-// hydra.lib.literals.readUint64 : String -> Maybe Uint64
-func ReadUint64(s string) *uint64 {
+// ParseUint64 parses a string as a uint64.
+// hydra.lib.literals.parseUint64 : String -> Maybe Uint64
+func ParseUint64(s string) *uint64 {
 	i, err := strconv.ParseUint(strings.TrimSpace(s), 10, 64)
 	if err != nil {
 		return nil
@@ -316,9 +316,9 @@ func ShowBigfloat(f *big.Float) string {
 	return f.Text('g', -1)
 }
 
-// ShowBigint converts a big int to its string representation.
-// hydra.lib.literals.showBigint : Bigint -> String
-func ShowBigint(i *big.Int) string {
+// PrintBigint converts a big int to its string representation.
+// hydra.lib.literals.printBigint : Bigint -> String
+func PrintBigint(i *big.Int) string {
 	return i.String()
 }
 
@@ -331,63 +331,63 @@ func ShowBoolean(b bool) string {
 	return "false"
 }
 
-// ShowFloat32 converts a float32 to its string representation.
-// hydra.lib.literals.showFloat32 : Float32 -> String
-func ShowFloat32(f float32) string {
+// PrintFloat32 converts a float32 to its string representation.
+// hydra.lib.literals.printFloat32 : Float32 -> String
+func PrintFloat32(f float32) string {
 	return strconv.FormatFloat(float64(f), 'g', -1, 32)
 }
 
-// ShowFloat64 converts a float64 to its string representation.
-// hydra.lib.literals.showFloat64 : Float64 -> String
-func ShowFloat64(f float64) string {
+// PrintFloat64 converts a float64 to its string representation.
+// hydra.lib.literals.printFloat64 : Float64 -> String
+func PrintFloat64(f float64) string {
 	return strconv.FormatFloat(f, 'g', -1, 64)
 }
 
-// ShowInt8 converts an int8 to its string representation.
-// hydra.lib.literals.showInt8 : Int8 -> String
-func ShowInt8(i int8) string {
+// PrintInt8 converts an int8 to its string representation.
+// hydra.lib.literals.printInt8 : Int8 -> String
+func PrintInt8(i int8) string {
 	return strconv.FormatInt(int64(i), 10)
 }
 
-// ShowInt16 converts an int16 to its string representation.
-// hydra.lib.literals.showInt16 : Int16 -> String
-func ShowInt16(i int16) string {
+// PrintInt16 converts an int16 to its string representation.
+// hydra.lib.literals.printInt16 : Int16 -> String
+func PrintInt16(i int16) string {
 	return strconv.FormatInt(int64(i), 10)
 }
 
-// ShowInt32 converts an int32 to its string representation.
-// hydra.lib.literals.showInt32 : Int32 -> String
-func ShowInt32(i int32) string {
+// PrintInt32 converts an int32 to its string representation.
+// hydra.lib.literals.printInt32 : Int32 -> String
+func PrintInt32(i int32) string {
 	return strconv.FormatInt(int64(i), 10)
 }
 
-// ShowInt64 converts an int64 to its string representation.
-// hydra.lib.literals.showInt64 : Int64 -> String
-func ShowInt64(i int64) string {
+// PrintInt64 converts an int64 to its string representation.
+// hydra.lib.literals.printInt64 : Int64 -> String
+func PrintInt64(i int64) string {
 	return strconv.FormatInt(i, 10)
 }
 
-// ShowUint8 converts a uint8 to its string representation.
-// hydra.lib.literals.showUint8 : Uint8 -> String
-func ShowUint8(i uint8) string {
+// PrintUint8 converts a uint8 to its string representation.
+// hydra.lib.literals.printUint8 : Uint8 -> String
+func PrintUint8(i uint8) string {
 	return strconv.FormatUint(uint64(i), 10)
 }
 
-// ShowUint16 converts a uint16 to its string representation.
-// hydra.lib.literals.showUint16 : Uint16 -> String
-func ShowUint16(i uint16) string {
+// PrintUint16 converts a uint16 to its string representation.
+// hydra.lib.literals.printUint16 : Uint16 -> String
+func PrintUint16(i uint16) string {
 	return strconv.FormatUint(uint64(i), 10)
 }
 
-// ShowUint32 converts a uint32 to its string representation.
-// hydra.lib.literals.showUint32 : Uint32 -> String
-func ShowUint32(i uint32) string {
+// PrintUint32 converts a uint32 to its string representation.
+// hydra.lib.literals.printUint32 : Uint32 -> String
+func PrintUint32(i uint32) string {
 	return strconv.FormatUint(uint64(i), 10)
 }
 
-// ShowUint64 converts a uint64 to its string representation.
-// hydra.lib.literals.showUint64 : Uint64 -> String
-func ShowUint64(i uint64) string {
+// PrintUint64 converts a uint64 to its string representation.
+// hydra.lib.literals.printUint64 : Uint64 -> String
+func PrintUint64(i uint64) string {
 	return strconv.FormatUint(i, 10)
 }
 

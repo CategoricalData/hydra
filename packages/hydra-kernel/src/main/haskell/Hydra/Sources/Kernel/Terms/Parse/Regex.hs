@@ -137,7 +137,9 @@ module_ = Module {
               "Parser for Hydra's translingual regular-expression syntax (docs/specification/regex.md):"
               <> " text -> hydra.regex AST. Built on the hydra.parsers combinators. Rejects ill-formed"
               <> " patterns (empty alternation branches, empty classes, out-of-range code points) via the"
-              <> " ParseResult failure channel, so 'well-formed' is portable across hosts. See issue #567.")}
+              <> " ParseResult failure channel, so 'well-formed' is portable across hosts. See issue #567."
+              <> " A structured textual-syntax parser (precedent for the general parser in #497), not a"
+              <> " scalar parse<T> convention function (see docs/specification/index.md, Conventions).")}
   where
    definitions = [
      toDefinition alternation,

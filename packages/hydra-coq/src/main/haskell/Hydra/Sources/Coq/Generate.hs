@@ -780,7 +780,7 @@ makeAccessorDefs = define "makeAccessorDefs" $
         (lets [
           "nFields">: Lists.length $ var "fields",
           "fieldVars">: Lists.map
-            (lambda "i" $ Strings.concat (list [string "f", Literals.showInt32 $ var "i"]))
+            (lambda "i" $ Strings.concat (list [string "f", Literals.printInt32 $ var "i"]))
             (Math.range (int32 0) (var "nFields")),
           "constrPat">: CSyntax.pattern10_Qualid
             (CoqCoderSource.coqQualid @@ Strings.concat (list [string "Build_", var "name"]))

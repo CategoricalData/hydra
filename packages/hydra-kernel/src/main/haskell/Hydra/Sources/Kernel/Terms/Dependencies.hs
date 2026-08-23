@@ -360,7 +360,7 @@ toShortNames = define "toShortNames" $
     "rangeFrom" <~ ("start" ~> Lists.cons (var "start") (var "rangeFrom" @@ (Math.add (var "start") (int32 1)))) $
     "rename" <~ ("name" ~> "i" ~> pair (var "name") $ Core.name $
       Logic.ifElse (Ordering.gt (var "i") (int32 1))
-        (Strings.concat2 (var "local") (Literals.showInt32 $ var "i"))
+        (Strings.concat2 (var "local") (Literals.printInt32 $ var "i"))
         (var "local")) $
     Lists.zipWith (var "rename") (Sets.toList (var "names" :: TypedTerm (S.Set Name))) (var "rangeFrom" @@ int32 1)) $
   ((Maps.fromList $ Lists.concat $ Lists.map (var "renameGroup") $ Maps.toList (var "groups" :: TypedTerm (M.Map Name (S.Set Name)))) :: TypedTerm (M.Map Name Name))

@@ -5352,7 +5352,7 @@ public class Coder {
                                 Lists.map(
                                     lambda("i",
                                         wrap(Name.TYPE_,
-                                            Strings.concat2(string("p"), Literals.showInt32(var("i"))))),
+                                            Strings.concat2(string("p"), Literals.printInt32(var("i"))))),
                                     Math_.range(int32(0), var("arity")))),
                             field("paramExprs",
                                 Lists.map(
@@ -5458,7 +5458,7 @@ public class Coder {
                                         ref(Coder.encodeLiteral),
                                         inject(Literal.TYPE_,
                                             Literal.STRING,
-                                            Literals.showDecimal(var("v"))))),
+                                            Literals.printDecimal(var("v"))))),
                                 nothing()))),
                     field(
                         Literal.FLOAT,
@@ -5667,7 +5667,7 @@ public class Coder {
         .lam("v")
         .to(() ->
                 let("s",
-                    Literals.showFloat32(var("v")),
+                    Literals.printFloat32(var("v")),
                     Logic.ifElse(
                         Equality.equal(var("s"), string("NaN")),
                         apply(
@@ -5706,7 +5706,7 @@ public class Coder {
         .lam("v")
         .to(() ->
                 let("s",
-                    Literals.showFloat64(var("v")),
+                    Literals.printFloat64(var("v")),
                     Logic.ifElse(
                         Equality.equal(var("s"), string("NaN")),
                         apply(
@@ -5755,7 +5755,7 @@ public class Coder {
                                         ref(Coder.encodeLiteral),
                                         inject(Literal.TYPE_,
                                             Literal.STRING,
-                                            Literals.showBigint(var("v"))))),
+                                            Literals.printBigint(var("v"))))),
                                 nothing()))),
                     field(
                         IntegerValue.INT8,
@@ -5879,7 +5879,7 @@ public class Coder {
                                         ref(Coder.encodeLiteral),
                                         inject(Literal.TYPE_,
                                             Literal.STRING,
-                                            Literals.showBigint(Literals.uint64ToBigint(var("v")))))),
+                                            Literals.printBigint(Literals.uint64ToBigint(var("v")))))),
                                 nothing())))));
 
     public static final Def encodeLiteral_javaParseDouble = def("encodeLiteral_javaParseDouble")
@@ -8296,7 +8296,7 @@ public class Coder {
                                                                                         var("tcoDepth"),
                                                                                         int32(0)),
                                                                                     string(""),
-                                                                                    Literals.showInt32(
+                                                                                    Literals.printInt32(
                                                                                         var("tcoDepth")))),
                                                                             field("matchVarId",
                                                                                 apply(
@@ -9444,7 +9444,7 @@ public class Coder {
                         Lists.map(
                             lambda("i",
                                 wrap(Name.TYPE_,
-                                    Strings.concat2(string("p"), Literals.showInt32(var("i"))))),
+                                    Strings.concat2(string("p"), Literals.printInt32(var("i"))))),
                             Math_.range(int32(0), var("arity")))),
                     field("paramExprs",
                         Lists.map(
@@ -10028,7 +10028,7 @@ public class Coder {
                     wrap(Name.TYPE_,
                         Strings.concat2(
                             apply(unwrap(Name.TYPE_), var("base")),
-                            Literals.showInt32(var("i")))),
+                            Literals.printInt32(var("i")))),
                     Logic.ifElse(
                         Sets.member(var("candidate"), var("avoid")),
                         apply(
@@ -13438,7 +13438,7 @@ public class Coder {
                                                                                 Name.TYPE_,
                                                                                 Strings.concat2(
                                                                                     string("p"),
-                                                                                    Literals.showInt32(
+                                                                                    Literals.printInt32(
                                                                                         var("i"))))),
                                                                         Math_.range(
                                                                             int32(0),

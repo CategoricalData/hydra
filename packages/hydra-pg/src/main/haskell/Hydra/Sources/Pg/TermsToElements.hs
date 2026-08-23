@@ -527,9 +527,9 @@ termToString = define "termToString" $
           _Literal_boolean>>: "b" ~> Logic.ifElse (var "b") (string "true") (string "false"),
           _Literal_integer>>: "i" ~>
             match _IntegerValue (var "i") (Just $ PrintCore.term @@ var "term") [
-              _IntegerValue_int32>>: "n" ~> Literals.showInt32 (var "n")],
+              _IntegerValue_int32>>: "n" ~> Literals.printInt32 (var "n")],
           _Literal_float>>: "f" ~>
             match _FloatValue (var "f") (Just $ PrintCore.term @@ var "term") [
-              _FloatValue_float64>>: "n" ~> Literals.showFloat64 (var "n")]],
+              _FloatValue_float64>>: "n" ~> Literals.printFloat64 (var "n")]],
       _Term_optional>>: "mt" ~>
         Optionals.match (var "mt") (string "none") ("t" ~> termToString @@ var "t")]

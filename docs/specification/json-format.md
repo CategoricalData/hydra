@@ -400,7 +400,7 @@ which is shared verbatim between the two encodings.
   if the input is the float64 bit pattern `0.30000000000000004`, the encoder emits exactly that.
   <!-- TODO(#579): state the tie/notation rule explicitly (positional-vs-exponent threshold,
        trailing-zero policy) — it is currently defined operationally by the shared
-       showFloat32/showFloat64 primitives; write it down here once verified against them. -->
+       printFloat32/printFloat64 primitives; write it down here once verified against them. -->
 - **Non-finite values and `-0.0`** encode as JSON strings — `"Infinity"`, `"-Infinity"`,
   `"NaN"`, `"-0.0"` — because JSON's number grammar cannot represent these.
 

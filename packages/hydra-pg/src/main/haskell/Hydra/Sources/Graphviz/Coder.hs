@@ -207,20 +207,20 @@ termLabel = define "termLabel" $
           _Literal_boolean>>: "b" ~> Literals.printBoolean (var "b"),
           _Literal_integer>>: "i" ~>
             cases _IntegerValue (Just $ string "?") [
-              _IntegerValue_bigint>>: "v" ~> Literals.showBigint (var "v"),
-              _IntegerValue_int8>>: "v" ~> Literals.showInt8 (var "v"),
-              _IntegerValue_int16>>: "v" ~> Literals.showInt16 (var "v"),
-              _IntegerValue_int32>>: "v" ~> Literals.showInt32 (var "v"),
-              _IntegerValue_int64>>: "v" ~> Literals.showInt64 (var "v"),
-              _IntegerValue_uint8>>: "v" ~> Literals.showUint8 (var "v"),
-              _IntegerValue_uint16>>: "v" ~> Literals.showUint16 (var "v"),
-              _IntegerValue_uint32>>: "v" ~> Literals.showUint32 (var "v"),
-              _IntegerValue_uint64>>: "v" ~> Literals.showUint64 (var "v")]
+              _IntegerValue_bigint>>: "v" ~> Literals.printBigint (var "v"),
+              _IntegerValue_int8>>: "v" ~> Literals.printInt8 (var "v"),
+              _IntegerValue_int16>>: "v" ~> Literals.printInt16 (var "v"),
+              _IntegerValue_int32>>: "v" ~> Literals.printInt32 (var "v"),
+              _IntegerValue_int64>>: "v" ~> Literals.printInt64 (var "v"),
+              _IntegerValue_uint8>>: "v" ~> Literals.printUint8 (var "v"),
+              _IntegerValue_uint16>>: "v" ~> Literals.printUint16 (var "v"),
+              _IntegerValue_uint32>>: "v" ~> Literals.printUint32 (var "v"),
+              _IntegerValue_uint64>>: "v" ~> Literals.printUint64 (var "v")]
               @@ var "i",
           _Literal_float>>: "f" ~>
             cases _FloatValue (Just $ string "?") [
-              _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v"),
-              _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v")]
+              _FloatValue_float32>>: "v" ~> Literals.printFloat32 (var "v"),
+              _FloatValue_float64>>: "v" ~> Literals.printFloat64 (var "v")]
               @@ var "f",
           _Literal_string>>: "s" ~> var "s"]
           @@ var "l"),

@@ -275,7 +275,7 @@ normalizeTypeVariablesInTerm = define "normalizeTypeVariablesInTerm" $
             "k"    <~ Lists.length (var "vars") $
             -- Build exactly k fresh names t{next}, t{next+1}, ...
             "gen"  <~ ("i" ~> "rem" ~> "acc2" ~>
-              "ti" <~ Core.name (Strings.concat2 (string "t") (Literals.showInt32 (Math.add (var "next") (var "i")))) $
+              "ti" <~ Core.name (Strings.concat2 (string "t") (Literals.printInt32 (Math.add (var "next") (var "i")))) $
               Logic.ifElse (Equality.equal (var "rem") (int32 0))
                 (Lists.reverse (var "acc2"))
                 (var "gen"
@@ -409,7 +409,7 @@ unshadowVariables = define "unshadowVariables" $
   "term0" ~>
   -- Find a fresh name not in the key set of the map, trying base2, base3, etc.
   "freshName" <~ ("base" ~> "i" ~> "m" ~>
-    "candidate" <~ Core.name (Strings.concat2 (Core.unName $ var "base") (Literals.showInt32 $ var "i")) $
+    "candidate" <~ Core.name (Strings.concat2 (Core.unName $ var "base") (Literals.printInt32 $ var "i")) $
     Logic.ifElse (Maps.member (var "candidate") (var "m" :: TypedTerm (M.Map Name Name)))
       (var "freshName" @@ var "base" @@ Math.add (var "i") (int32 1) @@ var "m")
       (var "candidate")) $

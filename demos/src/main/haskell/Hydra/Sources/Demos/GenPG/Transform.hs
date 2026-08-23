@@ -611,12 +611,12 @@ decodeCell = define "decodeCell" $
                 var "cname"]) [
                 _FloatType_float32>>: constant $
                   Optionals.match
-                    (Literals.readFloat32 $ var "value")
+                    (Literals.parseFloat32 $ var "value")
                     (left $ var "parseError")
                     ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat32 $ var "parsed"),
                 _FloatType_float64>>: constant $
                   Optionals.match
-                    (Literals.readFloat64 $ var "value")
+                    (Literals.parseFloat64 $ var "value")
                     (left $ var "parseError")
                     ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueFloat64 $ var "parsed")]
               @@ var "ft",
@@ -626,12 +626,12 @@ decodeCell = define "decodeCell" $
                 var "cname"]) [
                 _IntegerType_int32>>: constant $
                   Optionals.match
-                    (Literals.readInt32 $ var "value")
+                    (Literals.parseInt32 $ var "value")
                     (left $ var "parseError")
                     ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt32 $ var "parsed"),
                 _IntegerType_int64>>: constant $
                   Optionals.match
-                    (Literals.readInt64 $ var "value")
+                    (Literals.parseInt64 $ var "value")
                     (left $ var "parseError")
                     ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "parsed")]
               @@ var "it",

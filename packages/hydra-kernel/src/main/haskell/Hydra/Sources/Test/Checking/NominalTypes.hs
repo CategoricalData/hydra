@@ -856,11 +856,11 @@ multiParameterPolymorphicCaseStatementsTests = define "multiParameterPolymorphic
   subgroup "Multi-parameter polymorphic case statements" [
   checkTest "case Either converting both to string" []
     (match (TestTypes.testTypeEitherName) nothing [
-      "left">: lambda "x" $ primitive DefLiterals.showInt32 @@ var "x",
-      "right">: lambda "y" $ primitive DefLiterals.showFloat32 @@ var "y"])
+      "left">: lambda "x" $ primitive DefLiterals.printInt32 @@ var "x",
+      "right">: lambda "y" $ primitive DefLiterals.printFloat32 @@ var "y"])
     (tyapps (match (TestTypes.testTypeEitherName) nothing [
-      "left">: lambdaTyped "x" T.int32 (primitive DefLiterals.showInt32 @@ var "x"),
-      "right">: lambdaTyped "y" T.float32 (primitive DefLiterals.showFloat32 @@ var "y")]) [T.int32, T.float32])
+      "left">: lambdaTyped "x" T.int32 (primitive DefLiterals.printInt32 @@ var "x"),
+      "right">: lambdaTyped "y" T.float32 (primitive DefLiterals.printFloat32 @@ var "y")]) [T.int32, T.float32])
     (T.function
       (T.applys (Core.typeVariable $ TestTypes.testTypeEitherName) [T.int32, T.float32])
       T.string),
@@ -939,15 +939,15 @@ nestedUnionEliminationsTests = define "nestedUnionEliminationsTests" $
       "person">: lambda "p" (project (TestTypes.testTypePersonName) (name "firstName") @@ var "p"),
       "other">: lambda "x" (
         match (TestTypes.testTypeNumberName) nothing [
-          "int">: lambda "i" (primitive DefLiterals.showInt32 @@ var "i"),
-          "float">: lambda "f" (primitive DefLiterals.showFloat32 @@ var "f")] @@
+          "int">: lambda "i" (primitive DefLiterals.printInt32 @@ var "i"),
+          "float">: lambda "f" (primitive DefLiterals.printFloat32 @@ var "f")] @@
         var "x")])
     (tyapp (match (TestTypes.testTypePersonOrSomethingName) nothing [
       "person">: lambdaTyped "p" (Core.typeVariable $ TestTypes.testTypePersonName) (project (TestTypes.testTypePersonName) (name "firstName") @@ var "p"),
       "other">: lambdaTyped "x" (Core.typeVariable $ TestTypes.testTypeNumberName) (
         match (TestTypes.testTypeNumberName) nothing [
-          "int">: lambdaTyped "i" T.int32 (primitive DefLiterals.showInt32 @@ var "i"),
-          "float">: lambdaTyped "f" T.float32 (primitive DefLiterals.showFloat32 @@ var "f")] @@
+          "int">: lambdaTyped "i" T.int32 (primitive DefLiterals.printInt32 @@ var "i"),
+          "float">: lambdaTyped "f" T.float32 (primitive DefLiterals.printFloat32 @@ var "f")] @@
         var "x")]) (Core.typeVariable $ TestTypes.testTypeNumberName))
     (T.function (T.apply (Core.typeVariable $ TestTypes.testTypePersonOrSomethingName) (Core.typeVariable $ TestTypes.testTypeNumberName)) T.string),
   checkTest "match in tuple" []
@@ -1124,11 +1124,11 @@ unionEliminationsWithDataTests = define "unionEliminationsWithDataTests" $
     (T.function (Core.typeVariable $ TestTypes.testTypeNumberName) T.int32),
   checkTest "match Number converting to string" []
     (match (TestTypes.testTypeNumberName) nothing [
-      "int">: lambda "i" (primitive DefLiterals.showInt32 @@ var "i"),
-      "float">: lambda "f" (primitive DefLiterals.showFloat32 @@ var "f")])
+      "int">: lambda "i" (primitive DefLiterals.printInt32 @@ var "i"),
+      "float">: lambda "f" (primitive DefLiterals.printFloat32 @@ var "f")])
     (match (TestTypes.testTypeNumberName) nothing [
-      "int">: lambdaTyped "i" T.int32 (primitive DefLiterals.showInt32 @@ var "i"),
-      "float">: lambdaTyped "f" T.float32 (primitive DefLiterals.showFloat32 @@ var "f")])
+      "int">: lambdaTyped "i" T.int32 (primitive DefLiterals.printInt32 @@ var "i"),
+      "float">: lambdaTyped "f" T.float32 (primitive DefLiterals.printFloat32 @@ var "f")])
     (T.function (Core.typeVariable $ TestTypes.testTypeNumberName) T.string),
   checkTest "match Number applied to int variant" []
     (match (TestTypes.testTypeNumberName) nothing [
@@ -1142,10 +1142,10 @@ unionEliminationsWithDataTests = define "unionEliminationsWithDataTests" $
     T.int32,
   checkTest "match Timestamp with mixed data types" []
     (match (TestTypes.testTypeTimestampName) nothing [
-      "unixTimeMillis">: lambda "millis" (primitive DefLiterals.showUint64 @@ var "millis"),
+      "unixTimeMillis">: lambda "millis" (primitive DefLiterals.printUint64 @@ var "millis"),
       "date">: lambda "dateStr" (var "dateStr")])
     (match (TestTypes.testTypeTimestampName) nothing [
-      "unixTimeMillis">: lambdaTyped "millis" T.uint64 (primitive DefLiterals.showUint64 @@ var "millis"),
+      "unixTimeMillis">: lambdaTyped "millis" T.uint64 (primitive DefLiterals.printUint64 @@ var "millis"),
       "date">: lambdaTyped "dateStr" T.string (var "dateStr")])
     (T.function (Core.typeVariable $ TestTypes.testTypeTimestampName) T.string)]
 
@@ -1220,13 +1220,13 @@ usingUnionPolymorphicRecursiveTests = define "usingUnionPolymorphicRecursiveTest
     (lets [
       "test">: (match (TestTypes.testTypeUnionPolymorphicRecursiveName)
         (just $ string "other") [
-        "value">: lambda "i" $ primitive DefLiterals.showInt32 @@ var "i"])] $
+        "value">: lambda "i" $ primitive DefLiterals.printInt32 @@ var "i"])] $
       var "test")
     (letsTyped [
         ("test",
          tyapp (match (TestTypes.testTypeUnionPolymorphicRecursiveName)
            (just $ string "other") [
-           "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.showInt32 @@ var "i"]) T.int32,
+           "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.printInt32 @@ var "i"]) T.int32,
          T.mono $ T.function (T.apply (Core.typeVariable $ TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) T.string)] $
       var "test")
     (T.function (T.apply (Core.typeVariable $ TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) T.string),
@@ -1234,14 +1234,14 @@ usingUnionPolymorphicRecursiveTests = define "usingUnionPolymorphicRecursiveTest
     (lets [
       "test">: (match (TestTypes.testTypeUnionPolymorphicRecursiveName)
           (just $ string "other") [
-          "value">: lambda "i" $ primitive DefLiterals.showInt32 @@ var "i"])
+          "value">: lambda "i" $ primitive DefLiterals.printInt32 @@ var "i"])
         @@ (inject (TestTypes.testTypeUnionPolymorphicRecursiveName) "value" $ int32 42)] $
       var "test")
     (letsTyped [
       ("test",
        tyapp (match (TestTypes.testTypeUnionPolymorphicRecursiveName)
            (just $ string "other") [
-           "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.showInt32 @@ var "i"]) T.int32
+           "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.printInt32 @@ var "i"]) T.int32
          @@ tyapp (inject (TestTypes.testTypeUnionPolymorphicRecursiveName) "value" $ int32 42) T.int32,
        T.mono T.string)] $
       var "test")
@@ -1250,7 +1250,7 @@ usingUnionPolymorphicRecursiveTests = define "usingUnionPolymorphicRecursiveTest
     (lets [
       "test">: lambda "x" $ match (TestTypes.testTypeUnionPolymorphicRecursiveName)
           (just $ string "other") [
-          "value">: lambda "i" $ primitive DefLiterals.showInt32 @@ var "i"]
+          "value">: lambda "i" $ primitive DefLiterals.printInt32 @@ var "i"]
         @@ var "x"] $
       var "test")
     (letsTyped [
@@ -1258,7 +1258,7 @@ usingUnionPolymorphicRecursiveTests = define "usingUnionPolymorphicRecursiveTest
        lambdaTyped "x" (T.apply (Core.typeVariable $ TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) $
          tyapp (match (TestTypes.testTypeUnionPolymorphicRecursiveName)
              (just $ string "other") [
-             "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.showInt32 @@ var "i"]) T.int32
+             "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.printInt32 @@ var "i"]) T.int32
            @@ var "x",
        T.mono $ T.function (T.apply (Core.typeVariable $ TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) T.string)] $
       var "test")

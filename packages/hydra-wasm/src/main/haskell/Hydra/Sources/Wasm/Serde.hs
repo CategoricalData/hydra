@@ -169,13 +169,13 @@ constValueToExpr = define "constValueToExpr" $
   lambda "c" $
     match W._ConstValue (var "c") Nothing [
       W._ConstValue_i32>>: lambda "v" $
-        Serialization.cst @@ Strings.concat2 (string "i32.const ") (Literals.showInt32 (var "v")),
+        Serialization.cst @@ Strings.concat2 (string "i32.const ") (Literals.printInt32 (var "v")),
       W._ConstValue_i64>>: lambda "v" $
-        Serialization.cst @@ Strings.concat2 (string "i64.const ") (Literals.showInt64 (var "v")),
+        Serialization.cst @@ Strings.concat2 (string "i64.const ") (Literals.printInt64 (var "v")),
       W._ConstValue_f32>>: lambda "v" $
-        Serialization.cst @@ Strings.concat2 (string "f32.const ") (Literals.showFloat32 (var "v")),
+        Serialization.cst @@ Strings.concat2 (string "f32.const ") (Literals.printFloat32 (var "v")),
       W._ConstValue_f64>>: lambda "v" $
-        Serialization.cst @@ Strings.concat2 (string "f64.const ") (Literals.showFloat64 (var "v"))]
+        Serialization.cst @@ Strings.concat2 (string "f64.const ") (Literals.printFloat64 (var "v"))]
 
 
 -- =============================================================================
@@ -429,7 +429,7 @@ instructionToExpr = define "instructionToExpr" $
         "off">: project W._MemArg W._MemArg_offset @@ var "ma",
         "offStr">: Logic.ifElse (Equality.equal (var "off") (int32 0))
           (string "")
-          (Strings.concat2 (string " offset=") (Literals.showInt32 (var "off")))] $
+          (Strings.concat2 (string " offset=") (Literals.printInt32 (var "off")))] $
         Serialization.cst @@ Strings.concat (list [
           valTypeToStr @@ var "vt", string ".load", var "offStr"]),
       W._Instruction_store>>: lambda "st" $ lets [
@@ -438,7 +438,7 @@ instructionToExpr = define "instructionToExpr" $
         "off">: project W._MemArg W._MemArg_offset @@ var "ma",
         "offStr">: Logic.ifElse (Equality.equal (var "off") (int32 0))
           (string "")
-          (Strings.concat2 (string " offset=") (Literals.showInt32 (var "off")))] $
+          (Strings.concat2 (string " offset=") (Literals.printInt32 (var "off")))] $
         Serialization.cst @@ Strings.concat (list [
           valTypeToStr @@ var "vt", string ".store", var "offStr"]),
       W._Instruction_unop>>: lambda "op" $ lets [
@@ -506,8 +506,8 @@ limitsToExpr = define "limitsToExpr" $
     "mn">: project W._Limits W._Limits_min @@ var "l",
     "mx">: project W._Limits W._Limits_max @@ var "l"] $
     Serialization.spaceSep @@ Optionals.givens (list [
-      just (Serialization.cst @@ Literals.showInt32 (var "mn")),
-      Optionals.map (lambda "m" $ Serialization.cst @@ Literals.showInt32 (var "m")) (var "mx")])
+      just (Serialization.cst @@ Literals.printInt32 (var "mn")),
+      Optionals.map (lambda "m" $ Serialization.cst @@ Literals.printInt32 (var "m")) (var "mx")])
 
 
 -- =============================================================================

@@ -40,17 +40,17 @@ object literals:
     case l: Long => BigInt(l)
     case b: BigInt => b
     case _ => BigInt(0)
-  def readBigint(s: String): Option[BigInt] = try Some(BigInt(s)) catch { case _: Exception => None }
+  def parseBigint(s: String): Option[BigInt] = try Some(BigInt(s)) catch { case _: Exception => None }
   def parseBoolean(s: String): Option[Boolean] = s.toBooleanOption
-  def readDecimal(s: String): Option[BigDecimal] = try Some(BigDecimal(s)) catch { case _: Exception => None }
+  def parseDecimal(s: String): Option[BigDecimal] = try Some(BigDecimal(s)) catch { case _: Exception => None }
   def readFloat(s: String)(ft: Any): Option[Any] = try Some(BigDecimal(s)) catch { case _: Exception => None }
-  def readFloat32(s: String): Option[Float] = s.toFloatOption
-  def readFloat64(s: String): Option[Double] = s.toDoubleOption
+  def parseFloat32(s: String): Option[Float] = s.toFloatOption
+  def parseFloat64(s: String): Option[Double] = s.toDoubleOption
   def readInt(s: String)(it: Any): Option[Any] = s.toIntOption
-  def readInt8(s: String): Option[Byte] = s.toByteOption
-  def readInt16(s: String): Option[Short] = s.toShortOption
-  def readInt32(s: String): Option[Int] = s.toIntOption
-  def readInt64(s: String): Option[Long] = s.toLongOption
+  def parseInt8(s: String): Option[Byte] = s.toByteOption
+  def parseInt16(s: String): Option[Short] = s.toShortOption
+  def parseInt32(s: String): Option[Int] = s.toIntOption
+  def parseInt64(s: String): Option[Long] = s.toLongOption
   def parseString(s: String): Option[String] =
     // Haskell read expects a quoted string: read "\"hello\"" = "hello"
     if s.startsWith("\"") && s.endsWith("\"") && s.length >= 2 then
@@ -62,10 +62,10 @@ object literals:
         .replace("\u0000", "\\"))
     else None
   def readUint(s: String)(it: Any): Option[Any] = s.toIntOption.filter(_ >= 0)
-  def readUint8(s: String): Option[Byte] = s.toShortOption.filter(n => n >= 0 && n <= 255).map(_.toByte)
-  def readUint16(s: String): Option[Int] = s.toIntOption.filter(n => n >= 0 && n <= 65535)
-  def readUint32(s: String): Option[Long] = s.toLongOption.filter(n => n >= 0 && n <= 4294967295L)
-  def readUint64(s: String): Option[BigInt] = try { val n = BigInt(s); if (n >= 0 && n <= BigInt("18446744073709551615")) Some(n) else None } catch { case _: Exception => None }
+  def parseUint8(s: String): Option[Byte] = s.toShortOption.filter(n => n >= 0 && n <= 255).map(_.toByte)
+  def parseUint16(s: String): Option[Int] = s.toIntOption.filter(n => n >= 0 && n <= 65535)
+  def parseUint32(s: String): Option[Long] = s.toLongOption.filter(n => n >= 0 && n <= 4294967295L)
+  def parseUint64(s: String): Option[BigInt] = try { val n = BigInt(s); if (n >= 0 && n <= BigInt("18446744073709551615")) Some(n) else None } catch { case _: Exception => None }
 
   // Format a float32 to match Hydra's show for Float (Haskell-compatible)
   private def showHaskellFloat32(x: Float): String =
@@ -120,9 +120,9 @@ object literals:
           sb.append(mantissa).append('e').append(exponent)
           sb.toString
 
-  def showBigint(x: BigInt): String = x.toString
+  def printBigint(x: BigInt): String = x.toString
   def printBoolean(x: Boolean): String = if x then "true" else "false"
-  def showDecimal(x: BigDecimal): String = {
+  def printDecimal(x: BigDecimal): String = {
     // Match Haskell's Data.Scientific show: "42.0", "3.14", "1.0e20", "1.0e-10".
     val stripped = x.underlying.stripTrailingZeros
     if (stripped.signum == 0) return "0.0"
@@ -141,13 +141,13 @@ object literals:
     }
   }
   def showFloat(x: Any)(ft: Any): String = x.toString
-  def showFloat32(x: Float): String = showHaskellFloat32(x)
-  def showFloat64(x: Double): String = showHaskellDouble(x)
+  def printFloat32(x: Float): String = showHaskellFloat32(x)
+  def printFloat64(x: Double): String = showHaskellDouble(x)
   def showInt(x: Any)(it: Any): String = x.toString
-  def showInt8(x: Byte): String = x.toString
-  def showInt16(x: Short): String = x.toString
-  def showInt32(x: Int): String = x.toString
-  def showInt64(x: Long): String = x.toString
+  def printInt8(x: Byte): String = x.toString
+  def printInt16(x: Short): String = x.toString
+  def printInt32(x: Int): String = x.toString
+  def printInt64(x: Long): String = x.toString
 
   // Haskell show for strings: escapes special chars and non-ASCII
   def printString(s: String): String =
@@ -171,10 +171,10 @@ object literals:
     sb.append("\"").toString
 
   def showUint(x: Any)(it: Any): String = x.toString
-  def showUint8(x: Byte): String = (x.toInt & 0xff).toString
-  def showUint16(x: Int): String = x.toString
-  def showUint32(x: Long): String = x.toString
-  def showUint64(x: BigInt): String = x.toString
+  def printUint8(x: Byte): String = (x.toInt & 0xff).toString
+  def printUint16(x: Int): String = x.toString
+  def printUint32(x: Long): String = x.toString
+  def printUint64(x: BigInt): String = x.toString
   def base64ToBinary(s: String): String = s
   def uint(it: Any)(x: BigInt): Any = x // Placeholder
   def uint8ToBigint(x: Byte): BigInt = BigInt(x.toInt & 0xff)

@@ -18,7 +18,7 @@ labeledIntId itype iid = lambda "r" $ Optionals.map
   (lambda "i" $ Strings.concat (list [
     string $ decapitalize itype,
     string "_",
-    Literals.showInt32 (var "i")]))
+    Literals.printInt32 (var "i")]))
   (iid @@ var "r")
 
 healthGraph :: LazyGraph Term

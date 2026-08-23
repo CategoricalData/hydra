@@ -543,7 +543,7 @@ def _deduplicate_case_variables():
                             Core.name(
                                 Strings.concat2(
                                     Core.un_name(var("v")),
-                                    Literals.show_int32(var("count2")),
+                                    Literals.print_int32(var("count2")),
                                 )
                             ),
                         ),
@@ -2281,7 +2281,7 @@ def _encode_float_value_encode_float32():
     body = lambdas(
         ["v"],
         let_chain(
-            [("s", Literals.show_float32(var("v")))],
+            [("s", Literals.print_float32(var("v")))],
             Logic.if_else(
                 Equality.equal(var("s"), string("NaN")),
                 right(
@@ -2317,7 +2317,7 @@ def _encode_float_value_encode_float64():
     body = lambdas(
         ["v"],
         let_chain(
-            [("s", Literals.show_float64(var("v")))],
+            [("s", Literals.print_float64(var("v")))],
             Logic.if_else(
                 Equality.equal(var("s"), string("NaN")),
                 right(
@@ -5325,7 +5325,7 @@ def _encode_literal():
                         right(
                             _kref.utils_function_call(_kref.utils_py_name_to_py_primary(_py_name("Decimal")), list_(
                                     [
-                                        _kref.utils_single_quoted_string(Literals.show_decimal(var("d")))
+                                        _kref.utils_single_quoted_string(Literals.print_decimal(var("d")))
                                     ]
                                 ))
                         ),
@@ -5893,7 +5893,7 @@ def _encode_variable():
                                     _py_name(
                                         Strings.concat2(
                                             string("x"),
-                                            Literals.show_int32(var("i")),
+                                            Literals.print_int32(var("i")),
                                         )
                                     ),
                                 ),
@@ -7142,7 +7142,7 @@ def _make_simple_lambda():
                             _py_name(
                                 Strings.concat2(
                                     string("x"),
-                                    Literals.show_int32(var("i")),
+                                    Literals.print_int32(var("i")),
                                 )
                             ),
                         ),

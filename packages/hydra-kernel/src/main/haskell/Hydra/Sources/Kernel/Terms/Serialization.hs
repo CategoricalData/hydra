@@ -424,7 +424,7 @@ noSep = define "noSep" $
 num :: TypedTermDefinition (Int -> Expr)
 num = define "num" $
   doc "Construct a constant expression from an int32" $
-  "i" ~> cst @@ (Literals.showInt32 $ var "i")
+  "i" ~> cst @@ (Literals.printInt32 $ var "i")
 
 op :: TypedTermDefinition (String -> Int -> Associativity -> Op)
 op = define "op" $

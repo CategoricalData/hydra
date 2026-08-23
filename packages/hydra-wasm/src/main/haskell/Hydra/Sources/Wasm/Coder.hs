@@ -1309,7 +1309,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     -- exactly n synthetic indices; range 0 0 is already the empty list.
     "syntheticParamNames" <~ Logic.ifElse (Ordering.gt (var "syntheticCount") (int32 0))
       (Lists.map
-        (lambda "i" $ Strings.concat2 (string "arg_synth_") (Literals.showInt32 (var "i")))
+        (lambda "i" $ Strings.concat2 (string "arg_synth_") (Literals.printInt32 (var "i")))
         (Math.range (int32 0) (var "syntheticCount")))
       (list ([] :: [TypedTerm String])) $
     "paramNameStrs" <~ Lists.concat2 (var "lambdaParamNameStrs") (var "syntheticParamNames") $

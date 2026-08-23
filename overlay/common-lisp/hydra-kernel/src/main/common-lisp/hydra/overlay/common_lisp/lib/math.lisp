@@ -71,7 +71,7 @@
       (error "hydra.lib.math.~a: expected a numeric literal term" op-name)))
 
 ;; float32 is always represented internally as a double-float (matching literals.lisp's
-;; `decimal_to_float32`/`read_float32`/`show_float32` convention), snapped to single-precision
+;; `decimal_to_float32`/`parse_float32`/`print_float32` convention), snapped to single-precision
 ;; via a round-trip through 1.0f0. That round-trip signals FLOATING-POINT-OVERFLOW on SBCL for
 ;; any magnitude beyond float32's finite range (verified empirically), instead of saturating to
 ;; +-Infinity per IEEE 754 -- so it must run with float traps masked, mirroring the existing

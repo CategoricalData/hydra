@@ -302,7 +302,7 @@ etaExpandTerm = define "etaExpandTerm" $
        "codomainType" <~ var "peelFunctionDomains" @@ var "remainingType" @@ var "needed" $
        "fullyAppliedRaw" <~ Lists.foldl
          ("body" ~> "i" ~>
-           "vn" <~ Core.name (Strings.concat2 (string "v") (Literals.showInt32 $ var "i")) $
+           "vn" <~ Core.name (Strings.concat2 (string "v") (Literals.printInt32 $ var "i")) $
            Core.termApplication $ Core.application (var "body") (Core.termVariable $ var "vn"))
          (var "applied") (var "indices") $
        -- Annotate fullyApplied with its codomain type so downstream coders can determine the return type
@@ -316,7 +316,7 @@ etaExpandTerm = define "etaExpandTerm" $
          ("body" ~> "idPair" ~>
            "i" <~ Pairs.first (var "idPair") $
            "dom" <~ Pairs.second (var "idPair") $
-           "vn" <~ Core.name (Strings.concat2 (string "v") (Literals.showInt32 $ var "i")) $
+           "vn" <~ Core.name (Strings.concat2 (string "v") (Literals.printInt32 $ var "i")) $
            Core.termLambda $ Core.lambda (var "vn") (var "dom") (var "body"))
          (var "fullyApplied") (Lists.reverse (var "indexedDomains")))
       (var "applied")) $
@@ -601,7 +601,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
           ("t" ~> right $ Arity.typeArity @@ var "t")]) $
 
 
-    "extraVariables" <~ ("n" ~> Lists.map ("i" ~> Core.name $ Strings.concat2 (string "v") (Literals.showInt32 $ var "i")) $
+    "extraVariables" <~ ("n" ~> Lists.map ("i" ~> Core.name $ Strings.concat2 (string "v") (Literals.printInt32 $ var "i")) $
       Math.range (int32 1) (Math.add (var "n") (int32 1))) $
     "pad" <~ ("vars" ~> "body" ~>
       Optionals.match (Lists.uncons $ var "vars") (var "body") ("uc" ~>

@@ -167,8 +167,8 @@ floatValue :: TypedTermDefinition (FloatValue -> String)
 floatValue = define "float" $
   doc "Show a float value as a string" $
   "fv" ~> match _FloatValue (var "fv") Nothing [
-    _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v") ++ (string ":float32"),
-    _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v") ++ (string ":float64")]
+    _FloatValue_float32>>: "v" ~> Literals.printFloat32 (var "v") ++ (string ":float32"),
+    _FloatValue_float64>>: "v" ~> Literals.printFloat64 (var "v") ++ (string ":float64")]
 
 floatType :: TypedTermDefinition (FloatType -> String)
 floatType = define "floatType" $
@@ -193,15 +193,15 @@ integerValue :: TypedTermDefinition (IntegerValue -> String)
 integerValue = define "integer" $
   doc "Show an integer value as a string" $
   "iv" ~> match _IntegerValue (var "iv") Nothing [
-    _IntegerValue_bigint>>: "v" ~> Literals.showBigint (var "v") ++ (string ":bigint"),
-    _IntegerValue_int8>>: "v" ~> Literals.showInt8 (var "v") ++ (string ":int8"),
-    _IntegerValue_int16>>: "v" ~> Literals.showInt16 (var "v") ++ (string ":int16"),
-    _IntegerValue_int32>>: "v" ~> Literals.showInt32 (var "v") ++ (string ":int32"),
-    _IntegerValue_int64>>: "v" ~> Literals.showInt64 (var "v") ++ (string ":int64"),
-    _IntegerValue_uint8>>: "v" ~> Literals.showUint8 (var "v") ++ (string ":uint8"),
-    _IntegerValue_uint16>>: "v" ~> Literals.showUint16 (var "v") ++ (string ":uint16"),
-    _IntegerValue_uint32>>: "v" ~> Literals.showUint32 (var "v") ++ (string ":uint32"),
-    _IntegerValue_uint64>>: "v" ~> Literals.showUint64 (var "v") ++ (string ":uint64")]
+    _IntegerValue_bigint>>: "v" ~> Literals.printBigint (var "v") ++ (string ":bigint"),
+    _IntegerValue_int8>>: "v" ~> Literals.printInt8 (var "v") ++ (string ":int8"),
+    _IntegerValue_int16>>: "v" ~> Literals.printInt16 (var "v") ++ (string ":int16"),
+    _IntegerValue_int32>>: "v" ~> Literals.printInt32 (var "v") ++ (string ":int32"),
+    _IntegerValue_int64>>: "v" ~> Literals.printInt64 (var "v") ++ (string ":int64"),
+    _IntegerValue_uint8>>: "v" ~> Literals.printUint8 (var "v") ++ (string ":uint8"),
+    _IntegerValue_uint16>>: "v" ~> Literals.printUint16 (var "v") ++ (string ":uint16"),
+    _IntegerValue_uint32>>: "v" ~> Literals.printUint32 (var "v") ++ (string ":uint32"),
+    _IntegerValue_uint64>>: "v" ~> Literals.printUint64 (var "v") ++ (string ":uint64")]
 
 integerType :: TypedTermDefinition (IntegerType -> String)
 integerType = define "integerType" $
@@ -261,7 +261,7 @@ literal = define "literal" $
   "l" ~> match _Literal (var "l") Nothing [
     _Literal_binary>>: constant $ string "[binary]",
     _Literal_boolean>>: "b" ~> Logic.ifElse (var "b") (string "true") (string "false"),
-    _Literal_decimal>>: "d" ~> Literals.showDecimal $ var "d",
+    _Literal_decimal>>: "d" ~> Literals.printDecimal $ var "d",
     _Literal_float>>: "fv" ~> floatValue @@ var "fv",
     _Literal_integer>>: "iv" ~> integerValue @@ var "iv",
     _Literal_string>>: "s" ~> Literals.printString $ var "s"]

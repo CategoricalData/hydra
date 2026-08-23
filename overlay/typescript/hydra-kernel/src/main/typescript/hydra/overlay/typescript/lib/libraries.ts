@@ -757,13 +757,13 @@ const literalsPrimitives = (): readonly Primitive[] => [
     libLiterals.readInt, (m) => tOptional(m, (n) => tInt(n))),
   u1("hydra.lib.literals.readUint", tyString, tyOptional(tyInt32), dString,
     libLiterals.readUint, (m) => tOptional(m, (n) => tInt(n))),
-  u1("hydra.lib.literals.readBigint", tyString, tyOptional(tyBigint), dString,
-    libLiterals.readBigint, (m) => tOptional(m, tBigint)),
+  u1("hydra.lib.literals.parseBigint", tyString, tyOptional(tyBigint), dString,
+    libLiterals.parseBigint, (m) => tOptional(m, tBigint)),
   u1("hydra.lib.literals.readFloat", tyString, tyOptional(tyFloat64), dString,
     libLiterals.readFloat, (m) => tOptional(m, (f) => tFloat(f))),
-  u1("hydra.lib.literals.readDecimal", tyString, tyOptional(tyFloat64), dString,
-    libLiterals.readDecimal, (m) => tOptional(m, tDecimal)),
-  // showInt / showUint / showBigint / showFloat / showDecimal all accept
+  u1("hydra.lib.literals.parseDecimal", tyString, tyOptional(tyFloat64), dString,
+    libLiterals.parseDecimal, (m) => tOptional(m, tDecimal)),
+  // showInt / showUint / printBigint / showFloat / printDecimal all accept
   // an integer/float value and return its string form. Decode any width.
   prim("hydra.lib.literals.showInt", scheme(tyFn(tyInt32, tyString)),
     (g, args) =>
@@ -773,53 +773,53 @@ const literalsPrimitives = (): readonly Primitive[] => [
     (g, args) =>
       bind(need(args, 0, "showUint"), (a0) =>
         bind(dAnyInt(g, a0), (n) => right(tString(String(n)))))),
-  prim("hydra.lib.literals.showBigint", scheme(tyFn(tyBigint, tyString)),
+  prim("hydra.lib.literals.printBigint", scheme(tyFn(tyBigint, tyString)),
     (g, args) =>
-      bind(need(args, 0, "showBigint"), (a0) =>
+      bind(need(args, 0, "printBigint"), (a0) =>
         bind(dBigint(g, a0), (n) => right(tString(n.toString()))))),
-  // Width-specialized show primitives: each accepts the specific
+  // Width-specialized print primitives: each accepts the specific
   // integer/float width and renders the bare value (no `:tag` suffix —
   // these are the user-facing print functions).
-  prim("hydra.lib.literals.showInt8", scheme(tyFn(tyInt8, tyString)),
+  prim("hydra.lib.literals.printInt8", scheme(tyFn(tyInt8, tyString)),
     (g, args) =>
-      bind(need(args, 0, "showInt8"), (a0) =>
+      bind(need(args, 0, "printInt8"), (a0) =>
         bind(dAnyInt(g, a0), (n) => right(tString(String(n)))))),
-  prim("hydra.lib.literals.showInt16", scheme(tyFn(tyInt16, tyString)),
+  prim("hydra.lib.literals.printInt16", scheme(tyFn(tyInt16, tyString)),
     (g, args) =>
-      bind(need(args, 0, "showInt16"), (a0) =>
+      bind(need(args, 0, "printInt16"), (a0) =>
         bind(dAnyInt(g, a0), (n) => right(tString(String(n)))))),
-  prim("hydra.lib.literals.showInt32", scheme(tyFn(tyInt32, tyString)),
+  prim("hydra.lib.literals.printInt32", scheme(tyFn(tyInt32, tyString)),
     (g, args) =>
-      bind(need(args, 0, "showInt32"), (a0) =>
+      bind(need(args, 0, "printInt32"), (a0) =>
         bind(dAnyInt(g, a0), (n) => right(tString(String(n)))))),
-  prim("hydra.lib.literals.showInt64", scheme(tyFn(tyInt64, tyString)),
+  prim("hydra.lib.literals.printInt64", scheme(tyFn(tyInt64, tyString)),
     (g, args) =>
-      bind(need(args, 0, "showInt64"), (a0) =>
+      bind(need(args, 0, "printInt64"), (a0) =>
         bind(dAnyInt(g, a0), (n) => right(tString(String(n)))))),
-  prim("hydra.lib.literals.showUint8", scheme(tyFn(tyUint8, tyString)),
+  prim("hydra.lib.literals.printUint8", scheme(tyFn(tyUint8, tyString)),
     (g, args) =>
-      bind(need(args, 0, "showUint8"), (a0) =>
+      bind(need(args, 0, "printUint8"), (a0) =>
         bind(dAnyInt(g, a0), (n) => right(tString(String(n)))))),
-  prim("hydra.lib.literals.showUint16", scheme(tyFn(tyUint16, tyString)),
+  prim("hydra.lib.literals.printUint16", scheme(tyFn(tyUint16, tyString)),
     (g, args) =>
-      bind(need(args, 0, "showUint16"), (a0) =>
+      bind(need(args, 0, "printUint16"), (a0) =>
         bind(dAnyInt(g, a0), (n) => right(tString(String(n)))))),
-  prim("hydra.lib.literals.showUint32", scheme(tyFn(tyUint32, tyString)),
+  prim("hydra.lib.literals.printUint32", scheme(tyFn(tyUint32, tyString)),
     (g, args) =>
-      bind(need(args, 0, "showUint32"), (a0) =>
+      bind(need(args, 0, "printUint32"), (a0) =>
         bind(dAnyInt(g, a0), (n) => right(tString(String(n)))))),
-  prim("hydra.lib.literals.showUint64", scheme(tyFn(tyUint64, tyString)),
+  prim("hydra.lib.literals.printUint64", scheme(tyFn(tyUint64, tyString)),
     (g, args) =>
-      bind(need(args, 0, "showUint64"), (a0) =>
+      bind(need(args, 0, "printUint64"), (a0) =>
         bind(dAnyInt(g, a0), (n) => right(tString(String(n)))))),
-  prim("hydra.lib.literals.showFloat32", scheme(tyFn(tyFloat32, tyString)),
+  prim("hydra.lib.literals.printFloat32", scheme(tyFn(tyFloat32, tyString)),
     (g, args) =>
-      bind(need(args, 0, "showFloat32"), (a0) =>
-        bind(dAnyFloat(g, a0), (f) => right(tString(libLiterals.showFloat32(f)))))),
-  prim("hydra.lib.literals.showFloat64", scheme(tyFn(tyFloat64, tyString)),
+      bind(need(args, 0, "printFloat32"), (a0) =>
+        bind(dAnyFloat(g, a0), (f) => right(tString(libLiterals.printFloat32(f)))))),
+  prim("hydra.lib.literals.printFloat64", scheme(tyFn(tyFloat64, tyString)),
     (g, args) =>
-      bind(need(args, 0, "showFloat64"), (a0) =>
-        bind(dAnyFloat(g, a0), (f) => right(tString(libLiterals.showFloat64(f)))))),
+      bind(need(args, 0, "printFloat64"), (a0) =>
+        bind(dAnyFloat(g, a0), (f) => right(tString(libLiterals.printFloat64(f)))))),
   prim("hydra.lib.literals.showFloat", scheme(tyFn(tyFloat64, tyString)),
     (g, args) =>
       bind(need(args, 0, "showFloat"), (a0) => {
@@ -829,21 +829,21 @@ const literalsPrimitives = (): readonly Primitive[] => [
         if (lit.tag === "literal" && lit.value?.tag === "float") {
           const fv = lit.value.value as { tag?: string; value?: number };
           if (typeof fv?.value === "number") {
-            return right(tString(fv.tag === "float32" ? libLiterals.showFloat32(fv.value) : libLiterals.showFloat64(fv.value)));
+            return right(tString(fv.tag === "float32" ? libLiterals.printFloat32(fv.value) : libLiterals.printFloat64(fv.value)));
           }
         }
-        return bind(dAnyFloat(g, a0), (f) => right(tString(libLiterals.showFloat64(f))));
+        return bind(dAnyFloat(g, a0), (f) => right(tString(libLiterals.printFloat64(f))));
       })),
-  prim("hydra.lib.literals.showDecimal", scheme(tyFn(tyFloat64, tyString)),
+  prim("hydra.lib.literals.printDecimal", scheme(tyFn(tyFloat64, tyString)),
     (g, args) =>
-      bind(need(args, 0, "showDecimal"), (a0) => {
+      bind(need(args, 0, "printDecimal"), (a0) => {
         // Decode a Decimal literal: extract via decimal-literal helper.
         const lit = (a0 as { tag: string; value?: { tag?: string; value?: number } });
         const v = lit.value?.value;
         const showD = (f: number): string => {
           // Decimal always renders with a fractional part, matching the
           // kernel's test fixtures.
-          const s = libLiterals.showFloat64(f);
+          const s = libLiterals.printFloat64(f);
           if (s.includes(".") || s.includes("e") || s.includes("Infinity") || s.includes("NaN")) return s;
           return s + ".0";
         };
@@ -930,13 +930,13 @@ const literalsPrimitives = (): readonly Primitive[] => [
       (g, args) =>
         bind(need(args, 0, `bigintTo${w}`), (a0) =>
           bind(dBigint(g, a0), (n) => right(tInt(Number(n), w))))),
-    prim(`hydra.lib.literals.show${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(intTypeOf(w), tyString)),
+    prim(`hydra.lib.literals.print${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(intTypeOf(w), tyString)),
       (g, args) =>
-        bind(need(args, 0, `show${w}`), (a0) =>
+        bind(need(args, 0, `print${w}`), (a0) =>
           bind(dAnyInt(g, a0), (n) => right(tString(String(n)))))),
-    prim(`hydra.lib.literals.read${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(tyString, tyOptional(intTypeOf(w)))),
+    prim(`hydra.lib.literals.parse${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(tyString, tyOptional(intTypeOf(w)))),
       (g, args) =>
-        bind(need(args, 0, `read${w}`), (a0) =>
+        bind(need(args, 0, `parse${w}`), (a0) =>
           bind(dString(g, a0), (s) => {
             const r = libLiterals.readInt(s);
             if (r.tag === "none") return right(tOptionalNone);
@@ -957,13 +957,13 @@ const literalsPrimitives = (): readonly Primitive[] => [
       (g, args) =>
         bind(need(args, 0, `bigintTo${w}`), (a0) =>
           bind(dBigint(g, a0), (n) => right({ tag: "literal", value: { tag: "integer", value: { tag: w, value: Number(n) } } } as never)))),
-    prim(`hydra.lib.literals.show${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(intTypeOf(w), tyString)),
+    prim(`hydra.lib.literals.print${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(intTypeOf(w), tyString)),
       (g, args) =>
-        bind(need(args, 0, `show${w}`), (a0) =>
+        bind(need(args, 0, `print${w}`), (a0) =>
           bind(dAnyInt(g, a0), (n) => right(tString(String(n)))))),
-    prim(`hydra.lib.literals.read${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(tyString, tyOptional(intTypeOf(w)))),
+    prim(`hydra.lib.literals.parse${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(tyString, tyOptional(intTypeOf(w)))),
       (g, args) =>
-        bind(need(args, 0, `read${w}`), (a0) =>
+        bind(need(args, 0, `parse${w}`), (a0) =>
           bind(dString(g, a0), (s) => {
             const r = libLiterals.readUint(s);
             if (r.tag === "none") return right(tOptionalNone);
@@ -974,14 +974,14 @@ const literalsPrimitives = (): readonly Primitive[] => [
           }))),
   ]),
   ...(["float32", "float64"] as const).flatMap((w) => [
-    prim(`hydra.lib.literals.show${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(w === "float32" ? tyFloat32 : tyFloat64, tyString)),
+    prim(`hydra.lib.literals.print${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(w === "float32" ? tyFloat32 : tyFloat64, tyString)),
       (g, args) =>
-        bind(need(args, 0, `show${w}`), (a0) =>
+        bind(need(args, 0, `print${w}`), (a0) =>
           bind(dAnyFloat(g, a0), (f) =>
-            right(tString(w === "float32" ? libLiterals.showFloat32(f) : libLiterals.showFloat64(f)))))),
-    prim(`hydra.lib.literals.read${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(tyString, tyOptional(tyInt32))),
+            right(tString(w === "float32" ? libLiterals.printFloat32(f) : libLiterals.printFloat64(f)))))),
+    prim(`hydra.lib.literals.parse${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(tyString, tyOptional(tyInt32))),
       (g, args) =>
-        bind(need(args, 0, `read${w}`), (a0) =>
+        bind(need(args, 0, `parse${w}`), (a0) =>
           bind(dString(g, a0), (s) => {
             const r = libLiterals.readFloat(s);
             return right(tOptional(r, (f) => tFloat(f, w)));

@@ -137,9 +137,9 @@
 (defvar hydra_overlay_emacs_lisp_lib_literals_int64_to_bigint
   (lambda (x) x))
 
-;; read_decimal :: String -> Maybe Decimal
+;; parse_decimal :: String -> Maybe Decimal
 ;; Emacs Lisp has no native decimal; fallback uses float.
-(defvar hydra_overlay_emacs_lisp_lib_literals_read_decimal
+(defvar hydra_overlay_emacs_lisp_lib_literals_parse_decimal
   (lambda (s)
     (condition-case nil
         (let ((n (string-to-number s)))
@@ -150,9 +150,9 @@
                   (list :none))))
       (error (list :none)))))
 
-;; read_bigint :: String -> Maybe BigInteger
+;; parse_bigint :: String -> Maybe BigInteger
 ;; Uses read-from-string to handle arbitrarily large integers (Emacs 27+ bignum support)
-(defvar hydra_overlay_emacs_lisp_lib_literals_read_bigint
+(defvar hydra_overlay_emacs_lisp_lib_literals_parse_bigint
   (lambda (s)
     (condition-case nil
         (if (string-match-p "^-?[0-9]+$" s)
@@ -173,8 +173,8 @@
               (list :none)))
       (error (list :none)))))
 
-;; read_float32 :: String -> Maybe Float
-(defvar hydra_overlay_emacs_lisp_lib_literals_read_float32
+;; parse_float32 :: String -> Maybe Float
+(defvar hydra_overlay_emacs_lisp_lib_literals_parse_float32
   (lambda (s)
     (cond
       ((string= s "NaN") (list :given 0.0e+NaN))
@@ -197,8 +197,8 @@
               (list :none)))
       (error (list :none)))))
 
-;; read_int64 :: String -> Maybe Int64
-(defvar hydra_overlay_emacs_lisp_lib_literals_read_int64
+;; parse_int64 :: String -> Maybe Int64
+(defvar hydra_overlay_emacs_lisp_lib_literals_parse_int64
   (lambda (s)
     (condition-case nil
         (let ((n (string-to-number s)))
@@ -217,8 +217,8 @@
               (list :none)))
       (error (list :none)))))
 
-;; read_uint32 :: String -> Maybe Uint32
-(defvar hydra_overlay_emacs_lisp_lib_literals_read_uint32
+;; parse_uint32 :: String -> Maybe Uint32
+(defvar hydra_overlay_emacs_lisp_lib_literals_parse_uint32
   (lambda (s)
     (condition-case nil
         (let ((n (string-to-number s)))
@@ -227,8 +227,8 @@
               (list :none)))
       (error (list :none)))))
 
-;; read_uint64 :: String -> Maybe Uint64
-(defvar hydra_overlay_emacs_lisp_lib_literals_read_uint64
+;; parse_uint64 :: String -> Maybe Uint64
+(defvar hydra_overlay_emacs_lisp_lib_literals_parse_uint64
   (lambda (s)
     (condition-case nil
         (let ((n (string-to-number s)))
@@ -272,14 +272,14 @@
         s
         (concat s ".0"))))
 
-;; show_decimal :: Decimal -> String
+;; print_decimal :: Decimal -> String
 ;; Emacs Lisp has no native decimal; formatted as float.
-(defvar hydra_overlay_emacs_lisp_lib_literals_show_decimal
+(defvar hydra_overlay_emacs_lisp_lib_literals_print_decimal
   (lambda (x)
     (haskell-show-float (float x))))
 
-;; show_bigint :: BigInteger -> String
-(defvar hydra_overlay_emacs_lisp_lib_literals_show_bigint
+;; print_bigint :: BigInteger -> String
+(defvar hydra_overlay_emacs_lisp_lib_literals_print_bigint
   (lambda (x)
     (number-to-string x)))
 
@@ -333,13 +333,13 @@
                 return (haskell-show-float-simple (* 1.0 rounded))
                 finally return (haskell-show-float-simple f32))))))))
 
-;; show_float32 :: Float -> String
-(defvar hydra_overlay_emacs_lisp_lib_literals_show_float32
+;; print_float32 :: Float -> String
+(defvar hydra_overlay_emacs_lisp_lib_literals_print_float32
   (lambda (x)
     (haskell-show-float32 x)))
 
-;; show_float64 :: Double -> String
-(defvar hydra_overlay_emacs_lisp_lib_literals_show_float64
+;; print_float64 :: Double -> String
+(defvar hydra_overlay_emacs_lisp_lib_literals_print_float64
   (lambda (x)
     (haskell-show-float (float x))))
 
@@ -348,23 +348,23 @@
   (lambda (x)
     (number-to-string x)))
 
-;; show_int8 :: Int8 -> String
-(defvar hydra_overlay_emacs_lisp_lib_literals_show_int8
+;; print_int8 :: Int8 -> String
+(defvar hydra_overlay_emacs_lisp_lib_literals_print_int8
   (lambda (x)
     (number-to-string x)))
 
-;; show_int16 :: Int16 -> String
-(defvar hydra_overlay_emacs_lisp_lib_literals_show_int16
+;; print_int16 :: Int16 -> String
+(defvar hydra_overlay_emacs_lisp_lib_literals_print_int16
   (lambda (x)
     (number-to-string x)))
 
-;; show_int32 :: Int32 -> String
-(defvar hydra_overlay_emacs_lisp_lib_literals_show_int32
+;; print_int32 :: Int32 -> String
+(defvar hydra_overlay_emacs_lisp_lib_literals_print_int32
   (lambda (x)
     (number-to-string x)))
 
-;; show_int64 :: Int64 -> String
-(defvar hydra_overlay_emacs_lisp_lib_literals_show_int64
+;; print_int64 :: Int64 -> String
+(defvar hydra_overlay_emacs_lisp_lib_literals_print_int64
   (lambda (x)
     (number-to-string x)))
 
@@ -408,23 +408,23 @@
   (lambda (x)
     (number-to-string x)))
 
-;; show_uint8 :: Uint8 -> String
-(defvar hydra_overlay_emacs_lisp_lib_literals_show_uint8
+;; print_uint8 :: Uint8 -> String
+(defvar hydra_overlay_emacs_lisp_lib_literals_print_uint8
   (lambda (x)
     (number-to-string x)))
 
-;; show_uint16 :: Uint16 -> String
-(defvar hydra_overlay_emacs_lisp_lib_literals_show_uint16
+;; print_uint16 :: Uint16 -> String
+(defvar hydra_overlay_emacs_lisp_lib_literals_print_uint16
   (lambda (x)
     (number-to-string x)))
 
-;; show_uint32 :: Uint32 -> String
-(defvar hydra_overlay_emacs_lisp_lib_literals_show_uint32
+;; print_uint32 :: Uint32 -> String
+(defvar hydra_overlay_emacs_lisp_lib_literals_print_uint32
   (lambda (x)
     (number-to-string x)))
 
-;; show_uint64 :: Uint64 -> String
-(defvar hydra_overlay_emacs_lisp_lib_literals_show_uint64
+;; print_uint64 :: Uint64 -> String
+(defvar hydra_overlay_emacs_lisp_lib_literals_print_uint64
   (lambda (x)
     (number-to-string x)))
 
@@ -524,8 +524,8 @@
 (defvar hydra_overlay_emacs_lisp_lib_literals_uint64_to_bigint
   (lambda (x) x))
 
-;; read_float64 :: String -> Maybe Float64
-(defvar hydra_overlay_emacs_lisp_lib_literals_read_float64
+;; parse_float64 :: String -> Maybe Float64
+(defvar hydra_overlay_emacs_lisp_lib_literals_parse_float64
   (lambda (s)
     (cond
       ((string= s "NaN") (list :given 0.0e+NaN))
@@ -538,8 +538,8 @@
                    (list :none)))
            (error (list :none)))))))
 
-;; read_int8 :: String -> Maybe Int8
-(defvar hydra_overlay_emacs_lisp_lib_literals_read_int8
+;; parse_int8 :: String -> Maybe Int8
+(defvar hydra_overlay_emacs_lisp_lib_literals_parse_int8
   (lambda (s)
     (condition-case nil
         (let ((n (string-to-number s)))
@@ -548,8 +548,8 @@
               (list :none)))
       (error (list :none)))))
 
-;; read_int16 :: String -> Maybe Int16
-(defvar hydra_overlay_emacs_lisp_lib_literals_read_int16
+;; parse_int16 :: String -> Maybe Int16
+(defvar hydra_overlay_emacs_lisp_lib_literals_parse_int16
   (lambda (s)
     (condition-case nil
         (let ((n (string-to-number s)))
@@ -558,8 +558,8 @@
               (list :none)))
       (error (list :none)))))
 
-;; read_int32 :: String -> Maybe Int32
-(defvar hydra_overlay_emacs_lisp_lib_literals_read_int32
+;; parse_int32 :: String -> Maybe Int32
+(defvar hydra_overlay_emacs_lisp_lib_literals_parse_int32
   (lambda (s)
     (condition-case nil
         (let ((n (string-to-number s)))
@@ -568,8 +568,8 @@
               (list :none)))
       (error (list :none)))))
 
-;; read_uint8 :: String -> Maybe Uint8
-(defvar hydra_overlay_emacs_lisp_lib_literals_read_uint8
+;; parse_uint8 :: String -> Maybe Uint8
+(defvar hydra_overlay_emacs_lisp_lib_literals_parse_uint8
   (lambda (s)
     (condition-case nil
         (let ((n (string-to-number s)))
@@ -578,8 +578,8 @@
               (list :none)))
       (error (list :none)))))
 
-;; read_uint16 :: String -> Maybe Uint16
-(defvar hydra_overlay_emacs_lisp_lib_literals_read_uint16
+;; parse_uint16 :: String -> Maybe Uint16
+(defvar hydra_overlay_emacs_lisp_lib_literals_parse_uint16
   (lambda (s)
     (condition-case nil
         (let ((n (string-to-number s)))

@@ -99,7 +99,7 @@ chooseUniqueLabel = define "chooseUniqueLabel" $
   "tryLabel" <~ ("index" ~>
     "candidate" <~ Logic.ifElse (Equality.equal (var "index") (int32 1))
       (var "label")
-      (var "label" ++ Literals.showInt32 (var "index")) $
+      (var "label" ++ Literals.printInt32 (var "index")) $
     Logic.ifElse (Sets.member (var "candidate" :: TypedTerm String) (var "reserved"))
       (var "tryLabel" @@ (Math.add (var "index") (int32 1)))
       (var "candidate")) $
@@ -240,7 +240,7 @@ nameToFilePath = define "nameToFilePath" $
 normalTypeVariable :: TypedTermDefinition (Int -> Name)
 normalTypeVariable = define "normalTypeVariable" $
   doc "Type variable naming convention follows Haskell: t0, t1, etc." $
-  "i" ~> Core.name (Strings.concat2 (string "t") (Literals.showInt32 $ var "i"))
+  "i" ~> Core.name (Strings.concat2 (string "t") (Literals.printInt32 $ var "i"))
 
 pushSubtermStep :: TypedTermDefinition (SubtermStep -> InferenceContext -> InferenceContext)
 pushSubtermStep = define "pushSubtermStep" $

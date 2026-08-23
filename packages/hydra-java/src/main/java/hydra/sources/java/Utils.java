@@ -2981,7 +2981,7 @@ public class Utils {
         .to(() ->
                 let("candidate",
                     wrap(Name.TYPE_,
-                        Strings.concat2(var("base"), Literals.showInt32(var("n")))),
+                        Strings.concat2(var("base"), Literals.printInt32(var("n")))),
                     Logic.ifElse(
                         Sets.member(
                             var("candidate"),

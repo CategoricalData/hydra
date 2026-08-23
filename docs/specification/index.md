@@ -42,6 +42,18 @@ counterpart, and the two cite each other.
   post-inference module content; chapters like this one are hand-written and
   cross-link into them. Generated pages carry a generated-file notice.
 
+### Verb categories
+
+A type `T` with a canonical textual form has `print<T> : T → string` (total — printing does
+not fail) and `parse<T> : string → <result>` in the `hydra.print.*` / `hydra.parse.*`
+namespaces. The pair satisfies the round-trip law `parse (print x) = x`, verified by tests.
+`<result>` is `optional<T>` for scalar literals (a value either is or is not a well-formed
+literal; there is nothing more to report on failure); structured textual syntax (the eventual
+`printable` type class, and the general parser of #497) uses `either<ParseError, T>` to report
+where and why parsing failed. Helper parsers that do not follow this shape (parser
+combinators, doc-string parsers, and other bespoke `hydra.parse.*` modules) are documented as
+such in their own module description and are exempt from the convention.
+
 ## 3. Conformance
 
 **A conforming Hydra implementation passes the hydra-kernel test suite**

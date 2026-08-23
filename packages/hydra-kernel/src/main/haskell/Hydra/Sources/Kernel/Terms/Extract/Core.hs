@@ -657,9 +657,9 @@ nArgs = define "nArgs" $
   Logic.ifElse (Equality.equal (Lists.length (var "args")) (var "n"))
     (right Phantoms.unit)
     (unexpected(Strings.concat (Phantoms.list [
-      Literals.showInt32 (var "n"),
+      Literals.printInt32 (var "n"),
       Phantoms.string " arguments to primitive ",
-      Literals.printString (Core.unName (var "name"))])) (Literals.showInt32 (Lists.length (var "args"))))
+      Literals.printString (Core.unName (var "name"))])) (Literals.printInt32 (Lists.length (var "args"))))
 
 pair :: TypedTermDefinition ((Term -> Prelude.Either Error k) -> (Term -> Prelude.Either Error v) -> Graph -> Term -> Prelude.Either Error (k, v))
 pair = define "pair" $

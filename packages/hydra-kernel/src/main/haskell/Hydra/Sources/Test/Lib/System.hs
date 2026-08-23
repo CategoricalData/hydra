@@ -193,7 +193,7 @@ systemExecute = subgroup "execute" [
     (string "abc"),
   -- a successful program reports exit status 0.
   effectfulCase "reports exit status zero for a successful program"
-    (foldEither (lambda "r" $ primitive DefLiterals.showInt32 @@ resultExitCode (var "r"))
+    (foldEither (lambda "r" $ primitive DefLiterals.printInt32 @@ resultExitCode (var "r"))
       (primitive DefSystem.execute @@ command "/usr/bin/true" []))
     (string "0"),
   -- a program that runs and exits non-zero is right(result), NOT a SystemError; /usr/bin/false exits 1.

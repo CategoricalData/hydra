@@ -438,7 +438,7 @@ formatLispFloat :: TypedTermDefinition (L.Dialect -> Double -> String)
 formatLispFloat = define "formatLispFloat" $
   doc "Format a float64 value as a dialect-specific literal string, including special values like NaN and infinities" $
   lambda "d" $ lambda "v" $
-    "s" <~ Literals.showFloat64 (var "v") $
+    "s" <~ Literals.printFloat64 (var "v") $
     Logic.ifElse (Equality.equal (var "s") (string "NaN"))
       (match L._Dialect (var "d") Nothing [
         L._Dialect_clojure>>: constant $ string "Double/NaN",
@@ -723,7 +723,7 @@ literalToExpr = define "literalToExpr" $
   lambda "d" $ lambda "lit" $
     match L._Literal (var "lit") Nothing [
       L._Literal_integer>>: lambda "i" $
-        Serialization.cst @@ (Literals.showBigint (project L._IntegerLiteral L._IntegerLiteral_value @@ var "i")),
+        Serialization.cst @@ (Literals.printBigint (project L._IntegerLiteral L._IntegerLiteral_value @@ var "i")),
       L._Literal_float>>: lambda "f" $
         Serialization.cst @@ (formatLispFloat @@ var "d" @@ (project L._FloatLiteral L._FloatLiteral_value @@ var "f")),
       L._Literal_string>>: lambda "s" $

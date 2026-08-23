@@ -48,12 +48,12 @@ export const printBoolean = (b: boolean): string => (b ? "true" : "false");
 type IntegerValue = { tag: string; value: number | bigint };
 export const showInt = (v: IntegerValue): string => `${v.value}:${v.tag}`;
 export const showUint = (v: IntegerValue): string => `${v.value}:${v.tag}`;
-// showBigint is called by the kernel in two contexts:
-//   - As `lib_literals.showBigint` from `show.core.literal`, with an
+// printBigint is called by the kernel in two contexts:
+//   - As `lib_literals.printBigint` from `show.core.literal`, with an
 //     IntegerValue wrapper `{tag: "bigint", value: n}` — prints "n:bigint".
 //   - As a raw integer renderer from `json.writer.valueToExpr`, with a
 //     bare JS `bigint` — prints just "n".
-export const showBigint = (v: IntegerValue | bigint): string =>
+export const printBigint = (v: IntegerValue | bigint): string =>
   typeof v === "bigint" ? v.toString() : `${v.value}:${v.tag}`;
 
 type FloatValue = { tag: string; value: number };
@@ -65,7 +65,7 @@ export const showFloat = (v: FloatValue): string => `${v.value}:${v.tag}`;
 // JavaScript's `Number.prototype.toString` differs from Haskell in:
 //   - 0.01 → "0.01" vs Haskell "1.0e-2"
 //   - 1.0 → "1" vs Haskell "1.0"
-export const showDecimal = (f: number): string => {
+export const printDecimal = (f: number): string => {
   if (!Number.isFinite(f)) {
     if (Number.isNaN(f)) return "NaN";
     return f > 0 ? "Infinity" : "-Infinity";
@@ -109,7 +109,7 @@ export const readUint = (s: string): Optional<number> => {
   return Number.isFinite(n) && n >= 0 && /^\d+$/.test(s.trim()) ? Given(n) : None;
 };
 
-export const readBigint = (s: string): Optional<bigint> => {
+export const parseBigint = (s: string): Optional<bigint> => {
   try {
     return /^-?\d+$/.test(s.trim()) ? Given(BigInt(s.trim())) : None;
   } catch { return None; }
@@ -126,7 +126,7 @@ export const readFloat = (s: string): Optional<number> => {
   return Number.isNaN(n) ? None : Given(n);
 };
 
-export const readDecimal = readFloat;
+export const parseDecimal = readFloat;
 
 export const parseBoolean = (s: string): Optional<boolean> =>
   s === "true" ? Given(true) : s === "false" ? Given(false) : None;
@@ -203,14 +203,14 @@ export const bytesToBinary = (bytes: readonly number[]): string => {
 
 // === typed show helpers (used by encodeLiteral in the coder) ===
 
-export const showInt8 = (n: number): string => n.toString();
-export const showInt16 = (n: number): string => n.toString();
-export const showInt32 = (n: number): string => n.toString();
-export const showInt64 = (n: bigint): string => n.toString();
-export const showUint8 = (n: number): string => n.toString();
-export const showUint16 = (n: number): string => n.toString();
-export const showUint32 = (n: number): string => n.toString();
-export const showUint64 = (n: bigint): string => n.toString();
+export const printInt8 = (n: number): string => n.toString();
+export const printInt16 = (n: number): string => n.toString();
+export const printInt32 = (n: number): string => n.toString();
+export const printInt64 = (n: bigint): string => n.toString();
+export const printUint8 = (n: number): string => n.toString();
+export const printUint16 = (n: number): string => n.toString();
+export const printUint32 = (n: number): string => n.toString();
+export const printUint64 = (n: bigint): string => n.toString();
 // Show a float at ~12 significant digits, matching the convention used
 // by the kernel test fixtures. Haskell's `show` for `Double` uses
 // exponential notation when `abs(x) < 0.1` and the standard non-
@@ -262,8 +262,8 @@ const _showFloatPrecise = (f: number): string => {
 // precision to match what the kernel test fixtures expect (the
 // canonical round-trip representation of the float32 value, not the
 // full float64 approximation).
-export const showFloat32 = (f: number): string => _showFloatPreciseSig(f, 7);
-export const showFloat64 = (f: number): string => _showFloatPrecise(f);
+export const printFloat32 = (f: number): string => _showFloatPreciseSig(f, 7);
+export const printFloat64 = (f: number): string => _showFloatPrecise(f);
 
 const _showFloatPreciseSig = (f: number, sig: number): string => {
   if (Number.isNaN(f)) return "NaN";
@@ -301,27 +301,27 @@ export const int32ToBigint = (n: number): bigint => BigInt(n);
 export const float64ToDecimal = (f: number): number => f;
 export const decimalToFloat64 = (f: number): number => f;
 
-// === Width-specialized read aliases ===
+// === Width-specialized parse aliases ===
 //
-// The kernel emits direct references to `lib_literals.readFloat32`, etc.,
+// The kernel emits direct references to `lib_literals.parseFloat32`, etc.,
 // at the runtime layer (not via the primitives registry). They all
 // delegate to the underlying parser; the width tag is a hint about
 // where the result will be stored, not about the parsing rules.
-// `readFloat32` narrows the parsed value to single-precision so the
+// `parseFloat32` narrows the parsed value to single-precision so the
 // round-tripped string matches what a real float32 would store.
-export const readFloat32 = (s: string): Optional<number> => {
+export const parseFloat32 = (s: string): Optional<number> => {
   const m = readFloat(s);
   return m.tag === "given" ? { tag: "given" as const, value: Math.fround(m.value) } : m;
 };
-export const readFloat64 = readFloat;
-export const readInt8 = readInt;
-export const readInt16 = readInt;
-export const readInt32 = readInt;
-export const readInt64 = readBigint;
-export const readUint8 = readUint;
-export const readUint16 = readUint;
-export const readUint32 = readUint;
-export const readUint64 = readBigint;
+export const parseFloat64 = readFloat;
+export const parseInt8 = readInt;
+export const parseInt16 = readInt;
+export const parseInt32 = readInt;
+export const parseInt64 = parseBigint;
+export const parseUint8 = readUint;
+export const parseUint16 = readUint;
+export const parseUint32 = readUint;
+export const parseUint64 = parseBigint;
 
 // === Width-specialized show aliases ===
 //

@@ -194,7 +194,7 @@ filesListDirectory = subgroup "listDirectory" [
     (primitive DefEffects.bind
       @@ (primitive DefFiles.writeFile @@ path "only.txt" @@ bytes "x")
       @@ (lambda "_w" $ foldEither
-            (lambda "entries" $ primitive DefLiterals.showInt32 @@ (primitive DefLists.length @@ var "entries"))
+            (lambda "entries" $ primitive DefLiterals.printInt32 @@ (primitive DefLists.length @@ var "entries"))
             (primitive DefFiles.listDirectory @@ wrap File._FilePath (string testDir))))
     (string "1")]
 
@@ -275,7 +275,7 @@ filesStatus = subgroup "status" [
     (primitive DefEffects.bind
       @@ (primitive DefFiles.writeFile @@ path "stat.txt" @@ bytes "12345")
       @@ (lambda "_w" $ foldEither
-            (lambda "s" $ primitive DefLiterals.showInt64 @@
+            (lambda "s" $ primitive DefLiterals.printInt64 @@
               (project File._FileStatus File._FileStatus_size @@ var "s"))
             (primitive DefFiles.status @@ true @@ path "stat.txt")))
     (string "5"),

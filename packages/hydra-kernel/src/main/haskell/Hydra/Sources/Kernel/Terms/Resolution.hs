@@ -194,7 +194,7 @@ fullyStripAndNormalizeType = define "fullyStripAndNormalizeType" $
       (Just $ pair (var "subst") (var "t")) [
       _Type_forall>>: "ft" ~>
         "oldVar" <~ Core.forallTypeParameter (var "ft") $
-        "newVar" <~ Core.name (Strings.concat2 (string "_") (Literals.showInt32 $ var "depth")) $
+        "newVar" <~ Core.name (Strings.concat2 (string "_") (Literals.printInt32 $ var "depth")) $
         var "go"
           @@ (Math.add (var "depth") (int32 1))
           @@ (Maps.insert (var "oldVar" :: TypedTerm Name) (var "newVar") (var "subst"))

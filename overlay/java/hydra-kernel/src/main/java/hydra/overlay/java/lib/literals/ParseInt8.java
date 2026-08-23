@@ -8,12 +8,11 @@ import hydra.graph.Graph;
 import hydra.overlay.java.tools.PrimitiveFunction;
 import hydra.overlay.java.util.Optional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.overlay.java.dsl.Types.decimal;
 import static hydra.overlay.java.dsl.Types.function;
+import static hydra.overlay.java.dsl.Types.int8;
 import static hydra.overlay.java.dsl.Types.optional;
 import static hydra.overlay.java.dsl.Types.scheme;
 import static hydra.overlay.java.dsl.Types.string;
@@ -22,44 +21,49 @@ import hydra.overlay.java.util.Either;
 
 
 /**
- * Primitive function which parses a string into a decimal (arbitrary-precision exact decimal).
- * Returns an optional value that is empty if the string cannot be parsed.
+ * Primitive function which parses a string into an int8 (8-bit signed integer).
+ * Returns an optional value that is empty if the string cannot be parsed or is out of range.
  */
-public class ReadDecimal extends PrimitiveFunction {
+public class ParseInt8 extends PrimitiveFunction {
     /**
      * Returns the unique name identifying this primitive function.
-     * @return the function name "hydra.lib.literals.readDecimal"
+     * @return the function name "hydra.lib.literals.parseInt8"
      */
     public Name name() {
-        return hydra.lib.Literals.readDecimal().name;
+        return hydra.lib.Literals.parseInt8().name;
     }
 
     /**
-     * Returns the type scheme for this function: string -&gt; optional decimal.
+     * Returns the type scheme for this function: string -&gt; optional int8.
      * @return the type scheme representing the function signature
      */
     @Override
     public TypeScheme type() {
-        return scheme(function(string(), optional(decimal())));
+        return scheme(function(string(), optional(int8())));
     }
 
     /**
      * Provides the implementation of this primitive function.
-     * @return a function that parses string terms into optional decimal terms
+     * @return a function that parses string terms into optional int8 terms
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.overlay.java.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.optional(apply(s).map(Terms::decimal)), hydra.extract.Core.string(graph, args.get(0)));
+        return args -> graph -> hydra.overlay.java.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.optional(apply(s).map(Terms::int8)), hydra.extract.Core.string(graph, args.get(0)));
     }
 
     /**
-     * Attempts to parse a string into a BigDecimal.
+     * Attempts to parse a string into a Byte (8-bit signed).
      * @param str the string to parse
-     * @return a Optional containing the parsed BigDecimal, or empty if parsing fails
+     * @return a Optional containing the parsed Byte, or empty if parsing fails or value is out of range
      */
-    public static Optional<BigDecimal> apply(String str) {
+    public static Optional<Byte> apply(String str) {
         try {
-            return Optional.given(new BigDecimal(str));
+            long n = Long.parseLong(str);
+            if (n >= -128 && n <= 127) {
+                return Optional.given((byte) n);
+            } else {
+                return Optional.none();
+            }
         } catch (NumberFormatException e) {
             return Optional.none();
         }

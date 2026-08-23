@@ -161,7 +161,7 @@ enumValueToExpr = define "enumValueToExpr" $
       (semi @@ (Serialization.spaceSep @@ list [
         Serialization.cst @@ (unwrap P3._EnumValueName @@ var "name"),
         Serialization.cst @@ string "=",
-        Serialization.cst @@ (Literals.showInt32 (var "number"))]))
+        Serialization.cst @@ (Literals.printInt32 (var "number"))]))
 
 excludeInternalOptions :: TypedTermDefinition ([P3.Option] -> [P3.Option])
 excludeInternalOptions = define "excludeInternalOptions" $
@@ -217,21 +217,21 @@ fieldToExpr = define "fieldToExpr" $
             Optionals.given (fieldTypeToExpr @@ var "typ"),
             Optionals.given (Serialization.cst @@ (unwrap P3._FieldName @@ var "name")),
             Optionals.given (Serialization.cst @@ string "="),
-            Optionals.given (Serialization.cst @@ (Literals.showInt32 (var "num"))),
+            Optionals.given (Serialization.cst @@ (Literals.printInt32 (var "num"))),
             fieldOptionsToExpr @@ var "options"])),
         P3._FieldType_repeated>>: lambda "st" $
           semi @@ (Serialization.spaceSep @@ (Optionals.givens $ list [
             Optionals.given (fieldTypeToExpr @@ var "typ"),
             Optionals.given (Serialization.cst @@ (unwrap P3._FieldName @@ var "name")),
             Optionals.given (Serialization.cst @@ string "="),
-            Optionals.given (Serialization.cst @@ (Literals.showInt32 (var "num"))),
+            Optionals.given (Serialization.cst @@ (Literals.printInt32 (var "num"))),
             fieldOptionsToExpr @@ var "options"])),
         P3._FieldType_simple>>: lambda "st" $
           semi @@ (Serialization.spaceSep @@ (Optionals.givens $ list [
             Optionals.given (fieldTypeToExpr @@ var "typ"),
             Optionals.given (Serialization.cst @@ (unwrap P3._FieldName @@ var "name")),
             Optionals.given (Serialization.cst @@ string "="),
-            Optionals.given (Serialization.cst @@ (Literals.showInt32 (var "num"))),
+            Optionals.given (Serialization.cst @@ (Literals.printInt32 (var "num"))),
             fieldOptionsToExpr @@ var "options"]))])
 
 fieldTypeToExpr :: TypedTermDefinition (P3.FieldType -> Expr)

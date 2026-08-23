@@ -59,7 +59,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "General-purpose parser combinators")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "General-purpose parser combinators, operating on a Parser type. A helper library, not a set of parse<T> convention functions (see docs/specification/index.md, Conventions).")}
   where
    definitions = [
      toDefinition alt,

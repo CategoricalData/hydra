@@ -468,7 +468,7 @@ inferTypeOf = define "inferTypeOf" $
       (Paths.subtermPath (Lists.reverse $ Typing.inferenceContextTrace (var "fcx2")))
       (Strings.concat $ list [
         (string "Expected a single binding with a type scheme, but got: "),
-        Literals.showInt32 $ Lists.length $ var "bindings",
+        Literals.printInt32 $ Lists.length $ var "bindings",
         (string " bindings")])))
 
 
@@ -638,7 +638,7 @@ inferTypeOfCollection = define "inferTypeOfCollection" $
       @@ (Substitution.idTypeSubst)
       @@ var "classConstraints"))
     ("resultsRp" <<~ inferMany @@ var "fcx2" @@ var "cx" @@
-      (Lists.zip (var "els") $ Lists.map ("i" ~> Strings.concat $ list [(string "#"), Literals.showInt32 $ var "i"]) $
+      (Lists.zip (var "els") $ Lists.map ("i" ~> Strings.concat $ list [(string "#"), Literals.printInt32 $ var "i"]) $
         Math.range (int32 1) (Math.add (Lists.length $ var "els") (int32 1))) $
     "results" <~ Pairs.first (var "resultsRp") $
     "fcx3" <~ Pairs.second (var "resultsRp") $

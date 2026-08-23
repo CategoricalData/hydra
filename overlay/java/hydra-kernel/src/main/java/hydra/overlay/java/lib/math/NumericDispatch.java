@@ -170,7 +170,7 @@ public final class NumericDispatch {
     // Number subtypes selects the per-type arithmetic. Native fixed-width results are NOT re-narrowed
     // (the boxed type is the width); bigint uses BigInteger for full precision.
     //
-    // KNOWN GAP: uint64's native boxed representation is also BigInteger (see ReadUint64 etc.),
+    // KNOWN GAP: uint64's native boxed representation is also BigInteger (see ParseUint64 etc.),
     // identical to bigint's box — the `a instanceof BigInteger` branch below cannot distinguish
     // the two and skips narrowing for both. A native-path uint64 op can therefore escape the
     // 0..2^64-1 range the same way the Term-path bug (fixed at rewrapInteger/wrapUint64 above)

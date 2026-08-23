@@ -153,7 +153,7 @@ primitivesGroup = subgroup "primitives" [
     writerCase "negative integer" (Json.valueNumber $ Phantoms.decimal (-17.0)) "-17",
     writerCase "large integer" (Json.valueNumber $ Phantoms.decimal 1000000.0) "1000000",
 
-    -- Numbers - fractions. showDecimal (Scientific's Show) stays plain only in the
+    -- Numbers - fractions. printDecimal (Scientific's Show) stays plain only in the
     -- narrow [0.1, 1) ∪ whole-ish band; values like 0.01 and 0.001 come out in
     -- scientific form. This is imperfect but uniform across all Hydra hosts.
     writerCase "decimal" (Json.valueNumber $ Phantoms.decimal 3.14) "3.14",

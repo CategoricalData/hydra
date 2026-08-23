@@ -230,45 +230,45 @@ literalsFloat64ToDecimal = subgroup "float64ToDecimal" [
   where
     test name x result = primCase name DefLiterals.float64ToDecimal [float64 x] (decimal result)
 
-literalsReadDecimal :: TypedTerm TestGroup
-literalsReadDecimal = subgroup "readDecimal" [
+literalsParseDecimal :: TypedTerm TestGroup
+literalsParseDecimal = subgroup "parseDecimal" [
   testJust "positive" "3.14" 3.14,
   testJust "zero" "0" 0,
   testJust "negative" "-42" (-42),
   testNothing "invalid" "abc"]
   where
-    testJust name x result = primCase name DefLiterals.readDecimal [string x] (Core.termOptional $ just (decimal result))
-    testNothing name x = primCase name DefLiterals.readDecimal [string x] (Core.termOptional nothing)
+    testJust name x result = primCase name DefLiterals.parseDecimal [string x] (Core.termOptional $ just (decimal result))
+    testNothing name x = primCase name DefLiterals.parseDecimal [string x] (Core.termOptional nothing)
 
-literalsShowDecimal :: TypedTerm TestGroup
-literalsShowDecimal = subgroup "showDecimal" [
+literalsPrintDecimal :: TypedTerm TestGroup
+literalsPrintDecimal = subgroup "printDecimal" [
   test "zero" 0 "0.0",
   test "positive whole" 42 "42.0",
   test "negative whole" (-42) "-42.0",
   test "positive fraction" 3.14 "3.14",
   test "negative fraction" (-2.5) "-2.5"]
   where
-    test name x result = primCase name DefLiterals.showDecimal [decimal x] (string result)
+    test name x result = primCase name DefLiterals.printDecimal [decimal x] (string result)
 
--- Show functions
+-- Print functions
 
-literalsShowBigint :: TypedTerm TestGroup
-literalsShowBigint = subgroup "showBigint" [
+literalsPrintBigint :: TypedTerm TestGroup
+literalsPrintBigint = subgroup "printBigint" [
   test "positive" 42 "42",
   test "negative" (-42) "-42",
   test "zero" 0 "0"]
   where
-    test name x result = primCase name DefLiterals.showBigint [bigint x] (string result)
+    test name x result = primCase name DefLiterals.printBigint [bigint x] (string result)
 
-literalsShowBoolean :: TypedTerm TestGroup
-literalsShowBoolean = subgroup "showBoolean" [
+literalsPrintBoolean :: TypedTerm TestGroup
+literalsPrintBoolean = subgroup "printBoolean" [
   test "true" true "true",
   test "false" false "false"]
   where
     test name x result = primCase name DefLiterals.printBoolean [x] (string result)
 
-literalsShowFloat32 :: TypedTerm TestGroup
-literalsShowFloat32 = subgroup "showFloat32" [
+literalsPrintFloat32 :: TypedTerm TestGroup
+literalsPrintFloat32 = subgroup "printFloat32" [
   test "positive" 3.14 "3.14",
   test "negative" (-2.5) "-2.5",
   test "zero" 0.0 "0.0",
@@ -277,10 +277,10 @@ literalsShowFloat32 = subgroup "showFloat32" [
   test "very small" 0.001 "1.0e-3",
   test "normal decimal" 0.1 "0.1"]
   where
-    test name x result = primCase name DefLiterals.showFloat32 [float32 x] (string result)
+    test name x result = primCase name DefLiterals.printFloat32 [float32 x] (string result)
 
-literalsShowFloat64 :: TypedTerm TestGroup
-literalsShowFloat64 = subgroup "showFloat64" [
+literalsPrintFloat64 :: TypedTerm TestGroup
+literalsPrintFloat64 = subgroup "printFloat64" [
   test "positive" 3.14159 "3.14159",
   test "zero" 0.0 "0.0",
   test "small positive" 0.05 "5.0e-2",
@@ -288,39 +288,39 @@ literalsShowFloat64 = subgroup "showFloat64" [
   test "very small" 0.001 "1.0e-3",
   test "normal decimal" 0.1 "0.1"]
   where
-    test name x result = primCase name DefLiterals.showFloat64 [float64 x] (string result)
+    test name x result = primCase name DefLiterals.printFloat64 [float64 x] (string result)
 
-literalsShowInt16 :: TypedTerm TestGroup
-literalsShowInt16 = subgroup "showInt16" [
+literalsPrintInt16 :: TypedTerm TestGroup
+literalsPrintInt16 = subgroup "printInt16" [
   test "positive" 1000 "1000",
   test "negative" (-1000) "-1000"]
   where
-    test name x result = primCase name DefLiterals.showInt16 [int16 x] (string result)
+    test name x result = primCase name DefLiterals.printInt16 [int16 x] (string result)
 
-literalsShowInt32 :: TypedTerm TestGroup
-literalsShowInt32 = subgroup "showInt32" [
+literalsPrintInt32 :: TypedTerm TestGroup
+literalsPrintInt32 = subgroup "printInt32" [
   test "positive" 42 "42",
   test "negative" (-42) "-42",
   test "zero" 0 "0"]
   where
-    test name x result = primCase name DefLiterals.showInt32 [int32 x] (string result)
+    test name x result = primCase name DefLiterals.printInt32 [int32 x] (string result)
 
-literalsShowInt64 :: TypedTerm TestGroup
-literalsShowInt64 = subgroup "showInt64" [
+literalsPrintInt64 :: TypedTerm TestGroup
+literalsPrintInt64 = subgroup "printInt64" [
   test "positive" 1000000 "1000000",
   test "negative" (-1000000) "-1000000"]
   where
-    test name x result = primCase name DefLiterals.showInt64 [int64 x] (string result)
+    test name x result = primCase name DefLiterals.printInt64 [int64 x] (string result)
 
-literalsShowInt8 :: TypedTerm TestGroup
-literalsShowInt8 = subgroup "showInt8" [
+literalsPrintInt8 :: TypedTerm TestGroup
+literalsPrintInt8 = subgroup "printInt8" [
   test "positive" 42 "42",
   test "negative" (-42) "-42"]
   where
-    test name x result = primCase name DefLiterals.showInt8 [int8 x] (string result)
+    test name x result = primCase name DefLiterals.printInt8 [int8 x] (string result)
 
-literalsShowString :: TypedTerm TestGroup
-literalsShowString = subgroup "showString" [
+literalsPrintString :: TypedTerm TestGroup
+literalsPrintString = subgroup "printString" [
   test "simple" "hello" "\"hello\"",
   test "empty" "" "\"\"",
   -- Non-ASCII characters are escaped as decimal codes
@@ -343,35 +343,35 @@ literalsShowString = subgroup "showString" [
   where
     test name x result = primCase name DefLiterals.printString [string x] (string result)
 
-literalsShowUint16 :: TypedTerm TestGroup
-literalsShowUint16 = subgroup "showUint16" [
+literalsPrintUint16 :: TypedTerm TestGroup
+literalsPrintUint16 = subgroup "printUint16" [
   test "zero" 0 "0",
   test "typical value" 1000 "1000"]
   where
-    test name x result = primCase name DefLiterals.showUint16 [uint16 x] (string result)
+    test name x result = primCase name DefLiterals.printUint16 [uint16 x] (string result)
 
-literalsShowUint32 :: TypedTerm TestGroup
-literalsShowUint32 = subgroup "showUint32" [
+literalsPrintUint32 :: TypedTerm TestGroup
+literalsPrintUint32 = subgroup "printUint32" [
   test "zero" 0 "0",
   test "typical value" 100000 "100000"]
   where
-    test name x result = primCase name DefLiterals.showUint32 [uint32 x] (string result)
+    test name x result = primCase name DefLiterals.printUint32 [uint32 x] (string result)
 
-literalsShowUint64 :: TypedTerm TestGroup
-literalsShowUint64 = subgroup "showUint64" [
+literalsPrintUint64 :: TypedTerm TestGroup
+literalsPrintUint64 = subgroup "printUint64" [
   test "zero" 0 "0",
   test "typical value" 1000000 "1000000"]
   where
-    test name x result = primCase name DefLiterals.showUint64 [uint64 x] (string result)
+    test name x result = primCase name DefLiterals.printUint64 [uint64 x] (string result)
 
-literalsShowUint8 :: TypedTerm TestGroup
-literalsShowUint8 = subgroup "showUint8" [
+literalsPrintUint8 :: TypedTerm TestGroup
+literalsPrintUint8 = subgroup "printUint8" [
   test "zero" 0 "0",
   test "max value" 255 "255"]
   where
-    test name x result = primCase name DefLiterals.showUint8 [uint8 x] (string result)
+    test name x result = primCase name DefLiterals.printUint8 [uint8 x] (string result)
 
--- Read functions
+-- Parse functions
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
@@ -405,36 +405,36 @@ allTests = definitionInModule module_ "allTests" $
       literalsDecimalToFloat64,
       literalsFloat32ToDecimal,
       literalsFloat64ToDecimal,
-      literalsShowDecimal,
-      literalsReadDecimal,
-      -- Show functions
-      literalsShowInt8,
-      literalsShowInt16,
-      literalsShowInt32,
-      literalsShowInt64,
-      literalsShowUint8,
-      literalsShowUint16,
-      literalsShowUint32,
-      literalsShowUint64,
-      literalsShowBigint,
-      literalsShowFloat32,
-      literalsShowFloat64,
-      literalsShowBoolean,
-      literalsShowString,
-      -- Read functions
-      literalsReadInt8,
-      literalsReadInt16,
-      literalsReadInt32,
-      literalsReadInt64,
-      literalsReadUint8,
-      literalsReadUint16,
-      literalsReadUint32,
-      literalsReadUint64,
-      literalsReadBigint,
-      literalsReadFloat32,
-      literalsReadFloat64,
-      literalsReadBoolean,
-      literalsReadString,
+      literalsPrintDecimal,
+      literalsParseDecimal,
+      -- Print functions
+      literalsPrintInt8,
+      literalsPrintInt16,
+      literalsPrintInt32,
+      literalsPrintInt64,
+      literalsPrintUint8,
+      literalsPrintUint16,
+      literalsPrintUint32,
+      literalsPrintUint64,
+      literalsPrintBigint,
+      literalsPrintFloat32,
+      literalsPrintFloat64,
+      literalsPrintBoolean,
+      literalsPrintString,
+      -- Parse functions
+      literalsParseInt8,
+      literalsParseInt16,
+      literalsParseInt32,
+      literalsParseInt64,
+      literalsParseUint8,
+      literalsParseUint16,
+      literalsParseUint32,
+      literalsParseUint64,
+      literalsParseBigint,
+      literalsParseFloat32,
+      literalsParseFloat64,
+      literalsParseBoolean,
+      literalsParseString,
       -- Binary conversions
       literalsBase64ToBinary,
       literalsBinaryToBase64,
@@ -455,22 +455,22 @@ literalsBinaryToBytes = subgroup "binaryToBytes" [
   where
     test name x result = primCase name DefLiterals.binaryToBytes [binary x] (list (int32 <$> result))
 
-literalsReadBigint :: TypedTerm TestGroup
-literalsReadBigint = subgroup "readBigint" [
+literalsParseBigint :: TypedTerm TestGroup
+literalsParseBigint = subgroup "parseBigint" [
   testJust "positive" "42" 42,
   testJust "negative" "-42" (-42),
   testJust "zero" "0" 0,
-  primCaseWithTags "large" [] DefLiterals.readBigint [string "123456789012345678901234567890"] (Core.termOptional $ just (bigint 123456789012345678901234567890)),
+  primCaseWithTags "large" [] DefLiterals.parseBigint [string "123456789012345678901234567890"] (Core.termOptional $ just (bigint 123456789012345678901234567890)),
   testNothing "invalid" "abc"]
   where
-    testJust name x result = primCase name DefLiterals.readBigint [string x] (Core.termOptional $ just (bigint result))
-    testNothing name x = primCase name DefLiterals.readBigint [string x] (Core.termOptional nothing)
+    testJust name x result = primCase name DefLiterals.parseBigint [string x] (Core.termOptional $ just (bigint result))
+    testNothing name x = primCase name DefLiterals.parseBigint [string x] (Core.termOptional nothing)
 
 -- Binary/String conversion
 -- Note: binaryToBase64 and base64ToBinary use base64 encoding
 
-literalsReadBoolean :: TypedTerm TestGroup
-literalsReadBoolean = subgroup "readBoolean" [
+literalsParseBoolean :: TypedTerm TestGroup
+literalsParseBoolean = subgroup "parseBoolean" [
   testJust "true" "true" true,
   testJust "false" "false" false,
   testNothing "invalid" "yes"]
@@ -478,53 +478,53 @@ literalsReadBoolean = subgroup "readBoolean" [
     testJust name x result = primCase name DefLiterals.parseBoolean [string x] (Core.termOptional $ just result)
     testNothing name x = primCase name DefLiterals.parseBoolean [string x] (Core.termOptional nothing)
 
-literalsReadFloat32 :: TypedTerm TestGroup
-literalsReadFloat32 = subgroup "readFloat32" [
+literalsParseFloat32 :: TypedTerm TestGroup
+literalsParseFloat32 = subgroup "parseFloat32" [
   testJust "positive" "3.14" 3.14,
   testJust "negative" "-2.5" (-2.5),
   testNothing "invalid" "abc"]
   where
-    testJust name x result = primCase name DefLiterals.readFloat32 [string x] (Core.termOptional $ just (float32 result))
-    testNothing name x = primCase name DefLiterals.readFloat32 [string x] (Core.termOptional nothing)
+    testJust name x result = primCase name DefLiterals.parseFloat32 [string x] (Core.termOptional $ just (float32 result))
+    testNothing name x = primCase name DefLiterals.parseFloat32 [string x] (Core.termOptional nothing)
 
-literalsReadFloat64 :: TypedTerm TestGroup
-literalsReadFloat64 = subgroup "readFloat64" [
+literalsParseFloat64 :: TypedTerm TestGroup
+literalsParseFloat64 = subgroup "parseFloat64" [
   testJust "positive" "3.14159" 3.14159,
   testJust "negative" "-2.71828" (-2.71828),
   testNothing "invalid" "abc"]
   where
-    testJust name x result = primCase name DefLiterals.readFloat64 [string x] (Core.termOptional $ just (float64 result))
-    testNothing name x = primCase name DefLiterals.readFloat64 [string x] (Core.termOptional nothing)
+    testJust name x result = primCase name DefLiterals.parseFloat64 [string x] (Core.termOptional $ just (float64 result))
+    testNothing name x = primCase name DefLiterals.parseFloat64 [string x] (Core.termOptional nothing)
 
-literalsReadInt16 :: TypedTerm TestGroup
-literalsReadInt16 = subgroup "readInt16" [
+literalsParseInt16 :: TypedTerm TestGroup
+literalsParseInt16 = subgroup "parseInt16" [
   testJust "positive" "1000" 1000,
   testJust "negative" "-1000" (-1000),
   testNothing "invalid" "abc"]
   where
-    testJust name x result = primCase name DefLiterals.readInt16 [string x] (Core.termOptional $ just (int16 result))
-    testNothing name x = primCase name DefLiterals.readInt16 [string x] (Core.termOptional nothing)
+    testJust name x result = primCase name DefLiterals.parseInt16 [string x] (Core.termOptional $ just (int16 result))
+    testNothing name x = primCase name DefLiterals.parseInt16 [string x] (Core.termOptional nothing)
 
-literalsReadInt32 :: TypedTerm TestGroup
-literalsReadInt32 = subgroup "readInt32" [
+literalsParseInt32 :: TypedTerm TestGroup
+literalsParseInt32 = subgroup "parseInt32" [
   testJust "positive" "42" 42,
   testJust "negative" "-42" (-42),
   testNothing "invalid" "abc"]
   where
-    testJust name x result = primCase name DefLiterals.readInt32 [string x] (Core.termOptional $ just (int32 result))
-    testNothing name x = primCase name DefLiterals.readInt32 [string x] (Core.termOptional nothing)
+    testJust name x result = primCase name DefLiterals.parseInt32 [string x] (Core.termOptional $ just (int32 result))
+    testNothing name x = primCase name DefLiterals.parseInt32 [string x] (Core.termOptional nothing)
 
-literalsReadInt64 :: TypedTerm TestGroup
-literalsReadInt64 = subgroup "readInt64" [
+literalsParseInt64 :: TypedTerm TestGroup
+literalsParseInt64 = subgroup "parseInt64" [
   testJust "positive" "1000000" 1000000,
   testJust "negative" "-1000000" (-1000000),
   testNothing "invalid" "abc"]
   where
-    testJust name x result = primCase name DefLiterals.readInt64 [string x] (Core.termOptional $ just (int64 result))
-    testNothing name x = primCase name DefLiterals.readInt64 [string x] (Core.termOptional nothing)
+    testJust name x result = primCase name DefLiterals.parseInt64 [string x] (Core.termOptional $ just (int64 result))
+    testNothing name x = primCase name DefLiterals.parseInt64 [string x] (Core.termOptional nothing)
 
-literalsReadInt8 :: TypedTerm TestGroup
-literalsReadInt8 = subgroup "readInt8" [
+literalsParseInt8 :: TypedTerm TestGroup
+literalsParseInt8 = subgroup "parseInt8" [
   testJust "positive" "42" 42,
   testJust "negative" "-42" (-42),
   testJust "max value" "127" 127,
@@ -532,11 +532,11 @@ literalsReadInt8 = subgroup "readInt8" [
   testNothing "invalid" "abc",
   testNothing "overflow" "128"]
   where
-    testJust name x result = primCase name DefLiterals.readInt8 [string x] (Core.termOptional $ just (int8 result))
-    testNothing name x = primCase name DefLiterals.readInt8 [string x] (Core.termOptional nothing)
+    testJust name x result = primCase name DefLiterals.parseInt8 [string x] (Core.termOptional $ just (int8 result))
+    testNothing name x = primCase name DefLiterals.parseInt8 [string x] (Core.termOptional nothing)
 
-literalsReadString :: TypedTerm TestGroup
-literalsReadString = subgroup "readString" [
+literalsParseString :: TypedTerm TestGroup
+literalsParseString = subgroup "parseString" [
   testJust "quoted string" "\"hello\"" "hello",
   testJust "empty quoted" "\"\"" "",
   testNothing "unquoted" "hello"]
@@ -544,46 +544,46 @@ literalsReadString = subgroup "readString" [
     testJust name x result = primCase name DefLiterals.parseString [string x] (Core.termOptional $ just (string result))
     testNothing name x = primCase name DefLiterals.parseString [string x] (Core.termOptional nothing)
 
-literalsReadUint16 :: TypedTerm TestGroup
-literalsReadUint16 = subgroup "readUint16" [
+literalsParseUint16 :: TypedTerm TestGroup
+literalsParseUint16 = subgroup "parseUint16" [
   testJust "zero" "0" 0,
   testJust "typical" "1000" 1000,
   testNothing "invalid" "abc",
   testNothing "negative" "-1"]
   where
-    testJust name x result = primCase name DefLiterals.readUint16 [string x] (Core.termOptional $ just (uint16 result))
-    testNothing name x = primCase name DefLiterals.readUint16 [string x] (Core.termOptional nothing)
+    testJust name x result = primCase name DefLiterals.parseUint16 [string x] (Core.termOptional $ just (uint16 result))
+    testNothing name x = primCase name DefLiterals.parseUint16 [string x] (Core.termOptional nothing)
 
-literalsReadUint32 :: TypedTerm TestGroup
-literalsReadUint32 = subgroup "readUint32" [
+literalsParseUint32 :: TypedTerm TestGroup
+literalsParseUint32 = subgroup "parseUint32" [
   testJust "zero" "0" 0,
   testJust "typical" "100000" 100000,
   testNothing "invalid" "abc",
   testNothing "negative" "-1"]
   where
-    testJust name x result = primCase name DefLiterals.readUint32 [string x] (Core.termOptional $ just (uint32 result))
-    testNothing name x = primCase name DefLiterals.readUint32 [string x] (Core.termOptional nothing)
+    testJust name x result = primCase name DefLiterals.parseUint32 [string x] (Core.termOptional $ just (uint32 result))
+    testNothing name x = primCase name DefLiterals.parseUint32 [string x] (Core.termOptional nothing)
 
-literalsReadUint64 :: TypedTerm TestGroup
-literalsReadUint64 = subgroup "readUint64" [
+literalsParseUint64 :: TypedTerm TestGroup
+literalsParseUint64 = subgroup "parseUint64" [
   testJust "zero" "0" 0,
   testJust "typical" "1000000" 1000000,
   testNothing "invalid" "abc",
   testNothing "negative" "-1"]
   where
-    testJust name x result = primCase name DefLiterals.readUint64 [string x] (Core.termOptional $ just (uint64 result))
-    testNothing name x = primCase name DefLiterals.readUint64 [string x] (Core.termOptional nothing)
+    testJust name x result = primCase name DefLiterals.parseUint64 [string x] (Core.termOptional $ just (uint64 result))
+    testNothing name x = primCase name DefLiterals.parseUint64 [string x] (Core.termOptional nothing)
 
-literalsReadUint8 :: TypedTerm TestGroup
-literalsReadUint8 = subgroup "readUint8" [
+literalsParseUint8 :: TypedTerm TestGroup
+literalsParseUint8 = subgroup "parseUint8" [
   testJust "zero" "0" 0,
   testJust "typical" "100" 100,
   testJust "max value" "255" 255,
   testNothing "invalid" "abc",
   testNothing "negative" "-1"]
   where
-    testJust name x result = primCase name DefLiterals.readUint8 [string x] (Core.termOptional $ just (uint8 result))
-    testNothing name x = primCase name DefLiterals.readUint8 [string x] (Core.termOptional nothing)
+    testJust name x result = primCase name DefLiterals.parseUint8 [string x] (Core.termOptional $ just (uint8 result))
+    testNothing name x = primCase name DefLiterals.parseUint8 [string x] (Core.termOptional nothing)
 
 literalsBase64ToBinary :: TypedTerm TestGroup
 literalsBase64ToBinary = subgroup "base64ToBinary" [

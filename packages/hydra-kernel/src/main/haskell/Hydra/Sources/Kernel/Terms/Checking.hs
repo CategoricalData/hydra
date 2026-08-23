@@ -186,7 +186,7 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
         (Just $ left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "forall type") (Strings.concat $ list [
           PrintCore.type_ @@ var "t",
           string ". Trying to apply ",
-          Literals.showInt32 (Lists.length $ var "typeArgs"),
+          Literals.printInt32 (Lists.length $ var "typeArgs"),
           string " type args: ",
           Formatting.showList @@ PrintCore.type_ @@ var "typeArgs",
           string ". Context has vars: {",
@@ -216,7 +216,7 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
             ("_" ~> left (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "forall type") (Strings.concat $ list [
               PrintCore.type_ @@ var "t",
               string ". Trying to apply ",
-              Literals.showInt32 (Lists.length $ var "typeArgs"),
+              Literals.printInt32 (Lists.length $ var "typeArgs"),
               string " type args: ",
               Formatting.showList @@ PrintCore.type_ @@ var "typeArgs"])))
             ("schemaRes" ~>
@@ -329,7 +329,7 @@ normalizeTypeFreeVars = define "normalizeTypeFreeVars" $
       _Type_variable>>: "v" ~>
         Logic.ifElse (Maps.member (var "v") (var "acc" :: TypedTerm (M.Map Name Name)))
           (var "acc")
-          (Maps.insert (var "v") (Core.name $ Strings.concat2 (string "_tv") (Literals.showInt32 $ Maps.size (var "acc" :: TypedTerm (M.Map Name Name)))) (var "acc" :: TypedTerm (M.Map Name Name)))]) $
+          (Maps.insert (var "v") (Core.name $ Strings.concat2 (string "_tv") (Literals.printInt32 $ Maps.size (var "acc" :: TypedTerm (M.Map Name Name)))) (var "acc" :: TypedTerm (M.Map Name Name)))]) $
   "subst" <~ Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "collectVars" @@ (Maps.empty :: TypedTerm (M.Map Name Name)) @@ var "typ" $
   Variables.substituteTypeVariables @@ var "subst" @@ var "typ"
 

@@ -265,7 +265,7 @@ typeSchemeToTermSignature = define "typeSchemeToTermSignature" $
       pair
         (Lists.cons
           (Typing.parameter
-            (Core.name $ Strings.concat (list [string "arg", Literals.showInt32 (var "i")]))
+            (Core.name $ Strings.concat (list [string "arg", Literals.printInt32 (var "i")]))
             Phantoms.nothing
             (var "ty")
             false)

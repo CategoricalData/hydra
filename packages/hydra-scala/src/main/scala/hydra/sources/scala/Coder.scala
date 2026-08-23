@@ -431,7 +431,7 @@ object Coder:
         Phantoms.right(inject("hydra.scala.syntax.Lit", "boolean", v("b"))))),
       field("decimal", lambda("d",
         Phantoms.right(inject("hydra.scala.syntax.Lit", "string",
-          applyP("hydra.lib.literals.showDecimal", v("d")))))),
+          applyP("hydra.lib.literals.printDecimal", v("d")))))),
       field("float", lambda("fv",
         matchWithDefault("hydra.core.FloatValue", v("fv"),
           errorLeft("unexpected float value"),
@@ -1722,14 +1722,14 @@ object Coder:
                       applyP(localUtils("sname"), string("BigInt")),
                       list(inject("hydra.scala.syntax.Data", "lit",
                         inject("hydra.scala.syntax.Lit", "string",
-                          applyP("hydra.lib.literals.showBigint", v("bi"))))))))),
+                          applyP("hydra.lib.literals.printBigint", v("bi"))))))))),
                 field("uint64", lambda("ui",
                   Phantoms.right(
                     applyP(localUtils("sapply"),
                       applyP(localUtils("sname"), string("BigInt")),
                       list(inject("hydra.scala.syntax.Data", "lit",
                         inject("hydra.scala.syntax.Lit", "string",
-                          applyP("hydra.lib.literals.showBigint",
+                          applyP("hydra.lib.literals.printBigint",
                             applyP("hydra.lib.literals.uint64ToBigint", v("ui"))))))))))))))))))
 
   // Variable arm: produce a properly-qualified Scala name.

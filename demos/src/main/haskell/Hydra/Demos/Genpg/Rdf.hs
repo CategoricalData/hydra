@@ -15,7 +15,7 @@ import Hydra.Demos.Genpg.Examples.Health.GraphSchema
 import Hydra.Demos.Genpg.Examples.Health.Mapping
 import Hydra.Demos.Genpg.Demo (transformTables)
 import Hydra.Rdf.ShaclRdf (shapesGraphToNtriples)
-import Hydra.Overlay.Haskell.Lib.Literals (showInt32)
+import Hydra.Overlay.Haskell.Lib.Literals (printInt32)
 import qualified Hydra.Pg.Rdf.Environment as PgRdfEnv
 import qualified Hydra.Pg.Rdf.Mappings as PgRdfMappings
 
@@ -112,7 +112,7 @@ defaultTermEnv = PgRdfEnv.PgRdfEnvironment {
 termToIri :: String -> Term -> Rdf.Iri
 termToIri prefix term = case term of
   TermLiteral (LiteralString s) -> Rdf.Iri (demoNs ++ prefix ++ s)
-  TermLiteral (LiteralInteger (IntegerValueInt32 i)) -> Rdf.Iri (demoNs ++ prefix ++ showInt32 i)
+  TermLiteral (LiteralInteger (IntegerValueInt32 i)) -> Rdf.Iri (demoNs ++ prefix ++ printInt32 i)
   _ -> error $ "Unsupported term type for IRI encoding: " ++ show term
 
 termToLiteral :: Term -> Rdf.Literal

@@ -54,7 +54,7 @@ showBool :: TypedTerm (Bool -> String)
 showBool = Phantoms.lambda "b" $ Literals.printBoolean (Phantoms.var "b")
 
 showInt32 :: TypedTerm (Int -> String)
-showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
+showInt32 = Phantoms.lambda "n" $ Literals.printInt32 (Phantoms.var "n")
 
 showIntList :: TypedTerm ([Int] -> String)
 showIntList = Phantoms.lambda "xs" $ PrintCore.list_ @@ showInt32 @@ Phantoms.var "xs"

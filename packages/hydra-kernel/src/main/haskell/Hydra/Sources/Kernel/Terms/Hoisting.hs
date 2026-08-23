@@ -582,7 +582,7 @@ hoistSubterms = define "hoistSubterms" $
             -- Hoist: add to collected bindings, return reference
             -- Use the namePrefix to create stable names: _hoist_<prefix>_<counter>
             -- Use chooseUniqueName to avoid collisions with names in the enclosing scope
-            ("proposedName" <~ Core.name (Strings.concat (list [string "_hoist_", var "namePrefix", string "_", Literals.showInt32 (var "newCounter")])) $
+            ("proposedName" <~ Core.name (Strings.concat (list [string "_hoist_", var "namePrefix", string "_", Literals.printInt32 (var "newCounter")])) $
              "existingNames" <~ (Sets.fromList (Lists.map (lambda "b" $ Core.bindingName (var "b")) (var "newBindings")) :: TypedTerm (S.Set Name)) $
              "freeVarsInSubterm" <~ Variables.freeVariablesInTerm @@ var "subterm" $
              "allReserved" <~ Sets.union (var "existingNames" :: TypedTerm (S.Set Name)) (var "freeVarsInSubterm") $

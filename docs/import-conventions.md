@@ -74,8 +74,8 @@ meta-function `TypedTerm a -> TypedTerm b` into a first-class term-level functio
 `Hydra.Overlay.Haskell.Dsl.Typed.Phantoms`:
 
 ```haskell
-ShowCore.list_ @@ reify Literals.showInt32 @@ xs
-ShowCore.map_ @@ reify Literals.showInt32 @@ reify Literals.showString @@ m
+PrintCore.list_ @@ reify Literals.printInt32 @@ xs
+PrintCore.map_ @@ reify Literals.printInt32 @@ reify Literals.printString @@ m
 binPrim :: TypedTerm (a -> b -> c)
 binPrim = reify2 (\x y -> Maths.add x (Maths.mul x y))
 ```

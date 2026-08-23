@@ -146,7 +146,7 @@ notAForallTypeError = define "notAForallTypeError" $
     string "not a forall type: ",
     PrintCore.type_ @@ var "typ",
     string ". Trying to apply ",
-    Literals.showInt32 (Lists.length $ var "args"),
+    Literals.printInt32 (Lists.length $ var "args"),
     string " type argument(s): ",
     Formatting.showList @@ PrintCore.type_ @@ var "args"]
 
@@ -196,9 +196,9 @@ typeArityMismatchError = define "typeArityMismatchError" $
     string "type ",
     PrintCore.type_ @@ var "typ",
     string " applied to the wrong number of type arguments (expected ",
-    Literals.showInt32 (var "expected"),
+    Literals.printInt32 (var "expected"),
     string ", got ",
-    Literals.showInt32 (var "actual"),
+    Literals.printInt32 (var "actual"),
     string "): ",
     Formatting.showList @@ PrintCore.type_ @@ var "args"]
 

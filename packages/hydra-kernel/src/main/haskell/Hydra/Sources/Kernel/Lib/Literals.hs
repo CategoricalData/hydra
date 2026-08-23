@@ -28,14 +28,14 @@ module_ = Module {
                    float32ToDecimal, float32ToFloat64,
                    float64ToDecimal, float64ToFloat32,
                    int16ToBigint, int32ToBigint, int64ToBigint, int8ToBigint,
-                   parseBoolean, parseString,
-                   printBoolean, printString,
-                   readBigint, readDecimal, readFloat32, readFloat64,
-                   readInt16, readInt32, readInt64, readInt8,
-                   readUint16, readUint32, readUint64, readUint8,
-                   showBigint, showDecimal, showFloat32, showFloat64,
-                   showInt16, showInt32, showInt64, showInt8,
-                   showUint16, showUint32, showUint64, showUint8,
+                   parseBigint, parseBoolean, parseDecimal, parseFloat32, parseFloat64,
+                   parseInt16, parseInt32, parseInt64, parseInt8,
+                   parseString,
+                   parseUint16, parseUint32, parseUint64, parseUint8,
+                   printBigint, printBoolean, printDecimal, printFloat32, printFloat64,
+                   printInt16, printInt32, printInt64, printInt8,
+                   printString,
+                   printUint16, printUint32, printUint64, printUint8,
                    uint16ToBigint, uint32ToBigint, uint64ToBigint, uint8ToBigint]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
@@ -191,10 +191,10 @@ int8ToBigint = define "int8ToBigint" "Convert an int8 to a bigint." (fn ("x", "t
   \ lossless.",
    "Total."]
 
-readBigint :: PrimitiveDefinition
-readBigint = deprecatedSince "0.18" "parseBigint" $ define "readBigint" "Parse a string as a bigint."
+parseBigint :: PrimitiveDefinition
+parseBigint = define "parseBigint" "Parse a string as a bigint."
   (fn ("s", "the string to parse") Types.string (Types.optional Types.bigint))
-  ["readBigint(s) returns Just(x) where x is the bigint parsed from s, or Nothing if s is not a valid\
+  ["parseBigint(s) returns Just(x) where x is the bigint parsed from s, or Nothing if s is not a valid\
   \ bigint literal.",
    "Accepted syntax follows the Haskell Show/Read convention: an optional leading minus sign followed\
   \ by a sequence of decimal digits. Whitespace is not stripped; leading or trailing whitespace causes\
@@ -209,57 +209,57 @@ parseBoolean = define "parseBoolean" "Parse a string as a boolean."
   \ capitalized forms is host-defined and should not be relied upon).",
    "Total."]
 
-readDecimal :: PrimitiveDefinition
-readDecimal = deprecatedSince "0.18" "parseDecimal" $ define "readDecimal" "Parse a string as a decimal."
+parseDecimal :: PrimitiveDefinition
+parseDecimal = define "parseDecimal" "Parse a string as a decimal."
   (fn ("s", "the string to parse") Types.string (Types.optional Types.decimal))
-  ["readDecimal(s) returns Just(x) where x is the decimal parsed from s, or Nothing on parse failure.",
+  ["parseDecimal(s) returns Just(x) where x is the decimal parsed from s, or Nothing on parse failure.",
    "Accepted syntax is the standard decimal literal: an optional sign, an integer part, an optional\
   \ fractional part, and an optional exponent (e.g. -1.5, 2e10, 0.0).",
    "Total."]
 
-readFloat32 :: PrimitiveDefinition
-readFloat32 = deprecatedSince "0.18" "parseFloat32" $ define "readFloat32" "Parse a string as a float32."
+parseFloat32 :: PrimitiveDefinition
+parseFloat32 = define "parseFloat32" "Parse a string as a float32."
   (fn ("s", "the string to parse") Types.string (Types.optional Types.float32))
-  ["readFloat32(s) returns Just(x) where x is the IEEE 754 binary32 value closest to the number parsed\
+  ["parseFloat32(s) returns Just(x) where x is the IEEE 754 binary32 value closest to the number parsed\
   \ from s under roundTiesToEven, or Nothing on parse failure.",
    "Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their\
   \ capitalization are host-defined.",
    "Total."]
 
-readFloat64 :: PrimitiveDefinition
-readFloat64 = deprecatedSince "0.18" "parseFloat64" $ define "readFloat64" "Parse a string as a float64."
+parseFloat64 :: PrimitiveDefinition
+parseFloat64 = define "parseFloat64" "Parse a string as a float64."
   (fn ("s", "the string to parse") Types.string (Types.optional Types.float64))
-  ["readFloat64(s) returns Just(x) where x is the IEEE 754 binary64 value closest to the number parsed\
+  ["parseFloat64(s) returns Just(x) where x is the IEEE 754 binary64 value closest to the number parsed\
   \ from s under roundTiesToEven, or Nothing on parse failure.",
    "Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their\
   \ capitalization are host-defined.",
    "Total."]
 
-readInt16 :: PrimitiveDefinition
-readInt16 = deprecatedSince "0.18" "parseInt16" $ define "readInt16" "Parse a string as an int16."
+parseInt16 :: PrimitiveDefinition
+parseInt16 = define "parseInt16" "Parse a string as an int16."
   (fn ("s", "the string to parse") Types.string (Types.optional Types.int16))
-  ["readInt16(s) returns Just(x) where x is the int16 parsed from s, or Nothing if s is not a valid\
+  ["parseInt16(s) returns Just(x) where x is the int16 parsed from s, or Nothing if s is not a valid\
   \ integer literal or the parsed value is outside [-2^15, 2^15-1].",
    "Total."]
 
-readInt32 :: PrimitiveDefinition
-readInt32 = deprecatedSince "0.18" "parseInt32" $ define "readInt32" "Parse a string as an int32."
+parseInt32 :: PrimitiveDefinition
+parseInt32 = define "parseInt32" "Parse a string as an int32."
   (fn ("s", "the string to parse") Types.string (Types.optional Types.int32))
-  ["readInt32(s) returns Just(x) where x is the int32 parsed from s, or Nothing if s is not a valid\
+  ["parseInt32(s) returns Just(x) where x is the int32 parsed from s, or Nothing if s is not a valid\
   \ integer literal or the parsed value is outside [-2^31, 2^31-1].",
    "Total."]
 
-readInt64 :: PrimitiveDefinition
-readInt64 = deprecatedSince "0.18" "parseInt64" $ define "readInt64" "Parse a string as an int64."
+parseInt64 :: PrimitiveDefinition
+parseInt64 = define "parseInt64" "Parse a string as an int64."
   (fn ("s", "the string to parse") Types.string (Types.optional Types.int64))
-  ["readInt64(s) returns Just(x) where x is the int64 parsed from s, or Nothing if s is not a valid\
+  ["parseInt64(s) returns Just(x) where x is the int64 parsed from s, or Nothing if s is not a valid\
   \ integer literal or the parsed value is outside [-2^63, 2^63-1].",
    "Total."]
 
-readInt8 :: PrimitiveDefinition
-readInt8 = deprecatedSince "0.18" "parseInt8" $ define "readInt8" "Parse a string as an int8."
+parseInt8 :: PrimitiveDefinition
+parseInt8 = define "parseInt8" "Parse a string as an int8."
   (fn ("s", "the string to parse") Types.string (Types.optional Types.int8))
-  ["readInt8(s) returns Just(x) where x is the int8 parsed from s, or Nothing if s is not a valid\
+  ["parseInt8(s) returns Just(x) where x is the int8 parsed from s, or Nothing if s is not a valid\
   \ integer literal or the parsed value is outside [-128, 127].",
    "Total."]
 
@@ -273,90 +273,90 @@ parseString = define "parseString"
   \ Nothing on malformed input.",
    "Total. The inverse of printString."]
 
-readUint16 :: PrimitiveDefinition
-readUint16 = deprecatedSince "0.18" "parseUint16" $ define "readUint16" "Parse a string as a uint16."
+parseUint16 :: PrimitiveDefinition
+parseUint16 = define "parseUint16" "Parse a string as a uint16."
   (fn ("s", "the string to parse") Types.string (Types.optional Types.uint16))
-  ["readUint16(s) returns Just(x) where x is the uint16 parsed from s, or Nothing if s is not a valid\
+  ["parseUint16(s) returns Just(x) where x is the uint16 parsed from s, or Nothing if s is not a valid\
   \ non-negative integer literal or the parsed value is outside [0, 2^16-1].",
    "Total."]
 
-readUint32 :: PrimitiveDefinition
-readUint32 = deprecatedSince "0.18" "parseUint32" $ define "readUint32" "Parse a string as a uint32."
+parseUint32 :: PrimitiveDefinition
+parseUint32 = define "parseUint32" "Parse a string as a uint32."
   (fn ("s", "the string to parse") Types.string (Types.optional Types.uint32))
-  ["readUint32(s) returns Just(x) where x is the uint32 parsed from s, or Nothing if s is not a valid\
+  ["parseUint32(s) returns Just(x) where x is the uint32 parsed from s, or Nothing if s is not a valid\
   \ non-negative integer literal or the parsed value is outside [0, 2^32-1].",
    "Total."]
 
-readUint64 :: PrimitiveDefinition
-readUint64 = deprecatedSince "0.18" "parseUint64" $ define "readUint64" "Parse a string as a uint64."
+parseUint64 :: PrimitiveDefinition
+parseUint64 = define "parseUint64" "Parse a string as a uint64."
   (fn ("s", "the string to parse") Types.string (Types.optional Types.uint64))
-  ["readUint64(s) returns Just(x) where x is the uint64 parsed from s, or Nothing if s is not a valid\
+  ["parseUint64(s) returns Just(x) where x is the uint64 parsed from s, or Nothing if s is not a valid\
   \ non-negative integer literal or the parsed value is outside [0, 2^64-1].",
    "Total."]
 
-readUint8 :: PrimitiveDefinition
-readUint8 = deprecatedSince "0.18" "parseUint8" $ define "readUint8" "Parse a string as a uint8."
+parseUint8 :: PrimitiveDefinition
+parseUint8 = define "parseUint8" "Parse a string as a uint8."
   (fn ("s", "the string to parse") Types.string (Types.optional Types.uint8))
-  ["readUint8(s) returns Just(x) where x is the uint8 parsed from s, or Nothing if s is not a valid\
+  ["parseUint8(s) returns Just(x) where x is the uint8 parsed from s, or Nothing if s is not a valid\
   \ non-negative integer literal or the parsed value is outside [0, 255].",
    "Total."]
 
-showBigint :: PrimitiveDefinition
-showBigint = deprecatedSince "0.18" "printBigint" $ define "showBigint" "Render a bigint as a string." (fn ("x", "the bigint to render") Types.bigint Types.string)
-  ["showBigint(x) returns the canonical decimal representation of x: an optional leading minus sign\
+printBigint :: PrimitiveDefinition
+printBigint = define "printBigint" "Render a bigint as a string." (fn ("x", "the bigint to render") Types.bigint Types.string)
+  ["printBigint(x) returns the canonical decimal representation of x: an optional leading minus sign\
   \ followed by decimal digits. No leading zeros are produced (except for the value 0 itself, which\
   \ renders as \"0\").",
-   "Total. The inverse of readBigint."]
+   "Total. The inverse of parseBigint."]
 
 printBoolean :: PrimitiveDefinition
 printBoolean = define "printBoolean" "Render a boolean as a string." (fn ("b", "the boolean to render") Types.boolean Types.string)
   ["printBoolean(true) = \"true\"; printBoolean(false) = \"false\".",
    "Total. The inverse of parseBoolean."]
 
-showDecimal :: PrimitiveDefinition
-showDecimal = deprecatedSince "0.18" "printDecimal" $ define "showDecimal" "Render a decimal as a string." (fn ("x", "the decimal to render") Types.decimal Types.string)
-  ["showDecimal(x) returns the canonical decimal representation of x as a string. The exact form (use\
+printDecimal :: PrimitiveDefinition
+printDecimal = define "printDecimal" "Render a decimal as a string." (fn ("x", "the decimal to render") Types.decimal Types.string)
+  ["printDecimal(x) returns the canonical decimal representation of x as a string. The exact form (use\
   \ of scientific notation, trailing zeros, etc.) is host-defined but always round-trips with\
-  \ readDecimal.",
+  \ parseDecimal.",
    "Total."]
 
-showFloat32 :: PrimitiveDefinition
-showFloat32 = deprecatedSince "0.18" "printFloat32" $ define "showFloat32" "Render a float32 as a string." (fn ("x", "the float32 to render") Types.float32 Types.string)
-  ["showFloat32(x) returns a string representation of x. Finite values use the shortest decimal that\
-  \ round-trips through readFloat32 back to x. Special values render as \"NaN\", \"Infinity\", or\
+printFloat32 :: PrimitiveDefinition
+printFloat32 = define "printFloat32" "Render a float32 as a string." (fn ("x", "the float32 to render") Types.float32 Types.string)
+  ["printFloat32(x) returns a string representation of x. Finite values use the shortest decimal that\
+  \ round-trips through parseFloat32 back to x. Special values render as \"NaN\", \"Infinity\", or\
   \ \"-Infinity\" (capitalization is host-defined).",
    "Total."]
 
-showFloat64 :: PrimitiveDefinition
-showFloat64 = deprecatedSince "0.18" "printFloat64" $ define "showFloat64" "Render a float64 as a string." (fn ("x", "the float64 to render") Types.float64 Types.string)
-  ["showFloat64(x) returns a string representation of x. Finite values use the shortest decimal that\
-  \ round-trips through readFloat64 back to x. Special values render as \"NaN\", \"Infinity\", or\
+printFloat64 :: PrimitiveDefinition
+printFloat64 = define "printFloat64" "Render a float64 as a string." (fn ("x", "the float64 to render") Types.float64 Types.string)
+  ["printFloat64(x) returns a string representation of x. Finite values use the shortest decimal that\
+  \ round-trips through parseFloat64 back to x. Special values render as \"NaN\", \"Infinity\", or\
   \ \"-Infinity\" (capitalization is host-defined).",
    "Total."]
 
-showInt16 :: PrimitiveDefinition
-showInt16 = deprecatedSince "0.18" "printInt16" $ define "showInt16" "Render an int16 as a string." (fn ("x", "the int16 to render") Types.int16 Types.string)
-  ["showInt16(x) returns the canonical decimal representation of x: an optional leading minus sign\
+printInt16 :: PrimitiveDefinition
+printInt16 = define "printInt16" "Render an int16 as a string." (fn ("x", "the int16 to render") Types.int16 Types.string)
+  ["printInt16(x) returns the canonical decimal representation of x: an optional leading minus sign\
   \ followed by decimal digits.",
-   "Total. The inverse of readInt16."]
+   "Total. The inverse of parseInt16."]
 
-showInt32 :: PrimitiveDefinition
-showInt32 = deprecatedSince "0.18" "printInt32" $ define "showInt32" "Render an int32 as a string." (fn ("x", "the int32 to render") Types.int32 Types.string)
-  ["showInt32(x) returns the canonical decimal representation of x: an optional leading minus sign\
+printInt32 :: PrimitiveDefinition
+printInt32 = define "printInt32" "Render an int32 as a string." (fn ("x", "the int32 to render") Types.int32 Types.string)
+  ["printInt32(x) returns the canonical decimal representation of x: an optional leading minus sign\
   \ followed by decimal digits.",
-   "Total. The inverse of readInt32."]
+   "Total. The inverse of parseInt32."]
 
-showInt64 :: PrimitiveDefinition
-showInt64 = deprecatedSince "0.18" "printInt64" $ define "showInt64" "Render an int64 as a string." (fn ("x", "the int64 to render") Types.int64 Types.string)
-  ["showInt64(x) returns the canonical decimal representation of x: an optional leading minus sign\
+printInt64 :: PrimitiveDefinition
+printInt64 = define "printInt64" "Render an int64 as a string." (fn ("x", "the int64 to render") Types.int64 Types.string)
+  ["printInt64(x) returns the canonical decimal representation of x: an optional leading minus sign\
   \ followed by decimal digits.",
-   "Total. The inverse of readInt64."]
+   "Total. The inverse of parseInt64."]
 
-showInt8 :: PrimitiveDefinition
-showInt8 = deprecatedSince "0.18" "printInt8" $ define "showInt8" "Render an int8 as a string." (fn ("x", "the int8 to render") Types.int8 Types.string)
-  ["showInt8(x) returns the canonical decimal representation of x: an optional leading minus sign\
+printInt8 :: PrimitiveDefinition
+printInt8 = define "printInt8" "Render an int8 as a string." (fn ("x", "the int8 to render") Types.int8 Types.string)
+  ["printInt8(x) returns the canonical decimal representation of x: an optional leading minus sign\
   \ followed by decimal digits.",
-   "Total. The inverse of readInt8."]
+   "Total. The inverse of parseInt8."]
 
 printString :: PrimitiveDefinition
 printString = define "printString" "Render a string as a string-literal token (escaped and quoted)."
@@ -366,25 +366,25 @@ printString = define "printString" "Render a string as a string-literal token (e
   \ control characters, quotes, and non-printable Unicode code points), and a closing double-quote.",
    "Total. The inverse of parseString."]
 
-showUint16 :: PrimitiveDefinition
-showUint16 = deprecatedSince "0.18" "printUint16" $ define "showUint16" "Render a uint16 as a string." (fn ("x", "the uint16 to render") Types.uint16 Types.string)
-  ["showUint16(x) returns the canonical decimal representation of x.",
-   "Total. The inverse of readUint16."]
+printUint16 :: PrimitiveDefinition
+printUint16 = define "printUint16" "Render a uint16 as a string." (fn ("x", "the uint16 to render") Types.uint16 Types.string)
+  ["printUint16(x) returns the canonical decimal representation of x.",
+   "Total. The inverse of parseUint16."]
 
-showUint32 :: PrimitiveDefinition
-showUint32 = deprecatedSince "0.18" "printUint32" $ define "showUint32" "Render a uint32 as a string." (fn ("x", "the uint32 to render") Types.uint32 Types.string)
-  ["showUint32(x) returns the canonical decimal representation of x.",
-   "Total. The inverse of readUint32."]
+printUint32 :: PrimitiveDefinition
+printUint32 = define "printUint32" "Render a uint32 as a string." (fn ("x", "the uint32 to render") Types.uint32 Types.string)
+  ["printUint32(x) returns the canonical decimal representation of x.",
+   "Total. The inverse of parseUint32."]
 
-showUint64 :: PrimitiveDefinition
-showUint64 = deprecatedSince "0.18" "printUint64" $ define "showUint64" "Render a uint64 as a string." (fn ("x", "the uint64 to render") Types.uint64 Types.string)
-  ["showUint64(x) returns the canonical decimal representation of x.",
-   "Total. The inverse of readUint64."]
+printUint64 :: PrimitiveDefinition
+printUint64 = define "printUint64" "Render a uint64 as a string." (fn ("x", "the uint64 to render") Types.uint64 Types.string)
+  ["printUint64(x) returns the canonical decimal representation of x.",
+   "Total. The inverse of parseUint64."]
 
-showUint8 :: PrimitiveDefinition
-showUint8 = deprecatedSince "0.18" "printUint8" $ define "showUint8" "Render a uint8 as a string." (fn ("x", "the uint8 to render") Types.uint8 Types.string)
-  ["showUint8(x) returns the canonical decimal representation of x.",
-   "Total. The inverse of readUint8."]
+printUint8 :: PrimitiveDefinition
+printUint8 = define "printUint8" "Render a uint8 as a string." (fn ("x", "the uint8 to render") Types.uint8 Types.string)
+  ["printUint8(x) returns the canonical decimal representation of x.",
+   "Total. The inverse of parseUint8."]
 
 uint16ToBigint :: PrimitiveDefinition
 uint16ToBigint = define "uint16ToBigint" "Convert a uint16 to a bigint." (fn ("x", "the uint16 to convert") Types.uint16 Types.bigint)

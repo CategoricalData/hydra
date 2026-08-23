@@ -75,7 +75,7 @@ showEitherResult = Eithers.either
 
 -- | Show a list of Int32 as a string like "[1, 2, 3]"
 showIntList :: TypedTerm [Int] -> TypedTerm String
-showIntList xs = PrintCore.list_ @@ reify Literals.showInt32 @@ xs
+showIntList xs = PrintCore.list_ @@ reify Literals.printInt32 @@ xs
 
 -- | Show a list of lists of Int32 as a string like "[[1, 2], [3]]"
 showIntListList :: TypedTerm [[Int]] -> TypedTerm String

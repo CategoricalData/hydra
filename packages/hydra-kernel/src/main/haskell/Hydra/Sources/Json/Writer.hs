@@ -196,14 +196,14 @@ valueToExpr = jsonSerdeDefinition "valueToExpr" $
       Serialization.cst @@ string "null",
     J._Value_number>>: "n" ~>
       -- Two candidate lexical forms:
-      --   plain      : showBigint(round(n)), only valid when n is whole-valued
-      --   scientific : showDecimal(n), always valid
+      --   plain      : printBigint(round(n)), only valid when n is whole-valued
+      --   scientific : printDecimal(n), always valid
       -- Pick whichever is shorter. This keeps 42 → "42" (plain) and 1e20 → "1.0e20"
       -- (scientific), avoiding both the trailing-".0" noise and the 21-digit integer.
       "rounded" <~ Literals.decimalToBigint (var "n") $
-      "shown" <~ (Literals.showDecimal $ var "n") $
+      "shown" <~ (Literals.printDecimal $ var "n") $
       "isWhole" <~ (Equality.equal (var "n") (Literals.bigintToDecimal $ var "rounded")) $
-      "plain" <~ (Literals.showBigint $ var "rounded") $
+      "plain" <~ (Literals.printBigint $ var "rounded") $
       Serialization.cst @@ (Logic.ifElse
         (Logic.and (var "isWhole")
           (Ordering.lte (Strings.length $ var "plain") (Strings.length $ var "shown")))

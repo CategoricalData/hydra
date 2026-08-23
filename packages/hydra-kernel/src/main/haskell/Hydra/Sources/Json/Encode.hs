@@ -117,12 +117,12 @@ encodeFloat = define "encodeFloat" $
   doc "Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode." $
   "fv" ~> match _FloatValue (var "fv") Nothing [
     _FloatValue_float32>>: "f" ~>
-      "s" <~ (Literals.showFloat32 $ var "f") $
+      "s" <~ (Literals.printFloat32 $ var "f") $
       Logic.ifElse (requiresJsonStringSentinel @@ var "s")
         (right $ Json.valueString $ var "s")
         (right $ Json.valueNumber $ Literals.float32ToDecimal $ var "f"),
     _FloatValue_float64>>: "f" ~>
-      "s" <~ (Literals.showFloat64 $ var "f") $
+      "s" <~ (Literals.printFloat64 $ var "f") $
       Logic.ifElse (requiresJsonStringSentinel @@ var "s")
         (right $ Json.valueString $ var "s")
         (right $ Json.valueNumber $ Literals.float64ToDecimal $ var "f")]
@@ -138,9 +138,9 @@ encodeInteger = define "encodeInteger" $
   doc "Encode an integer value to JSON. Small ints use native numbers; large ints use strings." $
   "iv" ~> match _IntegerValue (var "iv") Nothing [
     -- Large integers: use strings to preserve precision
-    _IntegerValue_bigint>>: "bi" ~> right $ Json.valueString $ Literals.showBigint $ var "bi",
-    _IntegerValue_int64>>: "i" ~> right $ Json.valueString $ Literals.showInt64 $ var "i",
-    _IntegerValue_uint64>>: "i" ~> right $ Json.valueString $ Literals.showUint64 $ var "i",
+    _IntegerValue_bigint>>: "bi" ~> right $ Json.valueString $ Literals.printBigint $ var "bi",
+    _IntegerValue_int64>>: "i" ~> right $ Json.valueString $ Literals.printInt64 $ var "i",
+    _IntegerValue_uint64>>: "i" ~> right $ Json.valueString $ Literals.printUint64 $ var "i",
     -- Small integers: use native JSON numbers (convert to decimal for JSON)
     _IntegerValue_int8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int8ToBigint $ var "i",
     _IntegerValue_int16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int16ToBigint $ var "i",

@@ -102,7 +102,7 @@ testGroupForNestedLet = define "testGroupForNestedLet" $
                     @@ (primitive DefMath.add @@ var "depth" @@ int32 1)
                     @@ (primitive DefMaps.insert
                           @@ (project (Core.nameLift _ForallType) (Core.nameLift _ForallType_parameter) @@ var "ft")
-                          @@ (Terms.wrap (Core.nameLift _Name) (primitive DefStrings.concat2 @@ string "_" @@ (primitive DefLiterals.showInt32 @@ var "depth")))
+                          @@ (Terms.wrap (Core.nameLift _Name) (primitive DefStrings.concat2 @@ string "_" @@ (primitive DefLiterals.printInt32 @@ var "depth")))
                           @@ var "subst")
                     @@ (project (Core.nameLift _ForallType) (Core.nameLift _ForallType_body) @@ var "ft")]
               @@ var "t"] $

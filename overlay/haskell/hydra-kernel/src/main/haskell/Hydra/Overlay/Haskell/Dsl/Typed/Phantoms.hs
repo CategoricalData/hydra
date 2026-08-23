@@ -374,7 +374,7 @@ record n fields = TypedTerm $ Terms.record (asName n) fields
 
 -- | Reify a Haskell-level meta-function over phantom-typed terms into a first-class
 -- term-level function. See also 'reify2' for the binary form.
--- Example: @reify Literals.showInt32@ has type @TypedTerm (Int -> String)@
+-- Example: @reify Literals.printInt32@ has type @TypedTerm (Int -> String)@
 reify :: (TypedTerm a -> TypedTerm b) -> TypedTerm (a -> b)
 reify f = case (unTypedTerm $ f $ var "x") of
   TermApplication (Application lhs _) -> TypedTerm lhs

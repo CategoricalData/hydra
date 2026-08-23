@@ -294,7 +294,7 @@ adaptLiteral = define "adaptLiteral" $
       Nothing [
       _LiteralType_float>>: constant $ Core.literalFloat $
         inject _FloatValue _FloatValue_float64 (Literals.decimalToFloat64 (var "d")),
-      _LiteralType_string>>: constant $ Core.literalString $ Literals.showDecimal (var "d")],
+      _LiteralType_string>>: constant $ Core.literalString $ Literals.printDecimal (var "d")],
     _Literal_float>>: "f" ~> match _LiteralType (var "lt")
       Nothing [
       _LiteralType_float>>: "ft" ~> Core.literalFloat $ match _FloatType (var "ft")
@@ -604,7 +604,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     Logic.ifElse (Lists.isEmpty $ var "untypedBindings")
       (right $ var "bindings")
       (left $ Error.errorOther $ Error.otherError $ Strings.concat (list [
-        string "Found ", Literals.showInt32 (Lists.length $ var "untypedBindings"),
+        string "Found ", Literals.printInt32 (Lists.length $ var "untypedBindings"),
         string " untyped binding(s) (", var "debugLabel",
         string "); each must carry a type scheme at this stage. ",
         string "This usually means stale dist/json field shapes after a kernel record rename ",

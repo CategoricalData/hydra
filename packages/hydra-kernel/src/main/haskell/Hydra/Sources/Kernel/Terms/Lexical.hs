@@ -152,7 +152,7 @@ chooseUniqueName = define "chooseUniqueName" $
   "tryName" <~ ("index" ~>
     "candidate" <~ Logic.ifElse (Equality.equal (var "index") (int32 1))
       (var "name")
-      (Core.name $ (Core.unName (var "name") ++ Literals.showInt32 (var "index"))) $
+      (Core.name $ (Core.unName (var "name") ++ Literals.printInt32 (var "index"))) $
     Logic.ifElse (Sets.member (var "candidate" :: TypedTerm Name) (var "reserved"))
       (var "tryName" @@ (Math.add (var "index") (int32 1)))
       (var "candidate")) $

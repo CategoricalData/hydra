@@ -38,15 +38,15 @@ module_ = Module {
     definitions = [Phantoms.toDefinition allTests]
 
 showInt32 :: TypedTerm (Int -> String)
-showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
+showInt32 = Phantoms.lambda "n" $ Literals.printInt32 (Phantoms.var "n")
 
 -- Show a (Int, Int) pair as "(<int>, <int>)"
 showIntIntPair :: TypedTerm ((Int, Int) -> String)
 showIntIntPair = Phantoms.lambda "p" $ Strings.concat (Phantoms.list [
   Phantoms.string "(",
-  Literals.showInt32 (Pairs.first (Phantoms.var "p")),
+  Literals.printInt32 (Pairs.first (Phantoms.var "p")),
   Phantoms.string ", ",
-  Literals.showInt32 (Pairs.second (Phantoms.var "p")),
+  Literals.printInt32 (Pairs.second (Phantoms.var "p")),
   Phantoms.string ")"])
 
 -- Show a (Int, String) pair as "(<int>, <string>)"

@@ -255,7 +255,7 @@ integerNode = define "integerNode" $
   lambda "n" $
     inject Rdf._Node Rdf._Node_literal $
       record Rdf._Literal [
-        Rdf._Literal_lexicalForm>>: Literals.showBigint (var "n"),
+        Rdf._Literal_lexicalForm>>: Literals.printBigint (var "n"),
         Rdf._Literal_datatypeIri>>: xsd @@ string "integer",
         Rdf._Literal_languageTag>>: nothing]
 

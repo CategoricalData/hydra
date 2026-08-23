@@ -6,18 +6,18 @@ Import ListNotations.
 
 (* --- Integer -> string --------------------------------------------------- *)
 
-(* All Hydra integer types are represented as Z in Coq, so every showIntN /
-   showUintN produces the same output as `show` in Haskell: the decimal
+(* All Hydra integer types are represented as Z in Coq, so every printIntN /
+   printUintN produces the same output as `show` in Haskell: the decimal
    representation with a leading `-` for negatives. *)
-Definition showInt32 (n : Z) : string := NilZero.string_of_int (Z.to_int n).
-Definition showInt8  : Z -> string := showInt32.
-Definition showInt16 : Z -> string := showInt32.
-Definition showInt64 : Z -> string := showInt32.
-Definition showUint8  : Z -> string := showInt32.
-Definition showUint16 : Z -> string := showInt32.
-Definition showUint32 : Z -> string := showInt32.
-Definition showUint64 : Z -> string := showInt32.
-Definition showBigint : Z -> string := showInt32.
+Definition printInt32 (n : Z) : string := NilZero.string_of_int (Z.to_int n).
+Definition printInt8  : Z -> string := printInt32.
+Definition printInt16 : Z -> string := printInt32.
+Definition printInt64 : Z -> string := printInt32.
+Definition printUint8  : Z -> string := printInt32.
+Definition printUint16 : Z -> string := printInt32.
+Definition printUint32 : Z -> string := printInt32.
+Definition printUint64 : Z -> string := printInt32.
+Definition printBigint : Z -> string := printInt32.
 
 (* --- Boolean / string shows --------------------------------------------- *)
 
@@ -55,23 +55,23 @@ Axiom int8ToBigint : Z -> Z.
 Axiom int16ToBigint : Z -> Z.
 Axiom int32ToBigint : Z -> Z.
 Axiom int64ToBigint : Z -> Z.
-Axiom readBigint : string -> option Z.
+Axiom parseBigint : string -> option Z.
 Axiom parseBoolean : string -> option bool.
-Axiom readDecimal : string -> option Q.
-Axiom readFloat32 : string -> option Q.
-Axiom readFloat64 : string -> option Q.
-Axiom readInt8 : string -> option Z.
-Axiom readInt16 : string -> option Z.
-Axiom readInt32 : string -> option Z.
-Axiom readInt64 : string -> option Z.
+Axiom parseDecimal : string -> option Q.
+Axiom parseFloat32 : string -> option Q.
+Axiom parseFloat64 : string -> option Q.
+Axiom parseInt8 : string -> option Z.
+Axiom parseInt16 : string -> option Z.
+Axiom parseInt32 : string -> option Z.
+Axiom parseInt64 : string -> option Z.
 Axiom parseString : string -> option string.
-Axiom readUint8 : string -> option Z.
-Axiom readUint16 : string -> option Z.
-Axiom readUint32 : string -> option Z.
-Axiom readUint64 : string -> option Z.
-Axiom showDecimal : Q -> string.
-Axiom showFloat32 : Q -> string.
-Axiom showFloat64 : Q -> string.
+Axiom parseUint8 : string -> option Z.
+Axiom parseUint16 : string -> option Z.
+Axiom parseUint32 : string -> option Z.
+Axiom parseUint64 : string -> option Z.
+Axiom printDecimal : Q -> string.
+Axiom printFloat32 : Q -> string.
+Axiom printFloat64 : Q -> string.
 Axiom base64ToBinary : string -> string.
 Axiom uint8ToBigint : Z -> Z.
 Axiom uint16ToBigint : Z -> Z.

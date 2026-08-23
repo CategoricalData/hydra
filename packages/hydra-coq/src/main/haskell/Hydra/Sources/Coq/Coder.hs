@@ -207,7 +207,7 @@ encodeAxiomDefinitionPair = define "encodeAxiomDefinitionPair" $
             C._AxiomDeclaration_name>>: coqIdent @@ Pairs.first (var "nt"),
             C._AxiomDeclaration_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ Pairs.second (var "nt"))]]
 
--- | Translate a float string (produced by `showFloat64`) to a Coq Term.
+-- | Translate a float string (produced by `printFloat64`) to a Coq Term.
 -- Ordinary values become parenthesised `Q`-scope literals. IEEE 754 special
 -- values (`Infinity`, `-Infinity`, `NaN`) have no representation in Coq's
 -- exact rationals, so they are emitted as references to the corresponding
@@ -248,29 +248,29 @@ encodeLiteral = define "encodeLiteral" $
     _Literal_boolean>>: "b" ~>
       Logic.ifElse (var "b") (coqTermQualid @@ string "true") (coqTermQualid @@ string "false"),
     _Literal_decimal>>: "d" ~> coqTermQualid @@ Strings.concat (list [
-      string "(", Literals.showDecimal (var "d"), string ")"]),
+      string "(", Literals.printDecimal (var "d"), string ")"]),
     _Literal_float>>: "fv" ~> match _FloatValue (var "fv") Nothing [
-      _FloatValue_float32>>: "v" ~> encodeFloatLiteral @@ Literals.showFloat64 (Literals.float32ToFloat64 $ var "v"),
-      _FloatValue_float64>>: "v" ~> encodeFloatLiteral @@ Literals.showFloat64 (var "v")],
+      _FloatValue_float32>>: "v" ~> encodeFloatLiteral @@ Literals.printFloat64 (Literals.float32ToFloat64 $ var "v"),
+      _FloatValue_float64>>: "v" ~> encodeFloatLiteral @@ Literals.printFloat64 (var "v")],
     _Literal_integer>>: "iv" ~> match _IntegerValue (var "iv") Nothing [
       _IntegerValue_bigint>>: "v" ~> coqTermQualid @@ Strings.concat (list [
-        string "(", Literals.showBigint (var "v"), string ")%Z"]),
+        string "(", Literals.printBigint (var "v"), string ")%Z"]),
       _IntegerValue_int8>>: "v" ~> coqTermQualid @@ Strings.concat (list [
-        string "(", Literals.showInt8 (var "v"), string ")%Z"]),
+        string "(", Literals.printInt8 (var "v"), string ")%Z"]),
       _IntegerValue_int16>>: "v" ~> coqTermQualid @@ Strings.concat (list [
-        string "(", Literals.showInt16 (var "v"), string ")%Z"]),
+        string "(", Literals.printInt16 (var "v"), string ")%Z"]),
       _IntegerValue_int32>>: "v" ~> coqTermQualid @@ Strings.concat (list [
-        string "(", Literals.showInt32 (var "v"), string ")%Z"]),
+        string "(", Literals.printInt32 (var "v"), string ")%Z"]),
       _IntegerValue_int64>>: "v" ~> coqTermQualid @@ Strings.concat (list [
-        string "(", Literals.showInt64 (var "v"), string ")%Z"]),
+        string "(", Literals.printInt64 (var "v"), string ")%Z"]),
       _IntegerValue_uint8>>: "v" ~> coqTermQualid @@ Strings.concat (list [
-        string "(", Literals.showUint8 (var "v"), string ")"]),
+        string "(", Literals.printUint8 (var "v"), string ")"]),
       _IntegerValue_uint16>>: "v" ~> coqTermQualid @@ Strings.concat (list [
-        string "(", Literals.showUint16 (var "v"), string ")"]),
+        string "(", Literals.printUint16 (var "v"), string ")"]),
       _IntegerValue_uint32>>: "v" ~> coqTermQualid @@ Strings.concat (list [
-        string "(", Literals.showUint32 (var "v"), string ")"]),
+        string "(", Literals.printUint32 (var "v"), string ")"]),
       _IntegerValue_uint64>>: "v" ~> coqTermQualid @@ Strings.concat (list [
-        string "(", Literals.showUint64 (var "v"), string ")"])],
+        string "(", Literals.printUint64 (var "v"), string ")"])],
     _Literal_string>>: "s" ~> coqTermQualid @@ Strings.concat (list [
       string "\"", escapeCoqString @@ var "s", string "\"%string"]),
     _Literal_binary>>: constant (coqTermQualid @@ string "\"\"")]

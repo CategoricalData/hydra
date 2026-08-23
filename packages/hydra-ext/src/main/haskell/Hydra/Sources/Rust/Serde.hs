@@ -537,7 +537,7 @@ floatLiteralToExpr = define "floatLiteralToExpr" $
   lambda "fl" $ lets [
     "val">: project R._FloatLiteral R._FloatLiteral_value @@ var "fl",
     "suf">: project R._FloatLiteral R._FloatLiteral_suffix @@ var "fl",
-    "valStr">: Literals.showFloat64 $ var "val",
+    "valStr">: Literals.printFloat64 $ var "val",
     "sufStr">: Optionals.match (var "suf") (string "") (lambda "s" $ var "s")] $
     Serialization.cst @@ (Strings.concat2 (var "valStr") (var "sufStr"))
 
@@ -790,7 +790,7 @@ integerLiteralToExpr = define "integerLiteralToExpr" $
   lambda "il" $ lets [
     "val">: project R._IntegerLiteral R._IntegerLiteral_value @@ var "il",
     "suf">: project R._IntegerLiteral R._IntegerLiteral_suffix @@ var "il",
-    "valStr">: Literals.showBigint $ var "val",
+    "valStr">: Literals.printBigint $ var "val",
     "sufStr">: Optionals.match (var "suf") (string "") (lambda "s" $ var "s")] $
     Serialization.cst @@ (Strings.concat2 (var "valStr") (var "sufStr"))
 
@@ -861,8 +861,8 @@ literalToExpr = define "literalToExpr" $
       R._Literal_string>>: lambda "s" $ Serialization.cst @@ (Literals.printString $ var "s"),
       R._Literal_rawString>>: lambda "s" $ Serialization.cst @@ (Strings.concat (list [string "r\"", var "s", string "\""])),
       R._Literal_byteString>>: lambda "bs" $ Serialization.cst @@ string "b\"...\"", -- TODO: Proper binary encoding
-      R._Literal_char>>: lambda "c" $ Serialization.cst @@ (Strings.concat (list [string "'", Literals.showUint32 $ var "c", string "'"])),
-      R._Literal_byte>>: lambda "b" $ Serialization.cst @@ (Strings.concat (list [string "b'", Literals.showUint8 $ var "b", string "'"])),
+      R._Literal_char>>: lambda "c" $ Serialization.cst @@ (Strings.concat (list [string "'", Literals.printUint32 $ var "c", string "'"])),
+      R._Literal_byte>>: lambda "b" $ Serialization.cst @@ (Strings.concat (list [string "b'", Literals.printUint8 $ var "b", string "'"])),
       R._Literal_bool>>: lambda "b" $ Serialization.cst @@ (Logic.ifElse (var "b") (string "true") (string "false"))]
 
 loopExprToExpr :: TypedTermDefinition (R.LoopExpr -> Expr)
@@ -1333,7 +1333,7 @@ tupleIndexExprToExpr = define "tupleIndexExprToExpr" $
     Serialization.cst @@ (Strings.concat (list [
       Serialization.printExpr @@ (expressionToExpr @@ var "tuple"),
       string ".",
-      Literals.showInt32 $ var "idx"]))
+      Literals.printInt32 $ var "idx"]))
 
 tupleStructPatternToExpr :: TypedTermDefinition (R.TupleStructPattern -> Expr)
 tupleStructPatternToExpr = define "tupleStructPatternToExpr" $

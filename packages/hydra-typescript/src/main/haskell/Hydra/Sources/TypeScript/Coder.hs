@@ -450,7 +450,7 @@ lazyFlagsForPrimitive = def "lazyFlagsForPrimitive" $
 --     as a call expression. (TS has a `123n` literal syntax but the AST
 --     doesn't represent it yet.)
 --   * Decimals carry no exact representation in TS; emit as a Double via
---     `Literals.readDecimal` since the runtime treats them as `number`.
+--     `Literals.parseDecimal` since the runtime treats them as `number`.
 --   * Binary literals encode as base64-tagged string literals; the runtime
 --     decoder (extractCore.binary) accepts either Uint8Array or base64.
 encodeLiteral :: TypedTermDefinition (Literal -> TS.Expression)
@@ -489,7 +489,7 @@ encodeLiteral = def "encodeLiteral" $
     _Literal_integer>>: lambda "iv" $
       match _IntegerValue (var "iv") (Just $ var "numLit" @@ (Literals.bigintToInt64 (Literals.int32ToBigint (int32 0)))) [
         _IntegerValue_bigint>>: lambda "n" $
-          var "bigIntCall" @@ (Literals.showBigint (var "n")),
+          var "bigIntCall" @@ (Literals.printBigint (var "n")),
         _IntegerValue_int8>>:   lambda "n" $
           var "numLit" @@ (Literals.bigintToInt64 (Literals.int8ToBigint (var "n"))),
         _IntegerValue_int16>>:  lambda "n" $
@@ -497,7 +497,7 @@ encodeLiteral = def "encodeLiteral" $
         _IntegerValue_int32>>:  lambda "n" $
           var "numLit" @@ (Literals.bigintToInt64 (Literals.int32ToBigint (var "n"))),
         _IntegerValue_int64>>:  lambda "n" $
-          var "bigIntCall" @@ (Literals.showInt64 (var "n")),
+          var "bigIntCall" @@ (Literals.printInt64 (var "n")),
         _IntegerValue_uint8>>:  lambda "n" $
           var "numLit" @@ (Literals.bigintToInt64 (Literals.uint8ToBigint (var "n"))),
         _IntegerValue_uint16>>: lambda "n" $
@@ -505,7 +505,7 @@ encodeLiteral = def "encodeLiteral" $
         _IntegerValue_uint32>>: lambda "n" $
           var "numLit" @@ (Literals.bigintToInt64 (Literals.uint32ToBigint (var "n"))),
         _IntegerValue_uint64>>: lambda "n" $
-          var "bigIntCall" @@ (Literals.showUint64 (var "n"))],
+          var "bigIntCall" @@ (Literals.printUint64 (var "n"))],
     _Literal_float>>: lambda "fv" $
       match _FloatValue (var "fv") (Just $ var "floatLit" @@ (float64 0.0)) [
         _FloatValue_float32>>: lambda "f" $ var "floatLit" @@ (Literals.float32ToFloat64 (var "f")),
@@ -674,7 +674,7 @@ encodeTerm = def "encodeTerm" $
            "pats" <~ Pairs.second (var "acc") $
            "raw" <~ (Names.localNameOf @@ var "pn") $
            "uniq" <~ Logic.ifElse (Equality.equal (var "raw") (string "_"))
-             (Strings.concat2 (string "_") (Literals.showInt32 (var "idx")))
+             (Strings.concat2 (string "_") (Literals.printInt32 (var "idx")))
              (var "raw") $
            "pat" <~ (tsTypedIdent
              @@ (Formatting.sanitizeWithUnderscores

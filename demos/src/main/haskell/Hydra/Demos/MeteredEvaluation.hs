@@ -38,7 +38,7 @@ testModule = Module {
   where
     test local tterm = TypedTermDefinition (unqualifyName $ QualifiedName (Just testNs) local) tterm
     definitions = [
-        toDefinition $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.showInt32 $ int32 42)),
+        toDefinition $ test "catStrings" (string "foo" ++ string "bar" ++ string "quux" ++ (Literals.printInt32 $ int32 42)),
         toDefinition $ test "describeType" $ PrintCore.type_ @@ (TypedTerm $ EncodeCore.type_ $ Types.list $ Types.int32)]
 
 demoMeteredEvaluation :: IO ()

@@ -58,7 +58,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Parser for Hydra documentation strings, producing DocSegment lists")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Parser for Hydra documentation strings, producing DocSegment lists. A bespoke helper parser, not a parse<T> convention function (see docs/specification/index.md, Conventions).")}
   where
    definitions = [
      toDefinition parseDocAnnotation,

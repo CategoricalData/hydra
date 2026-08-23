@@ -326,14 +326,14 @@ allTests = define "allTests" $
                 ("test",
                  tyapp (match TestTypes.testTypeUnionPolymorphicRecursiveName
                    (just $ string "other") [
-                   "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.showInt32 @@ var "i"]) T.int32,
+                   "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.printInt32 @@ var "i"]) T.int32,
                  T.mono $ T.function (T.apply (Core.typeVariable TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) T.string)] $
               var "test")
             (letsTyped [
                 ("test",
                  lambda "v1" $ tyapp (match TestTypes.testTypeUnionPolymorphicRecursiveName
                      (just $ string "other") [
-                     "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.showInt32 @@ var "i"]) T.int32
+                     "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.printInt32 @@ var "i"]) T.int32
                    @@ var "v1",
                  T.mono $ T.function (T.apply (Core.typeVariable TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) T.string)] $
               var "test"),
@@ -342,7 +342,7 @@ allTests = define "allTests" $
               ("test",
                tyapp (match TestTypes.testTypeUnionPolymorphicRecursiveName
                    (just $ string "other") [
-                   "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.showInt32 @@ var "i"]) T.int32
+                   "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.printInt32 @@ var "i"]) T.int32
                  @@ tyapp (inject TestTypes.testTypeUnionPolymorphicRecursiveName "value" (int32 42)) T.int32,
                T.mono $ T.string)] $
               var "test"),
@@ -352,7 +352,7 @@ allTests = define "allTests" $
                lambdaTyped "x" (T.apply (Core.typeVariable TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) $
                  tyapp (match TestTypes.testTypeUnionPolymorphicRecursiveName
                      (just $ string "other") [
-                     "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.showInt32 @@ var "i"]) T.int32
+                     "value">: lambdaTyped "i" T.int32 $ primitive DefLiterals.printInt32 @@ var "i"]) T.int32
                    @@ var "x",
                T.mono $ T.function (T.apply (Core.typeVariable TestTypes.testTypeUnionPolymorphicRecursiveName) T.int32) T.string)] $
               var "test"),

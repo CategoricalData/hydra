@@ -24,13 +24,13 @@ import hydra.overlay.java.util.Either;
  * Primitive function which parses a string into a uint8 (8-bit unsigned integer).
  * Returns an optional value that is empty if the string cannot be parsed or is out of range (0-255).
  */
-public class ReadUint8 extends PrimitiveFunction {
+public class ParseUint8 extends PrimitiveFunction {
     /**
      * Returns the unique name identifying this primitive function.
-     * @return the function name "hydra.lib.literals.readUint8"
+     * @return the function name "hydra.lib.literals.parseUint8"
      */
     public Name name() {
-        return hydra.lib.Literals.readUint8().name;
+        return hydra.lib.Literals.parseUint8().name;
     }
 
     /**

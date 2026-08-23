@@ -55,7 +55,7 @@
       (catch Exception _ []))))
 
 ;; Read functions (return Maybe)
-(def hydra_overlay_clojure_lib_literals_read_bigint
+(def hydra_overlay_clojure_lib_literals_parse_bigint
   (fn [s] (try (list :given (bigint (BigInteger. s)))
                (catch Exception _ (list :none)))))
 
@@ -63,7 +63,7 @@
   (fn [s] (try (list :given (Double/parseDouble s))
                (catch Exception _ (list :none)))))
 
-(def hydra_overlay_clojure_lib_literals_read_float32
+(def hydra_overlay_clojure_lib_literals_parse_float32
   (fn [s] (try (list :given (Float/parseFloat s))
                (catch Exception _ (list :none)))))
 
@@ -71,7 +71,7 @@
   (fn [s] (try (list :given (Long/parseLong s))
                (catch Exception _ (list :none)))))
 
-(def hydra_overlay_clojure_lib_literals_read_int64
+(def hydra_overlay_clojure_lib_literals_parse_int64
   (fn [s] (try (list :given (Long/parseLong s))
                (catch Exception _ (list :none)))))
 
@@ -80,12 +80,12 @@
                  (if (>= n 0) (list :given n) (list :none)))
                (catch Exception _ (list :none)))))
 
-(def hydra_overlay_clojure_lib_literals_read_uint32
+(def hydra_overlay_clojure_lib_literals_parse_uint32
   (fn [s] (try (let [n (Long/parseLong s)]
                  (if (>= n 0) (list :given n) (list :none)))
                (catch Exception _ (list :none)))))
 
-(def hydra_overlay_clojure_lib_literals_read_uint64
+(def hydra_overlay_clojure_lib_literals_parse_uint64
   (fn [s] (try (let [n (BigInteger. ^String s)]
                  (if (and (>= (.signum n) 0)
                           (<= (.compareTo n (BigInteger. "18446744073709551615")) 0))
@@ -124,9 +124,9 @@
             (str mant-s "e" exp)))))))
 
 ;; Show functions
-(def hydra_overlay_clojure_lib_literals_show_bigint (fn [x] (str x)))
+(def hydra_overlay_clojure_lib_literals_print_bigint (fn [x] (str x)))
 (def hydra_overlay_clojure_lib_literals_show_float (fn [x] (haskell-show-float x)))
-(def hydra_overlay_clojure_lib_literals_show_float32
+(def hydra_overlay_clojure_lib_literals_print_float32
   (fn [x]
     ;; Handle NaN/Inf before casting (Clojure's `float` throws on Infinity)
     (let [dx (double x)]
@@ -138,17 +138,17 @@
           (let [s (Float/toString (float dx))
                 d (Double/parseDouble s)]
             (haskell-show-float d))))))
-(def hydra_overlay_clojure_lib_literals_show_float64 (fn [x] (haskell-show-float x)))
+(def hydra_overlay_clojure_lib_literals_print_float64 (fn [x] (haskell-show-float x)))
 (def hydra_overlay_clojure_lib_literals_show_int (fn [x] (str x)))
-(def hydra_overlay_clojure_lib_literals_show_int8 (fn [x] (str x)))
-(def hydra_overlay_clojure_lib_literals_show_int16 (fn [x] (str x)))
-(def hydra_overlay_clojure_lib_literals_show_int32 (fn [x] (str x)))
-(def hydra_overlay_clojure_lib_literals_show_int64 (fn [x] (str x)))
+(def hydra_overlay_clojure_lib_literals_print_int8 (fn [x] (str x)))
+(def hydra_overlay_clojure_lib_literals_print_int16 (fn [x] (str x)))
+(def hydra_overlay_clojure_lib_literals_print_int32 (fn [x] (str x)))
+(def hydra_overlay_clojure_lib_literals_print_int64 (fn [x] (str x)))
 (def hydra_overlay_clojure_lib_literals_show_uint (fn [x] (str x)))
-(def hydra_overlay_clojure_lib_literals_show_uint8 (fn [x] (str x)))
-(def hydra_overlay_clojure_lib_literals_show_uint16 (fn [x] (str x)))
-(def hydra_overlay_clojure_lib_literals_show_uint32 (fn [x] (str x)))
-(def hydra_overlay_clojure_lib_literals_show_uint64 (fn [x] (str x)))
+(def hydra_overlay_clojure_lib_literals_print_uint8 (fn [x] (str x)))
+(def hydra_overlay_clojure_lib_literals_print_uint16 (fn [x] (str x)))
+(def hydra_overlay_clojure_lib_literals_print_uint32 (fn [x] (str x)))
+(def hydra_overlay_clojure_lib_literals_print_uint64 (fn [x] (str x)))
 
 ;; print_string :: String -> String  (Haskell-compatible quoted with escapes)
 (def hydra_overlay_clojure_lib_literals_print_string
@@ -190,14 +190,14 @@
       (= s "false") (list :given false)
       :else (list :none))))
 
-;; read_decimal :: String -> Maybe Decimal
-(def hydra_overlay_clojure_lib_literals_read_decimal
+;; parse_decimal :: String -> Maybe Decimal
+(def hydra_overlay_clojure_lib_literals_parse_decimal
   (fn [s] (try (list :given (bigdec s))
                (catch Exception _ (list :none)))))
 
-;; show_decimal :: Decimal -> String
+;; print_decimal :: Decimal -> String
 ;; Match Haskell's Data.Scientific show: "42.0", "3.14", "1.0e20", "1.0e-10".
-(def hydra_overlay_clojure_lib_literals_show_decimal
+(def hydra_overlay_clojure_lib_literals_print_decimal
   (fn [x]
     (let [bd (.stripTrailingZeros (bigdec x))]
       (if (zero? (.signum bd))
@@ -216,23 +216,23 @@
             (let [s (.toPlainString bd)]
               (if (.contains s ".") s (str s ".0")))))))))
 
-;; read_float64 :: String -> Maybe Float64
-(def hydra_overlay_clojure_lib_literals_read_float64
+;; parse_float64 :: String -> Maybe Float64
+(def hydra_overlay_clojure_lib_literals_parse_float64
   (fn [s] (try (list :given (Double/parseDouble s))
                (catch Exception _ (list :none)))))
 
-;; read_int8 :: String -> Maybe Int8
-(def hydra_overlay_clojure_lib_literals_read_int8
+;; parse_int8 :: String -> Maybe Int8
+(def hydra_overlay_clojure_lib_literals_parse_int8
   (fn [s] (try (list :given (Byte/parseByte s))
                (catch Exception _ (list :none)))))
 
-;; read_int16 :: String -> Maybe Int16
-(def hydra_overlay_clojure_lib_literals_read_int16
+;; parse_int16 :: String -> Maybe Int16
+(def hydra_overlay_clojure_lib_literals_parse_int16
   (fn [s] (try (list :given (Short/parseShort s))
                (catch Exception _ (list :none)))))
 
-;; read_int32 :: String -> Maybe Int32
-(def hydra_overlay_clojure_lib_literals_read_int32
+;; parse_int32 :: String -> Maybe Int32
+(def hydra_overlay_clojure_lib_literals_parse_int32
   (fn [s] (try (list :given (Integer/parseInt s))
                (catch Exception _ (list :none)))))
 
@@ -260,14 +260,14 @@
                 (do (.append sb (.charAt inner i)) (recur (inc i))))))))
       (list :none))))
 
-;; read_uint8 :: String -> Maybe Uint8
-(def hydra_overlay_clojure_lib_literals_read_uint8
+;; parse_uint8 :: String -> Maybe Uint8
+(def hydra_overlay_clojure_lib_literals_parse_uint8
   (fn [s] (try (let [n (Integer/parseInt s)]
                  (if (and (>= n 0) (<= n 255)) (list :given n) (list :none)))
                (catch Exception _ (list :none)))))
 
-;; read_uint16 :: String -> Maybe Uint16
-(def hydra_overlay_clojure_lib_literals_read_uint16
+;; parse_uint16 :: String -> Maybe Uint16
+(def hydra_overlay_clojure_lib_literals_parse_uint16
   (fn [s] (try (let [n (Integer/parseInt s)]
                  (if (and (>= n 0) (<= n 65535)) (list :given n) (list :none)))
                (catch Exception _ (list :none)))))

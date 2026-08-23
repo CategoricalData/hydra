@@ -206,7 +206,7 @@ def int64_to_bigint(x: int) -> int:
     return x
 
 
-def read_bigint(s: str) -> Optional[int]:
+def parse_bigint(s: str) -> Optional[int]:
     """Parse a string to a bigint (Integer)."""
     try:
         return Given(int(s))
@@ -224,7 +224,7 @@ def parse_boolean(s: str) -> Optional[bool]:
         return NONE_
 
 
-def read_decimal(s: str) -> Optional[Decimal]:
+def parse_decimal(s: str) -> Optional[Decimal]:
     """Parse a string to a decimal (arbitrary-precision exact decimal)."""
     try:
         return Given(Decimal(s))
@@ -245,7 +245,7 @@ def _parse_float_token(s: str) -> float:
     return float(s)
 
 
-def read_float32(s: str) -> Optional[float]:
+def parse_float32(s: str) -> Optional[float]:
     """Parse a string to a float32 (Float)."""
     import struct
     try:
@@ -258,7 +258,7 @@ def read_float32(s: str) -> Optional[float]:
         return NONE_
 
 
-def read_float64(s: str) -> Optional[float]:
+def parse_float64(s: str) -> Optional[float]:
     """Parse a string to a float64 (Double)."""
     try:
         return Given(_parse_float_token(s))
@@ -266,7 +266,7 @@ def read_float64(s: str) -> Optional[float]:
         return NONE_
 
 
-def read_int8(s: str) -> Optional[int]:
+def parse_int8(s: str) -> Optional[int]:
     """Parse a string to an int8 (-128 to 127)."""
     try:
         n = int(s)
@@ -278,7 +278,7 @@ def read_int8(s: str) -> Optional[int]:
         return NONE_
 
 
-def read_int16(s: str) -> Optional[int]:
+def parse_int16(s: str) -> Optional[int]:
     """Parse a string to an int16 (-32768 to 32767)."""
     try:
         n = int(s)
@@ -290,7 +290,7 @@ def read_int16(s: str) -> Optional[int]:
         return NONE_
 
 
-def read_int32(s: str) -> Optional[int]:
+def parse_int32(s: str) -> Optional[int]:
     """Parse a string to an int32."""
     try:
         return Given(int(s))
@@ -298,7 +298,7 @@ def read_int32(s: str) -> Optional[int]:
         return NONE_
 
 
-def read_int64(s: str) -> Optional[int]:
+def parse_int64(s: str) -> Optional[int]:
     """Parse a string to an int64."""
     try:
         return Given(int(s))
@@ -316,7 +316,7 @@ def parse_string(s: str) -> Optional[str]:
         return NONE_
 
 
-def read_uint8(s: str) -> Optional[int]:
+def parse_uint8(s: str) -> Optional[int]:
     """Parse a string to a uint8 (0 to 255)."""
     try:
         n = int(s)
@@ -328,7 +328,7 @@ def read_uint8(s: str) -> Optional[int]:
         return NONE_
 
 
-def read_uint16(s: str) -> Optional[int]:
+def parse_uint16(s: str) -> Optional[int]:
     """Parse a string to a uint16 (0 to 65535)."""
     try:
         n = int(s)
@@ -340,7 +340,7 @@ def read_uint16(s: str) -> Optional[int]:
         return NONE_
 
 
-def read_uint32(s: str) -> Optional[int]:
+def parse_uint32(s: str) -> Optional[int]:
     """Parse a string to a uint32 (0 to 4294967295)."""
     try:
         n = int(s)
@@ -352,7 +352,7 @@ def read_uint32(s: str) -> Optional[int]:
         return NONE_
 
 
-def read_uint64(s: str) -> Optional[int]:
+def parse_uint64(s: str) -> Optional[int]:
     """Parse a string to a uint64 (0 to 18446744073709551615)."""
     try:
         n = int(s)
@@ -364,7 +364,7 @@ def read_uint64(s: str) -> Optional[int]:
         return NONE_
 
 
-def show_bigint(x: int) -> str:
+def print_bigint(x: int) -> str:
     """Convert a bigint (Integer) to string."""
     return str(x)
 
@@ -374,7 +374,7 @@ def print_boolean(b: bool) -> str:
     return "true" if b else "false"
 
 
-def show_decimal(x: Decimal) -> str:
+def print_decimal(x: Decimal) -> str:
     """Convert a decimal to its string, matching Haskell's Data.Scientific show."""
     # Normalize: strip trailing zeros, then format as decimal or scientific.
     normalized = x.normalize() if x != 0 else Decimal(0)
@@ -408,7 +408,7 @@ def show_decimal(x: Decimal) -> str:
         return f"{sign_str}{plain}"
 
 
-def show_float32(x: float) -> str:
+def print_float32(x: float) -> str:
     """Convert a float32 (Float) to string, matching Haskell's show behavior.
 
     Three bugs fixed here (found via the #317 land-gate's python-to-haskell bootstrap path,
@@ -434,27 +434,27 @@ def show_float32(x: float) -> str:
     return _format_float_like_haskell(f32, pack_fmt='f')
 
 
-def show_float64(x: float) -> str:
+def print_float64(x: float) -> str:
     """Convert a float64 (Double) to string."""
     return _format_float_like_haskell(x, pack_fmt='d')
 
 
-def show_int8(x: int) -> str:
+def print_int8(x: int) -> str:
     """Convert an int8 to string."""
     return str(x)
 
 
-def show_int16(x: int) -> str:
+def print_int16(x: int) -> str:
     """Convert an int16 to string."""
     return str(x)
 
 
-def show_int32(x: int) -> str:
+def print_int32(x: int) -> str:
     """Convert an int32 to string."""
     return str(x)
 
 
-def show_int64(x: int) -> str:
+def print_int64(x: int) -> str:
     """Convert an int64 to string."""
     return str(x)
 
@@ -493,22 +493,22 @@ def print_string(s: str) -> str:
     return '"' + ''.join(sb) + '"'
 
 
-def show_uint8(x: int) -> str:
+def print_uint8(x: int) -> str:
     """Convert a uint8 to string."""
     return str(x)
 
 
-def show_uint16(x: int) -> str:
+def print_uint16(x: int) -> str:
     """Convert a uint16 to string."""
     return str(x)
 
 
-def show_uint32(x: int) -> str:
+def print_uint32(x: int) -> str:
     """Convert a uint32 to string."""
     return str(x)
 
 
-def show_uint64(x: int) -> str:
+def print_uint64(x: int) -> str:
     """Convert a uint64 to string."""
     return str(x)
 

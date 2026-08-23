@@ -25,15 +25,15 @@ import hydra.overlay.java.util.Either;
  * Primitive function which parses a string into a uint64 (64-bit unsigned integer).
  * Returns an optional value that is empty if the string cannot be parsed or is out of range (0-18446744073709551615).
  */
-public class ReadUint64 extends PrimitiveFunction {
+public class ParseUint64 extends PrimitiveFunction {
     private static final BigInteger MAX_UINT64 = new BigInteger("18446744073709551615");
 
     /**
      * Returns the unique name identifying this primitive function.
-     * @return the function name "hydra.lib.literals.readUint64"
+     * @return the function name "hydra.lib.literals.parseUint64"
      */
     public Name name() {
-        return hydra.lib.Literals.readUint64().name;
+        return hydra.lib.Literals.parseUint64().name;
     }
 
     /**

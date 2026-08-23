@@ -384,7 +384,7 @@ of kwargs + explicit `field()`.
 ```python
 @hydra_element(my_module, type_=T.function(T.int32(), T.string()))
 def show_number(x):
-    return Strings.show_int32(x)
+    return Strings.print_int32(x)
 ```
 
 Idiomatic Python metadata mechanism. Risk: users may expect the

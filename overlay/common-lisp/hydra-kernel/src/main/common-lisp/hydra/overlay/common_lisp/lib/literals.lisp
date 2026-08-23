@@ -159,9 +159,9 @@
 (defvar hydra_overlay_common_lisp_lib_literals_int64_to_bigint
   (lambda (x) x))
 
-;; read_decimal :: String -> Maybe Decimal
+;; parse_decimal :: String -> Maybe Decimal
 ;; No native decimal; parse as double-float.
-(defvar hydra_overlay_common_lisp_lib_literals_read_decimal
+(defvar hydra_overlay_common_lisp_lib_literals_parse_decimal
   (lambda (s)
     (let* ((*read-default-float-format* 'double-float)
            (n (ignore-errors (read-from-string s))))
@@ -169,9 +169,9 @@
           (list :given (float n 1.0d0))
           (list :none)))))
 
-;; read_bigint :: String -> Maybe BigInteger
+;; parse_bigint :: String -> Maybe BigInteger
 ;; Parse a string to a bigint (Integer).
-(defvar hydra_overlay_common_lisp_lib_literals_read_bigint
+(defvar hydra_overlay_common_lisp_lib_literals_parse_bigint
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if n
@@ -196,9 +196,9 @@
           (list :given (float n 1.0d0))
           (list :none)))))
 
-;; read_float32 :: String -> Maybe Float
+;; parse_float32 :: String -> Maybe Float
 ;; Parse a string to a float32 (Float). Handles NaN/Infinity sentinels.
-(defvar hydra_overlay_common_lisp_lib_literals_read_float32
+(defvar hydra_overlay_common_lisp_lib_literals_parse_float32
   (lambda (s)
     (cond
       ((string= s "NaN") (list :given +hydra-nan+))
@@ -209,9 +209,9 @@
                (list :given (float (float n 1.0f0) 1.0d0))
                (list :none)))))))
 
-;; read_float64 :: String -> Maybe Float64
+;; parse_float64 :: String -> Maybe Float64
 ;; Parse a string to a float64 (Double). Handles NaN/Infinity sentinels.
-(defvar hydra_overlay_common_lisp_lib_literals_read_float64
+(defvar hydra_overlay_common_lisp_lib_literals_parse_float64
   (lambda (s)
     (cond
       ((string= s "NaN") (list :given +hydra-nan+))
@@ -230,34 +230,34 @@
           (list :given n)
           (list :none)))))
 
-;; read_int8 :: String -> Maybe Int8
+;; parse_int8 :: String -> Maybe Int8
 ;; Parse a string to an int8 (-128 to 127).
-(defvar hydra_overlay_common_lisp_lib_literals_read_int8
+(defvar hydra_overlay_common_lisp_lib_literals_parse_int8
   (lambda (s)
     (handler-case
         (let ((n (parse-integer s)))
           (if (and (>= n -128) (<= n 127)) (list :given n) (list :none)))
       (error () (list :none)))))
 
-;; read_int16 :: String -> Maybe Int16
+;; parse_int16 :: String -> Maybe Int16
 ;; Parse a string to an int16 (-32768 to 32767).
-(defvar hydra_overlay_common_lisp_lib_literals_read_int16
+(defvar hydra_overlay_common_lisp_lib_literals_parse_int16
   (lambda (s)
     (handler-case
         (let ((n (parse-integer s)))
           (if (and (>= n -32768) (<= n 32767)) (list :given n) (list :none)))
       (error () (list :none)))))
 
-;; read_int32 :: String -> Maybe Int32
+;; parse_int32 :: String -> Maybe Int32
 ;; Parse a string to an int32.
-(defvar hydra_overlay_common_lisp_lib_literals_read_int32
+(defvar hydra_overlay_common_lisp_lib_literals_parse_int32
   (lambda (s)
     (handler-case (list :given (parse-integer s))
       (error () (list :none)))))
 
-;; read_int64 :: String -> Maybe Int64
+;; parse_int64 :: String -> Maybe Int64
 ;; Parse a string to an int64.
-(defvar hydra_overlay_common_lisp_lib_literals_read_int64
+(defvar hydra_overlay_common_lisp_lib_literals_parse_int64
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if n
@@ -303,36 +303,36 @@
           (list :given n)
           (list :none)))))
 
-;; read_uint8 :: String -> Maybe Uint8
+;; parse_uint8 :: String -> Maybe Uint8
 ;; Parse a string to a uint8 (0 to 255).
-(defvar hydra_overlay_common_lisp_lib_literals_read_uint8
+(defvar hydra_overlay_common_lisp_lib_literals_parse_uint8
   (lambda (s)
     (handler-case
         (let ((n (parse-integer s)))
           (if (and (>= n 0) (<= n 255)) (list :given n) (list :none)))
       (error () (list :none)))))
 
-;; read_uint16 :: String -> Maybe Uint16
+;; parse_uint16 :: String -> Maybe Uint16
 ;; Parse a string to a uint16 (0 to 65535).
-(defvar hydra_overlay_common_lisp_lib_literals_read_uint16
+(defvar hydra_overlay_common_lisp_lib_literals_parse_uint16
   (lambda (s)
     (handler-case
         (let ((n (parse-integer s)))
           (if (and (>= n 0) (<= n 65535)) (list :given n) (list :none)))
       (error () (list :none)))))
 
-;; read_uint32 :: String -> Maybe Uint32
+;; parse_uint32 :: String -> Maybe Uint32
 ;; Parse a string to a uint32 (0 to 4294967295).
-(defvar hydra_overlay_common_lisp_lib_literals_read_uint32
+(defvar hydra_overlay_common_lisp_lib_literals_parse_uint32
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if (and n (>= n 0))
           (list :given n)
           (list :none)))))
 
-;; read_uint64 :: String -> Maybe Uint64
+;; parse_uint64 :: String -> Maybe Uint64
 ;; Parse a string to a uint64 (0 to 18446744073709551615).
-(defvar hydra_overlay_common_lisp_lib_literals_read_uint64
+(defvar hydra_overlay_common_lisp_lib_literals_parse_uint64
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
       (if (and n (>= n 0))
@@ -401,15 +401,15 @@
                (strip-float-suffix (write-to-string sf-mantissa)) adj-exp)))
     (t (strip-float-suffix (write-to-string x)))))
 
-;; show_decimal :: Decimal -> String
+;; print_decimal :: Decimal -> String
 ;; No native decimal; formatted as double-float.
-(defvar hydra_overlay_common_lisp_lib_literals_show_decimal
+(defvar hydra_overlay_common_lisp_lib_literals_print_decimal
   (lambda (x)
     (haskell-show-float (float x 1.0d0))))
 
-;; show_bigint :: BigInteger -> String
+;; print_bigint :: BigInteger -> String
 ;; Convert a bigint (Integer) to string.
-(defvar hydra_overlay_common_lisp_lib_literals_show_bigint
+(defvar hydra_overlay_common_lisp_lib_literals_print_bigint
   (lambda (x)
     (write-to-string x)))
 
@@ -425,17 +425,17 @@
   (lambda (x)
     (haskell-show-float (float x 1.0d0))))
 
-;; show_float32 :: Float -> String
+;; print_float32 :: Float -> String
 ;; Convert a float32 (Float) to string.
 ;; The input is a double representing a single-float value.
 ;; Convert to single-float first for correct precision display.
-(defvar hydra_overlay_common_lisp_lib_literals_show_float32
+(defvar hydra_overlay_common_lisp_lib_literals_print_float32
   (lambda (x)
     (haskell-show-float-single (float x 1.0f0))))
 
-;; show_float64 :: Double -> String
+;; print_float64 :: Double -> String
 ;; Convert a float64 (Double) to string.
-(defvar hydra_overlay_common_lisp_lib_literals_show_float64
+(defvar hydra_overlay_common_lisp_lib_literals_print_float64
   (lambda (x)
     (haskell-show-float (float x 1.0d0))))
 
@@ -445,27 +445,27 @@
   (lambda (x)
     (write-to-string x)))
 
-;; show_int8 :: Int8 -> String
+;; print_int8 :: Int8 -> String
 ;; Convert an int8 to string.
-(defvar hydra_overlay_common_lisp_lib_literals_show_int8
+(defvar hydra_overlay_common_lisp_lib_literals_print_int8
   (lambda (x)
     (write-to-string x)))
 
-;; show_int16 :: Int16 -> String
+;; print_int16 :: Int16 -> String
 ;; Convert an int16 to string.
-(defvar hydra_overlay_common_lisp_lib_literals_show_int16
+(defvar hydra_overlay_common_lisp_lib_literals_print_int16
   (lambda (x)
     (write-to-string x)))
 
-;; show_int32 :: Int32 -> String
+;; print_int32 :: Int32 -> String
 ;; Convert an int32 to string.
-(defvar hydra_overlay_common_lisp_lib_literals_show_int32
+(defvar hydra_overlay_common_lisp_lib_literals_print_int32
   (lambda (x)
     (write-to-string x)))
 
-;; show_int64 :: Int64 -> String
+;; print_int64 :: Int64 -> String
 ;; Convert an int64 to string.
-(defvar hydra_overlay_common_lisp_lib_literals_show_int64
+(defvar hydra_overlay_common_lisp_lib_literals_print_int64
   (lambda (x)
     (write-to-string x)))
 
@@ -511,27 +511,27 @@
   (lambda (x)
     (write-to-string x)))
 
-;; show_uint8 :: Uint8 -> String
+;; print_uint8 :: Uint8 -> String
 ;; Convert a uint8 to string.
-(defvar hydra_overlay_common_lisp_lib_literals_show_uint8
+(defvar hydra_overlay_common_lisp_lib_literals_print_uint8
   (lambda (x)
     (write-to-string x)))
 
-;; show_uint16 :: Uint16 -> String
+;; print_uint16 :: Uint16 -> String
 ;; Convert a uint16 to string.
-(defvar hydra_overlay_common_lisp_lib_literals_show_uint16
+(defvar hydra_overlay_common_lisp_lib_literals_print_uint16
   (lambda (x)
     (write-to-string x)))
 
-;; show_uint32 :: Uint32 -> String
+;; print_uint32 :: Uint32 -> String
 ;; Convert a uint32 to string.
-(defvar hydra_overlay_common_lisp_lib_literals_show_uint32
+(defvar hydra_overlay_common_lisp_lib_literals_print_uint32
   (lambda (x)
     (write-to-string x)))
 
-;; show_uint64 :: Uint64 -> String
+;; print_uint64 :: Uint64 -> String
 ;; Convert a uint64 to string.
-(defvar hydra_overlay_common_lisp_lib_literals_show_uint64
+(defvar hydra_overlay_common_lisp_lib_literals_print_uint64
   (lambda (x)
     (write-to-string x)))
 

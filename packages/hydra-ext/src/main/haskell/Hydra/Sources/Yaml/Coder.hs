@@ -156,7 +156,7 @@ literalYamlCoder = define "literalYamlCoder" $
         "bf" <~ (match _FloatValue (var "f") Nothing [
           _FloatValue_float32>>: "v" ~> Literals.float32ToFloat64 (var "v"),
           _FloatValue_float64>>: "v" ~> var "v"]) $
-        "shown" <~ (Literals.showFloat64 $ var "bf") $
+        "shown" <~ (Literals.printFloat64 $ var "bf") $
         Logic.ifElse (requiresYamlStringSentinel @@ var "shown")
           (left (Error.errorOther $ Error.otherError (Strings.concat $ list [string "YAML cannot represent float value: ", var "shown"])))
           (right (Yaml.scalarFloat $ var "bf")))

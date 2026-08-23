@@ -153,7 +153,7 @@ decodeInteger = define "decodeInteger" $
       Eithers.either
         ("err" ~> left $ var "err")
         ("s" ~>
-          "parsed" <~ (Literals.readBigint $ var "s") $
+          "parsed" <~ (Literals.parseBigint $ var "s") $
           Optionals.match (var "parsed") (left $ Strings.concat $ list [string "invalid bigint: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueBigint $ var "v"))
         (var "strResult"),
     _IntegerType_int64>>: constant $
@@ -161,7 +161,7 @@ decodeInteger = define "decodeInteger" $
       Eithers.either
         ("err" ~> left $ var "err")
         ("s" ~>
-          "parsed" <~ (Literals.readInt64 $ var "s") $
+          "parsed" <~ (Literals.parseInt64 $ var "s") $
           Optionals.match (var "parsed") (left $ Strings.concat $ list [string "invalid int64: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueInt64 $ var "v"))
         (var "strResult"),
     _IntegerType_uint64>>: constant $
@@ -169,7 +169,7 @@ decodeInteger = define "decodeInteger" $
       Eithers.either
         ("err" ~> left $ var "err")
         ("s" ~>
-          "parsed" <~ (Literals.readUint64 $ var "s") $
+          "parsed" <~ (Literals.parseUint64 $ var "s") $
           Optionals.match (var "parsed") (left $ Strings.concat $ list [string "invalid uint64: ", var "s"]) ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint64 $ var "v"))
         (var "strResult"),
     -- Small integers: decode from JSON number
@@ -212,7 +212,7 @@ decodeInteger = define "decodeInteger" $
         _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint32 $
           Literals.bigintToUint32 $ Literals.decimalToBigint $ var "n",
         _Value_string>>: "s" ~>
-          "parsed" <~ (Literals.readUint32 $ var "s") $
+          "parsed" <~ (Literals.parseUint32 $ var "s") $
           Optionals.match (var "parsed")
             (left $ Strings.concat $ list [string "invalid uint32: ", var "s"])
             ("v" ~> right $ Core.termLiteral $ Core.literalInteger $ Core.integerValueUint32 $ var "v")]]
@@ -573,7 +573,7 @@ parseSpecialFloat = define "parseSpecialFloat" $
        Logic.or (Equality.equal (var "s") (string "Infinity")) $
        Logic.or (Equality.equal (var "s") (string "-Infinity"))
                 (Equality.equal (var "s") (string "-0.0")))
-      (Literals.readFloat64 $ var "s")
+      (Literals.parseFloat64 $ var "s")
       Phantoms.nothing
 
 -- | Parse a string as an IEEE sentinel float32. Same accepted strings as 'parseSpecialFloat',
@@ -589,5 +589,5 @@ parseSpecialFloat32 = define "parseSpecialFloat32" $
        Logic.or (Equality.equal (var "s") (string "Infinity")) $
        Logic.or (Equality.equal (var "s") (string "-Infinity"))
                 (Equality.equal (var "s") (string "-0.0")))
-      (Literals.readFloat32 $ var "s")
+      (Literals.parseFloat32 $ var "s")
       Phantoms.nothing

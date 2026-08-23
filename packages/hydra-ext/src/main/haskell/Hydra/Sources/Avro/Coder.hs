@@ -582,7 +582,7 @@ jsonToStringE = define "jsonToStringE" $
       JM._Value_string>>: lambda "s" $
         right (var "s"),
       JM._Value_number>>: lambda "d" $
-        right (Literals.showDecimal (var "d"))]
+        right (Literals.printDecimal (var "d"))]
 
 namedAnnotationsToCore :: TypedTermDefinition (Avro.Named -> M.Map Name Term)
 namedAnnotationsToCore = define "namedAnnotationsToCore" $
@@ -824,23 +824,23 @@ stringToTermE = define "stringToTermE" $
           _LiteralType_integer>>: lambda "it" $
             match _IntegerType (var "it") Nothing [
               _IntegerType_bigint>>: constant $
-                var "readAndWrap" @@ (lambda "x" $ Literals.readBigint (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueBigint (var "i")),
+                var "readAndWrap" @@ (lambda "x" $ Literals.parseBigint (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueBigint (var "i")),
               _IntegerType_int8>>: constant $
-                var "readAndWrap" @@ (lambda "x" $ Literals.readInt8 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueInt8 (var "i")),
+                var "readAndWrap" @@ (lambda "x" $ Literals.parseInt8 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueInt8 (var "i")),
               _IntegerType_int16>>: constant $
-                var "readAndWrap" @@ (lambda "x" $ Literals.readInt16 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueInt16 (var "i")),
+                var "readAndWrap" @@ (lambda "x" $ Literals.parseInt16 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueInt16 (var "i")),
               _IntegerType_int32>>: constant $
-                var "readAndWrap" @@ (lambda "x" $ Literals.readInt32 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueInt32 (var "i")),
+                var "readAndWrap" @@ (lambda "x" $ Literals.parseInt32 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueInt32 (var "i")),
               _IntegerType_int64>>: constant $
-                var "readAndWrap" @@ (lambda "x" $ Literals.readInt64 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueInt64 (var "i")),
+                var "readAndWrap" @@ (lambda "x" $ Literals.parseInt64 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueInt64 (var "i")),
               _IntegerType_uint8>>: constant $
-                var "readAndWrap" @@ (lambda "x" $ Literals.readUint8 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueUint8 (var "i")),
+                var "readAndWrap" @@ (lambda "x" $ Literals.parseUint8 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueUint8 (var "i")),
               _IntegerType_uint16>>: constant $
-                var "readAndWrap" @@ (lambda "x" $ Literals.readUint16 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueUint16 (var "i")),
+                var "readAndWrap" @@ (lambda "x" $ Literals.parseUint16 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueUint16 (var "i")),
               _IntegerType_uint32>>: constant $
-                var "readAndWrap" @@ (lambda "x" $ Literals.readUint32 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueUint32 (var "i")),
+                var "readAndWrap" @@ (lambda "x" $ Literals.parseUint32 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueUint32 (var "i")),
               _IntegerType_uint64>>: constant $
-                var "readAndWrap" @@ (lambda "x" $ Literals.readUint64 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueUint64 (var "i"))],
+                var "readAndWrap" @@ (lambda "x" $ Literals.parseUint64 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueUint64 (var "i"))],
           _LiteralType_string>>: constant $
             right (Core.termLiteral $ Core.literalString (var "s"))]]
 
@@ -857,15 +857,15 @@ termToStringE = define "termToStringE" $
             right (Literals.printBoolean (var "b")),
           _Literal_integer>>: lambda "iv" $
             right (match _IntegerValue (var "iv") Nothing [
-              _IntegerValue_bigint>>: lambda "i" $ Literals.showBigint (var "i"),
-              _IntegerValue_int8>>: lambda "i" $ Literals.showInt8 (var "i"),
-              _IntegerValue_int16>>: lambda "i" $ Literals.showInt16 (var "i"),
-              _IntegerValue_int32>>: lambda "i" $ Literals.showInt32 (var "i"),
-              _IntegerValue_int64>>: lambda "i" $ Literals.showInt64 (var "i"),
-              _IntegerValue_uint8>>: lambda "i" $ Literals.showUint8 (var "i"),
-              _IntegerValue_uint16>>: lambda "i" $ Literals.showUint16 (var "i"),
-              _IntegerValue_uint32>>: lambda "i" $ Literals.showUint32 (var "i"),
-              _IntegerValue_uint64>>: lambda "i" $ Literals.showUint64 (var "i")]),
+              _IntegerValue_bigint>>: lambda "i" $ Literals.printBigint (var "i"),
+              _IntegerValue_int8>>: lambda "i" $ Literals.printInt8 (var "i"),
+              _IntegerValue_int16>>: lambda "i" $ Literals.printInt16 (var "i"),
+              _IntegerValue_int32>>: lambda "i" $ Literals.printInt32 (var "i"),
+              _IntegerValue_int64>>: lambda "i" $ Literals.printInt64 (var "i"),
+              _IntegerValue_uint8>>: lambda "i" $ Literals.printUint8 (var "i"),
+              _IntegerValue_uint16>>: lambda "i" $ Literals.printUint16 (var "i"),
+              _IntegerValue_uint32>>: lambda "i" $ Literals.printUint32 (var "i"),
+              _IntegerValue_uint64>>: lambda "i" $ Literals.printUint64 (var "i")]),
           _Literal_string>>: lambda "s" $
             right (var "s")],
       _Term_optional>>: lambda "ot" $
