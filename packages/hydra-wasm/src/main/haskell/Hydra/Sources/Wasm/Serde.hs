@@ -264,7 +264,7 @@ funcToExpr = define "funcToExpr" $
     "localParts">: Lists.map (asTerm funcLocalToExpr) (var "locals"),
     "bodyParts">: Lists.map (asTerm instructionToExpr) (var "body"),
     "innerParts">: Lists.concat2 (var "localParts") (var "bodyParts")] $
-    Logic.ifElse (Lists.null (var "innerParts"))
+    Logic.ifElse (Lists.isEmpty (var "innerParts"))
       (Serialization.spaceSep @@ list [
         Serialization.cst @@ var "headerStr",
         var "typeUsePart",
@@ -288,8 +288,8 @@ funcTypeToExpr = define "funcTypeToExpr" $
       (var "results")] $
     Serialization.spaceSep @@ Optionals.givens (list [
       just (Serialization.cst @@ string "(func"),
-      Logic.ifElse (Lists.null (var "paramParts")) nothing (just (Serialization.spaceSep @@ var "paramParts")),
-      Logic.ifElse (Lists.null (var "resultParts")) nothing (just (Serialization.spaceSep @@ var "resultParts")),
+      Logic.ifElse (Lists.isEmpty (var "paramParts")) nothing (just (Serialization.spaceSep @@ var "paramParts")),
+      Logic.ifElse (Lists.isEmpty (var "resultParts")) nothing (just (Serialization.spaceSep @@ var "resultParts")),
       just (Serialization.cst @@ string ")")])
 
 globalDefToExpr :: TypedTermDefinition (W.GlobalDef -> Expr)
@@ -344,7 +344,7 @@ ifInstructionToExpr = define "ifInstructionToExpr" $
       list [Serialization.cst @@ string "(else"],
       Lists.map (lambda "p" $ Serialization.cst @@ Strings.concat2 (string "  ") (Serialization.printExpr @@ var "p")) (var "elseParts"),
       list [Serialization.cst @@ string ")"]])] $
-    Logic.ifElse (Lists.null (var "elseParts"))
+    Logic.ifElse (Lists.isEmpty (var "elseParts"))
       (Serialization.newlineSep @@ list [var "header", var "thenBlock", Serialization.cst @@ string ")"])
       (Serialization.newlineSep @@ list [var "header", var "thenBlock", var "elseBlock", Serialization.cst @@ string ")"])
 

@@ -247,7 +247,7 @@
       (if (hydra-map-lookup k m) t nil))))
 
 ;; null :: Map k v -> Bool
-(defvar hydra_overlay_emacs_lisp_lib_maps_null
+(defvar hydra_overlay_emacs_lisp_lib_maps_isEmpty
   (lambda (m)
     "Check if a map is empty."
     (hydra-map-empty-p m)))

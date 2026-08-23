@@ -67,6 +67,18 @@ U+FFFD.
 
 Since: 0.15
 
+#### isEmpty — **Draft**
+
+`string → boolean`
+
+Usage: `isEmpty s`
+
+Check whether a string is empty.
+Returns `true` if `s` is the empty string, and `false` otherwise; equivalently, `isEmpty s` is
+`true` exactly when `length s` is `0`.
+
+Since: 0.15
+
 #### join — **Draft**
 
 `string → list<string> → string`
@@ -98,18 +110,6 @@ requiring four bytes in UTF-8 counts as one, and an emoji built from multiple co
 as the number of code points it uses.
 Defined for every string whose code-point count is representable as an int32
 (fewer than 2^31 - 1 code points).
-
-Since: 0.15
-
-#### null — **Draft**
-
-`string → boolean`
-
-Usage: `null s`
-
-Check whether a string is empty.
-Returns `true` if `s` is the empty string, and `false` otherwise; equivalently, `null s` is
-`true` exactly when `length s` is `0`.
 
 Since: 0.15
 

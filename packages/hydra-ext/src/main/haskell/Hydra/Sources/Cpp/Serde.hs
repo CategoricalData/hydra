@@ -429,7 +429,7 @@ classSpecifierToExpr = define "classSpecifierToExpr" $
     "inheritance">: project Cpp._ClassSpecifier Cpp._ClassSpecifier_inheritance @@ var "cs"] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       list [classKeyToExpr @@ var "key", Serialization.cst @@ var "name"],
-      Logic.ifElse (Lists.null (var "inheritance"))
+      Logic.ifElse (Lists.isEmpty (var "inheritance"))
         (list ([] :: [TypedTerm Expr]))
         (list [Serialization.cst @@ string ":",
           Serialization.commaSep @@ Serialization.inlineStyle @@ (Lists.map (asTerm baseSpecifierToExpr) (var "inheritance"))])])
@@ -480,7 +480,7 @@ constructorDeclarationToExpr = define "constructorDeclarationToExpr" $
       just (Serialization.noSep @@ list [
         Serialization.cst @@ var "name",
         Serialization.parenListAdaptive @@ (Lists.map (asTerm parameterToExpr) (var "params"))]),
-      Logic.ifElse (Lists.null (var "inits"))
+      Logic.ifElse (Lists.isEmpty (var "inits"))
         nothing
         (just (Serialization.spaceSep @@ list [
           Serialization.cst @@ string ":",
@@ -859,7 +859,7 @@ lambdaExpressionToExpr = define "lambdaExpressionToExpr" $
     "body">: project Cpp._LambdaExpression Cpp._LambdaExpression_body @@ var "le"] $
     Serialization.spaceSep @@ list [
       captureListToExpr @@ var "captures",
-      Logic.ifElse (Lists.null (var "params"))
+      Logic.ifElse (Lists.isEmpty (var "params"))
         (Serialization.parens @@ (Serialization.cst @@ string ""))
         (Serialization.parenListAdaptive @@ (Lists.map (asTerm parameterToExpr) (var "params"))),
       Optionals.match (var "retType") (Serialization.cst @@ string "") (lambda "t" $ Serialization.spaceSep @@ list [Serialization.cst @@ string "->", typeExpressionToExpr @@ var "t"]),
@@ -1200,7 +1200,7 @@ programToExpr = define "programToExpr" $
     "includes">: project Cpp._Program Cpp._Program_includes @@ var "prog",
     "decls">: project Cpp._Program Cpp._Program_declarations @@ var "prog",
     "separate">: lambda "sep" $ lambda "defs" $
-      Logic.ifElse (Lists.null (var "defs"))
+      Logic.ifElse (Lists.isEmpty (var "defs"))
         nothing
         (just (var "sep" @@ var "defs"))] $
     Serialization.doubleNewlineSep @@ (Optionals.givens $ list [

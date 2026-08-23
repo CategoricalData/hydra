@@ -58,7 +58,7 @@ isPublishSetClosed :: TypedTermDefinition ([Package] -> [PackageName] -> [Packag
 isPublishSetClosed = define "isPublishSetClosed" $
   doc "Whether the publish set is dependency-closed given the externally-satisfied set" $
   "packages" ~> "publishSet" ~> "externallySatisfied" ~>
-    Lists.null (strandedDeps @@ var "packages" @@ var "publishSet" @@ var "externallySatisfied")
+    Lists.isEmpty (strandedDeps @@ var "packages" @@ var "publishSet" @@ var "externallySatisfied")
 
 -- | The names of a package's direct Hydra dependencies.
 packageDepNames :: TypedTermDefinition (Package -> [PackageName])

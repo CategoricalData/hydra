@@ -50,7 +50,7 @@ allTests = define "allTests" $
       stringsJoin,
       stringsLength,
       stringsCharAt,
-      stringsNull,
+      stringsIsEmpty,
       stringsSplitOn,
       stringsToList,
       stringsToLower,
@@ -161,7 +161,7 @@ allTests = define "allTests" $
           optionalInt32 Nothing = Core.termOptional nothing
           optionalInt32 (Just x) = Core.termOptional $ just (int32 x)
 
-      stringsNull = subgroup "null" [
+      stringsIsEmpty = subgroup "isEmpty" [
         test "empty string" "" True,
         test "single character" "a" False,
         test "space" " " False,
@@ -171,7 +171,7 @@ allTests = define "allTests" $
         test "multi-character" "hello" False]
         where
           test name s result = evalPair name showBool
-            (Strings.null (Phantoms.string s))
+            (Strings.isEmpty (Phantoms.string s))
             (Phantoms.boolean result)
   
       stringsSplitOn = subgroup "splitOn" [

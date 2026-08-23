@@ -169,7 +169,7 @@ eof :: TypedTermDefinition (Parser ())
 eof = define "eof" $
   doc "A parser that succeeds only at the end of input" $
   Parsing.parser ("input" ~>
-    Logic.ifElse (Lists.null $ var "input")
+    Logic.ifElse (Lists.isEmpty $ var "input")
       (Parsing.parseResultSuccess (Parsing.parseSuccess unit (var "input")))
       (Parsing.parseResultFailure (Parsing.parseError (string "expected end of input") (var "input"))))
 

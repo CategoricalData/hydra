@@ -236,7 +236,7 @@ constructModule = haskellCoderDefinition "constructModule" $
         "name">: Pairs.first $ Pairs.first $ var "triple",
         "malias">: Pairs.second $ Pairs.first $ var "triple",
         "hidden">: Pairs.second $ var "triple",
-        "spec">: Logic.ifElse (Lists.null $ var "hidden")
+        "spec">: Logic.ifElse (Lists.isEmpty $ var "hidden")
           nothing
           (just $ inject H._ImportSpec H._ImportSpec_hiding $ Lists.map ("n" ~> record H._NamedImportExport [
             H._NamedImportExport_modifier>>: nothing,
@@ -499,7 +499,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
           right $ inject H._Expression H._Expression_list $ var "helems",
       _Term_literal>>: "v" ~>
         encodeLiteral @@ var "v" @@ var "cx",
-      _Term_map>>: "m" ~> Logic.ifElse (Maps.null $ (var "m" :: TypedTerm (M.Map Term Term)))
+      _Term_map>>: "m" ~> Logic.ifElse (Maps.isEmpty $ (var "m" :: TypedTerm (M.Map Term Term)))
         (right $ HaskellUtilsSource.hsvar @@ string "M.empty")
         (var "nonemptyMap" @@ var "m"),
       _Term_optional>>: "m" ~>
@@ -528,7 +528,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
           right $ inject H._Expression H._Expression_constructRecord $ record H._RecordExpression [
             H._RecordExpression_name>>: var "typeName",
             H._RecordExpression_fields>>: var "updates"],
-      _Term_set>>: "s" ~> Logic.ifElse (Sets.null $ (var "s" :: TypedTerm (S.Set Term)))
+      _Term_set>>: "s" ~> Logic.ifElse (Sets.isEmpty $ (var "s" :: TypedTerm (S.Set Term)))
         (right $ HaskellUtilsSource.hsvar @@ string "S.empty")
         (var "nonemptySet" @@ var "s"),
       _Term_typeLambda>>: "abs" ~> lets [
@@ -691,7 +691,7 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
         pair (var "name") (var "c")] $
       Lists.map (var "toPair") (Sets.toList $ (var "clsSet" :: TypedTerm (S.Set Name)))] $
       "htyp" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ" @@ var "cx" @@ var "g" $
-      Logic.ifElse (Lists.null $ var "assertPairs")
+      Logic.ifElse (Lists.isEmpty $ var "assertPairs")
         (right $ var "htyp") (lets [
           "encoded">: Lists.map (var "encodeAssertion") (var "assertPairs"),
           "hassert">: Logic.ifElse (Equality.equal (Lists.length $ var "encoded") (int32 1))

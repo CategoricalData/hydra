@@ -57,7 +57,7 @@ testGroupForNestedLet = define "testGroupForNestedLet" $
           "list">: primitive DefStrings.toList @@ var "s",
           "firstLetter">: var "mapping" @@ (primitive DefStrings.fromList @@ (primitive DefOptionals.givens @@ list [primitive DefLists.head @@ var "list"]))] $
           primitive DefLogic.ifElse
-            @@ (primitive DefStrings.null @@ var "s")
+            @@ (primitive DefStrings.isEmpty @@ var "s")
             @@ (var "s")
             @@ (primitive DefStrings.concat2 @@ var "firstLetter" @@ (primitive DefStrings.fromList @@ (primitive DefLists.drop @@ int32 1 @@ var "list"))))
         (T.functionMany [T.function T.string T.string, T.string, T.string])],
@@ -71,7 +71,7 @@ testGroupForNestedLet = define "testGroupForNestedLet" $
           "go">:
             lambda "depth" $ lambda "subst" $ lambda "s" $
               primitive DefLogic.ifElse
-                @@ (primitive DefStrings.null @@ var "s")
+                @@ (primitive DefStrings.isEmpty @@ var "s")
                 @@ (pair (var "subst") (var "s"))
                 @@ (var "go"
                       @@ (primitive DefMath.add @@ var "depth" @@ int32 1)

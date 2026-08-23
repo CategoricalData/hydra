@@ -122,7 +122,7 @@ isComplexBinding = define "isComplexBinding" $
     (isComplexTerm @@ var "tc" @@ var "term") $
     "ts" ~>
       -- Check if polymorphic
-      "isPolymorphic" <~ Logic.not (Lists.null (Core.typeSchemeVariables $ var "ts")) $
+      "isPolymorphic" <~ Logic.not (Lists.isEmpty (Core.typeSchemeVariables $ var "ts")) $
       -- Check if non-nullary
       "isNonNullary" <~ Ordering.gt (Arity.typeArity @@ (Core.typeSchemeBody $ var "ts")) (int32 0) $
       -- Check if complex term
@@ -335,7 +335,7 @@ typeDependencies = define "typeDependencies" $
     Eithers.map ("typ" ~> pair (var "name") (var "transform" @@ var "typ"))
       (var "requireType" @@ var "name")) $
   "deps" <~ ("seeds" ~> "names" ~>
-    Logic.ifElse (Sets.null (var "seeds" :: TypedTerm (S.Set Name)))
+    Logic.ifElse (Sets.isEmpty (var "seeds" :: TypedTerm (S.Set Name)))
       (right (var "names"))
       (Eithers.bind (Eithers.mapList (var "toPair") (Sets.toList (var "seeds" :: TypedTerm (S.Set Name)))) (
         "pairs" ~>

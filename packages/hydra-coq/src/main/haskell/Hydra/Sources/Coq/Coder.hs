@@ -136,7 +136,7 @@ coqTermApp :: TypedTermDefinition (C.Term -> [C.Term] -> C.Term)
 coqTermApp = define "coqTermApp" $
   doc "Apply a Coq term to a list of argument terms, parenthesising each" $
   lambdas ["f", "args"] $
-    Logic.ifElse (Lists.null (var "args"))
+    Logic.ifElse (Lists.isEmpty (var "args"))
       (var "f")
       (inject C._Term C._Term_term100 $
         inject C._Term100 C._Term100_term10 $
@@ -416,7 +416,7 @@ encodeTerm = define "encodeTerm" $
     _Term_record>>: "r" ~> lets [
       "rname">: Core.recordTypeName $ var "r",
       "rfields">: Core.recordFields $ var "r"] $
-      Logic.ifElse (Lists.null $ var "rfields")
+      Logic.ifElse (Lists.isEmpty $ var "rfields")
         (coqTermQualid @@ string "tt")
         (coqTermApp
           @@ (coqTermQualid @@ (resolveQualifiedName @@ var "env"
@@ -441,7 +441,7 @@ encodeTerm = define "encodeTerm" $
       -- a Coq type annotation `(t : T)`. A type that mentions a Hydra type
       -- variable cannot, because such variables come from outer `TypeLambda`
       -- binders that Hydra erases in Coq — the variable would be free.
-      "isGround">: Sets.null (CoqUtils.collectFreeTypeVarsInType @@ var "tyArg")] $
+      "isGround">: Sets.isEmpty (CoqUtils.collectFreeTypeVarsInType @@ var "tyArg")] $
       -- An empty container (None, [], empty map, empty set) cannot have its
       -- element type inferred by Coq from the surrounding context. Emit an
       -- explicit `(None : option T)` / `(nil : list T)` cast using the type
@@ -466,7 +466,7 @@ encodeTerm = define "encodeTerm" $
         -- because Hydra sometimes passes a wrong single-type element (e.g.
         -- `Name` for an annotation field whose Coq type is `list (Name * Term)`).
         _Term_list>>: "xs" ~> Logic.ifElse
-          (Logic.and (Lists.null $ var "xs")
+          (Logic.and (Lists.isEmpty $ var "xs")
             (match _Type (var "tyArg") (Just (boolean False)) [
               _Type_either>>: constant (boolean True),
               _Type_pair>>: constant (boolean True),
@@ -774,7 +774,7 @@ isUnitDomain = define "isUnitDomain" $
   doc "True if the Maybe Type is the unit type, looking through annotations" $
   lambda "mty" $ Optionals.match (var "mty") (boolean False) (lambda "ty" $ match _Type (var "ty") (Just (boolean False)) [
       _Type_unit>>: constant true,
-      _Type_record>>: "fs" ~> Lists.null (var "fs"),
+      _Type_record>>: "fs" ~> Lists.isEmpty (var "fs"),
       _Type_annotated>>: "at" ~>
         isUnitDomain @@ just (Core.annotatedTypeBody $ var "at")])
 
@@ -1012,7 +1012,7 @@ unionConstructorName = define "unionConstructorName" $
     "parts">: Strings.splitOn (string ".") (var "typeName"),
     "localPart">: Optionals.withDefault (var "typeName") (Lists.last $ var "parts"),
     "prefixParts">: Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.init $ var "parts"),
-    "prefix">: Logic.ifElse (Lists.null $ var "prefixParts")
+    "prefix">: Logic.ifElse (Lists.isEmpty $ var "prefixParts")
       (string "")
       (Strings.concat2 (Strings.join (string ".") (var "prefixParts")) (string ".")),
     "sanitized">: sanitizeVar @@ var "localPart"] $

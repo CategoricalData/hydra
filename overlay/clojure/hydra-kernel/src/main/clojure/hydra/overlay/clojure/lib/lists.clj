@@ -131,7 +131,7 @@
             (recur (next rest_) (conj seen x) (cons x acc))))))))
 
 ;; null :: [a] -> Bool
-(def hydra_overlay_clojure_lib_lists_null
+(def hydra_overlay_clojure_lib_lists_isEmpty
   (fn [xs] (empty? xs)))
 
 ;; partition :: (a -> Bool) -> [a] -> Pair [a] [a]

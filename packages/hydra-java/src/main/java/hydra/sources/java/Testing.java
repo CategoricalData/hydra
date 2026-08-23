@@ -82,8 +82,8 @@ public class Testing {
     private static TypedTerm<?> listsMap(TypedTerm<?> f, TypedTerm<?> list) {
         return apply(prim("hydra.lib.lists.map"), f, list);
     }
-    private static TypedTerm<?> listsNull(TypedTerm<?> list) {
-        return apply(prim("hydra.lib.lists.null"), list);
+    private static TypedTerm<?> listsIsEmpty(TypedTerm<?> list) {
+        return apply(prim("hydra.lib.lists.isEmpty"), list);
     }
     private static TypedTerm<?> listsMaybeLast(TypedTerm<?> list) {
         return apply(prim("hydra.lib.lists.last"), list);
@@ -229,7 +229,7 @@ public class Testing {
                                 var("ucase")),
                             unit())),
                         field("fullName", logicIfElse(
-                            listsNull(var("groupPath")),
+                            listsIsEmpty(var("groupPath")),
                             var("name_"),
                             stringsIntercalate(string("_"),
                                 listsConcat2(var("groupPath"), list(var("name_")))))),

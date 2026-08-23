@@ -561,7 +561,7 @@ public class Serde {
                                     list(
                                         just(apply(ref(Serde.referenceTypeToExpr), var("rt"))),
                                         Logic.ifElse(
-                                            Lists.null_(var("adds")),
+                                            Lists.isEmpty_(var("adds")),
                                             nothing(),
                                             just(
                                                 hydra.dsl.Serialization.spaceSep(
@@ -791,7 +791,7 @@ public class Serde {
                                         Optionals.givens(
                                             list(
                                                 Logic.ifElse(
-                                                    Lists.null_(var("anns")),
+                                                    Lists.isEmpty_(var("anns")),
                                                     nothing(),
                                                     just(
                                                         hydra.dsl.Serialization.commaSep(
@@ -801,7 +801,7 @@ public class Serde {
                                                                 var("anns"))))),
                                                 just(var("qualifiedId")))))),
                                 Logic.ifElse(
-                                    Lists.null_(var("args")),
+                                    Lists.isEmpty_(var("args")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.angleBracesList(
@@ -832,7 +832,7 @@ public class Serde {
                                     Optionals.map(ref(Serde.packageDeclarationToExpr), var("mpkg"))),
                                 field("importsSec",
                                     Logic.ifElse(
-                                        Lists.null_(var("imports")),
+                                        Lists.isEmpty_(var("imports")),
                                         nothing(),
                                         just(
                                             hydra.dsl.Serialization.newlineSep(
@@ -841,7 +841,7 @@ public class Serde {
                                                     var("imports")))))),
                                 field("typesSec",
                                     Logic.ifElse(
-                                        Lists.null_(var("types")),
+                                        Lists.isEmpty_(var("types")),
                                         nothing(),
                                         just(
                                             hydra.dsl.Serialization.doubleNewlineSep(
@@ -918,7 +918,7 @@ public class Serde {
                             Optionals.givens(
                                 list(
                                     Logic.ifElse(
-                                        Lists.null_(var("mods")),
+                                        Lists.isEmpty_(var("mods")),
                                         nothing(),
                                         just(
                                             hydra.dsl.Serialization.spaceSep(
@@ -973,7 +973,7 @@ public class Serde {
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
-                                    Lists.null_(var("mods")),
+                                    Lists.isEmpty_(var("mods")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.spaceSep(
@@ -998,7 +998,7 @@ public class Serde {
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
-                                    Lists.null_(var("tparams")),
+                                    Lists.isEmpty_(var("tparams")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.angleBracesList(
@@ -1219,7 +1219,7 @@ public class Serde {
                             Optionals.givens(
                                 list(
                                     Logic.ifElse(
-                                        Lists.null_(var("mods")),
+                                        Lists.isEmpty_(var("mods")),
                                         nothing(),
                                         just(
                                             hydra.dsl.Serialization.spaceSep(
@@ -1303,7 +1303,7 @@ public class Serde {
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
-                                    Lists.null_(var("mods")),
+                                    Lists.isEmpty_(var("mods")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.spaceSep(
@@ -1507,7 +1507,7 @@ public class Serde {
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
-                                    Lists.null_(var("mods")),
+                                    Lists.isEmpty_(var("mods")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.spaceSep(
@@ -1747,7 +1747,7 @@ public class Serde {
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
-                                    Lists.null_(var("mods")),
+                                    Lists.isEmpty_(var("mods")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.spaceSep(
@@ -1798,7 +1798,7 @@ public class Serde {
                             Optionals.givens(
                                 list(
                                     Logic.ifElse(
-                                        Lists.null_(var("mods")),
+                                        Lists.isEmpty_(var("mods")),
                                         nothing(),
                                         just(
                                             hydra.dsl.Serialization.spaceSep(
@@ -1811,7 +1811,7 @@ public class Serde {
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
-                                    Lists.null_(var("anns")),
+                                    Lists.isEmpty_(var("anns")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.newlineSep(
@@ -1848,7 +1848,7 @@ public class Serde {
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
-                                    Lists.null_(var("params")),
+                                    Lists.isEmpty_(var("params")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.angleBracesList(
@@ -1890,7 +1890,7 @@ public class Serde {
                                                 Optionals.givens(
                                                     list(
                                                         Logic.ifElse(
-                                                            Lists.null_(var("targs")),
+                                                            Lists.isEmpty_(var("targs")),
                                                             nothing(),
                                                             just(
                                                                 hydra.dsl.Serialization.angleBracesList(
@@ -2078,7 +2078,7 @@ public class Serde {
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
-                                    Lists.null_(var("mods")),
+                                    Lists.isEmpty_(var("mods")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.spaceSep(
@@ -2093,7 +2093,7 @@ public class Serde {
                                                         ref(Serde.typeIdentifierToExpr),
                                                         var("id"))),
                                                 Logic.ifElse(
-                                                    Lists.null_(var("tparams")),
+                                                    Lists.isEmpty_(var("tparams")),
                                                     nothing(),
                                                     just(
                                                         hydra.dsl.Serialization.angleBracesList(
@@ -2110,7 +2110,7 @@ public class Serde {
                                                 apply(ref(Serde.classTypeToExpr), var("c"))))),
                                     var("msuperc")),
                                 Logic.ifElse(
-                                    Lists.null_(var("superi")),
+                                    Lists.isEmpty_(var("superi")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.spaceSep(
@@ -2142,7 +2142,7 @@ public class Serde {
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
-                                    Lists.null_(var("mods")),
+                                    Lists.isEmpty_(var("mods")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.spaceSep(
@@ -2159,7 +2159,7 @@ public class Serde {
                                                         ref(Serde.typeIdentifierToExpr),
                                                         var("id"))),
                                                 Logic.ifElse(
-                                                    Lists.null_(var("tparams")),
+                                                    Lists.isEmpty_(var("tparams")),
                                                     nothing(),
                                                     just(
                                                         hydra.dsl.Serialization.angleBracesList(
@@ -2168,7 +2168,7 @@ public class Serde {
                                                                 ref(Serde.typeParameterToExpr),
                                                                 var("tparams"))))))))),
                                 Logic.ifElse(
-                                    Lists.null_(var("extends")),
+                                    Lists.isEmpty_(var("extends")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.spaceSep(
@@ -2207,7 +2207,7 @@ public class Serde {
                             Optionals.givens(
                                 list(
                                     Logic.ifElse(
-                                        Lists.null_(var("mods")),
+                                        Lists.isEmpty_(var("mods")),
                                         nothing(),
                                         just(
                                             hydra.dsl.Serialization.spaceSep(
@@ -2367,7 +2367,7 @@ public class Serde {
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
-                                    Lists.null_(var("anns")),
+                                    Lists.isEmpty_(var("anns")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.spaceSep(
@@ -2813,7 +2813,7 @@ public class Serde {
                                 field("additional",
                                     proj(TypeBound_ClassOrInterface.TYPE_, TypeBound_ClassOrInterface.ADDITIONAL, "ci")),
                                 Logic.ifElse(
-                                    Lists.null_(var("additional")),
+                                    Lists.isEmpty_(var("additional")),
                                     apply(ref(Serde.classOrInterfaceTypeToExpr), var("cit")),
                                     hydra.dsl.Serialization.spaceSep(
                                         Lists.cons(
@@ -2892,7 +2892,7 @@ public class Serde {
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
-                                    Lists.null_(var("mods")),
+                                    Lists.isEmpty_(var("mods")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.spaceSep(
@@ -2934,7 +2934,7 @@ public class Serde {
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
-                                    Lists.null_(var("anns")),
+                                    Lists.isEmpty_(var("anns")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.spaceSep(
@@ -3020,7 +3020,7 @@ public class Serde {
                             list(
                                 just(hydra.dsl.Serialization.cst( string("new"))),
                                 Logic.ifElse(
-                                    Lists.null_(var("targs")),
+                                    Lists.isEmpty_(var("targs")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.angleBracesList(
@@ -3147,7 +3147,7 @@ public class Serde {
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
-                                    Lists.null_(var("anns")),
+                                    Lists.isEmpty_(var("anns")),
                                     nothing(),
                                     just(
                                         hydra.dsl.Serialization.commaSep(

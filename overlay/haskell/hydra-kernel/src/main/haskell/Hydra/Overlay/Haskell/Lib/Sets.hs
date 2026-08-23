@@ -44,8 +44,8 @@ member :: Ord x => x -> S.Set x -> Bool
 member = S.member
 
 -- | Check if a set is empty.
-null :: S.Set x -> Bool
-null = S.null
+isEmpty :: S.Set x -> Bool
+isEmpty = S.null
 
 -- | Create a singleton set.
 -- Consider renaming this to Sets.pure, or creating an alias

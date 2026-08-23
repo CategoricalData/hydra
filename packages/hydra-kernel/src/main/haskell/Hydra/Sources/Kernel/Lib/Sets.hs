@@ -11,7 +11,7 @@ import qualified Hydra.Dsl.Lib.Sets     as Sets
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (map)
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++), filter, map, null)
+import           Prelude hiding ((++), filter, map)
 import qualified Data.Set                    as S
 
 
@@ -30,8 +30,8 @@ module_ = Module {
     -- exposes the primitive's `Ord` element constraint, so these polymorphic defs need a concrete `Ord`
     -- type here to satisfy GHC. `Int` is arbitrary and carries no meaning — the emitted primitive is
     -- type-agnostic and fully polymorphic; only the Haskell typechecker sees the `Int`. See #467.
-    definitions = [delete, difference, empty, filter, fromList, insert, intersection, map, member,
-                   null, singleton, size, toList, union, unions]
+    definitions = [delete, difference, empty, filter, fromList, insert, intersection, isEmpty, map,
+                   member, singleton, size, toList, union, unions]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -115,6 +115,13 @@ intersection = defineWithDefault "intersection" "Compute the intersection of two
       (Sets.empty :: TypedTerm (S.Set Int))
       (Sets.toList (var "s1" :: TypedTerm (S.Set Int)))) :: TypedTerm (S.Set Int -> S.Set Int -> S.Set Int))
 
+isEmpty :: PrimitiveDefinition
+isEmpty = define "isEmpty" "Test whether a set is empty."
+  (setOp [("s", "the set to test for emptiness")] (ssx Types.~> Types.boolean))
+  ["isEmpty(s) returns true iff s has no elements.",
+   "Requires an 'ordering' constraint on the element type.",
+   "Total. Corresponds to Haskell's Data.Set.null :: Set a -> Bool."]
+
 map :: PrimitiveDefinition
 map = defineWithDefault "map" "Map a function over a set."
   (sigWithParams [("f", "the function to apply to each element"), ("s", "the set to map over")] $ Types.polyConstrained [("x", [Name "ordering"]), ("y", [Name "ordering"])]
@@ -132,13 +139,6 @@ member = define "member" "Test whether an element is in a set."
   ["member(x, s) returns true iff x is an element of s.",
    "Requires an 'ordering' constraint on the element type.",
    "Total. Corresponds to Haskell's Data.Set.member :: Ord a => a -> Set a -> Bool."]
-
-null :: PrimitiveDefinition
-null = define "null" "Test whether a set is empty."
-  (setOp [("s", "the set to test for emptiness")] (ssx Types.~> Types.boolean))
-  ["null(s) returns true iff s has no elements.",
-   "Requires an 'ordering' constraint on the element type.",
-   "Total. Corresponds to Haskell's Data.Set.null :: Set a -> Bool."]
 
 singleton :: PrimitiveDefinition
 singleton = define "singleton" "Construct a set containing a single element."

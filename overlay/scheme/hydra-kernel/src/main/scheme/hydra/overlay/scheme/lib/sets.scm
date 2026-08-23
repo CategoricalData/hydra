@@ -11,7 +11,7 @@
           hydra_overlay_scheme_lib_sets_intersection
           hydra_overlay_scheme_lib_sets_map
           hydra_overlay_scheme_lib_sets_member
-          hydra_overlay_scheme_lib_sets_null
+          hydra_overlay_scheme_lib_sets_isEmpty
           hydra_overlay_scheme_lib_sets_singleton
           hydra_overlay_scheme_lib_sets_size
           hydra_overlay_scheme_lib_sets_to_list
@@ -126,7 +126,7 @@
           (if (vhash-assoc x (ensure-vhset s)) #t #f))))
 
     ;; Check if a set is empty.
-    (define hydra_overlay_scheme_lib_sets_null
+    (define hydra_overlay_scheme_lib_sets_isEmpty
       (lambda (s)
         (cond
           ((vlist? s) (vlist-null? s))

@@ -44,7 +44,7 @@ const imports = {
   },
   "hydra.lib.lists": {
     "hydra.lib.lists.cons": (_x, _xs) => 0,
-    "hydra.lib.lists.null": (_xs) => 1,
+    "hydra.lib.lists.isEmpty": (_xs) => 1,
     "hydra.lib.lists.length": (_xs) => 0,
   },
   "hydra.lib.equality": {

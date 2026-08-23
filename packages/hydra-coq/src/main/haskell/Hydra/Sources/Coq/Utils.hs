@@ -617,7 +617,7 @@ isTypeVarLike = define "isTypeVarLike" $
         "rest">: Pairs.second (var "p")] $
         Logic.ifElse (Logic.not (Equality.equal (var "firstCh") (int32 116)))
           (boolean False)
-          (Logic.and (Logic.not (Lists.null (var "rest")))
+          (Logic.and (Logic.not (Lists.isEmpty (var "rest")))
                     (Lists.foldl
                       (lambdas ["acc", "c"] $ Logic.and (var "acc")
                         (Logic.and (Ordering.gte (var "c") (int32 48))
@@ -725,7 +725,7 @@ normalizeInnerTypeLambdas = define "normalizeInnerTypeLambdas" $
   "stripped" <~ var "stripTypeLambdas" @@ var "term" $
   "outerParams" <~ Pairs.first (var "stripped") $
   "body0" <~ Pairs.second (var "stripped") $
-  Logic.ifElse (Lists.null (var "outerParams"))
+  Logic.ifElse (Lists.isEmpty (var "outerParams"))
     (var "term")
     (var "rebuildTypeLambdas" @@ var "outerParams" @@
       (Rewriting.rewriteTermWithContext @@ var "f" @@ (Sets.empty :: TypedTerm (S.Set String)) @@ var "body0"))

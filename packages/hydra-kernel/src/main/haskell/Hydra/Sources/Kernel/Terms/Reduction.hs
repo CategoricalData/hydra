@@ -834,19 +834,19 @@ reduceTerm = define "reduceTerm" $
         (Core.applicationFunction $ var "app") @@
         (Lists.cons (Core.applicationArgument $ var "app") (var "args")),
       _Term_cases>>: "cs" ~>
-        Logic.ifElse (Lists.null $ var "args")
+        Logic.ifElse (Lists.isEmpty $ var "args")
           (right $ var "original")
           (var "forCases" @@ var "cs" @@ var "args"),
       _Term_project>>: "p" ~>
-        Logic.ifElse (Lists.null $ var "args")
+        Logic.ifElse (Lists.isEmpty $ var "args")
           (right $ var "original")
           (var "forProjection" @@ var "p" @@ var "args"),
       _Term_unwrap>>: "n" ~>
-        Logic.ifElse (Lists.null $ var "args")
+        Logic.ifElse (Lists.isEmpty $ var "args")
           (right $ var "original")
           (var "forUnwrap" @@ var "n" @@ var "args"),
       _Term_lambda>>: "l" ~>
-        Logic.ifElse (Lists.null $ var "args")
+        Logic.ifElse (Lists.isEmpty $ var "args")
           (right $ var "original")
           (var "forLambda" @@ var "l" @@ var "args"),
       _Term_variable>>: "v" ~>
@@ -909,7 +909,7 @@ reduceTerm = define "reduceTerm" $
 termIsClosed :: TypedTermDefinition (Term -> Bool)
 termIsClosed = define "termIsClosed" $
   doc "Whether a term is closed, i.e. represents a complete program" $
-  "term" ~> Sets.null $ Variables.freeVariablesInTerm @@ var "term"
+  "term" ~> Sets.isEmpty $ Variables.freeVariablesInTerm @@ var "term"
 
 termIsValue :: TypedTermDefinition (Term -> Bool)
 termIsValue = define "termIsValue" $

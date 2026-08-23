@@ -955,7 +955,7 @@ programToExpr = define "programToExpr" $
                 Serialization.cst @@ string ":refer",
                 Serialization.cst @@ string ":all"]))
               (var "importNames"),
-            "nsForm">: Logic.ifElse (Lists.null (var "requireClauses"))
+            "nsForm">: Logic.ifElse (Lists.isEmpty (var "requireClauses"))
               (Serialization.parens @@ (Serialization.spaceSepAdaptive @@ list [
                 Serialization.cst @@ string "ns",
                 Serialization.cst @@ var "nameStr"]))
@@ -977,7 +977,7 @@ programToExpr = define "programToExpr" $
                   list [symbolToExpr @@ (project L._FunctionDefinition L._FunctionDefinition_name @@ var "fd")]])
               (var "forms")) $
             -- (declare name1 name2 ...) for forward references
-            "declareForm" <~ Logic.ifElse (Lists.null (var "varNames"))
+            "declareForm" <~ Logic.ifElse (Lists.isEmpty (var "varNames"))
               (list ([] :: [TypedTerm Expr]))
               (list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
                 (list [Serialization.cst @@ string "declare"])
@@ -1019,7 +1019,7 @@ programToExpr = define "programToExpr" $
               (Lists.map (lambda "imp" $ Serialization.cst @@ Strings.concat2 (string ":") (var "imp"))
                 (var "importNames"))),
             -- (:export :sym1 :sym2 ...)
-            "exportClause">: Logic.ifElse (Lists.null (var "exportSyms"))
+            "exportClause">: Logic.ifElse (Lists.isEmpty (var "exportSyms"))
               (list ([] :: [TypedTerm Expr]))
               (list [Serialization.parens @@ (Serialization.spaceSepAdaptive @@ Lists.concat2
                 (list [Serialization.cst @@ string ":export"])

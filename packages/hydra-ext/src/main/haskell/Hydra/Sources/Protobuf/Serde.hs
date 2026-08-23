@@ -190,7 +190,7 @@ fieldOptionsToExpr = define "fieldOptionsToExpr" $
   doc "Convert field options to an optional bracket-enclosed expression" $
   lambda "opts0" $ lets [
     "opts">: excludeInternalOptions @@ var "opts0"] $
-    Logic.ifElse (Lists.null (var "opts"))
+    Logic.ifElse (Lists.isEmpty (var "opts"))
       nothing
       (Optionals.pure (Serialization.bracketList @@ Serialization.inlineStyle @@
         (Lists.map (asTerm fieldOptionToExpr) (var "opts"))))
@@ -272,7 +272,7 @@ fileOptionsToExpr = define "fileOptionsToExpr" $
   doc "Convert file-level options to an optional newline-separated expression" $
   lambda "opts0" $ lets [
     "opts">: excludeInternalOptions @@ var "opts0"] $
-    Logic.ifElse (Lists.null (var "opts"))
+    Logic.ifElse (Lists.isEmpty (var "opts"))
       nothing
       (Optionals.pure (Serialization.newlineSep @@ (Lists.map (asTerm fileOptionToExpr) (var "opts"))))
 
@@ -340,14 +340,14 @@ protoFileToExpr = define "protoFileToExpr" $
       semi @@ (Serialization.spaceSep @@ list [
         Serialization.cst @@ string "package",
         Serialization.cst @@ (unwrap P3._PackageName @@ var "pkg")])]),
-    "importsSec">: Logic.ifElse (Lists.null (var "imports"))
+    "importsSec">: Logic.ifElse (Lists.isEmpty (var "imports"))
       nothing
       (Optionals.pure (Serialization.newlineSep @@ (Lists.map (asTerm importToExpr) (var "imports")))),
     "options1">: Lists.filter
       (lambda "opt" $ Logic.not $ Equality.equal (project P3._Option P3._Option_name @@ var "opt") (string "_description"))
       (var "options"),
     "optionsSec">: fileOptionsToExpr @@ var "options1",
-    "defsSec">: Logic.ifElse (Lists.null (var "defs"))
+    "defsSec">: Logic.ifElse (Lists.isEmpty (var "defs"))
       nothing
       (Optionals.pure (Serialization.doubleNewlineSep @@ (Lists.map (asTerm definitionToExpr) (var "defs"))))] $
     optDesc @@ true @@ var "options" @@

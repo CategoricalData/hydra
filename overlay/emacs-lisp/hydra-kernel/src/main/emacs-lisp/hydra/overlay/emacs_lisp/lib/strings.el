@@ -99,7 +99,7 @@
             (list :none))))))
 
 ;; null :: String -> Bool
-(defvar hydra_overlay_emacs_lisp_lib_strings_null
+(defvar hydra_overlay_emacs_lisp_lib_strings_isEmpty
   (lambda (s)
     "Check whether a string is empty."
     (= (length s) 0)))

@@ -218,7 +218,7 @@ buildFullModule = define "buildFullModule" $
             "binders" <~ (mkTypeBinders @@ var "body2" @@ var "tv") $
             "allTypeVarNames" <~ Pairs.first (var "binders") $
             "rendered" <~ (renderSentences @@ var "sentences") $
-            "argsLine" <~ Logic.ifElse (Lists.null $ var "allTypeVarNames")
+            "argsLine" <~ Logic.ifElse (Lists.isEmpty $ var "allTypeVarNames")
               (string "")
               (Strings.concat (list [
                 string "\nArguments ",
@@ -303,7 +303,7 @@ dependencyImports :: TypedTermDefinition ([String] -> [C.Sentence])
 dependencyImports = define "dependencyImports" $
   doc "Emit a Require Import sentence for the given dependency namespaces; empty list yields no sentence" $
   lambda "deps" $
-    Logic.ifElse (Lists.null $ var "deps")
+    Logic.ifElse (Lists.isEmpty $ var "deps")
       (list ([] :: [TypedTerm C.Sentence]))
       (list [CSyntax.sentence
         (Phantoms.just $ CSyntax.comment (string "Module dependencies"))
@@ -379,7 +379,7 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
       "proj">: Pairs.second $ var "np"] $
       Strings.concat (list [var "nm", string " := ", var "proj"]))
     (Lists.zip (var "funInfos") (var "projExprs")) $
-  "letBlock" <~ Logic.ifElse (Lists.null $ var "letParts")
+  "letBlock" <~ Logic.ifElse (Lists.isEmpty $ var "letParts")
     (string "")
     (Strings.concat (list [
       string "let ",
@@ -391,7 +391,7 @@ encodeMutualGroupText = define "encodeMutualGroupText" $
     (var "funInfos") $
   "prodVal" <~ (makeProdVal @@ var "bodies") $
   -- Type binder text for the bundle Definition header.
-  "typBindText" <~ Logic.ifElse (Lists.null $ var "allTypeVarNames")
+  "typBindText" <~ Logic.ifElse (Lists.isEmpty $ var "allTypeVarNames")
     (string "")
     (Strings.concat (list [
       string " ",
@@ -504,7 +504,7 @@ generateArgumentsDecls = define "generateArgumentsDecls" $
           string "."]))
         (var "fields"),
       _Type_record>>: "fields" ~>
-        Logic.ifElse (Lists.null $ var "fields")
+        Logic.ifElse (Lists.isEmpty $ var "fields")
           (list ([] :: [TypedTerm String]))
           (lets [
             "constrLine">: Strings.concat (list [
@@ -533,12 +533,12 @@ generateArgumentsDecls = define "generateArgumentsDecls" $
       "ep" <~ (CoqUtils.extractTypeParams @@ var "ty") $
       "params" <~ (Pairs.first $ var "ep") $
       "bodyTy" <~ (Pairs.second $ var "ep") $
-      Logic.ifElse (Lists.null $ var "params")
+      Logic.ifElse (Lists.isEmpty $ var "params")
         (Phantoms.nothing :: TypedTerm (Maybe (String, ([String], Type))))
         (Phantoms.just $ pair (var "name") (pair (var "params") (var "bodyTy"))))
     (var "typeDefs")) $
   "allLines" <~ (Lists.concat $ Lists.map (var "linesFor") (var "triples")) $
-  Logic.ifElse (Lists.null $ var "allLines")
+  Logic.ifElse (Lists.isEmpty $ var "allLines")
     (string "")
     (Strings.concat (list [
       string "\n",
@@ -582,7 +582,7 @@ generateTypeGroup = define "generateTypeGroup" $
       "accessors">: Lists.concat $ Lists.map
         (lambda "d" $ makeAccessorDefs @@ var "d")
         (var "sanitizedGroup"),
-      "inductiveSent">: Logic.ifElse (Lists.null $ var "bodies")
+      "inductiveSent">: Logic.ifElse (Lists.isEmpty $ var "bodies")
         (list ([] :: [TypedTerm C.Sentence]))
         (list [CSyntax.sentence
           (Phantoms.nothing :: TypedTerm (Maybe C.Comment))
@@ -636,7 +636,7 @@ generateTypeSentence = define "generateTypeSentence" $
           (Phantoms.nothing :: TypedTerm (Maybe C.Comment))
           (CSyntax.sentenceContentInductive $ var "indDef")],
     _Type_record>>: "fields" ~>
-      Logic.ifElse (Lists.null $ var "fields")
+      Logic.ifElse (Lists.isEmpty $ var "fields")
         (list [var "mkDef" @@ var "name" @@ var "paramBinders"
                 @@ (CoqCoderSource.coqTermQualid @@ string "unit")])
         (list [CSyntax.sentence
@@ -750,7 +750,7 @@ implicitArgsLine :: TypedTermDefinition (String -> [String] -> String)
 implicitArgsLine = define "implicitArgsLine" $
   doc "Emit an Arguments line marking every type parameter of a definition as implicit" $
   lambdas ["name", "typeVarNames"] $
-    Logic.ifElse (Lists.null $ var "typeVarNames")
+    Logic.ifElse (Lists.isEmpty $ var "typeVarNames")
       (string "")
       (Strings.concat (list [
         string "Arguments ",
@@ -775,7 +775,7 @@ makeAccessorDefs = define "makeAccessorDefs" $
   "bodyTy" <~ (Pairs.second $ var "extracted") $
   match _Type (var "bodyTy") (Just $ list ([] :: [TypedTerm C.Sentence])) [
     _Type_record>>: "fields" ~>
-      Logic.ifElse (Lists.null $ var "fields")
+      Logic.ifElse (Lists.isEmpty $ var "fields")
         (list ([] :: [TypedTerm C.Sentence]))
         (lets [
           "nFields">: Lists.length $ var "fields",
@@ -842,7 +842,7 @@ makeInductiveBody = define "makeInductiveBody" $
           (lambda "ft" $ makeConstructor @@ var "env" @@ var "name" @@ var "params" @@ var "ft")
           (var "fields"))],
     _Type_record>>: "fields" ~>
-      Logic.ifElse (Lists.null $ var "fields")
+      Logic.ifElse (Lists.isEmpty $ var "fields")
         (list [CSyntax.inductiveBody
           (CoqCoderSource.coqIdent @@ var "name")
           (var "paramBinders")
@@ -986,7 +986,7 @@ makeReturnType :: TypedTermDefinition (String -> [String] -> C.Term)
 makeReturnType = define "makeReturnType" $
   doc "Return-type Coq term: `TypeName` or `TypeName p1 p2 ...`" $
   lambdas ["typeName", "params"] $
-    Logic.ifElse (Lists.null $ var "params")
+    Logic.ifElse (Lists.isEmpty $ var "params")
       (CoqCoderSource.coqTermQualid @@ var "typeName")
       (CoqCoderSource.coqTermApp
         @@ (CoqCoderSource.coqTermQualid @@ var "typeName")
@@ -1010,7 +1010,7 @@ mkTypeBinders = define "mkTypeBinders" $
   lambdas ["body", "typeVars"] $
   "schemeVarNames" <~ ((Sets.fromList $ Lists.map
     ("n" ~> unwrap _Name @@ var "n") (var "typeVars")) :: TypedTerm (S.Set String)) $
-  "innerTypeVars" <~ Logic.ifElse (Lists.null $ var "typeVars")
+  "innerTypeVars" <~ Logic.ifElse (Lists.isEmpty $ var "typeVars")
     (Sets.empty :: TypedTerm (S.Set String))
     (CoqUtils.collectFreeTypeVars @@ var "body") $
   "explicit" <~ (Lists.map ("n" ~> unwrap _Name @@ var "n") (var "typeVars")) $
@@ -1103,7 +1103,7 @@ namespaceToPath = define "namespaceToPath" $
     "parts">: Strings.splitOn (string ".") (var "ns"),
     "dirParts">: Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.init (var "parts")),
     "fileName">: Strings.concat (list [Optionals.withDefault (var "ns") (Lists.last (var "parts")), string ".v"])] $
-    Logic.ifElse (Lists.null (var "dirParts"))
+    Logic.ifElse (Lists.isEmpty (var "dirParts"))
       (var "fileName")
       (Strings.concat (list [
         Strings.join (string "/") (var "dirParts"),

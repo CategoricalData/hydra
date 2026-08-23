@@ -359,7 +359,7 @@ createConstructorBody = def "createConstructorBody" $
   doc "Create a constructor function body: default if no params, empty compound otherwise" $
   lambda "params" $
     Logic.ifElse
-      (Lists.null (var "params"))
+      (Lists.isEmpty (var "params"))
       (inject Cpp._FunctionBody Cpp._FunctionBody_default unit)
       (inject Cpp._FunctionBody Cpp._FunctionBody_compound $
         wrap Cpp._CompoundStatement (list ([] :: [TypedTerm Cpp.Statement])))

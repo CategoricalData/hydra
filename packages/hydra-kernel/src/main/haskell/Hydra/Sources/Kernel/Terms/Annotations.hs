@@ -219,7 +219,7 @@ normalizeTermAnnotations = define "normalizeTermAnnotations" $
   "term" ~>
   "anns" <~ termAnnotationInternal @@ var "term" $
   "stripped" <~ Strip.deannotateTerm @@ var "term" $
-  Logic.ifElse (Maps.null (var "anns" :: TypedTerm (M.Map Name Term)))
+  Logic.ifElse (Maps.isEmpty (var "anns" :: TypedTerm (M.Map Name Term)))
     (var "stripped")
     (Core.termAnnotated (Core.annotatedTerm (var "stripped") (wrapAnnotationMap @@ var "anns")))
 
@@ -229,7 +229,7 @@ normalizeTypeAnnotations = define "normalizeTypeAnnotations" $
   "typ" ~>
   "anns" <~ typeAnnotationInternal @@ var "typ" $
   "stripped" <~ Strip.deannotateType @@ var "typ" $
-  Logic.ifElse (Maps.null (var "anns" :: TypedTerm (M.Map Name Term)))
+  Logic.ifElse (Maps.isEmpty (var "anns" :: TypedTerm (M.Map Name Term)))
     (var "stripped")
     (Core.typeAnnotated (Core.annotatedType (var "stripped") (wrapAnnotationMap @@ var "anns")))
 
@@ -251,7 +251,7 @@ setTermAnnotation = define "setTermAnnotation" $
   "key" ~> "val" ~> "term" ~>
   "term'" <~ Strip.deannotateTerm @@ var "term" $
   "anns" <~ setAnnotation @@ var "key" @@ var "val" @@ (termAnnotationInternal @@ var "term") $
-  Logic.ifElse (Maps.null (var "anns" :: TypedTerm (M.Map Name Term)))
+  Logic.ifElse (Maps.isEmpty (var "anns" :: TypedTerm (M.Map Name Term)))
     (var "term'")
     (Core.termAnnotated (Core.annotatedTerm (var "term'") (wrapAnnotationMap @@ var "anns")))
 
@@ -273,7 +273,7 @@ setTypeAnnotation = define "setTypeAnnotation" $
   "key" ~> "val" ~> "typ" ~>
   "typ'" <~ Strip.deannotateType @@ var "typ" $
   "anns" <~ setAnnotation @@ var "key" @@ var "val" @@ (typeAnnotationInternal @@ var "typ") $
-  Logic.ifElse (Maps.null (var "anns" :: TypedTerm (M.Map Name Term)))
+  Logic.ifElse (Maps.isEmpty (var "anns" :: TypedTerm (M.Map Name Term)))
     (var "typ'")
     (Core.typeAnnotated (Core.annotatedType (var "typ'") (wrapAnnotationMap @@ var "anns")))
 
@@ -287,7 +287,7 @@ setTypeClasses = define "setTypeClasses" $
     pair
       (encoderFor _Name @@ var "name")
       (Core.termSet (Sets.fromList (Lists.map (encoderFor _Name) (Sets.toList (var "classes" :: TypedTerm (S.Set Name))))))) $
-  "encoded" <~ Logic.ifElse (Maps.null (var "m" :: TypedTerm (M.Map Name (S.Set Name))))
+  "encoded" <~ Logic.ifElse (Maps.isEmpty (var "m" :: TypedTerm (M.Map Name (S.Set Name))))
     nothing
     (just (Core.termMap (Maps.fromList (Lists.map (var "encodePair") (Maps.toList (var "m" :: TypedTerm (M.Map Name (S.Set Name)))))))) $
   setTermAnnotation @@ Constants.keyClasses @@ var "encoded" @@ var "term"

@@ -7,7 +7,7 @@ import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++), concat, length, null)
+import           Prelude hiding ((++), concat, length)
 
 
 ns :: ModuleName
@@ -20,8 +20,8 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.strings module.")}
   where
-    definitions = [charAt, concat, concat2, fromList, join, length,
-                   null, splitOn, toList, toLower, toUpper]
+    definitions = [charAt, concat, concat2, fromList, isEmpty, join, length,
+                   splitOn, toList, toLower, toUpper]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -60,6 +60,12 @@ fromList = define "fromList" "Convert a list of Unicode code points to a string.
   \ substitution with U+FFFD or truncation of the bits).",
    "Total. The inverse of toList."]
 
+isEmpty :: PrimitiveDefinition
+isEmpty = define "isEmpty" "Check whether a string is empty."
+  (fn [("s", "the string to test for emptiness")] Types.string Types.boolean)
+  ["isEmpty(s) returns true iff s is the empty string.",
+   "Total. Corresponds to Haskell's null :: String -> Bool."]
+
 join :: PrimitiveDefinition
 join = define "join" "Join a list of strings with a separator between each element."
   (fn2 [("sep", "the separator to insert between elements"), ("xs", "the list of strings to join")] Types.string (Types.list Types.string) Types.string)
@@ -76,12 +82,6 @@ length = define "length" "Return the length of a string."
   \ four-byte UTF-8 character counts as one and an emoji built from multiple code points counts as\
   \ the number of code points it uses.",
    "Total on strings shorter than 2^31-1 code points."]
-
-null :: PrimitiveDefinition
-null = define "null" "Check whether a string is empty."
-  (fn [("s", "the string to test for emptiness")] Types.string Types.boolean)
-  ["null(s) returns true iff s is the empty string.",
-   "Total. Corresponds to Haskell's null :: String -> Bool."]
 
 splitOn :: PrimitiveDefinition
 splitOn = define "splitOn" "Split a string on a delimiter string."

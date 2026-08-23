@@ -161,7 +161,7 @@ encode = def "encode" $
               (var "res")) [
           -- special case for the unit type
           _Type_record>>: lambda "rt" $
-            Logic.ifElse (Lists.null (var "rt"))
+            Logic.ifElse (Lists.isEmpty (var "rt"))
               (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ MetaTypes.int32)
               ("res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "t") $
                Eithers.either

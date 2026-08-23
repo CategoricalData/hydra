@@ -12,7 +12,7 @@ import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), concat, drop, dropWhile, elem, filter, foldl, foldr,
-                               head, init, last, length, map, null, pure, replicate, reverse,
+                               head, init, last, length, map, pure, replicate, reverse,
                                span, tail, take, takeWhile, zip, zipWith)
 
 
@@ -28,7 +28,7 @@ module_ = Module {
   where
     definitions = [apply, at, bind, compose, concat, concat2, cons, distinct, drop, dropWhile,
                    filter, find, foldList, foldl, foldr, group, head, init, intersperse,
-                   join, last, length, map, mapList, mapOptional, mapSet, member, null, partition,
+                   isEmpty, join, last, length, map, mapList, mapOptional, mapSet, member, partition,
                    pure, replicate, reverse, singleton, sort, sortBy, span, tail, take, takeWhile,
                    transpose, uncons, zip, zipWith]
 
@@ -213,6 +213,12 @@ intersperse = define "intersperse" "Intersperse a value between consecutive elem
   \ lists of length 0 or 1 the input is returned unchanged.",
    "Total. Corresponds to Haskell's intersperse :: a -> [a] -> [a]."]
 
+isEmpty :: PrimitiveDefinition
+isEmpty = define "isEmpty" "Test whether a list is empty."
+  (sigWithParams [("xs", "the list to test")] $ TypeScheme [Name "x"] (l tx Types.~> Types.boolean) mempty)
+  ["isEmpty(xs) returns true iff xs is the empty list.",
+   "Total. Corresponds to Haskell's null :: [a] -> Bool."]
+
 join :: PrimitiveDefinition
 join = define "join" "Intercalate a list of lists with a separator list between each."
   (sigWithParams [("sep", "the separator list to insert"), ("xss", "the list of lists to join")] $ TypeScheme [Name "x"]
@@ -282,12 +288,6 @@ member = define "member" "Test whether an element is in a list."
    "Requires an 'equality' constraint on the element type.",
    "Total. Corresponds to Haskell's elem :: Eq a => a -> [a] -> Bool."]
 
-null :: PrimitiveDefinition
-null = define "null" "Test whether a list is empty."
-  (sigWithParams [("xs", "the list to test")] $ TypeScheme [Name "x"] (l tx Types.~> Types.boolean) mempty)
-  ["null(xs) returns true iff xs is the empty list.",
-   "Total. Corresponds to Haskell's null :: [a] -> Bool."]
-
 partition :: PrimitiveDefinition
 partition = defineWithDefault "partition" "Partition a list into elements that satisfy a predicate and those that do not."
   (sigWithParams [("p", "the predicate to test each element"), ("xs", "the list to partition")] $ TypeScheme [Name "x"]
@@ -355,7 +355,7 @@ span = defineWithDefault "span" "Split a list at the first element where the pre
   ("p" ~> "xs" ~>
     Lists.foldl
       ("acc" ~> "x" ~> Logic.ifElse
-        (Logic.and (Lists.null (Pairs.second $ var "acc")) (var "p" @@ var "x"))
+        (Logic.and (Lists.isEmpty (Pairs.second $ var "acc")) (var "p" @@ var "x"))
         (pair (Lists.concat2 (Pairs.first $ var "acc") (list [var "x"])) (Pairs.second $ var "acc"))
         (pair (Pairs.first $ var "acc") (Lists.concat2 (Pairs.second $ var "acc") (list [var "x"]))))
       (pair (list ([] :: [TypedTerm a])) (list ([] :: [TypedTerm a])))

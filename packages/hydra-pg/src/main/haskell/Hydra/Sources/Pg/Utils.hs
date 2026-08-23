@@ -222,7 +222,7 @@ propertyGraphElements = define "propertyGraphElements" $
 -- Internal helper (not exported as a binding)
 propsToJson :: forall t v e. TypedTerm (PGM.Schema Graph t v e -> M.Map PG.PropertyKey v -> Either Error (Y.Maybe (String, JM.Value)))
 propsToJson = "schema" ~> "pairs" ~>
-  Logic.ifElse (Maps.null $ (var "pairs" :: TypedTerm (M.Map PG.PropertyKey v)))
+  Logic.ifElse (Maps.isEmpty $ (var "pairs" :: TypedTerm (M.Map PG.PropertyKey v)))
     (right nothing)
     (Eithers.map
       ("p" ~> just (pair (string "properties") (Json.valueObject $ var "p")))

@@ -69,7 +69,7 @@ allTests = define "allTests" $
       listsMaybeLast,
       listsMaybeTail,
       listsNub,
-      listsNull,
+      listsIsEmpty,
       listsPartition,
       listsPure,
       listsReplicate,
@@ -305,15 +305,15 @@ allTests = define "allTests" $
           testInt name lst result = primCase name DefLists.distinct [intList lst] (intList result)
           testStr name lst result = primCase name DefLists.distinct [stringList lst] (stringList result)
   
-      listsNull = subgroup "null" [
+      listsIsEmpty = subgroup "isEmpty" [
         testInt "empty int list" [] True,
         testInt "single element" [1] False,
         testInt "multiple elements" [1, 2, 3] False,
         testStr "empty string list" [] True,
         testStr "non-empty string list" ["a"] False]
         where
-          testInt name lst result = primCase name DefLists.null [intList lst] (boolean result)
-          testStr name lst result = primCase name DefLists.null [stringList lst] (boolean result)
+          testInt name lst result = primCase name DefLists.isEmpty [intList lst] (boolean result)
+          testStr name lst result = primCase name DefLists.isEmpty [stringList lst] (boolean result)
 
       listsPartition = subgroup "partition" [
         test "partition greater than 3" (lambda "x" (primitive DefOrdering.gt @@ var "x" @@ int32 3)) [1, 2, 3, 4, 5, 6] ([4, 5, 6], [1, 2, 3]),

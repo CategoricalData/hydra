@@ -199,7 +199,7 @@ encodeRecordOrUnion = define "encodeRecordOrUnion" $
             (var "acc"))
           (list ([] :: [TypedTerm JS.Keyword]))
           (var "fields"),
-        "reqRes">: Logic.ifElse (Lists.null (var "reqs"))
+        "reqRes">: Logic.ifElse (Lists.isEmpty (var "reqs"))
           (list ([] :: [TypedTerm JS.Restriction]))
           (list [inject JS._Restriction JS._Restriction_object
             (inject JS._ObjectRestriction JS._ObjectRestriction_required (var "reqs"))]),
@@ -228,7 +228,7 @@ encodeUnion = define "encodeUnion" $
       Predicates.isUnitType @@ (Strip.deannotateType @@ (project _FieldType _FieldType_type @@ var "f")),
     "simple">: Lists.filter (var "isSimple") (var "fields"),
     "nonsimple">: Lists.filter ("f" ~> Logic.not (var "isSimple" @@ var "f")) (var "fields")] $
-    Logic.ifElse (Lists.null (var "simple"))
+    Logic.ifElse (Lists.isEmpty (var "simple"))
       (encodeRecordOrUnion @@ var "cx" @@ var "g" @@ var "optional" @@ true @@ var "fields")
       (Eithers.bind
         (encodeRecordOrUnion @@ var "cx" @@ var "g" @@ false @@ true @@ var "nonsimple")

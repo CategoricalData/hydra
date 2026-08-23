@@ -95,7 +95,7 @@ allTests = definitionInModule module_ "allTests" $
       mapsMap,
       mapsMapKeys,
       mapsMember,
-      mapsNull,
+      mapsIsEmpty,
       mapsRemove,
       mapsSingleton,
       mapsSize,
@@ -251,13 +251,13 @@ mapsMember = subgroup "member" [
       (Maps.member (Phantoms.int32 k) (pMap m))
       (Phantoms.boolean result)
 
-mapsNull :: TypedTerm TestGroup
-mapsNull = subgroup "null" [
+mapsIsEmpty :: TypedTerm TestGroup
+mapsIsEmpty = subgroup "isEmpty" [
   test "empty map" [] True,
   test "non-empty map" [(1, "a")] False]
   where
     test name m result = evalPair name showBool
-      (Maps.null (pMap m))
+      (Maps.isEmpty (pMap m))
       (Phantoms.boolean result)
 
 mapsRemove :: TypedTerm TestGroup

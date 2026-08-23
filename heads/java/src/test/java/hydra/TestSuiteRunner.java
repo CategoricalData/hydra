@@ -298,7 +298,7 @@ public class TestSuiteRunner {
                                 apply(apply(apply(var("hydra.annotations.setAnnotation"), var("key")), var("val")),
                                     apply(var("hydra.annotations.termAnnotationInternal"), var("term"))),
                                 apply(apply(apply(primitive("hydra.lib.logic.ifElse"),
-                                    apply(primitive("hydra.lib.maps.null"), var("anns"))),
+                                    apply(primitive("hydra.lib.maps.isEmpty"), var("anns"))),
                                     var("stripped")),
                                     inject("hydra.core.Term", "annotated",
                                         record("hydra.core.AnnotatedTerm",

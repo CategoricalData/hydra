@@ -95,7 +95,7 @@
 
 ;; null :: String -> Bool
 ;; Check whether a string is empty.
-(defvar hydra_overlay_common_lisp_lib_strings_null
+(defvar hydra_overlay_common_lisp_lib_strings_isEmpty
   (lambda (s)
     (zerop (length s))))
 

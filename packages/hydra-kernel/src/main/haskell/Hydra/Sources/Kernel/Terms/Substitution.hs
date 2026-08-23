@@ -93,10 +93,10 @@ composeTypeSubst = define "composeTypeSubst" $
   doc "Compose two type substitutions" $
   lambdas ["s1", "s2"] $
     -- Short-circuit: if s1 is empty, return s2
-    Logic.ifElse (Maps.null $ Typing.unTypeSubst $ var "s1")
+    Logic.ifElse (Maps.isEmpty $ Typing.unTypeSubst $ var "s1")
       (var "s2") $
     -- Short-circuit: if s2 is empty, return s1
-    Logic.ifElse (Maps.null $ Typing.unTypeSubst $ var "s2")
+    Logic.ifElse (Maps.isEmpty $ Typing.unTypeSubst $ var "s2")
       (var "s1") $
     -- Otherwise, compose normally
     composeTypeSubstNonEmpty @@ var "s1" @@ var "s2"
@@ -161,7 +161,7 @@ substInClassConstraints = define "substInClassConstraints" $
         -- or retain under the original name if the target type is concrete
         ("targetType" ~>
           "freeVars" <~ Sets.toList (Variables.freeVariablesInType @@ var "targetType") $
-          Logic.ifElse (Lists.null (var "freeVars"))
+          Logic.ifElse (Lists.isEmpty (var "freeVars"))
             (var "insertOrMerge" @@ var "varName" @@ var "metadata" @@ var "acc")
             (Lists.foldl
               ("acc2" ~> "freeVar" ~> var "insertOrMerge" @@ var "freeVar" @@ var "metadata" @@ var "acc2")
@@ -185,7 +185,7 @@ substInType = define "substInType" $
   doc "Apply a type substitution to a type" $
   "subst" ~> "typ0" ~>
     -- Short-circuit: if substitution is empty, return type unchanged
-    Logic.ifElse (Maps.null $ Typing.unTypeSubst $ var "subst")
+    Logic.ifElse (Maps.isEmpty $ Typing.unTypeSubst $ var "subst")
       (var "typ0") $
     -- Otherwise, apply the substitution
     substInTypeNonEmpty @@ var "subst" @@ var "typ0"

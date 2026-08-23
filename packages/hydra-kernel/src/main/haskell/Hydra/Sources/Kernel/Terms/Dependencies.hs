@@ -282,7 +282,7 @@ replaceTypedefs = define "replaceTypedefs" $
           _Type_wrap>>: constant $ var "typ"]) $
         "forTypeScheme" <~ ("ts" ~>
           "t" <~ Core.typeSchemeBody (var "ts") $
-          Logic.ifElse (Lists.null $ Core.typeSchemeVariables $ var "ts")
+          Logic.ifElse (Lists.isEmpty $ Core.typeSchemeVariables $ var "ts")
             (var "forMono" @@ var "t")
             (var "typ")) $ -- TODO: this may be too simple
         optCases (Maps.lookup (var "v" :: TypedTerm Name) (var "types"))

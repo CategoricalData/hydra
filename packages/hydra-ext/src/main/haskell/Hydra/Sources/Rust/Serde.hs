@@ -383,7 +383,7 @@ derivesToExpr :: TypedTermDefinition ([String] -> Maybe Expr)
 derivesToExpr = define "derivesToExpr" $
   doc "Serialize derive macros to an attribute expression" $
   lambda "derives" $
-    Logic.ifElse (Lists.null $ var "derives")
+    Logic.ifElse (Lists.isEmpty $ var "derives")
       nothing
       (just $ Serialization.cst @@ (Strings.concat (list [
         string "#[derive(",
@@ -647,7 +647,7 @@ genericParamToExpr = define "genericParamToExpr" $
   lambda "gp" $ lets [
     "name">: project R._GenericParam R._GenericParam_name @@ var "gp",
     "bounds">: project R._GenericParam R._GenericParam_bounds @@ var "gp"] $
-    Logic.ifElse (Lists.null $ var "bounds")
+    Logic.ifElse (Lists.isEmpty $ var "bounds")
       (Serialization.cst @@ var "name")
       (Serialization.spaceSep @@ list [
         Serialization.cst @@ (Strings.concat2 (var "name") (string ":")),
@@ -657,7 +657,7 @@ genericParamsToExpr :: TypedTermDefinition ([R.GenericParam] -> Maybe Expr)
 genericParamsToExpr = define "genericParamsToExpr" $
   doc "Serialize a list of generic parameters" $
   lambda "gps" $
-    Logic.ifElse (Lists.null $ var "gps")
+    Logic.ifElse (Lists.isEmpty $ var "gps")
       nothing
       (just $ Serialization.angleBracesList @@ Serialization.inlineStyle @@ (Lists.map (asTerm genericParamToExpr) (var "gps")))
 
@@ -936,7 +936,7 @@ methodCallExprToExpr = define "methodCallExprToExpr" $
     "method">: project R._MethodCallExpr R._MethodCallExpr_method @@ var "m",
     "turbo">: project R._MethodCallExpr R._MethodCallExpr_turbofish @@ var "m",
     "args">: project R._MethodCallExpr R._MethodCallExpr_args @@ var "m",
-    "turboPart">: Logic.ifElse (Lists.null $ var "turbo")
+    "turboPart">: Logic.ifElse (Lists.isEmpty $ var "turbo")
       (string "")
       (Strings.concat (list [
         string "::<",
@@ -1254,7 +1254,7 @@ traitDefToExpr = define "traitDefToExpr" $
     "docPart">: Optionals.match (var "docC") (list ([] :: [TypedTerm Expr])) (lambda "d" $ list [Serialization.cst @@ (toRustDocComment @@ var "d")]),
     "unsafeKw">: Logic.ifElse (var "isUnsafe") (just $ Serialization.cst @@ string "unsafe") nothing,
     "genericsExpr">: genericParamsToExpr @@ var "generics",
-    "superPart">: Logic.ifElse (Lists.null $ var "supers") nothing
+    "superPart">: Logic.ifElse (Lists.isEmpty $ var "supers") nothing
       (just $ Serialization.spaceSep @@ list [
         Serialization.cst @@ string ":",
         Serialization.cst @@ (Strings.join (string " + ") (Lists.map (lambda "b" $ Serialization.printExpr @@ (typeParamBoundToExpr @@ var "b")) (var "supers")))]),
@@ -1310,7 +1310,7 @@ traitTypeToExpr = define "traitTypeToExpr" $
     "name">: project R._TraitType R._TraitType_name @@ var "t",
     "bounds">: project R._TraitType R._TraitType_bounds @@ var "t",
     "def">: project R._TraitType R._TraitType_default @@ var "t",
-    "boundsPart">: Logic.ifElse (Lists.null $ var "bounds") nothing
+    "boundsPart">: Logic.ifElse (Lists.isEmpty $ var "bounds") nothing
       (just $ Serialization.spaceSep @@ list [
         Serialization.cst @@ string ":",
         Serialization.cst @@ (Strings.join (string " + ") (Lists.map (lambda "b" $ Serialization.printExpr @@ (typeParamBoundToExpr @@ var "b")) (var "bounds")))]),
@@ -1487,7 +1487,7 @@ useTreeToExpr = define "useTreeToExpr" $
       R._UseTree_group>>: lambda "g" $ lets [
         "prefix">: project R._UseGroup R._UseGroup_prefix @@ var "g",
         "trees">: project R._UseGroup R._UseGroup_trees @@ var "g",
-        "prefixStr">: Logic.ifElse (Lists.null $ var "prefix")
+        "prefixStr">: Logic.ifElse (Lists.isEmpty $ var "prefix")
           (string "")
           (Strings.concat2 (Strings.join (string "::") (var "prefix")) (string "::"))] $
         Serialization.cst @@ (Strings.concat (list [

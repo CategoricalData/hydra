@@ -353,7 +353,7 @@
       (cons (prim-name hydra_lib_lists_last)       (prim1 (prim-name hydra_lib_lists_last)       hydra_overlay_common_lisp_lib_lists_last       nil (tc-list a) (tc-optional a)))
       (cons (prim-name hydra_lib_lists_tail)       (prim1 (prim-name hydra_lib_lists_tail)       hydra_overlay_common_lisp_lib_lists_tail       nil (tc-list a) (tc-optional (tc-list a))))
       (cons (prim-name hydra_lib_lists_distinct)   (prim1 (prim-name hydra_lib_lists_distinct)   hydra_overlay_common_lisp_lib_lists_distinct   nil (tc-list a) (tc-list a) '(("a" . ("equality")))))
-      (cons (prim-name hydra_lib_lists_null)       (prim1 (prim-name hydra_lib_lists_null)       hydra_overlay_common_lisp_lib_lists_null       nil (tc-list a) (tc-boolean)))
+      (cons (prim-name hydra_lib_lists_isEmpty)       (prim1 (prim-name hydra_lib_lists_isEmpty)       hydra_overlay_common_lisp_lib_lists_isEmpty       nil (tc-list a) (tc-boolean)))
       (cons (prim-name hydra_lib_lists_partition)   (prim2 (prim-name hydra_lib_lists_partition)
                                                hydra_overlay_common_lisp_lib_lists_partition
                                                nil (fun a (tc-boolean)) (tc-list a) (tc-pair (tc-list a) (tc-list a))))
@@ -459,7 +459,7 @@
         (cons (prim-name hydra_lib_maps_member)         (prim2 (prim-name hydra_lib_maps_member)
                                                    hydra_overlay_common_lisp_lib_maps_member
                                                    nil k map-kv (tc-boolean) ord-k))
-        (cons (prim-name hydra_lib_maps_null)           (prim1 (prim-name hydra_lib_maps_null)   hydra_overlay_common_lisp_lib_maps_null   nil map-kv (tc-boolean) ord-k))
+        (cons (prim-name hydra_lib_maps_isEmpty)           (prim1 (prim-name hydra_lib_maps_isEmpty)   hydra_overlay_common_lisp_lib_maps_isEmpty   nil map-kv (tc-boolean) ord-k))
         (cons (prim-name hydra_lib_maps_singleton)      (prim2 (prim-name hydra_lib_maps_singleton)
                                                    hydra_overlay_common_lisp_lib_maps_singleton
                                                    nil k v map-kv ord-k))
@@ -622,7 +622,7 @@
       (cons (prim-name hydra_lib_sets_member)       (prim2 (prim-name hydra_lib_sets_member)
                                                hydra_overlay_common_lisp_lib_sets_member
                                                nil a (tc-set a) (tc-boolean) ord-a))
-      (cons (prim-name hydra_lib_sets_null)         (prim1 (prim-name hydra_lib_sets_null)     hydra_overlay_common_lisp_lib_sets_null     nil (tc-set a) (tc-boolean) ord-a))
+      (cons (prim-name hydra_lib_sets_isEmpty)         (prim1 (prim-name hydra_lib_sets_isEmpty)     hydra_overlay_common_lisp_lib_sets_isEmpty     nil (tc-set a) (tc-boolean) ord-a))
       (cons (prim-name hydra_lib_sets_singleton)    (prim1 (prim-name hydra_lib_sets_singleton) hydra_overlay_common_lisp_lib_sets_singleton nil a (tc-set a) ord-a))
       (cons (prim-name hydra_lib_sets_size)         (prim1 (prim-name hydra_lib_sets_size)     hydra_overlay_common_lisp_lib_sets_size     nil (tc-set a) (tc-int32) ord-a))
       (cons (prim-name hydra_lib_sets_to_list)       (prim1 (prim-name hydra_lib_sets_to_list)   hydra_overlay_common_lisp_lib_sets_to_list  nil (tc-set a) (tc-list a) ord-a))
@@ -651,7 +651,7 @@
                                                nil s (tc-list s) s))
       (cons (prim-name hydra_lib_strings_length)      (prim1 (prim-name hydra_lib_strings_length)      hydra_overlay_common_lisp_lib_strings_length      nil s i))
       (cons (prim-name hydra_lib_strings_char_at)     (prim2 (prim-name hydra_lib_strings_char_at)     hydra_overlay_common_lisp_lib_strings_char_at     nil i s (tc-optional i)))
-      (cons (prim-name hydra_lib_strings_null)        (prim1 (prim-name hydra_lib_strings_null)        hydra_overlay_common_lisp_lib_strings_null        nil s b))
+      (cons (prim-name hydra_lib_strings_isEmpty)        (prim1 (prim-name hydra_lib_strings_isEmpty)        hydra_overlay_common_lisp_lib_strings_isEmpty        nil s b))
       (cons (prim-name hydra_lib_strings_split_on)     (prim2 (prim-name hydra_lib_strings_split_on)
                                                hydra_overlay_common_lisp_lib_strings_split_on
                                                nil s s (tc-list s)))

@@ -236,7 +236,7 @@
 
 ;; null :: [a] -> Bool
 ;; Check if a list is empty.
-(defvar hydra_overlay_common_lisp_lib_lists_null
+(defvar hydra_overlay_common_lisp_lib_lists_isEmpty
   (lambda (xs)
     (null xs)))
 

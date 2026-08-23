@@ -183,7 +183,7 @@ def _decode_py_comparison_to_py_await_primary():
             field("termRhs", PySyn.term_rhs(var("sumRhs"))),
         ],
         _short_circuit_to_nothing([
-            Logic.not_(Lists.null(var("rhs"))),
+            Logic.not_(Lists.isEmpty(var("rhs"))),
             Optionals.is_given(var("orLhs")),
             Optionals.is_given(var("xorLhs")),
             Optionals.is_given(var("andLhs")),
@@ -423,13 +423,13 @@ def _indented_block():
             ),
             field("groups",
                 Lists.filter(
-                    lam("g", Logic.not_(Lists.null(var("g")))),
+                    lam("g", Logic.not_(Lists.isEmpty(var("g")))),
                     Lists.cons(var("commentGroup"), var("stmts")),
                 ),
             ),
         ],
         Logic.if_else(
-            Lists.null(var("groups")),
+            Lists.isEmpty(var("groups")),
             PySyn.block_indented(list_([
                 list_([
                     PySyn.statement_simple(list_([
@@ -474,7 +474,7 @@ def _or_expression():
         ), lam(
             "p",
             Logic.if_else(
-                Lists.null(Pairs.second(var("p"))),
+                Lists.isEmpty(Pairs.second(var("p"))),
                 PySyn.bitwise_or(
                     var("prev"),
                     _local("pyPrimaryToPyBitwiseXor")(Pairs.first(var("p"))),
@@ -1029,7 +1029,7 @@ def _union_type_class_statements_310():
         ))
     doc_stmt_def = _local("pyExpressionToPyStatement")(_local("tripleQuotedString")(var("docString")))
     body_groups_def = Logic.if_else(
-        Lists.null(var("extraStmts")),
+        Lists.isEmpty(var("extraStmts")),
         let_chain(
             [("passStmt", _local("pySimpleStatementToPyStatement")(PySyn.simple_statement_pass))],
             list_([

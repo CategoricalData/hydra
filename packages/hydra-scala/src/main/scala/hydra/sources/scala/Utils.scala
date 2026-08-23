@@ -69,7 +69,7 @@ object Utils:
     define(NS, "sapplyTypes").doc("Apply explicit type parameters to a Scala expression (e.g. f[A, B]); a no-op for an empty type-arg list (#589)")
       .lam("fun").lam("typeArgs").to(
       applyP("hydra.lib.logic.ifElse",
-        applyP("hydra.lib.lists.null", v("typeArgs")),
+        applyP("hydra.lib.lists.isEmpty", v("typeArgs")),
         v("fun"),
         let(Seq(
           field("typeToStr", lambda("t",

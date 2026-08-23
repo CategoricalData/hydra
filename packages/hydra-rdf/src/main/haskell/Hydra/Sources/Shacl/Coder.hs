@@ -210,7 +210,7 @@ encodeList :: TypedTermDefinition (Rdf.Resource -> [Term] -> I.Int32 -> Graph ->
 encodeList = define "encodeList" $
   doc "Encode a list of terms as RDF list structure" $
   lambda "subj" $ lambda "terms" $ lambda "cx0" $ lambda "g" $
-    Logic.ifElse (Lists.null (var "terms"))
+    Logic.ifElse (Lists.isEmpty (var "terms"))
       (right $ pair
         (list [record Rdf._Description [
           Rdf._Description_subject>>: inject Rdf._Node Rdf._Node_iri (wrap Rdf._Iri (string "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),

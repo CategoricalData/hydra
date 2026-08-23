@@ -401,7 +401,7 @@ toTypeApplication = haskellUtilsDefinition "toTypeApplication" $
     "app">: "l" ~>
       Optionals.withDefault (var "dummyType")
         (Optionals.map
-          ("p" ~> Logic.ifElse (Lists.null (Pairs.second (var "p")))
+          ("p" ~> Logic.ifElse (Lists.isEmpty (Pairs.second (var "p")))
             (Pairs.first (var "p"))
             (inject H._Type H._Type_application $ record H._ApplicationType [
               H._ApplicationType_context>>: var "app" @@ (Pairs.second (var "p")),

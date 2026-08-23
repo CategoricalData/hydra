@@ -89,7 +89,7 @@ Since: 0.15
 Usage: `empty`
 
 The map with no bindings.
-`null empty` is `true`, and `size empty` is `0`.
+`isEmpty empty` is `true`, and `size empty` is `0`.
 
 Since: 0.15
 
@@ -175,6 +175,17 @@ The key-set analogue is `hydra.lib.sets.intersection`.
 
 Since: 0.18
 
+#### isEmpty — **Draft**
+
+`∀k,v. (ordering k) ⇒ map<k, v> → boolean`
+
+Usage: `isEmpty m`
+
+Test whether a map is empty.
+Returns `true` exactly when `m` has no bindings.
+
+Since: 0.15
+
 #### keys — **Draft**
 
 `∀k,v. (ordering k) ⇒ map<k, v> → list<k>`
@@ -233,17 +244,6 @@ Usage: `member k m`
 
 Test whether a key is present in a map.
 Returns `true` exactly when `k` is a key of `m`.
-
-Since: 0.15
-
-#### null — **Draft**
-
-`∀k,v. (ordering k) ⇒ map<k, v> → boolean`
-
-Usage: `null m`
-
-Test whether a map is empty.
-Returns `true` exactly when `m` has no bindings.
 
 Since: 0.15
 

@@ -2496,7 +2496,7 @@ public class Utils {
                 // invocation in that case, so callers can pass possibly-empty targs
                 // uniformly. See collectionTypeArgs (#394).
                 Logic.ifElse(
-                    Lists.null_(var("targs")),
+                    Lists.isEmpty_(var("targs")),
                     apply(
                         ref(Utils.methodInvocationStatic),
                         var("self"),

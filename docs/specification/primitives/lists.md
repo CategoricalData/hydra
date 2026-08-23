@@ -269,6 +269,17 @@ For lists of length 0 or 1 the input is returned unchanged.
 
 Since: 0.15
 
+#### isEmpty — **Draft**
+
+`∀t. list<t> → boolean`
+
+Usage: `isEmpty xs`
+
+Test whether a list is empty.
+Returns `true` if and only if `xs` is the empty list.
+
+Since: 0.15
+
 #### join — **Draft**
 
 `∀t. list<t> → list<list<t>> → list<t>`
@@ -396,17 +407,6 @@ Returns `true` if and only if some element of `xs` is equal to `x`.
 Requires an `equality` constraint on the element type.
 
 Since: 0.18 (renamed from `hydra.lib.lists.elem`)
-
-#### null — **Draft**
-
-`∀t. list<t> → boolean`
-
-Usage: `null xs`
-
-Test whether a list is empty.
-Returns `true` if and only if `xs` is the empty list.
-
-Since: 0.15
 
 #### partition — **Draft**
 

@@ -231,7 +231,7 @@ dslModule = define "dslModule" $
     "allBindings" <~ (deduplicateBindings @@ Lists.concat2
       (Lists.concat (var "typeDslBindings"))
       (Lists.concat (var "refDslBindings"))) $
-    Logic.ifElse (Lists.null (var "allBindings"))
+    Logic.ifElse (Lists.isEmpty (var "allBindings"))
       (right nothing)
       (right (just (Packaging.module_
         (dslModuleName @@ (Packaging.moduleName (var "mod")))
@@ -573,7 +573,7 @@ generateParametricRefBuilders = define "generateParametricRefBuilders" $
   doc "Generate encode/decode composition builders for a parametric type definition" $
   "origType" ~> "typeName" ~>
   "vars" <~ (collectForallVars @@ var "origType") $
-  Logic.ifElse (Lists.null (var "vars"))
+  Logic.ifElse (Lists.isEmpty (var "vars"))
     (list ([] :: [TypedTerm Binding]))
     (list [
       generateParametricCoderBuilder ["hydra", "encode"] encoderVarType encoderResultType "encode" (var "origType") (var "typeName"),

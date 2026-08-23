@@ -74,8 +74,8 @@ member :: Ord k => k -> M.Map k v -> Bool
 member = M.member
 
 -- | Check if a map is empty.
-null :: M.Map k v -> Bool
-null = M.null
+isEmpty :: M.Map k v -> Bool
+isEmpty = M.null
 
 -- | Create a map with a single key-value pair.
 singleton :: k -> v -> M.Map k v

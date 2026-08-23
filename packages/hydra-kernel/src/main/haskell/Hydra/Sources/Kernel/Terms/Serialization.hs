@@ -149,7 +149,7 @@ angleBracesList :: TypedTermDefinition (BlockStyle -> [Expr] -> Expr)
 angleBracesList = define "angleBracesList" $
   doc "Comma-separate the elements inside angle brackets in the given block style; renders as `<>` when empty" $
   "style" ~> "els" ~>
-    Logic.ifElse (Lists.null $ var "els")
+    Logic.ifElse (Lists.isEmpty $ var "els")
       (cst @@ string "<>")
       (brackets @@ angleBraces @@ var "style" @@ (commaSep @@ var "style" @@ var "els"))
 
@@ -165,7 +165,7 @@ bracketList :: TypedTermDefinition (BlockStyle -> [Expr] -> Expr)
 bracketList = define "bracketList" $
   doc "Comma-separate the elements inside square brackets in the given block style; renders as `[]` when empty" $
   "style" ~> "els" ~>
-    Logic.ifElse (Lists.null $ var "els")
+    Logic.ifElse (Lists.isEmpty $ var "els")
       (cst @@ string "[]")
       (brackets @@ squareBrackets @@ var "style" @@ (commaSep @@ var "style" @@ var "els"))
 
@@ -228,7 +228,7 @@ curlyBracesList :: TypedTermDefinition (Maybe String -> BlockStyle -> [Expr] -> 
 curlyBracesList = define "curlyBracesList" $
   doc "Separate the elements inside curly braces using the given symbol (default `,`) in the given block style; renders as `{}` when empty" $
   "msymb" ~> "style" ~> "els" ~>
-    Logic.ifElse (Lists.null $ var "els")
+    Logic.ifElse (Lists.isEmpty $ var "els")
       (cst @@ string "{}")
       (brackets @@ curlyBraces @@ var "style" @@
         (symbolSep @@ (Optionals.withDefault (string ",") (var "msymb")) @@ var "style" @@ var "els"))
@@ -380,7 +380,7 @@ infixWsList = define "infixWsList" $
   "op" ~> "opers" ~>
   "opExpr" <~ cst @@ var "op" $
   "foldFun" <~ ("e" ~> "r" ~>
-    Logic.ifElse (Lists.null $ var "e")
+    Logic.ifElse (Lists.isEmpty $ var "e")
       (list [var "r"])
       (Lists.cons (var "r") $ Lists.cons (var "opExpr") (var "e"))) $
   spaceSep @@ (Lists.foldl (var "foldFun") (list ([] :: [TypedTerm Expr])) $ Lists.reverse $ var "opers")
@@ -459,7 +459,7 @@ parenList = define "parenList" $
     "style" <~ (Logic.ifElse (Logic.and (var "newlines") (Ordering.gt (Lists.length $ var "els") (int32 1)))
       (asTerm halfBlockStyle)
       (asTerm inlineStyle)) $
-    Logic.ifElse (Lists.null $ var "els")
+    Logic.ifElse (Lists.isEmpty $ var "els")
       (cst @@ string "()")
       (brackets @@ parentheses @@ var "style" @@ (commaSep @@ var "style" @@ var "els"))
 
@@ -743,7 +743,7 @@ structuralSep :: TypedTermDefinition (Op -> [Expr] -> Expr)
 structuralSep = define "structuralSep" $
   doc "Like sep, but produces a SeqExpr instead of an OpExpr chain. SeqExpr is treated as structural layout and is not subject to parenthesization." $
   "op" ~> "els" ~>
-    Logic.ifElse (Lists.null $ var "els")
+    Logic.ifElse (Lists.isEmpty $ var "els")
       (cst @@ string "")
       (Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
         (Optionals.withDefault (cst @@ string "") (Lists.head $ var "els"))

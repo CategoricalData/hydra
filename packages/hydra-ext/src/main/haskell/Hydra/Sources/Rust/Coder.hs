@@ -104,7 +104,7 @@ encodeEnumVariant = def "encodeEnumVariant" $
     "isUnit" <~ (match _Type (var "dtyp") (Just $ boolean False) [
       _Type_unit>>: constant $ boolean True,
       _Type_record>>: lambda "rt" $
-        Lists.null (var "rt")]) $
+        Lists.isEmpty (var "rt")]) $
     Logic.ifElse (var "isUnit")
       -- Unit variant
       (right (record R._EnumVariant [
@@ -391,7 +391,7 @@ encodeTerm = def "encodeTerm" $
        "dterm" <~ (Strip.deannotateTerm @@ var "fterm") $
        "isUnit" <~ (match _Term (var "dterm") (Just $ boolean False) [
          _Term_unit>>: constant $ boolean True,
-         _Term_record>>: lambda "rt" $ Lists.null (Core.recordFields (var "rt"))]) $
+         _Term_record>>: lambda "rt" $ Lists.isEmpty (Core.recordFields (var "rt"))]) $
        Logic.ifElse (var "isUnit")
          (right (rustExprPath @@ Strings.concat2 (Strings.concat2 (var "tname") (string "::")) (var "fname")))
          ("sval" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "fterm") $

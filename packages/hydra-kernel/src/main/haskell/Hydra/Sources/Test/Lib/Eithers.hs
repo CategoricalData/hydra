@@ -139,7 +139,7 @@ eithersBind = subgroup "bind" [
   test "bind Left returns Left unchanged" (leftInt 42) (leftInt 42)]
   where
     bindFn = Phantoms.lambda "s" $
-      Logic.ifElse (Strings.null (Phantoms.var "s"))
+      Logic.ifElse (Strings.isEmpty (Phantoms.var "s"))
         (Phantoms.left (Phantoms.int32 0))
         (Phantoms.right (Strings.length (Phantoms.var "s")))
     test name input expected = evalPair name showEitherIntInt

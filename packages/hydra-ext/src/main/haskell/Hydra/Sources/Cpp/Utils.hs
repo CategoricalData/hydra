@@ -289,7 +289,7 @@ createConstructorBody :: TypedTermDefinition ([Cpp.Parameter] -> Cpp.FunctionBod
 createConstructorBody = def "createConstructorBody" $
   doc "Create a constructor body (default if no params, empty otherwise)" $
   lambda "params" $
-    Logic.ifElse (Lists.null $ var "params")
+    Logic.ifElse (Lists.isEmpty $ var "params")
       (inject Cpp._FunctionBody Cpp._FunctionBody_default unit)
       (asTerm emptyFunctionBody)
 

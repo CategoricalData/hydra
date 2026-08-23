@@ -110,8 +110,8 @@ filterKernelModules = define "filterKernelModules" $
     Optionals.match (Lists.uncons $ var "parts")
       false
       ("uc" ~> Logic.and
-        (Strings.null $ Pairs.first $ var "uc")
-        (Logic.not $ Lists.null $ Pairs.second $ var "uc"))) $
+        (Strings.isEmpty $ Pairs.first $ var "uc")
+        (Logic.not $ Lists.isEmpty $ Pairs.second $ var "uc"))) $
   Lists.filter
     ("m" ~>
       "name" <~ Packaging.unModuleName (Packaging.moduleName $ var "m") $

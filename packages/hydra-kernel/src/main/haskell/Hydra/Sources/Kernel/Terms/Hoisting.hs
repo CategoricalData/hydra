@@ -126,7 +126,7 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
     "freeVars" <~ Sets.toList (Sets.intersection (var "boundVars") (Variables.freeVariablesInTerm @@ (Core.bindingTerm $ var "b"))) $
     "varTypePairs" <~ Lists.map ("v" ~> pair (var "v") (Maps.lookup (var "v" :: TypedTerm Name) (var "types"))) (var "freeVars") $
     "varTypes" <~ Optionals.givens (Lists.map (reify Pairs.second) (var "varTypePairs")) $
-    Logic.ifElse (Logic.or (Lists.null $ var "freeVars")
+    Logic.ifElse (Logic.or (Lists.isEmpty $ var "freeVars")
                            (Logic.not $ Equality.equal (Lists.length $ var "varTypes") (Lists.length $ var "varTypePairs")))
       (pair (var "b") nothing)
       (pair
@@ -158,7 +158,7 @@ bindingIsPolymorphic = define "bindingIsPolymorphic" $
   "binding" ~>
   optCases (Core.bindingTypeScheme $ var "binding")
     false  -- No type scheme means monomorphic (or untyped)
-    ("ts" ~> Logic.not $ Lists.null $ Core.typeSchemeVariables $ var "ts")
+    ("ts" ~> Logic.not $ Lists.isEmpty $ Core.typeSchemeVariables $ var "ts")
 
 -- | Check if a binding's type uses any type variables from the given Graph.
 -- This checks if the free type variables in the binding's type intersect with
@@ -174,7 +174,7 @@ bindingUsesContextTypeVars = define "bindingUsesContextTypeVars" $
     ("ts" ~>
       "freeInType" <~ Variables.freeVariablesInType @@ Core.typeSchemeBody (var "ts") $
       "contextTypeVars" <~ Graph.graphTypeVariables (var "cx") $
-      Logic.not $ Sets.null $ Sets.intersection (var "freeInType" :: TypedTerm (S.Set Name)) (var "contextTypeVars"))
+      Logic.not $ Sets.isEmpty $ Sets.intersection (var "freeInType" :: TypedTerm (S.Set Name)) (var "contextTypeVars"))
 
 -- | Count the number of occurrences of a variable name in a term. Assumes no variable shadowing.
 countVarOccurrences :: TypedTermDefinition (Name -> Term -> Int)
@@ -458,7 +458,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
           (var "multiRefPairs") $
 
         -- Wrap the body in a let with the cache bindings if there are any
-        "bodyWithCache" <~ Logic.ifElse (Lists.null $ var "cacheBindings")
+        "bodyWithCache" <~ Logic.ifElse (Lists.isEmpty $ var "cacheBindings")
           (var "bodySubst")
           (Core.termLet $ Core.let_ (var "cacheBindings") (var "bodySubst")) $
 
@@ -478,7 +478,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
         "bodyFinal" <~ Substitution.substituteInTerm @@ var "augmentSubst" @@ var "bodyWithCache" $
         "keepUsFinal" <~ Lists.map (Substitution.substituteInBinding @@ var "augmentSubst") (var "keepUsSubst") $
 
-        "finalTerm" <~ Logic.ifElse (Lists.null (var "keepUsFinal"))
+        "finalTerm" <~ Logic.ifElse (Lists.isEmpty (var "keepUsFinal"))
           (var "bodyFinal")
           (Core.termLet $ Core.let_ (var "keepUsFinal") (var "bodyFinal")) $
 
@@ -634,7 +634,7 @@ hoistSubterms = define "hoistSubterms" $
     "finalCounter" <~ Pairs.first (var "finalAcc") $
     "bindings" <~ Pairs.second (var "finalAcc") $
     -- If any bindings were collected, wrap in a local let
-    Logic.ifElse (Lists.null (var "bindings"))
+    Logic.ifElse (Lists.isEmpty (var "bindings"))
       (pair (var "finalCounter") (var "transformedSubterm"))
       ("localLet" <~ Core.termLet (Core.let_ (Lists.reverse (var "bindings")) (var "transformedSubterm")) $
        pair (var "finalCounter") (var "localLet"))) $

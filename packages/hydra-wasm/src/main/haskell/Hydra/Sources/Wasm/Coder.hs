@@ -382,7 +382,7 @@ encodeApplication = def "encodeApplication" $
     [_Term_variable>>: lambda "name" $
        "rawName" <~ Core.unName (var "name") $
        "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ var "rawName") $
-       Logic.ifElse (Lists.null (Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.tail (Strings.splitOn (string ".") (var "rawName")))))
+       Logic.ifElse (Lists.isEmpty (Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.tail (Strings.splitOn (string ".") (var "rawName")))))
          -- Local variable head: the local holds a closure value — a pointer into
          -- linear memory to an 8-byte record {table_idx:i32 at 0, env:i32 at 4}.
          -- Dispatch by loading env + table_idx, pushing env + (first) real arg,
@@ -517,7 +517,7 @@ encodeCases = def "encodeCases" $
     "caseFields" <~ Core.caseStatementCases (var "cs") $
     -- Ensure the scrutinee pushes exactly one i32 onto the stack.
     -- If the caller passed no instructions, synthesize a placeholder pointer.
-    "scrutineeInstrs" <~ Logic.ifElse (Lists.null (var "scrutineeInstrsRaw"))
+    "scrutineeInstrs" <~ Logic.ifElse (Lists.isEmpty (var "scrutineeInstrsRaw"))
       (list [inject W._Instruction W._Instruction_const $
         inject W._ConstValue W._ConstValue_i32 (int32 0)])
       (var "scrutineeInstrsRaw") $
@@ -757,7 +757,7 @@ encodeProjection = def "encodeProjection" $
       -- Unknown: fall back to placeholder (drop scrutinee if any, push i32.const 0).
       (right (Lists.concat (list [
         var "scrutineeInstrs",
-        Logic.ifElse (Lists.null (var "scrutineeInstrs"))
+        Logic.ifElse (Lists.isEmpty (var "scrutineeInstrs"))
           (list ([] :: [TypedTerm W.Instruction]))
           (list [inject W._Instruction W._Instruction_drop unit]),
         list [inject W._Instruction W._Instruction_const $
@@ -768,7 +768,7 @@ encodeProjection = def "encodeProjection" $
       -- address on the stack.
       (lambda "off" $
         right (Lists.concat (list [
-          Logic.ifElse (Lists.null (var "scrutineeInstrs"))
+          Logic.ifElse (Lists.isEmpty (var "scrutineeInstrs"))
             (list [inject W._Instruction W._Instruction_const $
               inject W._ConstValue W._ConstValue_i32 (int32 0)])
             (var "scrutineeInstrs"),
@@ -858,7 +858,7 @@ encodeTerm = def "encodeTerm" $
        "dterm" <~ (Strip.deannotateTerm @@ var "fterm") $
        "isUnit" <~ (match _Term (var "dterm") (Just $ boolean False) [
          _Term_unit>>: constant $ boolean True,
-         _Term_record>>: lambda "rt" $ Lists.null (Core.recordFields (var "rt"))]) $
+         _Term_record>>: lambda "rt" $ Lists.isEmpty (Core.recordFields (var "rt"))]) $
        -- Look up the tag in the universe-wide variant table. Fall back to 0 when the
        -- type or variant is unknown (shouldn't happen for well-formed Hydra terms).
        "mVariants" <~ Maps.lookup (var "typeName") (var "variantIndexes" :: TypedTerm (M.Map Name [(Name, Int)])) $
@@ -1256,7 +1256,7 @@ encodeTerm = def "encodeTerm" $
        -- Qualified names are cross-module function *references* (not calls): we push
        -- an i32 placeholder representing the function index. Actual calls are emitted
        -- from encodeApplication when the function is in head position.
-       Logic.ifElse (Lists.null (Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.tail (Strings.splitOn (string ".") (var "rawName")))))
+       Logic.ifElse (Lists.isEmpty (Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.tail (Strings.splitOn (string ".") (var "rawName")))))
          (right (list [inject W._Instruction W._Instruction_localGet (var "lname")]))
          (right (list [inject W._Instruction W._Instruction_const $
            inject W._ConstValue W._ConstValue_i32 (int32 0)])),
@@ -1718,7 +1718,7 @@ peelLambdaApp :: TypedTermDefinition (Term -> [Term] -> ([Name], Term))
 peelLambdaApp = def "peelLambdaApp" $
   doc "Peel up to N outer lambdas from a term, where N is the number of given arguments" $
   lambda "term" $ lambda "args" $
-    Logic.ifElse (Lists.null (var "args"))
+    Logic.ifElse (Lists.isEmpty (var "args"))
       (pair (list ([] :: [TypedTerm Name])) (var "term"))
       ("stripped" <~ (Strip.deannotateTerm @@ var "term") $
        match _Term (var "stripped") (Just $ pair (list ([] :: [TypedTerm Name])) (var "term")) [

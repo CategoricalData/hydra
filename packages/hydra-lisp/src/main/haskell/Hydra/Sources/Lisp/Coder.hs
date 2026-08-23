@@ -606,7 +606,7 @@ encodeTerm = def "encodeTerm" $
        "dterm" <~ (Strip.deannotateTerm @@ var "fterm") $
        "isUnit" <~ (match _Term (var "dterm") (Just $ boolean False) [
          _Term_unit>>: constant $ boolean True,
-         _Term_record>>: lambda "rt" $ Lists.null (Core.recordFields (var "rt"))]) $
+         _Term_record>>: lambda "rt" $ Lists.isEmpty (Core.recordFields (var "rt"))]) $
        Logic.ifElse (var "isUnit")
          -- Unit variant: (list :variantName '())
          (right (lispApp @@ (lispVar @@ string "list") @@ list [
@@ -1078,7 +1078,7 @@ moduleExports = def "moduleExports" $
               wrap L._Symbol (Strings.concat2 (var "rname") (string "?"))],
             var "fieldSyms"])])
       (var "forms")) $
-    Logic.ifElse (Lists.null (var "symbols"))
+    Logic.ifElse (Lists.isEmpty (var "symbols"))
       (list ([] :: [TypedTerm L.ExportDeclaration]))
       (list [record L._ExportDeclaration [
         L._ExportDeclaration_symbols>>: var "symbols"]])

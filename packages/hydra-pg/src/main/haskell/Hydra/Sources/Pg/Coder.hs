@@ -619,7 +619,7 @@ traverseToSingleTerm = define "traverseToSingleTerm" $
   "cx" ~> "desc" ~> "traversal" ~> "term" ~>
     Eithers.bind (var "traversal" @@ var "term")
       ("terms" ~>
-        Logic.ifElse (Lists.null $ var "terms")
+        Logic.ifElse (Lists.isEmpty $ var "terms")
           (err (var "cx") (var "desc" ++ string " did not resolve to a term"))
           (Logic.ifElse (Equality.equal (Lists.length $ var "terms") (int32 1))
             (Optionals.match (Lists.head $ var "terms") (err (var "cx") (var "desc" ++ string " resolved to multiple terms")) (reify right))

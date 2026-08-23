@@ -383,7 +383,7 @@ field = define "field" $
     ("f" ~> Core.equalName_ (Core.fieldName (var "f")) (var "fname"))
     (var "fields") $
   "noMatchErr" <~ (unexpected(Phantoms.string "field " ++ (Core.unName (var "fname"))) (Phantoms.string "no matching field")) $
-  Logic.ifElse (Lists.null (var "matchingFields"))
+  Logic.ifElse (Lists.isEmpty (var "matchingFields"))
     (var "noMatchErr")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) $ Phantoms.int32 1)
       (Optionals.match (Lists.head $ var "matchingFields") (var "noMatchErr") ("mf" ~>
@@ -557,7 +557,7 @@ letBinding = define "letBinding" $
     ("b" ~> Core.equalName_ (Core.bindingName (var "b")) (var "name"))
     (Core.letBindings (var "letExpr")) $
   "noBindingErr" <~ (left (Error.errorExtraction $ Error.extractionErrorNoSuchBinding $ Error.noSuchBindingError (var "name"))) $
-  Logic.ifElse (Lists.null (var "matchingBindings"))
+  Logic.ifElse (Lists.isEmpty (var "matchingBindings"))
     (var "noBindingErr")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingBindings")) $ Phantoms.int32 1)
       (Optionals.match (Lists.head $ var "matchingBindings") (var "noBindingErr") ("b" ~> right (Core.bindingTerm $ var "b")))

@@ -179,7 +179,7 @@ lines = define "lines" $
   doc "Split a string into lines on newline (U+000A); a trailing newline is consumed without\
       \ producing an empty trailing element, and the empty string yields the empty list." $
   lambda "s" $
-    Logic.ifElse (Strings.null $ var "s")
+    Logic.ifElse (Strings.isEmpty $ var "s")
       (list ([] :: [TypedTerm String]))
       (lets [
         "parts">: Strings.splitOn (string "\n") (var "s")]
@@ -187,7 +187,7 @@ lines = define "lines" $
         -- in that case drop it, matching Haskell's lines. Otherwise keep all parts.
         $ Optionals.withDefault (var "parts") $
             Optionals.map ("lst" ~>
-              Logic.ifElse (Strings.null $ var "lst")
+              Logic.ifElse (Strings.isEmpty $ var "lst")
                 (Optionals.withDefault (var "parts") (Lists.init $ var "parts"))
                 (var "parts"))
               (Lists.last $ var "parts"))
@@ -198,7 +198,7 @@ mapFirstLetter = define "mapFirstLetter" $
   doc "A helper which maps the first letter of a string to another string" $
   "mapping" ~> "s" ~>
   Logic.ifElse
-    (Strings.null $ var "s")
+    (Strings.isEmpty $ var "s")
     (var "s")
     ("list" <~ Strings.toList (var "s") $
      Optionals.withDefault (var "s") $
@@ -233,7 +233,7 @@ normalizeComment = define "normalizeComment" $
   "s" ~>
   "stripped" <~ stripLeadingAndTrailingWhitespace @@ var "s" $
   Logic.ifElse
-    (Strings.null (var "stripped"))
+    (Strings.isEmpty (var "stripped"))
     (string "")
     -- Get the last character by using maybeCharAt with (length - 1).
     -- Code point 46 is '.'. Nothing is unreachable here: stripped is non-empty
@@ -328,7 +328,7 @@ wrapLine = define "wrapLine" $
       "suffix">: Lists.reverse $ Pairs.first $ var "spanResult"]
       $ Logic.ifElse (Ordering.lte (Lists.length $ var "rem") (var "maxlen"))
         (Lists.reverse $ Lists.cons (var "rem") (var "prev"))
-        (Logic.ifElse (Lists.null $ var "prefix")
+        (Logic.ifElse (Lists.isEmpty $ var "prefix")
           (var "helper" @@ (Lists.cons (var "trunc") (var "prev")) @@ (Lists.drop (var "maxlen") (var "rem")))
           -- prefix is non-empty here (guarded above), so maybeInit is always Just.
           (Optionals.withDefault

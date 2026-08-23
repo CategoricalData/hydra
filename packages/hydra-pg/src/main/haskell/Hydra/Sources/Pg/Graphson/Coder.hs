@@ -144,7 +144,7 @@ edgeMapToJson :: TypedTermDefinition (Bool -> M.Map G.EdgeLabel [G.AdjacentEdge]
 edgeMapToJson = define "edgeMapToJson" $
   doc "Convert a map of edges by label to an optional JSON Value" $
   "out" ~> "m" ~>
-    Logic.ifElse (Maps.null (var "m" :: TypedTerm (M.Map G.EdgeLabel [G.AdjacentEdge])))
+    Logic.ifElse (Maps.isEmpty (var "m" :: TypedTerm (M.Map G.EdgeLabel [G.AdjacentEdge])))
       nothing
       (just $ Json.valueObject $ Lists.map
         ("p" ~> pair
@@ -157,7 +157,7 @@ edgePropertyMapToJson :: TypedTermDefinition (M.Map G.PropertyKey G.Value -> May
 edgePropertyMapToJson = define "edgePropertyMapToJson" $
   doc "Convert a map of edge properties to an optional JSON Value" $
   "m" ~>
-    Logic.ifElse (Maps.null (var "m" :: TypedTerm (M.Map G.PropertyKey G.Value)))
+    Logic.ifElse (Maps.isEmpty (var "m" :: TypedTerm (M.Map G.PropertyKey G.Value)))
       nothing
       (just $ Json.valueObject $ Lists.map
         ("p" ~> pair
@@ -266,7 +266,7 @@ vertexPropertyMapToJson :: TypedTermDefinition (M.Map G.PropertyKey [G.VertexPro
 vertexPropertyMapToJson = define "vertexPropertyMapToJson" $
   doc "Convert a map of vertex properties to an optional JSON Value" $
   "m" ~>
-    Logic.ifElse (Maps.null (var "m" :: TypedTerm (M.Map G.PropertyKey [G.VertexPropertyValue])))
+    Logic.ifElse (Maps.isEmpty (var "m" :: TypedTerm (M.Map G.PropertyKey [G.VertexPropertyValue])))
       nothing
       (just $ Json.valueObject $ Lists.map
         ("p" ~> pair

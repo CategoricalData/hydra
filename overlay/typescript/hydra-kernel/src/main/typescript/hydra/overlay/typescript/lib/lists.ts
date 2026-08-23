@@ -124,9 +124,7 @@ export const distinct = (xs: any): readonly any[] => {
   return out;
 };
 
-// `null` is a reserved word in TS, so the coder emits `null_`. The runtime
-// matches that name.
-export const null_ = (xs: any): boolean => xs.length === 0;
+export const isEmpty_ = (xs: any): boolean => xs.length === 0;
 
 export const partition = <A>(p: (a: A) => boolean, xs: any): readonly [readonly A[], readonly A[]] => {
   const yes: A[] = [];

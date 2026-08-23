@@ -316,7 +316,7 @@ alternation = define "alternation" $
   Parsers.bind @@ (Parsers.sepBy1 @@ (asTerm sequence') @@ (Parsers.char @@ cp '|')) @@ ("branches" ~>
     lets [
       "hasEmpty">: Lists.foldl
-        ("acc" ~> "b" ~> Logic.or (var "acc") (Lists.null (var "b")))
+        ("acc" ~> "b" ~> Logic.or (var "acc") (Lists.isEmpty (var "b")))
         false
         (var "branches"),
       "multi">: Ordering.gt (Lists.length (var "branches")) (int32 1)] $
@@ -342,7 +342,7 @@ parseRegex = define "parseRegex" $
     -- parse consumed ALL input (no trailing garbage).
     match _ParseResult (Parsers.runParser @@ (asTerm regex) @@ var "input") Nothing [
       _ParseResult_success>>: "s" ~>
-        Logic.ifElse (Lists.null (Parsing.parseSuccessRemainder $ var "s"))
+        Logic.ifElse (Lists.isEmpty (Parsing.parseSuccessRemainder $ var "s"))
           (just (Parsing.parseSuccessValue (var "s")))
           nothing,
       _ParseResult_failure>>: "e" ~> nothing]

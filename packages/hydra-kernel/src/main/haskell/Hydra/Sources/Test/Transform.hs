@@ -234,7 +234,7 @@ transformToCompiledTests = define "transformToCompiledTests" $
     "transformedCases">: Optionals.givens (Lists.map (lambda "tc" $ transformTestCase @@ var "tc") (var "cases_")),
     "transformedSubgroups">: Optionals.givens (Lists.map (lambda "sg" $ transformToCompiledTests @@ var "sg") (var "subgroups"))] $
     Logic.ifElse
-      (Logic.and (Lists.null (var "transformedCases")) (Lists.null (var "transformedSubgroups")))
+      (Logic.and (Lists.isEmpty (var "transformedCases")) (Lists.isEmpty (var "transformedSubgroups")))
       nothing
       (just $ Testing.testGroup (var "name_") (var "desc") (var "transformedSubgroups") (var "transformedCases"))
 

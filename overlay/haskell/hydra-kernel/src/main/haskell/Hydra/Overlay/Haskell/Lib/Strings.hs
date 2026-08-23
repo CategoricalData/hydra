@@ -2,7 +2,7 @@
 
 module Hydra.Overlay.Haskell.Lib.Strings where
 
-import Prelude hiding (concat, length, null)
+import Prelude hiding (concat, length)
 import qualified Data.Char as C
 import qualified Data.List as L
 import qualified Data.List.Split as LS
@@ -35,8 +35,8 @@ length :: String -> Int
 length = L.length
 
 -- | Check whether a string is empty.
-null :: String -> Bool
-null = L.null
+isEmpty :: String -> Bool
+isEmpty = L.null
 
 -- | Split a string on a delimiter string.
 splitOn :: String -> String -> [String]

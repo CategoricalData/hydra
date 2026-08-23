@@ -370,7 +370,7 @@ encodeModule = define "encodeModule" $
           _Definition_type>>: "td" ~>
             just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
         (Packaging.moduleDefinitions (var "mod")))) $
-    Logic.ifElse (Lists.null (var "typeBindings"))
+    Logic.ifElse (Lists.isEmpty (var "typeBindings"))
       (right nothing)
       ("encodedBindings" <<~ Eithers.mapList ("b" ~>
         Eithers.bimap

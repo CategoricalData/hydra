@@ -334,7 +334,7 @@ generateSourceFiles = define "generateSourceFiles" $
   "dataGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes2" @@ var "dataElements" $
 
   -- Generate type modules
-  "schemaFiles" <<~ Logic.ifElse (Lists.null $ var "typeModulesToGenerate")
+  "schemaFiles" <<~ Logic.ifElse (Lists.isEmpty $ var "typeModulesToGenerate")
     (right (TypedTerm (Terms.list []) :: TypedTerm [(String, String)]))
     ("nameLists" <~ Lists.map ("m" ~> moduleTypeNames (var "m"))
         (var "typeModulesToGenerate") $
@@ -350,7 +350,7 @@ generateSourceFiles = define "generateSourceFiles" $
         (Lists.zip (var "typeModulesToGenerate") (var "defLists"))) $
 
   -- Generate term modules
-  "termFiles" <<~ Logic.ifElse (Lists.null $ var "termModulesToGenerate")
+  "termFiles" <<~ Logic.ifElse (Lists.isEmpty $ var "termModulesToGenerate")
     (right (TypedTerm (Terms.list []) :: TypedTerm [(String, String)]))
     ("namespaces" <~ Lists.map ("m" ~> Packaging.moduleName (var "m")) (var "termModulesToGenerate") $
       "dataResult" <<~ Adapt.dataGraphToDefinitions
@@ -406,11 +406,11 @@ generateSourceFiles = define "generateSourceFiles" $
 
 -- | Check whether a module has any term definitions.
 hasTermDefinitions :: TypedTerm Module -> TypedTerm Bool
-hasTermDefinitions m = Logic.not $ Lists.null $ moduleTermBindings m
+hasTermDefinitions m = Logic.not $ Lists.isEmpty $ moduleTermBindings m
 
 -- | Check whether a module has any type definitions.
 hasTypeDefinitions :: TypedTerm Module -> TypedTerm Bool
-hasTypeDefinitions m = Logic.not $ Lists.null $ moduleTypeBindings m
+hasTypeDefinitions m = Logic.not $ Lists.isEmpty $ moduleTypeBindings m
 
 -- | Format a term binding for the lexicon: "  name : typeScheme"
 -- | Perform type inference on a graph and generate its lexicon.
@@ -850,7 +850,7 @@ transitiveDeps = define "transitiveDeps" $
     (var "startMods"))) :: TypedTerm (S.Set ModuleName)) $
   -- Iterative closure: go pending visited
   "go" <~ ("pending" ~> "visited" ~>
-    Logic.ifElse (Sets.null (var "pending" :: TypedTerm (S.Set ModuleName)))
+    Logic.ifElse (Sets.isEmpty (var "pending" :: TypedTerm (S.Set ModuleName)))
       (var "visited")
       ("newVisited" <~ (Sets.union (var "visited") (var "pending") :: TypedTerm (S.Set ModuleName)) $
        "nextDeps" <~ (Sets.fromList (Lists.concat (Lists.map

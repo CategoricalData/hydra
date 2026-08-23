@@ -652,7 +652,7 @@ termToJsonValue = define "termToJsonValue" $
               (termToJsonValue @@ var "v"))
           (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))))),
       _Term_record>>: lambda "rec" $
-        Logic.ifElse (Lists.null (project _Record _Record_fields @@ var "rec"))
+        Logic.ifElse (Lists.isEmpty (project _Record _Record_fields @@ var "rec"))
           (injectUnit JM._Value JM._Value_null)
           (inject JM._Value JM._Value_string (string "<record>"))]
 

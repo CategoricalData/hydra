@@ -13,7 +13,7 @@
           hydra_overlay_scheme_lib_strings_is_suffix_of
           hydra_overlay_scheme_lib_strings_length
           hydra_overlay_scheme_lib_strings_char_at
-          hydra_overlay_scheme_lib_strings_null
+          hydra_overlay_scheme_lib_strings_isEmpty
           hydra_overlay_scheme_lib_strings_replicate
           hydra_overlay_scheme_lib_strings_reverse
           hydra_overlay_scheme_lib_strings_split_on
@@ -122,7 +122,7 @@
               (list 'none)))))
 
     ;; Check whether a string is empty.
-    (define hydra_overlay_scheme_lib_strings_null
+    (define hydra_overlay_scheme_lib_strings_isEmpty
       (lambda (s)
         (= (string-length s) 0)))
 

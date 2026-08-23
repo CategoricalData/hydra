@@ -285,7 +285,7 @@ checkTerm = define "checkTerm" $
       firstFinding @@ list [
         -- T21. EmptyTermAnnotationError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyTermAnnotation
-          (Logic.ifElse (Maps.null (var "annMap" :: TypedTerm (M.Map Name Term)))
+          (Logic.ifElse (Maps.isEmpty (var "annMap" :: TypedTerm (M.Map Name Term)))
             (mkJust $ inject _InvalidTermError _InvalidTermError_emptyTermAnnotation $
               record _EmptyTermAnnotationError [
                 _EmptyTermAnnotationError_location>>: var "path"])
@@ -398,7 +398,7 @@ checkTerm = define "checkTerm" $
             ("declFields" ~>
               "declNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "declFields")) :: TypedTerm (S.Set Name)) $
               "missing" <~ (Sets.difference (var "declNames") (var "suppliedNames") :: TypedTerm (S.Set Name)) $
-              Logic.ifElse (Sets.null $ (var "missing" :: TypedTerm (S.Set Name)))
+              Logic.ifElse (Sets.isEmpty $ (var "missing" :: TypedTerm (S.Set Name)))
                 noError
                 (mkJust $ inject _InvalidTermError _InvalidTermError_missingRecordFields $
                   record _MissingRecordFieldsError [
@@ -412,7 +412,7 @@ checkTerm = define "checkTerm" $
             ("declFields" ~>
               "declNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "declFields")) :: TypedTerm (S.Set Name)) $
               "extra" <~ (Sets.difference (var "suppliedNames") (var "declNames") :: TypedTerm (S.Set Name)) $
-              Logic.ifElse (Sets.null $ (var "extra" :: TypedTerm (S.Set Name)))
+              Logic.ifElse (Sets.isEmpty $ (var "extra" :: TypedTerm (S.Set Name)))
                 noError
                 (mkJust $ inject _InvalidTermError _InvalidTermError_extraRecordFields $
                   record _ExtraRecordFieldsError [
@@ -427,7 +427,7 @@ checkTerm = define "checkTerm" $
       firstFinding @@ list [
         -- T1. EmptyLetBindingsError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyLetBindings
-          (Logic.ifElse (Lists.null $ var "bindings")
+          (Logic.ifElse (Lists.isEmpty $ var "bindings")
             (mkJust $ inject _InvalidTermError _InvalidTermError_emptyLetBindings $
               record _EmptyLetBindingsError [
                 _EmptyLetBindingsError_location>>: var "path"])
@@ -624,7 +624,7 @@ checkTerm = define "checkTerm" $
         -- T6. EmptyCaseStatementError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyCaseStatement
           (Logic.ifElse
-            (Logic.and (Lists.null $ var "csCases") (Optionals.isNone $ var "csDefault"))
+            (Logic.and (Lists.isEmpty $ var "csCases") (Optionals.isNone $ var "csDefault"))
             (mkJust $ inject _InvalidTermError _InvalidTermError_emptyCaseStatement $
               record _EmptyCaseStatementError [
                 _EmptyCaseStatementError_location>>: var "path",
@@ -645,7 +645,7 @@ checkTerm = define "checkTerm" $
               ("fields" ~>
                 "variantNames" <~ (Sets.fromList (Lists.map (reify Core.fieldTypeName) (var "fields")) :: TypedTerm (S.Set Name)) $
                 "uncovered" <~ (Sets.difference (var "variantNames") (var "altNames") :: TypedTerm (S.Set Name)) $
-                Logic.ifElse (Sets.null $ (var "uncovered" :: TypedTerm (S.Set Name)))
+                Logic.ifElse (Sets.isEmpty $ (var "uncovered" :: TypedTerm (S.Set Name)))
                   noError
                   (mkJust $ inject _InvalidTermError _InvalidTermError_missingCaseBranches $
                     record _MissingCaseBranchesError [
@@ -1292,7 +1292,7 @@ validateTypeNode = define "validateTypeNode" $
       firstFindingType @@ list [
         -- Y9. EmptyTypeAnnotationError
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_emptyTypeAnnotation
-          (Logic.ifElse (Maps.null (var "annMap" :: TypedTerm (M.Map Name Term)))
+          (Logic.ifElse (Maps.isEmpty (var "annMap" :: TypedTerm (M.Map Name Term)))
             (mkJustType $ inject _InvalidTypeError _InvalidTypeError_emptyTypeAnnotation $
               record _EmptyTypeAnnotationError [
                 _EmptyTypeAnnotationError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep]))])
@@ -1378,7 +1378,7 @@ validateTypeNode = define "validateTypeNode" $
       firstFindingType @@ list [
         -- Y1. EmptyRecordTypeError
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_emptyRecordType
-          (Logic.ifElse (Lists.null $ var "fields")
+          (Logic.ifElse (Lists.isEmpty $ var "fields")
             (mkJustType $ inject _InvalidTypeError _InvalidTypeError_emptyRecordType $
               record _EmptyRecordTypeError [
                 _EmptyRecordTypeError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep]))])
@@ -1415,7 +1415,7 @@ validateTypeNode = define "validateTypeNode" $
       firstFindingType @@ list [
         -- Y2. EmptyUnionTypeError
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_emptyUnionType
-          (Logic.ifElse (Lists.null $ var "fields")
+          (Logic.ifElse (Lists.isEmpty $ var "fields")
             (mkJustType $ inject _InvalidTypeError _InvalidTypeError_emptyUnionType $
               record _EmptyUnionTypeError [
                 _EmptyUnionTypeError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep]))])

@@ -1154,9 +1154,9 @@ const stringsPrimitives = (): readonly Primitive[] => [
           bind(dString(g, a0), (sep) =>
             bind(dString(g, a1), (s) =>
               right({ tag: "list", value: s.split(sep).map((p) => tString(p)) } as never)))))),
-  prim("hydra.lib.strings.null", scheme(tyFn(tyString, tyBool)),
+  prim("hydra.lib.strings.isEmpty", scheme(tyFn(tyString, tyBool)),
     (g, args) =>
-      bind(need(args, 0, "null"), (a0) =>
+      bind(need(args, 0, "isEmpty"), (a0) =>
         bind(dString(g, a0), (s) => right(tBool(s.length === 0))))),
   prim("hydra.lib.strings.toList", scheme(tyFn(tyString, tyList(tyInt32))),
     (g, args) =>
@@ -1217,9 +1217,9 @@ const listsPrimitives = (): readonly Primitive[] => {
       (_g, args) =>
         bind(need(args, 0, "length"), (a0) =>
           bind(asList(a0), (xs) => right(tInt(xs.length))))),
-    prim("hydra.lib.lists.null", scheme(tyFn(tyList(tyVar("a")), tyBool), ["a"]),
+    prim("hydra.lib.lists.isEmpty", scheme(tyFn(tyList(tyVar("a")), tyBool), ["a"]),
       (_g, args) =>
-        bind(need(args, 0, "null"), (a0) =>
+        bind(need(args, 0, "isEmpty"), (a0) =>
           bind(asList(a0), (xs) => right(tBool(xs.length === 0))))),
     prim("hydra.lib.lists.reverse", scheme(tyFn(tyList(tyVar("a")), tyList(tyVar("a"))), ["a"]),
       (_g, args) =>
@@ -1610,10 +1610,10 @@ const setsPrimitives = (): readonly Primitive[] => {
           bind(asSet(a0), (s) => right(tInt(libSets.size(s)))))),
     prim("hydra.lib.sets.empty", schemeC(tySet(tyVar("a")), ["a"], [["a", ["ordering"]]]),
       (_g, _args) => right(mkSet(libSets.empty))),
-    prim("hydra.lib.sets.null", schemeC(tyFn(tySet(tyVar("a")), tyBool), ["a"], [["a", ["ordering"]]]),
+    prim("hydra.lib.sets.isEmpty", schemeC(tyFn(tySet(tyVar("a")), tyBool), ["a"], [["a", ["ordering"]]]),
       (_g, args) =>
-        bind(need(args, 0, "null"), (a0) =>
-          bind(asSet(a0), (s) => right(tBool(libSets.null_(s)))))),
+        bind(need(args, 0, "isEmpty"), (a0) =>
+          bind(asSet(a0), (s) => right(tBool(libSets.isEmpty_(s)))))),
     prim("hydra.lib.sets.member", schemeC(tyFnCurried(tyVar("a"), tySet(tyVar("a")), tyBool), ["a"], [["a", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "member"), (e) =>
@@ -1708,10 +1708,10 @@ const mapsPrimitives = (): readonly Primitive[] => {
   };
   const mkMap = (m: ReadonlyMap<unknown, Term>): Term => ({ tag: "map", value: m } as never);
   return [
-    prim("hydra.lib.maps.null", schemeC(tyFn(tyMap(tyVar("k"), tyVar("v")), tyBool), ["k", "v"], [["k", ["ordering"]]]),
+    prim("hydra.lib.maps.isEmpty", schemeC(tyFn(tyMap(tyVar("k"), tyVar("v")), tyBool), ["k", "v"], [["k", ["ordering"]]]),
       (_g, args) =>
-        bind(need(args, 0, "null"), (a0) =>
-          bind(asMap(a0), (m) => right(tBool(libMaps.null_(m)))))),
+        bind(need(args, 0, "isEmpty"), (a0) =>
+          bind(asMap(a0), (m) => right(tBool(libMaps.isEmpty_(m)))))),
     prim("hydra.lib.maps.size", schemeC(tyFn(tyMap(tyVar("k"), tyVar("v")), tyInt32), ["k", "v"], [["k", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "size"), (a0) =>

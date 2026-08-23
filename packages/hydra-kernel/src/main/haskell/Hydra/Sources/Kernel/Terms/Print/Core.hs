@@ -450,7 +450,7 @@ typeScheme = define "typeScheme" $
   "vars" <~ Core.typeSchemeVariables (var "ts") $
   "body" <~ Core.typeSchemeBody (var "ts") $
   "varNames" <~ Lists.map (unwrap _Name) (var "vars") $
-  "fa" <~ Logic.ifElse (Lists.null $ var "vars")
+  "fa" <~ Logic.ifElse (Lists.isEmpty $ var "vars")
     (string "")
     (Strings.concat $ list [
       string "forall ",
@@ -468,7 +468,7 @@ typeScheme = define "typeScheme" $
   Strings.concat $ list [
     string "(",
     var "fa",
-    Logic.ifElse (Lists.null $ var "tc")
+    Logic.ifElse (Lists.isEmpty $ var "tc")
       (string "")
       (Strings.concat $ list [
         string "(",

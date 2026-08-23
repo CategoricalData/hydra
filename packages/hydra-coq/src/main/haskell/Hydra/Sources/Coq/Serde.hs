@@ -418,7 +418,7 @@ pattern10ToExpr = define "pattern10ToExpr" $
       "q">: qualidToExpr @@ (project C._Pattern10_Qualid C._Pattern10_Qualid_qualid @@ var "pq"),
       "args">: Lists.map (lambda "p2" $ pattern1ToExpr @@ var "p2")
         (project C._Pattern10_Qualid C._Pattern10_Qualid_patterns @@ var "pq")] $
-      Logic.ifElse (Lists.null (var "args"))
+      Logic.ifElse (Lists.isEmpty (var "args"))
         (var "q")
         (Serialization.spaceSep @@ Lists.cons (var "q") (var "args"))]
 
@@ -450,7 +450,7 @@ qualidToExpr = define "qualidToExpr" $
     "fieldExprs">: Lists.map
       (lambda "f" $ identToExpr @@ (unwrap C._FieldIdent @@ var "f"))
       (var "fieldIds")] $
-    Logic.ifElse (Lists.null $ var "fieldExprs")
+    Logic.ifElse (Lists.isEmpty $ var "fieldExprs")
       (var "idExpr")
       (Serialization.dotSep @@ Lists.concat2 (list [var "idExpr"]) (var "fieldExprs"))
 

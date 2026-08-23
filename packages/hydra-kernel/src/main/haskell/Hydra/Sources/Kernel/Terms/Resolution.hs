@@ -179,7 +179,7 @@ findFieldType = define "findFieldType" $
     ("ft" ~> Equality.equal (Core.unName (Core.fieldTypeName (var "ft"))) (Core.unName (var "fname")))
     (var "fields") $
   "noMatch" <~ (left (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (var "fname"))) $
-  Logic.ifElse (Lists.null (var "matchingFields"))
+  Logic.ifElse (Lists.isEmpty (var "matchingFields"))
     (var "noMatch")
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) (int32 1))
       (Optionals.match (Lists.head $ var "matchingFields") (var "noMatch") ("ft" ~> right (Core.fieldTypeType $ var "ft")))

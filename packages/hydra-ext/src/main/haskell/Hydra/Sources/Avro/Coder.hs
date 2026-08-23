@@ -212,7 +212,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
       Avro._Schema_named>>: lambda "n" $ lets [
         "ns">: project Avro._Named Avro._Named_namespace @@ var "n",
         "manns">: namedAnnotationsToCore @@ var "n",
-        "ann">: Logic.ifElse (Maps.null (var "manns" :: TypedTerm (M.Map Name Term))) nothing (just (var "manns")),
+        "ann">: Logic.ifElse (Maps.isEmpty (var "manns" :: TypedTerm (M.Map Name Term))) nothing (just (var "manns")),
         "lastNs">: project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namespace @@ var "env0",
         "nextNs">: Optionals.match (var "ns") (var "lastNs") (lambda "s" $ just (var "s")),
         "env1">: record AvroEnv._AvroEnvironment [
@@ -409,7 +409,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
             Avro._Schema_primitive>>: lambda "prim" $
               match Avro._Primitive (var "prim") (Just (boolean False)) [
                 Avro._Primitive_null>>: constant (boolean True)]],
-        "hasNull">: Logic.not (Lists.null (Lists.filter (var "isNull") (var "schemas"))),
+        "hasNull">: Logic.not (Lists.isEmpty (Lists.filter (var "isNull") (var "schemas"))),
         "nonNulls">: Lists.filter (lambda "s" $ Logic.not (var "isNull" @@ var "s")) (var "schemas"),
         "forOptional">: lambda "s" $
           Eithers.bind (avroHydraAdapter @@ var "cx" @@ var "s" @@ var "env0") (lambda "adEnv" $ lets [
@@ -543,7 +543,7 @@ findAvroPrimaryKeyField = define "findAvroPrimaryKeyField" $
   doc "Find the primary key field among a list of Avro fields" $
   lambda "cx" $ lambda "qname" $ lambda "avroFields" $ lets [
     "keys">: Optionals.givens (Lists.map (lambda "f" $ primaryKeyE @@ var "cx" @@ var "f") (var "avroFields"))] $
-    Logic.ifElse (Lists.null (var "keys"))
+    Logic.ifElse (Lists.isEmpty (var "keys"))
       (right nothing)
       (Logic.ifElse (Equality.equal (Lists.length (var "keys")) (int32 1))
         (right (Lists.head (var "keys")))
@@ -629,7 +629,7 @@ prepareField = define "prepareField" $
   doc "Prepare a single field, producing an adapter and updated environment" $
   lambda "cx" $ lambda "env" $ lambda "f" $ lets [
     "manns">: fieldAnnotationsToCore @@ var "f",
-    "ann">: Logic.ifElse (Maps.null (var "manns" :: TypedTerm (M.Map Name Term))) nothing (just (var "manns"))] $
+    "ann">: Logic.ifElse (Maps.isEmpty (var "manns" :: TypedTerm (M.Map Name Term))) nothing (just (var "manns"))] $
     Eithers.bind (foreignKeyE @@ var "cx" @@ var "f") (lambda "fk" $
     Eithers.bind
       (Optionals.match

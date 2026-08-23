@@ -217,7 +217,7 @@ schemaFileToExpr = define "schemaFileToExpr" $
         Serialization.cst @@ string "package",
         Serialization.cst @@ (unwrap PDL._Package @@ var "p")])
       (var "pkg"),
-    "importsSec">: Logic.ifElse (Lists.null (var "imports"))
+    "importsSec">: Logic.ifElse (Lists.isEmpty (var "imports"))
       nothing
       (Optionals.pure (Serialization.newlineSep @@ (Lists.map (asTerm importToExpr) (var "imports")))),
     "schemaSecs">: Lists.map (lambda "s" $ Optionals.pure (namedSchemaToExpr @@ var "s")) (var "schemas")] $

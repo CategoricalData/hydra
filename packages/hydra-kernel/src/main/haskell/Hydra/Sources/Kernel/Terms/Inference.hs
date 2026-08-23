@@ -625,10 +625,10 @@ inferTypeOfCollection = define "inferTypeOfCollection" $
   "varResult" <~ Names.freshName @@ var "fcx" $
   "var" <~ Pairs.first (var "varResult") $
   "fcx2" <~ Pairs.second (var "varResult") $
-  "classConstraints" <~ Logic.ifElse (Sets.null $ (var "classNames" :: TypedTerm (S.Set Name)))
+  "classConstraints" <~ Logic.ifElse (Sets.isEmpty $ (var "classNames" :: TypedTerm (S.Set Name)))
     (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))
     (Maps.singleton (var "var") (Core.typeVariableConstraints $ Sets.map ("n" ~> Core.typeClassConstraintSimple (var "n")) (var "classNames" :: TypedTerm (S.Set Name)))) $
-  Logic.ifElse (Lists.null $ var "els")
+  Logic.ifElse (Lists.isEmpty $ var "els")
     (right (yieldWithConstraints
       @@ var "fcx2"
       @@ (buildTypeApplicationTerm
@@ -968,7 +968,7 @@ inferTypeOfMap = define "inferTypeOfMap" $
   "vvar" <~ Pairs.first (var "vvarResult") $
   "fcx3" <~ Pairs.second (var "vvarResult") $
   "keyConstraints" <~ (Maps.singleton (var "kvar") (Core.typeVariableConstraints $ Sets.singleton $ Core.typeClassConstraintSimple $ Core.name (string "ordering")) :: TypedTerm (M.Map Name TypeVariableConstraints)) $
-  Logic.ifElse (Maps.null $ (var "m" :: TypedTerm (M.Map Term Term)))
+  Logic.ifElse (Maps.isEmpty $ (var "m" :: TypedTerm (M.Map Term Term)))
     (right (yieldWithConstraints
       @@ var "fcx3"
       @@ (buildTypeApplicationTerm

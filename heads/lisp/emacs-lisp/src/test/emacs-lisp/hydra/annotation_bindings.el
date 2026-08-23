@@ -188,7 +188,7 @@
                       (hydra--t-var "key")) (hydra--t-var "val"))
                       (hydra--t-app (hydra--t-var "hydra.annotations.termAnnotationInternal") (hydra--t-var "term")))
                     (hydra--t-app (hydra--t-app (hydra--t-app (hydra--t-prim "hydra.lib.logic.ifElse")
-                      (hydra--t-app (hydra--t-prim "hydra.lib.maps.null") (hydra--t-var "anns")))
+                      (hydra--t-app (hydra--t-prim "hydra.lib.maps.isEmpty") (hydra--t-var "anns")))
                       (hydra--t-var "stripped"))
                       (hydra--t-inject "hydra.core.Term" "annotated"
                         (hydra--t-record "hydra.core.AnnotatedTerm"

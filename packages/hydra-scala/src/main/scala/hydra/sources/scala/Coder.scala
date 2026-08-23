@@ -586,7 +586,7 @@ object Coder:
 
   private val fieldToEnumCaseParentTypeExpr =
     applyP("hydra.lib.logic.ifElse",
-      applyP("hydra.lib.lists.null", v("tparams")),
+      applyP("hydra.lib.lists.isEmpty", v("tparams")),
       stref(v("parentName")),
       fieldToEnumCaseParentTypeApplied)
 
@@ -897,7 +897,7 @@ object Coder:
       applyP(local("encodeComplexTermDef"),
         v("overlaySubs"), v("cx"), v("g"), v("lname"), v("term"), v("typ'")),
       applyP("hydra.lib.logic.ifElse",
-        applyP("hydra.lib.lists.null", v("freeTypeVarsInTyp")),
+        applyP("hydra.lib.lists.isEmpty", v("freeTypeVarsInTyp")),
         encodeTermDefSimpleVal,
         encodeTermDefZeroParamDef))
 
@@ -1127,7 +1127,7 @@ object Coder:
         applyP("hydra.lib.logic.or",
           v("isFn"),
           applyP("hydra.lib.logic.not",
-            applyP("hydra.lib.lists.null", v("newVars")))))),
+            applyP("hydra.lib.lists.isEmpty", v("newVars")))))),
       applyP("hydra.lib.logic.ifElse",
         v("useDef"),
         applyP(local("encodeLocalDef"),
@@ -1238,7 +1238,7 @@ object Coder:
                 lambda("scod",
                   let(Seq(field("gForLets",
                     applyP("hydra.lib.logic.ifElse",
-                      applyP("hydra.lib.lists.null", v("letBindings")),
+                      applyP("hydra.lib.lists.isEmpty", v("letBindings")),
                       v("gWithTypeVars"),
                       applyP("hydra.scoping.extendGraphForLet",
                         lambda("g", lambda("b",
@@ -1257,7 +1257,7 @@ object Coder:
                     lambda("sbindings",
                       let(Seq(field("defBody",
                         applyP("hydra.lib.logic.ifElse",
-                          applyP("hydra.lib.lists.null", v("sbindings")),
+                          applyP("hydra.lib.lists.isEmpty", v("sbindings")),
                           v("sbody"),
                           inject("hydra.scala.syntax.Data", "block",
                             ScalaSyntax.blockData(
@@ -1339,7 +1339,7 @@ object Coder:
                 lambda("scod",
                   Phantoms.let("gForLets",
                     applyP("hydra.lib.logic.ifElse",
-                      applyP("hydra.lib.lists.null", v("letBindings")),
+                      applyP("hydra.lib.lists.isEmpty", v("letBindings")),
                       v("gWithTypeVars"),
                       applyP("hydra.scoping.extendGraphForLet",
                         lambda("g", lambda("b",
@@ -1359,7 +1359,7 @@ object Coder:
                       lambda("sbindings",
                         Phantoms.let("defBody",
                           applyP("hydra.lib.logic.ifElse",
-                            applyP("hydra.lib.lists.null", v("sbindings")),
+                            applyP("hydra.lib.lists.isEmpty", v("sbindings")),
                             v("sbody"),
                             inject("hydra.scala.syntax.Data", "block",
                               ScalaSyntax.blockData(
@@ -1533,7 +1533,7 @@ object Coder:
           v("unqualifiedFreeVars"),
           GraphDsl.graphTypeVariables(v("g"))))),
       applyP("hydra.lib.logic.ifElse",
-        applyP("hydra.lib.sets.null", v("unresolvedVars")),
+        applyP("hydra.lib.sets.isEmpty", v("unresolvedVars")),
         just(v("dom")),
         nothing))
 
@@ -2354,7 +2354,7 @@ object Coder:
       applyP("hydra.lib.logic.ifElse",
         applyP("hydra.lib.logic.and",
           applyP("hydra.lib.ordering.gte", v("selfRefCount"), int32(2)),
-          applyP("hydra.lib.logic.not", applyP("hydra.lib.lists.null", v("safeNonSelfVars")))),
+          applyP("hydra.lib.logic.not", applyP("hydra.lib.lists.isEmpty", v("safeNonSelfVars")))),
         applyP("hydra.lib.lists.foldl",
           lambda("s", lambda("vv", applyP("hydra.lib.maps.insert", v("vv"), v("inVar"), v("s")))),
           v("subst"), v("safeNonSelfVars")),
@@ -2486,7 +2486,7 @@ object Coder:
                   v("fallbackTypeApps"))),
               field("filteredFallback",
                 applyP("hydra.lib.logic.ifElse",
-                  applyP("hydra.lib.maps.null", v("overgenSubst")),
+                  applyP("hydra.lib.maps.isEmpty", v("overgenSubst")),
                   v("filteredFallback0"),
                   applyP("hydra.lib.lists.map",
                     lambda("t", applyP(local("substituteTypeVarsWithTypes"), v("overgenSubst"), v("t"))),

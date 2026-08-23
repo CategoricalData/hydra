@@ -268,7 +268,7 @@ qualifyName = define "qualifyName" $
         "localName" <~ Pairs.first (var "uc") $
         "restReversed" <~ Pairs.second (var "uc") $
         Logic.ifElse
-          (Lists.null $ var "restReversed")
+          (Lists.isEmpty $ var "restReversed")
           (Util.qualifiedName nothing (Core.unName $ var "name"))
           (Util.qualifiedName
             (just $ wrap _ModuleName (Strings.join (string ".") (Lists.reverse (var "restReversed"))))

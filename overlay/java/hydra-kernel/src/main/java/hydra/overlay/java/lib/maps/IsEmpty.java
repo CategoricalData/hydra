@@ -20,15 +20,15 @@ import hydra.errors.Error_;
 import hydra.overlay.java.util.Either;
 
 /**
- * Checks if a map is empty (null in Haskell terminology).
+ * Checks if a map is empty.
  */
-public class Null extends PrimitiveFunction {
+public class IsEmpty extends PrimitiveFunction {
     /**
      * Get the name of this primitive function.
      * @return the name
      */
     public Name name() {
-        return hydra.lib.Maps.null_().name;
+        return hydra.lib.Maps.isEmpty_().name;
     }
 
     /**

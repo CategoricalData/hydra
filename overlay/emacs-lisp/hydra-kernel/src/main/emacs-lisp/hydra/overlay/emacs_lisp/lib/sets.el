@@ -146,7 +146,7 @@
       (hydra-set-member-p x s))))
 
 ;; null :: Set a -> Bool
-(defvar hydra_overlay_emacs_lisp_lib_sets_null
+(defvar hydra_overlay_emacs_lisp_lib_sets_isEmpty
   (lambda (s)
     "Check if a set is empty."
     (hydra-set-empty-p s)))

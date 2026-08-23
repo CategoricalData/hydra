@@ -142,7 +142,7 @@ applyPattern :: TypedTermDefinition (InferenceContext -> String -> [([String], S
 applyPattern = define "applyPattern" $
   doc "Apply a parsed pattern to a term, producing string terms" $
   "cx" ~> "firstLit" ~> "pairs" ~> "term" ~>
-    Logic.ifElse (Lists.null $ var "pairs")
+    Logic.ifElse (Lists.isEmpty $ var "pairs")
       -- No path expressions: just return the literal as a string term
       (right (list [inject _Term _Term_literal (inject _Literal _Literal_string (var "firstLit"))]))
       -- Evaluate all paths, then combine
@@ -289,7 +289,7 @@ evalStep :: TypedTermDefinition (InferenceContext -> String -> Term -> Either Er
 evalStep = define "evalStep" $
   doc "Evaluate a single step of a path traversal on a term" $
   "cx" ~> "step" ~> "term" ~>
-    Logic.ifElse (Strings.null $ var "step")
+    Logic.ifElse (Strings.isEmpty $ var "step")
       (right (list [var "term"]))
       (match _Term (Strip.deannotateTerm @@ var "term")
         (Just $ left (Error.errorOther $ Error.otherError $ string "Can't traverse through term for step " ++ var "step")) [
@@ -486,7 +486,7 @@ requireUnique = define "requireUnique" $
   "cx" ~> "context" ~> "fun" ~> "term" ~>
     Eithers.bind (var "fun" @@ var "term")
       ("results" ~>
-        Logic.ifElse (Lists.null $ var "results")
+        Logic.ifElse (Lists.isEmpty $ var "results")
           (left $ Error.errorOther $ Error.otherError $ string "No value found: " ++ var "context")
           (Logic.ifElse (Equality.equal (Lists.length $ var "results") (int32 1))
             (Optionals.match (Lists.head $ var "results") (left $ Error.errorOther $ Error.otherError $ string "Multiple values found: " ++ var "context") (reify right))

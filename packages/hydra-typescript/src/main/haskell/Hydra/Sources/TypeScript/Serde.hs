@@ -770,7 +770,7 @@ importDeclarationToExpr = define "importDeclarationToExpr" $
     "source">: project TS._ImportDeclaration TS._ImportDeclaration_source @@ var "imp",
     "sourceExpr">: stringLiteralToExpr @@ var "source",
     "specExprs">: Lists.map (asTerm importSpecifierToExpr) (var "specifiers")] $
-    Logic.ifElse (Lists.null $ var "specifiers")
+    Logic.ifElse (Lists.isEmpty $ var "specifiers")
       -- import "module"
       (Serialization.suffix @@ string ";" @@
         (Serialization.spaceSep @@ list [Serialization.cst @@ string "import", var "sourceExpr"]))
@@ -1166,7 +1166,7 @@ toTypeScriptComments = define "toTypeScriptComments" $
         (Formatting.lines @@ var "desc")),
     "tagLines">: Lists.map (asTerm documentationTagToLine) (var "tags"),
     "allLines">: Lists.concat $ list [var "descLines", var "tagLines"]] $
-    Logic.ifElse (Lists.null $ var "allLines")
+    Logic.ifElse (Lists.isEmpty $ var "allLines")
       (string "")
       (Strings.join (string "\n") $
         Lists.concat $ list [

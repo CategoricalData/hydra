@@ -245,7 +245,7 @@
                           (t-var "key")) (t-var "val"))
                           (t-app (t-var "hydra.annotations.termAnnotationInternal") (t-var "term")))
                         (t-app (t-app (t-app (t-prim "hydra.lib.logic.ifElse")
-                          (t-app (t-prim "hydra.lib.maps.null") (t-var "anns")))
+                          (t-app (t-prim "hydra.lib.maps.isEmpty") (t-var "anns")))
                           (t-var "stripped"))
                           (t-inject "hydra.core.Term" "annotated"
                             (t-record "hydra.core.AnnotatedTerm"

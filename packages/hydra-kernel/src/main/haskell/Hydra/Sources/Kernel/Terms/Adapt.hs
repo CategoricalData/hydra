@@ -157,7 +157,7 @@ adaptDataGraph = define "adaptDataGraph" $
   "schemaTypes0" <~ Graph.graphSchemaTypes (var "graph0") $
   -- Adapt schema types
   "schemaBindings" <~ Environment.typesToDefinitions @@ Maps.map ("ts" ~> Scoping.typeSchemeToFType @@ var "ts") (var "schemaTypes0") $
-  "schemaResult" <<~ Logic.ifElse (Maps.null (var "schemaTypes0" :: TypedTerm (M.Map Name Type)))
+  "schemaResult" <<~ Logic.ifElse (Maps.isEmpty (var "schemaTypes0" :: TypedTerm (M.Map Name Type)))
     (right (Maps.empty :: TypedTerm (M.Map Name TypeScheme)))
     ("tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Environment.graphAsTypes @@ var "graph0" @@ var "schemaBindings") $
       "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
@@ -601,7 +601,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   "checkBindingsTyped" <~ ("debugLabel" ~> "bindings" ~>
     "untypedBindings" <~ Lists.map (var "qualifyUntyped")
       (Lists.filter ("b" ~> Logic.not $ Optionals.isGiven (Core.bindingTypeScheme $ var "b")) (var "bindings")) $
-    Logic.ifElse (Lists.null $ var "untypedBindings")
+    Logic.ifElse (Lists.isEmpty $ var "untypedBindings")
       (right $ var "bindings")
       (left $ Error.errorOther $ Error.otherError $ Strings.concat (list [
         string "Found ", Literals.showInt32 (Lists.length $ var "untypedBindings"),

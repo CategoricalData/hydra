@@ -138,7 +138,7 @@ def _generate_python_test_case():
             ),
             field("fullName",
                 Logic.if_else(
-                    Lists.null(var("groupPath")),
+                    Lists.isEmpty(var("groupPath")),
                     var("name_"),
                     Strings.join(
                         string("__"),

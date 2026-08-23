@@ -132,8 +132,8 @@ member :: Eq a => a -> [a] -> Bool
 member = L.elem
 
 -- | Check if a list is empty.
-null :: [a] -> Bool
-null = L.null
+isEmpty :: [a] -> Bool
+isEmpty = L.null
 
 -- | Partition a list into elements that satisfy a predicate and elements that do not.
 partition :: (a -> Bool) -> [a] -> ([a], [a])

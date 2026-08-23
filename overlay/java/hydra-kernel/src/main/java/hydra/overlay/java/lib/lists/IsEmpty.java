@@ -21,9 +21,9 @@ import hydra.overlay.java.util.Either;
 /**
  * Checks if a list is empty.
  */
-public class Null extends PrimitiveFunction {
+public class IsEmpty extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.null_().name;
+        return hydra.lib.Lists.isEmpty_().name;
     }
 
     @Override

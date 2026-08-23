@@ -205,7 +205,7 @@ systemExecute = subgroup "execute" [
   -- stderr is captured separately; ls of a missing path writes a diagnostic to stderr.
   effectfulCase "captures stderr separately from stdout"
     (foldEither (lambda "r" $ primitive DefLiterals.printBoolean
-        @@ (primitive DefLogic.not @@ (primitive DefStrings.null @@ resultStderr (var "r"))))
+        @@ (primitive DefLogic.not @@ (primitive DefStrings.isEmpty @@ resultStderr (var "r"))))
       (primitive DefSystem.execute @@ command "/bin/ls" ["/hydra-nonexistent-498"]))
     (string "true"),
   -- and that same run leaves stdout empty (the diagnostic did not leak into stdout).
@@ -282,6 +282,6 @@ systemGetWorkingDirectory = subgroup "getWorkingDirectory" [
     (foldEither
       (lambda "p" $ primitive DefLiterals.printBoolean
         @@ (primitive DefLogic.not
-              @@ (primitive DefStrings.null @@ (Phantoms.unwrap File._FilePath @@ var "p"))))
+              @@ (primitive DefStrings.isEmpty @@ (Phantoms.unwrap File._FilePath @@ var "p"))))
       (primitive DefSystem.getWorkingDirectory))
     (string "true")]

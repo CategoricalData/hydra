@@ -166,7 +166,7 @@ findReachableNodes = define "findReachableNodes" $
   "adj" ~> "root" ~>
   "visit" <~ ("visited" ~> "node" ~>
     "toVisit" <~ (Sets.difference (var "adj" @@ var "node") (var "visited" :: TypedTerm (S.Set a)) :: TypedTerm (S.Set a)) $
-    Logic.ifElse (Sets.null (var "toVisit" :: TypedTerm (S.Set a)))
+    Logic.ifElse (Sets.isEmpty (var "toVisit" :: TypedTerm (S.Set a)))
       (var "visited")
       (Lists.foldl
         ("v" ~> "n" ~> var "visit" @@ Sets.insert (var "n" :: TypedTerm a) (var "v") @@ var "n")
@@ -282,7 +282,7 @@ topologicalSort = define "topologicalSort" $
   -- A component is a cycle iff it has more than one element.
   "isCycle" <~ ("scc" ~> Ordering.gt (Lists.length $ var "scc") (int32 1)) $
   "withCycles" <~ Lists.filter (var "isCycle") (var "sccs") $
-  Logic.ifElse (Lists.null $ var "withCycles")
+  Logic.ifElse (Lists.isEmpty $ var "withCycles")
     (right $ Lists.concat $ var "sccs")
     (left $ var "withCycles")
 

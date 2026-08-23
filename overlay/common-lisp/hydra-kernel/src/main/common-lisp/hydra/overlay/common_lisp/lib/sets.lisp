@@ -114,7 +114,7 @@
     (lambda (s) (sets-member-raw x s))))
 
 ;; null :: Set a -> Bool
-(defvar hydra_overlay_common_lisp_lib_sets_null
+(defvar hydra_overlay_common_lisp_lib_sets_isEmpty
   (lambda (s) (sets-empty-p s)))
 
 ;; size :: Set a -> Int

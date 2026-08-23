@@ -91,7 +91,7 @@ indentString = define "indentString" $
   doc "Indent all lines of a string by 2 spaces" $
   "s" ~>
   Strings.concat $ Lists.map
-    ("line" ~> Logic.ifElse (Strings.null $ var "line")
+    ("line" ~> Logic.ifElse (Strings.isEmpty $ var "line")
       (string "")
       (Strings.concat $ list [string "  ", var "line", string "\n"]))
     (Formatting.lines @@ var "s")
@@ -106,20 +106,20 @@ isDecimalString = define "isDecimalString" $
   "before" <~ Pairs.first (var "parts") $
   "afterWithDot" <~ Pairs.second (var "parts") $
   -- Must have something before the dot
-  Logic.ifElse (Lists.null $ var "before") false $
+  Logic.ifElse (Lists.isEmpty $ var "before") false $
   -- Must have the dot
-  Logic.ifElse (Lists.null $ var "afterWithDot") false $
+  Logic.ifElse (Lists.isEmpty $ var "afterWithDot") false $
   -- Drop the dot
   "after" <~ Lists.drop (int32 1) (var "afterWithDot") $
   -- Must have something after the dot
-  Logic.ifElse (Lists.null $ var "after") false $
+  Logic.ifElse (Lists.isEmpty $ var "after") false $
   -- Both parts must be all digits
   "isDigitFn" <~ ("c" ~> Logic.and
     (Ordering.gte (var "c") (int32 48))
     (Ordering.lte (var "c") (int32 57))) $
   Logic.and
-    (Lists.null (Lists.filter ("c" ~> Logic.not (var "isDigitFn" @@ var "c")) (var "before")))
-    (Lists.null (Lists.filter ("c" ~> Logic.not (var "isDigitFn" @@ var "c")) (var "after")))
+    (Lists.isEmpty (Lists.filter ("c" ~> Logic.not (var "isDigitFn" @@ var "c")) (var "before")))
+    (Lists.isEmpty (Lists.filter ("c" ~> Logic.not (var "isDigitFn" @@ var "c")) (var "after")))
 
 -- | Check if a string looks like a number
 looksLikeNumber :: TypedTermDefinition (String -> Bool)
@@ -139,8 +139,8 @@ looksLikeNumber = define "looksLikeNumber" $
         (Ordering.gte (var "c") (int32 48))   -- '0'
         (Ordering.lte (var "c") (int32 57)),  -- '9'
       "allDigits">: Logic.and
-        (Logic.not (Lists.null (var "rest")))
-        (Lists.null (Lists.filter
+        (Logic.not (Lists.isEmpty (var "rest")))
+        (Lists.isEmpty (Lists.filter
           ("c" ~> Logic.not (var "isDigitFn" @@ var "c"))
           (var "rest")))] $
       Logic.ifElse (var "allDigits") true $
@@ -154,7 +154,7 @@ needsQuoting = define "needsQuoting" $
   doc "Check if a string needs quoting in YAML" $
   "s" ~>
   -- Empty string needs quoting
-  Logic.ifElse (Strings.null $ var "s") true $
+  Logic.ifElse (Strings.isEmpty $ var "s") true $
   -- Reserved words need quoting
   Logic.ifElse (Lists.member (var "s") (var "hydra.yaml.serde.yamlReservedWords" :: TypedTerm [String])) true $
   -- Looks like a number needs quoting
@@ -162,7 +162,7 @@ needsQuoting = define "needsQuoting" $
   -- Contains special characters needs quoting
   "chars" <~ Strings.toList (var "s") $
   "specials" <~ Strings.toList (var "hydra.yaml.serde.yamlSpecialChars" :: TypedTerm String) $
-  "hasSpecial" <~ Logic.not (Lists.null (Lists.filter
+  "hasSpecial" <~ Logic.not (Lists.isEmpty (Lists.filter
     ("c" ~> Lists.member (var "c" :: TypedTerm Int) (var "specials"))
     (var "chars"))) $
   Logic.ifElse (var "hasSpecial") true $
@@ -179,7 +179,7 @@ writeMappingEntry = define "writeMappingEntry" $
   match YM._Node (var "value") Nothing [
     YM._Node_scalar>>: "s" ~> Strings.concat $ list [writeNodeInline @@ var "key", string ": ", writeScalar @@ var "s", string "\n"],
     YM._Node_sequence>>: "items" ~>
-      Logic.ifElse (Lists.null $ var "items")
+      Logic.ifElse (Lists.isEmpty $ var "items")
         (Strings.concat $ list [writeNodeInline @@ var "key", string ": []\n"])
         (Strings.concat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")]),
     YM._Node_mapping>>: "m" ~>
@@ -197,7 +197,7 @@ writeMappingEntryInline = define "writeMappingEntryInline" $
   match YM._Node (var "value") Nothing [
     YM._Node_scalar>>: "s" ~> Strings.concat $ list [writeNodeInline @@ var "key", string ": ", writeScalar @@ var "s", string "\n"],
     YM._Node_sequence>>: "items" ~>
-      Logic.ifElse (Lists.null $ var "items")
+      Logic.ifElse (Lists.isEmpty $ var "items")
         (Strings.concat $ list [writeNodeInline @@ var "key", string ": []\n"])
         (Strings.concat $ list [writeNodeInline @@ var "key", string ":\n", indentString @@ (writeNode @@ var "value")]),
     YM._Node_mapping>>: "m" ~>
@@ -212,7 +212,7 @@ writeNode = define "writeNode" $
   "node" ~> match YM._Node (var "node") Nothing [
     YM._Node_scalar>>: "s" ~> Strings.concat2 (writeScalar @@ var "s") (string "\n"),
     YM._Node_sequence>>: "items" ~>
-      Logic.ifElse (Lists.null $ var "items")
+      Logic.ifElse (Lists.isEmpty $ var "items")
         (string "[]\n")
         (Strings.concat $ Lists.map (lambda "item" $ writeSequenceItem @@ var "item") (var "items")),
     YM._Node_mapping>>: "m" ~>
@@ -261,7 +261,7 @@ writeSequenceItem = define "writeSequenceItem" $
   "node" ~> match YM._Node (var "node") Nothing [
     YM._Node_scalar>>: "s" ~> Strings.concat $ list [string "- ", writeScalar @@ var "s", string "\n"],
     YM._Node_sequence>>: "items" ~>
-      Logic.ifElse (Lists.null $ var "items")
+      Logic.ifElse (Lists.isEmpty $ var "items")
         (string "- []\n")
         (Strings.concat2 (string "-\n") (indentString @@ (writeNode @@ var "node"))),
     YM._Node_mapping>>: "m" ~>

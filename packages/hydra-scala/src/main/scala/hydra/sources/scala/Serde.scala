@@ -129,7 +129,7 @@ object Serde:
     applyP("hydra.lib.lists.map", fn, xs)
 
   private def listNull(xs: TypedTerm[Any]): TypedTerm[Boolean] =
-    applyP("hydra.lib.lists.null", xs)
+    applyP("hydra.lib.lists.isEmpty", xs)
 
   private def listConcat(xss: TypedTerm[Any]): TypedTerm[Any] =
     applyP("hydra.lib.lists.concat", xss)

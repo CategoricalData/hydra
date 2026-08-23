@@ -69,7 +69,7 @@ allTests = definitionInModule module_ "allTests" $
       setsDelete,
       setsMember,
       setsSize,
-      setsNull,
+      setsIsEmpty,
       setsUnion,
       setsUnions,
       setsIntersection,
@@ -153,13 +153,13 @@ setsMember = subgroup "member" [
       (Sets.member (Phantoms.int32 x) (pIntSet s))
       (Phantoms.boolean result)
 
-setsNull :: TypedTerm TestGroup
-setsNull = subgroup "null" [
+setsIsEmpty :: TypedTerm TestGroup
+setsIsEmpty = subgroup "isEmpty" [
   test "empty set" [] True,
   test "non-empty set" [1, 2] False]
   where
     test name s result = evalPair name showBool
-      (Sets.null (pIntSet s))
+      (Sets.isEmpty (pIntSet s))
       (Phantoms.boolean result)
 
 setsSingleton :: TypedTerm TestGroup

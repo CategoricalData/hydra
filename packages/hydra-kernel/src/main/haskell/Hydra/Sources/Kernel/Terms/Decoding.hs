@@ -554,7 +554,7 @@ decodeModule = define "decodeModule" $
           _Definition_type>>: "td" ~>
             just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td"))])
         (Packaging.moduleDefinitions (var "mod")))) $
-    Logic.ifElse (Lists.null (var "typeBindings"))
+    Logic.ifElse (Lists.isEmpty (var "typeBindings"))
       (right nothing)
       ("decodedBindings" <<~ Eithers.mapList ("b" ~>
         Eithers.bimap

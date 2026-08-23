@@ -361,7 +361,7 @@ validateNode = validationDefinition "validateNode" $
     -- noSuchLabel finding (closed-world; only fires if the rule is enabled and
     -- there are no matches).
     "noMatchCheck">: guardedNodeRule (var "p") _InvalidNodeError _InvalidNodeError_noSuchLabel
-      (Logic.ifElse (Lists.null (var "matches"))
+      (Logic.ifElse (Lists.isEmpty (var "matches"))
         (just $ inject _InvalidNodeError _InvalidNodeError_noSuchLabel $
           record _NoSuchLabelError [
             _NoSuchLabelError_labels>>: Sets.toList (var "nodeLabels" :: TypedTerm (S.Set NodeLabel))])
@@ -422,7 +422,7 @@ validateRelationship = validationDefinition "validateRelationship" $
       (var "candidates"),
     -- noSuchType (closed-world): the relationship's type has no element type.
     "noSuchTypeCheck">: guardedRelationshipRule (var "p") _InvalidRelationshipError _InvalidRelationshipError_noSuchType
-      (Logic.ifElse (Lists.null (var "candidates"))
+      (Logic.ifElse (Lists.isEmpty (var "candidates"))
         (just $ inject _InvalidRelationshipError _InvalidRelationshipError_noSuchType $
           record _NoSuchRelationshipTypeError [
             _NoSuchRelationshipTypeError_type>>: var "relType"])
@@ -431,8 +431,8 @@ validateRelationship = validationDefinition "validateRelationship" $
     -- candidate's pattern matches.
     "noPatternCheck">: guardedRelationshipRule (var "p") _InvalidRelationshipError _InvalidRelationshipError_noMatchingPattern
       (Logic.ifElse
-        (Logic.and (Logic.not (Lists.null (var "candidates")))
-          (Logic.and (endpointsKnown (var "startLabels") (var "endLabels")) (Lists.null (var "matched"))))
+        (Logic.and (Logic.not (Lists.isEmpty (var "candidates")))
+          (Logic.and (endpointsKnown (var "startLabels") (var "endLabels")) (Lists.isEmpty (var "matched"))))
         (just $ inject _InvalidRelationshipError _InvalidRelationshipError_noMatchingPattern $
           record _NoMatchingPatternError [
             _NoMatchingPatternError_allowedPatterns>>: Lists.map

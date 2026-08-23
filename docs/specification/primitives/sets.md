@@ -43,7 +43,7 @@ Since: 0.15
 Usage: `empty`
 
 The set with no elements.
-`null empty` is `true`, and `size empty` is `0`.
+`isEmpty empty` is `true`, and `size empty` is `0`.
 
 Since: 0.15
 
@@ -94,6 +94,17 @@ The map analogue (by key) is `hydra.lib.maps.intersection`.
 
 Since: 0.15
 
+#### isEmpty — **Draft**
+
+`∀t. (ordering t) ⇒ set<t> → boolean`
+
+Usage: `isEmpty s`
+
+Test whether a set is empty.
+Returns `true` exactly when `s` has no elements.
+
+Since: 0.15
+
 #### map — **Draft**
 
 `∀t1,t2. (ordering t1, ordering t2) ⇒ (t1 → t2) → set<t1> → set<t2>`
@@ -117,17 +128,6 @@ Usage: `member x s`
 
 Test whether an element is in a set.
 Returns `true` exactly when `x` is an element of `s`.
-
-Since: 0.15
-
-#### null — **Draft**
-
-`∀t. (ordering t) ⇒ set<t> → boolean`
-
-Usage: `null s`
-
-Test whether a set is empty.
-Returns `true` exactly when `s` has no elements.
 
 Since: 0.15
 

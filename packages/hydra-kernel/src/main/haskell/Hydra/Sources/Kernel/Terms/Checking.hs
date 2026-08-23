@@ -243,7 +243,7 @@ checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
     "check" <~ ("typ" ~>
       "freevars" <~ Variables.freeVariablesInType @@ var "typ" $
       "badvars" <~ Sets.difference (Sets.difference (var "freevars" :: TypedTerm (S.Set Name)) (var "vars" :: TypedTerm (S.Set Name))) (var "svars" :: TypedTerm (S.Set Name)) $
-      Logic.ifElse (Sets.null (var "badvars" :: TypedTerm (S.Set Name)))
+      Logic.ifElse (Sets.isEmpty (var "badvars" :: TypedTerm (S.Set Name)))
         (right unit)
         (left (Error.errorChecking $ ErrorsChecking.checkingErrorUnboundTypeVariables $ ErrorsChecking.unboundTypeVariablesError (var "badvars") (var "typ")))) $
     "checkOptional" <~ ("m" ~>
@@ -302,7 +302,7 @@ checkTypeSubst = define "checkTypeSubst" $
     (Sets.toList (var "suspectVars" :: TypedTerm (S.Set Name)))) $
   "badPairs" <~ Lists.filter ("p" ~> Sets.member (Pairs.first $ var "p") (var "badVars" :: TypedTerm (S.Set Name))) (Maps.toList (var "s" :: TypedTerm (M.Map Name Type))) $
   "printPair" <~ ("p" ~> (Core.unName $ Pairs.first $ var "p") ++ (string " --> ") ++ (PrintCore.type_ @@ Pairs.second (var "p"))) $
-  Logic.ifElse (Sets.null (var "badVars" :: TypedTerm (S.Set Name)))
+  Logic.ifElse (Sets.isEmpty (var "badVars" :: TypedTerm (S.Set Name)))
     (right $ var "subst")
     (left (Error.errorChecking $ ErrorsChecking.checkingErrorIncorrectUnification $ ErrorsChecking.incorrectUnificationError (var "subst")))
 
@@ -314,7 +314,7 @@ containsInScopeTypeVars = define "containsInScopeTypeVars" $
   "tx" ~> "t" ~>
   "vars" <~ Graph.graphTypeVariables (var "tx") $
   "freeVars" <~ Variables.freeVariablesInTypeSimple @@ var "t" $
-  Logic.not $ Sets.null $ Sets.intersection (var "vars" :: TypedTerm (S.Set Name)) (var "freeVars" :: TypedTerm (S.Set Name))
+  Logic.not $ Sets.isEmpty $ Sets.intersection (var "vars" :: TypedTerm (S.Set Name)) (var "freeVars" :: TypedTerm (S.Set Name))
 
 formatError :: TypedTerm (Error -> String)
 formatError = "e" ~> PrintError.error_ @@ var "e"
@@ -560,7 +560,7 @@ typeOfList = define "typeOfList" $
   doc "Reconstruct the type of a list (Either/InferenceContext version). Paper: inference.tex, rules Lst_0 and Lst_+ (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "els" ~>
   "listArityErr" <~ (left (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeList Core.typeUnit) (int32 1) (Lists.length $ var "typeArgs") (var "typeArgs"))) $
-  Logic.ifElse (Lists.null $ var "els")
+  Logic.ifElse (Lists.isEmpty $ var "els")
     (Logic.ifElse (Equality.equal (Lists.length $ var "typeArgs") (int32 1))
       (Optionals.match (Lists.head $ var "typeArgs") (var "listArityErr") ("ta0" ~> right $ pair (Core.typeList $ var "ta0") (var "cx")))
       (var "listArityErr"))
@@ -595,7 +595,7 @@ typeOfMap = define "typeOfMap" $
   doc "Reconstruct the type of a map (Either/InferenceContext version). Paper: inference.tex, rules Map_0 and Map_+ (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "m" ~>
   "mapArityErr" <~ (left (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeMap $ Core.mapType Core.typeUnit Core.typeUnit) (int32 2) (Lists.length $ var "typeArgs") (var "typeArgs"))) $
-  Logic.ifElse (Maps.null (var "m" :: TypedTerm (M.Map Term Term)))
+  Logic.ifElse (Maps.isEmpty (var "m" :: TypedTerm (M.Map Term Term)))
     (Logic.ifElse (Equality.equal (Lists.length $ var "typeArgs") (int32 2))
       (Optionals.match (Lists.uncons $ var "typeArgs") (var "mapArityErr") ("uc0" ~>
           "ta0" <~ Pairs.first (var "uc0") $
@@ -739,7 +739,7 @@ typeOfSet = define "typeOfSet" $
   doc "Reconstruct the type of a set (Either/InferenceContext version). Paper: inference.tex, rules Set_0 and Set_+ (checking side)." $
   "cx" ~> "tx" ~> "typeArgs" ~> "els" ~>
   "setArityErr" <~ (left (Error.errorChecking $ ErrorsChecking.checkingErrorTypeArityMismatch $ ErrorsChecking.typeArityMismatchError (Core.typeSet Core.typeUnit) (int32 1) (Lists.length $ var "typeArgs") (var "typeArgs"))) $
-  Logic.ifElse (Sets.null (var "els" :: TypedTerm (S.Set Term)))
+  Logic.ifElse (Sets.isEmpty (var "els" :: TypedTerm (S.Set Term)))
     (Logic.ifElse (Equality.equal (Lists.length $ var "typeArgs") (int32 1))
       (Optionals.match (Lists.head $ var "typeArgs") (var "setArityErr") ("ta0" ~> right $ pair (Core.typeSet $ var "ta0") (var "cx")))
       (var "setArityErr"))
@@ -819,7 +819,7 @@ typeOfVariable = define "typeOfVariable" $
   doc "Reconstruct the type of a variable (Either/InferenceContext version). Paper: inference.tex, rules Var and Prim (checking side); note the primitives-first lookup order, the reverse of inference." $
   "cx" ~> "tx" ~> "typeArgs" ~> "name" ~>
   "forScheme" <~ ("ts" ~>
-      "tResult" <~ Logic.ifElse (Lists.null $ var "typeArgs")
+      "tResult" <~ Logic.ifElse (Lists.isEmpty $ var "typeArgs")
         (Resolution.instantiateType @@ var "cx" @@ (Scoping.typeSchemeToFType @@ var "ts"))
         (pair (Scoping.typeSchemeToFType @@ var "ts") (var "cx")) $
       "t" <~ Pairs.first (var "tResult") $
@@ -865,7 +865,7 @@ typesAllEffectivelyEqual = define "typesAllEffectivelyEqual" $
   "containsFreeVar" <~ ("t" ~>
     "allVars" <~ Variables.freeVariablesInTypeSimple @@ var "t" $
     "schemaNames" <~ Sets.fromList (Maps.keys (var "types" :: TypedTerm (M.Map Name TypeScheme))) $
-    Logic.not $ Sets.null $ Sets.difference (var "allVars" :: TypedTerm (S.Set Name)) (var "schemaNames" :: TypedTerm (S.Set Name))) $
+    Logic.not $ Sets.isEmpty $ Sets.difference (var "allVars" :: TypedTerm (S.Set Name)) (var "schemaNames" :: TypedTerm (S.Set Name))) $
   "anyContainsFreeVar" <~ Lists.foldl ("acc" ~> "t" ~> Logic.or (var "acc") (var "containsFreeVar" @@ var "t")) false (var "tlist") $
   Logic.ifElse (var "anyContainsFreeVar")
     true

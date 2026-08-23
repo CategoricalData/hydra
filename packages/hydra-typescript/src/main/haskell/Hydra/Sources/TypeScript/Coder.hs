@@ -388,7 +388,7 @@ thunkLazyBindings = def "thunkLazyBindings" $
   "bindings" ~> "body" ~>
     "candidates" <~ (Lists.filter
       (lambda "b" $ letBindingIsThunkCandidate @@ var "b") (var "bindings")) $
-    Logic.ifElse (Lists.null (var "candidates"))
+    Logic.ifElse (Lists.isEmpty (var "candidates"))
       (pair (var "bindings") (var "body"))
       ("targets" <~ (Sets.fromList
          (Lists.map (reify Core.bindingName) (var "candidates"))) $
@@ -655,7 +655,7 @@ encodeTerm = def "encodeTerm" $
        -- body, re-introduce them as a `Term_let` wrapping the inner body.
        -- That recurses back through `_Term_let`'s IIFE-chain encoder, so
        -- the multi-arg arrow still gets the lifted bindings in scope.
-       "innerBody" <~ Logic.ifElse (Lists.null (var "fsLBindings"))
+       "innerBody" <~ Logic.ifElse (Lists.isEmpty (var "fsLBindings"))
          (var "fsLBody")
          (Core.termLet (Core.let_ (var "fsLBindings") (var "fsLBody"))) $
        -- Emit `(p: unknown) => body` so `noImplicitAny` is satisfied.
@@ -740,7 +740,7 @@ encodeTerm = def "encodeTerm" $
               "headExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm") $
               tsCall @@ var "headExpr" @@ var "encArgs") [
             _Term_project>>: lambda "proj" $
-              Logic.ifElse (Lists.null (var "encArgs"))
+              Logic.ifElse (Lists.isEmpty (var "encArgs"))
                 -- No args: emit the bare arrow `(x) => x.field`.
                 ("headExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm") $
                  var "headExpr")
@@ -750,17 +750,17 @@ encodeTerm = def "encodeTerm" $
                  "firstA" <~ Optionals.withDefault (tsExprIdent @@ string "undefined") (Lists.head (var "encArgs")) $
                  "restA" <~ (Lists.drop (int32 1) (var "encArgs")) $
                  "fieldExpr" <~ (tsMember @@ var "firstA" @@ var "fname") $
-                 Logic.ifElse (Lists.null (var "restA"))
+                 Logic.ifElse (Lists.isEmpty (var "restA"))
                    (var "fieldExpr")
                    (tsCall @@ var "fieldExpr" @@ var "restA")),
             _Term_unwrap>>: constant $
-              Logic.ifElse (Lists.null (var "encArgs"))
+              Logic.ifElse (Lists.isEmpty (var "encArgs"))
                 ("headExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm") $
                  var "headExpr")
                 ("firstA" <~ Optionals.withDefault (tsExprIdent @@ string "undefined") (Lists.head (var "encArgs")) $
                  "restA" <~ (Lists.drop (int32 1) (var "encArgs")) $
                  "valueExpr" <~ (tsMember @@ var "firstA" @@ string "value") $
-                 Logic.ifElse (Lists.null (var "restA"))
+                 Logic.ifElse (Lists.isEmpty (var "restA"))
                    (var "valueExpr")
                    (tsCall @@ var "valueExpr" @@ var "restA"))])
          (lambda "e" $ var "e"),
@@ -1501,7 +1501,7 @@ importsToText = def "importsToText" $
       (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "currentNs"))) $
     "currentDepth" <~ (Lists.length (var "currentSegs")) $
     "currentIsTest" <~ Logic.and
-      (Logic.not (Lists.null (var "currentSegs")))
+      (Logic.not (Lists.isEmpty (var "currentSegs")))
       (Equality.equal (Optionals.withDefault (string "") (Lists.head (var "currentSegs"))) (string "test")) $
     "baseUpPrefix" <~ Logic.ifElse
       (Equality.equal (var "currentDepth") (int32 1))
@@ -1514,7 +1514,7 @@ importsToText = def "importsToText" $
         "targetSegs" <~ (Lists.drop (int32 1)
           (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"))) $
         "targetIsTest" <~ Logic.and
-          (Logic.not (Lists.null (var "targetSegs")))
+          (Logic.not (Lists.isEmpty (var "targetSegs")))
           (Equality.equal (Optionals.withDefault (string "") (Lists.head (var "targetSegs"))) (string "test")) $
         -- #501/#507: the TS lib runtime impls (hydra.lib.*) ship under the renamed
         -- overlay namespace at hydra/overlay/typescript/lib/, not hydra/lib/ (which holds
@@ -1777,7 +1777,7 @@ printInterfaceDeclaration = def "printInterfaceDeclaration" $
     "name" <~ (unwrap TS._Identifier @@ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_name @@ var "decl")) $
     "params" <~ (printTypeParameterList @@ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_typeParameters @@ var "decl")) $
     "exts" <~ (project TS._InterfaceDeclaration TS._InterfaceDeclaration_extends @@ var "decl") $
-    "extClause" <~ Logic.ifElse (Lists.null (var "exts"))
+    "extClause" <~ Logic.ifElse (Lists.isEmpty (var "exts"))
       (string "")
       (Strings.concat2 (string " extends ")
         (Strings.join (string ", ")
@@ -1786,7 +1786,7 @@ printInterfaceDeclaration = def "printInterfaceDeclaration" $
     "renderMember" <~ ("ps" ~>
       Strings.join (string "\n  ")
         (Formatting.lines @@ (asTerm printPropertySignature @@ var "ps"))) $
-    "body" <~ Logic.ifElse (Lists.null (var "members"))
+    "body" <~ Logic.ifElse (Lists.isEmpty (var "members"))
       (string "")
       (Strings.concat (list [
         string "\n  ",
@@ -1961,7 +1961,7 @@ printTypeParameterList :: TypedTermDefinition ([TS.TypeParameter] -> String)
 printTypeParameterList = def "printTypeParameterList" $
   doc "Render a generic parameter list, or the empty string when there are no parameters" $
   lambda "tps" $
-    Logic.ifElse (Lists.null (var "tps"))
+    Logic.ifElse (Lists.isEmpty (var "tps"))
       (string "")
       (Strings.concat (list [
         string "<",

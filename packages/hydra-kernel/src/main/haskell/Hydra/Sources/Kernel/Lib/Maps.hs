@@ -12,7 +12,7 @@ import qualified Hydra.Dsl.Lib.Pairs    as Pairs
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (map)
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++), filter, lookup, map, null)
+import           Prelude hiding ((++), filter, lookup, map)
 import qualified Data.Map                    as M
 
 
@@ -31,8 +31,8 @@ module_ = Module {
     -- concrete type here to satisfy GHC. 'Int' is arbitrary and carries no meaning — the emitted primitive
     -- is type-agnostic and fully polymorphic. See #467.
     definitions = [alter, bimap, delete, difference, elems, empty, filter, filterWithKey,
-                   findWithDefault, fromList, insert, intersection, keys, lookup, map, mapKeys,
-                   member, null, singleton, size, toList, union, unions]
+                   findWithDefault, fromList, insert, intersection, isEmpty, keys, lookup, map,
+                   mapKeys, member, singleton, size, toList, union, unions]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -208,6 +208,14 @@ intersection = define "intersection" "Compute the intersection of two maps by ke
    "Requires an 'ordering' constraint on the key type.",
    "Total. Corresponds to Haskell's Data.Map.intersection :: Ord k => Map k v -> Map k v -> Map k v."]
 
+isEmpty :: PrimitiveDefinition
+isEmpty = define "isEmpty" "Test whether a map is empty."
+  (ordKey [("m", "the map to test")]
+    [("v", [])] (mp tk tv Types.~> Types.boolean))
+  ["isEmpty(m) returns true iff m has no bindings.",
+   "Requires an 'ordering' constraint on the key type.",
+   "Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool."]
+
 keys :: PrimitiveDefinition
 keys = define "keys" "Return the keys of a map (in key order)."
   (ordKey [("m", "the map whose keys to return")]
@@ -266,14 +274,6 @@ member = define "member" "Test whether a key is present in a map."
   ["member(k, m) returns true iff k is a key in m.",
    "Requires an 'ordering' constraint on the key type.",
    "Total. Corresponds to Haskell's Data.Map.member :: Ord k => k -> Map k v -> Bool."]
-
-null :: PrimitiveDefinition
-null = define "null" "Test whether a map is empty."
-  (ordKey [("m", "the map to test")]
-    [("v", [])] (mp tk tv Types.~> Types.boolean))
-  ["null(m) returns true iff m has no bindings.",
-   "Requires an 'ordering' constraint on the key type.",
-   "Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool."]
 
 singleton :: PrimitiveDefinition
 singleton = define "singleton" "Construct a map with a single key-value pair."
