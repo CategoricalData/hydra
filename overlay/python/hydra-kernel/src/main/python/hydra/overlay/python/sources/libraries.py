@@ -269,6 +269,10 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
         def_eithers.is_right.name, eithers.is_right, [_x, _y],
         prims.either(x, y), prims.boolean()
     )
+    primitives[def_eithers.left.name] = prims.prim1(
+        def_eithers.left.name, eithers.left, [_x, _y],
+        x, prims.either(x, y)
+    )
     primitives[def_eithers.lefts.name] = prims.prim1(
         def_eithers.lefts.name, eithers.lefts, [_x, _y],
         prims.list_(prims.either(x, y)), prims.list_(x)
@@ -296,6 +300,10 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
     primitives[def_eithers.partition.name] = prims.prim1(
         def_eithers.partition.name, eithers.partition, [_x, _y],
         prims.list_(prims.either(x, y)), prims.pair(prims.list_(x), prims.list_(y))
+    )
+    primitives[def_eithers.right.name] = prims.prim1(
+        def_eithers.right.name, eithers.right, [_x, _y],
+        y, prims.either(x, y)
     )
     primitives[def_eithers.rights.name] = prims.prim1(
         def_eithers.rights.name, eithers.rights, [_x, _y],
@@ -445,11 +453,6 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     primitives[def_lists.partition.name] = prims.prim2(
         def_lists.partition.name, lists.partition, [_a],
         fun(a, prims.boolean()), prims.list_(a), prims.pair(prims.list_(a), prims.list_(a))
-    )
-    # prim1: pure :: a -> [a]
-    primitives[def_lists.pure.name] = prims.prim1(
-        def_lists.pure.name, lists.pure, [_a],
-        a, prims.list_(a)
     )
     # prim2: replicate :: Int32 -> a -> [a]
     primitives[def_lists.replicate.name] = prims.prim2(
@@ -881,8 +884,8 @@ def register_optionals_primitives() -> dict[Name, Primitive]:
         def_optionals.map_optional.name, optionals.map_optional, [_a, _b],
         fun(a, prims.optional(b)), prims.list_(a), prims.list_(b)
     )
-    primitives[def_optionals.pure.name] = prims.prim1(
-        def_optionals.pure.name, optionals.pure, [_a],
+    primitives[def_optionals.given.name] = prims.prim1(
+        def_optionals.given.name, optionals.given, [_a],
         a, prims.optional(a)
     )
     # toList :: optional a -> [a]
@@ -1322,6 +1325,10 @@ def register_pairs_primitives() -> dict[Name, Primitive]:
     primitives[def_pairs.first.name] = prims.prim1(
         def_pairs.first.name, pairs.first, [_a, _b],
         prims.pair(a, b), a
+    )
+    primitives[def_pairs.pair.name] = prims.prim2(
+        def_pairs.pair.name, pairs.pair, [_a, _b],
+        a, b, prims.pair(a, b)
     )
     primitives[def_pairs.second.name] = prims.prim1(
         def_pairs.second.name, pairs.second, [_a, _b],

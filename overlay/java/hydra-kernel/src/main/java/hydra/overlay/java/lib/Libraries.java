@@ -137,12 +137,14 @@ public class Libraries {
                 new hydra.overlay.java.lib.eithers.FoldList(),
                 new hydra.overlay.java.lib.eithers.IsLeft(),
                 new hydra.overlay.java.lib.eithers.IsRight(),
+                new hydra.overlay.java.lib.eithers.Left(),
                 new hydra.overlay.java.lib.eithers.Lefts(),
                 new hydra.overlay.java.lib.eithers.Map(),
                 new hydra.overlay.java.lib.eithers.MapList(),
                 new hydra.overlay.java.lib.eithers.MapOptional(),
                 new hydra.overlay.java.lib.eithers.MapSet(),
                 new hydra.overlay.java.lib.eithers.Partition(),
+                new hydra.overlay.java.lib.eithers.Right(),
                 new hydra.overlay.java.lib.eithers.Rights());
     }
 
@@ -205,7 +207,6 @@ public class Libraries {
                 new hydra.overlay.java.lib.lists.Map(),
                 new hydra.overlay.java.lib.lists.Member(),
                 new hydra.overlay.java.lib.lists.Partition(),
-                new hydra.overlay.java.lib.lists.Pure(),
                 new hydra.overlay.java.lib.lists.Replicate(),
                 new hydra.overlay.java.lib.lists.Reverse(),
                 new hydra.overlay.java.lib.lists.Singleton(),
@@ -363,13 +364,13 @@ public class Libraries {
                 new hydra.overlay.java.lib.optionals.Apply(),
                 new hydra.overlay.java.lib.optionals.Bind(),
                 new hydra.overlay.java.lib.optionals.Compose(),
+                new hydra.overlay.java.lib.optionals.Given(),
                 new hydra.overlay.java.lib.optionals.Givens(),
                 new hydra.overlay.java.lib.optionals.IsGiven(),
                 new hydra.overlay.java.lib.optionals.IsNone(),
                 new hydra.overlay.java.lib.optionals.Map(),
                 new hydra.overlay.java.lib.optionals.MapOptional(),
                 new hydra.overlay.java.lib.optionals.Match(),
-                new hydra.overlay.java.lib.optionals.Pure(),
                 new hydra.overlay.java.lib.optionals.ToList(),
                 new hydra.overlay.java.lib.optionals.WithDefault());
     }
@@ -389,6 +390,7 @@ public class Libraries {
         return Arrays.asList(
                 new hydra.overlay.java.lib.pairs.Bimap(),
                 new hydra.overlay.java.lib.pairs.First(),
+                new hydra.overlay.java.lib.pairs.Pair(),
                 new hydra.overlay.java.lib.pairs.Second());
     }
 

@@ -203,7 +203,7 @@ mapFirstLetter = define "mapFirstLetter" $
     ("list" <~ Strings.toList (var "s") $
      Optionals.withDefault (var "s") $
        Optionals.map ("uc" ~>
-         "firstLetter" <~ (var "mapping" @@ Strings.fromList (Lists.pure (Pairs.first $ var "uc"))) $
+         "firstLetter" <~ (var "mapping" @@ Strings.fromList (Lists.singleton (Pairs.first $ var "uc"))) $
          Strings.concat2 (var "firstLetter") (Strings.fromList (Pairs.second $ var "uc")))
          (Lists.uncons $ var "list"))
 
@@ -310,7 +310,7 @@ withCharacterAliases = define "withCharacterAliases" $
       pair (int32 125) (string "rcub"),
       pair (int32 126) (string "tilde")],
     "alias">: lambda "c" $ Optionals.withDefault
-      (Lists.pure $ var "c")
+      (Lists.singleton $ var "c")
       (Optionals.map (reify Strings.toList) $ Maps.lookup (var "c" :: TypedTerm Int) (var "aliases"))]
     $ Strings.fromList $ Lists.filter (reify Chars.isAlphaNum) $ Lists.concat $
       Lists.map (var "alias") $ Strings.toList $ var "original"

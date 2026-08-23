@@ -22,7 +22,7 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.pairs module.")}
   where
-    definitions = [bimap, first, second]
+    definitions = [bimap, first, pair, second]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -53,6 +53,15 @@ first = define "first" "Get the first element of a pair."
     mempty)
   ["first(p) returns the first component of the pair p.",
    "Total. Corresponds to Haskell's fst :: (a, b) -> a."]
+
+pair :: PrimitiveDefinition
+pair = define "pair" "Construct a pair from two values."
+  (sigWithParams [("x", "the first element"), ("y", "the second element")] $ TypeScheme [Name "a", Name "b"]
+    (Types.var "a" Types.~> Types.var "b" Types.~> Types.pair (Types.var "a") (Types.var "b"))
+    Nothing)
+  ["pair(x, y) returns the pair (x, y).",
+   "The type-free pair constructor, useful point-free (e.g. zipWith(pair, xs, ys)).",
+   "Total. Corresponds to Haskell's (,) :: a -> b -> (a, b)."]
 
 second :: PrimitiveDefinition
 second = define "second" "Get the second element of a pair."

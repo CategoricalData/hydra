@@ -416,7 +416,7 @@ moduleToGraphql = define "moduleToGraphql" $
     "prefixes">: findPrefixes @@ Packaging.moduleName (var "mod") @@ var "typeDefs",
     "filePath">: Names.moduleNameToFilePath @@ Util.caseConventionCamel @@ (wrap _FileExtension (string "graphql")) @@ Packaging.moduleName (var "mod")] $
     "gtdefs" <<~ (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "td") (var "typeDefs")) $
-    right ((Maps.fromList $ Lists.pure $ pair (var "filePath")
+    right ((Maps.fromList $ Lists.singleton $ pair (var "filePath")
       (Serialization.printExpr @@ (Serialization.parenthesize @@
         (GraphqlSerde.documentToExpr @@ (wrap G._Document
           (Lists.map

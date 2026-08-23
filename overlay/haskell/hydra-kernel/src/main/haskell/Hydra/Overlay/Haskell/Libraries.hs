@@ -135,6 +135,7 @@ hydraLibEithers = standardLibrary [
     prim3       DefEithers.foldList            Eithers.foldList            (fun x_ (fun y_ (Prims.either_ z_ x_))) x_ (list y_) (Prims.either_ z_ x_),
     prim1       DefEithers.isLeft           Eithers.isLeft           (Prims.either_ x_ y_) boolean,
     prim1       DefEithers.isRight          Eithers.isRight          (Prims.either_ x_ y_) boolean,
+    prim1       DefEithers.left             Eithers.left             x_ (Prims.either_ x_ y_),
     prim1       DefEithers.lefts            Eithers.lefts            (list $ Prims.either_ x_ y_) (list x_),
     prim2       DefEithers.map              Eithers.map              (funT x_ y_) (Prims.either_ z_ x_) (Prims.either_ z_ y_),
     prim2       DefEithers.mapList          Eithers.mapList          (fun x_ (Prims.either_ z_ y_)) (list x_) (Prims.either_ z_ (list y_)),
@@ -142,7 +143,7 @@ hydraLibEithers = standardLibrary [
     prim2       DefEithers.mapSet           Eithers.mapSet           (fun x_ (Prims.either_ z_ y_)) (set x_) (Prims.either_ z_ (set y_)),
     prim1       DefEithers.partition        Eithers.partition        (list $ Prims.either_ x_ y_) (pair (list x_) (list y_)),
     prim1       DefEithers.partition Eithers.partition (list $ Prims.either_ x_ y_) (pair (list x_) (list y_)),
-    prim1       DefEithers.pure             Eithers.pure             y_ (Prims.either_ x_ y_),
+    prim1       DefEithers.right            Eithers.right            y_ (Prims.either_ x_ y_),
     prim1       DefEithers.rights           Eithers.rights           (list $ Prims.either_ x_ y_) (list y_)]
 
 hydraLibEquality :: Library
@@ -206,7 +207,6 @@ hydraLibLists = standardLibrary [
     prim1     DefLists.distinct         Lists.distinct           (list x_) (list x_),
     prim1     DefLists.isEmpty     Lists.isEmpty       (list x_) boolean,
     prim2     DefLists.partition   Lists.partition     (fun x_ boolean) (list x_) (pair (list x_) (list x_)),
-    prim1     DefLists.pure        Lists.pure          x_ (list x_),
     prim2     DefLists.replicate   Lists.replicate     int32 x_ (list x_),
     prim1     DefLists.reverse     Lists.reverse       (list x_) (list x_),
     prim1     DefLists.singleton   Lists.singleton     x_ (list x_),
@@ -386,7 +386,7 @@ hydraLibOptionals = standardLibrary [
     prim2     DefOptionals.mapList   Optionals.mapList      (fun x_ (optional y_)) (list x_) (optional (list y_)),
     prim2     DefOptionals.mapOptional  Optionals.mapOptional     (fun x_ $ optional y_) (list x_) (list y_),
     prim2     DefOptionals.mapSet    Optionals.mapSet       (fun x_ (optional y_)) (set x_) (optional (set y_)),
-    prim1     DefOptionals.pure      Optionals.pure         x_ (optional x_),
+    prim1     DefOptionals.given     Optionals.given        x_ (optional x_),
     prim1     DefOptionals.toList    Optionals.toList       (optional x_) (list x_),
     prim2 DefOptionals.withDefault Optionals.withDefault    x_ (optional x_) x_]
 
@@ -394,6 +394,7 @@ hydraLibPairs :: Library
 hydraLibPairs = standardLibrary [
     prim3     DefPairs.bimap  Pairs.bimap      (funT a_ c_) (funT b_ d_) (pair a_ b_) (pair c_ d_),
     prim1     DefPairs.first  Pairs.first      (pair a_ b_) a_,
+    prim2     DefPairs.pair   Pairs.pair       a_ b_ (pair a_ b_),
     prim1     DefPairs.second Pairs.second     (pair a_ b_) b_]
 
 hydraLibRegex :: Library

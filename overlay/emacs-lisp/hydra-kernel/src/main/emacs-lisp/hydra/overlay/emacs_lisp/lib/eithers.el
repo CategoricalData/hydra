@@ -61,6 +61,12 @@
     "Check if an Either is a Right value."
     (eq (either-tag e) :right)))
 
+;; left :: a -> Either a b
+(defvar hydra_overlay_emacs_lisp_lib_eithers_left
+  (lambda (x)
+    "Construct a Left value from an error."
+    (list :left x)))
+
 ;; lefts :: [Either a b] -> [a]
 (defvar hydra_overlay_emacs_lisp_lib_eithers_lefts
   (lambda (es)
@@ -135,6 +141,12 @@
         (if (eq (either-tag e) :left)
             (push (either-val e) lefts)
             (push (either-val e) rights))))))
+
+;; right :: b -> Either a b
+(defvar hydra_overlay_emacs_lisp_lib_eithers_right
+  (lambda (x)
+    "Construct a Right value from a success."
+    (list :right x)))
 
 ;; rights :: [Either a b] -> [b]
 (defvar hydra_overlay_emacs_lisp_lib_eithers_rights

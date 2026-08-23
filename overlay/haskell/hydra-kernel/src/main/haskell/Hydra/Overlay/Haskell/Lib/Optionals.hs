@@ -2,7 +2,7 @@
 
 module Hydra.Overlay.Haskell.Lib.Optionals where
 
-import Prelude hiding (map, pure)
+import Prelude hiding (map)
 import qualified Control.Monad as CM
 import qualified Data.Maybe as Y
 import qualified Data.Set as S
@@ -23,6 +23,10 @@ compose f g = \x -> f x >>= g
 -- | Left-fold over a list with an optional-returning function, short-circuiting on none.
 foldList :: (a -> b -> Y.Maybe a) -> a -> [b] -> Y.Maybe a
 foldList = CM.foldM
+
+-- | Lift a value into the optional type.
+given :: a -> Y.Maybe a
+given = Just
 
 -- | Filter out absent values from a list.
 givens :: [Y.Maybe a] -> [a]
@@ -55,10 +59,6 @@ mapSet f s = fmap S.fromList (CM.mapM f (S.toList s))
 -- | Handle an optional value with the absent-case value as the first argument.
 match :: Y.Maybe a -> b -> (a -> b) -> b
 match m n j = Y.maybe n j m
-
--- | Lift a value into the optional type.
-pure :: a -> Y.Maybe a
-pure = Just
 
 -- | Convert an optional value to a list: a present value becomes [x], an absent value becomes [].
 toList :: Y.Maybe a -> [a]

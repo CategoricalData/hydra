@@ -78,6 +78,11 @@ def is_right(e: Either[A, B]) -> bool:
     return isinstance(e, Right)
 
 
+def left(value: A) -> Either[A, B]:
+    """Construct a Left (error/exceptional) Either value."""
+    return Left(value)
+
+
 def lefts(eithers: frozenlist[Either[A, B]]) -> frozenlist[A]:
     """Extract all Left values from a list of Eithers."""
     result: list[A] = []
@@ -165,6 +170,11 @@ def partition(eithers: frozenlist[Either[A, B]]) -> tuple[frozenlist[A], frozenl
             case Right(val):
                 right_vals.append(val)
     return (tuple(left_vals), tuple(right_vals))
+
+
+def right(value: B) -> Either[A, B]:
+    """Construct a Right (success/normal) Either value."""
+    return Right(value)
 
 
 def rights(eithers: frozenlist[Either[A, B]]) -> frozenlist[B]:

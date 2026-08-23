@@ -126,7 +126,7 @@ hexByte = jsonSerdeDefinition "hexByte" $
   doc "Encode a byte (0..255) as a two-character lowercase hex string. Non-byte inputs yield placeholder '?' characters." $
   "c" ~>
   "nibble" <~ ("i" ~> Optionals.withDefault (string "?") (Optionals.map
-    ("ch" ~> Strings.fromList (Lists.pure $ var "ch"))
+    ("ch" ~> Strings.fromList (Lists.singleton $ var "ch"))
     (Strings.charAt (var "i") hexDigits))) $
   "hi" <~ (var "nibble" @@ Optionals.withDefault (int32 0) (Math.div (var "c") (int32 16))) $
   "lo" <~ (var "nibble" @@ Optionals.withDefault (int32 0) (Math.mod (var "c") (int32 16))) $
@@ -164,7 +164,7 @@ jsonString = jsonSerdeDefinition "jsonString" $
                   (Logic.ifElse (Ordering.lt (var "c") (int32 32))
                     (var "hexEscape" @@ var "c")
                     -- Non-control character: pass through as-is
-                    (Strings.fromList (Lists.pure (var "c"))))))))))) $
+                    (Strings.fromList (Lists.singleton (var "c"))))))))))) $
   "escaped" <~ Strings.concat (Lists.map (var "escape") (Strings.toList $ var "s")) $
   string "\"" ++ var "escaped" ++ string "\""
 

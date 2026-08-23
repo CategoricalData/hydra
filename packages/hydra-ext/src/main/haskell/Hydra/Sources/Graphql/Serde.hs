@@ -271,4 +271,4 @@ withDescription = define "withDescription" $
   lambda "mdesc" $ lambda "expr" $
     Serialization.newlineSep @@ (Optionals.givens $ list [
       Optionals.map (asTerm descriptionToExpr) (var "mdesc"),
-      Optionals.pure (var "expr")])
+      Optionals.given (var "expr")])

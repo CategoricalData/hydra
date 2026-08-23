@@ -13,6 +13,10 @@ bimap = BF.bimap
 first :: (a, b) -> a
 first (x, _) = x
 
+-- | Construct a pair from two values.
+pair :: a -> b -> (a, b)
+pair x y = (x, y)
+
 -- | Get the second element of a pair.
 second :: (a, b) -> b
 second (_, y) = y

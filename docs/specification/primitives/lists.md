@@ -7,8 +7,8 @@
 # hydra.lib.lists
 
 List construction, transformation, and folding.
-Lists form a monad: `pure` is its unit and `bind` its bind, with `map`, `apply`, and `compose`
-completing the functor, applicative, and Kleisli structure.
+Lists form a monad: `singleton` is its unit and `bind` its bind, with `map`, `apply`, and
+`compose` completing the functor, applicative, and Kleisli structure.
 The traversal family `mapList`, `mapOptional`, and `mapSet` traverses a container in the list
 monad, and `foldList` is the monadic fold.
 The bare `foldl` and `foldr` are the plain, non-monadic folds.
@@ -52,7 +52,7 @@ Apply a function that returns lists to each element of a list, and flatten the r
 Applies `f` to each element of `xs` and concatenates the resulting lists in order
 (a "flat map").
 `bind xs f` is equivalent to `concat (map f xs)`.
-This is the monadic bind for lists; `pure` is the corresponding unit.
+This is the monadic bind for lists; `singleton` is the corresponding unit.
 
 Since: 0.15
 
@@ -195,9 +195,9 @@ Left-fold a list in the list monad (a nondeterministic fold).
 Folds `xs` from the left, branching the accumulator over every result of the step function at
 each element: after each element the set of accumulators is replaced by all results of applying
 `f` to each current accumulator and that element.
-`foldList f acc0 xs` is `foldl (λmacc el → bind macc (λacc → f acc el)) (pure acc0) xs`;
+`foldList f acc0 xs` is `foldl (λmacc el → bind macc (λacc → f acc el)) (singleton acc0) xs`;
 this defining equation is the specification.
-For the empty list the result is `pure acc0`.
+For the empty list the result is `singleton acc0`.
 For example, if `f acc x` returns the two-element list containing `acc` and the sum of `acc`
 and `x`, then `foldList f 0 xs` computes the sums of all subsets of `xs`.
 
@@ -360,7 +360,7 @@ Results appear in the lexicographic order of the choices, with the choice for th
 varying slowest.
 The number of results is the product of the lengths of the lists `f x`; if `f x` is empty for
 any element, the result is the empty list.
-`mapList f []` is `pure []`, the single-element list containing the empty list.
+`mapList f []` is `singleton []`, the single-element list containing the empty list.
 This is the list-monad instance of the traversal family (`mapList`, `mapOptional`, `mapSet`).
 
 Since: 0.18
@@ -422,19 +422,6 @@ The first component equals `filter p xs`.
 
 Since: 0.15
 
-#### pure — **Draft**
-
-`∀t. t → list<t>`
-
-Usage: `pure x`
-
-Wrap a value in a single-element list.
-Returns the list whose only element is `x`.
-This is the unit of the list monad, and the standard way to construct a single-element list
-(the former `singleton` is deprecated in its favor).
-
-Since: 0.15
-
 #### replicate — **Draft**
 
 `∀t. int32 → t → list<t>`
@@ -455,6 +442,18 @@ Usage: `reverse xs`
 
 Reverse a list.
 Returns the elements of `xs` in reverse order.
+
+Since: 0.15
+
+#### singleton — **Draft**
+
+`∀t. t → list<t>`
+
+Usage: `singleton x`
+
+Construct a single-element list.
+Returns the list whose only element is `x`.
+This is the unit of the list monad; useful point-free (e.g. `map singleton xs`).
 
 Since: 0.15
 
@@ -645,13 +644,6 @@ Deprecated since: 0.18. Use: `hydra.lib.lists.tail`.
 `∀t. (equality t) ⇒ list<t> → list<t>`
 
 Deprecated since: 0.18. Use: `hydra.lib.lists.distinct`.
-
-#### singleton — **Deprecated**
-
-`∀t. t → list<t>`
-
-Deprecated since: 0.18. Use: `hydra.lib.lists.pure`.
-Lists standardize on the monadic unit `pure`; sets and maps retain `singleton`.
 
 #### sortOn — **Deprecated**
 

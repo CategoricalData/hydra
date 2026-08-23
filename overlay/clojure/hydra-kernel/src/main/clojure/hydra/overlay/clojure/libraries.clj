@@ -80,6 +80,7 @@
                                      [] (fun x (fun y (p/tc-either z x))) x (p/tc-list y) (p/tc-either z x))
      (prim-name 'hydra.lib.eithers/hydra_lib_eithers_is_left)  (p/prim1 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_is_left)  eithers/hydra_overlay_clojure_lib_eithers_is_left  [] (p/tc-either x y) (p/tc-boolean))
      (prim-name 'hydra.lib.eithers/hydra_lib_eithers_is_right) (p/prim1 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_is_right) eithers/hydra_overlay_clojure_lib_eithers_is_right [] (p/tc-either x y) (p/tc-boolean))
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_left)    (p/prim1 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_left)    eithers/hydra_overlay_clojure_lib_eithers_left    [] x (p/tc-either x y))
      (prim-name 'hydra.lib.eithers/hydra_lib_eithers_lefts)   (p/prim1 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_lefts)   eithers/hydra_overlay_clojure_lib_eithers_lefts   [] (p/tc-list (p/tc-either x y)) (p/tc-list x))
      (prim-name 'hydra.lib.eithers/hydra_lib_eithers_map)     (p/prim2 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_map)
                                      (fn [f e] ((eithers/hydra_overlay_clojure_lib_eithers_map f) e))
@@ -109,6 +110,7 @@
      (prim-name 'hydra.lib.eithers/hydra_lib_eithers_partition) (p/prim1 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_partition)
                                               eithers/hydra_overlay_clojure_lib_eithers_partition
                                               [] (p/tc-list (p/tc-either x y)) (p/tc-pair (p/tc-list x) (p/tc-list y)))
+     (prim-name 'hydra.lib.eithers/hydra_lib_eithers_right)   (p/prim1 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_right)   eithers/hydra_overlay_clojure_lib_eithers_right   [] y (p/tc-either x y))
      (prim-name 'hydra.lib.eithers/hydra_lib_eithers_rights)  (p/prim1 (prim-name 'hydra.lib.eithers/hydra_lib_eithers_rights)  eithers/hydra_overlay_clojure_lib_eithers_rights  [] (p/tc-list (p/tc-either x y)) (p/tc-list y))}))
 
 ;; ============================================================
@@ -196,7 +198,6 @@
      (prim-name 'hydra.lib.lists/hydra_lib_lists_partition)   (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_partition)
                                          (fn [f xs] ((lists/hydra_overlay_clojure_lib_lists_partition f) xs))
                                          [] (fun a (p/tc-boolean)) (p/tc-list a) (p/tc-pair (p/tc-list a) (p/tc-list a)))
-     (prim-name 'hydra.lib.lists/hydra_lib_lists_pure)       (p/prim1 (prim-name 'hydra.lib.lists/hydra_lib_lists_pure)       lists/hydra_overlay_clojure_lib_lists_pure       [] a (p/tc-list a))
      (prim-name 'hydra.lib.lists/hydra_lib_lists_replicate)  (p/prim2 (prim-name 'hydra.lib.lists/hydra_lib_lists_replicate)
                                         (fn [n x] ((lists/hydra_overlay_clojure_lib_lists_replicate n) x))
                                         [] (p/tc-int32) a (p/tc-list a))
@@ -403,7 +404,7 @@
      (prim-name 'hydra.lib.optionals/hydra_lib_optionals_match)    (p/lazy-args [1] (p/prim3 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_match)
                                       (fn [mx dflt f] (((optionals/hydra_overlay_clojure_lib_optionals_match mx) dflt) f))
                                       [] (p/tc-optional a) b (fun a b) b))
-     (prim-name 'hydra.lib.optionals/hydra_lib_optionals_pure)      (p/prim1 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_pure)      optionals/hydra_overlay_clojure_lib_optionals_pure      [] a (p/tc-optional a))
+     (prim-name 'hydra.lib.optionals/hydra_lib_optionals_given)     (p/prim1 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_given)     optionals/hydra_overlay_clojure_lib_optionals_given     [] a (p/tc-optional a))
      (prim-name 'hydra.lib.optionals/hydra_lib_optionals_to_list)    (p/prim1 (prim-name 'hydra.lib.optionals/hydra_lib_optionals_to_list)    optionals/hydra_overlay_clojure_lib_optionals_to_list   [] (p/tc-optional a) (p/tc-list a))}))
 
 ;; ============================================================
@@ -424,6 +425,9 @@
                                     (fn [f g p] (((pairs/hydra_overlay_clojure_lib_pairs_bimap f) g) p))
                                     ["a" "b" "c" "d"] (fun a c) (fun b d) (p/tc-pair a b) (p/tc-pair c d))
      (prim-name 'hydra.lib.pairs/hydra_lib_pairs_first)  (p/prim1 (prim-name 'hydra.lib.pairs/hydra_lib_pairs_first)  pairs/hydra_overlay_clojure_lib_pairs_first  [] (p/tc-pair a b) a)
+     (prim-name 'hydra.lib.pairs/hydra_lib_pairs_pair)   (p/prim2 (prim-name 'hydra.lib.pairs/hydra_lib_pairs_pair)
+                                    (fn [x y] ((pairs/hydra_overlay_clojure_lib_pairs_pair x) y))
+                                    [] a b (p/tc-pair a b))
      (prim-name 'hydra.lib.pairs/hydra_lib_pairs_second) (p/prim1 (prim-name 'hydra.lib.pairs/hydra_lib_pairs_second) pairs/hydra_overlay_clojure_lib_pairs_second [] (p/tc-pair a b) b)}))
 
 ;; ============================================================

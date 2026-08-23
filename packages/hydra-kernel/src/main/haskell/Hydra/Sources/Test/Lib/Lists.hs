@@ -71,7 +71,6 @@ allTests = define "allTests" $
       listsNub,
       listsIsEmpty,
       listsPartition,
-      listsPure,
       listsReplicate,
       listsReverse,
       listsSingleton,
@@ -96,10 +95,10 @@ allTests = define "allTests" $
           testStr name funs lst result = primCase name DefLists.apply [list funs, stringList lst] (stringList result)
   
       listsBind = subgroup "bind" [
-        test "negation function" [1, 2, 3, 4] (lambda "x" (primitive DefLists.pure @@ (primitive DefMath.negate @@ var "x"))) (negate <$> [1, 2, 3, 4]),
-        test "empty list" [] (lambda "x" (primitive DefLists.pure @@ (primitive DefMath.negate @@ var "x"))) [],
-        test "single element" [5] (lambda "x" (primitive DefLists.pure @@ (primitive DefMath.negate @@ var "x"))) [-5],
-        test "duplicate elements" [1, 1, 2] (lambda "x" (primitive DefLists.pure @@ (primitive DefMath.negate @@ var "x"))) [-1, -1, -2]]
+        test "negation function" [1, 2, 3, 4] (lambda "x" (primitive DefLists.singleton @@ (primitive DefMath.negate @@ var "x"))) (negate <$> [1, 2, 3, 4]),
+        test "empty list" [] (lambda "x" (primitive DefLists.singleton @@ (primitive DefMath.negate @@ var "x"))) [],
+        test "single element" [5] (lambda "x" (primitive DefLists.singleton @@ (primitive DefMath.negate @@ var "x"))) [-5],
+        test "duplicate elements" [1, 1, 2] (lambda "x" (primitive DefLists.singleton @@ (primitive DefMath.negate @@ var "x"))) [-1, -1, -2]]
         where
           test name lst fun result = primCase name DefLists.bind [intList lst, fun] (intList result)
 
@@ -324,15 +323,6 @@ allTests = define "allTests" $
         where
           test name pred lst (yes, no) = primCase name DefLists.partition [pred, intList lst] (pair (intList yes) (intList no))
 
-      listsPure = subgroup "pure" [
-        testStr "string element" "one" ["one"],
-        testStr "empty string" "" [""],
-        testInt "number element" 42 [42],
-        testInt "negative number" (-5) [-5]]
-        where
-          testStr name arg result = primCase name DefLists.pure [string arg] (stringList result)
-          testInt name arg result = primCase name DefLists.pure [int32 arg] (intList result)
-  
       listsReplicate = subgroup "replicate" [
         testInt "replicate three times" 3 42 [42, 42, 42],
         testInt "replicate zero times" 0 1 [],

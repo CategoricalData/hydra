@@ -99,7 +99,7 @@ def map_optional(f: Callable[[A], Optional[B]], xs: Sequence[A]) -> frozenlist[B
     return tuple(result)
 
 
-def pure(x: A) -> Optional[A]:
+def given(x: A) -> Optional[A]:
     """Lift a value into the optional type."""
     return Given(x)
 

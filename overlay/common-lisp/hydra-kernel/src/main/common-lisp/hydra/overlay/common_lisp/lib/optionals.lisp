@@ -94,8 +94,8 @@
             (if (functionp def) (funcall def) def)
             (funcall f (maybe-value m)))))))
 
-;; pure :: a -> Maybe a
-(defvar hydra_overlay_common_lisp_lib_optionals_pure
+;; given :: a -> Maybe a
+(defvar hydra_overlay_common_lisp_lib_optionals_given
   (lambda (x)
     (list :given x)))
 

@@ -41,6 +41,11 @@
   (lambda (e)
     (eq (either-tag e) :right)))
 
+;; left :: a -> Either a b
+(defvar hydra_overlay_common_lisp_lib_eithers_left
+  (lambda (x)
+    (list :left x)))
+
 ;; lefts :: [Either a b] -> [a]
 (defvar hydra_overlay_common_lisp_lib_eithers_lefts
   (lambda (es)
@@ -117,6 +122,11 @@
                      (return result)
                      (setf acc (either-val result)))
               finally (return (list :right acc)))))))
+
+;; right :: b -> Either a b
+(defvar hydra_overlay_common_lisp_lib_eithers_right
+  (lambda (x)
+    (list :right x)))
 
 ;; rights :: [Either a b] -> [b]
 (defvar hydra_overlay_common_lisp_lib_eithers_rights

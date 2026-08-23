@@ -234,7 +234,7 @@ jsonExponentPart = define "jsonExponentPart" $
             Parsers.map @@
               ("digits" ~>
                 string "e" ++
-                Optionals.match (var "sign") (string "") (reify Strings.fromList <.> reify Lists.pure) ++
+                Optionals.match (var "sign") (string "") (reify Strings.fromList <.> reify Lists.singleton) ++
                 var "digits") @@
               digits)))
 

@@ -229,7 +229,7 @@ valueToJson = define "valueToJson" $
     G._Value_byte>>: "b" ~>
       typedValueToJson @@ string "g:Byte" @@ (Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint8ToBigint $ var "b"),
     G._Value_char>>: "c" ~>
-      typedValueToJson @@ string "g:Char" @@ (Json.valueString $ Strings.fromList $ Lists.pure $ Literals.bigintToInt32 $ Literals.uint32ToBigint $ var "c"),
+      typedValueToJson @@ string "g:Char" @@ (Json.valueString $ Strings.fromList $ Lists.singleton $ Literals.bigintToInt32 $ Literals.uint32ToBigint $ var "c"),
     G._Value_composite>>: "ctv" ~>
       typedValueToJson
         @@ (unwrap G._TypeName @@ (project G._CompositeTypedValue G._CompositeTypedValue_type @@ var "ctv"))

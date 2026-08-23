@@ -2,7 +2,7 @@
 
 module Hydra.Overlay.Haskell.Lib.Lists where
 
-import Prelude hiding (compose, head, init, last, map, pure, tail, takeWhile)
+import Prelude hiding (compose, head, init, last, map, tail, takeWhile)
 import Hydra.Util
 import Hydra.Core
 import Hydra.Graph
@@ -138,10 +138,6 @@ isEmpty = L.null
 -- | Partition a list into elements that satisfy a predicate and elements that do not.
 partition :: (a -> Bool) -> [a] -> ([a], [a])
 partition = L.partition
-
--- | Create a list with a single element.
-pure :: a -> [a]
-pure e = [e]
 
 -- | Create a list with n copies of a value.
 replicate :: Int -> a -> [a]

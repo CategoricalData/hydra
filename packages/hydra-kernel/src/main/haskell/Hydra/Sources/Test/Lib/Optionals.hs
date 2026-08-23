@@ -86,13 +86,13 @@ allTests = definitionInModule module_ "allTests" $
       optionalsApply,
       optionalsBind,
       optionalsCompose,
+      optionalsGiven,
       optionalsGivens,
       optionalsIsGiven,
       optionalsIsNone,
       optionalsMap,
       optionalsMapOptional,
       optionalsMatch,
-      optionalsPure,
       optionalsToList,
       optionalsWithDefault]
 
@@ -137,6 +137,18 @@ optionalsCompose = subgroup "compose" [
     testFails name input = evalPair name showMaybeInt
       (Optionals.compose funF funG (Phantoms.int32 input))
       nothingInt
+
+optionalsGiven :: TypedTerm TestGroup
+optionalsGiven = subgroup "given" [
+  testInt "wraps integer" 42 42,
+  testStr "wraps string" "hello" "hello"]
+  where
+    testInt name x expected = evalPair name showMaybeInt
+      (Optionals.given (Phantoms.int32 x))
+      (justInt expected)
+    testStr name x expected = evalPair name showMaybeString
+      (Optionals.given (Phantoms.string x))
+      (Phantoms.just (Phantoms.string expected))
 
 optionalsGivens :: TypedTerm TestGroup
 optionalsGivens = subgroup "givens" [
@@ -201,18 +213,6 @@ optionalsMatch = subgroup "match" [
     test name opt def expected = evalPair name showInt32
       (Optionals.match opt (Phantoms.int32 def) (Phantoms.lambda "x" $ Math.mul (Phantoms.var "x") (Phantoms.int32 2)))
       (Phantoms.int32 expected)
-
-optionalsPure :: TypedTerm TestGroup
-optionalsPure = subgroup "pure" [
-  testInt "wraps integer" 42 42,
-  testStr "wraps string" "hello" "hello"]
-  where
-    testInt name x expected = evalPair name showMaybeInt
-      (Optionals.pure (Phantoms.int32 x))
-      (justInt expected)
-    testStr name x expected = evalPair name showMaybeString
-      (Optionals.pure (Phantoms.string x))
-      (Phantoms.just (Phantoms.string expected))
 
 optionalsToList :: TypedTerm TestGroup
 optionalsToList = subgroup "toList" [

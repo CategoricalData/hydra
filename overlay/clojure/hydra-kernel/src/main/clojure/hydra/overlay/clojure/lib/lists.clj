@@ -144,10 +144,6 @@
           (recur (next rest_) (cons (first rest_) yes) no)
           (recur (next rest_) yes (cons (first rest_) no))))))))
 
-;; pure :: a -> [a]
-(def hydra_overlay_clojure_lib_lists_pure
-  (fn [x] (list x)))
-
 ;; replicate :: Int -> a -> [a]
 (def hydra_overlay_clojure_lib_lists_replicate
   (fn [n] (fn [x] (repeat n x))))

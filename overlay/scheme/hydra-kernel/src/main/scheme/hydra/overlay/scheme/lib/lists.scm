@@ -23,7 +23,6 @@
           hydra_overlay_scheme_lib_lists_distinct
           hydra_overlay_scheme_lib_lists_isEmpty
           hydra_overlay_scheme_lib_lists_partition
-          hydra_overlay_scheme_lib_lists_pure
           hydra_overlay_scheme_lib_lists_replicate
           hydra_overlay_scheme_lib_lists_reverse
           hydra_overlay_scheme_lib_lists_singleton
@@ -279,11 +278,6 @@
                 (if (pred (car rest))
                     (loop (cdr rest) (cons (car rest) yes) no)
                     (loop (cdr rest) yes (cons (car rest) no))))))))
-
-    ;; pure :: a -> [a]
-    (define hydra_overlay_scheme_lib_lists_pure
-      (lambda (x)
-        (list x)))
 
     ;; replicate :: Int -> a -> [a]
     (define hydra_overlay_scheme_lib_lists_replicate

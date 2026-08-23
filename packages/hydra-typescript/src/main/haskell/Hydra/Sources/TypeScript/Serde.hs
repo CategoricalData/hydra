@@ -1288,7 +1288,7 @@ typeExpressionToString = define "typeExpressionToString" $
                 typeExpressionToString @@ var "p"]] $
               pair
                 (Math.add (var "i") (int32 1))
-                (Lists.concat2 (var "soFar") (Lists.pure (var "this"))))
+                (Lists.concat2 (var "soFar") (Lists.singleton (var "this"))))
             (pair (int32 0) (list ([] :: [TypedTerm String])))
             (var "params")] $
         Strings.concat $ list [

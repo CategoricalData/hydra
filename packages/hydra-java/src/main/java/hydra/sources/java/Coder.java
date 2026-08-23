@@ -2785,7 +2785,7 @@ public class Coder {
                                                 Optionals.match(
                                                     var("m"),
                                                     list(),
-                                                    lambda("x", Lists.pure(var("x"))))))),
+                                                    lambda("x", Lists.singleton(var("x"))))))),
                                     field("irDoms",
                                         Lists.map(
                                             lambda("d",

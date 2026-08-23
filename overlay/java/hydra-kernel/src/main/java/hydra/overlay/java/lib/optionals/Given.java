@@ -19,15 +19,15 @@ import hydra.overlay.java.util.Either;
 
 
 /**
- * Wraps a value in a flow.
+ * Wraps a value in given.
  */
-public class Pure extends PrimitiveFunction {
+public class Given extends PrimitiveFunction {
     /**
      * Returns the name of this primitive function.
-     * @return the name "hydra.lib.optionals.pure"
+     * @return the name "hydra.lib.optionals.given"
      */
     public Name name() {
-        return hydra.lib.Optionals.pure().name;
+        return hydra.lib.Optionals.given().name;
     }
 
     /**

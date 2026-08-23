@@ -173,7 +173,7 @@ flattenLetTerms = define "flattenLetTerms" $
         -- Put dependencies BEFORE the binding that depends on them
         -- This is important for hoisting: dependencies need to be hoisted first
         -- so that transitive capture works correctly
-        "forResult" <~ ("hr" ~> Lists.concat2 (Pairs.second $ var "hr") (Lists.pure (Pairs.first $ var "hr"))) $
+        "forResult" <~ ("hr" ~> Lists.concat2 (Pairs.second $ var "hr") (Lists.singleton (Pairs.first $ var "hr"))) $
         "flattenedBindings" <~ Lists.concat (Lists.map (var "forResult" <.> var "rewriteBinding") (var "bindings")) $
         -- Now check if body is also a let and merge those bindings too
         "merged" <~ var "flattenBodyLet" @@ var "flattenedBindings" @@ var "body" $

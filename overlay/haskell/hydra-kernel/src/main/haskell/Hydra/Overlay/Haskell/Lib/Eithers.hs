@@ -2,7 +2,7 @@
 
 module Hydra.Overlay.Haskell.Lib.Eithers where
 
-import Prelude hiding (either, map, pure)
+import Prelude hiding (either, map)
 import qualified Control.Monad as CM
 import qualified Data.Bifunctor as BF
 import qualified Data.Either as E
@@ -41,6 +41,10 @@ isLeft = E.isLeft
 isRight :: Either a b -> Bool
 isRight = E.isRight
 
+-- | Construct a Left (error/exceptional) Either value.
+left :: a -> Either a b
+left = Left
+
 -- | Extract all Left values from a list of Eithers.
 lefts :: [Either a b] -> [a]
 lefts = E.lefts
@@ -65,9 +69,9 @@ mapSet f s = fmap S.fromList (CM.mapM f (S.toList s))
 partition :: [Either a b] -> ([a], [b])
 partition = E.partitionEithers
 
--- | Wrap a value as a Right.
-pure :: b -> Either a b
-pure = Right
+-- | Construct a Right (success/normal) Either value.
+right :: b -> Either a b
+right = Right
 
 -- | Extract all Right values from a list of Eithers.
 rights :: [Either a b] -> [b]

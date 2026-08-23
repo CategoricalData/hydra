@@ -149,6 +149,7 @@
                                              #f (fun x (fun y (tc-either z x))) x (tc-list y) (tc-either z x)))
           (cons (prim-name def:hydra_lib_eithers_is_left)  (prim1 (prim-name def:hydra_lib_eithers_is_left)  hydra_overlay_scheme_lib_eithers_is_left  #f (tc-either x y) (tc-boolean)))
           (cons (prim-name def:hydra_lib_eithers_is_right) (prim1 (prim-name def:hydra_lib_eithers_is_right) hydra_overlay_scheme_lib_eithers_is_right #f (tc-either x y) (tc-boolean)))
+          (cons (prim-name def:hydra_lib_eithers_left)    (prim1 (prim-name def:hydra_lib_eithers_left)    hydra_overlay_scheme_lib_eithers_left    #f x (tc-either x y)))
           (cons (prim-name def:hydra_lib_eithers_lefts)   (prim1 (prim-name def:hydra_lib_eithers_lefts)   hydra_overlay_scheme_lib_eithers_lefts   #f (tc-list (tc-either x y)) (tc-list x)))
           (cons (prim-name def:hydra_lib_eithers_map)     (prim2 (prim-name def:hydra_lib_eithers_map)
                                              hydra_overlay_scheme_lib_eithers_map
@@ -165,6 +166,7 @@
           (cons (prim-name def:hydra_lib_eithers_partition) (prim1 (prim-name def:hydra_lib_eithers_partition)
                                                       hydra_overlay_scheme_lib_eithers_partition
                                                       #f (tc-list (tc-either x y)) (tc-pair (tc-list x) (tc-list y))))
+          (cons (prim-name def:hydra_lib_eithers_right)   (prim1 (prim-name def:hydra_lib_eithers_right)   hydra_overlay_scheme_lib_eithers_right   #f y (tc-either x y)))
           (cons (prim-name def:hydra_lib_eithers_rights)  (prim1 (prim-name def:hydra_lib_eithers_rights)  hydra_overlay_scheme_lib_eithers_rights  #f (tc-list (tc-either x y)) (tc-list y))))))
 
     ;; ============================================================================
@@ -381,7 +383,6 @@
           (cons (prim-name def:hydra_lib_lists_partition)   (prim2 (prim-name def:hydra_lib_lists_partition)
                                                   hydra_overlay_scheme_lib_lists_partition
                                                   #f (fun a (tc-boolean)) (tc-list a) (tc-pair (tc-list a) (tc-list a))))
-          (cons (prim-name def:hydra_lib_lists_pure)       (prim1 (prim-name def:hydra_lib_lists_pure)       hydra_overlay_scheme_lib_lists_pure       #f a (tc-list a)))
           (cons (prim-name def:hydra_lib_lists_replicate)  (prim2 (prim-name def:hydra_lib_lists_replicate)
                                                  hydra_overlay_scheme_lib_lists_replicate
                                                  #f (tc-int32) a (tc-list a)))
@@ -595,7 +596,7 @@
           (cons (prim-name def:hydra_lib_optionals_match)    (lazy-args '(1) (prim3 (prim-name def:hydra_lib_optionals_match)
                                               hydra_overlay_scheme_lib_optionals_match
                                               #f (tc-optional a) b (fun a b) b)))
-          (cons (prim-name def:hydra_lib_optionals_pure)      (prim1 (prim-name def:hydra_lib_optionals_pure)      hydra_overlay_scheme_lib_optionals_pure      #f a (tc-optional a)))
+          (cons (prim-name def:hydra_lib_optionals_given)     (prim1 (prim-name def:hydra_lib_optionals_given)     hydra_overlay_scheme_lib_optionals_given     #f a (tc-optional a)))
           (cons (prim-name def:hydra_lib_optionals_to_list)    (prim1 (prim-name def:hydra_lib_optionals_to_list)    hydra_overlay_scheme_lib_optionals_to_list   #f (tc-optional a) (tc-list a))))))
 
     ;; ============================================================================
@@ -613,6 +614,9 @@
                                             hydra_overlay_scheme_lib_pairs_bimap
                                             #f (fun a c) (fun b d) (tc-pair a b) (tc-pair c d)))
           (cons (prim-name def:hydra_lib_pairs_first)  (prim1 (prim-name def:hydra_lib_pairs_first)  hydra_overlay_scheme_lib_pairs_first  #f (tc-pair a b) a))
+          (cons (prim-name def:hydra_lib_pairs_pair)   (prim2 (prim-name def:hydra_lib_pairs_pair)
+                                            hydra_overlay_scheme_lib_pairs_pair
+                                            #f a b (tc-pair a b)))
           (cons (prim-name def:hydra_lib_pairs_second) (prim1 (prim-name def:hydra_lib_pairs_second) hydra_overlay_scheme_lib_pairs_second #f (tc-pair a b) b)))))
 
     ;; ============================================================================

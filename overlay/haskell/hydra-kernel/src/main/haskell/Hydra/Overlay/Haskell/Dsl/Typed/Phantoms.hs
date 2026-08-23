@@ -380,7 +380,7 @@ reify f = case (unTypedTerm $ f $ var "x") of
   TermApplication (Application lhs _) -> TypedTerm lhs
   TermEither (Prelude.Left _) -> lambda "x" $ TypedTerm $ TermEither $ Prelude.Left $ Terms.var "x"
   TermEither (Prelude.Right _) -> lambda "x" $ TypedTerm $ TermEither $ Prelude.Right $ Terms.var "x"
-  TermOptional (Just _) -> primitive (Prims.primName DefOptionals.pure)
+  TermOptional (Just _) -> primitive (Prims.primName DefOptionals.given)
   TermInject (Injection tname (Field fname _)) -> lambda "x" $ inject tname fname $ var "x"
   TermWrap (WrappedTerm tname _) -> lambda "x" $ wrap tname $ var "x"
 

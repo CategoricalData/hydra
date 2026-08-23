@@ -8,8 +8,9 @@
 
 The optional type is Hydra's presence/absence type: a value of `optional<t>` is either `given x`,
 carrying a value `x` of type `t`, or `none`, carrying nothing.
-The optional type is a monad, and this module provides the full monad row — `pure`, `map`,
-`apply`, `bind`, and `compose` — together with elimination (`cases`), predicates, and traversal.
+The optional type is a monad, and this module provides the full monad row — `given` (the unit),
+`map`, `apply`, `bind`, and `compose` — together with elimination (`cases`), predicates, and
+traversal.
 The fundamental eliminator is `cases`; every other primitive in this module can be derived
 from it.
 
@@ -83,8 +84,20 @@ Threads the accumulator through the optional monad: folds `f` over `xs` from the
 iterating while each application yields `given`, and returns `none` as soon as any step
 yields `none`.
 If every element is processed, the result is `given` of the final accumulator.
-`foldList f acc xs` is `hydra.lib.lists.foldl (λm y → bind m (λx → f x y)) (pure acc) xs`;
+`foldList f acc xs` is `hydra.lib.lists.foldl (λm y → bind m (λx → f x y)) (given acc) xs`;
 this defining equation is the specification, and the default implementation.
+
+Since: 0.18
+
+#### given — **Draft**
+
+`∀t. t → optional<t>`
+
+Usage: `given x`
+
+Wrap a value in `given`.
+Returns the optional value containing `x`. The constructor for the present case of an
+optional value.
 
 Since: 0.18
 
@@ -162,19 +175,6 @@ deduplicated by the result type's ordering.
 The result is `none` as soon as any application yields `none`.
 
 Since: 0.18
-
-#### pure — **Draft**
-
-`∀t. t → optional<t>`
-
-Usage: `pure x`
-
-Wrap a value in `given`.
-`pure x` is `given x`; this defining equation is the specification, and the default
-implementation.
-This is the unit of the optional monad.
-
-Since: 0.15
 
 #### toList — **Draft**
 

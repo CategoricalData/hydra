@@ -5,12 +5,12 @@
           hydra_overlay_scheme_lib_optionals_givens
           hydra_overlay_scheme_lib_optionals_compose
           hydra_overlay_scheme_lib_optionals_with_default
+          hydra_overlay_scheme_lib_optionals_given
           hydra_overlay_scheme_lib_optionals_is_given
           hydra_overlay_scheme_lib_optionals_is_none
           hydra_overlay_scheme_lib_optionals_map
           hydra_overlay_scheme_lib_optionals_map_optional
           hydra_overlay_scheme_lib_optionals_match
-          hydra_overlay_scheme_lib_optionals_pure
           hydra_overlay_scheme_lib_optionals_to_list
           maybe-nothing?
           maybe-value)
@@ -116,8 +116,8 @@
                 (if (procedure? def) (def) def)
                 (f (maybe-value m)))))))
 
-    ;; pure :: a -> Maybe a
-    (define hydra_overlay_scheme_lib_optionals_pure
+    ;; given :: a -> Maybe a
+    (define hydra_overlay_scheme_lib_optionals_given
       (lambda (x)
         (list 'given x)))
 

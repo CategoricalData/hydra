@@ -96,8 +96,8 @@
         (list :none)
         (g (maybe-value result))))))))
 
-;; pure :: a -> Maybe a
-(def hydra_overlay_clojure_lib_optionals_pure
+;; given :: a -> Maybe a
+(def hydra_overlay_clojure_lib_optionals_given
   (fn [x] (list :given x)))
 
 ;; to_list :: Maybe a -> [a]

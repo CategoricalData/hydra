@@ -7,6 +7,7 @@
           hydra_overlay_scheme_lib_eithers_either
           hydra_overlay_scheme_lib_eithers_is_left
           hydra_overlay_scheme_lib_eithers_is_right
+          hydra_overlay_scheme_lib_eithers_left
           hydra_overlay_scheme_lib_eithers_lefts
           hydra_overlay_scheme_lib_eithers_map
           hydra_overlay_scheme_lib_eithers_map_list
@@ -14,6 +15,7 @@
           hydra_overlay_scheme_lib_eithers_map_set
           hydra_overlay_scheme_lib_eithers_partition
           hydra_overlay_scheme_lib_eithers_fold_list
+          hydra_overlay_scheme_lib_eithers_right
           hydra_overlay_scheme_lib_eithers_rights)
   (begin
 
@@ -57,6 +59,11 @@
     (define hydra_overlay_scheme_lib_eithers_is_right
       (lambda (e)
         (eq? (either-tag e) 'right)))
+
+    ;; left :: a -> Either a b
+    (define hydra_overlay_scheme_lib_eithers_left
+      (lambda (x)
+        (list 'left x)))
 
     ;; lefts :: [Either a b] -> [a]
     (define hydra_overlay_scheme_lib_eithers_lefts
@@ -141,6 +148,11 @@
                     (if (eq? (either-tag result) 'left)
                         result
                         (loop (cdr rest) (either-val result))))))))))
+
+    ;; right :: b -> Either a b
+    (define hydra_overlay_scheme_lib_eithers_right
+      (lambda (x)
+        (list 'right x)))
 
     ;; rights :: [Either a b] -> [b]
     (define hydra_overlay_scheme_lib_eithers_rights

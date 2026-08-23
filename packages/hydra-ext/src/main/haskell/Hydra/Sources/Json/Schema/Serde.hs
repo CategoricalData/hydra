@@ -216,7 +216,7 @@ jsonSchemaDocumentToJsonValue = define "jsonSchemaDocumentToJsonValue" $
     "schemaMap">: fromObject @@ (schemaToExpr @@ var "root"),
     "restMap">: fromObject @@ (toObject @@ list [
       pair keyId (Optionals.map (lambda "i" $ Json.valueString (var "i")) (var "mid")),
-      pair keySchema (Optionals.pure (Json.valueString (string "http://json-schema.org/2020-12/schema"))),
+      pair keySchema (Optionals.given (Json.valueString (string "http://json-schema.org/2020-12/schema"))),
       pair keyDefinitions (Optionals.map
         (lambda "mp" $ Json.valueObject
           (Lists.map

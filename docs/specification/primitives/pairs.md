@@ -7,7 +7,7 @@
 # hydra.lib.pairs
 
 Pairs: the two-component product type.
-This module provides the two projections and the bifunctor map.
+This module provides the two projections, the bifunctor map, and the constructor.
 
 #### bimap — **Draft**
 
@@ -32,6 +32,18 @@ Get the first element of a pair.
 Returns the first component of `p`.
 
 Since: 0.15
+
+#### pair — **Draft**
+
+`∀t1,t2. t1 → t2 → pair<t1, t2>`
+
+Usage: `pair x y`
+
+Construct a pair from two values.
+Returns the pair `(x, y)`.
+The type-free pair constructor, useful point-free (e.g. `zipWith pair xs ys`).
+
+Since: 0.18
 
 #### second — **Draft**
 

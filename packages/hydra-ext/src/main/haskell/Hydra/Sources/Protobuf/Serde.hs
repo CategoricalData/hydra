@@ -192,7 +192,7 @@ fieldOptionsToExpr = define "fieldOptionsToExpr" $
     "opts">: excludeInternalOptions @@ var "opts0"] $
     Logic.ifElse (Lists.isEmpty (var "opts"))
       nothing
-      (Optionals.pure (Serialization.bracketList @@ Serialization.inlineStyle @@
+      (Optionals.given (Serialization.bracketList @@ Serialization.inlineStyle @@
         (Lists.map (asTerm fieldOptionToExpr) (var "opts"))))
 
 fieldToExpr :: TypedTermDefinition (P3.Field -> Expr)
@@ -214,24 +214,24 @@ fieldToExpr = define "fieldToExpr" $
           "kt">: project P3._MapType P3._MapType_keys @@ var "mt",
           "vt">: project P3._MapType P3._MapType_values @@ var "mt"] $
           semi @@ (Serialization.spaceSep @@ (Optionals.givens $ list [
-            Optionals.pure (fieldTypeToExpr @@ var "typ"),
-            Optionals.pure (Serialization.cst @@ (unwrap P3._FieldName @@ var "name")),
-            Optionals.pure (Serialization.cst @@ string "="),
-            Optionals.pure (Serialization.cst @@ (Literals.showInt32 (var "num"))),
+            Optionals.given (fieldTypeToExpr @@ var "typ"),
+            Optionals.given (Serialization.cst @@ (unwrap P3._FieldName @@ var "name")),
+            Optionals.given (Serialization.cst @@ string "="),
+            Optionals.given (Serialization.cst @@ (Literals.showInt32 (var "num"))),
             fieldOptionsToExpr @@ var "options"])),
         P3._FieldType_repeated>>: lambda "st" $
           semi @@ (Serialization.spaceSep @@ (Optionals.givens $ list [
-            Optionals.pure (fieldTypeToExpr @@ var "typ"),
-            Optionals.pure (Serialization.cst @@ (unwrap P3._FieldName @@ var "name")),
-            Optionals.pure (Serialization.cst @@ string "="),
-            Optionals.pure (Serialization.cst @@ (Literals.showInt32 (var "num"))),
+            Optionals.given (fieldTypeToExpr @@ var "typ"),
+            Optionals.given (Serialization.cst @@ (unwrap P3._FieldName @@ var "name")),
+            Optionals.given (Serialization.cst @@ string "="),
+            Optionals.given (Serialization.cst @@ (Literals.showInt32 (var "num"))),
             fieldOptionsToExpr @@ var "options"])),
         P3._FieldType_simple>>: lambda "st" $
           semi @@ (Serialization.spaceSep @@ (Optionals.givens $ list [
-            Optionals.pure (fieldTypeToExpr @@ var "typ"),
-            Optionals.pure (Serialization.cst @@ (unwrap P3._FieldName @@ var "name")),
-            Optionals.pure (Serialization.cst @@ string "="),
-            Optionals.pure (Serialization.cst @@ (Literals.showInt32 (var "num"))),
+            Optionals.given (fieldTypeToExpr @@ var "typ"),
+            Optionals.given (Serialization.cst @@ (unwrap P3._FieldName @@ var "name")),
+            Optionals.given (Serialization.cst @@ string "="),
+            Optionals.given (Serialization.cst @@ (Literals.showInt32 (var "num"))),
             fieldOptionsToExpr @@ var "options"]))])
 
 fieldTypeToExpr :: TypedTermDefinition (P3.FieldType -> Expr)
@@ -274,7 +274,7 @@ fileOptionsToExpr = define "fileOptionsToExpr" $
     "opts">: excludeInternalOptions @@ var "opts0"] $
     Logic.ifElse (Lists.isEmpty (var "opts"))
       nothing
-      (Optionals.pure (Serialization.newlineSep @@ (Lists.map (asTerm fileOptionToExpr) (var "opts"))))
+      (Optionals.given (Serialization.newlineSep @@ (Lists.map (asTerm fileOptionToExpr) (var "opts"))))
 
 importToExpr :: TypedTermDefinition (P3.FileReference -> Expr)
 importToExpr = define "importToExpr" $
@@ -335,21 +335,21 @@ protoFileToExpr = define "protoFileToExpr" $
     "imports">: project P3._ProtoFile P3._ProtoFile_imports @@ var "pf",
     "defs">: project P3._ProtoFile P3._ProtoFile_types @@ var "pf",
     "options">: project P3._ProtoFile P3._ProtoFile_options @@ var "pf",
-    "headerSec">: Optionals.pure (Serialization.newlineSep @@ list [
+    "headerSec">: Optionals.given (Serialization.newlineSep @@ list [
       semi @@ (Serialization.cst @@ string "syntax = \"proto3\""),
       semi @@ (Serialization.spaceSep @@ list [
         Serialization.cst @@ string "package",
         Serialization.cst @@ (unwrap P3._PackageName @@ var "pkg")])]),
     "importsSec">: Logic.ifElse (Lists.isEmpty (var "imports"))
       nothing
-      (Optionals.pure (Serialization.newlineSep @@ (Lists.map (asTerm importToExpr) (var "imports")))),
+      (Optionals.given (Serialization.newlineSep @@ (Lists.map (asTerm importToExpr) (var "imports")))),
     "options1">: Lists.filter
       (lambda "opt" $ Logic.not $ Equality.equal (project P3._Option P3._Option_name @@ var "opt") (string "_description"))
       (var "options"),
     "optionsSec">: fileOptionsToExpr @@ var "options1",
     "defsSec">: Logic.ifElse (Lists.isEmpty (var "defs"))
       nothing
-      (Optionals.pure (Serialization.doubleNewlineSep @@ (Lists.map (asTerm definitionToExpr) (var "defs"))))] $
+      (Optionals.given (Serialization.doubleNewlineSep @@ (Lists.map (asTerm definitionToExpr) (var "defs"))))] $
     optDesc @@ true @@ var "options" @@
       (Serialization.doubleNewlineSep @@ (Optionals.givens $ list [
         var "headerSec", var "importsSec", var "optionsSec", var "defsSec"]))

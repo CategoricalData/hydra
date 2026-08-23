@@ -16,6 +16,13 @@
   (lambda (p)
     (first p)))
 
+;; pair :: a -> b -> Pair a b
+;; Construct a pair from two values.
+(defvar hydra_overlay_common_lisp_lib_pairs_pair
+  (lambda (x)
+    (lambda (y)
+      (list x y))))
+
 ;; second :: Pair a b -> b
 ;; Get the second element of a pair.
 (defvar hydra_overlay_common_lisp_lib_pairs_second

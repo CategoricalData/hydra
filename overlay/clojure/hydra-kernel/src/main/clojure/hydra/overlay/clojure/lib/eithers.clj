@@ -90,6 +90,10 @@
 (def hydra_overlay_clojure_lib_eithers_is_right
   (fn [e] (= (first e) :right)))
 
+;; left :: a -> Either a b
+(def hydra_overlay_clojure_lib_eithers_left
+  (fn [x] (list :left x)))
+
 ;; lefts :: [Either a b] -> [a]
 (def hydra_overlay_clojure_lib_eithers_lefts
   (fn [es] (map second (filter #(= (first %) :left) es))))
@@ -100,6 +104,10 @@
     (let [lefts_  (vec (map second (filter #(= (first %) :left) es)))
           rights_ (vec (map second (filter #(= (first %) :right) es)))]
       (list lefts_ rights_))))
+
+;; right :: b -> Either a b
+(def hydra_overlay_clojure_lib_eithers_right
+  (fn [x] (list :right x)))
 
 ;; rights :: [Either a b] -> [b]
 (def hydra_overlay_clojure_lib_eithers_rights

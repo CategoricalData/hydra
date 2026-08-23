@@ -13,7 +13,7 @@ import qualified Hydra.Dsl.Lib.Sets     as Sets
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, compose, map)
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++), either, foldl, map, pure)
+import           Prelude hiding ((++), either, foldl, map)
 import qualified Data.Set                    as S
 
 
@@ -32,7 +32,7 @@ module_ = Module {
     -- constraint, so this polymorphic def needs a concrete type here to satisfy GHC. `Int` is arbitrary
     -- and carries no meaning — the emitted primitive is type-agnostic and fully polymorphic. See #467.
     definitions = [apply, bimap, bind, compose, either, foldList, isLeft,
-                   isRight, lefts, map, mapList, mapOptional, mapSet, partition, pure,
+                   isRight, left, lefts, map, mapList, mapOptional, mapSet, partition, right,
                    rights]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
@@ -142,6 +142,13 @@ isRight = defineWithDefault "isRight" "Check whether an either is a Right value.
    "Total. Corresponds to Haskell's Data.Either.isRight :: Either a b -> Bool."]
   ("e" ~> Eithers.either ("_" ~> false) ("_" ~> true) (var "e"))
 
+left :: PrimitiveDefinition
+left = define "left" "Construct a left (error/exceptional) either value."
+  (sigWithParams [("x", "the value to wrap as a Left")] $ TypeScheme [Name "x", Name "y"] (tx Types.~> ee tx ty) mempty)
+  ["left(x) is Left x. The dual constructor to right, injecting into the Left (error/exceptional)\
+  \ side of an either.",
+   "Total. Corresponds to Haskell's Left :: a -> Either a b."]
+
 lefts :: PrimitiveDefinition
 lefts = defineWithDefault "lefts" "Extract all Left values from a list of either values."
   (sigWithParams [("xs", "the list of either values to extract Lefts from")] $ TypeScheme [Name "x", Name "y"]
@@ -236,14 +243,12 @@ partition = defineWithDefault "partition" "Partition a list of either values int
       (pair (list ([] :: [TypedTerm a])) (list ([] :: [TypedTerm b])))
       (var "xs"))
 
-pure :: PrimitiveDefinition
-pure = defineWithDefault "pure" "Wrap a value as a right."
+right :: PrimitiveDefinition
+right = define "right" "Construct a right (success/normal) either value."
   (sigWithParams [("x", "the value to wrap as a Right")] $ TypeScheme [Name "x", Name "y"] (ty Types.~> ee tx ty) mempty)
-  ["pure(x) is right(x); this defining equation is the specification, and the default implementation.",
-   "This is the unit of the either monad; it exists so that code written generically over a monad can\
-  \ reach the unit.",
-   "Total. Corresponds to Haskell's pure / Right for Either."]
-  ("x" ~> right (var "x"))
+  ["right(x) is Right x. The dual constructor to left, injecting into the Right (success/normal)\
+  \ side of an either.",
+   "Total. Corresponds to Haskell's Right :: b -> Either a b."]
 
 rights :: PrimitiveDefinition
 rights = defineWithDefault "rights" "Extract all Right values from a list of either values."

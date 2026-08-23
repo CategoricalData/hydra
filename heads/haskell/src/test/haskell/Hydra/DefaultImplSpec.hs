@@ -184,9 +184,9 @@ spec = do
       H.describe "fromOptional" $ do
         H.it "fromOptional 0 (Just 42)" $ checkDefaultMatchesNative (applyPrim DefOptionals.withDefault [int32_ 0, just_ (int32_ 42)])
         H.it "fromOptional 0 Nothing"   $ checkDefaultMatchesNative (applyPrim DefOptionals.withDefault [int32_ 0, nothing_])
-      H.describe "pure" $ do
-        H.it "pure 42"   $ checkDefaultMatchesNative (applyPrim DefOptionals.pure [int32_ 42])
-        H.it "pure true" $ checkDefaultMatchesNative (applyPrim DefOptionals.pure [bool_ True])
+      H.describe "given" $ do
+        H.it "given 42"   $ checkDefaultMatchesNative (applyPrim DefOptionals.given [int32_ 42])
+        H.it "given true" $ checkDefaultMatchesNative (applyPrim DefOptionals.given [bool_ True])
       H.describe "toList" $ do
         H.it "toList (Just 3)" $ checkDefaultMatchesNative (applyPrim DefOptionals.toList [just_ (int32_ 3)])
         H.it "toList Nothing"  $ checkDefaultMatchesNative (applyPrim DefOptionals.toList [nothing_])

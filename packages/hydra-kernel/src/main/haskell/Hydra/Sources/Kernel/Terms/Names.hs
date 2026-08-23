@@ -200,7 +200,7 @@ freshNames = define "freshNames" $
     "result" <~ freshName @@ var "cx0" $
     "name" <~ Pairs.first (var "result") $
     "cx1" <~ Pairs.second (var "result") $
-    pair (Lists.concat2 (var "names") (Lists.pure (var "name"))) (var "cx1")) $
+    pair (Lists.concat2 (var "names") (Lists.singleton (var "name"))) (var "cx1")) $
   Lists.foldl (var "go") (pair (list ([] :: [TypedTerm Name])) (var "cx")) (Lists.replicate (var "n") unit)
 
 localNameOf :: TypedTermDefinition (Name -> String)

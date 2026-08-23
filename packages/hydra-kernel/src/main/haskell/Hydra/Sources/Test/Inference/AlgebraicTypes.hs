@@ -213,7 +213,7 @@ testGroupForFolds = define "testGroupForFolds" $
         (primitive DefOptionals.match @@ optional nothing @@ (int32 42) @@ (primitive DefMath.negate))
         T.int32,
       expectPoly 4 [tag_disabledForMinimalInference]
-        (lambda "x" $ primitive DefOptionals.match @@ (var "x") @@ (var "x") @@ (primitive DefOptionals.pure))
+        (lambda "x" $ primitive DefOptionals.match @@ (var "x") @@ (var "x") @@ (primitive DefOptionals.given))
         ["t0"] (T.function (T.optional $ T.var "t0") (T.optional $ T.var "t0")),
       expectPoly 5 [tag_disabledForMinimalInference]
         (lambda "m" $ primitive DefOptionals.match @@ (var "m") @@ (list []) @@ (lambda "x" $ list [var "x"]))

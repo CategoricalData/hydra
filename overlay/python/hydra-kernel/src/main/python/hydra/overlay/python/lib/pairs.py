@@ -20,6 +20,11 @@ def first(pair: tuple[A, B]) -> A:
     return pair[0]
 
 
+def pair(x: A, y: B) -> tuple[A, B]:
+    """Construct a pair from two values."""
+    return (x, y)
+
+
 def second(pair: tuple[A, B]) -> B:
     """Get the second element of a pair."""
     return pair[1]

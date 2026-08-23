@@ -12,7 +12,7 @@ import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), concat, drop, dropWhile, elem, filter, foldl, foldr,
-                               head, init, last, length, map, pure, replicate, reverse,
+                               head, init, last, length, map, replicate, reverse,
                                span, tail, take, takeWhile, zip, zipWith)
 
 
@@ -29,7 +29,7 @@ module_ = Module {
     definitions = [apply, at, bind, compose, concat, concat2, cons, distinct, drop, dropWhile,
                    filter, find, foldList, foldl, foldr, group, head, init, intersperse,
                    isEmpty, join, last, length, map, mapList, mapOptional, mapSet, member, partition,
-                   pure, replicate, reverse, singleton, sort, sortBy, span, tail, take, takeWhile,
+                   replicate, reverse, singleton, sort, sortBy, span, tail, take, takeWhile,
                    transpose, uncons, zip, zipWith]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
@@ -162,8 +162,8 @@ foldList = define "foldList" "Left-fold a list in the list monad (a nondetermini
   ["foldList(f, acc0, xs) folds xs from the left, branching the accumulator over every result of the\
   \ step function at each element: after each element the set of accumulators is replaced by all\
   \ results of applying f to each current accumulator and that element.",
-   "foldList(f, acc0, xs) is foldl(\\macc el -> bind(macc, \\acc -> f(acc, el)), pure(acc0), xs); this\
-  \ defining equation is the specification. For the empty list the result is pure(acc0).",
+   "foldList(f, acc0, xs) is foldl(\\macc el -> bind(macc, \\acc -> f(acc, el)), singleton(acc0), xs);\
+  \ this defining equation is the specification. For the empty list the result is singleton(acc0).",
    "Total on finite inputs. The list-monad instance of the monadic left fold."]
 
 foldl :: PrimitiveDefinition
@@ -256,7 +256,7 @@ mapList = define "mapList" "Traverse a list in the list monad."
   \ corresponding f(x).",
    "Results appear in the lexicographic order of the choices, with the choice for the first element\
   \ varying slowest. The number of results is the product of the lengths of the lists f(x); if f(x) is\
-  \ empty for any element, the result is the empty list; mapList(f, []) is pure([]).",
+  \ empty for any element, the result is the empty list; mapList(f, []) is singleton([]).",
    "Total on finite inputs. The list-monad instance of the traversal family."]
 
 mapOptional :: PrimitiveDefinition
@@ -303,12 +303,6 @@ partition = defineWithDefault "partition" "Partition a list into elements that s
       (pair (list ([] :: [TypedTerm a])) (list ([] :: [TypedTerm a])))
       (var "xs"))
 
-pure :: PrimitiveDefinition
-pure = define "pure" "Wrap a value in a single-element list."
-  (sigWithParams [("x", "the value to wrap")] $ TypeScheme [Name "x"] (tx Types.~> l tx) mempty)
-  ["pure(x) = [x]. The applicative pure for lists.",
-   "Total. Corresponds to Haskell's pure :: a -> [a]."]
-
 replicate :: PrimitiveDefinition
 replicate = define "replicate" "Build a list of n copies of a value."
   (sigWithParams [("n", "the number of copies"), ("x", "the value to replicate")] $ TypeScheme [Name "x"] (Types.int32 Types.~> tx Types.~> l tx) mempty)
@@ -322,9 +316,10 @@ reverse = define "reverse" "Reverse a list."
    "Total. Corresponds to Haskell's reverse :: [a] -> [a]."]
 
 singleton :: PrimitiveDefinition
-singleton = deprecatedSince "0.18" "hydra.lib.lists.pure" $ define "singleton" "Construct a single-element list."
+singleton = define "singleton" "Construct a single-element list."
   (sigWithParams [("x", "the value to wrap in a single-element list")] $ TypeScheme [Name "x"] (tx Types.~> l tx) mempty)
-  ["singleton(x) = [x]. Identical to pure for lists.",
+  ["singleton(x) = [x].",
+   "The constructor for a single-element list; useful point-free (e.g. map singleton xs).",
    "Total. Corresponds to Haskell's singleton :: a -> [a]."]
 
 sort :: PrimitiveDefinition

@@ -168,7 +168,7 @@ adaptDataGraph = define "adaptDataGraph" $
   -- let with all bindings, which causes bytecode stack overflow in EL.
   "adaptBinding" <~ ("el" ~>
     "transformed" <~ var "transformBinding" @@ var "graph0" @@ var "el" $
-    "wrapped" <~ Core.termLet (Core.let_ (Lists.pure (var "transformed")) Core.termUnit) $
+    "wrapped" <~ Core.termLet (Core.let_ (Lists.singleton (var "transformed")) Core.termUnit) $
     "adapted" <<~ adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "graph0" @@ var "wrapped" $
     Rewriting.rewriteTermM @@ (adaptLambdaDomains @@ var "constraints" @@ var "litmap") @@ var "adapted") $
   "adaptedTerms" <<~ Eithers.mapList (var "adaptBinding") (var "els0") $

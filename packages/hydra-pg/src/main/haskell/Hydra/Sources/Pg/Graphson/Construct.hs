@@ -154,7 +154,7 @@ aggregateMap = define "aggregateMap" $
         "v" <~ (Pairs.second $ var "p") $
         "existing" <~ ((Maps.lookup (var "k") ((var "m") :: TypedTerm (M.Map k [v]))) :: TypedTerm (Y.Maybe [v])) $
         ((Maps.insert (var "k")
-          (Optionals.match (var "existing") (Lists.pure $ var "v") ("vs" ~> Lists.cons (var "v") (var "vs")))
+          (Optionals.match (var "existing") (Lists.singleton $ var "v") ("vs" ~> Lists.cons (var "v") (var "vs")))
           ((var "m") :: TypedTerm (M.Map k [v]))) :: TypedTerm (M.Map k [v])))
       (Maps.empty :: TypedTerm (M.Map k [v]))
       (var "pairs")

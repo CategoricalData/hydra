@@ -356,7 +356,7 @@ decodeAliases = define "decodeAliases" $
       (lambda "mArr" $
         Optionals.match (var "mArr") (Phantoms.right nothing) (lambda "arr" $
             Eithers.map
-              (lambda "strs" $ Optionals.pure (var "strs"))
+              (lambda "strs" $ Optionals.given (var "strs"))
               (Eithers.mapList (expectStringE @@ var "cx") (var "arr"))))
 
 decodeArraySchema :: TypedTermDefinition (InferenceContext -> M.Map String JM.Value -> Result Avro.Schema)
@@ -724,7 +724,7 @@ getAnnotations = define "getAnnotations" $
         "v">: Pairs.second (var "entry")] $
         Logic.ifElse
           (Equality.equal (Optionals.withDefault (int32 0) (Strings.charAt (int32 0) (var "k"))) (int32 64))  -- 64 = '@'
-          (Optionals.pure (pair (Strings.fromList (Lists.drop (int32 1) (Strings.toList (var "k")))) (var "v")))
+          (Optionals.given (pair (Strings.fromList (Lists.drop (int32 1) (Strings.toList (var "k")))) (var "v")))
           nothing)
       (Maps.toList (var "m" :: TypedTerm (M.Map String JM.Value))))) :: TypedTerm (M.Map String JM.Value))
 
@@ -741,7 +741,7 @@ optArrayE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.
 optArrayE = define "optArrayE" $
   doc "Look up an optional array attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
-    Optionals.match (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (Phantoms.right nothing) (lambda "v" $ Eithers.map (lambda "a" $ Optionals.pure (var "a")) (expectArrayE @@ var "cx" @@ var "v"))
+    Optionals.match (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (Phantoms.right nothing) (lambda "v" $ Eithers.map (lambda "a" $ Optionals.given (var "a")) (expectArrayE @@ var "cx" @@ var "v"))
 
 optE :: TypedTermDefinition (String -> M.Map String JM.Value -> Maybe JM.Value)
 optE = define "optE" $
@@ -753,7 +753,7 @@ optStringE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM
 optStringE = define "optStringE" $
   doc "Look up an optional string attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
-    Optionals.match (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (Phantoms.right nothing) (lambda "v" $ Eithers.map (lambda "s" $ Optionals.pure (var "s")) (expectStringE @@ var "cx" @@ var "v"))
+    Optionals.match (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (Phantoms.right nothing) (lambda "v" $ Eithers.map (lambda "s" $ Optionals.given (var "s")) (expectStringE @@ var "cx" @@ var "v"))
 
 requireArrayE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM.Value -> Result [JM.Value])
 requireArrayE = define "requireArrayE" $

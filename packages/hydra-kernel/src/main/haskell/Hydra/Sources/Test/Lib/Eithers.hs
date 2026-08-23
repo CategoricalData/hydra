@@ -112,7 +112,9 @@ allTests = definitionInModule module_ "allTests" $
       eithersIsRight,
       eithersEither,
       eithersFoldList,
+      eithersLeft,
       eithersLefts,
+      eithersRight,
       eithersRights,
       eithersPartition,
       eithersMap,
@@ -190,6 +192,14 @@ eithersIsRight = subgroup "isRight" [
       (Eithers.isRight x)
       (Phantoms.boolean result)
 
+eithersLeft :: TypedTerm TestGroup
+eithersLeft = subgroup "left" [
+  test "wrap a value as left" 5 (leftInt 5)]
+  where
+    test name x expected = evalPair name showEitherIntInt
+      (Eithers.left (Phantoms.int32 x))
+      expected
+
 eithersLefts :: TypedTerm TestGroup
 eithersLefts = subgroup "lefts" [
   test "filter left values" [leftInt 1, rightStr "a", leftInt 2, rightStr "b"] [1, 2],
@@ -265,6 +275,14 @@ eithersPartition = subgroup "partition" [
     test name input (lefts, rights) = evalPair name showPairIntListStringList
       (Eithers.partition (Phantoms.list input))
       (Phantoms.pair (Phantoms.list (Phantoms.int32 <$> lefts)) (Phantoms.list (Phantoms.string <$> rights)))
+
+eithersRight :: TypedTerm TestGroup
+eithersRight = subgroup "right" [
+  test "wrap a value as right" 5 (rightInt 5)]
+  where
+    test name x expected = evalPair name showEitherIntInt
+      (Eithers.right (Phantoms.int32 x))
+      expected
 
 eithersRights :: TypedTerm TestGroup
 eithersRights = subgroup "rights" [

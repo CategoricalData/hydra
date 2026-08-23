@@ -439,7 +439,7 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
       "tResult" <<~ typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ var "term" $
       "t" <~ Pairs.first (var "tResult") $
       "cxB" <~ Pairs.second (var "tResult") $
-      right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "t")) (var "cxB"))
+      right $ pair (Lists.concat2 (var "types") (Lists.singleton $ var "t")) (var "cxB"))
     (right $ pair (list ([] :: [TypedTerm Type])) (var "cx2"))
     (var "cterms") $
   "foldR" <<~ var "foldResult" $
@@ -451,12 +451,12 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
       "accR" <<~ var "acc" $
       "cods" <~ Pairs.first (var "accR") $
       "ft" <<~ ExtractCore.functionType @@ var "t" $
-      right $ pair (Lists.concat2 (var "cods") (Lists.pure $ Core.functionTypeCodomain $ var "ft")) (var "cx3"))
+      right $ pair (Lists.concat2 (var "cods") (Lists.singleton $ Core.functionTypeCodomain $ var "ft")) (var "cx3"))
     (right $ pair (list ([] :: [TypedTerm Type])) (var "cx3"))
     (var "tcterms") $
   "fcodsR" <<~ var "fcodsResult" $
   "fcods" <~ Pairs.first (var "fcodsR") $
-  "cods" <~ Optionals.givens (Lists.cons (var "tdflt") $ Lists.map (reify Optionals.pure) (var "fcods")) $
+  "cods" <~ Optionals.givens (Lists.cons (var "tdflt") $ Lists.map (reify Optionals.given) (var "fcods")) $
   "cod" <<~ checkSameType @@ var "cx3" @@ var "tx" @@ (string "case branches") @@ var "cods" $
   right $ pair (Core.typeFunction $ Core.functionType
     (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs")
@@ -539,7 +539,7 @@ typeOfLet = define "typeOfLet" $
       "accR" <<~ var "acc" $
       "types" <~ Pairs.first (var "accR") $
       "btype" <<~ var "bindingType" @@ var "b" $
-      right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "btype")) unit)
+      right $ pair (Lists.concat2 (var "types") (Lists.singleton $ var "btype")) unit)
     (right $ pair (list ([] :: [TypedTerm Type])) unit)
     (var "bs") $
   "btypesR" <<~ var "btypesResult" $
@@ -573,7 +573,7 @@ typeOfList = define "typeOfList" $
         "tResult" <<~ typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ var "term" $
         "t" <~ Pairs.first (var "tResult") $
         "cxB" <~ Pairs.second (var "tResult") $
-        right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "t")) (var "cxB"))
+        right $ pair (Lists.concat2 (var "types") (Lists.singleton $ var "t")) (var "cxB"))
       (right $ pair (list ([] :: [TypedTerm Type])) (var "cx"))
       (var "els") $
     "foldR" <<~ var "foldResult" $
@@ -614,7 +614,7 @@ typeOfMap = define "typeOfMap" $
         "tResult" <<~ typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ (Pairs.first $ var "p") $
         "t" <~ Pairs.first (var "tResult") $
         "cxB" <~ Pairs.second (var "tResult") $
-        right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "t")) (var "cxB"))
+        right $ pair (Lists.concat2 (var "types") (Lists.singleton $ var "t")) (var "cxB"))
       (right $ pair (list ([] :: [TypedTerm Type])) (var "cx"))
       (var "pairs") $
     "keyFoldR" <<~ var "keyFoldResult" $
@@ -630,7 +630,7 @@ typeOfMap = define "typeOfMap" $
         "tResult" <<~ typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ (Pairs.second $ var "p") $
         "t" <~ Pairs.first (var "tResult") $
         "cxB" <~ Pairs.second (var "tResult") $
-        right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "t")) (var "cxB"))
+        right $ pair (Lists.concat2 (var "types") (Lists.singleton $ var "t")) (var "cxB"))
       (right $ pair (list ([] :: [TypedTerm Type])) (var "cx2"))
       (var "pairs") $
     "valFoldR" <<~ var "valFoldResult" $
@@ -727,7 +727,7 @@ typeOfRecord = define "typeOfRecord" $
       "tResult" <<~ typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ var "term" $
       "t" <~ Pairs.first (var "tResult") $
       "cxB" <~ Pairs.second (var "tResult") $
-      right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "t")) (var "cxB"))
+      right $ pair (Lists.concat2 (var "types") (Lists.singleton $ var "t")) (var "cxB"))
     (right $ pair (list ([] :: [TypedTerm Type])) (var "cx"))
     (Lists.map (reify Core.fieldTerm) (var "fields")) $
   "foldR" <<~ var "foldResult" $
@@ -752,7 +752,7 @@ typeOfSet = define "typeOfSet" $
         "tResult" <<~ typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ var "term" $
         "t" <~ Pairs.first (var "tResult") $
         "cxB" <~ Pairs.second (var "tResult") $
-        right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "t")) (var "cxB"))
+        right $ pair (Lists.concat2 (var "types") (Lists.singleton $ var "t")) (var "cxB"))
       (right $ pair (list ([] :: [TypedTerm Type])) (var "cx"))
       (Sets.toList (var "els" :: TypedTerm (S.Set Term))) $
     "foldR" <<~ var "foldResult" $

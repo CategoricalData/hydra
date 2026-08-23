@@ -9,11 +9,11 @@
 The either type is Hydra's error/alternative type: a value of `either<t1, t2>` is either
 `left x`, conventionally carrying an error or alternative of type `t1`, or `right y`, carrying
 a success value of type `t2`.
-The either type is a right-biased monad: `pure`, `map`, `apply`, and `bind` operate on the
-`right` side, and the `left` type is held fixed through a computation, so a chain of steps
-shares a common error type.
-This module provides the full monad row — `pure`, `map`, `apply`, `bind`, and `compose` —
-together with elimination (`cases`), predicates, and traversal.
+The either type is a right-biased monad: `right` (the unit), `map`, `apply`, and `bind` operate
+on the `right` side, and the `left` type is held fixed through a computation, so a chain of
+steps shares a common error type.
+This module provides the full monad row — `right`, `map`, `apply`, `bind`, and `compose` —
+together with the dual constructor `left`, elimination (`cases`), predicates, and traversal.
 The fundamental eliminator is `cases`; every other primitive in this module can be derived
 from it.
 
@@ -99,7 +99,7 @@ application may fail with a `left`: iterates while `f` returns `right`, propagat
 `left` without processing further elements, and returns `right` of the final accumulator if
 every element was processed.
 Equivalent to chaining `bind` over the list.
-`foldList f acc xs` is `hydra.lib.lists.foldl (λe y → bind e (λx → f x y)) (pure acc) xs`;
+`foldList f acc xs` is `hydra.lib.lists.foldl (λe y → bind e (λx → f x y)) (right acc) xs`;
 this defining equation is the specification, and the default implementation.
 
 Since: 0.18 (renamed from `hydra.lib.eithers.foldl`)
@@ -125,6 +125,18 @@ Test whether an either value is a `right`.
 Returns `true` if `e` is a `right` variant, and `false` if it is a `left`.
 
 Since: 0.15
+
+#### left — **Draft**
+
+`∀t1,t2. t1 → either<t1, t2>`
+
+Usage: `left x`
+
+Construct a `left` (error/exceptional) either value.
+`left x` is `Left x`. The dual constructor to `right`, injecting into the Left
+(error/exceptional) side of an either.
+
+Since: 0.18
 
 #### lefts — **Draft**
 
@@ -207,17 +219,15 @@ order.
 
 Since: 0.18 (renamed from `hydra.lib.eithers.partitionEithers`)
 
-#### pure — **Draft**
+#### right — **Draft**
 
 `∀t1,t2. t2 → either<t1, t2>`
 
-Usage: `pure x`
+Usage: `right x`
 
-Wrap a value as a `right`.
-`pure x` is `right x`; this defining equation is the specification, and the default
-implementation.
-This is the unit of the either monad; it exists so that code written generically over a monad
-can reach the unit.
+Construct a `right` (success/normal) either value.
+`right x` is `Right x`. The dual constructor to `left`, injecting into the Right
+(success/normal) side of an either.
 
 Since: 0.18
 

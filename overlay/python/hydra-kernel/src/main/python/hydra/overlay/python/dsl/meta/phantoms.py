@@ -618,7 +618,7 @@ def unary_function(f) -> TypedTerm[A]:
         case terms.TermApplication(terms.Application(lhs, _)):
             return TypedTerm[A](lhs)
         case terms.TermOptional(Given(_)):
-            return TypedTerm[A](terms.primitive(Name("hydra.lib.optionals.pure")))
+            return TypedTerm[A](terms.primitive(Name("hydra.lib.optionals.given")))
         case terms.TermInject(terms.Injection(tname, Field(fname, _))):
             return lam("x", inject(tname, fname, var("x")))
         case terms.TermWrap(terms.WrappedTerm(tname, _)):

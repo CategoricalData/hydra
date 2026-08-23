@@ -210,7 +210,7 @@ nodeIdToExpr = define "nodeIdToExpr" $
     "i">: project Dot._NodeId Dot._NodeId_id @@ var "nid",
     "mp">: project Dot._NodeId Dot._NodeId_port @@ var "nid"] $
     Serialization.noSep @@ (Optionals.givens $ list [
-      Optionals.pure (idToExpr @@ var "i"),
+      Optionals.given (idToExpr @@ var "i"),
       Optionals.map (asTerm portToExpr) (var "mp")])
 
 nodeOrSubgraphToExpr :: TypedTermDefinition (Bool -> Dot.NodeOrSubgraph -> Expr)
@@ -228,7 +228,7 @@ nodeStmtToExpr = define "nodeStmtToExpr" $
     "i">: project Dot._NodeStmt Dot._NodeStmt_id @@ var "ns",
     "attr">: project Dot._NodeStmt Dot._NodeStmt_attributes @@ var "ns"] $
     Serialization.spaceSep @@ (Optionals.givens $ list [
-      Optionals.pure (nodeIdToExpr @@ var "i"),
+      Optionals.given (nodeIdToExpr @@ var "i"),
       Optionals.map (asTerm attrListToExpr) (var "attr")])
 
 portToExpr :: TypedTermDefinition (Dot.Port -> Expr)
@@ -257,7 +257,7 @@ subgraphIdToExpr = define "subgraphIdToExpr" $
   doc "Convert a subgraph identifier to an expression" $
   lambda "sid" $
     Serialization.spaceSep @@ (Optionals.givens $ list [
-      Optionals.pure (Serialization.cst @@ string "subgraph"),
+      Optionals.given (Serialization.cst @@ string "subgraph"),
       Optionals.map (asTerm idToExpr) (unwrap Dot._SubgraphId @@ var "sid")])
 
 subgraphToExpr :: TypedTermDefinition (Bool -> Dot.Subgraph -> Expr)
@@ -270,4 +270,4 @@ subgraphToExpr = define "subgraphToExpr" $
       (Serialization.spaceSep @@ (Lists.map (stmtToExpr @@ var "directed") (var "stmts")))] $
     Serialization.spaceSep @@ (Optionals.givens $ list [
       Optionals.map (asTerm subgraphIdToExpr) (var "mid"),
-      Optionals.pure (var "body")])
+      Optionals.given (var "body")])

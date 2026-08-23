@@ -140,8 +140,8 @@ object Serde:
   private def listMaybeHead(xs: TypedTerm[Any]): TypedTerm[Any] =
     applyP("hydra.lib.lists.head", xs)
 
-  private def optPure(x: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.lib.optionals.pure", x)
+  private def optGiven(x: TypedTerm[Any]): TypedTerm[Any] =
+    applyP("hydra.lib.optionals.given", x)
 
   private def optCat(xs: TypedTerm[Any]): TypedTerm[Any] =
     applyP("hydra.lib.optionals.givens", xs)
@@ -214,7 +214,7 @@ object Serde:
       field("name", ScalaSyntax.paramDataName(v("dp"))),
       field("stype", ScalaSyntax.paramDataDecltpe(v("dp")))),
       noSep(optCat(list(
-        optPure(nameToExprCall(v("name"))),
+        optGiven(nameToExprCall(v("name"))),
         optMap(
           lambda("t", spaceSep(list(cstS(":"), typeToExprCall(v("t"))))),
           v("stype")))))))
@@ -278,7 +278,7 @@ object Serde:
       field("body", ScalaSyntax.defDefnBody(v("dd"))),
       field("tparamsExpr",
         ifElse(listNull(v("tparams")), nothing,
-          optPure(bracketList(inlineStyle, map(v(local("typeParamToExpr")), v("tparams")))))),
+          optGiven(bracketList(inlineStyle, map(v(local("typeParamToExpr")), v("tparams")))))),
       field("scodExpr",
         optMap(
           lambda("t", spaceSep(list(cstS(":"), typeToExprCall(v("t"))))),
@@ -289,9 +289,9 @@ object Serde:
           v("paramss"))),
       field("nameAndParams",
         noSep(optCat(listConcat(list(
-          list(optPure(dataNameToExprCall(v("name")))),
+          list(optGiven(dataNameToExprCall(v("name")))),
           list(v("tparamsExpr")),
-          map(lambda("pe", optPure(v("pe"))), v("paramssExprs")),
+          map(lambda("pe", optGiven(v("pe"))), v("paramssExprs")),
           list(v("scodExpr")))))))),
       defDefnArmOuterBody))
 
@@ -302,12 +302,12 @@ object Serde:
       field("tparams", ScalaSyntax.typeDefnTparams(v("dt"))),
       field("body", ScalaSyntax.typeDefnBody(v("dt")))),
       spaceSep(optCat(list(
-        optPure(cstS("type")),
-        optPure(typeNameToExprCall(v("name"))),
+        optGiven(cstS("type")),
+        optGiven(typeNameToExprCall(v("name"))),
         ifElse(listNull(v("tparams")), nothing,
-          optPure(bracketList(inlineStyle, map(v(local("typeParamToExpr")), v("tparams"))))),
-        optPure(cstS("=")),
-        optPure(typeToExprCall(v("body"))))))))
+          optGiven(bracketList(inlineStyle, map(v(local("typeParamToExpr")), v("tparams"))))),
+        optGiven(cstS("=")),
+        optGiven(typeToExprCall(v("body"))))))))
 
   // val arm
   private val valDefnNameStr =
@@ -352,13 +352,13 @@ object Serde:
       field("paramss", ScalaSyntax.primaryCtorParamss(v("ctor"))),
       field("tparamsExpr",
         ifElse(listNull(v("tparams")), nothing,
-          optPure(bracketList(inlineStyle, map(v(local("typeParamToExpr")), v("tparams")))))),
+          optGiven(bracketList(inlineStyle, map(v(local("typeParamToExpr")), v("tparams")))))),
       field("paramsExpr",
         ifElse(listNull(v("paramss")), nothing,
-          optPure(parenList(map(v(local("dataParamToExpr")), listConcat(v("paramss"))))))),
+          optGiven(parenList(map(v(local("dataParamToExpr")), listConcat(v("paramss"))))))),
       field("nameAndParams",
         noSep(optCat(list(
-          optPure(typeNameToExprCall(v("name"))),
+          optGiven(typeNameToExprCall(v("name"))),
           v("tparamsExpr"),
           v("paramsExpr")))))),
       spaceSep(listConcat(list(
@@ -376,9 +376,9 @@ object Serde:
         spaceSep(list(
           cstS("enum"),
           noSep(optCat(list(
-            optPure(typeNameToExprCall(v("name"))),
+            optGiven(typeNameToExprCall(v("name"))),
             ifElse(listNull(v("tparams")), nothing,
-              optPure(bracketList(inlineStyle, map(v(local("typeParamToExpr")), v("tparams")))))))),
+              optGiven(bracketList(inlineStyle, map(v(local("typeParamToExpr")), v("tparams")))))))),
           cstS(":")))),
       field("enumCases",
         map(

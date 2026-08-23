@@ -2222,7 +2222,7 @@ tsEscapeString = def "tsEscapeString" $
       Logic.ifElse (Equality.equal (var "c") (int32 9))     (string "\\t")   $
       Logic.ifElse (Equality.equal (var "c") (int32 8))     (string "\\b")   $
       Logic.ifElse (Equality.equal (var "c") (int32 12))    (string "\\f")   $
-        Strings.fromList $ Lists.pure (var "c")) $
+        Strings.fromList $ Lists.singleton (var "c")) $
     Strings.concat $ list [
       string "\"",
       Strings.concat $ Lists.map (var "escapeChar") (Strings.toList (var "s")),

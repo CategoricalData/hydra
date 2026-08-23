@@ -599,7 +599,7 @@ optStringE :: TypedTermDefinition (InferenceContext -> String -> M.Map String JM
 optStringE = define "optStringE" $
   doc "Look up an optional string attribute in a JSON object map" $
   lambda "cx" $ lambda "fname" $ lambda "m" $
-    Optionals.match (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (right nothing) (lambda "v" $ Eithers.map (lambda "s" $ Optionals.pure (var "s")) (expectStringE @@ var "cx" @@ var "v"))
+    Optionals.match (Maps.lookup (var "fname") (var "m" :: TypedTerm (M.Map String JM.Value))) (right nothing) (lambda "v" $ Eithers.map (lambda "s" $ Optionals.given (var "s")) (expectStringE @@ var "cx" @@ var "v"))
 
 
 -- | Constants

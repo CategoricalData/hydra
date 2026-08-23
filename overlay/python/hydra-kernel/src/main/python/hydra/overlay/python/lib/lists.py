@@ -219,11 +219,6 @@ def partition(
     return (ConsList.from_iterable(yes), ConsList.from_iterable(no))
 
 
-def pure(value: A) -> Sequence[A]:
-    """Create a list with a single element."""
-    return ConsList.singleton(value)
-
-
 def replicate(n: int, value: A) -> Sequence[A]:
     """Create a list with n copies of a value."""
     return ConsList.from_iterable(value for _ in range(n))

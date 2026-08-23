@@ -117,7 +117,7 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
 
     -- Helper: conditional inclusion
     "cond">: lambda "v" $ lambda "b" $
-      Logic.ifElse (var "b") (Optionals.pure (var "v")) nothing,
+      Logic.ifElse (var "b") (Optionals.given (var "v")) nothing,
 
     -- Whether lists are supported (any array type is supported)
     "supportsLists">:
@@ -169,14 +169,14 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
       var "cond" @@ Variants.termVariantLiteral @@ var "supportsLiterals",
       var "cond" @@ Variants.termVariantMap @@ var "supportsMaps",
       -- An optional value translates to an absent vertex property
-      Optionals.pure Variants.termVariantOptional]),
+      Optionals.given Variants.termVariantOptional]),
 
     "typeVariants">: Sets.fromList (Optionals.givens $ list [
       var "cond" @@ Variants.typeVariantList @@ var "supportsLists",
       var "cond" @@ Variants.typeVariantLiteral @@ var "supportsLiterals",
       var "cond" @@ Variants.typeVariantMap @@ var "supportsMaps",
-      Optionals.pure Variants.typeVariantOptional,
-      Optionals.pure Variants.typeVariantWrap]),
+      Optionals.given Variants.typeVariantOptional,
+      Optionals.given Variants.typeVariantWrap]),
 
     "typePredicate">: "typ" ~> lets [
       "dt">: Strip.deannotateType @@ var "typ"] $

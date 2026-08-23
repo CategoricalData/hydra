@@ -102,6 +102,11 @@ const tOptionalNone: Term =
 const tOptional = <T>(m: { tag: "given"; value: T } | { tag: "none" }, lift: (t: T) => Term): Term =>
   m.tag === "given" ? tOptionalGiven(lift(m.value)) : tOptionalNone;
 
+const tEitherLeft = (v: Term): Term =>
+  ({ tag: "either", value: { tag: "left", value: v } } as never);
+const tEitherRight = (v: Term): Term =>
+  ({ tag: "either", value: { tag: "right", value: v } } as never);
+
 // === Type construction helpers ===
 
 const tyVar = (n: string): Type => ({ tag: "variable", value: { value: n } as never } as never);
@@ -1242,9 +1247,6 @@ const listsPrimitives = (): readonly Primitive[] => {
         bind(need(args, 0, "cons"), (x) =>
           bind(need(args, 1, "cons"), (a1) =>
             bind(asList(a1), (xs) => right(mkList([x, ...xs])))))),
-    prim("hydra.lib.lists.pure", scheme(tyFn(tyVar("a"), tyList(tyVar("a"))), ["a"]),
-      (_g, args) =>
-        bind(need(args, 0, "pure"), (x) => right(mkList([x])))),
     prim("hydra.lib.lists.singleton", scheme(tyFn(tyVar("a"), tyList(tyVar("a"))), ["a"]),
       (_g, args) =>
         bind(need(args, 0, "singleton"), (x) => right(mkList([x])))),
@@ -2126,9 +2128,9 @@ const optionalsPrimitives = (): readonly Primitive[] => {
             const app: Term = { tag: "application", value: { function_: fn, argument: mv.value } } as never;
             return (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
           }))),
-    prim("hydra.lib.optionals.pure", scheme(tyFn(tyVar("a"), tyOptional(tyVar("a"))), ["a"]),
+    prim("hydra.lib.optionals.given", scheme(tyFn(tyVar("a"), tyOptional(tyVar("a"))), ["a"]),
       (_g, args) =>
-        bind(need(args, 0, "pure"), (x) => right(tOptionalGiven(x)))),
+        bind(need(args, 0, "given"), (x) => right(tOptionalGiven(x)))),
     prim("hydra.lib.optionals.givens", scheme(tyFn(tyList(tyOptional(tyVar("a"))), tyList(tyVar("a"))), ["a"]),
       (_g, args) =>
         bind(need(args, 0, "cat"), (xs) => {
@@ -2329,6 +2331,9 @@ const eithersPrimitives = (): readonly Primitive[] => {
           if (!ev) return left({ tag: "other", value: "expected an either" } as never);
           return right(tBool(ev.tag === "right"));
         })),
+    prim("hydra.lib.eithers.left", scheme(tyFn(tyVar("a"), tyEither(tyVar("a"), tyVar("b"))), ["a", "b"]),
+      (_g, args) =>
+        bind(need(args, 0, "left"), (x) => right(tEitherLeft(x)))),
     prim("hydra.lib.eithers.lefts", scheme(tyFn(tyList(tyEither(tyVar("a"), tyVar("b"))), tyList(tyVar("a"))), ["a", "b"]),
       (_g, args) =>
         bind(need(args, 0, "lefts"), (xs) => {
@@ -2341,6 +2346,9 @@ const eithersPrimitives = (): readonly Primitive[] => {
           }
           return right({ tag: "list", value: out } as never);
         })),
+    prim("hydra.lib.eithers.right", scheme(tyFn(tyVar("b"), tyEither(tyVar("a"), tyVar("b"))), ["a", "b"]),
+      (_g, args) =>
+        bind(need(args, 0, "right"), (x) => right(tEitherRight(x)))),
     prim("hydra.lib.eithers.rights", scheme(tyFn(tyList(tyEither(tyVar("a"), tyVar("b"))), tyList(tyVar("b"))), ["a", "b"]),
       (_g, args) =>
         bind(need(args, 0, "rights"), (xs) => {
@@ -2443,6 +2451,11 @@ function pairsPrimitivesList(): readonly Primitive[] {
           if (p.tag !== "pair" || !p.value) return left({ tag: "other", value: "first: expected pair" } as never);
           return right(p.value[0]);
         })),
+    prim("hydra.lib.pairs.pair", scheme(tyFnCurried(tyVar("a"), tyVar("b"), tyPair(tyVar("a"), tyVar("b"))), ["a", "b"]),
+      (_g, args) =>
+        bind(need(args, 0, "pair"), (x) =>
+          bind(need(args, 1, "pair"), (y) =>
+            right({ tag: "pair", value: [x, y] } as never)))),
     prim("hydra.lib.pairs.second", scheme(tyFn(tyPair(tyVar("a"), tyVar("b")), tyVar("b")), ["a", "b"]),
       (_g, args) =>
         bind(need(args, 0, "second"), (a0) => {

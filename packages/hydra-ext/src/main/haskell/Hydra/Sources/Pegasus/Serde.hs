@@ -182,7 +182,7 @@ qualifiedNameToExpr = define "qualifiedNameToExpr" $
     "ns">: project PDL._QualifiedName PDL._QualifiedName_namespace @@ var "qn",
     "parts">: Optionals.givens $ list [
       Optionals.map (lambda "n" $ unwrap PDL._Namespace @@ var "n") (var "ns"),
-      Optionals.pure (var "name")]] $
+      Optionals.given (var "name")]] $
     Serialization.cst @@ (Strings.join (string ".") (var "parts"))
 
 recordFieldToExpr :: TypedTermDefinition (PDL.RecordField -> Expr)
@@ -195,11 +195,11 @@ recordFieldToExpr = define "recordFieldToExpr" $
     "anns">: project PDL._RecordField PDL._RecordField_annotations @@ var "rf"] $
     withAnnotations @@ var "anns" @@
       (Serialization.spaceSep @@ (Optionals.givens $ list [
-        Optionals.pure (Serialization.cst @@ (Strings.concat2 (var "name") (string ":"))),
+        Optionals.given (Serialization.cst @@ (Strings.concat2 (var "name") (string ":"))),
         Logic.ifElse (var "optional")
-          (Optionals.pure (Serialization.cst @@ string "optional"))
+          (Optionals.given (Serialization.cst @@ string "optional"))
           nothing,
-        Optionals.pure (schemaToExpr @@ var "schema")]))
+        Optionals.given (schemaToExpr @@ var "schema")]))
 
 schemaFileToExpr :: TypedTermDefinition (PDL.SchemaFile -> Expr)
 schemaFileToExpr = define "schemaFileToExpr" $
@@ -209,7 +209,7 @@ schemaFileToExpr = define "schemaFileToExpr" $
     "pkg">: project PDL._SchemaFile PDL._SchemaFile_package @@ var "sf",
     "imports">: project PDL._SchemaFile PDL._SchemaFile_imports @@ var "sf",
     "schemas">: project PDL._SchemaFile PDL._SchemaFile_schemas @@ var "sf",
-    "namespaceSec">: Optionals.pure (Serialization.spaceSep @@ list [
+    "namespaceSec">: Optionals.given (Serialization.spaceSep @@ list [
       Serialization.cst @@ string "namespace",
       Serialization.cst @@ var "ns"]),
     "packageSec">: Optionals.map
@@ -219,8 +219,8 @@ schemaFileToExpr = define "schemaFileToExpr" $
       (var "pkg"),
     "importsSec">: Logic.ifElse (Lists.isEmpty (var "imports"))
       nothing
-      (Optionals.pure (Serialization.newlineSep @@ (Lists.map (asTerm importToExpr) (var "imports")))),
-    "schemaSecs">: Lists.map (lambda "s" $ Optionals.pure (namedSchemaToExpr @@ var "s")) (var "schemas")] $
+      (Optionals.given (Serialization.newlineSep @@ (Lists.map (asTerm importToExpr) (var "imports")))),
+    "schemaSecs">: Lists.map (lambda "s" $ Optionals.given (namedSchemaToExpr @@ var "s")) (var "schemas")] $
     Serialization.doubleNewlineSep @@ (Optionals.givens $
       Lists.concat $ list [
         list [var "namespaceSec", var "packageSec", var "importsSec"],
@@ -260,7 +260,7 @@ unionMemberToExpr = define "unionMemberToExpr" $
         Optionals.map (lambda "fn" $
           Serialization.cst @@ (Strings.concat2 (unwrap PDL._FieldName @@ var "fn") (string ":")))
           (var "alias"),
-        Optionals.pure (schemaToExpr @@ var "schema")]))
+        Optionals.given (schemaToExpr @@ var "schema")]))
 
 withAnnotations :: TypedTermDefinition (PDL.Annotations -> Expr -> Expr)
 withAnnotations = define "withAnnotations" $
@@ -268,4 +268,4 @@ withAnnotations = define "withAnnotations" $
   lambda "anns" $ lambda "expr" $
     Serialization.newlineSep @@ (Optionals.givens $ list [
       annotationsToExpr @@ var "anns",
-      Optionals.pure (var "expr")])
+      Optionals.given (var "expr")])

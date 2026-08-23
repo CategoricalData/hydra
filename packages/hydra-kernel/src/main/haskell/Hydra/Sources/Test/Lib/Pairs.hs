@@ -49,6 +49,15 @@ showIntIntPair = Phantoms.lambda "p" $ Strings.concat (Phantoms.list [
   Literals.showInt32 (Pairs.second (Phantoms.var "p")),
   Phantoms.string ")"])
 
+-- Show a (Int, String) pair as "(<int>, <string>)"
+showIntStrPair :: TypedTerm ((Int, String) -> String)
+showIntStrPair = Phantoms.lambda "p" $ Strings.concat (Phantoms.list [
+  Phantoms.string "(",
+  Literals.showInt32 (Pairs.first (Phantoms.var "p")),
+  Phantoms.string ", ",
+  Pairs.second (Phantoms.var "p"),
+  Phantoms.string ")"])
+
 -- Test groups for hydra.lib.pairs primitives
 
 allTests :: TypedTermDefinition TestGroup
@@ -57,6 +66,7 @@ allTests = definitionInModule module_ "allTests" $
     supergroup "hydra.lib.pairs primitives" [
       pairsBimap,
       pairsFirst,
+      pairsPair,
       pairsSecond]
 
 pairsBimap :: TypedTerm TestGroup
@@ -80,6 +90,16 @@ pairsFirst = subgroup "first" [
     test name fst snd result = evalPair name showInt32
       (Pairs.first (Phantoms.pair (Phantoms.int32 fst) (Phantoms.string snd)))
       (Phantoms.int32 result)
+
+pairsPair :: TypedTerm TestGroup
+pairsPair = subgroup "pair" [
+  test "construct a pair" 42 "hello",
+  test "with zero" 0 "world",
+  test "negative number" (-5) "test"]
+  where
+    test name fst snd = evalPair name showIntStrPair
+      (Pairs.pair (Phantoms.int32 fst) (Phantoms.string snd))
+      (Phantoms.pair (Phantoms.int32 fst) (Phantoms.string snd))
 
 pairsSecond :: TypedTerm TestGroup
 pairsSecond = subgroup "second" [

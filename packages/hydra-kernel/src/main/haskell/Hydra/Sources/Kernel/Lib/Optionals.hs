@@ -11,7 +11,7 @@ import qualified Hydra.Dsl.Lib.Sets     as Sets
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, compose, map, match)
 import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
-import           Prelude hiding ((++), map, pure)
+import           Prelude hiding ((++), map)
 import qualified Data.Set                    as S
 
 
@@ -25,8 +25,8 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.optionals module.")}
   where
-    definitions = [apply, bind, compose, foldList, givens, isGiven, isNone,
-                   map, mapList, mapOptional, mapSet, match, pure, toList, withDefault]
+    definitions = [apply, bind, compose, foldList, given, givens, isGiven, isNone,
+                   map, mapList, mapOptional, mapSet, match, toList, withDefault]
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -81,14 +81,21 @@ foldList = defineWithDefault "foldList" "Left-fold over a list with an optional-
   ["foldList(f, acc, xs) folds f over xs from the left, iterating while each application yields given,\
   \ and returns none as soon as any step yields none. If every element is processed, the result is\
   \ given of the final accumulator.",
-   "foldList(f, acc, xs) is lists.foldl(\\m y -> bind(m, \\x -> f(x, y)), pure(acc), xs); this defining\
+   "foldList(f, acc, xs) is lists.foldl(\\m y -> bind(m, \\x -> f(x, y)), given(acc), xs); this defining\
   \ equation is the specification, and the default implementation.",
    "Total. Corresponds to a short-circuiting foldM specialised to Maybe."]
   ("f" ~> "acc" ~> "xs" ~>
     Lists.foldl
       ("m" ~> "y" ~> Optionals.bind (var "m") ("x" ~> var "f" @@ var "x" @@ var "y"))
-      (Optionals.pure (var "acc"))
+      (Optionals.given (var "acc"))
       (var "xs"))
+
+given :: PrimitiveDefinition
+given = define "given" "Wrap a value in given."
+  (sigWithParams [("x", "the value to wrap in given")] $ TypeScheme [Name "x"] (tx Types.~> Types.optional tx) mempty)
+  ["given(x) is the optional value containing x.",
+   "The constructor for the present case of an optional value.",
+   "Total. Corresponds to Haskell's Just :: a -> Maybe a."]
 
 givens :: PrimitiveDefinition
 givens = defineWithDefault "givens" "Concatenate optionals, keeping only the present values."
@@ -143,7 +150,7 @@ mapList = defineWithDefault "mapList" "Traverse a list in the optional monad."
       ("x" ~> "acc" ~>
         Optionals.bind (var "f" @@ var "x") $
           "y" ~> Optionals.map ("ys" ~> Lists.cons (var "y") (var "ys")) (var "acc"))
-      (Optionals.pure (list ([] :: [TypedTerm b])))
+      (Optionals.given (list ([] :: [TypedTerm b])))
       (var "xs"))
 
 mapOptional :: PrimitiveDefinition
@@ -172,7 +179,7 @@ mapSet = defineWithDefault "mapSet" "Traverse a set in the optional monad."
         ("x" ~> "acc" ~>
           Optionals.bind (var "f" @@ var "x") $
             "y" ~> Optionals.map ("ys" ~> Lists.cons (var "y") (var "ys")) (var "acc"))
-        (Optionals.pure (list ([] :: [TypedTerm Int])))
+        (Optionals.given (list ([] :: [TypedTerm Int])))
         (Sets.toList (var "s" :: TypedTerm (S.Set Int))))) :: TypedTerm ((Int -> Maybe Int) -> S.Set Int -> Maybe (S.Set Int)))
 
 -- The default value (position 1) is lazy: it is only evaluated when the optional is empty.
@@ -186,13 +193,6 @@ match = define "match" "The fundamental eliminator for the optional type, scruti
    \ derived from it. The optional value is the first argument, matching the convention for\
    \ case-statement-like elimination.",
    "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."]
-
-pure :: PrimitiveDefinition
-pure = defineWithDefault "pure" "Wrap a value in given."
-  (sigWithParams [("x", "the value to wrap in given")] $ TypeScheme [Name "x"] (tx Types.~> Types.optional tx) mempty)
-  ["pure(x) = given(x). The applicative pure for optionals.",
-   "Total. Corresponds to Haskell's pure :: a -> Maybe a / Just."]
-  ("x" ~> just (var "x"))
 
 toList :: PrimitiveDefinition
 toList = defineWithDefault "toList" "Convert an optional to a list: given x maps to [x], none to []."

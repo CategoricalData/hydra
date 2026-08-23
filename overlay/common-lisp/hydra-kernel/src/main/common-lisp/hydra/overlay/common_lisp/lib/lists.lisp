@@ -251,12 +251,6 @@
               (push x yes)
               (push x no)))))))
 
-;; pure :: a -> [a]
-;; Create a list with a single element.
-(defvar hydra_overlay_common_lisp_lib_lists_pure
-  (lambda (x)
-    (list x)))
-
 ;; replicate :: Int -> a -> [a]
 ;; Create a list with n copies of a value.
 (defvar hydra_overlay_common_lisp_lib_lists_replicate

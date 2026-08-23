@@ -18,6 +18,13 @@
     "Get the first element of a pair."
     (car p)))
 
+;; pair :: a -> b -> Pair a b
+(defvar hydra_overlay_emacs_lisp_lib_pairs_pair
+  (lambda (x)
+    "Construct a pair from two values."
+    (lambda (y)
+      (list x y))))
+
 ;; second :: Pair a b -> b
 (defvar hydra_overlay_emacs_lisp_lib_pairs_second
   (lambda (p)

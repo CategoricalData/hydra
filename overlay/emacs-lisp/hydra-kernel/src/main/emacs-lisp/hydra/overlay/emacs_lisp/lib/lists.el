@@ -247,12 +247,6 @@
               (push x yes)
               (push x no)))))))
 
-;; pure :: a -> [a]
-(defvar hydra_overlay_emacs_lisp_lib_lists_pure
-  (lambda (x)
-    "Create a list with a single element."
-    (list x)))
-
 ;; replicate :: Int -> a -> [a]
 (defvar hydra_overlay_emacs_lisp_lib_lists_replicate
   (lambda (n)

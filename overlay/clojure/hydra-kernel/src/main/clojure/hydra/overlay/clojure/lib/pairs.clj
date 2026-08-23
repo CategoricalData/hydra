@@ -12,6 +12,11 @@
   "Get the first element of a pair."
   (fn [p] (first p)))
 
+;; pair :: a -> b -> Pair a b
+(def hydra_overlay_clojure_lib_pairs_pair
+  "Construct a pair from two values."
+  (fn [x] (fn [y] (list x y))))
+
 ;; second :: Pair a b -> b
 (def hydra_overlay_clojure_lib_pairs_second
   "Get the second element of a pair."
