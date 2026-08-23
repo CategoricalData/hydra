@@ -226,7 +226,7 @@ isNominalType = define "isNominalType" $
 
 isSerializable :: TypedTermDefinition (InferenceContext -> Graph -> Binding -> Either Error Bool)
 isSerializable = define "isSerializable" $
-  doc "Check if an element is serializable (no function types in dependencies) (Either version)" $
+  doc "Check if an element is serializable (no function, effect, or void types in dependencies) (Either version)" $
   "cx" ~> "graph" ~> "el" ~>
   "variants" <~ ("typ" ~>
     Lists.map (asTerm Reflect.typeVariant) (Rewriting.foldOverType @@ Coders.traversalOrderPre @@
@@ -236,12 +236,14 @@ isSerializable = define "isSerializable" $
       "allVariants" <~ (Sets.fromList (Lists.concat (Lists.map (var "variants") (Maps.elems (var "deps" :: TypedTerm (M.Map Name Type))))) :: TypedTerm (S.Set TypeVariant)) $
       Logic.not (Logic.or
         (Sets.member Variants.typeVariantEffect (var "allVariants"))
-        (Sets.member Variants.typeVariantFunction (var "allVariants"))))
+        (Logic.or
+          (Sets.member Variants.typeVariantFunction (var "allVariants"))
+          (Sets.member Variants.typeVariantVoid (var "allVariants")))))
     (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (reify Functions.identity) @@ Core.bindingName (var "el"))
 
 isSerializableByName :: TypedTermDefinition (InferenceContext -> Graph -> Name -> Either Error Bool)
 isSerializableByName = define "isSerializableByName" $
-  doc "Check if a type (by name) is serializable, resolving all type dependencies (Either version)" $
+  doc "Check if a type (by name) is serializable, resolving all type dependencies (no function, effect, or void types) (Either version)" $
   "cx" ~> "graph" ~> "name" ~>
   "variants" <~ ("typ" ~>
     Lists.map (asTerm Reflect.typeVariant) (Rewriting.foldOverType @@ Coders.traversalOrderPre @@
@@ -251,19 +253,23 @@ isSerializableByName = define "isSerializableByName" $
       "allVariants" <~ (Sets.fromList (Lists.concat (Lists.map (var "variants") (Maps.elems (var "deps" :: TypedTerm (M.Map Name Type))))) :: TypedTerm (S.Set TypeVariant)) $
       Logic.not (Logic.or
         (Sets.member Variants.typeVariantEffect (var "allVariants"))
-        (Sets.member Variants.typeVariantFunction (var "allVariants"))))
+        (Logic.or
+          (Sets.member Variants.typeVariantFunction (var "allVariants"))
+          (Sets.member Variants.typeVariantVoid (var "allVariants")))))
     (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (reify Functions.identity) @@ var "name")
 
 isSerializableType :: TypedTermDefinition (Type -> Bool)
 isSerializableType = define "isSerializableType" $
-  doc "Check if a type is serializable (no function types in the type itself)" $
+  doc "Check if a type is serializable (no function, effect, or void types in the type itself)" $
   "typ" ~>
   "allVariants" <~ Sets.fromList (Lists.map (asTerm Reflect.typeVariant)
     (Rewriting.foldOverType @@ Coders.traversalOrderPre @@
       ("m" ~> "t" ~> Lists.cons (var "t") (var "m")) @@ list ([] :: [TypedTerm Type]) @@ var "typ")) $
   Logic.not (Logic.or
     (Sets.member Variants.typeVariantEffect (var "allVariants"))
-    (Sets.member Variants.typeVariantFunction (var "allVariants")))
+    (Logic.or
+      (Sets.member Variants.typeVariantFunction (var "allVariants"))
+      (Sets.member Variants.typeVariantVoid (var "allVariants"))))
 
 isTrivialTerm :: TypedTermDefinition (Term -> Bool)
 isTrivialTerm = define "isTrivialTerm" $
