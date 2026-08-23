@@ -572,6 +572,13 @@ context usage. Keep it lean by following these principles:
   (`<branch>-plan.md`, gitignored), a comment on the driving GitHub issue,
   or the commit message that embodies the decision. `docs/history/` is for
   retrospectives — after the fact, not during.
+- **Organize `docs/history/` by feature, with linkable headers.** A history entry retrospects on a
+  feature (or a solved problem, or an abandoned approach), so name and structure it so other user docs
+  can deep-link to it. Give each entry a clear feature-scoped title, name the issue(s)/PR(s) it
+  retrospects on, and use stable, descriptive section headings that a README or recipe can link to
+  (`docs/history/<file>.md#<heading>`). The bar for adding one is a *rich, settled* record — real design
+  discussion in commits and closed issues, not a thin or speculative sketch. If the record is too thin to
+  write a real retrospective, don't manufacture one; that re-creates the dumping-ground problem.
 - **Add to other docs first.** When new guidance is needed, put it in the most specific
   applicable document and add a link here only if the topic is common enough.
 - **Review before expanding.** Before adding content, check whether it's already reachable
