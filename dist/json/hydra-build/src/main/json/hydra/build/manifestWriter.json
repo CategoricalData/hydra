@@ -193,7 +193,7 @@
                                             "argument": {
                                               "application": {"function": {"project": {"typeName": "hydra.packaging.Module", "fieldName": "name"}}, "argument": {"variable": "m"}}}}}}}}},
                                 "argument": {"variable": "mods"}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                     "body": {
                       "inject": {
                         "typeName": "hydra.json.model.Value",

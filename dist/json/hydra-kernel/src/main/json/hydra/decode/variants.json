@@ -83,17 +83,17 @@
                                                         "name": "field",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Injection", "fieldName": "field"}}, "argument": {"variable": "inj"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}, "constraints": []}},
                                                       {
                                                         "name": "fname",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "name"}}, "argument": {"variable": "field"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                       {
                                                         "name": "fterm",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "term"}}, "argument": {"variable": "field"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}, "constraints": []}},
                                                       {
                                                         "name": "variantMap",
                                                         "term": {
@@ -415,7 +415,8 @@
                                                               "values": {
                                                                 "function": {
                                                                   "domain": {"variable": "hydra.core.Term"},
-                                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.variants.LiteralVariant"}}}}}}}}}],
+                                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.variants.LiteralVariant"}}}}}}},
+                                                          "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {
@@ -553,17 +554,17 @@
                                                         "name": "field",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Injection", "fieldName": "field"}}, "argument": {"variable": "inj"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}, "constraints": []}},
                                                       {
                                                         "name": "fname",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "name"}}, "argument": {"variable": "field"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                       {
                                                         "name": "fterm",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "term"}}, "argument": {"variable": "field"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}, "constraints": []}},
                                                       {
                                                         "name": "variantMap",
                                                         "term": {
@@ -1635,7 +1636,8 @@
                                                               "values": {
                                                                 "function": {
                                                                   "domain": {"variable": "hydra.core.Term"},
-                                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.variants.TermVariant"}}}}}}}}}],
+                                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.variants.TermVariant"}}}}}}},
+                                                          "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {
@@ -1773,17 +1775,17 @@
                                                         "name": "field",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Injection", "fieldName": "field"}}, "argument": {"variable": "inj"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}, "constraints": []}},
                                                       {
                                                         "name": "fname",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "name"}}, "argument": {"variable": "field"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                       {
                                                         "name": "fterm",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "term"}}, "argument": {"variable": "field"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}, "constraints": []}},
                                                       {
                                                         "name": "variantMap",
                                                         "term": {
@@ -2705,7 +2707,8 @@
                                                               "values": {
                                                                 "function": {
                                                                   "domain": {"variable": "hydra.core.Term"},
-                                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.variants.TypeVariant"}}}}}}}}}],
+                                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.variants.TypeVariant"}}}}}}},
+                                                          "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {

@@ -22,7 +22,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of a property or indexer accessor: a block, an expression, or empty (abstract)."}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of a property or indexer accessor: a block, an expression, or empty (abstract)."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AccessorDeclaration",
@@ -39,7 +40,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single get or set accessor, with optional attributes and an access modifier."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single get or set accessor, with optional attributes and an access modifier."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AccessorDeclarations",
@@ -55,7 +57,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The get and/or set accessors of a standard (non-ref-returning) property."}}}]}}}}}},
+                    "value": {"literal": {"string": "The get and/or set accessors of a standard (non-ref-returning) property."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AccessorModifier",
@@ -76,7 +79,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An access modifier restricting a get or set accessor beyond the property's own accessibility."}}}]}}}}}},
+                    "value": {"literal": {"string": "An access modifier restricting a get or set accessor beyond the property's own accessibility."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AccessorsEventDeclaration",
@@ -95,7 +99,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An event declaration using explicit add/remove accessor syntax."}}}]}}}}}},
+                    "value": {"literal": {"string": "An event declaration using explicit add/remove accessor syntax."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AddRemoveAccessorDeclaration",
@@ -111,7 +116,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The add or remove accessor body of an event declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "The add or remove accessor body of an event declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AdditiveExpression",
@@ -127,7 +133,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple multiplicative expression or a binary addition/subtraction expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple multiplicative expression or a binary addition/subtraction expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AdditiveOperator",
@@ -140,7 +147,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The plus or minus operator used in an additive expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "The plus or minus operator used in an additive expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AndExpression",
@@ -156,7 +164,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple equality expression or a binary bitwise-AND expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple equality expression or a binary bitwise-AND expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AnonymousFunctionBody",
@@ -174,7 +183,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of an anonymous function: a null-conditional invocation, expression, ref, or block."}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of an anonymous function: a null-conditional invocation, expression, ref, or block."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AnonymousFunctionParameterModifier",
@@ -187,7 +197,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A ref, out, or in modifier on an explicit anonymous function parameter."}}}]}}}}}},
+                    "value": {"literal": {"string": "A ref, out, or in modifier on an explicit anonymous function parameter."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AnonymousFunctionSignature",
@@ -203,7 +214,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The parameter list of a lambda expression, either explicitly or implicitly typed."}}}]}}}}}},
+                    "value": {"literal": {"string": "The parameter list of a lambda expression, either explicitly or implicitly typed."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AnonymousMethodExpression",
@@ -220,7 +232,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A delegate expression created with the anonymous method syntax (delegate(...) { ... })."}}}]}}}}}},
+                    "value": {"literal": {"string": "A delegate expression created with the anonymous method syntax (delegate(...) { ... })."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Argument",
@@ -236,7 +249,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single argument in an argument list, with an optional name for named arguments."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single argument in an argument list, with an optional name for named arguments."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ArgumentList",
@@ -253,7 +267,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty, comma-separated list of arguments passed to a member or delegate invocation."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of arguments passed to a member or delegate invocation."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ArgumentValue",
@@ -271,7 +286,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The value portion of an argument: an expression, or a ref/in/out variable reference."}}}]}}}}}},
+                    "value": {"literal": {"string": "The value portion of an argument: an expression, or a ref/in/out variable reference."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ArrayCreationExpression",
@@ -288,7 +304,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression that creates a new array, in any of its three creation-syntax forms."}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression that creates a new array, in any of its three creation-syntax forms."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ArrayInitializer",
@@ -301,7 +318,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A brace-delimited list of variable initializers used to populate an array."}}}]}}}}}},
+                    "value": {"literal": {"string": "A brace-delimited list of variable initializers used to populate an array."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ArrayType",
@@ -317,7 +335,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An array type formed from a non-array element type and one or more rank specifiers."}}}]}}}}}},
+                    "value": {"literal": {"string": "An array type formed from a non-array element type and one or more rank specifiers."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ArrayTypeArrayCreationExpression",
@@ -333,7 +352,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Array creation using an explicit array type together with an array initializer."}}}]}}}}}},
+                    "value": {"literal": {"string": "Array creation using an explicit array type together with an array initializer."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AsTypeExpression",
@@ -349,7 +369,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An 'as' expression that attempts a type conversion, yielding null on failure."}}}]}}}}}},
+                    "value": {"literal": {"string": "An 'as' expression that attempts a type conversion, yielding null on failure."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Assignment",
@@ -366,7 +387,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An assignment expression: a target, an assignment operator, and a right-hand expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "An assignment expression: a target, an assignment operator, and a right-hand expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AssignmentMemberDeclarator",
@@ -382,7 +404,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A member declarator of the form 'name = expression' in an anonymous object creation."}}}]}}}}}},
+                    "value": {"literal": {"string": "A member declarator of the form 'name = expression' in an anonymous object creation."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AssignmentOperator",
@@ -407,7 +430,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The simple assignment operator or one of the compound assignment operators."}}}]}}}}}},
+                    "value": {"literal": {"string": "The simple assignment operator or one of the compound assignment operators."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Attribute",
@@ -423,7 +447,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single attribute, consisting of an attribute name and optional constructor/named arguments."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single attribute, consisting of an attribute name and optional constructor/named arguments."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AttributeArgumentExpression",
@@ -436,7 +461,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression usable as an attribute argument (a compile-time constant expression)."}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression usable as an attribute argument (a compile-time constant expression)."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AttributeArguments",
@@ -452,7 +478,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The positional and named argument lists supplied to an attribute."}}}]}}}}}},
+                    "value": {"literal": {"string": "The positional and named argument lists supplied to an attribute."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AttributeList",
@@ -469,7 +496,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty, comma-separated list of attributes within a single attribute section."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of attributes within a single attribute section."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AttributeName",
@@ -483,7 +511,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The type name referenced by an attribute, resolved against types ending in the suffix Attribute."}}}]}}}}}},
+                      "literal": {"string": "The type name referenced by an attribute, resolved against types ending in the suffix Attribute."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AttributeSection",
@@ -499,7 +528,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A bracketed attribute section, with an optional target specifier, attached to a declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A bracketed attribute section, with an optional target specifier, attached to a declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.AttributeTarget",
@@ -515,7 +545,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The target specifier of an attribute section (e.g. assembly, module, return, field)."}}}]}}}}}},
+                    "value": {"literal": {"string": "The target specifier of an attribute section (e.g. assembly, module, return, field)."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Attributes",
@@ -532,7 +563,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty sequence of attribute sections attached to a single declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty sequence of attribute sections attached to a single declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BaseAccess",
@@ -548,7 +580,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'base' access expression, either invoking a base member or indexing via base[args]."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'base' access expression, either invoking a base member or indexing via base[args]."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BaseAccessWithIdentifier",
@@ -564,7 +597,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'base.member' access, with an optional list of type arguments."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'base.member' access, with an optional list of type arguments."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BinaryAdditiveExpression",
@@ -581,7 +615,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary addition or subtraction expression with a left operand, operator, and right operand."}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary addition or subtraction expression with a left operand, operator, and right operand."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BinaryAndExpression",
@@ -597,7 +632,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary bitwise-AND expression (&) over two operand expressions."}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary bitwise-AND expression (&) over two operand expressions."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BinaryConditionalAndExpression",
@@ -613,7 +649,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary conditional-AND expression (&&) over two operand expressions."}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary conditional-AND expression (&&) over two operand expressions."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BinaryConditionalOrExpression",
@@ -629,7 +666,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary conditional-OR expression (||) over two operand expressions."}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary conditional-OR expression (||) over two operand expressions."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BinaryEqualityExpression",
@@ -646,7 +684,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary equality or inequality comparison expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary equality or inequality comparison expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BinaryExclusiveOrExpression",
@@ -662,7 +701,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary bitwise exclusive-OR expression (^) over two operand expressions."}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary bitwise exclusive-OR expression (^) over two operand expressions."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BinaryInclusiveOrExpression",
@@ -678,7 +718,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary bitwise inclusive-OR expression (|) over two operand expressions."}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary bitwise inclusive-OR expression (|) over two operand expressions."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BinaryMultiplicativeExpression",
@@ -695,7 +736,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary multiplication, division, or remainder expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary multiplication, division, or remainder expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BinaryNullCoalescingExpression",
@@ -711,7 +753,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary null-coalescing expression (??) over two operand expressions."}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary null-coalescing expression (??) over two operand expressions."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BinaryOperatorDeclarator",
@@ -729,7 +772,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The declarator for a user-defined binary operator overload, naming its two parameters."}}}]}}}}}},
+                    "value": {"literal": {"string": "The declarator for a user-defined binary operator overload, naming its two parameters."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BinaryRelationalExpression",
@@ -746,7 +790,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary relational comparison expression (<, >, <=, or >=)."}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary relational comparison expression (<, >, <=, or >=)."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BinaryShiftExpression",
@@ -761,7 +806,8 @@
                   {"name": "right", "type": {"variable": "hydra.csharp.syntax.AdditiveExpression"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A binary left-shift or right-shift expression."}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A binary left-shift or right-shift expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Block",
@@ -774,7 +820,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A brace-delimited sequence of statements forming a single compound statement."}}}]}}}}}},
+                    "value": {"literal": {"string": "A brace-delimited sequence of statements forming a single compound statement."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BlockPropertyBody",
@@ -790,7 +837,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A property body given as get/set accessor declarations, with an optional initializer."}}}]}}}}}},
+                    "value": {"literal": {"string": "A property body given as get/set accessor declarations, with an optional initializer."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.BooleanExpression",
@@ -803,7 +851,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression required to have (or be convertible to) type bool, such as an if condition."}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression required to have (or be convertible to) type bool, such as an if condition."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.CastExpression",
@@ -819,7 +868,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An explicit type-cast expression applied to a unary expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "An explicit type-cast expression applied to a unary expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.CatchClauses",
@@ -836,7 +886,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The catch clauses of a try statement: one or more specific clauses, or a single general clause."}}}]}}}}}},
+                      "literal": {"string": "The catch clauses of a try statement: one or more specific clauses, or a single general clause."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ClassBase",
@@ -852,7 +903,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The base class and/or implemented interfaces listed in a class declaration's base-list."}}}]}}}}}},
+                    "value": {"literal": {"string": "The base class and/or implemented interfaces listed in a class declaration's base-list."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ClassBody",
@@ -865,7 +917,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The brace-delimited sequence of member declarations that make up a class."}}}]}}}}}},
+                    "value": {"literal": {"string": "The brace-delimited sequence of member declarations that make up a class."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ClassDeclaration",
@@ -887,7 +940,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C# class declaration, including its modifiers, type parameters, base list, and body."}}}]}}}}}},
+                    "value": {"literal": {"string": "A C# class declaration, including its modifiers, type parameters, base list, and body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ClassMemberDeclaration",
@@ -912,7 +966,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Any member that can appear in a class body: field, method, property, event, and so on."}}}]}}}}}},
+                    "value": {"literal": {"string": "Any member that can appear in a class body: field, method, property, event, and so on."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ClassModifier",
@@ -935,7 +990,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A modifier keyword on a class declaration, such as public, abstract, sealed, or static."}}}]}}}}}},
+                    "value": {"literal": {"string": "A modifier keyword on a class declaration, such as public, abstract, sealed, or static."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ClassType",
@@ -952,7 +1008,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to a class type: a named type, or the predefined 'object' or 'string' types."}}}]}}}}}},
+                    "value": {"literal": {"string": "A reference to a class type: a named type, or the predefined 'object' or 'string' types."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.CompilationUnit",
@@ -970,7 +1027,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The root of a C# source file: extern aliases, using directives, attributes, and type members."}}}]}}}}}},
+                    "value": {"literal": {"string": "The root of a C# source file: extern aliases, using directives, attributes, and type members."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConditionalAndExpression",
@@ -986,7 +1044,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple inclusive-OR expression or a binary conditional-AND (&&) expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple inclusive-OR expression or a binary conditional-AND (&&) expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConditionalExpression",
@@ -1003,7 +1062,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The ternary conditional expression, in its simple, ref-conditional, or fallthrough forms."}}}]}}}}}},
+                    "value": {"literal": {"string": "The ternary conditional expression, in its simple, ref-conditional, or fallthrough forms."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConditionalOrExpression",
@@ -1019,7 +1079,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple conditional-AND expression or a binary conditional-OR (||) expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple conditional-AND expression or a binary conditional-OR (||) expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConstantDeclaration",
@@ -1042,7 +1103,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'const' field declaration with its modifiers, type, and one or more declarators."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'const' field declaration with its modifiers, type, and one or more declarators."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConstantDeclarator",
@@ -1058,7 +1120,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single 'identifier = expression' pair within a constant declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single 'identifier = expression' pair within a constant declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConstantExpression",
@@ -1071,7 +1134,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression that is required to be evaluable at compile time."}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression that is required to be evaluable at compile time."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConstantModifier",
@@ -1090,7 +1154,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An access modifier (new, public, protected, internal, or private) on a constant declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "An access modifier (new, public, protected, internal, or private) on a constant declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConstructorBody",
@@ -1107,7 +1172,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of an instance constructor: a block, expression body, or empty (extern) body."}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of an instance constructor: a block, expression body, or empty (extern) body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConstructorDeclaration",
@@ -1125,7 +1191,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An instance constructor declaration, including its declarator and body."}}}]}}}}}},
+                    "value": {"literal": {"string": "An instance constructor declaration, including its declarator and body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConstructorDeclarator",
@@ -1142,7 +1209,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A constructor's name, parameter list, and optional base/this initializer."}}}]}}}}}},
+                    "value": {"literal": {"string": "A constructor's name, parameter list, and optional base/this initializer."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConstructorInitializer",
@@ -1158,7 +1226,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A ': base(...)' or ': this(...)' initializer invoked before a constructor body runs."}}}]}}}}}},
+                    "value": {"literal": {"string": "A ': base(...)' or ': this(...)' initializer invoked before a constructor body runs."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConstructorModifier",
@@ -1178,7 +1247,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An access or extern/unsafe modifier on an instance constructor declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "An access or extern/unsafe modifier on an instance constructor declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConversionKind",
@@ -1191,7 +1261,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Whether a user-defined conversion operator is implicit or explicit."}}}]}}}}}},
+                    "value": {"literal": {"string": "Whether a user-defined conversion operator is implicit or explicit."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ConversionOperatorDeclarator",
@@ -1208,7 +1279,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The declarator for a user-defined implicit or explicit conversion operator."}}}]}}}}}},
+                    "value": {"literal": {"string": "The declarator for a user-defined implicit or explicit conversion operator."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.DeclarationExpression",
@@ -1224,7 +1296,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An inline variable declaration used as an expression, such as an out-variable declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "An inline variable declaration used as an expression, such as an out-variable declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.DeclarationPattern",
@@ -1240,7 +1313,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A pattern that tests an expression's type and, on success, binds it to a designation."}}}]}}}}}},
+                    "value": {"literal": {"string": "A pattern that tests an expression's type and, on success, binds it to a designation."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.DeclarationStatement",
@@ -1257,7 +1331,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A local variable, local constant, or local function declaration statement."}}}]}}}}}},
+                    "value": {"literal": {"string": "A local variable, local constant, or local function declaration statement."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.DeconstructionElement",
@@ -1273,7 +1348,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "One element of a deconstruction pattern: a nested tuple or a bound identifier."}}}]}}}}}},
+                    "value": {"literal": {"string": "One element of a deconstruction pattern: a nested tuple or a bound identifier."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.DeconstructionTuple",
@@ -1290,7 +1366,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A tuple deconstruction pattern used on the left-hand side of a deconstructing assignment."}}}]}}}}}},
+                    "value": {"literal": {"string": "A tuple deconstruction pattern used on the left-hand side of a deconstructing assignment."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.DefaultValueExpression",
@@ -1306,7 +1383,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'default(T)' expression, or the type-inferred 'default' literal."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'default(T)' expression, or the type-inferred 'default' literal."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.DelegateCreationExpression",
@@ -1322,7 +1400,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression that creates a delegate instance from a method group or lambda."}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression that creates a delegate instance from a method group or lambda."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.DelegateDeclaration",
@@ -1342,7 +1421,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A delegate type declaration, naming its return type, ref kind, and parameter list."}}}]}}}}}},
+                    "value": {"literal": {"string": "A delegate type declaration, naming its return type, ref kind, and parameter list."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.DelegateHeader",
@@ -1360,7 +1440,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The name, type parameters, formal parameters, and constraints of a delegate declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "The name, type parameters, formal parameters, and constraints of a delegate declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.DelegateModifier",
@@ -1380,7 +1461,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An access or unsafe modifier on a delegate type declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "An access or unsafe modifier on a delegate type declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.DelegateType",
@@ -1393,7 +1475,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to a delegate type by its type name."}}}]}}}}}},
+                    "value": {"literal": {"string": "A reference to a delegate type by its type name."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.DependentAccess",
@@ -1410,7 +1493,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A member access, element access, or invocation chained after a null-conditional operator."}}}]}}}}}},
+                    "value": {"literal": {"string": "A member access, element access, or invocation chained after a null-conditional operator."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.DependentAccessForMember",
@@ -1426,7 +1510,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A member identifier and optional type arguments chained after a null-conditional access."}}}]}}}}}},
+                    "value": {"literal": {"string": "A member identifier and optional type arguments chained after a null-conditional access."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Designation",
@@ -1439,7 +1524,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple identifier binding introduced by a pattern, such as in a declaration pattern."}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple identifier binding introduced by a pattern, such as in a declaration pattern."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.DoStatement",
@@ -1455,7 +1541,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A do-while iteration statement that executes its body at least once."}}}]}}}}}},
+                    "value": {"literal": {"string": "A do-while iteration statement that executes its body at least once."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ElementAccess",
@@ -1471,7 +1558,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An indexer access expression applying an argument list to a primary expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "An indexer access expression applying an argument list to a primary expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ElementInitializer",
@@ -1487,7 +1575,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single element of a collection initializer: one expression, or a nested element list."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single element of a collection initializer: one expression, or a nested element list."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.EmbeddedStatement",
@@ -1515,7 +1604,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A statement nested inside another statement, excluding labeled and declaration statements."}}}]}}}}}},
+                    "value": {"literal": {"string": "A statement nested inside another statement, excluding labeled and declaration statements."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.EnumBase",
@@ -1531,7 +1621,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The optional explicit underlying integral type declared for an enum."}}}]}}}}}},
+                    "value": {"literal": {"string": "The optional explicit underlying integral type declared for an enum."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.EnumBody",
@@ -1544,7 +1635,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The brace-delimited list of member declarations that make up an enum."}}}]}}}}}},
+                    "value": {"literal": {"string": "The brace-delimited list of member declarations that make up an enum."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.EnumDeclaration",
@@ -1563,7 +1655,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An enum type declaration, with its modifiers, name, underlying type, and members."}}}]}}}}}},
+                    "value": {"literal": {"string": "An enum type declaration, with its modifiers, name, underlying type, and members."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.EnumMemberDeclaration",
@@ -1580,7 +1673,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single named enum member, with optional attributes and an explicit constant value."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single named enum member, with optional attributes and an explicit constant value."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.EnumModifier",
@@ -1599,7 +1693,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An access modifier (new, public, protected, internal, or private) on an enum declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "An access modifier (new, public, protected, internal, or private) on an enum declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.EnumType",
@@ -1610,7 +1705,8 @@
               "body": {"wrap": {"variable": "hydra.csharp.syntax.TypeName"}},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to an enum type by its type name."}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to an enum type by its type name."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.EqualityExpression",
@@ -1626,7 +1722,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple relational expression or a binary equality/inequality expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple relational expression or a binary equality/inequality expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.EqualityOperator",
@@ -1637,7 +1734,8 @@
               "body": {"union": [{"name": "equal", "type": "unit"}, {"name": "notEqual", "type": "unit"}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The equality (==) or inequality (!=) operator."}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The equality (==) or inequality (!=) operator."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.EventAccessorDeclarations",
@@ -1653,7 +1751,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The add and remove accessor declarations of an event with an explicit accessor body."}}}]}}}}}},
+                    "value": {"literal": {"string": "The add and remove accessor declarations of an event with an explicit accessor body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.EventDeclaration",
@@ -1669,7 +1768,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An event member declaration, in either its field-like or explicit-accessor form."}}}]}}}}}},
+                    "value": {"literal": {"string": "An event member declaration, in either its field-like or explicit-accessor form."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.EventModifier",
@@ -1695,7 +1795,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A modifier keyword on an event declaration, such as static, virtual, or override."}}}]}}}}}},
+                    "value": {"literal": {"string": "A modifier keyword on an event declaration, such as static, virtual, or override."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ExceptionSpecifier",
@@ -1711,7 +1812,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The exception type and optional identifier caught by a specific catch clause."}}}]}}}}}},
+                    "value": {"literal": {"string": "The exception type and optional identifier caught by a specific catch clause."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ExclusiveOrExpression",
@@ -1727,7 +1829,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple AND expression or a binary bitwise exclusive-OR (^) expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple AND expression or a binary bitwise exclusive-OR (^) expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ExplicitAnonymousFunctionParameter",
@@ -1744,7 +1847,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An explicitly typed parameter of an anonymous function, with an optional modifier."}}}]}}}}}},
+                    "value": {"literal": {"string": "An explicitly typed parameter of an anonymous function, with an optional modifier."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ExplicitlyTypedLocalVariableDeclaration",
@@ -1760,7 +1864,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A local variable declaration whose type is written out explicitly."}}}]}}}}}},
+                    "value": {"literal": {"string": "A local variable declaration whose type is written out explicitly."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ExplicitlyTypedLocalVariableDeclarator",
@@ -1776,7 +1881,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An identifier and optional initializer within an explicitly typed local declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "An identifier and optional initializer within an explicitly typed local declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Expression",
@@ -1792,7 +1898,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-assignment expression or an assignment expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-assignment expression or an assignment expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ExpressionList",
@@ -1809,7 +1916,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty, comma-separated list of expressions, as used in an array creation expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of expressions, as used in an array creation expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ExternAliasDirective",
@@ -1822,7 +1930,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An 'extern alias' directive introducing an alias for an external assembly reference."}}}]}}}}}},
+                    "value": {"literal": {"string": "An 'extern alias' directive introducing an alias for an external assembly reference."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.FieldDeclaration",
@@ -1845,7 +1954,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A field member declaration, with its modifiers, type, and one or more variable declarators."}}}]}}}}}},
+                    "value": {"literal": {"string": "A field member declaration, with its modifiers, type, and one or more variable declarators."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.FieldModifier",
@@ -1868,7 +1978,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A modifier keyword on a field declaration, such as static, readonly, or volatile."}}}]}}}}}},
+                    "value": {"literal": {"string": "A modifier keyword on a field declaration, such as static, readonly, or volatile."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.FinalizerBody",
@@ -1885,7 +1996,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of a finalizer: a block, expression body, or empty (extern) body."}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of a finalizer: a block, expression body, or empty (extern) body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.FinalizerDeclaration",
@@ -1904,7 +2016,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A finalizer (destructor) declaration, with its extern/unsafe flags, name, and body."}}}]}}}}}},
+                    "value": {"literal": {"string": "A finalizer (destructor) declaration, with its extern/unsafe flags, name, and body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.FixedParameter",
@@ -1924,7 +2037,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A single by-value or by-reference formal parameter, with optional attributes and a default value."}}}]}}}}}},
+                      "literal": {"string": "A single by-value or by-reference formal parameter, with optional attributes and a default value."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.FixedPointerDeclarator",
@@ -1940,7 +2054,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single declarator in a fixed statement, binding a pointer to a variable or expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single declarator in a fixed statement, binding a pointer to a variable or expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.FixedSizeBufferDeclaration",
@@ -1968,7 +2083,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An unsafe fixed-size buffer field declaration inside a struct."}}}]}}}}}},
+                    "value": {"literal": {"string": "An unsafe fixed-size buffer field declaration inside a struct."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.FixedSizeBufferDeclarator",
@@ -1984,7 +2100,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The name and constant size of a single fixed-size buffer member."}}}]}}}}}},
+                    "value": {"literal": {"string": "The name and constant size of a single fixed-size buffer member."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.FixedSizeBufferModifier",
@@ -2003,7 +2120,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An access or unsafe modifier on a fixed-size buffer declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "An access or unsafe modifier on a fixed-size buffer declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.FixedStatement",
@@ -2025,7 +2143,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An unsafe 'fixed' statement that pins one or more variables for pointer access."}}}]}}}}}},
+                    "value": {"literal": {"string": "An unsafe 'fixed' statement that pins one or more variables for pointer access."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.FloatingPointType",
@@ -2038,7 +2157,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The float or double floating-point numeric type."}}}]}}}}}},
+                    "value": {"literal": {"string": "The float or double floating-point numeric type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ForInitializer",
@@ -2054,7 +2174,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The initializer clause of a for statement: a local variable declaration or expression list."}}}]}}}}}},
+                    "value": {"literal": {"string": "The initializer clause of a for statement: a local variable declaration or expression list."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ForStatement",
@@ -2072,7 +2193,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C-style for loop, with optional initializer, condition, iterator, and a body statement."}}}]}}}}}},
+                    "value": {"literal": {"string": "A C-style for loop, with optional initializer, condition, iterator, and a body statement."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ForeachStatement",
@@ -2092,7 +2214,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A foreach iteration statement over an enumerable expression, binding each element to a variable."}}}]}}}}}},
+                      "literal": {"string": "A foreach iteration statement over an enumerable expression, binding each element to a variable."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.FormalParameterList",
@@ -2108,7 +2231,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The fixed parameters of a member, plus an optional trailing params array parameter."}}}]}}}}}},
+                    "value": {"literal": {"string": "The fixed parameters of a member, plus an optional trailing params array parameter."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.FromClause",
@@ -2125,7 +2249,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The initial or additional 'from' clause of a query expression, introducing a range variable."}}}]}}}}}},
+                    "value": {"literal": {"string": "The initial or additional 'from' clause of a query expression, introducing a range variable."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.GlobalAttributeSection",
@@ -2141,7 +2266,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An assembly- or module-level attribute section appearing at the top of a compilation unit."}}}]}}}}}},
+                    "value": {"literal": {"string": "An assembly- or module-level attribute section appearing at the top of a compilation unit."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.GotoStatement",
@@ -2158,7 +2284,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A goto statement targeting a label, a switch case, or the switch default section."}}}]}}}}}},
+                    "value": {"literal": {"string": "A goto statement targeting a label, a switch case, or the switch default section."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.GroupClause",
@@ -2174,7 +2301,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The 'group ... by ...' clause that ends a query expression, producing grouped results."}}}]}}}}}},
+                    "value": {"literal": {"string": "The 'group ... by ...' clause that ends a query expression, producing grouped results."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Identifier",
@@ -2187,7 +2315,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C# identifier: a name for a variable, type, member, or other program element."}}}]}}}}}},
+                    "value": {"literal": {"string": "A C# identifier: a name for a variable, type, member, or other program element."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.IdentifierNamespaceOrTypeName",
@@ -2203,7 +2332,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple namespace-or-type name consisting of an identifier and optional type arguments."}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple namespace-or-type name consisting of an identifier and optional type arguments."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.IfStatement",
@@ -2220,7 +2350,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An if statement with a boolean condition, a then-branch, and an else-branch."}}}]}}}}}},
+                    "value": {"literal": {"string": "An if statement with a boolean condition, a then-branch, and an else-branch."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ImplicitlyTypedLocalVariableDeclaration",
@@ -2236,7 +2367,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A local variable declaration using 'var' with inferred type, plain or ref."}}}]}}}}}},
+                    "value": {"literal": {"string": "A local variable declaration using 'var' with inferred type, plain or ref."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ImplicitlyTypedLocalVariableDeclarator",
@@ -2252,7 +2384,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The identifier and initializer expression of a 'var'-typed local variable."}}}]}}}}}},
+                    "value": {"literal": {"string": "The identifier and initializer expression of a 'var'-typed local variable."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InclusiveOrExpression",
@@ -2268,7 +2401,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple exclusive-OR expression or a binary bitwise inclusive-OR (|) expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple exclusive-OR expression or a binary bitwise inclusive-OR (|) expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.IndexerBody",
@@ -2284,7 +2418,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of a standard indexer: block accessors or a single expression body."}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of a standard indexer: block accessors or a single expression body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.IndexerDeclaration",
@@ -2300,7 +2435,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An indexer member declaration, in its standard or ref-returning form."}}}]}}}}}},
+                    "value": {"literal": {"string": "An indexer member declaration, in its standard or ref-returning form."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.IndexerDeclarator",
@@ -2317,7 +2453,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An indexer's declared type, optional explicit interface, and formal parameter list."}}}]}}}}}},
+                    "value": {"literal": {"string": "An indexer's declared type, optional explicit interface, and formal parameter list."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.IndexerModifier",
@@ -2342,7 +2479,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A modifier keyword on an indexer declaration, such as virtual, override, or abstract."}}}]}}}}}},
+                    "value": {"literal": {"string": "A modifier keyword on an indexer declaration, such as virtual, override, or abstract."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InitializerTarget",
@@ -2358,7 +2496,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The left-hand side of a member initializer: an identifier or an indexer argument list."}}}]}}}}}},
+                    "value": {"literal": {"string": "The left-hand side of a member initializer: an identifier or an indexer argument list."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InitializerValue",
@@ -2375,7 +2514,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The right-hand side of a member initializer: an expression or a nested collection initializer."}}}]}}}}}},
+                      "literal": {"string": "The right-hand side of a member initializer: an expression or a nested collection initializer."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.IntegerLiteral",
@@ -2392,7 +2532,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An integer literal, expressed in decimal, hexadecimal, or binary notation."}}}]}}}}}},
+                    "value": {"literal": {"string": "An integer literal, expressed in decimal, hexadecimal, or binary notation."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.IntegralType",
@@ -2415,7 +2556,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "One of the built-in integral numeric types (sbyte through char)."}}}]}}}}}},
+                    "value": {"literal": {"string": "One of the built-in integral numeric types (sbyte through char)."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InterfaceAccessors",
@@ -2432,7 +2574,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The get and/or set accessor attribute lists declared by an interface property or indexer."}}}]}}}}}},
+                    "value": {"literal": {"string": "The get and/or set accessor attribute lists declared by an interface property or indexer."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InterfaceDeclaration",
@@ -2455,7 +2598,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "An interface type declaration, with its modifiers, type parameters, base interfaces, and members."}}}]}}}}}},
+                      "literal": {"string": "An interface type declaration, with its modifiers, type parameters, base interfaces, and members."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InterfaceEventDeclaration",
@@ -2473,7 +2617,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An event member declared within an interface body."}}}]}}}}}},
+                    "value": {"literal": {"string": "An event member declared within an interface body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InterfaceIndexerDeclaration",
@@ -2493,7 +2638,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An indexer member declared within an interface body."}}}]}}}}}},
+                    "value": {"literal": {"string": "An indexer member declared within an interface body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InterfaceMemberDeclaration",
@@ -2511,7 +2657,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Any member that can appear in an interface body: method, property, event, or indexer."}}}]}}}}}},
+                    "value": {"literal": {"string": "Any member that can appear in an interface body: method, property, event, or indexer."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InterfaceMethodDeclaration",
@@ -2530,7 +2677,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A method member declared within an interface body."}}}]}}}}}},
+                    "value": {"literal": {"string": "A method member declared within an interface body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InterfaceMethodHeader",
@@ -2548,7 +2696,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The name, parameters, type parameters, and constraints of an interface method declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "The name, parameters, type parameters, and constraints of an interface method declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InterfaceModifier",
@@ -2568,7 +2717,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An access or unsafe modifier on an interface declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "An access or unsafe modifier on an interface declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InterfacePropertyDeclaration",
@@ -2588,7 +2738,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A property member declared within an interface body."}}}]}}}}}},
+                    "value": {"literal": {"string": "A property member declared within an interface body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InterfaceType",
@@ -2601,7 +2752,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to an interface type by its type name."}}}]}}}}}},
+                    "value": {"literal": {"string": "A reference to an interface type by its type name."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InterpolatedRegularStringExpression",
@@ -2614,7 +2766,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An interpolated string literal delimited by ordinary double quotes."}}}]}}}}}},
+                    "value": {"literal": {"string": "An interpolated string literal delimited by ordinary double quotes."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InterpolatedStringExpression",
@@ -2630,7 +2783,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An interpolated string expression, in its regular or verbatim quoting form."}}}]}}}}}},
+                    "value": {"literal": {"string": "An interpolated string expression, in its regular or verbatim quoting form."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InterpolatedVerbatimStringExpression",
@@ -2643,7 +2797,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An interpolated string literal using verbatim, at-sign-prefixed quoting."}}}]}}}}}},
+                    "value": {"literal": {"string": "An interpolated string literal using verbatim, at-sign-prefixed quoting."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.InvocationExpression",
@@ -2659,7 +2814,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A method or delegate invocation: a primary expression applied to an argument list."}}}]}}}}}},
+                    "value": {"literal": {"string": "A method or delegate invocation: a primary expression applied to an argument list."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.IsPatternExpression",
@@ -2675,7 +2831,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An 'is' pattern-matching expression testing a relational expression against a pattern."}}}]}}}}}},
+                    "value": {"literal": {"string": "An 'is' pattern-matching expression testing a relational expression against a pattern."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.IsTypeExpression",
@@ -2691,7 +2848,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An 'is' type-testing expression checking whether an expression is of a given type."}}}]}}}}}},
+                    "value": {"literal": {"string": "An 'is' type-testing expression checking whether an expression is of a given type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.IterationStatement",
@@ -2706,7 +2864,8 @@
                   {"name": "for", "type": {"variable": "hydra.csharp.syntax.ForStatement"}},
                   {"name": "foreach", "type": {"variable": "hydra.csharp.syntax.ForeachStatement"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A while, do, for, or foreach loop statement."}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A while, do, for, or foreach loop statement."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.JoinClause",
@@ -2726,7 +2885,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'join' clause in a query expression, correlating two sequences on matching keys."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'join' clause in a query expression, correlating two sequences on matching keys."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.JumpStatement",
@@ -2745,7 +2905,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A break, continue, goto, return, or throw statement that transfers control."}}}]}}}}}},
+                    "value": {"literal": {"string": "A break, continue, goto, return, or throw statement that transfers control."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Keyword",
@@ -2754,7 +2915,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reserved C# keyword."}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reserved C# keyword."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.LabeledStatement",
@@ -2770,7 +2932,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A statement prefixed with a label, usable as the target of a goto statement."}}}]}}}}}},
+                    "value": {"literal": {"string": "A statement prefixed with a label, usable as the target of a goto statement."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.LambdaExpression",
@@ -2787,7 +2950,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A lambda expression, with its async flag, parameter signature, and body."}}}]}}}}}},
+                    "value": {"literal": {"string": "A lambda expression, with its async flag, parameter signature, and body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.LetClause",
@@ -2803,7 +2967,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'let' clause in a query expression that introduces a computed range variable."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'let' clause in a query expression that introduces a computed range variable."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Literal",
@@ -2823,7 +2988,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A literal value: boolean, integer, real, character, string, or null."}}}]}}}}}},
+                    "value": {"literal": {"string": "A literal value: boolean, integer, real, character, string, or null."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.LocalConstantDeclaration",
@@ -2844,7 +3010,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'const' local declaration with its type and one or more constant declarators."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'const' local declaration with its type and one or more constant declarators."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.LocalFunctionBody",
@@ -2861,7 +3028,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of a local function: a block, null-conditional invocation, or expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of a local function: a block, null-conditional invocation, or expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.LocalFunctionDeclaration",
@@ -2877,7 +3045,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A local function declaration, in its standard or ref-returning form."}}}]}}}}}},
+                    "value": {"literal": {"string": "A local function declaration, in its standard or ref-returning form."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.LocalFunctionHeader",
@@ -2895,7 +3064,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The name, type parameters, formal parameters, and constraints of a local function."}}}]}}}}}},
+                    "value": {"literal": {"string": "The name, type parameters, formal parameters, and constraints of a local function."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.LocalFunctionModifier",
@@ -2911,7 +3081,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A modifier on a local function declaration: a ref modifier, or 'async'."}}}]}}}}}},
+                    "value": {"literal": {"string": "A modifier on a local function declaration: a ref modifier, or 'async'."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.LocalVariableDeclaration",
@@ -2928,7 +3099,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A local variable declaration, in its implicitly typed, explicitly typed, or ref form."}}}]}}}}}},
+                    "value": {"literal": {"string": "A local variable declaration, in its implicitly typed, explicitly typed, or ref form."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.LocalVariableInitializer",
@@ -2944,7 +3116,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The initializer of a local variable: an expression or an array initializer."}}}]}}}}}},
+                    "value": {"literal": {"string": "The initializer of a local variable: an expression or an array initializer."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.LocalVariableType",
@@ -2957,7 +3130,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The declared type of a local variable, or 'var' for implicit typing."}}}]}}}}}},
+                    "value": {"literal": {"string": "The declared type of a local variable, or 'var' for implicit typing."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.LockStatement",
@@ -2973,7 +3147,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'lock' statement that acquires a mutual-exclusion lock for the duration of its body."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'lock' statement that acquires a mutual-exclusion lock for the duration of its body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.MemberAccess",
@@ -2990,7 +3165,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'primary.identifier' member access, with optional explicit type arguments."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'primary.identifier' member access, with optional explicit type arguments."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.MemberAccessHead",
@@ -3007,7 +3183,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The left-hand target of a member access: a primary expression, predefined type, or alias."}}}]}}}}}},
+                    "value": {"literal": {"string": "The left-hand target of a member access: a primary expression, predefined type, or alias."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.MemberDeclarator",
@@ -3028,7 +3205,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single member of an anonymous object initializer, naming or computing a member value."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single member of an anonymous object initializer, naming or computing a member value."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.MemberDeclaratorList",
@@ -3045,7 +3223,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty, comma-separated list of member declarators in an anonymous object creation."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of member declarators in an anonymous object creation."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.MemberInitializer",
@@ -3061,7 +3240,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'target = value' pair within an object initializer."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'target = value' pair within an object initializer."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.MemberName",
@@ -3077,7 +3257,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A member's declared name, with an optional explicit interface type qualifier."}}}]}}}}}},
+                    "value": {"literal": {"string": "A member's declared name, with an optional explicit interface type qualifier."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.MethodBody",
@@ -3095,7 +3276,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of a standard method: a block, null-conditional invocation, expression, or empty."}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of a standard method: a block, null-conditional invocation, expression, or empty."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.MethodDeclaration",
@@ -3111,7 +3293,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A method member declaration, in its standard or ref-returning form."}}}]}}}}}},
+                    "value": {"literal": {"string": "A method member declaration, in its standard or ref-returning form."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.MethodHeader",
@@ -3129,7 +3312,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The name, type parameters, formal parameters, and constraints of a method declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "The name, type parameters, formal parameters, and constraints of a method declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.MethodModifier",
@@ -3143,7 +3327,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A modifier on a method declaration: a ref modifier, or 'async'."}}}]}}}}}},
+                    "value": {"literal": {"string": "A modifier on a method declaration: a ref modifier, or 'async'."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.MethodModifiers",
@@ -3159,7 +3344,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The full modifier list of a method declaration, including whether it is 'partial'."}}}]}}}}}},
+                    "value": {"literal": {"string": "The full modifier list of a method declaration, including whether it is 'partial'."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.MultiplicativeExpression",
@@ -3175,7 +3361,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple unary expression or a binary multiplication/division/remainder expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple unary expression or a binary multiplication/division/remainder expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.MultiplicativeOperator",
@@ -3188,7 +3375,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The multiplication, division, or modulo operator."}}}]}}}}}},
+                    "value": {"literal": {"string": "The multiplication, division, or modulo operator."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NamedArgument",
@@ -3204,7 +3392,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An argument of the form 'name: value' passed to an attribute constructor."}}}]}}}}}},
+                    "value": {"literal": {"string": "An argument of the form 'name: value' passed to an attribute constructor."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NamedArgumentList",
@@ -3221,7 +3410,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty, comma-separated list of named arguments passed to an attribute."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of named arguments passed to an attribute."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NamedEntity",
@@ -3237,7 +3427,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The target expression of a 'nameof' operator, with its chain of accessed parts."}}}]}}}}}},
+                    "value": {"literal": {"string": "The target expression of a 'nameof' operator, with its chain of accessed parts."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NamedEntityPart",
@@ -3253,7 +3444,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single '.identifier<TypeArgs>' segment chained within a named entity."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single '.identifier<TypeArgs>' segment chained within a named entity."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NamedEntityTarget",
@@ -3273,7 +3465,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The initial target of a named entity: a simple name, this, base, or a predefined/aliased type."}}}]}}}}}},
+                      "literal": {"string": "The initial target of a named entity: a simple name, this, base, or a predefined/aliased type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NamespaceBody",
@@ -3290,7 +3483,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The extern aliases, using directives, and member declarations within a namespace."}}}]}}}}}},
+                    "value": {"literal": {"string": "The extern aliases, using directives, and member declarations within a namespace."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NamespaceDeclaration",
@@ -3306,7 +3500,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A namespace declaration, naming the namespace and giving its body."}}}]}}}}}},
+                    "value": {"literal": {"string": "A namespace declaration, naming the namespace and giving its body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NamespaceMemberDeclaration",
@@ -3322,7 +3517,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A member of a namespace: a nested namespace declaration or a type declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A member of a namespace: a nested namespace declaration or a type declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NamespaceName",
@@ -3335,7 +3531,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to a namespace, expressed as a namespace-or-type name."}}}]}}}}}},
+                    "value": {"literal": {"string": "A reference to a namespace, expressed as a namespace-or-type name."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NamespaceOrTypeName",
@@ -3353,7 +3550,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A name that may refer to either a namespace or a type: identifier, qualified, or alias-qualified."}}}]}}}}}},
+                      "literal": {"string": "A name that may refer to either a namespace or a type: identifier, qualified, or alias-qualified."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NonArrayType",
@@ -3375,7 +3573,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A type that is not itself an array type: value, class, interface, delegate, dynamic, or pointer."}}}]}}}}}},
+                      "literal": {"string": "A type that is not itself an array type: value, class, interface, delegate, dynamic, or pointer."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NonArrayTypeArrayCreationExpression",
@@ -3393,7 +3592,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Array creation giving the element type, dimension expressions, and rank specifiers directly."}}}]}}}}}},
+                    "value": {"literal": {"string": "Array creation giving the element type, dimension expressions, and rank specifiers directly."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NonAssignmentExpression",
@@ -3412,7 +3612,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "An expression other than an assignment: declaration, conditional, lambda, or query expression."}}}]}}}}}},
+                      "literal": {"string": "An expression other than an assignment: declaration, conditional, lambda, or query expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NullCoalescingExpression",
@@ -3429,7 +3630,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple, binary (??), or throw-expression form of the null-coalescing operator."}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple, binary (??), or throw-expression form of the null-coalescing operator."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NullConditionalElementAccess",
@@ -3446,7 +3648,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A null-conditional element access (?[...]) with its chain of dependent accesses."}}}]}}}}}},
+                    "value": {"literal": {"string": "A null-conditional element access (?[...]) with its chain of dependent accesses."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NullConditionalInvocationExpression",
@@ -3462,7 +3665,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A null-conditional invocation (?.method(...) or ?[...]) with optional arguments."}}}]}}}}}},
+                    "value": {"literal": {"string": "A null-conditional invocation (?.method(...) or ?[...]) with optional arguments."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NullConditionalInvocationExpressionHead",
@@ -3478,7 +3682,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The member- or element-access head of a null-conditional invocation expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "The member- or element-access head of a null-conditional invocation expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NullConditionalMemberAccess",
@@ -3496,7 +3701,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A null-conditional member access (?.member) with its chain of dependent accesses."}}}]}}}}}},
+                    "value": {"literal": {"string": "A null-conditional member access (?.member) with its chain of dependent accesses."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NullConditionalProjectionInitializer",
@@ -3513,7 +3719,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A null-conditional member projection used inside an anonymous object initializer."}}}]}}}}}},
+                    "value": {"literal": {"string": "A null-conditional member projection used inside an anonymous object initializer."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.NumericType",
@@ -3530,7 +3737,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A numeric type: integral, floating-point, or decimal."}}}]}}}}}},
+                    "value": {"literal": {"string": "A numeric type: integral, floating-point, or decimal."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ObjectCreationExpression",
@@ -3547,7 +3755,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'new' expression that constructs an object, with optional arguments and initializer."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'new' expression that constructs an object, with optional arguments and initializer."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ObjectOrCollectionInitializer",
@@ -3563,7 +3772,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An object initializer's member list, or a collection initializer's element list."}}}]}}}}}},
+                    "value": {"literal": {"string": "An object initializer's member list, or a collection initializer's element list."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.OperatorBody",
@@ -3581,7 +3791,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The body of an operator overload declaration: a block, expression body, or empty (extern) body."}}}]}}}}}},
+                      "literal": {"string": "The body of an operator overload declaration: a block, expression body, or empty (extern) body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.OperatorDeclaration",
@@ -3599,7 +3810,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A user-defined operator overload declaration, with its modifiers, declarator, and body."}}}]}}}}}},
+                    "value": {"literal": {"string": "A user-defined operator overload declaration, with its modifiers, declarator, and body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.OperatorDeclarator",
@@ -3616,7 +3828,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The declarator of an operator overload: unary, binary, or conversion form."}}}]}}}}}},
+                    "value": {"literal": {"string": "The declarator of an operator overload: unary, binary, or conversion form."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.OperatorModifier",
@@ -3634,7 +3847,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A modifier keyword on an operator declaration: public, static, extern, or unsafe."}}}]}}}}}},
+                    "value": {"literal": {"string": "A modifier keyword on an operator declaration: public, static, extern, or unsafe."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Ordering",
@@ -3651,7 +3865,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A single ordering key expression, with an optional ascending/descending direction, in an orderby clause."}}}]}}}}}},
+                      "literal": {"string": "A single ordering key expression, with an optional ascending/descending direction, in an orderby clause."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.OrderingDirection",
@@ -3664,7 +3879,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The ascending or descending direction of an ordering key in an orderby clause."}}}]}}}}}},
+                    "value": {"literal": {"string": "The ascending or descending direction of an ordering key in an orderby clause."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.OverloadableBinaryOperator",
@@ -3694,7 +3910,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary operator symbol that may be overloaded via a user-defined operator declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary operator symbol that may be overloaded via a user-defined operator declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.OverloadableUnaryOperator",
@@ -3716,7 +3933,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A unary operator symbol that may be overloaded via a user-defined operator declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A unary operator symbol that may be overloaded via a user-defined operator declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ParameterArray",
@@ -3733,7 +3951,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A trailing 'params' array parameter of a formal parameter list."}}}]}}}}}},
+                    "value": {"literal": {"string": "A trailing 'params' array parameter of a formal parameter list."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ParameterModeModifier",
@@ -3746,7 +3965,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The ref, out, or in passing-mode modifier on a fixed parameter."}}}]}}}}}},
+                    "value": {"literal": {"string": "The ref, out, or in passing-mode modifier on a fixed parameter."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ParameterModifier",
@@ -3760,7 +3980,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A modifier on a fixed parameter: a passing-mode modifier, or 'this' for extension methods."}}}]}}}}}},
+                    "value": {"literal": {"string": "A modifier on a fixed parameter: a passing-mode modifier, or 'this' for extension methods."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Pattern",
@@ -3777,7 +3998,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A pattern used in pattern matching: a declaration, constant, or var pattern."}}}]}}}}}},
+                    "value": {"literal": {"string": "A pattern used in pattern matching: a declaration, constant, or var pattern."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.PointerElementAccess",
@@ -3793,7 +4015,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An unsafe pointer indexing expression (pointer[index])."}}}]}}}}}},
+                    "value": {"literal": {"string": "An unsafe pointer indexing expression (pointer[index])."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.PointerMemberAccess",
@@ -3810,7 +4033,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An unsafe pointer member access expression (pointer->member)."}}}]}}}}}},
+                    "value": {"literal": {"string": "An unsafe pointer member access expression (pointer->member)."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.PointerType",
@@ -3826,7 +4050,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An unsafe pointer type, formed from a pointee value type and a pointer depth."}}}]}}}}}},
+                    "value": {"literal": {"string": "An unsafe pointer type, formed from a pointee value type and a pointer depth."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.PositionalArgument",
@@ -3842,7 +4067,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single positional (or optionally named) argument in an attribute's argument list."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single positional (or optionally named) argument in an attribute's argument list."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.PositionalArgumentList",
@@ -3859,7 +4085,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty, comma-separated list of positional arguments passed to an attribute."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of positional arguments passed to an attribute."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.PredefinedType",
@@ -3888,7 +4115,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "One of the built-in predefined type keywords, such as int, string, or bool."}}}]}}}}}},
+                    "value": {"literal": {"string": "One of the built-in predefined type keywords, such as int, string, or bool."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.PrimaryConstraint",
@@ -3907,7 +4135,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The primary type-parameter constraint: a class type, or the class/struct/unmanaged constraint."}}}]}}}}}},
+                      "literal": {"string": "The primary type-parameter constraint: a class type, or the class/struct/unmanaged constraint."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.PrimaryExpression",
@@ -3923,7 +4152,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression without an array creation, or an array creation expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression without an array creation, or an array creation expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.PrimaryNoArrayCreationExpression",
@@ -3964,7 +4194,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A primary expression other than array creation: literal, invocation, access, and so on."}}}]}}}}}},
+                    "value": {"literal": {"string": "A primary expression other than array creation: literal, invocation, access, and so on."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.PropertyBody",
@@ -3980,7 +4211,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of a standard property: block accessors or a single expression body."}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of a standard property: block accessors or a single expression body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.PropertyDeclaration",
@@ -3996,7 +4228,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A property member declaration, in its standard or ref-returning form."}}}]}}}}}},
+                    "value": {"literal": {"string": "A property member declaration, in its standard or ref-returning form."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.PropertyModifier",
@@ -4022,7 +4255,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A modifier keyword on a property declaration, such as virtual, override, or abstract."}}}]}}}}}},
+                    "value": {"literal": {"string": "A modifier keyword on a property declaration, such as virtual, override, or abstract."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.QualifiedAliasMember",
@@ -4039,7 +4273,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An 'alias::member' reference, with optional type arguments, using an extern or global alias."}}}]}}}}}},
+                    "value": {"literal": {"string": "An 'alias::member' reference, with optional type arguments, using an extern or global alias."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.QualifiedIdentifier",
@@ -4056,7 +4291,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty, dot-separated sequence of identifiers, as used in a namespace declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty, dot-separated sequence of identifiers, as used in a namespace declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.QualifiedNamespaceOrTypeName",
@@ -4073,7 +4309,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A namespace-or-type name qualified with a preceding namespace-or-type and identifier."}}}]}}}}}},
+                    "value": {"literal": {"string": "A namespace-or-type name qualified with a preceding namespace-or-type and identifier."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.QueryBody",
@@ -4090,7 +4327,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The clauses, select/group clause, and optional continuation of a query expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "The clauses, select/group clause, and optional continuation of a query expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.QueryBodyClause",
@@ -4114,7 +4352,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A clause in a query expression body: from, let, where, join, or orderby."}}}]}}}}}},
+                    "value": {"literal": {"string": "A clause in a query expression body: from, let, where, join, or orderby."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.QueryContinuation",
@@ -4130,7 +4369,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An 'into' continuation that feeds a query's results into a further query body."}}}]}}}}}},
+                    "value": {"literal": {"string": "An 'into' continuation that feeds a query's results into a further query body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.QueryExpression",
@@ -4146,7 +4386,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A LINQ query expression, starting with a from clause and continuing with a query body."}}}]}}}}}},
+                    "value": {"literal": {"string": "A LINQ query expression, starting with a from clause and continuing with a query body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RankSpecifier",
@@ -4159,7 +4400,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The rank (number of dimensions) of an array type or array creation expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "The rank (number of dimensions) of an array type or array creation expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RankSpecifierArrayCreationExpression",
@@ -4176,7 +4418,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "Array creation using a rank specifier together with an array initializer, with inferred element type."}}}]}}}}}},
+                      "literal": {"string": "Array creation using a rank specifier together with an array initializer, with inferred element type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefAccessorBody",
@@ -4193,7 +4436,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of a ref-returning get accessor: a block, ref expression, or empty (abstract) body."}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of a ref-returning get accessor: a block, ref expression, or empty (abstract) body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefConditionalExpression",
@@ -4210,7 +4454,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A ref-returning conditional expression, selecting between two variable references."}}}]}}}}}},
+                    "value": {"literal": {"string": "A ref-returning conditional expression, selecting between two variable references."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefGetAccessorDeclaration",
@@ -4227,7 +4472,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A ref-returning property or indexer get accessor declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A ref-returning property or indexer get accessor declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefIndexerBody",
@@ -4243,7 +4489,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of a ref-returning indexer: a ref get accessor, or a single ref expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of a ref-returning indexer: a ref get accessor, or a single ref expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefIndexerDeclaration",
@@ -4259,7 +4506,8 @@
                   {"name": "declarator", "type": {"variable": "hydra.csharp.syntax.IndexerDeclarator"}},
                   {"name": "body", "type": {"variable": "hydra.csharp.syntax.RefIndexerBody"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A ref-returning indexer member declaration."}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A ref-returning indexer member declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefKind",
@@ -4272,7 +4520,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Whether a ref-returning member returns by plain ref or by ref readonly."}}}]}}}}}},
+                    "value": {"literal": {"string": "Whether a ref-returning member returns by plain ref or by ref readonly."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefLocalFunctionBody",
@@ -4288,7 +4537,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of a ref-returning local function: a block, or a single ref expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of a ref-returning local function: a block, or a single ref expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefLocalFunctionDeclaration",
@@ -4304,7 +4554,8 @@
                   {"name": "header", "type": {"variable": "hydra.csharp.syntax.LocalFunctionHeader"}},
                   {"name": "body", "type": {"variable": "hydra.csharp.syntax.RefLocalFunctionBody"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A ref-returning local function declaration."}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A ref-returning local function declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefLocalFunctionModifier",
@@ -4317,7 +4568,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A modifier on a ref-returning local function declaration: static or unsafe."}}}]}}}}}},
+                    "value": {"literal": {"string": "A modifier on a ref-returning local function declaration: static or unsafe."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefLocalVariableDeclaration",
@@ -4339,7 +4591,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A local variable declaration that binds a variable by reference."}}}]}}}}}},
+                    "value": {"literal": {"string": "A local variable declaration that binds a variable by reference."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefLocalVariableDeclarator",
@@ -4355,7 +4608,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The identifier and referenced variable in a single ref local variable declarator."}}}]}}}}}},
+                    "value": {"literal": {"string": "The identifier and referenced variable in a single ref local variable declarator."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefMethodBody",
@@ -4372,7 +4626,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of a ref-returning method: a block, ref expression, or empty (extern) body."}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of a ref-returning method: a block, ref expression, or empty (extern) body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefMethodModifier",
@@ -4398,7 +4653,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A modifier keyword on a ref-returning method declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A modifier keyword on a ref-returning method declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefPropertyBody",
@@ -4414,7 +4670,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of a ref-returning property: a ref get accessor, or a single ref expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of a ref-returning property: a ref get accessor, or a single ref expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefReturnMethodDeclaration",
@@ -4434,7 +4691,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A ref-returning method declaration, including its ref kind, header, and body."}}}]}}}}}},
+                    "value": {"literal": {"string": "A ref-returning method declaration, including its ref kind, header, and body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefReturnPropertyDeclaration",
@@ -4454,7 +4712,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A ref-returning property declaration, including its ref kind and body."}}}]}}}}}},
+                    "value": {"literal": {"string": "A ref-returning property declaration, including its ref kind and body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RefVarImplicitlyTypedLocalVariableDeclaration",
@@ -4470,7 +4729,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An implicitly typed local variable declared by reference using 'ref var'."}}}]}}}}}},
+                    "value": {"literal": {"string": "An implicitly typed local variable declared by reference using 'ref var'."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ReferenceType",
@@ -4489,7 +4749,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference type: class, interface, array, delegate, or the dynamic type."}}}]}}}}}},
+                    "value": {"literal": {"string": "A reference type: class, interface, array, delegate, or the dynamic type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RegularInterpolation",
@@ -4506,7 +4767,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single '{expression[,width][:format]}' hole within a regular interpolated string."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single '{expression[,width][:format]}' hole within a regular interpolated string."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RelationalExpression",
@@ -4525,7 +4787,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple, binary, is-type, is-pattern, or as-type relational expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple, binary, is-type, is-pattern, or as-type relational expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.RelationalOperator",
@@ -4543,7 +4806,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A relational comparison operator: less than, greater than, or their or-equal variants."}}}]}}}}}},
+                    "value": {"literal": {"string": "A relational comparison operator: less than, greater than, or their or-equal variants."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ResourceAcquisition",
@@ -4559,7 +4823,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The resource acquired by a using statement: a local variable declaration or an expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "The resource acquired by a using statement: a local variable declaration or an expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ReturnStatement",
@@ -4576,7 +4841,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A return statement, in its value-less, value-returning, or ref-returning form."}}}]}}}}}},
+                    "value": {"literal": {"string": "A return statement, in its value-less, value-returning, or ref-returning form."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ReturnType",
@@ -4589,7 +4855,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The declared return type of a member: a ref-qualified type, or void."}}}]}}}}}},
+                    "value": {"literal": {"string": "The declared return type of a member: a ref-qualified type, or void."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.SecondaryConstraint",
@@ -4605,7 +4872,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A secondary type-parameter constraint: an interface type or another type parameter."}}}]}}}}}},
+                    "value": {"literal": {"string": "A secondary type-parameter constraint: an interface type or another type parameter."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.SecondaryConstraints",
@@ -4622,7 +4890,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty list of secondary constraints on a type parameter."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty list of secondary constraints on a type parameter."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.SelectOrGroupClause",
@@ -4638,7 +4907,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The final clause of a query body: a 'select' projection or a 'group by' clause."}}}]}}}}}},
+                    "value": {"literal": {"string": "The final clause of a query body: a 'select' projection or a 'group by' clause."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.SelectionStatement",
@@ -4650,7 +4920,8 @@
                 "union": [
                   {"name": "if", "type": {"variable": "hydra.csharp.syntax.IfStatement"}},
                   {"name": "switch", "type": {"variable": "hydra.csharp.syntax.SwitchStatement"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An if or switch statement."}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An if or switch statement."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ShiftExpression",
@@ -4666,7 +4937,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple additive expression or a binary left/right-shift expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple additive expression or a binary left/right-shift expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ShiftOperator",
@@ -4679,7 +4951,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The left-shift (<<) or right-shift (>>) operator."}}}]}}}}}},
+                    "value": {"literal": {"string": "The left-shift (<<) or right-shift (>>) operator."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.SimpleConditionalExpression",
@@ -4696,7 +4969,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The ordinary ternary conditional expression: 'condition ? true : false'."}}}]}}}}}},
+                    "value": {"literal": {"string": "The ordinary ternary conditional expression: 'condition ? true : false'."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.SimpleName",
@@ -4712,7 +4986,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple identifier reference, with an optional list of explicit type arguments."}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple identifier reference, with an optional list of explicit type arguments."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.SimpleType",
@@ -4722,7 +4997,8 @@
             "annotated": {
               "body": {
                 "union": [{"name": "numeric", "type": {"variable": "hydra.csharp.syntax.NumericType"}}, {"name": "bool", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A numeric type or the bool type."}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A numeric type or the bool type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.SpecificCatchClause",
@@ -4739,7 +5015,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A catch clause naming an exception type and/or filter, with a handler block."}}}]}}}}}},
+                    "value": {"literal": {"string": "A catch clause naming an exception type and/or filter, with a handler block."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StackallocExpression",
@@ -4756,7 +5033,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'stackalloc' expression that allocates a block of memory on the stack."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'stackalloc' expression that allocates a block of memory on the stack."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StandardEventDeclaration",
@@ -4774,7 +5052,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A field-like event declaration, with its type and one or more declarators."}}}]}}}}}},
+                    "value": {"literal": {"string": "A field-like event declaration, with its type and one or more declarators."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StandardIndexerDeclaration",
@@ -4792,7 +5071,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A standard (non-ref-returning) indexer declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A standard (non-ref-returning) indexer declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StandardLocalFunctionDeclaration",
@@ -4810,7 +5090,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A standard (non-ref-returning) local function declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A standard (non-ref-returning) local function declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StandardMethodDeclaration",
@@ -4829,7 +5110,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A standard (non-ref-returning) method declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A standard (non-ref-returning) method declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StandardPropertyDeclaration",
@@ -4848,7 +5130,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A standard (non-ref-returning) property declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A standard (non-ref-returning) property declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Statement",
@@ -4865,7 +5148,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A labeled statement, a declaration statement, or an embedded statement."}}}]}}}}}},
+                    "value": {"literal": {"string": "A labeled statement, a declaration statement, or an embedded statement."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StatementExpression",
@@ -4888,7 +5172,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression usable as a statement on its own, such as an invocation or assignment."}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression usable as a statement on its own, such as an invocation or assignment."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StatementExpressionList",
@@ -4905,7 +5190,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty, comma-separated list of statement expressions, as used in a for statement."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of statement expressions, as used in a for statement."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StaticConstructorBody",
@@ -4922,7 +5208,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of a static constructor: a block, expression body, or empty (extern) body."}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of a static constructor: a block, expression body, or empty (extern) body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StaticConstructorDeclaration",
@@ -4937,7 +5224,8 @@
                   {"name": "name", "type": {"variable": "hydra.csharp.syntax.Identifier"}},
                   {"name": "body", "type": {"variable": "hydra.csharp.syntax.StaticConstructorBody"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A static constructor declaration for a type."}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A static constructor declaration for a type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StaticConstructorModifiers",
@@ -4950,7 +5238,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The extern and unsafe flags of a static constructor declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "The extern and unsafe flags of a static constructor declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StructDeclaration",
@@ -4973,7 +5262,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A struct type declaration, with its modifiers, type parameters, interfaces, and body."}}}]}}}}}},
+                    "value": {"literal": {"string": "A struct type declaration, with its modifiers, type parameters, interfaces, and body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StructMemberDeclaration",
@@ -4998,7 +5288,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Any member that can appear in a struct body, including fixed-size buffer declarations."}}}]}}}}}},
+                    "value": {"literal": {"string": "Any member that can appear in a struct body, including fixed-size buffer declarations."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StructModifier",
@@ -5019,7 +5310,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A modifier keyword on a struct declaration, such as readonly or unsafe."}}}]}}}}}},
+                    "value": {"literal": {"string": "A modifier keyword on a struct declaration, such as readonly or unsafe."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StructOrEnumType",
@@ -5035,7 +5327,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A struct type or an enum type, as used in the definition of value types."}}}]}}}}}},
+                    "value": {"literal": {"string": "A struct type or an enum type, as used in the definition of value types."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.StructType",
@@ -5052,7 +5345,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to a struct type: a named type, a simple type, or a tuple type."}}}]}}}}}},
+                    "value": {"literal": {"string": "A reference to a struct type: a named type, a simple type, or a tuple type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.SwitchBranch",
@@ -5068,7 +5362,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A pattern and optional guard expression used in a pattern-matching switch section."}}}]}}}}}},
+                    "value": {"literal": {"string": "A pattern and optional guard expression used in a pattern-matching switch section."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.SwitchLabel",
@@ -5082,7 +5377,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single label of a switch section: a pattern branch, or the default label."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single label of a switch section: a pattern branch, or the default label."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.SwitchSection",
@@ -5103,7 +5399,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A group of switch labels sharing a common statement list within a switch statement."}}}]}}}}}},
+                    "value": {"literal": {"string": "A group of switch labels sharing a common statement list within a switch statement."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.SwitchStatement",
@@ -5119,7 +5416,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A switch statement, dispatching on an expression across its switch sections."}}}]}}}}}},
+                    "value": {"literal": {"string": "A switch statement, dispatching on an expression across its switch sections."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TryStatement",
@@ -5136,7 +5434,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A try statement with its protected block, catch clauses, and optional finally block."}}}]}}}}}},
+                    "value": {"literal": {"string": "A try statement with its protected block, catch clauses, and optional finally block."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TupleElement",
@@ -5152,7 +5451,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single element of a tuple expression, with an optional name."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single element of a tuple expression, with an optional name."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TupleExpression",
@@ -5173,7 +5473,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A tuple literal expression, either a list of named elements or a deconstruction tuple."}}}]}}}}}},
+                    "value": {"literal": {"string": "A tuple literal expression, either a list of named elements or a deconstruction tuple."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TupleType",
@@ -5190,7 +5491,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A tuple type formed from a non-empty list of named or unnamed element types."}}}]}}}}}},
+                    "value": {"literal": {"string": "A tuple type formed from a non-empty list of named or unnamed element types."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TupleTypeElement",
@@ -5206,7 +5508,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single element type of a tuple type, with an optional element name."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single element type of a tuple type, with an optional element name."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.Type",
@@ -5224,7 +5527,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C# type: a reference type, value type, type parameter, or pointer type."}}}]}}}}}},
+                    "value": {"literal": {"string": "A C# type: a reference type, value type, type parameter, or pointer type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TypeArgumentList",
@@ -5237,7 +5541,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A list of type arguments supplied to a generic type or method."}}}]}}}}}},
+                    "value": {"literal": {"string": "A list of type arguments supplied to a generic type or method."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TypeDeclaration",
@@ -5256,7 +5561,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A top-level or nested type declaration: class, struct, interface, enum, or delegate."}}}]}}}}}},
+                    "value": {"literal": {"string": "A top-level or nested type declaration: class, struct, interface, enum, or delegate."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TypeName",
@@ -5269,7 +5575,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A name that is known to refer to a type, expressed as a namespace-or-type name."}}}]}}}}}},
+                    "value": {"literal": {"string": "A name that is known to refer to a type, expressed as a namespace-or-type name."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TypeParameter",
@@ -5282,7 +5589,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single generic type parameter, identified by its name."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single generic type parameter, identified by its name."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TypeParameterConstraints",
@@ -5299,7 +5607,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The primary, secondary, and constructor constraints on a single type parameter."}}}]}}}}}},
+                    "value": {"literal": {"string": "The primary, secondary, and constructor constraints on a single type parameter."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TypeParameterConstraintsClause",
@@ -5315,7 +5624,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'where T : ...' clause constraining one type parameter of a generic declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'where T : ...' clause constraining one type parameter of a generic declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TypeParameterList",
@@ -5332,7 +5642,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty, comma-separated list of type parameters in a generic declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of type parameters in a generic declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TypeParameterPart",
@@ -5348,7 +5659,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single type parameter within a type parameter list, with its optional attributes."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single type parameter within a type parameter list, with its optional attributes."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.TypeofExpression",
@@ -5365,7 +5677,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'typeof' expression yielding the System.Type of a type, unbound generic type, or void."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'typeof' expression yielding the System.Type of a type, unbound generic type, or void."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.UnaryExpression",
@@ -5390,7 +5703,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A unary expression: a primary expression, or a prefixed unary/cast/await operation."}}}]}}}}}},
+                    "value": {"literal": {"string": "A unary expression: a primary expression, or a prefixed unary/cast/await operation."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.UnaryOperatorDeclarator",
@@ -5407,7 +5721,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The declarator for a user-defined unary operator overload, naming its single parameter."}}}]}}}}}},
+                    "value": {"literal": {"string": "The declarator for a user-defined unary operator overload, naming its single parameter."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.UnboundTypeName",
@@ -5424,7 +5739,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An unbound generic type name, as used in a typeof expression (e.g. Dictionary<,>)."}}}]}}}}}},
+                    "value": {"literal": {"string": "An unbound generic type name, as used in a typeof expression (e.g. Dictionary<,>)."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.UnboundTypeNamePart",
@@ -5441,7 +5757,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single segment of an unbound type name, with its aliasing flag and generic dimension."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single segment of an unbound type name, with its aliasing flag and generic dimension."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.UnmanagedType",
@@ -5457,7 +5774,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A type usable with the unsafe 'sizeof' operator: a value type or pointer type."}}}]}}}}}},
+                    "value": {"literal": {"string": "A type usable with the unsafe 'sizeof' operator: a value type or pointer type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.UsingAliasDirective",
@@ -5473,7 +5791,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'using alias = namespace-or-type;' directive introducing a using alias."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'using alias = namespace-or-type;' directive introducing a using alias."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.UsingDirective",
@@ -5490,7 +5809,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A using directive: an alias directive, a namespace import, or a using-static directive."}}}]}}}}}},
+                    "value": {"literal": {"string": "A using directive: an alias directive, a namespace import, or a using-static directive."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.UsingStatement",
@@ -5506,7 +5826,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'using' statement that deterministically disposes an acquired resource after its body."}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'using' statement that deterministically disposes an acquired resource after its body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.ValueType",
@@ -5522,7 +5843,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A struct or enum type, in its non-nullable or nullable ('?') form."}}}]}}}}}},
+                    "value": {"literal": {"string": "A struct or enum type, in its non-nullable or nullable ('?') form."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.VariableDeclarator",
@@ -5538,7 +5860,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An identifier and optional initializer within a field or local variable declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "An identifier and optional initializer within a field or local variable declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.VariableDeclarators",
@@ -5555,7 +5878,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty, comma-separated list of variable declarators, as used in an event declaration."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of variable declarators, as used in an event declaration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.VariableInitializer",
@@ -5571,7 +5895,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The initializer of a variable: an expression or a nested array initializer."}}}]}}}}}},
+                    "value": {"literal": {"string": "The initializer of a variable: an expression or a nested array initializer."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.VariableReference",
@@ -5584,7 +5909,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to a variable, expressed as an expression."}}}]}}}}}},
+                    "value": {"literal": {"string": "A reference to a variable, expressed as an expression."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.VarianceAnnotation",
@@ -5597,7 +5923,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The in (contravariant) or out (covariant) variance annotation on a generic type parameter."}}}]}}}}}},
+                    "value": {"literal": {"string": "The in (contravariant) or out (covariant) variance annotation on a generic type parameter."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.VariantTypeParameter",
@@ -5614,7 +5941,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single type parameter of an interface or delegate, with optional variance annotation."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single type parameter of an interface or delegate, with optional variance annotation."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.VariantTypeParameters",
@@ -5627,7 +5955,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The list of variant type parameters declared by a generic interface or delegate."}}}]}}}}}},
+                    "value": {"literal": {"string": "The list of variant type parameters declared by a generic interface or delegate."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.VerbatimInterpolation",
@@ -5644,7 +5973,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single '{expression[,width][:format]}' hole within a verbatim interpolated string."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single '{expression[,width][:format]}' hole within a verbatim interpolated string."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.WhileStatement",
@@ -5660,7 +5990,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A while iteration statement that tests its condition before each execution of the body."}}}]}}}}}},
+                    "value": {"literal": {"string": "A while iteration statement that tests its condition before each execution of the body."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.csharp.syntax.YieldStatement",
@@ -5674,4 +6005,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'yield return' or 'yield break' statement used within an iterator."}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A 'yield return' or 'yield break' statement used within an iterator."}}}]}}},
+          "constraints": []}}}]}

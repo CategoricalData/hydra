@@ -82,7 +82,7 @@
                                                         "handler": {"lambda": {"parameter": "_", "domain": {"variable": "hydra.core.IntegerType"}, "body": {"literal": {"boolean": true}}}}}]}},
                                                 "argument": {"variable": "lt"}}}}}}]}},
                                 "argument": {"application": {"function": {"variable": "hydra.strip.deannotateType"}, "argument": {"variable": "typ"}}}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -113,7 +113,7 @@
                                                             "handler": {"lambda": {"parameter": "_", "domain": {"variable": "hydra.core.FloatType"}, "body": {"literal": {"boolean": true}}}}}]}},
                                                     "argument": {"variable": "lt"}}}}}}]}},
                                     "argument": {"application": {"function": {"variable": "hydra.strip.deannotateType"}, "argument": {"variable": "typ"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                                "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {

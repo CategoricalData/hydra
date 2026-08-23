@@ -76,7 +76,10 @@
                                   {
                                     "name": "jsonResult",
                                     "term": {"application": {"function": {"variable": "hydra.json.yaml.decode.yamlToJson"}, "argument": {"variable": "node"}}},
-                                    "typeScheme": {"variables": [], "body": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.json.model.Value"}}}}}],
+                                    "typeScheme": {
+                                      "variables": [],
+                                      "body": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.json.model.Value"}}},
+                                      "constraints": []}}],
                                 "body": {
                                   "application": {
                                     "function": {
@@ -167,7 +170,7 @@
                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.yaml.model.Node"}}},
                                                             "type": {"variable": "hydra.yaml.model.Node"}}},
                                                         "argument": {"variable": "kv"}}},
-                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.yaml.model.Node"}}}],
+                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.yaml.model.Node"}, "constraints": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -180,7 +183,7 @@
                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.yaml.model.Node"}}},
                                                                 "type": {"variable": "hydra.yaml.model.Node"}}},
                                                             "argument": {"variable": "kv"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.yaml.model.Node"}}}],
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.yaml.model.Node"}, "constraints": []}}],
                                                     "body": {
                                                       "let": {
                                                         "bindings": [
@@ -226,7 +229,10 @@
                                                                                                 "type": {"literal": "string"}}}}}}]}},
                                                                                 "argument": {"variable": "s"}}}}}}]}},
                                                                 "argument": {"variable": "keyNode"}}},
-                                                            "typeScheme": {"variables": [], "body": {"either": {"left": {"literal": "string"}, "right": {"literal": "string"}}}}}],
+                                                            "typeScheme": {
+                                                              "variables": [],
+                                                              "body": {"either": {"left": {"literal": "string"}, "right": {"literal": "string"}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -261,7 +267,10 @@
                                                                           {
                                                                             "name": "valResult",
                                                                             "term": {"application": {"function": {"variable": "hydra.json.yaml.decode.yamlToJson"}, "argument": {"variable": "valNode"}}},
-                                                                            "typeScheme": {"variables": [], "body": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.json.model.Value"}}}}}],
+                                                                            "typeScheme": {
+                                                                              "variables": [],
+                                                                              "body": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.json.model.Value"}}},
+                                                                              "constraints": []}}],
                                                                         "body": {
                                                                           "application": {
                                                                             "function": {
@@ -292,7 +301,8 @@
                                               "codomain": {
                                                 "either": {
                                                   "left": {"literal": "string"},
-                                                  "right": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}}}}}}],
+                                                  "right": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}}}},
+                                          "constraints": []}}],
                                     "body": {
                                       "let": {
                                         "bindings": [
@@ -325,7 +335,8 @@
                                               "body": {
                                                 "either": {
                                                   "left": {"literal": "string"},
-                                                  "right": {"list": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}}}}}],
+                                                  "right": {"list": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}}},
+                                              "constraints": []}}],
                                         "body": {
                                           "application": {
                                             "function": {
@@ -484,7 +495,8 @@
                                             "argument": {"variable": "nodes"}}},
                                         "typeScheme": {
                                           "variables": [],
-                                          "body": {"either": {"left": {"literal": "string"}, "right": {"list": {"variable": "hydra.json.model.Value"}}}}}}],
+                                          "body": {"either": {"left": {"literal": "string"}, "right": {"list": {"variable": "hydra.json.model.Value"}}}},
+                                          "constraints": []}}],
                                     "body": {
                                       "application": {
                                         "function": {

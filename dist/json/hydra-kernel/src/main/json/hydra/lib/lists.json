@@ -387,7 +387,7 @@
           "description": "Left-fold a list in the list monad (a nondeterministic fold).",
           "comments": [
             "foldList(f, acc0, xs) folds xs from the left, branching the accumulator over every result of the step function at each element: after each element the set of accumulators is replaced by all results of applying f to each current accumulator and that element.",
-            "foldList(f, acc0, xs) is foldl(\\macc el -> bind(macc, \\acc -> f(acc, el)), pure(acc0), xs); this defining equation is the specification. For the empty list the result is pure(acc0).",
+            "foldList(f, acc0, xs) is foldl(\\macc el -> bind(macc, \\acc -> f(acc, el)), singleton(acc0), xs); this defining equation is the specification. For the empty list the result is singleton(acc0).",
             "Total on finite inputs. The list-monad instance of the monadic left fold."],
           "seeAlso": []},
         "signature": {
@@ -523,6 +523,19 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.lib.lists.isEmpty",
+        "metadata": {
+          "description": "Test whether a list is empty.",
+          "comments": ["isEmpty(xs) returns true iff xs is the empty list.", "Total. Corresponds to Haskell's null :: [a] -> Bool."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [{"name": "xs", "description": "the list to test", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.lists.join",
         "metadata": {
           "description": "Intercalate a list of lists with a separator list between each.",
@@ -606,7 +619,7 @@
           "description": "Traverse a list in the list monad.",
           "comments": [
             "mapList(f, xs) returns all combinations obtainable by choosing one element from f(x) for each x in xs: each result list has the same length as xs, with its element at each position drawn from the corresponding f(x).",
-            "Results appear in the lexicographic order of the choices, with the choice for the first element varying slowest. The number of results is the product of the lengths of the lists f(x); if f(x) is empty for any element, the result is the empty list; mapList(f, []) is pure([]).",
+            "Results appear in the lexicographic order of the choices, with the choice for the first element varying slowest. The number of results is the product of the lengths of the lists f(x); if f(x) is empty for any element, the result is the empty list; mapList(f, []) is singleton([]).",
             "Total on finite inputs. The list-monad instance of the traversal family."],
           "seeAlso": []},
         "signature": {
@@ -684,19 +697,6 @@
         "isTotal": true}},
     {
       "primitive": {
-        "name": "hydra.lib.lists.null",
-        "metadata": {
-          "description": "Test whether a list is empty.",
-          "comments": ["null(xs) returns true iff xs is the empty list.", "Total. Corresponds to Haskell's null :: [a] -> Bool."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "xs", "description": "the list to test", "type": {"list": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"literal": "boolean"}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
         "name": "hydra.lib.lists.partition",
         "metadata": {
           "description": "Partition a list into elements that satisfy a predicate and those that do not.",
@@ -761,19 +761,6 @@
                     "argument": {"variable": "xs"}}}}}}}}},
     {
       "primitive": {
-        "name": "hydra.lib.lists.pure",
-        "metadata": {
-          "description": "Wrap a value in a single-element list.",
-          "comments": ["pure(x) = [x]. The applicative pure for lists.", "Total. Corresponds to Haskell's pure :: a -> [a]."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "x", "description": "the value to wrap", "type": {"variable": "x"}, "isLazy": false}],
-          "result": {"type": {"list": {"variable": "x"}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
         "name": "hydra.lib.lists.replicate",
         "metadata": {
           "description": "Build a list of n copies of a value.",
@@ -808,11 +795,10 @@
         "metadata": {
           "description": "Construct a single-element list.",
           "comments": [
-            "singleton(x) = [x]. Identical to pure for lists.",
-            "Total. Corresponds to Haskell's singleton :: a -> [a].",
-            "Deprecated since 0.18. Use: hydra.lib.lists.pure."],
-          "seeAlso": [],
-          "lifecycle": {"deprecatedSince": "0.18"}},
+            "singleton(x) = [x].",
+            "The constructor for a single-element list; useful point-free (e.g. map singleton xs).",
+            "Total. Corresponds to Haskell's singleton :: a -> [a]."],
+          "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "x", "description": "the value to wrap in a single-element list", "type": {"variable": "x"}, "isLazy": false}],
@@ -911,7 +897,7 @@
                                                         "function": {"variable": "hydra.lib.logic.and"},
                                                         "argument": {
                                                           "application": {
-                                                            "function": {"variable": "hydra.lib.lists.null"},
+                                                            "function": {"variable": "hydra.lib.lists.isEmpty"},
                                                             "argument": {"application": {"function": {"variable": "hydra.lib.pairs.second"}, "argument": {"variable": "acc"}}}}}}},
                                                     "argument": {"application": {"function": {"variable": "p"}, "argument": {"variable": "x"}}}}}}},
                                             "argument": {

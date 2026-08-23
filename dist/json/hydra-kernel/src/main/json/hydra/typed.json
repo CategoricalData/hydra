@@ -31,7 +31,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An association of a named term (element) with a phantom type"}}}]}}}}}},
+                    "value": {"literal": {"string": "An association of a named term (element) with a phantom type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.typed.TypedName",
@@ -41,7 +42,8 @@
             "annotated": {
               "body": {"forall": {"parameter": "a", "body": {"wrap": {"variable": "hydra.core.Name"}}}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An association of a name with a phantom type"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An association of a name with a phantom type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.typed.TypedTerm",
@@ -51,7 +53,8 @@
             "annotated": {
               "body": {"forall": {"parameter": "a", "body": {"wrap": {"variable": "hydra.core.Term"}}}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An association of a term with a phantom type"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An association of a term with a phantom type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.typed.TypedTermDefinition",
@@ -80,4 +83,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An association of a term definition with a phantom type"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "An association of a term definition with a phantom type"}}}]}}},
+          "constraints": []}}}]}

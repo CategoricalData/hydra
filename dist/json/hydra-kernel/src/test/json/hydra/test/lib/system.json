@@ -410,7 +410,7 @@
                                                                                       "domain": {"variable": "hydra.system.ProcessResult"},
                                                                                       "body": {
                                                                                         "application": {
-                                                                                          "function": {"variable": "hydra.lib.literals.showInt32"},
+                                                                                          "function": {"variable": "hydra.lib.literals.printInt32"},
                                                                                           "argument": {
                                                                                             "application": {
                                                                                               "function": {"unwrap": "hydra.system.StatusCode"},
@@ -608,7 +608,7 @@
                                                                                               "function": {"variable": "hydra.lib.logic.not"},
                                                                                               "argument": {
                                                                                                 "application": {
-                                                                                                  "function": {"variable": "hydra.lib.strings.null"},
+                                                                                                  "function": {"variable": "hydra.lib.strings.isEmpty"},
                                                                                                   "argument": {
                                                                                                     "application": {
                                                                                                       "function": {
@@ -1420,7 +1420,7 @@
                                                                                               "function": {"variable": "hydra.lib.logic.not"},
                                                                                               "argument": {
                                                                                                 "application": {
-                                                                                                  "function": {"variable": "hydra.lib.strings.null"},
+                                                                                                  "function": {"variable": "hydra.lib.strings.isEmpty"},
                                                                                                   "argument": {"application": {"function": {"unwrap": "hydra.file.FilePath"}, "argument": {"variable": "p"}}}}}}}}}}}}},
                                                                               "argument": {"variable": "r"}}}}}}},
                                                                   "argument": {"variable": "hydra.lib.system.getWorkingDirectory"}}}}}},

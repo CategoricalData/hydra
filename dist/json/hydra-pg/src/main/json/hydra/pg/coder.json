@@ -428,7 +428,7 @@
                                                                                               {
                                                                                                 "name": "label",
                                                                                                 "term": {"wrap": {"typeName": "hydra.pg.model.EdgeLabel", "body": {"variable": "labelStr"}}},
-                                                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
+                                                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.EdgeLabel"}, "constraints": []}},
                                                                                               {
                                                                                                 "name": "vertexIdsSchema",
                                                                                                 "term": {
@@ -453,7 +453,8 @@
                                                                                                         "application": {
                                                                                                           "function": {"application": {"function": {"variable": "hydra.coders.Coder"}, "argument": {"variable": "hydra.core.Term"}}},
                                                                                                           "argument": {"variable": "t3"}}},
-                                                                                                      "argument": {"variable": "hydra.errors.Error"}}}}}],
+                                                                                                      "argument": {"variable": "hydra.errors.Error"}}},
+                                                                                                  "constraints": []}}],
                                                                                             "body": {
                                                                                               "application": {
                                                                                                 "function": {
@@ -1578,7 +1579,8 @@
                                                                                                                                                                     "argument": {"application": {"function": {"variable": "hydra.pg.model.ElementTypeTree"}, "argument": {"variable": "t2"}}}}},
                                                                                                                                                                 "argument": {"variable": "hydra.core.Term"}}},
                                                                                                                                                             "argument": {"application": {"function": {"variable": "hydra.pg.model.ElementTree"}, "argument": {"variable": "t3"}}}}},
-                                                                                                                                                        "argument": {"variable": "hydra.errors.Error"}}}}}}}}],
+                                                                                                                                                        "argument": {"variable": "hydra.errors.Error"}}}}}},
+                                                                                                                                              "constraints": []}}],
                                                                                                                                         "body": {
                                                                                                                                           "application": {
                                                                                                                                             "function": {
@@ -2106,7 +2108,7 @@
                                                                               {
                                                                                 "name": "label",
                                                                                 "term": {"wrap": {"typeName": "hydra.pg.model.VertexLabel", "body": {"variable": "labelStr"}}},
-                                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.VertexLabel"}}}],
+                                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.VertexLabel"}, "constraints": []}}],
                                                                             "body": {
                                                                               "application": {
                                                                                 "function": {
@@ -2934,7 +2936,8 @@
                                                                                                                                                     "type": {"variable": "t7"}}},
                                                                                                                                                 "typeScheme": {
                                                                                                                                                   "variables": [],
-                                                                                                                                                  "body": {"application": {"function": {"variable": "hydra.pg.model.EdgeType"}, "argument": {"variable": "t7"}}}}}],
+                                                                                                                                                  "body": {"application": {"function": {"variable": "hydra.pg.model.EdgeType"}, "argument": {"variable": "t7"}}},
+                                                                                                                                                  "constraints": []}}],
                                                                                                                                             "body": {
                                                                                                                                               "typeApplication": {
                                                                                                                                                 "body": {
@@ -2987,7 +2990,7 @@
                                                                                                                                                                                                       {
                                                                                                                                                                                                         "name": "deannot",
                                                                                                                                                                                                         "term": {"application": {"function": {"variable": "hydra.strip.deannotateTerm"}, "argument": {"variable": "term"}}},
-                                                                                                                                                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}, "constraints": []}},
                                                                                                                                                                                                       {
                                                                                                                                                                                                         "name": "unwrapped",
                                                                                                                                                                                                         "term": {
@@ -3011,7 +3014,7 @@
                                                                                                                                                                                                                                 "argument": {"variable": "deannot"}}},
                                                                                                                                                                                                                             "argument": {"variable": "mt"}}}}}}]}},
                                                                                                                                                                                                             "argument": {"variable": "deannot"}}},
-                                                                                                                                                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}, "constraints": []}},
                                                                                                                                                                                                       {
                                                                                                                                                                                                         "name": "rec",
                                                                                                                                                                                                         "term": {
@@ -3024,7 +3027,7 @@
                                                                                                                                                                                                                     "name": "record",
                                                                                                                                                                                                                     "handler": {"lambda": {"parameter": "r", "domain": {"variable": "hydra.core.Record"}, "body": {"variable": "r"}}}}]}},
                                                                                                                                                                                                             "argument": {"variable": "unwrapped"}}},
-                                                                                                                                                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Record"}}}],
+                                                                                                                                                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Record"}, "constraints": []}}],
                                                                                                                                                                                                     "body": {
                                                                                                                                                                                                       "application": {
                                                                                                                                                                                                         "function": {
@@ -3061,7 +3064,10 @@
                                                                                                                                                                                                                         "function": {"variable": "hydra.resolution.fieldMap"},
                                                                                                                                                                                                                         "argument": {
                                                                                                                                                                                                                           "application": {"function": {"project": {"typeName": "hydra.core.Record", "fieldName": "fields"}}, "argument": {"variable": "rec"}}}}},
-                                                                                                                                                                                                                    "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                                                                                                                                                                                    "typeScheme": {
+                                                                                                                                                                                                                      "variables": [],
+                                                                                                                                                                                                                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                                                                                      "constraints": []}}],
                                                                                                                                                                                                                 "body": {
                                                                                                                                                                                                                   "application": {
                                                                                                                                                                                                                     "function": {
@@ -3362,7 +3368,8 @@
                                                                                                                                                                                                                                                                     "argument": {"variable": "hydra.core.Term"}}},
                                                                                                                                                                                                                                                                 "argument": {"variable": "t4"}}},
                                                                                                                                                                                                                                                             "argument": {"variable": "hydra.errors.Error"}}}}}},
-                                                                                                                                                                                                                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t4"}}}}}}}}}],
+                                                                                                                                                                                                                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t4"}}}}}}},
+                                                                                                                                                                                                                                          "constraints": [{"key": "t16", "value": {"classes": []}}, {"key": "t17", "value": {"classes": []}}]}}],
                                                                                                                                                                                                                                     "body": {
                                                                                                                                                                                                                                       "application": {
                                                                                                                                                                                                                                         "function": {
@@ -3523,7 +3530,7 @@
                                                                                                                                                                                                                                                                                                     "argument": {"application": {"function": {"variable": "hydra.pg.model.ElementTree"}, "argument": {"variable": "t4"}}}}},
                                                                                                                                                                                                                                                                                                 "argument": {"variable": "hydra.errors.Error"}}}}},
                                                                                                                                                                                                                                                                                         "argument": {"variable": "va"}}},
-                                                                                                                                                                                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                                                                                                                                                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                                                                                                                                                                                                                                                   {
                                                                                                                                                                                                                                                                                     "name": "ad",
                                                                                                                                                                                                                                                                                     "term": {
@@ -3559,7 +3566,8 @@
                                                                                                                                                                                                                                                                                                       "argument": {"variable": "t15"}}},
                                                                                                                                                                                                                                                                                                   "argument": {"variable": "hydra.core.Term"}}},
                                                                                                                                                                                                                                                                                               "argument": {"application": {"function": {"variable": "hydra.pg.model.ElementTree"}, "argument": {"variable": "t4"}}}}},
-                                                                                                                                                                                                                                                                                          "argument": {"variable": "hydra.errors.Error"}}}}}],
+                                                                                                                                                                                                                                                                                          "argument": {"variable": "hydra.errors.Error"}}},
+                                                                                                                                                                                                                                                                                      "constraints": []}}],
                                                                                                                                                                                                                                                                                 "body": {
                                                                                                                                                                                                                                                                                   "application": {
                                                                                                                                                                                                                                                                                     "function": {
@@ -4207,7 +4215,7 @@
                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.pg.model.Direction"}}},
                                                                                 "type": {"variable": "hydra.pg.model.VertexLabel"}}},
                                                                             "argument": {"variable": "p"}}}}}}},
-                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.Direction"}}},
+                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.Direction"}, "constraints": []}},
                                                               {
                                                                 "name": "parentLabel",
                                                                 "term": {
@@ -4236,7 +4244,7 @@
                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.pg.model.Direction"}}},
                                                                                 "type": {"variable": "hydra.pg.model.VertexLabel"}}},
                                                                             "argument": {"variable": "p"}}}}}}},
-                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.VertexLabel"}}}],
+                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.VertexLabel"}, "constraints": []}}],
                                                             "body": {
                                                               "application": {
                                                                 "function": {
@@ -4337,7 +4345,7 @@
                                                                                   {
                                                                                     "name": "name",
                                                                                     "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "placeholder"}}}},
-                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                                                   {
                                                                                     "name": "outVertexKey",
                                                                                     "term": {
@@ -4360,7 +4368,7 @@
                                                                                                         "type": {"variable": "t2"}}},
                                                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                                                 "argument": {"variable": "schema"}}}}}}},
-                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                                                   {
                                                                                     "name": "outVertexLabelKey",
                                                                                     "term": {
@@ -4383,7 +4391,7 @@
                                                                                                         "type": {"variable": "t2"}}},
                                                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                                                 "argument": {"variable": "schema"}}}}}}},
-                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                                                   {
                                                                                     "name": "inVertexKey",
                                                                                     "term": {
@@ -4406,7 +4414,7 @@
                                                                                                         "type": {"variable": "t2"}}},
                                                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                                                 "argument": {"variable": "schema"}}}}}}},
-                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                                                   {
                                                                                     "name": "inVertexLabelKey",
                                                                                     "term": {
@@ -4429,7 +4437,7 @@
                                                                                                         "type": {"variable": "t2"}}},
                                                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                                                 "argument": {"variable": "schema"}}}}}}},
-                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                                                                                 "body": {
                                                                                   "application": {
                                                                                     "function": {
@@ -4575,7 +4583,7 @@
                                                                                                                         "argument": {"variable": "mInSpec"}}}}},
                                                                                                                 "argument": {"inject": {"typeName": "hydra.pg.model.ElementKind", "field": {"name": "edge", "term": "unit"}}}}},
                                                                                                             "argument": {"inject": {"typeName": "hydra.pg.model.ElementKind", "field": {"name": "vertex", "term": "unit"}}}}},
-                                                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.ElementKind"}}}],
+                                                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.ElementKind"}, "constraints": []}}],
                                                                                                     "body": {
                                                                                                       "application": {
                                                                                                         "function": {
@@ -5322,7 +5330,7 @@
                                                             "type": {"variable": "t2"}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "argument": {"variable": "adapter"}}}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                           {
                                             "name": "ftyp",
                                             "term": {
@@ -5350,7 +5358,7 @@
                                                                 "type": {"variable": "t2"}}},
                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                         "argument": {"variable": "adapter"}}}}}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}}},
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}, "constraints": []}},
                                           {
                                             "name": "isMaybe",
                                             "term": {
@@ -5364,7 +5372,7 @@
                                                         "name": "optional",
                                                         "handler": {"lambda": {"parameter": "_", "domain": {"variable": "hydra.core.Type"}, "body": {"literal": {"boolean": true}}}}}]}},
                                                 "argument": {"variable": "ftyp"}}},
-                                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                                           {
                                             "name": "encodeValue",
                                             "term": {
@@ -5425,7 +5433,8 @@
                                               "body": {
                                                 "function": {
                                                   "domain": {"variable": "hydra.core.Term"},
-                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"optional": {"variable": "t2"}}}}}}}}],
+                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"optional": {"variable": "t2"}}}}}},
+                                              "constraints": []}}],
                                         "body": {
                                           "application": {
                                             "function": {
@@ -5897,7 +5906,7 @@
                                                                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                                                                 "argument": {"variable": "schema"}}}}}}}}]}},
                                                                                             "argument": {"variable": "dir"}}}}},
-                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                                                                                 "body": {
                                                                                   "application": {
                                                                                     "function": {
@@ -6666,7 +6675,7 @@
                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.FieldType"}}},
                                                                     "type": {"pair": {"first": {"variable": "hydra.pg.mapping.ValueSpec"}, "second": {"optional": {"literal": "string"}}}}}},
                                                                 "argument": {"variable": "spec"}}},
-                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.FieldType"}}}],
+                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.FieldType"}, "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -7300,7 +7309,7 @@
                                                                                             "type": {"variable": "t3"}}},
                                                                                         "type": {"variable": "t4"}}},
                                                                                     "argument": {"variable": "schema"}}}}}}},
-                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                                       {
                                                                         "name": "propValueKey",
                                                                         "term": {
@@ -7323,7 +7332,7 @@
                                                                                             "type": {"variable": "t3"}}},
                                                                                         "type": {"variable": "t4"}}},
                                                                                     "argument": {"variable": "schema"}}}}}}},
-                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                                                                     "body": {
                                                                       "application": {
                                                                         "function": {
@@ -7495,7 +7504,7 @@
                                                                                         "type": {"variable": "t3"}}},
                                                                                     "type": {"variable": "t4"}}},
                                                                                 "argument": {"variable": "schema"}}},
-                                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.mapping.AnnotationSchema"}}},
+                                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.mapping.AnnotationSchema"}, "constraints": []}},
                                                                           {
                                                                             "name": "ignoreKey",
                                                                             "term": {
@@ -7505,7 +7514,7 @@
                                                                                   "application": {
                                                                                     "function": {"project": {"typeName": "hydra.pg.mapping.AnnotationSchema", "fieldName": "ignore"}},
                                                                                     "argument": {"variable": "annots"}}}}},
-                                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                                           {
                                                                             "name": "specialKeys",
                                                                             "term": {
@@ -7573,14 +7582,14 @@
                                                                                                         "function": {"project": {"typeName": "hydra.pg.mapping.AnnotationSchema", "fieldName": "inVertex"}},
                                                                                                         "argument": {"variable": "annots"}}}}}]}}}}]}},
                                                                                 "argument": {"variable": "kind"}}},
-                                                                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}}},
+                                                                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}, "constraints": []}},
                                                                           {
                                                                             "name": "allKeys",
                                                                             "term": {
                                                                               "application": {
                                                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.core.Name"}}},
                                                                                 "argument": {"list": [{"list": [{"variable": "ignoreKey"}]}, {"variable": "specialKeys"}]}}},
-                                                                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}}},
+                                                                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}, "constraints": []}},
                                                                           {
                                                                             "name": "hasSpecialAnnotation",
                                                                             "term": {
@@ -7614,7 +7623,7 @@
                                                                                                               "application": {"function": {"project": {"typeName": "hydra.core.FieldType", "fieldName": "type"}}, "argument": {"variable": "field"}}}}}}}}}}}}}}},
                                                                                     "argument": {"literal": {"boolean": false}}}},
                                                                                 "argument": {"variable": "allKeys"}}},
-                                                                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                                                                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                                                                           {
                                                                             "name": "hasSpecialFieldName",
                                                                             "term": {
@@ -7648,7 +7657,7 @@
                                                                                                         "argument": {"variable": "k"}}}}}}}}}}},
                                                                                     "argument": {"literal": {"boolean": false}}}},
                                                                                 "argument": {"variable": "specialKeys"}}},
-                                                                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                                                                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
                                                                         "body": {
                                                                           "application": {
                                                                             "function": {"variable": "hydra.lib.logic.not"},
@@ -7715,7 +7724,7 @@
                                                             "argument": {
                                                               "application": {"function": {"project": {"typeName": "hydra.core.FieldType", "fieldName": "type"}}, "argument": {"variable": "f"}}}}}}}}}}},
                                             "argument": {"variable": "fields"}}},
-                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.FieldType"}}}}],
+                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.FieldType"}}, "constraints": []}}],
                                     "body": {
                                       "application": {
                                         "function": {
@@ -7987,7 +7996,7 @@
                                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.FieldType"}}},
                                                                             "type": {"pair": {"first": {"variable": "hydra.pg.mapping.ValueSpec"}, "second": {"variable": "t4"}}}}},
                                                                         "argument": {"variable": "spec"}}},
-                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.FieldType"}}},
+                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.FieldType"}, "constraints": []}},
                                                                   {
                                                                     "name": "values",
                                                                     "term": {
@@ -8003,7 +8012,7 @@
                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.FieldType"}}},
                                                                                 "type": {"pair": {"first": {"variable": "hydra.pg.mapping.ValueSpec"}, "second": {"variable": "t4"}}}}},
                                                                             "argument": {"variable": "spec"}}}}},
-                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.mapping.ValueSpec"}}}],
+                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.mapping.ValueSpec"}, "constraints": []}}],
                                                                 "body": {
                                                                   "application": {
                                                                     "function": {
@@ -8353,7 +8362,7 @@
                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.FieldType"}}},
                                                                 "type": {"pair": {"first": {"variable": "hydra.pg.mapping.ValueSpec"}, "second": {"optional": {"literal": "string"}}}}}},
                                                             "argument": {"variable": "spec"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.FieldType"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.FieldType"}, "constraints": []}},
                                                       {
                                                         "name": "values",
                                                         "term": {
@@ -8369,7 +8378,7 @@
                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.FieldType"}}},
                                                                     "type": {"pair": {"first": {"variable": "hydra.pg.mapping.ValueSpec"}, "second": {"optional": {"literal": "string"}}}}}},
                                                                 "argument": {"variable": "spec"}}}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.mapping.ValueSpec"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.mapping.ValueSpec"}, "constraints": []}},
                                                       {
                                                         "name": "alias",
                                                         "term": {
@@ -8386,7 +8395,7 @@
                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.FieldType"}}},
                                                                     "type": {"pair": {"first": {"variable": "hydra.pg.mapping.ValueSpec"}, "second": {"optional": {"literal": "string"}}}}}},
                                                                 "argument": {"variable": "spec"}}}}},
-                                                        "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}}},
+                                                        "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}, "constraints": []}},
                                                       {
                                                         "name": "key",
                                                         "term": {
@@ -8403,7 +8412,7 @@
                                                                         "argument": {
                                                                           "application": {"function": {"project": {"typeName": "hydra.core.FieldType", "fieldName": "name"}}, "argument": {"variable": "tfield"}}}}}}},
                                                                 "argument": {"variable": "alias"}}}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.PropertyKey"}}}],
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.PropertyKey"}, "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {
@@ -8978,7 +8987,7 @@
                                                                     "argument": {"variable": "t4"}}},
                                                                 "argument": {"variable": "hydra.errors.Error"}}}}},
                                                         "argument": {"variable": "ad"}}},
-                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                   {
                                                     "name": "adapter",
                                                     "term": {
@@ -9014,7 +9023,8 @@
                                                                       "argument": {"variable": "t3"}}},
                                                                   "argument": {"variable": "t1"}}},
                                                               "argument": {"variable": "t4"}}},
-                                                          "argument": {"variable": "hydra.errors.Error"}}}}}],
+                                                          "argument": {"variable": "hydra.errors.Error"}}},
+                                                      "constraints": []}}],
                                                 "body": {
                                                   "application": {
                                                     "function": {
@@ -9204,7 +9214,7 @@
                                                                     "argument": {"variable": "t4"}}},
                                                                 "argument": {"variable": "hydra.errors.Error"}}}}},
                                                         "argument": {"variable": "ad"}}},
-                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                   {
                                                     "name": "adapter",
                                                     "term": {
@@ -9240,7 +9250,8 @@
                                                                       "argument": {"variable": "t3"}}},
                                                                   "argument": {"variable": "t1"}}},
                                                               "argument": {"variable": "t4"}}},
-                                                          "argument": {"variable": "hydra.errors.Error"}}}}}],
+                                                          "argument": {"variable": "hydra.errors.Error"}}},
+                                                      "constraints": []}}],
                                                 "body": {
                                                   "application": {
                                                     "function": {
@@ -9401,7 +9412,7 @@
                                                                 "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t2"}}}}},
                                                             "argument": {
                                                               "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "t2"}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "t2"}}},
                                                                 "argument": {"variable": "terms"}}}}},
                                                         "argument": {
                                                           "typeApplication": {
@@ -9795,7 +9806,8 @@
                                                                                                                 "type": {"variable": "t7"}}},
                                                                                                             "typeScheme": {
                                                                                                               "variables": [],
-                                                                                                              "body": {"application": {"function": {"variable": "hydra.pg.model.VertexType"}, "argument": {"variable": "t7"}}}}},
+                                                                                                              "body": {"application": {"function": {"variable": "hydra.pg.model.VertexType"}, "argument": {"variable": "t7"}}},
+                                                                                                              "constraints": []}},
                                                                                                           {
                                                                                                             "name": "depTypes",
                                                                                                             "term": {
@@ -9938,7 +9950,8 @@
                                                                                                                 "argument": {"variable": "edgeAdapters"}}},
                                                                                                             "typeScheme": {
                                                                                                               "variables": [],
-                                                                                                              "body": {"list": {"application": {"function": {"variable": "hydra.pg.model.ElementTypeTree"}, "argument": {"variable": "t7"}}}}}},
+                                                                                                              "body": {"list": {"application": {"function": {"variable": "hydra.pg.model.ElementTypeTree"}, "argument": {"variable": "t7"}}}},
+                                                                                                              "constraints": []}},
                                                                                                           {
                                                                                                             "name": "target",
                                                                                                             "term": {
@@ -9950,7 +9963,8 @@
                                                                                                                 "argument": {"variable": "depTypes"}}},
                                                                                                             "typeScheme": {
                                                                                                               "variables": [],
-                                                                                                              "body": {"application": {"function": {"variable": "hydra.pg.model.ElementTypeTree"}, "argument": {"variable": "t7"}}}}}],
+                                                                                                              "body": {"application": {"function": {"variable": "hydra.pg.model.ElementTypeTree"}, "argument": {"variable": "t7"}}},
+                                                                                                              "constraints": []}}],
                                                                                                         "body": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {
@@ -9992,7 +10006,7 @@
                                                                                                                                                                   {
                                                                                                                                                                     "name": "deannot",
                                                                                                                                                                     "term": {"application": {"function": {"variable": "hydra.strip.deannotateTerm"}, "argument": {"variable": "term"}}},
-                                                                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}, "constraints": []}},
                                                                                                                                                                   {
                                                                                                                                                                     "name": "unwrapped",
                                                                                                                                                                     "term": {
@@ -10016,7 +10030,7 @@
                                                                                                                                                                                             "argument": {"variable": "deannot"}}},
                                                                                                                                                                                         "argument": {"variable": "mt"}}}}}}]}},
                                                                                                                                                                         "argument": {"variable": "deannot"}}},
-                                                                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}, "constraints": []}},
                                                                                                                                                                   {
                                                                                                                                                                     "name": "rec",
                                                                                                                                                                     "term": {
@@ -10029,7 +10043,7 @@
                                                                                                                                                                                 "name": "record",
                                                                                                                                                                                 "handler": {"lambda": {"parameter": "r", "domain": {"variable": "hydra.core.Record"}, "body": {"variable": "r"}}}}]}},
                                                                                                                                                                         "argument": {"variable": "unwrapped"}}},
-                                                                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Record"}}},
+                                                                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Record"}, "constraints": []}},
                                                                                                                                                                   {
                                                                                                                                                                     "name": "fmap",
                                                                                                                                                                     "term": {
@@ -10037,7 +10051,10 @@
                                                                                                                                                                         "function": {"variable": "hydra.resolution.fieldMap"},
                                                                                                                                                                         "argument": {
                                                                                                                                                                           "application": {"function": {"project": {"typeName": "hydra.core.Record", "fieldName": "fields"}}, "argument": {"variable": "rec"}}}}},
-                                                                                                                                                                    "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                                                                                                                                    "typeScheme": {
+                                                                                                                                                                      "variables": [],
+                                                                                                                                                                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                                      "constraints": []}}],
                                                                                                                                                                 "body": {
                                                                                                                                                                   "application": {
                                                                                                                                                                     "function": {
@@ -10234,7 +10251,7 @@
                                                                                                                                                                                                                                         "argument": {"application": {"function": {"variable": "hydra.pg.model.ElementTree"}, "argument": {"variable": "t4"}}}}},
                                                                                                                                                                                                                                     "argument": {"variable": "hydra.errors.Error"}}}}}}}}},
                                                                                                                                                                                                                     "argument": {"variable": "ea"}}},
-                                                                                                                                                                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.Direction"}}},
+                                                                                                                                                                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.Direction"}, "constraints": []}},
                                                                                                                                                                                                               {
                                                                                                                                                                                                                 "name": "eaField",
                                                                                                                                                                                                                 "term": {
@@ -10283,7 +10300,7 @@
                                                                                                                                                                                                                                             "argument": {"application": {"function": {"variable": "hydra.pg.model.ElementTree"}, "argument": {"variable": "t4"}}}}},
                                                                                                                                                                                                                                         "argument": {"variable": "hydra.errors.Error"}}}}}}}}},
                                                                                                                                                                                                                         "argument": {"variable": "ea"}}}}},
-                                                                                                                                                                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.core.FieldType"}}},
+                                                                                                                                                                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.core.FieldType"}, "constraints": []}},
                                                                                                                                                                                                               {
                                                                                                                                                                                                                 "name": "eaLabel",
                                                                                                                                                                                                                 "term": {
@@ -10350,7 +10367,7 @@
                                                                                                                                                                                                                                                 "argument": {"application": {"function": {"variable": "hydra.pg.model.ElementTree"}, "argument": {"variable": "t4"}}}}},
                                                                                                                                                                                                                                             "argument": {"variable": "hydra.errors.Error"}}}}}}}}},
                                                                                                                                                                                                                             "argument": {"variable": "ea"}}}}}}},
-                                                                                                                                                                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
+                                                                                                                                                                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.EdgeLabel"}, "constraints": []}},
                                                                                                                                                                                                               {
                                                                                                                                                                                                                 "name": "eaAdapter",
                                                                                                                                                                                                                 "term": {
@@ -10431,7 +10448,8 @@
                                                                                                                                                                                                                                   "argument": {"application": {"function": {"variable": "hydra.pg.model.ElementTypeTree"}, "argument": {"variable": "t7"}}}}},
                                                                                                                                                                                                                               "argument": {"variable": "hydra.core.Term"}}},
                                                                                                                                                                                                                           "argument": {"application": {"function": {"variable": "hydra.pg.model.ElementTree"}, "argument": {"variable": "t4"}}}}},
-                                                                                                                                                                                                                      "argument": {"variable": "hydra.errors.Error"}}}}}],
+                                                                                                                                                                                                                      "argument": {"variable": "hydra.errors.Error"}}},
+                                                                                                                                                                                                                  "constraints": []}}],
                                                                                                                                                                                                             "body": {
                                                                                                                                                                                                               "application": {
                                                                                                                                                                                                                 "function": {
@@ -10516,7 +10534,7 @@
                                                                                                                                                                                                                                                                 "function": {
                                                                                                                                                                                                                                                                   "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "id"}}, "type": {"variable": "t4"}}},
                                                                                                                                                                                                                                                                 "argument": {"variable": "vtx"}}},
-                                                                                                                                                                                                                                                            "typeScheme": {"variables": [], "body": {"variable": "t4"}}},
+                                                                                                                                                                                                                                                            "typeScheme": {"variables": [], "body": {"variable": "t4"}, "constraints": []}},
                                                                                                                                                                                                                                                           {
                                                                                                                                                                                                                                                             "name": "edgeid",
                                                                                                                                                                                                                                                             "term": {
@@ -10533,7 +10551,7 @@
                                                                                                                                                                                                                                                                         "type": {"variable": "t4"}}},
                                                                                                                                                                                                                                                                     "type": {"variable": "t5"}}},
                                                                                                                                                                                                                                                                 "argument": {"variable": "schema"}}},
-                                                                                                                                                                                                                                                            "typeScheme": {"variables": [], "body": {"variable": "t4"}}},
+                                                                                                                                                                                                                                                            "typeScheme": {"variables": [], "body": {"variable": "t4"}, "constraints": []}},
                                                                                                                                                                                                                                                           {
                                                                                                                                                                                                                                                             "name": "outId",
                                                                                                                                                                                                                                                             "term": {
@@ -10545,7 +10563,7 @@
                                                                                                                                                                                                                                                                       {"name": "out", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"variable": "vid"}}}},
                                                                                                                                                                                                                                                                       {"name": "in", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"variable": "otherid"}}}}]}},
                                                                                                                                                                                                                                                                 "argument": {"variable": "eaDir"}}},
-                                                                                                                                                                                                                                                            "typeScheme": {"variables": [], "body": {"variable": "t4"}}},
+                                                                                                                                                                                                                                                            "typeScheme": {"variables": [], "body": {"variable": "t4"}, "constraints": []}},
                                                                                                                                                                                                                                                           {
                                                                                                                                                                                                                                                             "name": "inId",
                                                                                                                                                                                                                                                             "term": {
@@ -10557,7 +10575,7 @@
                                                                                                                                                                                                                                                                       {"name": "out", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"variable": "otherid"}}}},
                                                                                                                                                                                                                                                                       {"name": "in", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"variable": "vid"}}}}]}},
                                                                                                                                                                                                                                                                 "argument": {"variable": "eaDir"}}},
-                                                                                                                                                                                                                                                            "typeScheme": {"variables": [], "body": {"variable": "t4"}}},
+                                                                                                                                                                                                                                                            "typeScheme": {"variables": [], "body": {"variable": "t4"}, "constraints": []}},
                                                                                                                                                                                                                                                           {
                                                                                                                                                                                                                                                             "name": "edge",
                                                                                                                                                                                                                                                             "term": {
@@ -10587,7 +10605,8 @@
                                                                                                                                                                                                                                                                 "type": {"variable": "t4"}}},
                                                                                                                                                                                                                                                             "typeScheme": {
                                                                                                                                                                                                                                                               "variables": [],
-                                                                                                                                                                                                                                                              "body": {"application": {"function": {"variable": "hydra.pg.model.Element"}, "argument": {"variable": "t4"}}}}}],
+                                                                                                                                                                                                                                                              "body": {"application": {"function": {"variable": "hydra.pg.model.Element"}, "argument": {"variable": "t4"}}},
+                                                                                                                                                                                                                                                              "constraints": []}}],
                                                                                                                                                                                                                                                         "body": {
                                                                                                                                                                                                                                                           "list": [
                                                                                                                                                                                                                                                             {
@@ -10701,7 +10720,8 @@
                                                                                                                                                                                                                                                                 "argument": {"variable": "eaDir"}}},
                                                                                                                                                                                                                                                             "typeScheme": {
                                                                                                                                                                                                                                                               "variables": [],
-                                                                                                                                                                                                                                                              "body": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t4"}}}}}],
+                                                                                                                                                                                                                                                              "body": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t4"}}},
+                                                                                                                                                                                                                                                              "constraints": []}}],
                                                                                                                                                                                                                                                         "body": {
                                                                                                                                                                                                                                                           "list": [
                                                                                                                                                                                                                                                             {

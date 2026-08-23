@@ -209,7 +209,8 @@
                               "body": {
                                 "pair": {
                                   "first": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}},
-                                  "second": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}}}}],
+                                  "second": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}},
+                              "constraints": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -233,7 +234,8 @@
                                         "argument": {"variable": "partitioned"}}}}},
                                 "typeScheme": {
                                   "variables": [],
-                                  "body": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}}}],
+                                  "body": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}},
+                                  "constraints": []}}],
                             "body": {
                               "let": {
                                 "bindings": [
@@ -257,7 +259,8 @@
                                             "argument": {"variable": "partitioned"}}}}},
                                     "typeScheme": {
                                       "variables": [],
-                                      "body": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}}],
+                                      "body": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}},
+                                      "constraints": []}}],
                                 "body": {
                                   "let": {
                                     "bindings": [
@@ -326,7 +329,8 @@
                                           "body": {
                                             "map": {
                                               "keys": {"variable": "t0"},
-                                              "values": {"application": {"function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}, "argument": {"variable": "t0"}}}}}}}],
+                                              "values": {"application": {"function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}, "argument": {"variable": "t0"}}}}},
+                                          "constraints": []}}],
                                     "body": {
                                       "let": {
                                         "bindings": [
@@ -369,7 +373,7 @@
                                                                             "function": {
                                                                               "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "label"}}, "type": {"variable": "t0"}}},
                                                                             "argument": {"variable": "edge"}}},
-                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.EdgeLabel"}}}],
+                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.EdgeLabel"}, "constraints": []}}],
                                                                     "body": {
                                                                       "let": {
                                                                         "bindings": [
@@ -380,7 +384,7 @@
                                                                                 "function": {
                                                                                   "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "id"}}, "type": {"variable": "t0"}}},
                                                                                 "argument": {"variable": "edge"}}},
-                                                                            "typeScheme": {"variables": [], "body": {"variable": "t0"}}}],
+                                                                            "typeScheme": {"variables": [], "body": {"variable": "t0"}, "constraints": []}}],
                                                                         "body": {
                                                                           "let": {
                                                                             "bindings": [
@@ -391,7 +395,7 @@
                                                                                     "function": {
                                                                                       "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "out"}}, "type": {"variable": "t0"}}},
                                                                                     "argument": {"variable": "edge"}}},
-                                                                                "typeScheme": {"variables": [], "body": {"variable": "t0"}}}],
+                                                                                "typeScheme": {"variables": [], "body": {"variable": "t0"}, "constraints": []}}],
                                                                             "body": {
                                                                               "let": {
                                                                                 "bindings": [
@@ -402,7 +406,7 @@
                                                                                         "function": {
                                                                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "in"}}, "type": {"variable": "t0"}}},
                                                                                         "argument": {"variable": "edge"}}},
-                                                                                    "typeScheme": {"variables": [], "body": {"variable": "t0"}}}],
+                                                                                    "typeScheme": {"variables": [], "body": {"variable": "t0"}, "constraints": []}}],
                                                                                 "body": {
                                                                                   "let": {
                                                                                     "bindings": [
@@ -413,7 +417,10 @@
                                                                                             "function": {
                                                                                               "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "properties"}}, "type": {"variable": "t0"}}},
                                                                                             "argument": {"variable": "edge"}}},
-                                                                                        "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}}}],
+                                                                                        "typeScheme": {
+                                                                                          "variables": [],
+                                                                                          "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}},
+                                                                                          "constraints": []}}],
                                                                                     "body": {
                                                                                       "let": {
                                                                                         "bindings": [
@@ -432,7 +439,8 @@
                                                                                                 "type": {"variable": "t0"}}},
                                                                                             "typeScheme": {
                                                                                               "variables": [],
-                                                                                              "body": {"application": {"function": {"variable": "hydra.pg.model.AdjacentEdge"}, "argument": {"variable": "t0"}}}}}],
+                                                                                              "body": {"application": {"function": {"variable": "hydra.pg.model.AdjacentEdge"}, "argument": {"variable": "t0"}}},
+                                                                                              "constraints": []}}],
                                                                                         "body": {
                                                                                           "let": {
                                                                                             "bindings": [
@@ -451,7 +459,8 @@
                                                                                                     "type": {"variable": "t0"}}},
                                                                                                 "typeScheme": {
                                                                                                   "variables": [],
-                                                                                                  "body": {"application": {"function": {"variable": "hydra.pg.model.AdjacentEdge"}, "argument": {"variable": "t0"}}}}}],
+                                                                                                  "body": {"application": {"function": {"variable": "hydra.pg.model.AdjacentEdge"}, "argument": {"variable": "t0"}}},
+                                                                                                  "constraints": []}}],
                                                                                             "body": {
                                                                                               "let": {
                                                                                                 "bindings": [
@@ -548,7 +557,8 @@
                                                                                                       "body": {
                                                                                                         "map": {
                                                                                                           "keys": {"variable": "t0"},
-                                                                                                          "values": {"application": {"function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}, "argument": {"variable": "t0"}}}}}}}],
+                                                                                                          "values": {"application": {"function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}, "argument": {"variable": "t0"}}}}},
+                                                                                                      "constraints": []}}],
                                                                                                 "body": {
                                                                                                   "application": {
                                                                                                     "function": {
@@ -642,7 +652,8 @@
                                               "body": {
                                                 "map": {
                                                   "keys": {"variable": "t0"},
-                                                  "values": {"application": {"function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}, "argument": {"variable": "t0"}}}}}}}],
+                                                  "values": {"application": {"function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}, "argument": {"variable": "t0"}}}}},
+                                              "constraints": []}}],
                                         "body": {
                                           "application": {
                                             "function": {

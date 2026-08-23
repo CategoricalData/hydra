@@ -36,7 +36,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Configuration for the definition-name-convention check"}}}]}}}}}},
+                    "value": {"literal": {"string": "Configuration for the definition-name-convention check"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.DefinitionValidationProfile",
@@ -102,7 +103,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Validation rules applying to individual definitions within a module. Absent fields mean the corresponding check is not configured."}}}]}}}}}},
+                        "string": "Validation rules applying to individual definitions within a module. Absent fields mean the corresponding check is not configured."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.DigestEntry",
@@ -129,7 +131,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "One file's classification and content hash within a digest"}}}]}}}}}},
+                    "value": {"literal": {"string": "One file's classification and content hash within a digest"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.DigestKind",
@@ -188,7 +191,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "The kind of artifact recorded in a digest entry. Lets a single digest mix typed entries without losing the discriminator."}}}]}}}}}},
+                        "string": "The kind of artifact recorded in a digest entry. Lets a single digest mix typed entries without losing the discriminator."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.DocumentationProfile",
@@ -219,7 +223,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Configuration for the definition-documentation check"}}}]}}}}}},
+                    "value": {"literal": {"string": "Configuration for the definition-documentation check"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.Generation",
@@ -295,7 +300,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A structured generation-provenance record for generated artifacts, separating gating identity from informational provenance. Only generatorId gates cache freshness; it is host-independent by design, since self-hosting requires every host to produce byte-identical output. All other fields are informational and must not gate. Invariant: a shim-mode generation has a revision (a shim has no release version, so the working-tree revision is its only precise identity)."}}}]}}}}}},
+                        "string": "A structured generation-provenance record for generated artifacts, separating gating identity from informational provenance. Only generatorId gates cache freshness; it is host-independent by design, since self-hosting requires every host to produce byte-identical output. All other fields are informational and must not gate. Invariant: a shim-mode generation has a revision (a shim has no release version, so the working-tree revision is its only precise identity)."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.GenerationMode",
@@ -323,7 +329,8 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Produced by a locally-built migration shim, ahead of any published host"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The provenance class of a generated artifact"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The provenance class of a generated artifact"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.HostOverride",
@@ -356,7 +363,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "An override of the default published-host consumption for one host language: either force a local from-source build, or pin a specific published version."}}}]}}}}}},
+                        "string": "An override of the default published-host consumption for one host language: either force a local from-source build, or pin a specific published version."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.InputDigest",
@@ -419,7 +427,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A per-package, per-source-set input digest (dist/json/<pkg>/build/<set>/digest.json): Merkle-style hashes of the package's DSL sources, recorded when the package's JSON is written and consumed by downstream freshness checks. The selfHash summarizes the package's own module hashes; dependencyHashes captures the selfHash of each declared dependency package at write time, giving transitive invalidation."}}}]}}}}}},
+                        "string": "A per-package, per-source-set input digest (dist/json/<pkg>/build/<set>/digest.json): Merkle-style hashes of the package's DSL sources, recorded when the package's JSON is written and consumed by downstream freshness checks. The selfHash summarizes the package's own module hashes; dependencyHashes captures the selfHash of each declared dependency package at write time, giving transitive invalidation."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.LanguageName",
@@ -433,7 +442,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The name of a source or target language in Hydra's build system, e.g. \"haskell\", \"java\", or \"python\""}}}]}}}}}},
+                      "literal": {"string": "The name of a source or target language in Hydra's build system, e.g. \"haskell\", \"java\", or \"python\""}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.ModuleValidationProfile",
@@ -479,7 +489,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Validation rules applying to a module as a whole. Absent fields mean the corresponding check is not configured."}}}]}}}}}},
+                        "string": "Validation rules applying to a module as a whole. Absent fields mean the corresponding check is not configured."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.OutputDigest",
@@ -569,7 +580,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A per-package, per-source-set output digest for one target language (dist/<lang>/<pkg>/build/<set>/digest.json), recording every input file whose content determines the generated output, every output file the generation step is responsible for, and the identity of the generator. A generation step is fresh exactly when all input hashes, all output hashes, the generator identity, and the recorded package and dependency hashes match."}}}]}}}}}},
+                        "string": "A per-package, per-source-set output digest for one target language (dist/<lang>/<pkg>/build/<set>/digest.json), recording every input file whose content determines the generated output, every output file the generation step is responsible for, and the identity of the generator. A generation step is fresh exactly when all input hashes, all output hashes, the generator identity, and the recorded package and dependency hashes match."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.PackageDescriptor",
@@ -655,7 +667,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A package descriptor (packages/<pkg>/package.json): the source-of-truth declaration of a Hydra package's name, source language, dependencies, and optional per-package configuration."}}}]}}}}}},
+                        "string": "A package descriptor (packages/<pkg>/package.json): the source-of-truth declaration of a Hydra package's name, source language, dependencies, and optional per-package configuration."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.PackageManifest",
@@ -733,7 +746,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A generated-source manifest (dist/<lang>/<pkg>/src/<set>/<lang>/manifest.json): the list of modules generated into a distribution package, partitioned by role."}}}]}}}}}},
+                        "string": "A generated-source manifest (dist/<lang>/<pkg>/src/<set>/<lang>/manifest.json): the list of modules generated into a distribution package, partitioned by role."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.PackageValidationConfiguration",
@@ -786,7 +800,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "The full, opt-in validation configuration for a package, as declared in its package descriptor. Every field cascades optional; an absent field means the corresponding rule family is not configured and the validation engine's defaults apply."}}}]}}}}}},
+                        "string": "The full, opt-in validation configuration for a package, as declared in its package descriptor. Every field cascades optional; an absent field means the corresponding rule family is not configured and the validation engine's defaults apply."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.PackageValidationProfile",
@@ -832,7 +847,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Validation rules applying to a package as a whole. Absent fields mean the corresponding check is not configured."}}}]}}}}}},
+                        "string": "Validation rules applying to a package as a whole. Absent fields mean the corresponding check is not configured."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.RepositoryDescriptor",
@@ -918,7 +934,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "The repository descriptor (hydra.json at the repository root): release and host versions, host consumption overrides, publication metadata, and the list of source packages."}}}]}}}}}},
+                        "string": "The repository descriptor (hydra.json at the repository root): release and host versions, host consumption overrides, publication metadata, and the list of source packages."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.Severity",
@@ -927,7 +944,8 @@
           "body": {
             "annotated": {
               "body": {"union": [{"name": "error", "type": "unit"}, {"name": "warning", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "How a validation finding is treated"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "How a validation finding is treated"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.Sha256Hash",
@@ -940,7 +958,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A SHA-256 hash in lowercase hexadecimal notation"}}}]}}}}}},
+                    "value": {"literal": {"string": "A SHA-256 hash in lowercase hexadecimal notation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.TermValidationProfile",
@@ -980,7 +999,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Validation rules applying to term-definition bodies. Absent fields mean the corresponding check is not configured."}}}]}}}}}},
+                        "string": "Validation rules applying to term-definition bodies. Absent fields mean the corresponding check is not configured."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.format.TypeValidationProfile",
@@ -1020,4 +1040,5 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Validation rules applying to type-definition bodies. Absent fields mean the corresponding check is not configured."}}}]}}}}}}]}
+                        "string": "Validation rules applying to type-definition bodies. Absent fields mean the corresponding check is not configured."}}}]}}},
+          "constraints": []}}}]}

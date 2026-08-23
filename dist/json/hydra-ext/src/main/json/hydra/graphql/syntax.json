@@ -18,7 +18,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL field alias, immediately followed by a colon."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL field alias, immediately followed by a colon."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Argument",
@@ -34,7 +35,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single GraphQL argument, consisting of a name and a value."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single GraphQL argument, consisting of a name and a value."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Arguments",
@@ -44,7 +46,8 @@
             "annotated": {
               "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.Argument"}}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A parenthesized list of GraphQL arguments."}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A parenthesized list of GraphQL arguments."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ArgumentsDefinition",
@@ -57,7 +60,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A parenthesized list of GraphQL input value definitions for a field's arguments."}}}]}}}}}},
+                    "value": {"literal": {"string": "A parenthesized list of GraphQL input value definitions for a field's arguments."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.BooleanValue",
@@ -70,7 +74,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL boolean literal, either true or false."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL boolean literal, either true or false."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.DefaultValue",
@@ -83,7 +88,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A default value for a GraphQL variable or input field, introduced by an equals sign."}}}]}}}}}},
+                    "value": {"literal": {"string": "A default value for a GraphQL variable or input field, introduced by an equals sign."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Definition",
@@ -99,7 +105,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A top-level GraphQL definition, either executable or part of the type system."}}}]}}}}}},
+                    "value": {"literal": {"string": "A top-level GraphQL definition, either executable or part of the type system."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Description",
@@ -112,7 +119,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An optional string description preceding a GraphQL type system definition."}}}]}}}}}},
+                    "value": {"literal": {"string": "An optional string description preceding a GraphQL type system definition."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Directive",
@@ -128,7 +136,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single GraphQL directive, consisting of a name and optional arguments."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single GraphQL directive, consisting of a name and optional arguments."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.DirectiveDefinition",
@@ -147,7 +156,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL directive definition, giving its name, arguments, repeatability, and locations."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL directive definition, giving its name, arguments, repeatability, and locations."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.DirectiveLocation",
@@ -163,7 +173,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A location at which a GraphQL directive may be applied, either executable or type-system."}}}]}}}}}},
+                    "value": {"literal": {"string": "A location at which a GraphQL directive may be applied, either executable or type-system."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.DirectiveLocations",
@@ -179,7 +190,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A pipe-separated list of GraphQL directive locations."}}}]}}}}}},
+                    "value": {"literal": {"string": "A pipe-separated list of GraphQL directive locations."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.DirectiveLocationsSequence",
@@ -195,7 +207,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty DirectiveLocations sequence with a leading list of locations."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty DirectiveLocations sequence with a leading list of locations."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.DirectiveLocationsSequence2",
@@ -211,7 +224,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The base case of a DirectiveLocations sequence: a single, optionally pipe-prefixed location."}}}]}}}}}},
+                    "value": {"literal": {"string": "The base case of a DirectiveLocations sequence: a single, optionally pipe-prefixed location."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Directives",
@@ -224,7 +238,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A list of GraphQL directives applied to a definition or selection."}}}]}}}}}},
+                    "value": {"literal": {"string": "A list of GraphQL directives applied to a definition or selection."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Document",
@@ -237,7 +252,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL document, consisting of a list of definitions."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL document, consisting of a list of definitions."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.EnumTypeDefinition",
@@ -255,7 +271,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL enum type definition, giving its name, directives, and enum values."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL enum type definition, giving its name, directives, and enum values."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.EnumTypeExtension",
@@ -271,7 +288,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An extension of a GraphQL enum type, either adding enum values or only directives."}}}]}}}}}},
+                    "value": {"literal": {"string": "An extension of a GraphQL enum type, either adding enum values or only directives."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.EnumTypeExtensionSequence",
@@ -288,7 +306,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An enum type extension that adds new enum values, with optional directives."}}}]}}}}}},
+                    "value": {"literal": {"string": "An enum type extension that adds new enum values, with optional directives."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.EnumTypeExtensionSequence2",
@@ -304,7 +323,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An enum type extension consisting of directives only, with no new enum values."}}}]}}}}}},
+                    "value": {"literal": {"string": "An enum type extension consisting of directives only, with no new enum values."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.EnumValue",
@@ -317,7 +337,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL enum value, represented as a name (excluding true, false, and null)."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL enum value, represented as a name (excluding true, false, and null)."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.EnumValueDefinition",
@@ -335,7 +356,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A single value definition within a GraphQL enum type, with optional description and directives."}}}]}}}}}},
+                      "literal": {"string": "A single value definition within a GraphQL enum type, with optional description and directives."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.EnumValuesDefinition",
@@ -348,7 +370,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The braced list of enum value definitions in a GraphQL enum type."}}}]}}}}}},
+                    "value": {"literal": {"string": "The braced list of enum value definitions in a GraphQL enum type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ExecutableDefinition",
@@ -364,7 +387,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL executable definition, either an operation or a fragment definition."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL executable definition, either an operation or a fragment definition."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ExecutableDirectiveLocation",
@@ -387,7 +411,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A directive location valid on GraphQL executable definitions (queries, fields, fragments, etc.)."}}}]}}}}}},
+                      "literal": {"string": "A directive location valid on GraphQL executable definitions (queries, fields, fragments, etc.)."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ExecutableDocument",
@@ -400,7 +425,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL document consisting only of executable definitions."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL document consisting only of executable definitions."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Field",
@@ -419,7 +445,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL field selection, with optional alias, arguments, directives, and sub-selection set."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL field selection, with optional alias, arguments, directives, and sub-selection set."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.FieldDefinition",
@@ -438,7 +465,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A field definition within a GraphQL object or interface type."}}}]}}}}}},
+                    "value": {"literal": {"string": "A field definition within a GraphQL object or interface type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.FieldsDefinition",
@@ -451,7 +479,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The braced list of field definitions in a GraphQL object or interface type."}}}]}}}}}},
+                    "value": {"literal": {"string": "The braced list of field definitions in a GraphQL object or interface type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.FloatValue",
@@ -460,7 +489,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphQL floating-point literal."}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphQL floating-point literal."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.FragmentDefinition",
@@ -478,7 +508,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL fragment definition, naming a type condition and a selection set."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL fragment definition, naming a type condition and a selection set."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.FragmentName",
@@ -491,7 +522,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The name of a GraphQL fragment (any name other than \"on\")."}}}]}}}}}},
+                    "value": {"literal": {"string": "The name of a GraphQL fragment (any name other than \"on\")."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.FragmentSpread",
@@ -507,7 +539,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL fragment spread, referencing a named fragment with optional directives."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL fragment spread, referencing a named fragment with optional directives."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ImplementsInterfaces",
@@ -523,7 +556,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A clause declaring the interfaces implemented by a GraphQL object or interface type."}}}]}}}}}},
+                    "value": {"literal": {"string": "A clause declaring the interfaces implemented by a GraphQL object or interface type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ImplementsInterfacesSequence",
@@ -539,7 +573,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty ImplementsInterfaces list with a leading list of interfaces."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty ImplementsInterfaces list with a leading list of interfaces."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ImplementsInterfacesSequence2",
@@ -556,7 +591,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The base case of an ImplementsInterfaces list: a single, optionally ampersand-prefixed interface."}}}]}}}}}},
+                      "literal": {"string": "The base case of an ImplementsInterfaces list: a single, optionally ampersand-prefixed interface."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InlineFragment",
@@ -573,7 +609,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL inline fragment, with optional type condition, directives, and a selection set."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL inline fragment, with optional type condition, directives, and a selection set."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InputFieldsDefinition",
@@ -586,7 +623,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The braced list of input field definitions in a GraphQL input object type."}}}]}}}}}},
+                    "value": {"literal": {"string": "The braced list of input field definitions in a GraphQL input object type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InputObjectTypeDefinition",
@@ -602,7 +640,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL input object type definition, either with or without input fields."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL input object type definition, either with or without input fields."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InputObjectTypeDefinitionSequence",
@@ -620,7 +659,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An input object type definition that includes an input fields definition."}}}]}}}}}},
+                    "value": {"literal": {"string": "An input object type definition that includes an input fields definition."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InputObjectTypeDefinitionSequence2",
@@ -637,7 +677,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An input object type definition with no input fields definition."}}}]}}}}}},
+                    "value": {"literal": {"string": "An input object type definition with no input fields definition."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InputObjectTypeExtension",
@@ -653,7 +694,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An extension of a GraphQL input object type, either with or without input fields."}}}]}}}}}},
+                    "value": {"literal": {"string": "An extension of a GraphQL input object type, either with or without input fields."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InputObjectTypeExtensionSequence",
@@ -670,7 +712,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An input object type extension that adds an input fields definition."}}}]}}}}}},
+                    "value": {"literal": {"string": "An input object type extension that adds an input fields definition."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InputObjectTypeExtensionSequence2",
@@ -686,7 +729,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An input object type extension consisting of directives only."}}}]}}}}}},
+                    "value": {"literal": {"string": "An input object type extension consisting of directives only."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InputValueDefinition",
@@ -705,7 +749,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single input value definition, used for field arguments and input object fields."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single input value definition, used for field arguments and input object fields."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.IntValue",
@@ -714,7 +759,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphQL integer literal."}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphQL integer literal."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InterfaceTypeDefinition",
@@ -730,7 +776,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL interface type definition, either with or without a fields definition."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL interface type definition, either with or without a fields definition."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InterfaceTypeDefinitionSequence",
@@ -749,7 +796,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An interface type definition that includes a fields definition."}}}]}}}}}},
+                    "value": {"literal": {"string": "An interface type definition that includes a fields definition."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InterfaceTypeDefinitionSequence2",
@@ -767,7 +815,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An interface type definition with no fields definition."}}}]}}}}}},
+                    "value": {"literal": {"string": "An interface type definition with no fields definition."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InterfaceTypeExtension",
@@ -784,7 +833,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An extension of a GraphQL interface type, in one of three forms."}}}]}}}}}},
+                    "value": {"literal": {"string": "An extension of a GraphQL interface type, in one of three forms."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InterfaceTypeExtensionSequence",
@@ -802,7 +852,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An interface type extension that adds a fields definition."}}}]}}}}}},
+                    "value": {"literal": {"string": "An interface type extension that adds a fields definition."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InterfaceTypeExtensionSequence2",
@@ -819,7 +870,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An interface type extension that adds directives but no fields definition."}}}]}}}}}},
+                    "value": {"literal": {"string": "An interface type extension that adds directives but no fields definition."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.InterfaceTypeExtensionSequence3",
@@ -835,7 +887,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An interface type extension that adds only implemented interfaces."}}}]}}}}}},
+                    "value": {"literal": {"string": "An interface type extension that adds only implemented interfaces."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ListType",
@@ -848,7 +901,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL list type, wrapping an inner type in square brackets."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL list type, wrapping an inner type in square brackets."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ListValue",
@@ -864,7 +918,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL list literal, either empty or containing a sequence of values."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL list literal, either empty or containing a sequence of values."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ListValueSequence",
@@ -874,7 +929,8 @@
             "annotated": {
               "body": "unit",
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The empty-list form of a GraphQL ListValue."}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The empty-list form of a GraphQL ListValue."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Name",
@@ -887,7 +943,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL name: an identifier matching [_A-Za-z][_0-9A-Za-z]*."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL name: an identifier matching [_A-Za-z][_0-9A-Za-z]*."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.NamedType",
@@ -900,7 +957,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL named type, referencing a type by its name."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL named type, referencing a type by its name."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.NonNullType",
@@ -916,7 +974,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL non-null type, wrapping a named or list type with a trailing exclamation mark."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL non-null type, wrapping a named or list type with a trailing exclamation mark."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.NullValue",
@@ -925,7 +984,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": "unit"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The GraphQL null literal."}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The GraphQL null literal."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ObjectField",
@@ -941,7 +1001,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single field of a GraphQL object literal, consisting of a name and a value."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single field of a GraphQL object literal, consisting of a name and a value."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ObjectTypeDefinition",
@@ -960,7 +1021,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL object type definition, giving its name, interfaces, directives, and fields."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL object type definition, giving its name, interfaces, directives, and fields."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ObjectTypeExtension",
@@ -977,7 +1039,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An extension of a GraphQL object type, in one of three forms."}}}]}}}}}},
+                    "value": {"literal": {"string": "An extension of a GraphQL object type, in one of three forms."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ObjectTypeExtensionSequence",
@@ -995,7 +1058,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An object type extension that adds a fields definition."}}}]}}}}}},
+                    "value": {"literal": {"string": "An object type extension that adds a fields definition."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ObjectTypeExtensionSequence2",
@@ -1012,7 +1076,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An object type extension that adds directives but no fields definition."}}}]}}}}}},
+                    "value": {"literal": {"string": "An object type extension that adds directives but no fields definition."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ObjectTypeExtensionSequence3",
@@ -1028,7 +1093,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An object type extension that adds only implemented interfaces."}}}]}}}}}},
+                    "value": {"literal": {"string": "An object type extension that adds only implemented interfaces."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ObjectValue",
@@ -1044,7 +1110,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL object literal, either empty or containing a sequence of object fields."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL object literal, either empty or containing a sequence of object fields."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ObjectValueSequence",
@@ -1057,7 +1124,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The empty-object form of a GraphQL ObjectValue."}}}]}}}}}},
+                    "value": {"literal": {"string": "The empty-object form of a GraphQL ObjectValue."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.OperationDefinition",
@@ -1073,7 +1141,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL operation definition, either a shorthand query or an explicit operation."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL operation definition, either a shorthand query or an explicit operation."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.OperationDefinitionSequence",
@@ -1093,7 +1162,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "An explicit GraphQL operation definition with a type, optional name, variables, and directives."}}}]}}}}}},
+                      "literal": {"string": "An explicit GraphQL operation definition with a type, optional name, variables, and directives."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.OperationType",
@@ -1107,7 +1177,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The type of a GraphQL operation: query, mutation, or subscription."}}}]}}}}}},
+                    "value": {"literal": {"string": "The type of a GraphQL operation: query, mutation, or subscription."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.RootOperationTypeDefinition",
@@ -1123,7 +1194,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A mapping from a GraphQL operation type to its root object type."}}}]}}}}}},
+                    "value": {"literal": {"string": "A mapping from a GraphQL operation type to its root object type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ScalarTypeDefinition",
@@ -1140,7 +1212,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL scalar type definition, with optional description and directives."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL scalar type definition, with optional description and directives."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.ScalarTypeExtension",
@@ -1156,7 +1229,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An extension of a GraphQL scalar type, adding directives."}}}]}}}}}},
+                    "value": {"literal": {"string": "An extension of a GraphQL scalar type, adding directives."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.SchemaDefinition",
@@ -1173,7 +1247,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL schema definition, declaring its root operation types."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL schema definition, declaring its root operation types."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.SchemaExtension",
@@ -1189,7 +1264,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An extension of a GraphQL schema, adding root operation types or directives."}}}]}}}}}},
+                    "value": {"literal": {"string": "An extension of a GraphQL schema, adding root operation types or directives."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.SchemaExtensionSequence",
@@ -1205,7 +1281,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A schema extension that adds a root operation type definition."}}}]}}}}}},
+                    "value": {"literal": {"string": "A schema extension that adds a root operation type definition."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Selection",
@@ -1223,7 +1300,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A single selection within a GraphQL selection set: a field, fragment spread, or inline fragment."}}}]}}}}}},
+                      "literal": {"string": "A single selection within a GraphQL selection set: a field, fragment spread, or inline fragment."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.SelectionSet",
@@ -1233,7 +1311,8 @@
             "annotated": {
               "body": {"wrap": {"list": {"variable": "hydra.graphql.syntax.Selection"}}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A braced list of GraphQL selections."}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A braced list of GraphQL selections."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.StringValue",
@@ -1242,7 +1321,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphQL string literal."}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphQL string literal."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Type",
@@ -1259,7 +1339,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL type reference: named, list, or non-null."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL type reference: named, list, or non-null."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.TypeCondition",
@@ -1273,7 +1354,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL type condition, naming the type a fragment applies to."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL type condition, naming the type a fragment applies to."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.TypeDefinition",
@@ -1293,7 +1375,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL type system definition for a single named type."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL type system definition for a single named type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.TypeExtension",
@@ -1310,7 +1393,8 @@
                   {"name": "enum", "type": {"variable": "hydra.graphql.syntax.EnumTypeExtension"}},
                   {"name": "inputObject", "type": {"variable": "hydra.graphql.syntax.InputObjectTypeExtension"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An extension of a GraphQL named type."}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An extension of a GraphQL named type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.TypeSystemDefinition",
@@ -1327,7 +1411,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL type system definition: schema, type, or directive."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL type system definition: schema, type, or directive."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.TypeSystemDefinitionOrExtension",
@@ -1343,7 +1428,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Either a GraphQL type system definition or an extension of one."}}}]}}}}}},
+                    "value": {"literal": {"string": "Either a GraphQL type system definition or an extension of one."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.TypeSystemDirectiveLocation",
@@ -1368,7 +1454,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A directive location valid on GraphQL type system definitions."}}}]}}}}}},
+                    "value": {"literal": {"string": "A directive location valid on GraphQL type system definitions."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.TypeSystemDocment",
@@ -1381,7 +1468,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL document consisting only of type system definitions."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL document consisting only of type system definitions."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.TypeSystemExtension",
@@ -1394,7 +1482,8 @@
                   {"name": "schema", "type": {"variable": "hydra.graphql.syntax.SchemaExtension"}},
                   {"name": "type", "type": {"variable": "hydra.graphql.syntax.TypeExtension"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An extension of a GraphQL schema or type."}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An extension of a GraphQL schema or type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.TypeSystemExtensionDocument",
@@ -1407,7 +1496,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL document consisting of type system definitions and extensions."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL document consisting of type system definitions and extensions."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.UnionMemberTypes",
@@ -1423,7 +1513,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The list of member types of a GraphQL union type, introduced by an equals sign."}}}]}}}}}},
+                    "value": {"literal": {"string": "The list of member types of a GraphQL union type, introduced by an equals sign."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.UnionMemberTypesSequence",
@@ -1439,7 +1530,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty UnionMemberTypes list with a leading list of member types."}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty UnionMemberTypes list with a leading list of member types."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.UnionMemberTypesSequence2",
@@ -1455,7 +1547,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The base case of a UnionMemberTypes list: a single, optionally pipe-prefixed member type."}}}]}}}}}},
+                    "value": {"literal": {"string": "The base case of a UnionMemberTypes list: a single, optionally pipe-prefixed member type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.UnionTypeDefinition",
@@ -1473,7 +1566,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL union type definition, giving its name, directives, and member types."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL union type definition, giving its name, directives, and member types."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.UnionTypeExtension",
@@ -1489,7 +1583,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An extension of a GraphQL union type, either adding member types or only directives."}}}]}}}}}},
+                    "value": {"literal": {"string": "An extension of a GraphQL union type, either adding member types or only directives."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.UnionTypeExtensionSequence",
@@ -1506,7 +1601,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A union type extension that adds new member types."}}}]}}}}}},
+                    "value": {"literal": {"string": "A union type extension that adds new member types."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.UnionTypeExtensionSequence2",
@@ -1522,7 +1618,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A union type extension consisting of directives only."}}}]}}}}}},
+                    "value": {"literal": {"string": "A union type extension consisting of directives only."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Value",
@@ -1545,7 +1642,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL value: a variable, literal, list, or object."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL value: a variable, literal, list, or object."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.Variable",
@@ -1558,7 +1656,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphQL variable reference, introduced by a dollar sign."}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphQL variable reference, introduced by a dollar sign."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graphql.syntax.VariablesDefinition",
@@ -1576,4 +1675,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single variable definition in a GraphQL operation's variable list."}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A single variable definition in a GraphQL operation's variable list."}}}]}}},
+          "constraints": []}}}]}

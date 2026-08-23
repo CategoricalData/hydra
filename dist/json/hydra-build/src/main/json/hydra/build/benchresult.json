@@ -50,7 +50,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Per-run metadata: timestamp and git context of a benchmark run"}}}]}}}}}},
+                    "value": {"literal": {"string": "Per-run metadata: timestamp and git context of a benchmark run"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.benchresult.GenBenchResult",
@@ -91,7 +92,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A generator-benchmark result: target, run count, and per-host results"}}}]}}}}}},
+                    "value": {"literal": {"string": "A generator-benchmark result: target, run count, and per-host results"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.benchresult.HostResult",
@@ -122,7 +124,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "One host's generator-benchmark result: setup time and per-package timings"}}}]}}}}}},
+                    "value": {"literal": {"string": "One host's generator-benchmark result: setup time and per-package timings"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.benchresult.RunStats",
@@ -150,4 +153,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Timing statistics for one (host, package): per-run elapsed times and the median"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "Timing statistics for one (host, package): per-run elapsed times and the median"}}}]}}},
+          "constraints": []}}}]}

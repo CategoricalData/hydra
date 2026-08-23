@@ -69,7 +69,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Configuration for a validation pass: which check rules are active, how each is classified, and the upper bounds on collected findings. A check whose rule name appears in neither set is never evaluated. Errors hard-stop the traversal once maxErrors is reached; warnings only stop being collected once maxWarnings is reached, never causing termination."}}}]}}}}}},
+                        "string": "Configuration for a validation pass: which check rules are active, how each is classified, and the upper bounds on collected findings. A check whose rule name appears in neither set is never evaluated. Errors hard-stop the traversal once maxErrors is reached; warnings only stop being collected once maxWarnings is reached, never causing termination."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.validation.ValidationResult",
@@ -108,4 +109,5 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "The outcome of a validation pass: an ordered list of error findings and an ordered list of warning findings, each parameterized by the finding payload type. The pass is considered successful when 'errors' is empty; warnings are informational and do not affect that judgement."}}}]}}}}}}]}
+                        "string": "The outcome of a validation pass: an ordered list of error findings and an ordered list of warning findings, each parameterized by the finding payload type. The pass is considered successful when 'errors' is empty; warnings are informational and do not affect that judgement."}}}]}}},
+          "constraints": []}}}]}

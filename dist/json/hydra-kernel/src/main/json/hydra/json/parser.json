@@ -449,7 +449,7 @@
                                                                     "function": {"variable": "hydra.lib.strings.fromList"},
                                                                     "argument": {
                                                                       "application": {
-                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.pure"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.singleton"}, "type": {"literal": {"integer": "int32"}}}},
                                                                         "argument": {"variable": "arg_"}}}}}}}}}}}}},
                                                 "argument": {"variable": "digits"}}}}}}},
                                     "argument": {"variable": "hydra.json.parser.digits"}}}}}}}}}}}}},
@@ -804,7 +804,7 @@
                                                                 "argument": {"variable": "expPart"}}},
                                                             "argument": {"literal": {"string": ""}}}},
                                                         "argument": {"typeApplication": {"body": {"variable": "hydra.lib.functions.identity"}, "type": {"literal": "string"}}}}}}},
-                                                "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                             "body": {
                                               "application": {
                                                 "function": {"typeApplication": {"body": {"variable": "hydra.parsers.pure"}, "type": {"variable": "hydra.json.model.Value"}}},
@@ -823,7 +823,7 @@
                                                                     "typeApplication": {
                                                                       "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "decimal"}}},
                                                                       "type": {"literal": "decimal"}}},
-                                                                  "argument": {"application": {"function": {"variable": "hydra.lib.literals.readDecimal"}, "argument": {"variable": "numStr"}}}}},
+                                                                  "argument": {"application": {"function": {"variable": "hydra.lib.literals.parseDecimal"}, "argument": {"variable": "numStr"}}}}},
                                                               "argument": {"literal": {"decimal": 0}}}},
                                                           "argument": {"typeApplication": {"body": {"variable": "hydra.lib.functions.identity"}, "type": {"literal": "decimal"}}}}}}}}}}}}}}}}}}}}}}}}}},
             "annotation": {

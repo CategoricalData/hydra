@@ -25,7 +25,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphSON edge as referenced from an adjacent vertex, with its own properties"}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphSON edge as referenced from an adjacent vertex, with its own properties"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.BigDecimalValue",
@@ -38,7 +39,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphSON big-decimal value, represented as a string"}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphSON big-decimal value, represented as a string"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.CompositeTypedValue",
@@ -54,7 +56,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphSON composite value tagged with a GraphSON type name"}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphSON composite value tagged with a GraphSON type name"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.DateTime",
@@ -67,7 +70,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphSON date-time value, represented as a string"}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphSON date-time value, represented as a string"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.DoubleValue",
@@ -85,7 +89,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphSON double-precision floating-point value, including IEEE special values"}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphSON double-precision floating-point value, including IEEE special values"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.Duration",
@@ -98,7 +103,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphSON duration value, represented as a string"}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphSON duration value, represented as a string"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.EdgeLabel",
@@ -109,7 +115,8 @@
               "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphSON edge label, represented as a string"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphSON edge label, represented as a string"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.FloatValue",
@@ -127,7 +134,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphSON single-precision floating-point value, including IEEE special values"}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphSON single-precision floating-point value, including IEEE special values"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.Map",
@@ -140,7 +148,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphSON map, represented as a list of key/value pairs"}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphSON map, represented as a list of key/value pairs"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.PrimitiveTypedValue",
@@ -156,7 +165,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphSON primitive value tagged with a GraphSON type name"}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphSON primitive value tagged with a GraphSON type name"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.PropertyKey",
@@ -169,7 +179,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphSON property key, represented as a string"}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphSON property key, represented as a string"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.TypeName",
@@ -180,7 +191,8 @@
               "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphSON type name, represented as a string"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphSON type name, represented as a string"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.Uuid",
@@ -191,7 +203,8 @@
               "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphSON UUID value, represented as a string"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A GraphSON UUID value, represented as a string"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.Value",
@@ -226,7 +239,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphSON value, covering the subset of GraphSON value types this model supports"}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphSON value, covering the subset of GraphSON value types this model supports"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.ValuePair",
@@ -238,7 +252,8 @@
                 "record": [
                   {"name": "first", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
                   {"name": "second", "type": {"variable": "hydra.pg.graphson.syntax.Value"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value pair in a GraphSON map"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value pair in a GraphSON map"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.Vertex",
@@ -281,7 +296,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphSON vertex, with its incident edges and properties"}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphSON vertex, with its incident edges and properties"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.VertexLabel",
@@ -294,7 +310,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphSON vertex label, represented as a string"}}}]}}}}}},
+                    "value": {"literal": {"string": "A GraphSON vertex label, represented as a string"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.VertexPropertyValue",
@@ -310,4 +327,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GraphSON vertex property value, with an optional property id"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A GraphSON vertex property value, with an optional property id"}}}]}}},
+          "constraints": []}}}]}

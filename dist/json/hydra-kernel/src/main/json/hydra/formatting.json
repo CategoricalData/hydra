@@ -171,7 +171,8 @@
                                                     "function": {
                                                       "domain": {"list": {"list": {"literal": {"integer": "int32"}}}},
                                                       "codomain": {
-                                                        "function": {"domain": {"literal": {"integer": "int32"}}, "codomain": {"list": {"list": {"literal": {"integer": "int32"}}}}}}}}}}],
+                                                        "function": {"domain": {"literal": {"integer": "int32"}}, "codomain": {"list": {"list": {"literal": {"integer": "int32"}}}}}}}},
+                                                  "constraints": []}}],
                                             "body": {
                                               "application": {
                                                 "function": {
@@ -201,14 +202,14 @@
                                                           "application": {
                                                             "function": {"variable": "hydra.lib.strings.toList"},
                                                             "argument": {"application": {"function": {"variable": "hydra.formatting.decapitalize"}, "argument": {"variable": "original"}}}}}}}}}}}}},
-                                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
+                                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
                                       {
                                         "name": "byUnderscores",
                                         "term": {
                                           "application": {
                                             "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "_"}}}},
                                             "argument": {"variable": "original"}}},
-                                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                                     "body": {
                                       "application": {
                                         "function": {
@@ -224,7 +225,7 @@
                                                 "name": "upperSnake",
                                                 "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"variable": "byUnderscores"}}}}]}},
                                         "argument": {"variable": "from"}}}}},
-                                "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                                "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {
@@ -352,7 +353,7 @@
                           "application": {
                             "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "_"}}}},
                             "argument": {"variable": "s"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -373,7 +374,7 @@
                                         "body": {
                                           "application": {"function": {"variable": "hydra.formatting.convertCaseCamelToLowerSnake"}, "argument": {"variable": "p"}}}}}}},
                                 "argument": {"variable": "parts"}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "_"}}}},
@@ -530,7 +531,10 @@
                               "application": {
                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "    "}}}},
                                 "argument": {"variable": "l"}}}}},
-                        "typeScheme": {"variables": [], "body": {"function": {"domain": {"literal": "string"}, "codomain": {"literal": "string"}}}}}],
+                        "typeScheme": {
+                          "variables": [],
+                          "body": {"function": {"domain": {"literal": "string"}, "codomain": {"literal": "string"}}},
+                          "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.formatting.unlines"},
@@ -599,7 +603,7 @@
                         "function": {
                           "application": {
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"list": {"literal": "string"}}}},
-                            "argument": {"application": {"function": {"variable": "hydra.lib.strings.null"}, "argument": {"variable": "s"}}}}},
+                            "argument": {"application": {"function": {"variable": "hydra.lib.strings.isEmpty"}, "argument": {"variable": "s"}}}}},
                         "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}}},
                     "argument": {
                       "let": {
@@ -610,7 +614,7 @@
                               "application": {
                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "\n"}}}},
                                 "argument": {"variable": "s"}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {
@@ -636,7 +640,7 @@
                                                 "function": {
                                                   "application": {
                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"list": {"literal": "string"}}}},
-                                                    "argument": {"application": {"function": {"variable": "hydra.lib.strings.null"}, "argument": {"variable": "lst"}}}}},
+                                                    "argument": {"application": {"function": {"variable": "hydra.lib.strings.isEmpty"}, "argument": {"variable": "lst"}}}}},
                                                 "argument": {
                                                   "application": {
                                                     "function": {
@@ -688,7 +692,7 @@
                             "function": {
                               "application": {
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "string"}}},
-                                "argument": {"application": {"function": {"variable": "hydra.lib.strings.null"}, "argument": {"variable": "s"}}}}},
+                                "argument": {"application": {"function": {"variable": "hydra.lib.strings.isEmpty"}, "argument": {"variable": "s"}}}}},
                             "argument": {"variable": "s"}}},
                         "argument": {
                           "let": {
@@ -696,7 +700,7 @@
                               {
                                 "name": "list",
                                 "term": {"application": {"function": {"variable": "hydra.lib.strings.toList"}, "argument": {"variable": "s"}}},
-                                "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}}}],
+                                "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}, "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {
@@ -731,7 +735,7 @@
                                                             "function": {"variable": "hydra.lib.strings.fromList"},
                                                             "argument": {
                                                               "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.pure"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.singleton"}, "type": {"literal": {"integer": "int32"}}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {
@@ -739,7 +743,7 @@
                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": {"integer": "int32"}}}},
                                                                         "type": {"list": {"literal": {"integer": "int32"}}}}},
                                                                     "argument": {"variable": "uc"}}}}}}}}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                                 "body": {
                                                   "application": {
                                                     "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "firstLetter"}}},
@@ -853,7 +857,8 @@
                                             "argument": {"literal": {"integer": {"int32": 57}}}}}}}}}}}}},
                         "typeScheme": {
                           "variables": [],
-                          "body": {"function": {"domain": {"literal": {"integer": "int32"}}, "codomain": {"literal": "boolean"}}}}}],
+                          "body": {"function": {"domain": {"literal": {"integer": "int32"}}, "codomain": {"literal": "boolean"}}},
+                          "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -880,7 +885,7 @@
                                                       "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"literal": {"integer": "int32"}}}}},
                                                     "type": {"literal": "boolean"}}},
                                                 "argument": {"variable": "p"}}},
-                                            "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}}}],
+                                            "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}, "constraints": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -894,7 +899,7 @@
                                                           "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"literal": {"integer": "int32"}}}}},
                                                         "type": {"literal": "boolean"}}},
                                                     "argument": {"variable": "p"}}},
-                                                "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                                                "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
                                             "body": {
                                               "application": {
                                                 "function": {
@@ -964,7 +969,8 @@
                                   "codomain": {
                                     "function": {
                                       "domain": {"literal": {"integer": "int32"}},
-                                      "codomain": {"pair": {"first": {"list": {"literal": {"integer": "int32"}}}, "second": {"literal": "boolean"}}}}}}}}}],
+                                      "codomain": {"pair": {"first": {"list": {"literal": {"integer": "int32"}}}, "second": {"literal": "boolean"}}}}}}},
+                              "constraints": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -997,7 +1003,8 @@
                                     "argument": {"application": {"function": {"variable": "hydra.lib.strings.toList"}, "argument": {"variable": "input"}}}}},
                                 "typeScheme": {
                                   "variables": [],
-                                  "body": {"pair": {"first": {"list": {"literal": {"integer": "int32"}}}, "second": {"literal": "boolean"}}}}}],
+                                  "body": {"pair": {"first": {"list": {"literal": {"integer": "int32"}}}, "second": {"literal": "boolean"}}},
+                                  "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {"variable": "hydra.lib.strings.fromList"},
@@ -1037,7 +1044,7 @@
                         "name": "stripped",
                         "term": {
                           "application": {"function": {"variable": "hydra.formatting.stripLeadingAndTrailingWhitespace"}, "argument": {"variable": "s"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -1045,7 +1052,7 @@
                             "function": {
                               "application": {
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "string"}}},
-                                "argument": {"application": {"function": {"variable": "hydra.lib.strings.null"}, "argument": {"variable": "stripped"}}}}},
+                                "argument": {"application": {"function": {"variable": "hydra.lib.strings.isEmpty"}, "argument": {"variable": "stripped"}}}}},
                             "argument": {"literal": {"string": ""}}}},
                         "argument": {
                           "let": {
@@ -1059,7 +1066,7 @@
                                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
                                         "argument": {"application": {"function": {"variable": "hydra.lib.strings.length"}, "argument": {"variable": "stripped"}}}}},
                                     "argument": {"literal": {"integer": {"int32": 1}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}}],
+                                "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}}],
                             "body": {
                               "let": {
                                 "bindings": [
@@ -1069,7 +1076,7 @@
                                       "application": {
                                         "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "stripped"}}},
                                         "argument": {"literal": {"string": "."}}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                 "body": {
                                   "application": {
                                     "function": {
@@ -1526,7 +1533,10 @@
                                         "body": {"pair": {"first": {"literal": {"integer": {"int32": 126}}}, "second": {"literal": {"string": "tilde"}}}},
                                         "type": {"literal": {"integer": "int32"}}}},
                                     "type": {"literal": "string"}}}]}}},
-                        "typeScheme": {"variables": [], "body": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}}}},
+                        "typeScheme": {
+                          "variables": [],
+                          "body": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"literal": "string"}}},
+                          "constraints": []}},
                       {
                         "name": "alias",
                         "term": {
@@ -1541,7 +1551,7 @@
                                       "typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"list": {"literal": {"integer": "int32"}}}}},
                                     "argument": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.pure"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.singleton"}, "type": {"literal": {"integer": "int32"}}}},
                                         "argument": {"variable": "c"}}}}},
                                 "argument": {
                                   "application": {
@@ -1564,7 +1574,8 @@
                                         "argument": {"variable": "aliases"}}}}}}}}},
                         "typeScheme": {
                           "variables": [],
-                          "body": {"function": {"domain": {"literal": {"integer": "int32"}}, "codomain": {"list": {"literal": {"integer": "int32"}}}}}}}],
+                          "body": {"function": {"domain": {"literal": {"integer": "int32"}}, "codomain": {"list": {"literal": {"integer": "int32"}}}}},
+                          "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.lib.strings.fromList"},
@@ -1636,7 +1647,7 @@
                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.take"}, "type": {"literal": {"integer": "int32"}}}},
                                                     "argument": {"variable": "maxlen"}}},
                                                 "argument": {"variable": "rem"}}},
-                                            "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}}},
+                                            "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}, "constraints": []}},
                                           {
                                             "name": "spanResult",
                                             "term": {
@@ -1679,7 +1690,8 @@
                                                     "argument": {"variable": "trunc"}}}}},
                                             "typeScheme": {
                                               "variables": [],
-                                              "body": {"pair": {"first": {"list": {"literal": {"integer": "int32"}}}, "second": {"list": {"literal": {"integer": "int32"}}}}}}},
+                                              "body": {"pair": {"first": {"list": {"literal": {"integer": "int32"}}}, "second": {"list": {"literal": {"integer": "int32"}}}}},
+                                              "constraints": []}},
                                           {
                                             "name": "prefix",
                                             "term": {
@@ -1693,7 +1705,7 @@
                                                           "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"literal": {"integer": "int32"}}}}},
                                                         "type": {"list": {"literal": {"integer": "int32"}}}}},
                                                     "argument": {"variable": "spanResult"}}}}},
-                                            "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}}},
+                                            "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}, "constraints": []}},
                                           {
                                             "name": "suffix",
                                             "term": {
@@ -1707,7 +1719,7 @@
                                                           "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"literal": {"integer": "int32"}}}}},
                                                         "type": {"list": {"literal": {"integer": "int32"}}}}},
                                                     "argument": {"variable": "spanResult"}}}}},
-                                            "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}}}],
+                                            "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}, "constraints": []}}],
                                         "body": {
                                           "application": {
                                             "function": {
@@ -1747,7 +1759,7 @@
                                                           "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"list": {"list": {"literal": {"integer": "int32"}}}}}},
                                                         "argument": {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"literal": {"integer": "int32"}}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"literal": {"integer": "int32"}}}},
                                                             "argument": {"variable": "prefix"}}}}},
                                                     "argument": {
                                                       "application": {
@@ -1843,7 +1855,8 @@
                                   "codomain": {
                                     "function": {
                                       "domain": {"list": {"literal": {"integer": "int32"}}},
-                                      "codomain": {"list": {"list": {"literal": {"integer": "int32"}}}}}}}}}}],
+                                      "codomain": {"list": {"list": {"literal": {"integer": "int32"}}}}}}}},
+                              "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {"variable": "hydra.lib.strings.fromList"},

@@ -91,7 +91,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A graph, or lexical environment which binds names to terms, types, primitives, and metadata"}}}]}}}}}},
+                    "value": {"literal": {"string": "A graph, or lexical environment which binds names to terms, types, primitives, and metadata"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graph.Library",
@@ -128,7 +129,8 @@
                         "body": {"list": {"variable": "hydra.graph.Primitive"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The primitives defined in this library"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A library of primitive functions"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A library of primitive functions"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graph.Primitive",
@@ -174,7 +176,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A built-in function or constant, consisting of the host-independent PrimitiveDefinition (name, signature, metadata) plus a host-specific implementation."}}}]}}}}}},
+                        "string": "A built-in function or constant, consisting of the host-independent PrimitiveDefinition (name, signature, metadata) plus a host-specific implementation."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.graph.TermCoder",
@@ -230,4 +233,5 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms."}}}]}}}}}}]}
+                        "string": "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms."}}}]}}},
+          "constraints": []}}}]}

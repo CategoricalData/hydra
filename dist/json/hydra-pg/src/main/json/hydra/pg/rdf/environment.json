@@ -79,4 +79,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The environment for property graph to RDF mapping"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "The environment for property graph to RDF mapping"}}}]}}},
+          "constraints": []}}}]}

@@ -106,7 +106,7 @@
                                                         "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}}},
                                                     "argument": {"variable": "env"}}},
                                                 "argument": {"variable": "name"}}}}}}}}},
-                                "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}}}],
+                                "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}, "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {
@@ -225,7 +225,7 @@
                                               "application": {
                                                 "function": {"project": {"typeName": "hydra.cpp.environment.CppEnvironment", "fieldName": "namespaces"}},
                                                 "argument": {"variable": "env"}}}}}}},
-                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}}},
+                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}, "constraints": []}},
                                   {
                                     "name": "boundVars",
                                     "term": {
@@ -238,25 +238,28 @@
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.cpp.environment.CppEnvironment", "fieldName": "boundTypeVariables"}},
                                             "argument": {"variable": "env"}}}}},
-                                    "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": "string"}}}}},
+                                    "typeScheme": {
+                                      "variables": [],
+                                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": "string"}}},
+                                      "constraints": []}},
                                   {
                                     "name": "qualName",
                                     "term": {"application": {"function": {"variable": "hydra.names.qualifyName"}, "argument": {"variable": "name"}}},
-                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.util.QualifiedName"}}},
+                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.util.QualifiedName"}, "constraints": []}},
                                   {
                                     "name": "mns",
                                     "term": {
                                       "application": {
                                         "function": {"project": {"typeName": "hydra.util.QualifiedName", "fieldName": "moduleName"}},
                                         "argument": {"variable": "qualName"}}},
-                                    "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.packaging.ModuleName"}}}},
+                                    "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.packaging.ModuleName"}}, "constraints": []}},
                                   {
                                     "name": "local",
                                     "term": {
                                       "application": {
                                         "function": {"project": {"typeName": "hydra.util.QualifiedName", "fieldName": "local"}},
                                         "argument": {"variable": "qualName"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                   {
                                     "name": "cppLocal",
                                     "term": {
@@ -272,7 +275,7 @@
                                                     "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}}},
                                                 "argument": {"variable": "conv"}}},
                                             "argument": {"variable": "local"}}}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                   {
                                     "name": "cppNs",
                                     "term": {
@@ -303,7 +306,8 @@
                                                     "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "nsVal"}}}}}}}}}}},
                                     "typeScheme": {
                                       "variables": [],
-                                      "body": {"function": {"domain": {"variable": "hydra.packaging.ModuleName"}, "codomain": {"literal": "string"}}}}}],
+                                      "body": {"function": {"domain": {"variable": "hydra.packaging.ModuleName"}, "codomain": {"literal": "string"}}},
+                                      "constraints": []}}],
                                 "body": {
                                   "application": {
                                     "function": {
@@ -397,7 +401,10 @@
                                   "application": {
                                     "function": {"project": {"typeName": "hydra.cpp.environment.CppEnvironment", "fieldName": "boundTypeVariables"}},
                                     "argument": {"variable": "env"}}}}},
-                            "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": "string"}}}}},
+                            "typeScheme": {
+                              "variables": [],
+                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": "string"}}},
+                              "constraints": []}},
                           {
                             "name": "focusNs",
                             "term": {
@@ -414,25 +421,25 @@
                                       "application": {
                                         "function": {"project": {"typeName": "hydra.cpp.environment.CppEnvironment", "fieldName": "namespaces"}},
                                         "argument": {"variable": "env"}}}}}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}}},
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}, "constraints": []}},
                           {
                             "name": "qualName",
                             "term": {"application": {"function": {"variable": "hydra.names.qualifyName"}, "argument": {"variable": "name"}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.util.QualifiedName"}}},
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.util.QualifiedName"}, "constraints": []}},
                           {
                             "name": "mns",
                             "term": {
                               "application": {
                                 "function": {"project": {"typeName": "hydra.util.QualifiedName", "fieldName": "moduleName"}},
                                 "argument": {"variable": "qualName"}}},
-                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.packaging.ModuleName"}}}},
+                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.packaging.ModuleName"}}, "constraints": []}},
                           {
                             "name": "local",
                             "term": {
                               "application": {
                                 "function": {"project": {"typeName": "hydra.util.QualifiedName", "fieldName": "local"}},
                                 "argument": {"variable": "qualName"}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {

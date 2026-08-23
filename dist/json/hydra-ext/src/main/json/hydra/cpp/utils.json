@@ -469,7 +469,7 @@
                                   "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.cpp.syntax.FunctionBody"}}},
                                 "argument": {
                                   "application": {
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "t0"}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "t0"}}},
                                     "argument": {"variable": "params"}}}}},
                             "argument": {"inject": {"typeName": "hydra.cpp.syntax.FunctionBody", "field": {"name": "default", "term": "unit"}}}}},
                         "argument": {"variable": "hydra.cpp.utils.emptyFunctionBody"}}}}},

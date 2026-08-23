@@ -74,7 +74,7 @@
                                         "function": {
                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "label"}}, "type": {"variable": "t0"}}},
                                         "argument": {"variable": "edge"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                               {
                                 "name": "id",
                                 "term": {
@@ -85,7 +85,7 @@
                                         "function": {
                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "id"}}, "type": {"variable": "t0"}}},
                                         "argument": {"variable": "edge"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                               {
                                 "name": "outId",
                                 "term": {
@@ -96,7 +96,7 @@
                                         "function": {
                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "out"}}, "type": {"variable": "t0"}}},
                                         "argument": {"variable": "edge"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                               {
                                 "name": "inId",
                                 "term": {
@@ -107,7 +107,7 @@
                                         "function": {
                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "in"}}, "type": {"variable": "t0"}}},
                                         "argument": {"variable": "edge"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                               {
                                 "name": "props",
                                 "term": {
@@ -162,7 +162,7 @@
                                                 "function": {
                                                   "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "properties"}}, "type": {"variable": "t0"}}},
                                                 "argument": {"variable": "edge"}}}}}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {"variable": "hydra.lib.strings.concat"},
@@ -292,7 +292,8 @@
                                     "argument": {"variable": "lg"}}},
                                 "typeScheme": {
                                   "variables": [],
-                                  "body": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}}},
+                                  "body": {"list": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}},
+                                  "constraints": []}},
                               {
                                 "name": "edges",
                                 "term": {
@@ -302,7 +303,8 @@
                                     "argument": {"variable": "lg"}}},
                                 "typeScheme": {
                                   "variables": [],
-                                  "body": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}}}}],
+                                  "body": {"list": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "t0"}}}},
+                                  "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {"variable": "hydra.lib.strings.concat"},
@@ -463,7 +465,7 @@
                                         "function": {
                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "label"}}, "type": {"variable": "t0"}}},
                                         "argument": {"variable": "vertex"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                               {
                                 "name": "id",
                                 "term": {
@@ -474,7 +476,7 @@
                                         "function": {
                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "id"}}, "type": {"variable": "t0"}}},
                                         "argument": {"variable": "vertex"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                               {
                                 "name": "props",
                                 "term": {
@@ -529,7 +531,7 @@
                                                 "function": {
                                                   "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "properties"}}, "type": {"variable": "t0"}}},
                                                 "argument": {"variable": "vertex"}}}}}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {"variable": "hydra.lib.strings.concat"},

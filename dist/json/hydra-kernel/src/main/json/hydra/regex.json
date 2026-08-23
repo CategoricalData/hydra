@@ -19,7 +19,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A non-empty list of alternative sequences, joined by the | operator. Matches if any alternative matches."}}}]}}}}}},
+                      "literal": {"string": "A non-empty list of alternative sequences, joined by the | operator. Matches if any alternative matches."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.regex.Atom",
@@ -97,7 +98,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single, unquantified regex element: the smallest unit to which a quantifier may apply."}}}]}}}}}},
+                    "value": {"literal": {"string": "A single, unquantified regex element: the smallest unit to which a quantifier may apply."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.regex.CharacterClass",
@@ -133,7 +135,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A bracketed character class, [ ... ] or [^ ... ]."}}}]}}}}}},
+                    "value": {"literal": {"string": "A bracketed character class, [ ... ] or [^ ... ]."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.regex.CharacterRange",
@@ -167,7 +170,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An inclusive range of characters within a character class, e.g. a-z."}}}]}}}}}},
+                    "value": {"literal": {"string": "An inclusive range of characters within a character class, e.g. a-z."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.regex.ClassItem",
@@ -198,7 +202,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A member of a character class: either a single character or an inclusive character range."}}}]}}}}}},
+                    "value": {"literal": {"string": "A member of a character class: either a single character or an inclusive character range."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.regex.Quantified",
@@ -228,7 +233,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An atom together with an optional quantifier applied to it."}}}]}}}}}},
+                    "value": {"literal": {"string": "An atom together with an optional quantifier applied to it."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.regex.Quantifier",
@@ -312,7 +318,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A regular-expression quantifier. Mirrors hydra.query.RegexQuantifier, which models the same set of quantifiers for graph-path queries; a future refactor may hoist a shared type (see #567 findings)."}}}]}}}}}},
+                        "string": "A regular-expression quantifier. Mirrors hydra.query.RegexQuantifier, which models the same set of quantifiers for graph-path queries; a future refactor may hoist a shared type (see #567 findings)."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.regex.QuantifierRange",
@@ -342,7 +349,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The bounds of a {n,m} quantifier: between min and max (inclusive) occurrences."}}}]}}}}}},
+                    "value": {"literal": {"string": "The bounds of a {n,m} quantifier: between min and max (inclusive) occurrences."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.regex.Regex",
@@ -356,7 +364,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A complete Hydra regular expression: the root of the AST. A regex is an alternation of sequences."}}}]}}}}}},
+                      "literal": {"string": "A complete Hydra regular expression: the root of the AST. A regex is an alternation of sequences."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.regex.RegexSequence",
@@ -371,4 +380,5 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A (possibly empty) sequence of quantified atoms, matched in order. An empty sequence matches the empty string. (Named RegexSequence rather than Sequence to avoid the generated coder binding colliding with the host's built-in sequence.)"}}}]}}}}}}]}
+                        "string": "A (possibly empty) sequence of quantified atoms, matched in order. An empty sequence matches the empty string. (Named RegexSequence rather than Sequence to avoid the generated coder binding colliding with the host's built-in sequence.)"}}}]}}},
+          "constraints": []}}}]}

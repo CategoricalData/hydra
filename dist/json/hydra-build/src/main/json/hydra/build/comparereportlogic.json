@@ -148,7 +148,8 @@
                                 "list": {
                                   "pair": {
                                     "first": {"variable": "t0"},
-                                    "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": {"integer": "int32"}}}}}}}}}],
+                                    "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": {"integer": "int32"}}}}}}},
+                              "constraints": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -201,7 +202,7 @@
                                                                 "argument": {"variable": "r"}}}}}}},
                                                     "argument": {"literal": {"string": "byteEq"}}}}}}}},
                                         "argument": {"variable": "rows"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}}],
+                                "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}}],
                             "body": {
                               "typeApplication": {
                                 "body": {
@@ -430,7 +431,7 @@
                               "application": {
                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "\n"}}}},
                                 "argument": {"variable": "a"}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -440,7 +441,7 @@
                                   "application": {
                                     "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "\n"}}}},
                                     "argument": {"variable": "b"}}},
-                                "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                                "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                             "body": {
                               "let": {
                                 "bindings": [
@@ -469,7 +470,7 @@
                                                                 "argument": {"variable": "x"}}},
                                                             "argument": {"variable": "bLines"}}}}}}}}},
                                             "argument": {"variable": "aLines"}}}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}}],
+                                    "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}}],
                                 "body": {
                                   "let": {
                                     "bindings": [
@@ -498,7 +499,7 @@
                                                                     "argument": {"variable": "y"}}},
                                                                 "argument": {"variable": "aLines"}}}}}}}}},
                                                 "argument": {"variable": "bLines"}}}}},
-                                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}}],
+                                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}}],
                                     "body": {
                                       "application": {
                                         "function": {
@@ -604,7 +605,8 @@
                             "list": {
                               "pair": {
                                 "first": {"literal": "string"},
-                                "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": {"integer": "int32"}}}}}}}}}],
+                                "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": {"integer": "int32"}}}}}}},
+                          "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -630,7 +632,7 @@
                                                   "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": {"integer": "int32"}}}}}}}}},
                                         "type": {"pair": {"first": {"literal": {"integer": "int32"}}, "second": {"literal": {"integer": "int32"}}}}}},
                                     "argument": {"variable": "report"}}}}},
-                            "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}}],
+                            "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -656,7 +658,7 @@
                                                       "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": {"integer": "int32"}}}}}}}}},
                                             "type": {"pair": {"first": {"literal": {"integer": "int32"}}, "second": {"literal": {"integer": "int32"}}}}}},
                                         "argument": {"variable": "report"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}}],
+                                "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}}],
                             "body": {
                               "let": {
                                 "bindings": [
@@ -685,7 +687,7 @@
                                                     "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": {"integer": "int32"}}}}}},
                                                 "body": {"application": {"function": {"variable": "hydra.build.comparereportlogic.renderRow"}, "argument": {"variable": "r"}}}}}}},
                                         "argument": {"variable": "rows"}}},
-                                    "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                                    "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                                 "body": {
                                   "let": {
                                     "bindings": [
@@ -696,11 +698,11 @@
                                             "function": {"variable": "hydra.lib.strings.concat"},
                                             "argument": {
                                               "list": [
-                                                {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "byteEqCount"}}},
+                                                {"application": {"function": {"variable": "hydra.lib.literals.printInt32"}, "argument": {"variable": "byteEqCount"}}},
                                                 {"literal": {"string": "/"}},
-                                                {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "total"}}},
+                                                {"application": {"function": {"variable": "hydra.lib.literals.printInt32"}, "argument": {"variable": "total"}}},
                                                 {"literal": {"string": " byte-identical"}}]}}},
-                                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                     "body": {
                                       "application": {
                                         "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "\n"}}}},
@@ -748,7 +750,7 @@
                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": "string"}}},
                                 "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": {"integer": "int32"}}}}}},
                             "argument": {"variable": "row"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -767,7 +769,7 @@
                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": "string"}}},
                                         "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": {"integer": "int32"}}}}}},
                                     "argument": {"variable": "row"}}}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -786,7 +788,7 @@
                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": "string"}}},
                                             "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": {"integer": "int32"}}}}}},
                                         "argument": {"variable": "row"}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}}],
+                                "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {
@@ -810,7 +812,7 @@
                                             {"literal": {"string": ": "}},
                                             {"variable": "status"},
                                             {"literal": {"string": " ("}},
-                                            {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "diffLines"}}},
+                                            {"application": {"function": {"variable": "hydra.lib.literals.printInt32"}, "argument": {"variable": "diffLines"}}},
                                             {"literal": {"string": " lines differ)"}}]}}}}},
                                 "argument": {
                                   "application": {
@@ -902,7 +904,7 @@
                           "application": {
                             "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
                             "argument": {"variable": "entry"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {

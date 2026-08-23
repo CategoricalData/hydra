@@ -20,7 +20,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd"}}}]}}}}}},
+                        "string": "A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.relational.ColumnSchema",
@@ -49,7 +50,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An abstract specification of the domain represented by a column in a relation; a role"}}}]}}}}}},
+                    "value": {"literal": {"string": "An abstract specification of the domain represented by a column in a relation; a role"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.relational.ForeignKey",
@@ -83,7 +85,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A mapping from certain columns of a source relation to primary key columns of a target relation"}}}]}}}}}},
+                      "literal": {"string": "A mapping from certain columns of a source relation to primary key columns of a target relation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.relational.PrimaryKey",
@@ -100,7 +103,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A primary key of a relation, specified either as a single column, or as a list of columns"}}}]}}}}}},
+                    "value": {"literal": {"string": "A primary key of a relation, specified either as a single column, or as a list of columns"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.relational.Relation",
@@ -112,7 +116,8 @@
                 "forall": {
                   "parameter": "v",
                   "body": {"wrap": {"list": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "v"}}}}}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A set of distinct n-tuples; a table"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A set of distinct n-tuples; a table"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.relational.RelationName",
@@ -121,7 +126,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique relation (table) name"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unique relation (table) name"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.relational.RelationSchema",
@@ -174,7 +180,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An abstract relation; the name and columns of a relation without its actual data"}}}]}}}}}},
+                    "value": {"literal": {"string": "An abstract relation; the name and columns of a relation without its actual data"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.relational.Relationship",
@@ -190,7 +197,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A domain-unordered (string-indexed, rather than position-indexed) relation"}}}]}}}}}},
+                    "value": {"literal": {"string": "A domain-unordered (string-indexed, rather than position-indexed) relation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.relational.Row",
@@ -210,4 +218,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An n-tuple which is an element of a given relation"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "An n-tuple which is an element of a given relation"}}}]}}},
+          "constraints": []}}}]}

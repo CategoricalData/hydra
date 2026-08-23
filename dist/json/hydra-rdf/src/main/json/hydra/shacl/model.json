@@ -19,7 +19,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A SHACL closed-shape constraint, restricting a node's properties to those explicitly listed or ignored"}}}]}}}}}},
+                      "literal": {"string": "A SHACL closed-shape constraint, restricting a node's properties to those explicitly listed or ignored"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.shacl.model.CommonConstraint",
@@ -270,7 +271,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "Any of a number of constraint parameters which can be applied either to node or property shapes"}}}]}}}}}},
+                      "literal": {"string": "Any of a number of constraint parameters which can be applied either to node or property shapes"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.shacl.model.CommonProperties",
@@ -349,7 +351,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Common constraint parameters and other properties for SHACL shapes"}}}]}}}}}},
+                    "value": {"literal": {"string": "Common constraint parameters and other properties for SHACL shapes"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.shacl.model.Definition",
@@ -367,7 +370,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "An instance of a type like sh:Shape or sh:NodeShape, together with a unique IRI for that instance"}}}]}}}}}},
+                      "literal": {"string": "An instance of a type like sh:Shape or sh:NodeShape, together with a unique IRI for that instance"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.shacl.model.NodeKind",
@@ -413,7 +417,8 @@
                       "annotated": {
                         "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An IRI or a literal"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The SHACL node kind of an RDF term"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The SHACL node kind of an RDF term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.shacl.model.NodeShape",
@@ -426,7 +431,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A SHACL node shape. See https://www.w3.org/TR/shacl/#node-shapes"}}}]}}}}}},
+                    "value": {"literal": {"string": "A SHACL node shape. See https://www.w3.org/TR/shacl/#node-shapes"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.shacl.model.Pattern",
@@ -440,7 +446,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A SHACL pattern. See https://www.w3.org/TR/shacl/#PatternConstraintComponent"}}}]}}}}}},
+                    "value": {"literal": {"string": "A SHACL pattern. See https://www.w3.org/TR/shacl/#PatternConstraintComponent"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.shacl.model.PropertyShape",
@@ -495,7 +502,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A SHACL property shape. See https://www.w3.org/TR/shacl/#property-shapes"}}}]}}}}}},
+                    "value": {"literal": {"string": "A SHACL property shape. See https://www.w3.org/TR/shacl/#property-shapes"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.shacl.model.PropertyShapeConstraint",
@@ -575,7 +583,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes"}}}]}}}}}},
+                        "string": "A number of constraint parameters which are specific to property shapes, and cannot be applied to node shapes"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.shacl.model.QualifiedValueShape",
@@ -597,7 +606,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A SHACL qualified value shape constraint, requiring a count of values conforming to a given shape"}}}]}}}}}},
+                      "literal": {"string": "A SHACL qualified value shape constraint, requiring a count of values conforming to a given shape"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.shacl.model.Reference",
@@ -629,7 +639,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Either an instance of a type like sh:Shape or sh:NodeShape, or an IRI which refers to an instance of that type"}}}]}}}}}},
+                        "string": "Either an instance of a type like sh:Shape or sh:NodeShape, or an IRI which refers to an instance of that type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.shacl.model.Severity",
@@ -666,7 +677,8 @@
                         "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constraint violation"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The severity of a SHACL constraint violation"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The severity of a SHACL constraint violation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.shacl.model.Shape",
@@ -682,7 +694,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A SHACL node or property shape. See https://www.w3.org/TR/shacl/#shapes"}}}]}}}}}},
+                    "value": {"literal": {"string": "A SHACL node or property shape. See https://www.w3.org/TR/shacl/#shapes"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.shacl.model.ShapesGraph",
@@ -700,4 +713,5 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes"}}}]}}}}}}]}
+                        "string": "An RDF graph containing zero or more shapes that is passed into a SHACL validation process so that a data graph can be validated against the shapes"}}}]}}},
+          "constraints": []}}}]}

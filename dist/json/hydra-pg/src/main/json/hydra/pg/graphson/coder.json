@@ -243,7 +243,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.maps.null"}, "type": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.maps.isEmpty"}, "type": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"}}},
                                         "type": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}},
                                     "argument": {"variable": "m"}}}}},
                             "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.json.model.Value"}}}}},
@@ -362,7 +362,7 @@
                                 "function": {
                                   "typeApplication": {
                                     "body": {
-                                      "typeApplication": {"body": {"variable": "hydra.lib.maps.null"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
+                                      "typeApplication": {"body": {"variable": "hydra.lib.maps.isEmpty"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                 "argument": {"variable": "m"}}}}},
                         "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.json.model.Value"}}}}},
@@ -780,7 +780,7 @@
                                       "function": {"variable": "hydra.lib.strings.fromList"},
                                       "argument": {
                                         "application": {
-                                          "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.pure"}, "type": {"literal": {"integer": "int32"}}}},
+                                          "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.singleton"}, "type": {"literal": {"integer": "int32"}}}},
                                           "argument": {
                                             "application": {
                                               "function": {"variable": "hydra.lib.literals.bigintToInt32"},
@@ -1077,7 +1077,7 @@
                                 "function": {
                                   "typeApplication": {
                                     "body": {
-                                      "typeApplication": {"body": {"variable": "hydra.lib.maps.null"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
+                                      "typeApplication": {"body": {"variable": "hydra.lib.maps.isEmpty"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                     "type": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}},
                                 "argument": {"variable": "m"}}}}},
                         "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.json.model.Value"}}}}},

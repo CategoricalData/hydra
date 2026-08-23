@@ -72,7 +72,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "An Asset is an object that contains a URI to data associated with the Item that can be downloaded or streamed. It is allowed to add additional fields."}}}]}}}}}},
+                        "string": "An Asset is an object that contains a URI to data associated with the Item that can be downloaded or streamed. It is allowed to add additional fields."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.stac.items.Item",
@@ -137,7 +138,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "This object describes a STAC Item. The fields id, type, bbox, geometry and properties are inherited from GeoJSON."}}}]}}}}}},
+                        "string": "This object describes a STAC Item. The fields id, type, bbox, geometry and properties are inherited from GeoJSON."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.stac.items.Link",
@@ -192,7 +194,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "This object describes a relationship with another entity. Data providers are advised to be liberal with the links section, to describe things like the Catalog an Item is in, related Items, parent or child Items (modeled in different ways, like an 'acquisition' or derived data). It is allowed to add additional fields such as a title and type."}}}]}}}}}},
+                        "string": "This object describes a relationship with another entity. Data providers are advised to be liberal with the links section, to describe things like the Catalog an Item is in, related Items, parent or child Items (modeled in different ways, like an 'acquisition' or derived data). It is allowed to add additional fields such as a title and type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.stac.items.MediaType",
@@ -205,7 +208,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An IANA media type (MIME type) string identifying the format of an asset or linked resource"}}}]}}}}}},
+                    "value": {"literal": {"string": "An IANA media type (MIME type) string identifying the format of an asset or linked resource"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.stac.items.RelationType",
@@ -224,7 +228,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "STAC Items use a variety of rel types in the link object, to describe the exact nature of the link between this Item and the entity it is linking to. It is recommended to use the official IANA Link Relation Types where possible. The following table explains places where STAC use custom rel types are used with Items. This happens where there is not a clear official option, or where STAC uses an official type but adds additional meaning for the STAC context."}}}]}}}}}},
+                        "string": "STAC Items use a variety of rel types in the link object, to describe the exact nature of the link between this Item and the entity it is linking to. It is recommended to use the official IANA Link Relation Types where possible. The following table explains places where STAC use custom rel types are used with Items. This happens where there is not a clear official option, or where STAC uses an official type but adds additional meaning for the STAC context."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.stac.items.Role",
@@ -287,7 +292,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "The roles field is used to describe the purpose of each asset. It is recommended to include one for every asset, to give users a sense of why they might want to make use of the asset. There are some emerging standards that enable clients to take particular action when they encounter particular roles, listed below. But implementors are encouraged to come up with their own terms to describe the role."}}}]}}}}}},
+                        "string": "The roles field is used to describe the purpose of each asset. It is recommended to include one for every asset, to give users a sense of why they might want to make use of the asset. There are some emerging standards that enable clients to take particular action when they encounter particular roles, listed below. But implementors are encouraged to come up with their own terms to describe the role."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.stac.items.StacRelationType",
@@ -355,7 +361,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A STAC-specific link relation type used to describe relationships between STAC entities"}}}]}}}}}},
+                    "value": {"literal": {"string": "A STAC-specific link relation type used to describe relationships between STAC entities"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.stac.items.StacVersion",
@@ -368,7 +375,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The version of the STAC specification that an Item implements"}}}]}}}}}},
+                    "value": {"literal": {"string": "The version of the STAC specification that an Item implements"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.stac.items.Uri",
@@ -381,7 +389,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A URI string, used for asset and other resource references"}}}]}}}}}},
+                    "value": {"literal": {"string": "A URI string, used for asset and other resource references"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.stac.items.Url",
@@ -394,4 +403,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A URL string, used for links to related entities"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A URL string, used for links to related entities"}}}]}}},
+          "constraints": []}}}]}

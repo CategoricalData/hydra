@@ -34,7 +34,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Configurable annotation keys for property graph mapping specifications"}}}]}}}}}},
+                    "value": {"literal": {"string": "Configurable annotation keys for property graph mapping specifications"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.mapping.EdgeSpec",
@@ -97,7 +98,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A mapping specification producing edges of a specified label."}}}]}}}}}},
+                    "value": {"literal": {"string": "A mapping specification producing edges of a specified label."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.mapping.ElementSpec",
@@ -113,7 +115,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Either a vertex specification or an edge specification"}}}]}}}}}},
+                    "value": {"literal": {"string": "Either a vertex specification or an edge specification"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.mapping.PropertySpec",
@@ -146,7 +149,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A mapping specification producing properties of a specified key, and values of the appropriate type."}}}]}}}}}},
+                      "literal": {"string": "A mapping specification producing properties of a specified key, and values of the appropriate type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.mapping.Schema",
@@ -231,7 +235,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types"}}}]}}}}}},
+                        "string": "A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.mapping.ValueSpec",
@@ -266,7 +271,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A mapping specification producing values (usually literal values) whose type is understood in context"}}}]}}}}}},
+                      "literal": {"string": "A mapping specification producing values (usually literal values) whose type is understood in context"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.mapping.VertexSpec",
@@ -311,4 +317,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A mapping specification producing vertices of a specified label"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A mapping specification producing vertices of a specified label"}}}]}}},
+          "constraints": []}}}]}

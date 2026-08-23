@@ -112,7 +112,10 @@
                                                           {
                                                             "name": "fieldMap",
                                                             "term": {"application": {"function": {"variable": "hydra.extract.core.toFieldMap"}, "argument": {"variable": "record"}}},
-                                                            "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                            "typeScheme": {
+                                                              "variables": [],
+                                                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -364,17 +367,17 @@
                                                         "name": "field",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Injection", "fieldName": "field"}}, "argument": {"variable": "inj"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}, "constraints": []}},
                                                       {
                                                         "name": "fname",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "name"}}, "argument": {"variable": "field"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                       {
                                                         "name": "fterm",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "term"}}, "argument": {"variable": "field"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}, "constraints": []}},
                                                       {
                                                         "name": "variantMap",
                                                         "term": {
@@ -596,7 +599,8 @@
                                                               "values": {
                                                                 "function": {
                                                                   "domain": {"variable": "hydra.core.Term"},
-                                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.pg.model.Direction"}}}}}}}}}],
+                                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.pg.model.Direction"}}}}}}},
+                                                          "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {
@@ -763,7 +767,10 @@
                                                           {
                                                             "name": "fieldMap",
                                                             "term": {"application": {"function": {"variable": "hydra.extract.core.toFieldMap"}, "argument": {"variable": "record"}}},
-                                                            "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                            "typeScheme": {
+                                                              "variables": [],
+                                                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -1266,7 +1273,10 @@
                                                           {
                                                             "name": "fieldMap",
                                                             "term": {"application": {"function": {"variable": "hydra.extract.core.toFieldMap"}, "argument": {"variable": "record"}}},
-                                                            "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                            "typeScheme": {
+                                                              "variables": [],
+                                                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -1576,17 +1586,17 @@
                                                             "name": "field",
                                                             "term": {
                                                               "application": {"function": {"project": {"typeName": "hydra.core.Injection", "fieldName": "field"}}, "argument": {"variable": "inj"}}},
-                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}}},
+                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}, "constraints": []}},
                                                           {
                                                             "name": "fname",
                                                             "term": {
                                                               "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "name"}}, "argument": {"variable": "field"}}},
-                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                           {
                                                             "name": "fterm",
                                                             "term": {
                                                               "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "term"}}, "argument": {"variable": "field"}}},
-                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}}},
+                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}, "constraints": []}},
                                                           {
                                                             "name": "variantMap",
                                                             "term": {
@@ -1704,7 +1714,8 @@
                                                                       "codomain": {
                                                                         "either": {
                                                                           "left": {"variable": "hydra.errors.DecodingError"},
-                                                                          "right": {"application": {"function": {"variable": "hydra.pg.model.Element"}, "argument": {"variable": "v"}}}}}}}}}}}],
+                                                                          "right": {"application": {"function": {"variable": "hydra.pg.model.Element"}, "argument": {"variable": "v"}}}}}}}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -1853,17 +1864,17 @@
                                                         "name": "field",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Injection", "fieldName": "field"}}, "argument": {"variable": "inj"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}, "constraints": []}},
                                                       {
                                                         "name": "fname",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "name"}}, "argument": {"variable": "field"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                       {
                                                         "name": "fterm",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "term"}}, "argument": {"variable": "field"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}, "constraints": []}},
                                                       {
                                                         "name": "variantMap",
                                                         "term": {
@@ -1985,7 +1996,8 @@
                                                               "values": {
                                                                 "function": {
                                                                   "domain": {"variable": "hydra.core.Term"},
-                                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.pg.model.ElementKind"}}}}}}}}}],
+                                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.pg.model.ElementKind"}}}}}}},
+                                                          "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {
@@ -2152,7 +2164,10 @@
                                                           {
                                                             "name": "fieldMap",
                                                             "term": {"application": {"function": {"variable": "hydra.extract.core.toFieldMap"}, "argument": {"variable": "record"}}},
-                                                            "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                            "typeScheme": {
+                                                              "variables": [],
+                                                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -2352,17 +2367,17 @@
                                                             "name": "field",
                                                             "term": {
                                                               "application": {"function": {"project": {"typeName": "hydra.core.Injection", "fieldName": "field"}}, "argument": {"variable": "inj"}}},
-                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}}},
+                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}, "constraints": []}},
                                                           {
                                                             "name": "fname",
                                                             "term": {
                                                               "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "name"}}, "argument": {"variable": "field"}}},
-                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                           {
                                                             "name": "fterm",
                                                             "term": {
                                                               "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "term"}}, "argument": {"variable": "field"}}},
-                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}}},
+                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}, "constraints": []}},
                                                           {
                                                             "name": "variantMap",
                                                             "term": {
@@ -2480,7 +2495,8 @@
                                                                       "codomain": {
                                                                         "either": {
                                                                           "left": {"variable": "hydra.errors.DecodingError"},
-                                                                          "right": {"application": {"function": {"variable": "hydra.pg.model.ElementType"}, "argument": {"variable": "t"}}}}}}}}}}}],
+                                                                          "right": {"application": {"function": {"variable": "hydra.pg.model.ElementType"}, "argument": {"variable": "t"}}}}}}}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -2659,7 +2675,10 @@
                                                           {
                                                             "name": "fieldMap",
                                                             "term": {"application": {"function": {"variable": "hydra.extract.core.toFieldMap"}, "argument": {"variable": "record"}}},
-                                                            "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                            "typeScheme": {
+                                                              "variables": [],
+                                                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -2862,7 +2881,10 @@
                                                           {
                                                             "name": "fieldMap",
                                                             "term": {"application": {"function": {"variable": "hydra.extract.core.toFieldMap"}, "argument": {"variable": "record"}}},
-                                                            "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                            "typeScheme": {
+                                                              "variables": [],
+                                                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -3092,7 +3114,10 @@
                                                           {
                                                             "name": "fieldMap",
                                                             "term": {"application": {"function": {"variable": "hydra.extract.core.toFieldMap"}, "argument": {"variable": "record"}}},
-                                                            "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                            "typeScheme": {
+                                                              "variables": [],
+                                                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -3296,17 +3321,17 @@
                                                         "name": "field",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Injection", "fieldName": "field"}}, "argument": {"variable": "inj"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Field"}, "constraints": []}},
                                                       {
                                                         "name": "fname",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "name"}}, "argument": {"variable": "field"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}},
                                                       {
                                                         "name": "fterm",
                                                         "term": {
                                                           "application": {"function": {"project": {"typeName": "hydra.core.Field", "fieldName": "term"}}, "argument": {"variable": "field"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}}},
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}, "constraints": []}},
                                                       {
                                                         "name": "variantMap",
                                                         "term": {
@@ -3400,7 +3425,8 @@
                                                               "values": {
                                                                 "function": {
                                                                   "domain": {"variable": "hydra.core.Term"},
-                                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.pg.model.Label"}}}}}}}}}],
+                                                                  "codomain": {"either": {"left": {"variable": "hydra.errors.DecodingError"}, "right": {"variable": "hydra.pg.model.Label"}}}}}}},
+                                                          "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {
@@ -3566,7 +3592,10 @@
                                                           {
                                                             "name": "fieldMap",
                                                             "term": {"application": {"function": {"variable": "hydra.extract.core.toFieldMap"}, "argument": {"variable": "record"}}},
-                                                            "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                            "typeScheme": {
+                                                              "variables": [],
+                                                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -3773,7 +3802,10 @@
                                                           {
                                                             "name": "fieldMap",
                                                             "term": {"application": {"function": {"variable": "hydra.extract.core.toFieldMap"}, "argument": {"variable": "record"}}},
-                                                            "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                            "typeScheme": {
+                                                              "variables": [],
+                                                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -4153,7 +4185,10 @@
                                                           {
                                                             "name": "fieldMap",
                                                             "term": {"application": {"function": {"variable": "hydra.extract.core.toFieldMap"}, "argument": {"variable": "record"}}},
-                                                            "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                            "typeScheme": {
+                                                              "variables": [],
+                                                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -4473,7 +4508,10 @@
                                                           {
                                                             "name": "fieldMap",
                                                             "term": {"application": {"function": {"variable": "hydra.extract.core.toFieldMap"}, "argument": {"variable": "record"}}},
-                                                            "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                            "typeScheme": {
+                                                              "variables": [],
+                                                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -4902,7 +4940,10 @@
                                                           {
                                                             "name": "fieldMap",
                                                             "term": {"application": {"function": {"variable": "hydra.extract.core.toFieldMap"}, "argument": {"variable": "record"}}},
-                                                            "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                            "typeScheme": {
+                                                              "variables": [],
+                                                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -5142,7 +5183,10 @@
                                                           {
                                                             "name": "fieldMap",
                                                             "term": {"application": {"function": {"variable": "hydra.extract.core.toFieldMap"}, "argument": {"variable": "record"}}},
-                                                            "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                            "typeScheme": {
+                                                              "variables": [],
+                                                              "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {

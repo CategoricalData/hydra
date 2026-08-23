@@ -18,7 +18,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A file extension (without the dot), e.g. \"json\" or \"py\""}}}]}}}}}},
+                    "value": {"literal": {"string": "A file extension (without the dot), e.g. \"json\" or \"py\""}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.file.FilePath",
@@ -33,7 +34,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A host file-system path; a POSIX \"pathname\" (XBD section 3.254), i.e. a string used to identify a file. Named FilePath rather than Pathname so that the kernel type is self-describing and distinct from Hydra's other notions of paths"}}}]}}}}}},
+                        "string": "A host file-system path; a POSIX \"pathname\" (XBD section 3.254), i.e. a string used to identify a file. Named FilePath rather than Pathname so that the kernel type is self-describing and distinct from Hydra's other notions of paths"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.file.FileStatus",
@@ -102,7 +104,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Metadata about a file, based on the POSIX struct stat. Only the portable, cross-platform subset of struct stat is modeled here; the following Unix-specific fields are omitted for now: st_dev (device ID), st_ino (inode number), st_mode permission bits (only the file type bits are kept, as fileType), st_nlink (hard link count), st_uid (owner user ID), st_gid (owner group ID), st_rdev (device ID for special files), st_blksize (preferred I/O block size), and st_blocks (number of blocks allocated). See <sys/stat.h> (https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/sys_stat.h.html)"}}}]}}}}}},
+                        "string": "Metadata about a file, based on the POSIX struct stat. Only the portable, cross-platform subset of struct stat is modeled here; the following Unix-specific fields are omitted for now: st_dev (device ID), st_ino (inode number), st_mode permission bits (only the file type bits are kept, as fileType), st_nlink (hard link count), st_uid (owner user ID), st_gid (owner group ID), st_rdev (device ID for special files), st_blksize (preferred I/O block size), and st_blocks (number of blocks allocated). See <sys/stat.h> (https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/sys_stat.h.html)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.file.FileType",
@@ -168,4 +171,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An enumeration of POSIX file types, following the file type macros of <sys/stat.h>"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "An enumeration of POSIX file types, following the file type macros of <sys/stat.h>"}}}]}}},
+          "constraints": []}}}]}

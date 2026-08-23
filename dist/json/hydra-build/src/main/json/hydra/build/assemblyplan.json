@@ -356,42 +356,42 @@
                   {
                     "name": "kernelMain",
                     "term": {"literal": {"string": "dist/typescript/hydra-kernel/src/main/typescript/hydra"}},
-                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                 "body": {
                   "let": {
                     "bindings": [
                       {
                         "name": "kernelTest",
                         "term": {"literal": {"string": "dist/typescript/hydra-kernel/src/test/typescript/hydra"}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
                           {
                             "name": "rdfMain",
                             "term": {"literal": {"string": "dist/typescript/hydra-rdf/src/main/typescript/hydra"}},
-                            "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                         "body": {
                           "let": {
                             "bindings": [
                               {
                                 "name": "pgMain",
                                 "term": {"literal": {"string": "dist/typescript/hydra-pg/src/main/typescript/hydra"}},
-                                "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                             "body": {
                               "let": {
                                 "bindings": [
                                   {
                                     "name": "buildMain",
                                     "term": {"literal": {"string": "dist/typescript/hydra-build/src/main/typescript/hydra"}},
-                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                 "body": {
                                   "let": {
                                     "bindings": [
                                       {
                                         "name": "buildTest",
                                         "term": {"literal": {"string": "dist/typescript/hydra-build/src/test/typescript/hydra"}},
-                                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                     "body": {
                                       "list": [
                                         {

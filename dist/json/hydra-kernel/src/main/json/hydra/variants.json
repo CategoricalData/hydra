@@ -22,7 +22,8 @@
                   {"name": "integer", "type": "unit"},
                   {"name": "string", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The identifier of a literal constructor"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The identifier of a literal constructor"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.variants.TermVariant",
@@ -57,7 +58,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The identifier of a term expression constructor"}}}]}}}}}},
+                    "value": {"literal": {"string": "The identifier of a term expression constructor"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.variants.TypeVariant",
@@ -86,4 +88,5 @@
                   {"name": "void", "type": "unit"},
                   {"name": "wrap", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The identifier of a type constructor"}}}]}}}}}}]}
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The identifier of a type constructor"}}}]}}},
+          "constraints": []}}}]}

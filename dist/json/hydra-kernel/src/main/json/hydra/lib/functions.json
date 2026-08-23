@@ -34,6 +34,28 @@
   "definitions": [
     {
       "primitive": {
+        "name": "hydra.lib.functions.absurd",
+        "metadata": {
+          "description": "Eliminate a value of the uninhabited void type, producing any type.",
+          "comments": [
+            "absurd(v) is the unique function from void to any type t1; since void has no inhabitants, this function can never actually be applied in a well-typed program.",
+            "Its purpose is to discharge an impossible branch in otherwise-total code, such as the left case of an either<void, a> that can never occur.",
+            "The eliminator dual to the (nonexistent) introducer for void.",
+            "Total, vacuously: there is no well-typed argument on which absurd could be called. Corresponds to Haskell's Data.Void.absurd :: Void -> a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "t1", "constraints": []}],
+          "parameters": [
+            {
+              "name": "v",
+              "description": "a value of the void type; unreachable in any well-typed program",
+              "type": "void",
+              "isLazy": false}],
+          "result": {"type": {"variable": "t1"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.functions.compose",
         "metadata": {
           "description": "Compose two functions.",

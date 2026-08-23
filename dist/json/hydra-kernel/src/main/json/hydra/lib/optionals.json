@@ -158,7 +158,7 @@
           "description": "Left-fold over a list with an optional-returning function, short-circuiting on none.",
           "comments": [
             "foldList(f, acc, xs) folds f over xs from the left, iterating while each application yields given, and returns none as soon as any step yields none. If every element is processed, the result is given of the final accumulator.",
-            "foldList(f, acc, xs) is lists.foldl(\\m y -> bind(m, \\x -> f(x, y)), pure(acc), xs); this defining equation is the specification, and the default implementation.",
+            "foldList(f, acc, xs) is lists.foldl(\\m y -> bind(m, \\x -> f(x, y)), given(acc), xs); this defining equation is the specification, and the default implementation.",
             "Total. Corresponds to a short-circuiting foldM specialised to Maybe."],
           "seeAlso": []},
         "signature": {
@@ -209,8 +209,24 @@
                                                   "application": {
                                                     "function": {"application": {"function": {"variable": "f"}, "argument": {"variable": "x"}}},
                                                     "argument": {"variable": "y"}}}}}}}}}}}}},
-                            "argument": {"application": {"function": {"variable": "hydra.lib.optionals.pure"}, "argument": {"variable": "acc"}}}}},
+                            "argument": {"application": {"function": {"variable": "hydra.lib.optionals.given"}, "argument": {"variable": "acc"}}}}},
                         "argument": {"variable": "xs"}}}}}}}}}}},
+    {
+      "primitive": {
+        "name": "hydra.lib.optionals.given",
+        "metadata": {
+          "description": "Wrap a value in given.",
+          "comments": [
+            "given(x) is the optional value containing x.",
+            "The constructor for the present case of an optional value.",
+            "Total. Corresponds to Haskell's Just :: a -> Maybe a."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [{"name": "x", "description": "the value to wrap in given", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "x"}}}},
+        "isPure": true,
+        "isTotal": true}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.givens",
@@ -412,7 +428,7 @@
                                                             "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "y"}}},
                                                             "argument": {"variable": "ys"}}}}}}},
                                                 "argument": {"variable": "acc"}}}}}}}}}}}}},
-                        "argument": {"application": {"function": {"variable": "hydra.lib.optionals.pure"}, "argument": {"list": []}}}}},
+                        "argument": {"application": {"function": {"variable": "hydra.lib.optionals.given"}, "argument": {"list": []}}}}},
                     "argument": {"variable": "xs"}}}}}}}}},
     {
       "primitive": {
@@ -522,7 +538,7 @@
                                                                 "function": {"application": {"function": {"variable": "hydra.lib.lists.cons"}, "argument": {"variable": "y"}}},
                                                                 "argument": {"variable": "ys"}}}}}}},
                                                     "argument": {"variable": "acc"}}}}}}}}}}}}},
-                            "argument": {"application": {"function": {"variable": "hydra.lib.optionals.pure"}, "argument": {"list": []}}}}},
+                            "argument": {"application": {"function": {"variable": "hydra.lib.optionals.given"}, "argument": {"list": []}}}}},
                         "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s"}}}}}}}}}}}}},
     {
       "primitive": {
@@ -555,22 +571,6 @@
           "result": {"type": {"variable": "y"}}},
         "isPure": true,
         "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.optionals.pure",
-        "metadata": {
-          "description": "Wrap a value in given.",
-          "comments": [
-            "pure(x) = given(x). The applicative pure for optionals.",
-            "Total. Corresponds to Haskell's pure :: a -> Maybe a / Just."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [{"name": "x", "description": "the value to wrap in given", "type": {"variable": "x"}, "isLazy": false}],
-          "result": {"type": {"optional": {"variable": "x"}}}},
-        "isPure": true,
-        "isTotal": true,
-        "defaultImplementation": {"lambda": {"parameter": "x", "body": {"optional": {"variable": "x"}}}}}},
     {
       "primitive": {
         "name": "hydra.lib.optionals.toList",

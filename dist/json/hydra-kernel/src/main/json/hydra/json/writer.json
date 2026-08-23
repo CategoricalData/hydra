@@ -108,7 +108,7 @@
                                                 "function": {"variable": "hydra.lib.strings.fromList"},
                                                 "argument": {
                                                   "application": {
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.pure"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.singleton"}, "type": {"literal": {"integer": "int32"}}}},
                                                     "argument": {"variable": "ch"}}}}}}}}},
                                     "argument": {
                                       "application": {
@@ -116,7 +116,8 @@
                                         "argument": {"literal": {"string": "0123456789abcdef"}}}}}}}}}},
                         "typeScheme": {
                           "variables": [],
-                          "body": {"function": {"domain": {"literal": {"integer": "int32"}}, "codomain": {"literal": "string"}}}}}],
+                          "body": {"function": {"domain": {"literal": {"integer": "int32"}}, "codomain": {"literal": "string"}}},
+                          "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -139,7 +140,7 @@
                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.div"}, "type": {"literal": {"integer": "int32"}}}},
                                             "argument": {"variable": "c"}}},
                                         "argument": {"literal": {"integer": {"int32": 16}}}}}}}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -162,7 +163,7 @@
                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.mod"}, "type": {"literal": {"integer": "int32"}}}},
                                                 "argument": {"variable": "c"}}},
                                             "argument": {"literal": {"integer": {"int32": 16}}}}}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "hi"}}},
@@ -202,7 +203,8 @@
                                 "argument": {"application": {"function": {"variable": "hydra.json.writer.hexByte"}, "argument": {"variable": "c"}}}}}}},
                         "typeScheme": {
                           "variables": [],
-                          "body": {"function": {"domain": {"literal": {"integer": "int32"}}, "codomain": {"literal": "string"}}}}}],
+                          "body": {"function": {"domain": {"literal": {"integer": "int32"}}, "codomain": {"literal": "string"}}},
+                          "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -337,11 +339,12 @@
                                                                     "function": {"variable": "hydra.lib.strings.fromList"},
                                                                     "argument": {
                                                                       "application": {
-                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.pure"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.singleton"}, "type": {"literal": {"integer": "int32"}}}},
                                                                         "argument": {"variable": "c"}}}}}}}}}}}}}}}}}}}}}}},
                             "typeScheme": {
                               "variables": [],
-                              "body": {"function": {"domain": {"literal": {"integer": "int32"}}, "codomain": {"literal": "string"}}}}}],
+                              "body": {"function": {"domain": {"literal": {"integer": "int32"}}, "codomain": {"literal": "string"}}},
+                              "constraints": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -360,7 +363,7 @@
                                                 "type": {"literal": "string"}}},
                                             "argument": {"variable": "escape"}}},
                                         "argument": {"application": {"function": {"variable": "hydra.lib.strings.toList"}, "argument": {"variable": "s"}}}}}}},
-                                "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {
@@ -402,7 +405,7 @@
                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": "string"}}},
                                 "type": {"variable": "hydra.json.model.Value"}}},
                             "argument": {"variable": "pair"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -415,7 +418,7 @@
                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": "string"}}},
                                     "type": {"variable": "hydra.json.model.Value"}}},
                                 "argument": {"variable": "pair"}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.json.model.Value"}}}],
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.json.model.Value"}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {
@@ -524,14 +527,14 @@
                                       {
                                         "name": "rounded",
                                         "term": {"application": {"function": {"variable": "hydra.lib.literals.decimalToBigint"}, "argument": {"variable": "n"}}},
-                                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "bigint"}}}}],
+                                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "bigint"}}, "constraints": []}}],
                                     "body": {
                                       "let": {
                                         "bindings": [
                                           {
                                             "name": "shown",
-                                            "term": {"application": {"function": {"variable": "hydra.lib.literals.showDecimal"}, "argument": {"variable": "n"}}},
-                                            "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                            "term": {"application": {"function": {"variable": "hydra.lib.literals.printDecimal"}, "argument": {"variable": "n"}}},
+                                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -544,14 +547,14 @@
                                                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "decimal"}}},
                                                         "argument": {"variable": "n"}}},
                                                     "argument": {"application": {"function": {"variable": "hydra.lib.literals.bigintToDecimal"}, "argument": {"variable": "rounded"}}}}},
-                                                "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                                                "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
                                                   {
                                                     "name": "plain",
-                                                    "term": {"application": {"function": {"variable": "hydra.lib.literals.showBigint"}, "argument": {"variable": "rounded"}}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                                    "term": {"application": {"function": {"variable": "hydra.lib.literals.printBigint"}, "argument": {"variable": "rounded"}}},
+                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                                 "body": {
                                                   "application": {
                                                     "function": {"variable": "hydra.serialization.cst"},

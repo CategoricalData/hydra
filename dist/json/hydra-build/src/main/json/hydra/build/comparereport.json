@@ -38,7 +38,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The whole compare-report: per-module records plus the byte-identical tally"}}}]}}}}}},
+                    "value": {"literal": {"string": "The whole compare-report: per-module records plus the byte-identical tally"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.comparereport.CompareStatus",
@@ -74,7 +75,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The result of comparing one module's JSON on the two sides"}}}]}}}}}},
+                    "value": {"literal": {"string": "The result of comparing one module's JSON on the two sides"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.comparereport.ModuleCompare",
@@ -126,4 +128,5 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "The number of differing lines (0 when byte-identical)"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "One module's comparison record"}}}]}}}}}}]}
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "One module's comparison record"}}}]}}},
+          "constraints": []}}}]}

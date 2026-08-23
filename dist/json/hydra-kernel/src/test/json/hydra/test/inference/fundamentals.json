@@ -228,8 +228,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -387,8 +387,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -609,22 +609,21 @@
                                                                     {
                                                                       "name": "constraints",
                                                                       "term": {
-                                                                        "optional": {
-                                                                          "map": [
-                                                                            {
-                                                                              "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
-                                                                              "value": {
-                                                                                "record": {
-                                                                                  "typeName": "hydra.core.TypeVariableConstraints",
-                                                                                  "fields": [
-                                                                                    {
-                                                                                      "name": "classes",
-                                                                                      "term": {
-                                                                                        "list": [
-                                                                                          {
-                                                                                            "inject": {
-                                                                                              "typeName": "hydra.core.TypeClassConstraint",
-                                                                                              "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}}]}}}}}}}]}}}}}},
+                                                                        "map": [
+                                                                          {
+                                                                            "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
+                                                                            "value": {
+                                                                              "record": {
+                                                                                "typeName": "hydra.core.TypeVariableConstraints",
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "classes",
+                                                                                    "term": {
+                                                                                      "set": [
+                                                                                        {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.TypeClassConstraint",
+                                                                                            "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -844,22 +843,21 @@
                                                                     {
                                                                       "name": "constraints",
                                                                       "term": {
-                                                                        "optional": {
-                                                                          "map": [
-                                                                            {
-                                                                              "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
-                                                                              "value": {
-                                                                                "record": {
-                                                                                  "typeName": "hydra.core.TypeVariableConstraints",
-                                                                                  "fields": [
-                                                                                    {
-                                                                                      "name": "classes",
-                                                                                      "term": {
-                                                                                        "list": [
-                                                                                          {
-                                                                                            "inject": {
-                                                                                              "typeName": "hydra.core.TypeClassConstraint",
-                                                                                              "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}}]}}}}}}}]}}}}}},
+                                                                        "map": [
+                                                                          {
+                                                                            "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
+                                                                            "value": {
+                                                                              "record": {
+                                                                                "typeName": "hydra.core.TypeVariableConstraints",
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "classes",
+                                                                                    "term": {
+                                                                                      "set": [
+                                                                                        {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.TypeClassConstraint",
+                                                                                            "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -1103,8 +1101,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}]}},
               {
@@ -1354,8 +1352,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -1506,8 +1504,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -1662,8 +1660,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -1831,8 +1829,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -1987,8 +1985,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -2198,8 +2196,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -2420,8 +2418,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -2654,8 +2652,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -3062,8 +3060,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -3262,8 +3260,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -3499,8 +3497,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -3733,8 +3731,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -4262,22 +4260,21 @@
                                                                     {
                                                                       "name": "constraints",
                                                                       "term": {
-                                                                        "optional": {
-                                                                          "map": [
-                                                                            {
-                                                                              "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
-                                                                              "value": {
-                                                                                "record": {
-                                                                                  "typeName": "hydra.core.TypeVariableConstraints",
-                                                                                  "fields": [
-                                                                                    {
-                                                                                      "name": "classes",
-                                                                                      "term": {
-                                                                                        "list": [
-                                                                                          {
-                                                                                            "inject": {
-                                                                                              "typeName": "hydra.core.TypeClassConstraint",
-                                                                                              "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}}]}}}}}}}]}}}}}},
+                                                                        "map": [
+                                                                          {
+                                                                            "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
+                                                                            "value": {
+                                                                              "record": {
+                                                                                "typeName": "hydra.core.TypeVariableConstraints",
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "classes",
+                                                                                    "term": {
+                                                                                      "set": [
+                                                                                        {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.TypeClassConstraint",
+                                                                                            "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -4496,8 +4493,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -4711,8 +4708,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -4943,8 +4940,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -5184,8 +5181,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -5442,8 +5439,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -5711,8 +5708,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {
                                         "name": "tags",
@@ -5982,8 +5979,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {
                                         "name": "tags",
@@ -6256,8 +6253,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -6450,8 +6447,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -6797,22 +6794,21 @@
                                                                     {
                                                                       "name": "constraints",
                                                                       "term": {
-                                                                        "optional": {
-                                                                          "map": [
-                                                                            {
-                                                                              "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
-                                                                              "value": {
-                                                                                "record": {
-                                                                                  "typeName": "hydra.core.TypeVariableConstraints",
-                                                                                  "fields": [
-                                                                                    {
-                                                                                      "name": "classes",
-                                                                                      "term": {
-                                                                                        "list": [
-                                                                                          {
-                                                                                            "inject": {
-                                                                                              "typeName": "hydra.core.TypeClassConstraint",
-                                                                                              "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}}]}}}}}}}]}}}}}},
+                                                                        "map": [
+                                                                          {
+                                                                            "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
+                                                                            "value": {
+                                                                              "record": {
+                                                                                "typeName": "hydra.core.TypeVariableConstraints",
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "classes",
+                                                                                    "term": {
+                                                                                      "set": [
+                                                                                        {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.TypeClassConstraint",
+                                                                                            "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -7058,8 +7054,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -7299,8 +7295,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -7606,8 +7602,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -7889,8 +7885,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -8193,8 +8189,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {
                                         "name": "tags",
@@ -8499,8 +8495,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {
                                         "name": "tags",
@@ -8971,8 +8967,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -9346,8 +9342,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {
                                         "name": "tags",
@@ -9654,8 +9650,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {
                                         "name": "tags",
@@ -10055,8 +10051,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {
                                         "name": "tags",
@@ -10251,8 +10247,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {
                                         "name": "tags",
@@ -10576,8 +10572,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -10960,8 +10956,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -11469,8 +11465,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -11938,8 +11934,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -12491,8 +12487,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -12960,8 +12956,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}]}},
               {
@@ -13107,8 +13103,8 @@
                                                           "name": "constraints",
                                                           "term": {
                                                             "typeApplication": {
-                                                              "body": {"optional": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                              "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                              "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
@@ -13223,8 +13219,8 @@
                                                           "name": "constraints",
                                                           "term": {
                                                             "typeApplication": {
-                                                              "body": {"optional": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                              "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                              "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
@@ -13339,8 +13335,8 @@
                                                           "name": "constraints",
                                                           "term": {
                                                             "typeApplication": {
-                                                              "body": {"optional": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                              "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                              "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                     {
@@ -13466,8 +13462,8 @@
                                                           "name": "constraints",
                                                           "term": {
                                                             "typeApplication": {
-                                                              "body": {"optional": null},
-                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                              "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                              "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
     {
@@ -13636,8 +13632,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -13857,8 +13853,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {
                                         "name": "tags",
@@ -14066,8 +14062,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -14259,8 +14255,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -14483,8 +14479,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -14781,8 +14777,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -14991,8 +14987,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -15205,8 +15201,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -15466,8 +15462,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -15754,8 +15750,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}]}},
               {
@@ -15903,8 +15899,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -16022,8 +16018,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {
                                         "name": "tags",
@@ -16162,8 +16158,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {
                                         "name": "tags",
@@ -16321,8 +16317,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -16499,8 +16495,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -16655,8 +16651,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -16828,8 +16824,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -17051,8 +17047,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -17210,8 +17206,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -17392,8 +17388,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -17554,22 +17550,21 @@
                                                                     {
                                                                       "name": "constraints",
                                                                       "term": {
-                                                                        "optional": {
-                                                                          "map": [
-                                                                            {
-                                                                              "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
-                                                                              "value": {
-                                                                                "record": {
-                                                                                  "typeName": "hydra.core.TypeVariableConstraints",
-                                                                                  "fields": [
-                                                                                    {
-                                                                                      "name": "classes",
-                                                                                      "term": {
-                                                                                        "list": [
-                                                                                          {
-                                                                                            "inject": {
-                                                                                              "typeName": "hydra.core.TypeClassConstraint",
-                                                                                              "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}}]}}}}}}}]}}}}}},
+                                                                        "map": [
+                                                                          {
+                                                                            "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
+                                                                            "value": {
+                                                                              "record": {
+                                                                                "typeName": "hydra.core.TypeVariableConstraints",
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "classes",
+                                                                                    "term": {
+                                                                                      "set": [
+                                                                                        {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.TypeClassConstraint",
+                                                                                            "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -17747,22 +17742,21 @@
                                                                     {
                                                                       "name": "constraints",
                                                                       "term": {
-                                                                        "optional": {
-                                                                          "map": [
-                                                                            {
-                                                                              "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
-                                                                              "value": {
-                                                                                "record": {
-                                                                                  "typeName": "hydra.core.TypeVariableConstraints",
-                                                                                  "fields": [
-                                                                                    {
-                                                                                      "name": "classes",
-                                                                                      "term": {
-                                                                                        "list": [
-                                                                                          {
-                                                                                            "inject": {
-                                                                                              "typeName": "hydra.core.TypeClassConstraint",
-                                                                                              "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}}]}}}}}}}]}}}}}},
+                                                                        "map": [
+                                                                          {
+                                                                            "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
+                                                                            "value": {
+                                                                              "record": {
+                                                                                "typeName": "hydra.core.TypeVariableConstraints",
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "classes",
+                                                                                    "term": {
+                                                                                      "set": [
+                                                                                        {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.TypeClassConstraint",
+                                                                                            "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -17940,22 +17934,21 @@
                                                                     {
                                                                       "name": "constraints",
                                                                       "term": {
-                                                                        "optional": {
-                                                                          "map": [
-                                                                            {
-                                                                              "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
-                                                                              "value": {
-                                                                                "record": {
-                                                                                  "typeName": "hydra.core.TypeVariableConstraints",
-                                                                                  "fields": [
-                                                                                    {
-                                                                                      "name": "classes",
-                                                                                      "term": {
-                                                                                        "list": [
-                                                                                          {
-                                                                                            "inject": {
-                                                                                              "typeName": "hydra.core.TypeClassConstraint",
-                                                                                              "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}}]}}}}}}}]}}}}}},
+                                                                        "map": [
+                                                                          {
+                                                                            "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "t0"}}}},
+                                                                            "value": {
+                                                                              "record": {
+                                                                                "typeName": "hydra.core.TypeVariableConstraints",
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "classes",
+                                                                                    "term": {
+                                                                                      "set": [
+                                                                                        {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.TypeClassConstraint",
+                                                                                            "field": {"name": "simple", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "numeric"}}}}}}}]}}]}}}]}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -18203,8 +18196,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -18362,8 +18355,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -18598,8 +18591,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -18765,8 +18758,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -18913,8 +18906,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -19123,8 +19116,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -19278,8 +19271,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}]}},
               {
@@ -19448,8 +19441,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -19680,8 +19673,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -19912,8 +19905,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -20174,8 +20167,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -20474,8 +20467,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -20657,8 +20650,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -20888,8 +20881,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -21112,8 +21105,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -21299,8 +21292,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -21485,8 +21478,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -21763,8 +21756,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -21916,8 +21909,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                     {
@@ -22106,8 +22099,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -22300,8 +22293,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -22448,8 +22441,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -22626,8 +22619,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -22825,8 +22818,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -23030,8 +23023,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -23279,8 +23272,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                 {
@@ -23478,8 +23471,8 @@
                                                                       "name": "constraints",
                                                                       "term": {
                                                                         "typeApplication": {
-                                                                          "body": {"optional": null},
-                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}]}}}}}},
+                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                       {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}]}},
               {

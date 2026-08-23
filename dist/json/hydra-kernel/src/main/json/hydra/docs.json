@@ -36,4 +36,5 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A segment of a documentation string, either a raw text fragment or an inline entity reference. Documentation strings are parsed into a sequence of DocSegments for host-specific rendering."}}}]}}}}}}]}
+                        "string": "A segment of a documentation string, either a raw text fragment or an inline entity reference. Documentation strings are parsed into a sequence of DocSegments for host-specific rendering."}}}]}}},
+          "constraints": []}}}]}

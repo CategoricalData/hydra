@@ -12,7 +12,8 @@
             "annotated": {
               "body": {"union": [{"name": "count", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An aggregation query over a property graph"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An aggregation query over a property graph"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.ApplicationQuery",
@@ -29,7 +30,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty sequence of queries applied in order"}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty sequence of queries applied in order"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.AssociativeExpression",
@@ -50,7 +52,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An associative expression: a binary operator applied to a non-empty list of operands"}}}]}}}}}},
+                    "value": {"literal": {"string": "An associative expression: a binary operator applied to a non-empty list of operands"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.BinaryBooleanOperator",
@@ -60,7 +63,8 @@
             "annotated": {
               "body": {"union": [{"name": "and", "type": "unit"}, {"name": "or", "type": "unit"}, {"name": "xor", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A binary boolean operator: and, or, or xor"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A binary boolean operator: and, or, or xor"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.BinaryExpression",
@@ -77,7 +81,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary expression: a left operand, an operator, and a right operand"}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary expression: a left operand, an operator, and a right operand"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.BinaryOperator",
@@ -94,7 +99,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary operator: boolean, comparison, or exponentiation"}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary operator: boolean, comparison, or exponentiation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.Binding",
@@ -107,7 +113,8 @@
                   {"name": "key", "type": {"variable": "hydra.pg.query.Variable"}},
                   {"name": "value", "type": {"variable": "hydra.pg.query.Query"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A variable bound to the result of a query"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A variable bound to the result of a query"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.ComparisonOperator",
@@ -127,7 +134,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A comparison operator: equal, not-equal, or an ordering relation"}}}]}}}}}},
+                    "value": {"literal": {"string": "A comparison operator: equal, not-equal, or an ordering relation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.EdgeProjectionPattern",
@@ -145,7 +153,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A pattern matching an edge, its direction, optional label, properties, and adjacent vertex"}}}]}}}}}},
+                    "value": {"literal": {"string": "A pattern matching an edge, its direction, optional label, properties, and adjacent vertex"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.Expression",
@@ -162,7 +171,8 @@
                   {"name": "variable", "type": {"variable": "hydra.pg.query.Variable"}},
                   {"name": "vertex", "type": {"variable": "hydra.pg.query.VertexPattern"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An expression in a property graph query"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An expression in a property graph query"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.LetQuery",
@@ -178,7 +188,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A let query: variable bindings evaluated in an environment query"}}}]}}}}}},
+                    "value": {"literal": {"string": "A let query: variable bindings evaluated in an environment query"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.MatchQuery",
@@ -195,7 +206,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A pattern-matching query, with optional matching semantics and a filter condition"}}}]}}}}}},
+                    "value": {"literal": {"string": "A pattern-matching query, with optional matching semantics and a filter condition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.Projection",
@@ -211,7 +223,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A projected expression, optionally bound to a variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A projected expression, optionally bound to a variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.Projections",
@@ -227,7 +240,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A set of projections, optionally including all fields"}}}]}}}}}},
+                    "value": {"literal": {"string": "A set of projections, optionally including all fields"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.PropertyPattern",
@@ -243,7 +257,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A pattern matching a property by key against a value pattern"}}}]}}}}}},
+                    "value": {"literal": {"string": "A pattern matching a property by key against a value pattern"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.PropertyProjection",
@@ -259,7 +274,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A projection of a property, by key, from a base expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A projection of a property, by key, from a base expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.PropertyValue",
@@ -268,7 +284,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property value"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.PropertyValuePattern",
@@ -284,7 +301,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A pattern matching a property value: a variable binding or a literal value"}}}]}}}}}},
+                    "value": {"literal": {"string": "A pattern matching a property value: a variable binding or a literal value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.Query",
@@ -300,7 +318,8 @@
                   {"name": "match", "type": {"variable": "hydra.pg.query.MatchQuery"}},
                   {"name": "select", "type": {"variable": "hydra.pg.query.SelectQuery"}},
                   {"name": "value", "type": {"literal": "string"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property graph query"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property graph query"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.SelectQuery",
@@ -316,7 +335,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A select query, with optional distinctness and a set of projections"}}}]}}}}}},
+                    "value": {"literal": {"string": "A select query, with optional distinctness and a set of projections"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.UnaryExpression",
@@ -332,7 +352,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A unary expression: an operator applied to a single operand"}}}]}}}}}},
+                    "value": {"literal": {"string": "A unary expression: an operator applied to a single operand"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.UnaryOperator",
@@ -341,7 +362,8 @@
           "body": {
             "annotated": {
               "body": {"union": [{"name": "negate", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unary operator: negation"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unary operator: negation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.Variable",
@@ -350,7 +372,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A query variable name"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A query variable name"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.query.VertexPattern",
@@ -369,4 +392,5 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A pattern matching a vertex, its optional binding variable and label, properties, and adjacent edges"}}}]}}}}}}]}
+                      "literal": {"string": "A pattern matching a vertex, its optional binding variable and label, properties, and adjacent edges"}}}]}}},
+          "constraints": []}}}]}

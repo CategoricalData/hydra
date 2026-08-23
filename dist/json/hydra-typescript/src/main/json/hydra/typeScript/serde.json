@@ -272,21 +272,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ArrowFunctionExpression", "fieldName": "params"}},
                             "argument": {"variable": "arrow"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Pattern"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Pattern"}}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ArrowFunctionExpression", "fieldName": "body"}},
                             "argument": {"variable": "arrow"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.ArrowFunctionBody"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.ArrowFunctionBody"}, "constraints": []}},
                       {
                         "name": "async",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ArrowFunctionExpression", "fieldName": "async"}},
                             "argument": {"variable": "arrow"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "asyncKw",
                         "term": {
@@ -300,7 +300,7 @@
                                 "argument": {
                                   "list": [{"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "async"}}}}]}}},
                             "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}},
                       {
                         "name": "paramsExpr",
                         "term": {
@@ -317,7 +317,7 @@
                                         "type": {"variable": "hydra.ast.Expr"}}},
                                     "argument": {"variable": "hydra.typeScript.serde.patternToExpr"}}},
                                 "argument": {"variable": "params"}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                       {
                         "name": "bodyExpr",
                         "term": {
@@ -369,7 +369,7 @@
                                         "body": {
                                           "application": {"function": {"variable": "hydra.typeScript.serde.blockStatementToExpr"}, "argument": {"variable": "b"}}}}}}]}},
                             "argument": {"variable": "body"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -416,26 +416,26 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.AssignmentExpression", "fieldName": "operator"}},
                             "argument": {"variable": "assign"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.AssignmentOperator"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.AssignmentOperator"}, "constraints": []}},
                       {
                         "name": "left",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.AssignmentExpression", "fieldName": "left"}},
                             "argument": {"variable": "assign"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Pattern"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Pattern"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.AssignmentExpression", "fieldName": "right"}},
                             "argument": {"variable": "assign"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "opStr",
                         "term": {
                           "application": {"function": {"variable": "hydra.typeScript.serde.assignmentOperatorToString"}, "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -540,14 +540,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.AssignmentPattern", "fieldName": "left"}},
                             "argument": {"variable": "assign"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Pattern"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Pattern"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.AssignmentPattern", "fieldName": "right"}},
                             "argument": {"variable": "assign"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -584,21 +584,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.BinaryExpression", "fieldName": "operator"}},
                             "argument": {"variable": "bin"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.BinaryOperator"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.BinaryOperator"}, "constraints": []}},
                       {
                         "name": "left",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.BinaryExpression", "fieldName": "left"}},
                             "argument": {"variable": "bin"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.BinaryExpression", "fieldName": "right"}},
                             "argument": {"variable": "bin"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -820,21 +820,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.CallExpression", "fieldName": "callee"}},
                             "argument": {"variable": "call"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "args",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.CallExpression", "fieldName": "arguments"}},
                             "argument": {"variable": "call"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Expression"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Expression"}}, "constraints": []}},
                       {
                         "name": "optional",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.CallExpression", "fieldName": "optional"}},
                             "argument": {"variable": "call"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "calleeExpr",
                         "term": {
@@ -934,7 +934,7 @@
                                             "argument": {
                                               "application": {"function": {"variable": "hydra.typeScript.serde.expressionToExpr"}, "argument": {"variable": "callee"}}}}}}}}]}},
                             "argument": {"variable": "callee"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                       {
                         "name": "argsExpr",
                         "term": {
@@ -951,7 +951,7 @@
                                         "type": {"variable": "hydra.ast.Expr"}}},
                                     "argument": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
                                 "argument": {"variable": "args"}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                       {
                         "name": "optionalDot",
                         "term": {
@@ -964,7 +964,7 @@
                                     "argument": {"variable": "optional"}}},
                                 "argument": {"literal": {"string": "?."}}}},
                             "argument": {"literal": {"string": ""}}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -998,14 +998,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.CatchClause", "fieldName": "param"}},
                             "argument": {"variable": "c"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Pattern"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Pattern"}}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.CatchClause", "fieldName": "body"}},
                             "argument": {"variable": "c"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Statement"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Statement"}}, "constraints": []}},
                       {
                         "name": "catchKw",
                         "term": {
@@ -1035,7 +1035,7 @@
                                           "application": {
                                             "function": {"variable": "hydra.serialization.parens"},
                                             "argument": {"application": {"function": {"variable": "hydra.typeScript.serde.patternToExpr"}, "argument": {"variable": "p"}}}}}]}}}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -1068,21 +1068,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ClassDeclaration", "fieldName": "id"}},
                             "argument": {"variable": "cls"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Identifier"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Identifier"}, "constraints": []}},
                       {
                         "name": "superClass",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ClassDeclaration", "fieldName": "superClass"}},
                             "argument": {"variable": "cls"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ClassDeclaration", "fieldName": "body"}},
                             "argument": {"variable": "cls"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.MethodDefinition"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.MethodDefinition"}}, "constraints": []}},
                       {
                         "name": "extendsClause",
                         "term": {
@@ -1106,7 +1106,7 @@
                                   "list": [
                                     {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "extends"}}}},
                                     {"application": {"function": {"variable": "hydra.typeScript.serde.expressionToExpr"}, "argument": {"variable": "s"}}}]}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}},
                       {
                         "name": "bodyExpr",
                         "term": {
@@ -1129,7 +1129,7 @@
                                             "type": {"variable": "hydra.ast.Expr"}}},
                                         "argument": {"variable": "hydra.typeScript.serde.methodDefinitionToExpr"}}},
                                     "argument": {"variable": "body"}}}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -1171,14 +1171,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ClassDeclarationWithComments", "fieldName": "body"}},
                             "argument": {"variable": "cdwc"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.ClassDeclaration"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.ClassDeclaration"}, "constraints": []}},
                       {
                         "name": "mc",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ClassDeclarationWithComments", "fieldName": "comments"}},
                             "argument": {"variable": "cdwc"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}],
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -1235,21 +1235,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ConditionalExpression", "fieldName": "test"}},
                             "argument": {"variable": "cond"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "consequent",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ConditionalExpression", "fieldName": "consequent"}},
                             "argument": {"variable": "cond"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "alternate",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ConditionalExpression", "fieldName": "alternate"}},
                             "argument": {"variable": "cond"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "consExpr",
                         "term": {
@@ -1283,7 +1283,7 @@
                                             "argument": {
                                               "application": {"function": {"variable": "hydra.typeScript.serde.expressionToExpr"}, "argument": {"variable": "consequent"}}}}}}}}]}},
                             "argument": {"variable": "consequent"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                       {
                         "name": "altExpr",
                         "term": {
@@ -1317,7 +1317,7 @@
                                             "argument": {
                                               "application": {"function": {"variable": "hydra.typeScript.serde.expressionToExpr"}, "argument": {"variable": "alternate"}}}}}}}}]}},
                             "argument": {"variable": "alternate"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -1401,14 +1401,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.DoWhileStatement", "fieldName": "body"}},
                             "argument": {"variable": "d"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Statement"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Statement"}, "constraints": []}},
                       {
                         "name": "test",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.DoWhileStatement", "fieldName": "test"}},
                             "argument": {"variable": "d"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"application": {"function": {"variable": "hydra.serialization.suffix"}, "argument": {"literal": {"string": ";"}}}},
@@ -1451,14 +1451,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.DocumentationComment", "fieldName": "description"}},
                             "argument": {"variable": "doc"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "tags",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.DocumentationComment", "fieldName": "tags"}},
                             "argument": {"variable": "doc"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.DocumentationTag"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.DocumentationTag"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.cst"},
@@ -1494,28 +1494,28 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.DocumentationTag", "fieldName": "name"}},
                             "argument": {"variable": "tag"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "mtype",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.DocumentationTag", "fieldName": "type"}},
                             "argument": {"variable": "tag"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.TypeExpression"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.TypeExpression"}}, "constraints": []}},
                       {
                         "name": "mparamName",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.DocumentationTag", "fieldName": "paramName"}},
                             "argument": {"variable": "tag"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Identifier"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Identifier"}}, "constraints": []}},
                       {
                         "name": "description",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.DocumentationTag", "fieldName": "description"}},
                             "argument": {"variable": "tag"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "typePart",
                         "term": {
@@ -1544,7 +1544,7 @@
                                         {
                                           "application": {"function": {"variable": "hydra.typeScript.serde.typeExpressionToString"}, "argument": {"variable": "t"}}},
                                         {"literal": {"string": "}"}}]}}}}}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "paramPart",
                         "term": {
@@ -1565,7 +1565,7 @@
                                 "parameter": "p",
                                 "domain": {"variable": "hydra.typeScript.syntax.Identifier"},
                                 "body": {"application": {"function": {"unwrap": "hydra.typeScript.syntax.Identifier"}, "argument": {"variable": "p"}}}}}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "parts",
                         "term": {
@@ -1577,7 +1577,7 @@
                             {"variable": "typePart"},
                             {"variable": "paramPart"},
                             {"variable": "description"}]},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
                       {
                         "name": "nonEmpty",
                         "term": {
@@ -1600,7 +1600,7 @@
                                                 "argument": {"variable": "p"}}},
                                             "argument": {"literal": {"string": ""}}}}}}}}}},
                             "argument": {"variable": "parts"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": " * "}}}},
@@ -1666,7 +1666,8 @@
                                   "codomain": {
                                     "function": {
                                       "domain": {"literal": "string"},
-                                      "codomain": {"function": {"domain": {"literal": "string"}, "codomain": {"literal": "string"}}}}}}}}},
+                                      "codomain": {"function": {"domain": {"literal": "string"}, "codomain": {"literal": "string"}}}}}}},
+                              "constraints": []}},
                           {
                             "name": "s1",
                             "term": {
@@ -1676,7 +1677,7 @@
                                     "function": {"application": {"function": {"variable": "replace"}, "argument": {"literal": {"string": "\\"}}}},
                                     "argument": {"literal": {"string": "\\\\"}}}},
                                 "argument": {"variable": "s"}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                           {
                             "name": "s2",
                             "term": {
@@ -1686,7 +1687,7 @@
                                     "function": {"application": {"function": {"variable": "replace"}, "argument": {"literal": {"string": "\n"}}}},
                                     "argument": {"literal": {"string": "\\n"}}}},
                                 "argument": {"variable": "s1"}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                           {
                             "name": "s3",
                             "term": {
@@ -1696,7 +1697,7 @@
                                     "function": {"application": {"function": {"variable": "replace"}, "argument": {"literal": {"string": "\r"}}}},
                                     "argument": {"literal": {"string": "\\r"}}}},
                                 "argument": {"variable": "s2"}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                           {
                             "name": "s4",
                             "term": {
@@ -1706,7 +1707,7 @@
                                     "function": {"application": {"function": {"variable": "replace"}, "argument": {"literal": {"string": "\t"}}}},
                                     "argument": {"literal": {"string": "\\t"}}}},
                                 "argument": {"variable": "s3"}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {
@@ -1756,14 +1757,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ExportAllDeclaration", "fieldName": "exported"}},
                             "argument": {"variable": "a"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Identifier"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Identifier"}}, "constraints": []}},
                       {
                         "name": "source",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ExportAllDeclaration", "fieldName": "source"}},
                             "argument": {"variable": "a"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.StringLiteral"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.StringLiteral"}, "constraints": []}},
                       {
                         "name": "exportedClause",
                         "term": {
@@ -1791,7 +1792,7 @@
                                         {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "*"}}}},
                                         {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "as"}}}},
                                         {"application": {"function": {"variable": "hydra.typeScript.serde.identifierToExpr"}, "argument": {"variable": "e"}}}]}}}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"application": {"function": {"variable": "hydra.serialization.suffix"}, "argument": {"literal": {"string": ";"}}}},
@@ -1901,14 +1902,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ExportSpecifier", "fieldName": "local"}},
                             "argument": {"variable": "spec"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Identifier"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Identifier"}, "constraints": []}},
                       {
                         "name": "exported",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ExportSpecifier", "fieldName": "exported"}},
                             "argument": {"variable": "spec"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Identifier"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Identifier"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -2175,14 +2176,14 @@
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.typeScript.syntax.AsExpression", "fieldName": "expression"}},
                                             "argument": {"variable": "ae"}}},
-                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                                       {
                                         "name": "typ",
                                         "term": {
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.typeScript.syntax.AsExpression", "fieldName": "type"}},
                                             "argument": {"variable": "ae"}}},
-                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.TypeExpression"}}}],
+                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.TypeExpression"}, "constraints": []}}],
                                     "body": {
                                       "application": {
                                         "function": {"variable": "hydra.serialization.parens"},
@@ -2227,21 +2228,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ForInStatement", "fieldName": "left"}},
                             "argument": {"variable": "f"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.ForInLeft"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.ForInLeft"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ForInStatement", "fieldName": "right"}},
                             "argument": {"variable": "f"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ForInStatement", "fieldName": "body"}},
                             "argument": {"variable": "f"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Statement"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Statement"}, "constraints": []}},
                       {
                         "name": "leftExpr",
                         "term": {
@@ -2266,7 +2267,7 @@
                                         "domain": {"variable": "hydra.typeScript.syntax.Pattern"},
                                         "body": {"application": {"function": {"variable": "hydra.typeScript.serde.patternToExpr"}, "argument": {"variable": "p"}}}}}}]}},
                             "argument": {"variable": "left"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -2313,28 +2314,28 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ForOfStatement", "fieldName": "await"}},
                             "argument": {"variable": "f"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "left",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ForOfStatement", "fieldName": "left"}},
                             "argument": {"variable": "f"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.ForInLeft"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.ForInLeft"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ForOfStatement", "fieldName": "right"}},
                             "argument": {"variable": "f"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ForOfStatement", "fieldName": "body"}},
                             "argument": {"variable": "f"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Statement"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Statement"}, "constraints": []}},
                       {
                         "name": "forKw",
                         "term": {
@@ -2347,7 +2348,7 @@
                                     "argument": {"variable": "await"}}},
                                 "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "for await"}}}}}},
                             "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "for"}}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                       {
                         "name": "leftExpr",
                         "term": {
@@ -2372,7 +2373,7 @@
                                         "domain": {"variable": "hydra.typeScript.syntax.Pattern"},
                                         "body": {"application": {"function": {"variable": "hydra.typeScript.serde.patternToExpr"}, "argument": {"variable": "p"}}}}}}]}},
                             "argument": {"variable": "left"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -2419,28 +2420,28 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ForStatement", "fieldName": "init"}},
                             "argument": {"variable": "f"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.ForInit"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.ForInit"}}, "constraints": []}},
                       {
                         "name": "test",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ForStatement", "fieldName": "test"}},
                             "argument": {"variable": "f"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}, "constraints": []}},
                       {
                         "name": "update",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ForStatement", "fieldName": "update"}},
                             "argument": {"variable": "f"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ForStatement", "fieldName": "body"}},
                             "argument": {"variable": "f"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Statement"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Statement"}, "constraints": []}},
                       {
                         "name": "initExpr",
                         "term": {
@@ -2482,7 +2483,7 @@
                                                 "domain": {"variable": "hydra.typeScript.syntax.Expression"},
                                                 "body": {"application": {"function": {"variable": "hydra.typeScript.serde.expressionToExpr"}, "argument": {"variable": "e"}}}}}}]}},
                                     "argument": {"variable": "i"}}}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                       {
                         "name": "testExpr",
                         "term": {
@@ -2499,7 +2500,7 @@
                                     "argument": {"variable": "test"}}},
                                 "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": ""}}}}}},
                             "argument": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                       {
                         "name": "updateExpr",
                         "term": {
@@ -2516,7 +2517,7 @@
                                     "argument": {"variable": "update"}}},
                                 "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": ""}}}}}},
                             "argument": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -2580,35 +2581,35 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionDeclaration", "fieldName": "id"}},
                             "argument": {"variable": "fn"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Identifier"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Identifier"}, "constraints": []}},
                       {
                         "name": "params",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionDeclaration", "fieldName": "params"}},
                             "argument": {"variable": "fn"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Pattern"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Pattern"}}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionDeclaration", "fieldName": "body"}},
                             "argument": {"variable": "fn"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Statement"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Statement"}}, "constraints": []}},
                       {
                         "name": "async",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionDeclaration", "fieldName": "async"}},
                             "argument": {"variable": "fn"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "generator",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionDeclaration", "fieldName": "generator"}},
                             "argument": {"variable": "fn"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "asyncKw",
                         "term": {
@@ -2622,7 +2623,7 @@
                                 "argument": {
                                   "list": [{"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "async"}}}}]}}},
                             "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}},
                       {
                         "name": "funcKw",
                         "term": {
@@ -2635,7 +2636,7 @@
                                     "argument": {"variable": "generator"}}},
                                 "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "function*"}}}}}},
                             "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "function"}}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                       {
                         "name": "paramsExpr",
                         "term": {
@@ -2652,11 +2653,11 @@
                                         "type": {"variable": "hydra.ast.Expr"}}},
                                     "argument": {"variable": "hydra.typeScript.serde.patternToExpr"}}},
                                 "argument": {"variable": "params"}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                       {
                         "name": "retAnnot",
                         "term": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": ": any"}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -2701,14 +2702,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionDeclarationWithComments", "fieldName": "body"}},
                             "argument": {"variable": "fdwc"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.FunctionDeclaration"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.FunctionDeclaration"}, "constraints": []}},
                       {
                         "name": "mc",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionDeclarationWithComments", "fieldName": "comments"}},
                             "argument": {"variable": "fdwc"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}],
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -2765,35 +2766,35 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionExpression", "fieldName": "id"}},
                             "argument": {"variable": "fn"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Identifier"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Identifier"}}, "constraints": []}},
                       {
                         "name": "params",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionExpression", "fieldName": "params"}},
                             "argument": {"variable": "fn"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Pattern"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Pattern"}}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionExpression", "fieldName": "body"}},
                             "argument": {"variable": "fn"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Statement"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Statement"}}, "constraints": []}},
                       {
                         "name": "async",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionExpression", "fieldName": "async"}},
                             "argument": {"variable": "fn"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "generator",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionExpression", "fieldName": "generator"}},
                             "argument": {"variable": "fn"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "asyncKw",
                         "term": {
@@ -2807,7 +2808,7 @@
                                 "argument": {
                                   "list": [{"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "async"}}}}]}}},
                             "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}},
                       {
                         "name": "funcKw",
                         "term": {
@@ -2820,7 +2821,7 @@
                                     "argument": {"variable": "generator"}}},
                                 "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "function*"}}}}}},
                             "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "function"}}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                       {
                         "name": "nameExpr",
                         "term": {
@@ -2842,7 +2843,7 @@
                                 "domain": {"variable": "hydra.typeScript.syntax.Identifier"},
                                 "body": {
                                   "list": [{"application": {"function": {"variable": "hydra.typeScript.serde.identifierToExpr"}, "argument": {"variable": "id"}}}]}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}},
                       {
                         "name": "paramsExpr",
                         "term": {
@@ -2859,7 +2860,7 @@
                                         "type": {"variable": "hydra.ast.Expr"}}},
                                     "argument": {"variable": "hydra.typeScript.serde.patternToExpr"}}},
                                 "argument": {"variable": "params"}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -2922,21 +2923,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.IfStatement", "fieldName": "test"}},
                             "argument": {"variable": "ifStmt"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "consequent",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.IfStatement", "fieldName": "consequent"}},
                             "argument": {"variable": "ifStmt"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Statement"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Statement"}, "constraints": []}},
                       {
                         "name": "alternate",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.IfStatement", "fieldName": "alternate"}},
                             "argument": {"variable": "ifStmt"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Statement"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Statement"}}, "constraints": []}},
                       {
                         "name": "ifPart",
                         "term": {
@@ -2951,7 +2952,7 @@
                                     "argument": {"application": {"function": {"variable": "hydra.typeScript.serde.expressionToExpr"}, "argument": {"variable": "test"}}}}},
                                 {
                                   "application": {"function": {"variable": "hydra.typeScript.serde.statementToExpr"}, "argument": {"variable": "consequent"}}}]}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -3001,19 +3002,19 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ImportDeclaration", "fieldName": "specifiers"}},
                             "argument": {"variable": "imp"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.ImportClause"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.ImportClause"}}, "constraints": []}},
                       {
                         "name": "source",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ImportDeclaration", "fieldName": "source"}},
                             "argument": {"variable": "imp"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.StringLiteral"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.StringLiteral"}, "constraints": []}},
                       {
                         "name": "sourceExpr",
                         "term": {
                           "application": {"function": {"variable": "hydra.typeScript.serde.stringLiteralToExpr"}, "argument": {"variable": "source"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                       {
                         "name": "specExprs",
                         "term": {
@@ -3027,7 +3028,7 @@
                                     "type": {"variable": "hydra.ast.Expr"}}},
                                 "argument": {"variable": "hydra.typeScript.serde.importSpecifierToExpr"}}},
                             "argument": {"variable": "specifiers"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -3038,7 +3039,7 @@
                                 "argument": {
                                   "application": {
                                     "function": {
-                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.typeScript.syntax.ImportClause"}}},
+                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.typeScript.syntax.ImportClause"}}},
                                     "argument": {"variable": "specifiers"}}}}},
                             "argument": {
                               "application": {
@@ -3102,14 +3103,14 @@
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ImportSpecifier", "fieldName": "imported"}},
                                             "argument": {"variable": "n"}}},
-                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Identifier"}}},
+                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Identifier"}, "constraints": []}},
                                       {
                                         "name": "local",
                                         "term": {
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ImportSpecifier", "fieldName": "local"}},
                                             "argument": {"variable": "n"}}},
-                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Identifier"}}}],
+                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Identifier"}, "constraints": []}}],
                                     "body": {
                                       "application": {
                                         "function": {
@@ -3190,14 +3191,14 @@
                       {
                         "name": "cps",
                         "term": {"application": {"function": {"variable": "hydra.lib.strings.toList"}, "argument": {"variable": "s"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}, "constraints": []}},
                       {
                         "name": "len",
                         "term": {
                           "application": {
                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"literal": {"integer": "int32"}}}},
                             "argument": {"variable": "cps"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}},
+                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}},
                       {
                         "name": "first",
                         "term": {
@@ -3211,7 +3212,7 @@
                               "application": {
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"literal": {"integer": "int32"}}}},
                                 "argument": {"variable": "cps"}}}}},
-                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}},
+                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}},
                       {
                         "name": "rest",
                         "term": {
@@ -3237,7 +3238,7 @@
                                         "argument": {"literal": {"integer": {"int32": 1}}}}},
                                     "argument": {"variable": "cps"}}}}},
                             "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": "int32"}}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -3291,14 +3292,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.LabeledStatement", "fieldName": "label"}},
                             "argument": {"variable": "l"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Identifier"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Identifier"}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.LabeledStatement", "fieldName": "body"}},
                             "argument": {"variable": "l"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Statement"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Statement"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -3396,7 +3397,7 @@
                                         "function": {
                                           "application": {
                                             "function": {"variable": "hydra.lib.strings.concat2"},
-                                            "argument": {"application": {"function": {"variable": "hydra.lib.literals.showBigint"}, "argument": {"variable": "n"}}}}},
+                                            "argument": {"application": {"function": {"variable": "hydra.lib.literals.printBigint"}, "argument": {"variable": "n"}}}}},
                                         "argument": {"literal": {"string": "n"}}}}}}}}},
                           {
                             "name": "template",
@@ -3431,28 +3432,28 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.MemberExpression", "fieldName": "object"}},
                             "argument": {"variable": "mem"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "prop",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.MemberExpression", "fieldName": "property"}},
                             "argument": {"variable": "mem"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "computed",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.MemberExpression", "fieldName": "computed"}},
                             "argument": {"variable": "mem"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "optional",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.MemberExpression", "fieldName": "optional"}},
                             "argument": {"variable": "mem"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "objExpr",
                         "term": {
@@ -3543,11 +3544,11 @@
                                             "function": {"variable": "hydra.serialization.parens"},
                                             "argument": {"application": {"function": {"variable": "hydra.typeScript.serde.expressionToExpr"}, "argument": {"variable": "obj"}}}}}}}}]}},
                             "argument": {"variable": "obj"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                       {
                         "name": "propExpr",
                         "term": {"application": {"function": {"variable": "hydra.typeScript.serde.expressionToExpr"}, "argument": {"variable": "prop"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -3628,35 +3629,35 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.MethodDefinition", "fieldName": "key"}},
                             "argument": {"variable": "method"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "value",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.MethodDefinition", "fieldName": "value"}},
                             "argument": {"variable": "method"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.FunctionExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.FunctionExpression"}, "constraints": []}},
                       {
                         "name": "kind",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.MethodDefinition", "fieldName": "kind"}},
                             "argument": {"variable": "method"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.MethodKind"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.MethodKind"}, "constraints": []}},
                       {
                         "name": "computed",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.MethodDefinition", "fieldName": "computed"}},
                             "argument": {"variable": "method"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "static",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.MethodDefinition", "fieldName": "static"}},
                             "argument": {"variable": "method"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "staticKw",
                         "term": {
@@ -3670,7 +3671,7 @@
                                 "argument": {
                                   "list": [{"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "static"}}}}]}}},
                             "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}},
                       {
                         "name": "kindKw",
                         "term": {
@@ -3710,7 +3711,7 @@
                                         "body": {
                                           "list": [{"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "set"}}}}]}}}}]}},
                             "argument": {"variable": "kind"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}},
                       {
                         "name": "keyExpr",
                         "term": {
@@ -3732,21 +3733,21 @@
                                         "argument": {"variable": "hydra.serialization.inlineStyle"}}},
                                     "argument": {"application": {"function": {"variable": "hydra.typeScript.serde.expressionToExpr"}, "argument": {"variable": "key"}}}}}}},
                             "argument": {"application": {"function": {"variable": "hydra.typeScript.serde.expressionToExpr"}, "argument": {"variable": "key"}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                       {
                         "name": "params",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionExpression", "fieldName": "params"}},
                             "argument": {"variable": "value"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Pattern"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Pattern"}}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionExpression", "fieldName": "body"}},
                             "argument": {"variable": "value"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Statement"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Statement"}}, "constraints": []}},
                       {
                         "name": "paramsExpr",
                         "term": {
@@ -3763,7 +3764,7 @@
                                         "type": {"variable": "hydra.ast.Expr"}}},
                                     "argument": {"variable": "hydra.typeScript.serde.patternToExpr"}}},
                                 "argument": {"variable": "params"}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -3852,14 +3853,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ModuleItemWithComments", "fieldName": "body"}},
                             "argument": {"variable": "miwc"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.ModuleItem"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.ModuleItem"}, "constraints": []}},
                       {
                         "name": "mc",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ModuleItemWithComments", "fieldName": "comments"}},
                             "argument": {"variable": "miwc"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}],
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -3914,14 +3915,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.NamedExport", "fieldName": "specifiers"}},
                             "argument": {"variable": "n"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.ExportSpecifier"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.ExportSpecifier"}}, "constraints": []}},
                       {
                         "name": "source",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.NamedExport", "fieldName": "source"}},
                             "argument": {"variable": "n"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.StringLiteral"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.StringLiteral"}}, "constraints": []}},
                       {
                         "name": "specExprs",
                         "term": {
@@ -3935,7 +3936,7 @@
                                     "type": {"variable": "hydra.ast.Expr"}}},
                                 "argument": {"variable": "hydra.typeScript.serde.exportSpecifierToExpr"}}},
                             "argument": {"variable": "specifiers"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}},
                       {
                         "name": "fromClause",
                         "term": {
@@ -3959,7 +3960,7 @@
                                   "list": [
                                     {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "from"}}}},
                                     {"application": {"function": {"variable": "hydra.typeScript.serde.stringLiteralToExpr"}, "argument": {"variable": "s"}}}]}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"application": {"function": {"variable": "hydra.serialization.suffix"}, "argument": {"literal": {"string": ";"}}}},
@@ -4016,7 +4017,7 @@
                                 "body": {
                                   "application": {
                                     "function": {"variable": "hydra.serialization.cst"},
-                                    "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt64"}, "argument": {"variable": "i"}}}}}}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.lib.literals.printInt64"}, "argument": {"variable": "i"}}}}}}}},
                           {
                             "name": "float",
                             "handler": {
@@ -4026,7 +4027,7 @@
                                 "body": {
                                   "application": {
                                     "function": {"variable": "hydra.serialization.cst"},
-                                    "argument": {"application": {"function": {"variable": "hydra.lib.literals.showFloat64"}, "argument": {"variable": "f"}}}}}}}}]}},
+                                    "argument": {"application": {"function": {"variable": "hydra.lib.literals.printFloat64"}, "argument": {"variable": "f"}}}}}}}}]}},
                     "argument": {"variable": "n"}}}}},
             "annotation": {
               "map": [
@@ -4136,7 +4137,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ObjectPattern", "fieldName": "properties"}},
                             "argument": {"variable": "obj"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.ObjectPatternProperty"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.ObjectPatternProperty"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -4324,7 +4325,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.Program", "fieldName": "body"}},
                             "argument": {"variable": "prog"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.ModuleItem"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.ModuleItem"}}, "constraints": []}},
                       {
                         "name": "warning",
                         "term": {
@@ -4336,7 +4337,7 @@
                                   "application": {
                                     "function": {"variable": "hydra.typeScript.serde.toLineComment"},
                                     "argument": {"variable": "hydra.constants.warningAutoGeneratedFile"}}}}}]},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}},
                       {
                         "name": "items",
                         "term": {
@@ -4350,7 +4351,7 @@
                                     "type": {"variable": "hydra.ast.Expr"}}},
                                 "argument": {"variable": "hydra.typeScript.serde.moduleItemToExpr"}}},
                             "argument": {"variable": "body"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.doubleNewlineSep"},
@@ -4385,28 +4386,28 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.Property", "fieldName": "key"}},
                             "argument": {"variable": "prop"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "value",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.Property", "fieldName": "value"}},
                             "argument": {"variable": "prop"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "shorthand",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.Property", "fieldName": "shorthand"}},
                             "argument": {"variable": "prop"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "computed",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.Property", "fieldName": "computed"}},
                             "argument": {"variable": "prop"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "keyExpr",
                         "term": {
@@ -4428,7 +4429,7 @@
                                         "argument": {"variable": "hydra.serialization.inlineStyle"}}},
                                     "argument": {"application": {"function": {"variable": "hydra.typeScript.serde.expressionToExpr"}, "argument": {"variable": "key"}}}}}}},
                             "argument": {"application": {"function": {"variable": "hydra.typeScript.serde.expressionToExpr"}, "argument": {"variable": "key"}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -4698,14 +4699,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.StringLiteral", "fieldName": "value"}},
                             "argument": {"variable": "s"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "singleQuote",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.StringLiteral", "fieldName": "singleQuote"}},
                             "argument": {"variable": "s"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "quote",
                         "term": {
@@ -4718,14 +4719,14 @@
                                     "argument": {"variable": "singleQuote"}}},
                                 "argument": {"literal": {"string": "'"}}}},
                             "argument": {"literal": {"string": "\""}}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "escaped",
                         "term": {
                           "application": {
                             "function": {"application": {"function": {"variable": "hydra.typeScript.serde.escapeString"}, "argument": {"variable": "value"}}},
                             "argument": {"variable": "singleQuote"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.cst"},
@@ -4758,14 +4759,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.SwitchCase", "fieldName": "test"}},
                             "argument": {"variable": "c"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}, "constraints": []}},
                       {
                         "name": "consequent",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.SwitchCase", "fieldName": "consequent"}},
                             "argument": {"variable": "c"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Statement"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Statement"}}, "constraints": []}},
                       {
                         "name": "caseLabel",
                         "term": {
@@ -4793,7 +4794,7 @@
                                         {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "case"}}}},
                                         {"application": {"function": {"variable": "hydra.typeScript.serde.expressionToExpr"}, "argument": {"variable": "t"}}},
                                         {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": ":"}}}}]}}}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.newlineSep"},
@@ -4838,14 +4839,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.SwitchStatement", "fieldName": "discriminant"}},
                             "argument": {"variable": "switchStmt"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "match",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.SwitchStatement", "fieldName": "cases"}},
                             "argument": {"variable": "switchStmt"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.SwitchCase"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.SwitchCase"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -4904,14 +4905,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.TemplateLiteral", "fieldName": "quasis"}},
                             "argument": {"variable": "t"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.TemplateElement"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.TemplateElement"}}, "constraints": []}},
                       {
                         "name": "exprs",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.TemplateLiteral", "fieldName": "expressions"}},
                             "argument": {"variable": "t"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Expression"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Expression"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.cst"},
@@ -5102,7 +5103,7 @@
                                                     "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": " * "}}}},
                                                     "argument": {"variable": "line"}}}}}}}}},
                                     "argument": {"application": {"function": {"variable": "hydra.formatting.lines"}, "argument": {"variable": "desc"}}}}}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
                           {
                             "name": "tagLines",
                             "term": {
@@ -5116,14 +5117,14 @@
                                         "type": {"literal": "string"}}},
                                     "argument": {"variable": "hydra.typeScript.serde.documentationTagToLine"}}},
                                 "argument": {"variable": "tags"}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
                           {
                             "name": "allLines",
                             "term": {
                               "application": {
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": "string"}}},
                                 "argument": {"list": [{"variable": "descLines"}, {"variable": "tagLines"}]}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {
@@ -5133,7 +5134,7 @@
                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "string"}}},
                                     "argument": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"literal": "string"}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"literal": "string"}}},
                                         "argument": {"variable": "allLines"}}}}},
                                 "argument": {"literal": {"string": ""}}}},
                             "argument": {
@@ -5173,21 +5174,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.TryStatement", "fieldName": "block"}},
                             "argument": {"variable": "t"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Statement"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.Statement"}}, "constraints": []}},
                       {
                         "name": "handler",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.TryStatement", "fieldName": "handler"}},
                             "argument": {"variable": "t"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.CatchClause"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.CatchClause"}}, "constraints": []}},
                       {
                         "name": "finalizer",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.TryStatement", "fieldName": "finalizer"}},
                             "argument": {"variable": "t"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"list": {"variable": "hydra.typeScript.syntax.Statement"}}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"list": {"variable": "hydra.typeScript.syntax.Statement"}}}, "constraints": []}},
                       {
                         "name": "tryPart",
                         "term": {
@@ -5198,7 +5199,7 @@
                                 {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "try"}}}},
                                 {
                                   "application": {"function": {"variable": "hydra.typeScript.serde.blockStatementToExpr"}, "argument": {"variable": "block"}}}]}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                       {
                         "name": "catchPart",
                         "term": {
@@ -5220,7 +5221,7 @@
                                 "domain": {"variable": "hydra.typeScript.syntax.CatchClause"},
                                 "body": {
                                   "list": [{"application": {"function": {"variable": "hydra.typeScript.serde.catchClauseToExpr"}, "argument": {"variable": "c"}}}]}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}},
                       {
                         "name": "finallyPart",
                         "term": {
@@ -5250,7 +5251,7 @@
                                             {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "finally"}}}},
                                             {
                                               "application": {"function": {"variable": "hydra.typeScript.serde.blockStatementToExpr"}, "argument": {"variable": "f"}}}]}}}]}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -5292,7 +5293,7 @@
                                       {
                                         "name": "raw",
                                         "term": {"application": {"function": {"unwrap": "hydra.typeScript.syntax.Identifier"}, "argument": {"variable": "i"}}},
-                                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                     "body": {
                                       "application": {
                                         "function": {
@@ -5538,14 +5539,14 @@
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionTypeExpression", "fieldName": "parameters"}},
                                             "argument": {"variable": "f"}}},
-                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.TypeExpression"}}}},
+                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.TypeExpression"}}, "constraints": []}},
                                       {
                                         "name": "rt",
                                         "term": {
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.typeScript.syntax.FunctionTypeExpression", "fieldName": "returnType"}},
                                             "argument": {"variable": "f"}}},
-                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.TypeExpression"}}},
+                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.TypeExpression"}, "constraints": []}},
                                       {
                                         "name": "rendered",
                                         "term": {
@@ -5587,7 +5588,7 @@
                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": {"integer": "int32"}}}},
                                                                                 "type": {"list": {"literal": "string"}}}},
                                                                             "argument": {"variable": "acc"}}},
-                                                                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}},
+                                                                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}},
                                                                       {
                                                                         "name": "soFar",
                                                                         "term": {
@@ -5597,7 +5598,7 @@
                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": {"integer": "int32"}}}},
                                                                                 "type": {"list": {"literal": "string"}}}},
                                                                             "argument": {"variable": "acc"}}},
-                                                                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
+                                                                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
                                                                       {
                                                                         "name": "this",
                                                                         "term": {
@@ -5606,11 +5607,11 @@
                                                                             "argument": {
                                                                               "list": [
                                                                                 {"literal": {"string": "_a"}},
-                                                                                {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "i"}}},
+                                                                                {"application": {"function": {"variable": "hydra.lib.literals.printInt32"}, "argument": {"variable": "i"}}},
                                                                                 {"literal": {"string": ": "}},
                                                                                 {
                                                                                   "application": {"function": {"variable": "hydra.typeScript.serde.typeExpressionToString"}, "argument": {"variable": "p"}}}]}}},
-                                                                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                                                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                                                     "body": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -5632,7 +5633,7 @@
                                                                                         "argument": {"variable": "soFar"}}},
                                                                                     "argument": {
                                                                                       "application": {
-                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.pure"}, "type": {"literal": "string"}}},
+                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.singleton"}, "type": {"literal": "string"}}},
                                                                                         "argument": {"variable": "this"}}}}}}},
                                                                             "type": {"literal": {"integer": "int32"}}}},
                                                                         "type": {"list": {"literal": "string"}}}}}}}}}}}},
@@ -5647,7 +5648,7 @@
                                                             "type": {"literal": {"integer": "int32"}}}},
                                                         "type": {"list": {"literal": "string"}}}}}},
                                                 "argument": {"variable": "params"}}}}},
-                                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                                     "body": {
                                       "application": {
                                         "function": {"variable": "hydra.lib.strings.concat"},
@@ -5703,14 +5704,14 @@
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ParameterizedTypeExpression", "fieldName": "base"}},
                                             "argument": {"variable": "p"}}},
-                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.TypeExpression"}}},
+                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.TypeExpression"}, "constraints": []}},
                                       {
                                         "name": "args",
                                         "term": {
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.typeScript.syntax.ParameterizedTypeExpression", "fieldName": "arguments"}},
                                             "argument": {"variable": "p"}}},
-                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.TypeExpression"}}}}],
+                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.TypeExpression"}}, "constraints": []}}],
                                     "body": {
                                       "application": {
                                         "function": {"variable": "hydra.lib.strings.concat"},
@@ -5773,24 +5774,24 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.TypedPattern", "fieldName": "pattern"}},
                             "argument": {"variable": "tp"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Pattern"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Pattern"}, "constraints": []}},
                       {
                         "name": "typ",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.TypedPattern", "fieldName": "type"}},
                             "argument": {"variable": "tp"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.TypeExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.TypeExpression"}, "constraints": []}},
                       {
                         "name": "innerStr",
                         "term": {
                           "application": {"function": {"variable": "hydra.typeScript.serde.patternToString"}, "argument": {"variable": "innerPat"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "typeStr",
                         "term": {
                           "application": {"function": {"variable": "hydra.typeScript.serde.tsTypeExpressionToString"}, "argument": {"variable": "typ"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.cst"},
@@ -5825,30 +5826,30 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.UnaryExpression", "fieldName": "operator"}},
                             "argument": {"variable": "un"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.UnaryOperator"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.UnaryOperator"}, "constraints": []}},
                       {
                         "name": "arg",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.UnaryExpression", "fieldName": "argument"}},
                             "argument": {"variable": "un"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "prefix",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.UnaryExpression", "fieldName": "prefix"}},
                             "argument": {"variable": "un"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "opStr",
                         "term": {
                           "application": {"function": {"variable": "hydra.typeScript.serde.unaryOperatorToString"}, "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "argExpr",
                         "term": {"application": {"function": {"variable": "hydra.typeScript.serde.expressionToExpr"}, "argument": {"variable": "arg"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -5933,14 +5934,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.VariableDeclaration", "fieldName": "kind"}},
                             "argument": {"variable": "decl"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.VariableKind"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.VariableKind"}, "constraints": []}},
                       {
                         "name": "declarations",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.VariableDeclaration", "fieldName": "declarations"}},
                             "argument": {"variable": "decl"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.VariableDeclarator"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.typeScript.syntax.VariableDeclarator"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"application": {"function": {"variable": "hydra.serialization.suffix"}, "argument": {"literal": {"string": ";"}}}},
@@ -5993,14 +5994,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.VariableDeclarator", "fieldName": "id"}},
                             "argument": {"variable": "decl"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Pattern"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Pattern"}, "constraints": []}},
                       {
                         "name": "init",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.VariableDeclarator", "fieldName": "init"}},
                             "argument": {"variable": "decl"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}}}],
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.typeScript.syntax.Expression"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -6096,14 +6097,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.WhileStatement", "fieldName": "test"}},
                             "argument": {"variable": "w"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.typeScript.syntax.WhileStatement", "fieldName": "body"}},
                             "argument": {"variable": "w"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Statement"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.typeScript.syntax.Statement"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},

@@ -1862,8 +1862,8 @@
                                                                                   "name": "constraints",
                                                                                   "term": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"optional": null},
-                                                                                      "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}}}}},
+                                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                      "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -1989,8 +1989,8 @@
                                                                                   "name": "constraints",
                                                                                   "term": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"optional": null},
-                                                                                      "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}}}}},
+                                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                      "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -2138,8 +2138,8 @@
                                                                                   "name": "constraints",
                                                                                   "term": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"optional": null},
-                                                                                      "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}}}}},
+                                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                      "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -2290,8 +2290,8 @@
                                                                                   "name": "constraints",
                                                                                   "term": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"optional": null},
-                                                                                      "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}}}}},
+                                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                      "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -2403,8 +2403,8 @@
                                                                                   "name": "constraints",
                                                                                   "term": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"optional": null},
-                                                                                      "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}}}}}}},
+                                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                      "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {

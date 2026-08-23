@@ -19,7 +19,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The XSD anySimpleType, the base type of all simple (non-list, non-union-composed) XML Schema datatypes"}}}]}}}}}},
+                      "literal": {"string": "The XSD anySimpleType, the base type of all simple (non-list, non-union-composed) XML Schema datatypes"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.AnyType",
@@ -32,7 +33,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD anyType, the root of the XML Schema type hierarchy"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD anyType, the root of the XML Schema type hierarchy"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.AnyURI",
@@ -42,7 +44,8 @@
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD anyURI datatype: a URI reference"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD anyURI datatype: a URI reference"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Base64Binary",
@@ -55,7 +58,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD base64Binary datatype: arbitrary binary data encoded as base64"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD base64Binary datatype: arbitrary binary data encoded as base64"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Boolean",
@@ -65,7 +69,8 @@
             "annotated": {
               "body": {"wrap": {"literal": "boolean"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD boolean datatype: true or false"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD boolean datatype: true or false"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Byte",
@@ -76,7 +81,8 @@
               "body": {"wrap": {"literal": {"integer": "int8"}}},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD byte datatype: an 8-bit signed integer"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD byte datatype: an 8-bit signed integer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.ConstrainingFacet",
@@ -89,7 +95,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An XML Schema constraining facet, restricting the value space of a datatype"}}}]}}}}}},
+                    "value": {"literal": {"string": "An XML Schema constraining facet, restricting the value space of a datatype"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Datatype",
@@ -144,7 +151,8 @@
                   {"name": "unsignedLong", "type": "unit"},
                   {"name": "unsignedShort", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a built-in XML Schema datatype"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a built-in XML Schema datatype"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Date",
@@ -157,7 +165,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD date datatype: a calendar date, optionally with a timezone"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD date datatype: a calendar date, optionally with a timezone"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.DateTime",
@@ -170,7 +179,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD dateTime datatype: a date and time, optionally with a timezone"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD dateTime datatype: a date and time, optionally with a timezone"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Decimal",
@@ -183,7 +193,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD decimal datatype: an arbitrary-precision signed decimal number"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD decimal datatype: an arbitrary-precision signed decimal number"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Double",
@@ -196,7 +207,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD double datatype: an IEEE 754 double-precision floating-point number"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD double datatype: an IEEE 754 double-precision floating-point number"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Duration",
@@ -207,7 +219,8 @@
               "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD duration datatype: a duration of time"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD duration datatype: a duration of time"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.ENTITIES",
@@ -220,7 +233,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD ENTITIES datatype: a whitespace-separated list of unparsed entity names"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD ENTITIES datatype: a whitespace-separated list of unparsed entity names"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.ENTITY",
@@ -233,7 +247,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD ENTITY datatype: the name of an unparsed entity"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD ENTITY datatype: the name of an unparsed entity"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Float",
@@ -246,7 +261,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD float datatype: an IEEE 754 single-precision floating-point number"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD float datatype: an IEEE 754 single-precision floating-point number"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.GDay",
@@ -259,7 +275,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD gDay datatype: a day of the month, recurring"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD gDay datatype: a day of the month, recurring"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.GMonth",
@@ -272,7 +289,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD gMonth datatype: a month of the year, recurring"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD gMonth datatype: a month of the year, recurring"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.GMonthDay",
@@ -285,7 +303,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD gMonthDay datatype: a day of a specific month, recurring yearly"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD gMonthDay datatype: a day of a specific month, recurring yearly"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.GYear",
@@ -295,7 +314,8 @@
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD gYear datatype: a calendar year"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD gYear datatype: a calendar year"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.GYearMonth",
@@ -308,7 +328,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD gYearMonth datatype: a specific month of a specific year"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD gYearMonth datatype: a specific month of a specific year"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.HexBinary",
@@ -321,7 +342,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD hexBinary datatype: arbitrary binary data encoded as hexadecimal"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD hexBinary datatype: arbitrary binary data encoded as hexadecimal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.ID",
@@ -334,7 +356,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD ID datatype: an XML identifier attribute value, unique within a document"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD ID datatype: an XML identifier attribute value, unique within a document"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.IDREF",
@@ -347,7 +370,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD IDREF datatype: a reference to an XML ID attribute value"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD IDREF datatype: a reference to an XML ID attribute value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.IDREFS",
@@ -360,7 +384,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD IDREFS datatype: a whitespace-separated list of IDREF values"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD IDREFS datatype: a whitespace-separated list of IDREF values"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Int",
@@ -371,7 +396,8 @@
               "body": {"wrap": {"literal": {"integer": "int32"}}},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD int datatype: a 32-bit signed integer"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD int datatype: a 32-bit signed integer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Integer",
@@ -384,7 +410,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD integer datatype: an arbitrary-precision signed integer"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD integer datatype: an arbitrary-precision signed integer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Language",
@@ -397,7 +424,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD language datatype: an RFC 3066 language tag"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD language datatype: an RFC 3066 language tag"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Long",
@@ -408,7 +436,8 @@
               "body": {"wrap": {"literal": {"integer": "int64"}}},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD long datatype: a 64-bit signed integer"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD long datatype: a 64-bit signed integer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.NMTOKEN",
@@ -418,7 +447,8 @@
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD NMTOKEN datatype: an XML name token"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD NMTOKEN datatype: an XML name token"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.NOTATION",
@@ -431,7 +461,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD NOTATION datatype: the name of a notation declared in the document's DTD"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD NOTATION datatype: the name of a notation declared in the document's DTD"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Name",
@@ -444,7 +475,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD Name datatype: an XML Name (a token that may not start with a digit)"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD Name datatype: an XML Name (a token that may not start with a digit)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.NegativeInteger",
@@ -457,7 +489,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD negativeInteger datatype: an arbitrary-precision integer less than zero"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD negativeInteger datatype: an arbitrary-precision integer less than zero"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.NonNegativeInteger",
@@ -471,7 +504,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The XSD nonNegativeInteger datatype: an arbitrary-precision integer greater than or equal to zero"}}}]}}}}}},
+                      "literal": {"string": "The XSD nonNegativeInteger datatype: an arbitrary-precision integer greater than or equal to zero"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.NonPositiveInteger",
@@ -485,7 +519,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The XSD nonPositiveInteger datatype: an arbitrary-precision integer less than or equal to zero"}}}]}}}}}},
+                      "literal": {"string": "The XSD nonPositiveInteger datatype: an arbitrary-precision integer less than or equal to zero"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.NormalizedString",
@@ -499,7 +534,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The XSD normalizedString datatype: a string with no carriage return, line feed, or tab characters"}}}]}}}}}},
+                      "literal": {"string": "The XSD normalizedString datatype: a string with no carriage return, line feed, or tab characters"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.PositiveInteger",
@@ -512,7 +548,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD positiveInteger datatype: an arbitrary-precision integer greater than zero"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD positiveInteger datatype: an arbitrary-precision integer greater than zero"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.QName",
@@ -525,7 +562,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD QName datatype: a namespace-qualified XML name"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD QName datatype: a namespace-qualified XML name"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Short",
@@ -538,7 +576,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD short datatype: a 16-bit signed integer"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD short datatype: a 16-bit signed integer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.String",
@@ -548,7 +587,8 @@
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD string datatype: a character string"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The XSD string datatype: a character string"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Time",
@@ -561,7 +601,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD time datatype: a time of day, optionally with a timezone"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD time datatype: a time of day, optionally with a timezone"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.Token",
@@ -575,7 +616,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The XSD token datatype: a normalized string with no leading, trailing, or consecutive internal whitespace"}}}]}}}}}},
+                      "literal": {"string": "The XSD token datatype: a normalized string with no leading, trailing, or consecutive internal whitespace"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.UnsignedByte",
@@ -588,7 +630,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD unsignedByte datatype: an 8-bit unsigned integer"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD unsignedByte datatype: an 8-bit unsigned integer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.UnsignedInt",
@@ -601,7 +644,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD unsignedInt datatype: a 32-bit unsigned integer"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD unsignedInt datatype: a 32-bit unsigned integer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.UnsignedLong",
@@ -614,7 +658,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD unsignedLong datatype: a 64-bit unsigned integer"}}}]}}}}}},
+                    "value": {"literal": {"string": "The XSD unsignedLong datatype: a 64-bit unsigned integer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.xml.schema.UnsignedShort",
@@ -627,4 +672,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The XSD unsignedShort datatype: a 16-bit unsigned integer"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "The XSD unsignedShort datatype: a 16-bit unsigned integer"}}}]}}},
+          "constraints": []}}}]}

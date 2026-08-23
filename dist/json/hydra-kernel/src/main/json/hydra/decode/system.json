@@ -87,7 +87,10 @@
                                                       {
                                                         "name": "fieldMap",
                                                         "term": {"application": {"function": {"variable": "hydra.extract.core.toFieldMap"}, "argument": {"variable": "record"}}},
-                                                        "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                        "typeScheme": {
+                                                          "variables": [],
+                                                          "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                          "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {
@@ -714,7 +717,10 @@
                                                       {
                                                         "name": "fieldMap",
                                                         "term": {"application": {"function": {"variable": "hydra.extract.core.toFieldMap"}, "argument": {"variable": "record"}}},
-                                                        "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}}}],
+                                                        "typeScheme": {
+                                                          "variables": [],
+                                                          "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}},
+                                                          "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {

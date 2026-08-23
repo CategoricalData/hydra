@@ -33,7 +33,8 @@
                               "value": {
                                 "literal": {
                                   "string": "The annotation as a single term. By convention this is a map term (Name -> Term) so that multiple independent annotations can coexist, but applications are free to use any term shape."}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A term together with an annotation"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A term together with an annotation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.AnnotatedType",
@@ -61,7 +62,8 @@
                               "value": {
                                 "literal": {
                                   "string": "The annotation as a single term. By convention this is a map term (Name -> Term) so that multiple independent annotations can coexist, but applications are free to use any term shape."}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type together with an annotation"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type together with an annotation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.Application",
@@ -87,7 +89,8 @@
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand side of the application"}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A term which applies a function to an argument"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A term which applies a function to an argument"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.ApplicationType",
@@ -112,7 +115,8 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand side of the application"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type-level analog of an application term"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type-level analog of an application term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.Binding",
@@ -146,7 +150,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A field with an optional type scheme, used to bind variables to terms in a 'let' expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A field with an optional type scheme, used to bind variables to terms in a 'let' expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.CaseAlternative",
@@ -182,7 +187,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A single alternative of a case statement (union elimination): the variant being matched, together with the term that handles it."}}}]}}}}}},
+                        "string": "A single alternative of a case statement (union elimination): the variant being matched, together with the term that handles it."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.CaseStatement",
@@ -219,7 +225,8 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "A list of case alternatives, one per union variant being handled"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A union elimination; a case statement"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A union elimination; a case statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.EitherType",
@@ -245,7 +252,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A type which provides a choice between a 'left' type and a 'right' type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A type which provides a choice between a 'left' type and a 'right' type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.Field",
@@ -267,7 +275,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.core.Term"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value of the field"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A name/term pair"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A name/term pair"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.FieldType",
@@ -289,7 +298,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.core.Type"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of the field"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A name/type pair"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A name/type pair"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.FloatType",
@@ -311,7 +321,8 @@
                       "annotated": {
                         "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit floating-point type"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A floating-point type"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A floating-point type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.FloatValue",
@@ -333,7 +344,8 @@
                       "annotated": {
                         "body": {"literal": {"float": "float64"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit floating-point value"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A floating-point literal value"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A floating-point literal value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.ForallType",
@@ -362,7 +374,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term."}}}]}}}}}},
+                        "string": "A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.FunctionType",
@@ -387,7 +400,8 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The codomain (output) type of the function"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function type, also known as an arrow type"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function type, also known as an arrow type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.Injection",
@@ -417,7 +431,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()"}}}]}}}}}},
+                    "value": {"literal": {"string": "An instance of a union type; i.e. a string-indexed generalization of inl() or inr()"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.IntegerType",
@@ -481,7 +496,8 @@
                       "annotated": {
                         "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A 64-bit unsigned integer type"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An integer type"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An integer type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.IntegerValue",
@@ -556,7 +572,8 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "A 64-bit unsigned integer value (unsigned long)"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An integer literal value"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An integer literal value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.Lambda",
@@ -585,7 +602,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.core.Term"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The body of the lambda"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function abstraction (lambda)"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function abstraction (lambda)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.Let",
@@ -613,7 +631,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A set of (possibly recursive) 'let' bindings together with a body in which they are bound"}}}]}}}}}},
+                    "value": {"literal": {"string": "A set of (possibly recursive) 'let' bindings together with a body in which they are bound"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.Literal",
@@ -662,7 +681,8 @@
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string literal"}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A term constant; an instance of a literal type"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A term constant; an instance of a literal type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.LiteralType",
@@ -720,7 +740,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants"}}}]}}}}}},
+                        "string": "Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.MapType",
@@ -742,7 +763,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.core.Type"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of values in the map"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A map type"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A map type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.Name",
@@ -755,7 +777,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A unique identifier in some context; a string-valued key"}}}]}}}}}},
+                    "value": {"literal": {"string": "A unique identifier in some context; a string-valued key"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.PairType",
@@ -781,7 +804,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A type which pairs a 'first' type and a 'second' type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A type which pairs a 'first' type and a 'second' type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.Projection",
@@ -803,7 +827,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.core.Name"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the projected field"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A record elimination; a projection"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A record elimination; a projection"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.Record",
@@ -833,7 +858,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A record, or labeled tuple; a map of field names to terms"}}}]}}}}}},
+                    "value": {"literal": {"string": "A record, or labeled tuple; a map of field names to terms"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.Term",
@@ -982,7 +1008,8 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "A wrapped term; an instance of a wrapper type (newtype)"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A data term"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A data term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.Type",
@@ -1122,7 +1149,8 @@
                               "value": {
                                 "literal": {
                                   "string": "A wrapped type (newtype). There is no corresponding `unwrap` variant at the type level: wrap is the introduction form, and a wrapper type's underlying body type is given by the `wrap` variant's argument."}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A data type"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A data type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.TypeApplicationTerm",
@@ -1146,7 +1174,8 @@
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type argument"}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A term applied to a type; a type application."}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A term applied to a type; a type application."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.TypeClassConstraint",
@@ -1172,7 +1201,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A type class constraint on a type variable. Currently has only one variant, but designed to be forward-compatible with multi-parameter type classes and constraints on type expressions."}}}]}}}}}},
+                        "string": "A type class constraint on a type variable. Currently has only one variant, but designed to be forward-compatible with multi-parameter type classes and constraints on type expressions."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.TypeLambda",
@@ -1198,7 +1228,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.core.Term"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The body of the abstraction"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A System F type abstraction term"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A System F type abstraction term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.TypeScheme",
@@ -1224,20 +1255,20 @@
                     "name": "constraints",
                     "type": {
                       "annotated": {
-                        "body": {
-                          "optional": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}},
+                        "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}},
                         "annotation": {
                           "map": [
                             {
                               "key": {"variable": "description"},
                               "value": {
                                 "literal": {
-                                  "string": "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names."}}}]}}}}]},
+                                  "string": "Constraints on type variables, including typeclass constraints. The map keys are type variable names; an empty map means no constraints."}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A type expression together with free type variables occurring in the expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A type expression together with free type variables occurring in the expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.TypeVariableConstraints",
@@ -1251,7 +1282,7 @@
                     "name": "classes",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}},
+                        "body": {"set": {"variable": "hydra.core.TypeClassConstraint"}},
                         "annotation": {
                           "map": [
                             {
@@ -1261,7 +1292,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Constraints associated with a type variable, including typeclass constraints"}}}]}}}}}},
+                    "value": {"literal": {"string": "Constraints associated with a type variable, including typeclass constraints"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.core.WrappedTerm",
@@ -1283,4 +1315,5 @@
                       "annotated": {
                         "body": {"variable": "hydra.core.Term"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The wrapped term"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A term wrapped in a type name"}}}]}}}}}}]}
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A term wrapped in a type name"}}}]}}},
+          "constraints": []}}}]}

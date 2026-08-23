@@ -19,7 +19,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL annotation on an axiom, consisting of a property and value"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL annotation on an axiom, consisting of a property and value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.AnnotationAssertion",
@@ -33,7 +34,8 @@
                   {"name": "property", "type": {"variable": "hydra.owl.syntax.AnnotationProperty"}},
                   {"name": "subject", "type": {"variable": "hydra.owl.syntax.AnnotationSubject"}},
                   {"name": "value", "type": {"variable": "hydra.owl.syntax.AnnotationValue"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL annotation assertion axiom"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL annotation assertion axiom"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.AnnotationAxiom",
@@ -47,7 +49,8 @@
                   {"name": "annotationPropertyDomain", "type": {"variable": "hydra.owl.syntax.AnnotationPropertyDomain"}},
                   {"name": "annotationPropertyRange", "type": {"variable": "hydra.owl.syntax.AnnotationPropertyRange"}},
                   {"name": "subAnnotationPropertyOf", "type": {"variable": "hydra.owl.syntax.SubAnnotationPropertyOf"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL annotation axiom"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL annotation axiom"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.AnnotationProperty",
@@ -60,7 +63,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL annotation property, identified by an IRI"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL annotation property, identified by an IRI"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.AnnotationPropertyDomain",
@@ -77,7 +81,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting the domain of an annotation property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting the domain of an annotation property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.AnnotationPropertyRange",
@@ -94,7 +99,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting the range of an annotation property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting the range of an annotation property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.AnnotationSubject",
@@ -110,7 +116,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL annotation subject: an IRI or an anonymous individual"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL annotation subject: an IRI or an anonymous individual"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.AnnotationValue",
@@ -127,7 +134,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL annotation value: an anonymous individual, IRI, or literal"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL annotation value: an anonymous individual, IRI, or literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.AnonymousIndividual",
@@ -140,7 +148,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL anonymous individual, identified by a blank node id"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL anonymous individual, identified by a blank node id"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.Assertion",
@@ -158,7 +167,8 @@
                   {"name": "negativeObjectPropertyAssertion", "type": {"variable": "hydra.owl.syntax.NegativeObjectPropertyAssertion"}},
                   {"name": "sameIndividual", "type": {"variable": "hydra.owl.syntax.SameIndividual"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL assertion axiom about individuals"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL assertion axiom about individuals"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.AsymmetricObjectProperty",
@@ -174,7 +184,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting a characteristic (e.g. symmetric, transitive) of an object property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting a characteristic (e.g. symmetric, transitive) of an object property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.Axiom",
@@ -192,7 +203,8 @@
                   {"name": "declaration", "type": {"variable": "hydra.owl.syntax.Declaration"}},
                   {"name": "hasKey", "type": {"variable": "hydra.owl.syntax.HasKey"}},
                   {"name": "objectPropertyAxiom", "type": {"variable": "hydra.owl.syntax.ObjectPropertyAxiom"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL axiom"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL axiom"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.Class",
@@ -201,7 +213,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": "unit"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL class, identified by an IRI"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL class, identified by an IRI"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ClassAssertion",
@@ -218,7 +231,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting that an individual belongs to a class"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting that an individual belongs to a class"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ClassAxiom",
@@ -232,7 +246,8 @@
                   {"name": "disjointUnion", "type": {"variable": "hydra.owl.syntax.DisjointUnion"}},
                   {"name": "equivalentClasses", "type": {"variable": "hydra.owl.syntax.EquivalentClasses"}},
                   {"name": "subClassOf", "type": {"variable": "hydra.owl.syntax.SubClassOf"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL axiom about classes"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL axiom about classes"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ClassExpression",
@@ -259,7 +274,8 @@
                   {"name": "objectOneOf", "type": {"variable": "hydra.owl.syntax.ObjectOneOf"}},
                   {"name": "objectSomeValuesFrom", "type": {"variable": "hydra.owl.syntax.ObjectSomeValuesFrom"}},
                   {"name": "objectUnionOf", "type": {"variable": "hydra.owl.syntax.ObjectUnionOf"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL class expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL class expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataAllValuesFrom",
@@ -277,7 +293,8 @@
                         "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                   {"name": "range", "type": {"variable": "hydra.owl.syntax.DataRange"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL universal data property restriction"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL universal data property restriction"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataComplementOf",
@@ -290,7 +307,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL data range which is the complement of another data range"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL data range which is the complement of another data range"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataExactCardinality",
@@ -307,7 +325,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL exact-cardinality restriction on a data property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL exact-cardinality restriction on a data property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataHasValue",
@@ -323,7 +342,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL data property restriction requiring a specific literal value"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL data property restriction requiring a specific literal value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataIntersectionOf",
@@ -340,7 +360,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL data range which is the intersection of two or more data ranges"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL data range which is the intersection of two or more data ranges"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataMaxCardinality",
@@ -357,7 +378,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL maximum-cardinality restriction on a data property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL maximum-cardinality restriction on a data property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataMinCardinality",
@@ -374,7 +396,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL minimum-cardinality restriction on a data property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL minimum-cardinality restriction on a data property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataOneOf",
@@ -391,7 +414,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL data range enumerating one or more literals"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL data range enumerating one or more literals"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataProperty",
@@ -401,7 +425,8 @@
             "annotated": {
               "body": {"wrap": "unit"},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL data property, identified by an IRI"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL data property, identified by an IRI"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataPropertyAssertion",
@@ -419,7 +444,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting a data property relationship between an individual and a literal"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting a data property relationship between an individual and a literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataPropertyAxiom",
@@ -435,7 +461,8 @@
                   {"name": "equivalentDataProperties", "type": {"variable": "hydra.owl.syntax.EquivalentDataProperties"}},
                   {"name": "functionalDataProperty", "type": {"variable": "hydra.owl.syntax.FunctionalDataProperty"}},
                   {"name": "subDataPropertyOf", "type": {"variable": "hydra.owl.syntax.SubDataPropertyOf"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL axiom about data properties"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL axiom about data properties"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataPropertyDomain",
@@ -452,7 +479,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting the domain of a data property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting the domain of a data property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataPropertyExpression",
@@ -461,7 +489,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"variable": "hydra.owl.syntax.DataProperty"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL data property expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL data property expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataPropertyRange",
@@ -478,7 +507,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting the range of a data property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting the range of a data property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataRange",
@@ -494,7 +524,8 @@
                   {"name": "dataUnionOf", "type": {"variable": "hydra.owl.syntax.DataUnionOf"}},
                   {"name": "datatype", "type": {"variable": "hydra.owl.syntax.Datatype"}},
                   {"name": "datatypeRestriction", "type": {"variable": "hydra.owl.syntax.DatatypeRestriction"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL data range"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL data range"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataSomeValuesFrom",
@@ -512,7 +543,8 @@
                         "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                   {"name": "range", "type": {"variable": "hydra.owl.syntax.DataRange"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL existential data property restriction"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL existential data property restriction"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DataUnionOf",
@@ -529,7 +561,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL data range which is the union of two or more data ranges"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL data range which is the union of two or more data ranges"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.Datatype",
@@ -553,7 +586,8 @@
                                   "string": "Note: XML Schema datatypes are treated as a special case in this model (not in the OWL 2 specification itself) because they are particularly common"}}}]}}}},
                   {"name": "other", "type": {"variable": "hydra.rdf.syntax.Iri"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL datatype, identified by an IRI"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL datatype, identified by an IRI"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DatatypeDefinition",
@@ -570,7 +604,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom defining a datatype in terms of a data range"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom defining a datatype in terms of a data range"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DatatypeRestriction",
@@ -591,7 +626,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL datatype restricted by one or more constraining facets"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL datatype restricted by one or more constraining facets"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DatatypeRestrictionConstrainingFacet",
@@ -618,7 +654,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A constraining facet used in an OWL datatype restriction"}}}]}}}}}},
+                    "value": {"literal": {"string": "A constraining facet used in an OWL datatype restriction"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DatatypeRestrictionConstraint",
@@ -634,7 +671,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single constraining facet and its restriction value in an OWL datatype restriction"}}}]}}}}}},
+                    "value": {"literal": {"string": "A single constraining facet and its restriction value in an OWL datatype restriction"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.Declaration",
@@ -646,7 +684,8 @@
                 "record": [
                   {"name": "annotations", "type": {"list": {"variable": "hydra.owl.syntax.Annotation"}}},
                   {"name": "entity", "type": {"variable": "hydra.owl.syntax.Entity"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL entity declaration"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL entity declaration"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DifferentIndividuals",
@@ -667,7 +706,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting that two or more individuals are pairwise distinct"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting that two or more individuals are pairwise distinct"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DisjointClasses",
@@ -688,7 +728,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting that two or more classes are pairwise disjoint"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting that two or more classes are pairwise disjoint"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DisjointDataProperties",
@@ -709,7 +750,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting that two or more data properties are pairwise disjoint"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting that two or more data properties are pairwise disjoint"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DisjointObjectProperties",
@@ -730,7 +772,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting that two or more object properties are pairwise disjoint"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting that two or more object properties are pairwise disjoint"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.DisjointUnion",
@@ -752,7 +795,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting that a class is the disjoint union of other class expressions"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting that a class is the disjoint union of other class expressions"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.Entity",
@@ -772,7 +816,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL entity: a class, datatype, object/data/annotation property, or named individual"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL entity: a class, datatype, object/data/annotation property, or named individual"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.EquivalentClasses",
@@ -793,7 +838,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting that two or more classes are equivalent"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting that two or more classes are equivalent"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.EquivalentDataProperties",
@@ -814,7 +860,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting that two or more data properties are equivalent"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting that two or more data properties are equivalent"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.EquivalentObjectProperties",
@@ -835,7 +882,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting that two or more object properties are equivalent"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting that two or more object properties are equivalent"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.FunctionalDataProperty",
@@ -851,7 +899,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting that a data property is functional"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting that a data property is functional"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.FunctionalObjectProperty",
@@ -867,7 +916,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting a characteristic (e.g. symmetric, transitive) of an object property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting a characteristic (e.g. symmetric, transitive) of an object property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.HasKey",
@@ -885,7 +935,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting that a set of properties functions as a key for a class"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting that a set of properties functions as a key for a class"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.Individual",
@@ -901,7 +952,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL individual: a named individual or an anonymous individual"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL individual: a named individual or an anonymous individual"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.InverseFunctionalObjectProperty",
@@ -917,7 +969,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting a characteristic (e.g. symmetric, transitive) of an object property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting a characteristic (e.g. symmetric, transitive) of an object property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.InverseObjectProperties",
@@ -934,7 +987,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting that two object properties are inverses of each other"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting that two object properties are inverses of each other"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.InverseObjectProperty",
@@ -944,7 +998,8 @@
             "annotated": {
               "body": {"wrap": {"variable": "hydra.owl.syntax.ObjectProperty"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The inverse of an OWL object property"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The inverse of an OWL object property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.IrreflexiveObjectProperty",
@@ -960,7 +1015,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting a characteristic (e.g. symmetric, transitive) of an object property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting a characteristic (e.g. symmetric, transitive) of an object property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.NamedIndividual",
@@ -971,7 +1027,8 @@
               "body": {"wrap": "unit"},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL named individual, identified by an IRI"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL named individual, identified by an IRI"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.NegativeDataPropertyAssertion",
@@ -989,7 +1046,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting that a data property relationship does NOT hold"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting that a data property relationship does NOT hold"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.NegativeObjectPropertyAssertion",
@@ -1007,7 +1065,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting that an object property relationship does NOT hold"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting that an object property relationship does NOT hold"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectAllValuesFrom",
@@ -1020,7 +1079,8 @@
                   {"name": "property", "type": {"variable": "hydra.owl.syntax.ObjectPropertyExpression"}},
                   {"name": "class", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL universal object property restriction"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL universal object property restriction"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectComplementOf",
@@ -1033,7 +1093,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL class expression which is the complement of another class expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL class expression which is the complement of another class expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectExactCardinality",
@@ -1050,7 +1111,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL exact-cardinality restriction on an object property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL exact-cardinality restriction on an object property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectHasSelf",
@@ -1063,7 +1125,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL class expression restricting an object property to self-relationships"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL class expression restricting an object property to self-relationships"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectHasValue",
@@ -1079,7 +1142,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL object property restriction requiring a specific individual value"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL object property restriction requiring a specific individual value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectIntersectionOf",
@@ -1096,7 +1160,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL class expression which is the intersection of two or more class expressions"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL class expression which is the intersection of two or more class expressions"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectMaxCardinality",
@@ -1113,7 +1178,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL maximum-cardinality restriction on an object property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL maximum-cardinality restriction on an object property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectMinCardinality",
@@ -1130,7 +1196,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL minimum-cardinality restriction on an object property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL minimum-cardinality restriction on an object property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectOneOf",
@@ -1147,7 +1214,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL class expression enumerating one or more individuals"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL class expression enumerating one or more individuals"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectProperty",
@@ -1157,7 +1225,8 @@
             "annotated": {
               "body": {"wrap": "unit"},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL object property, identified by an IRI"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL object property, identified by an IRI"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectPropertyAssertion",
@@ -1175,7 +1244,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting an object property relationship between two individuals"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting an object property relationship between two individuals"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectPropertyAxiom",
@@ -1199,7 +1269,8 @@
                   {"name": "symmetricObjectProperty", "type": {"variable": "hydra.owl.syntax.SymmetricObjectProperty"}},
                   {"name": "transitiveObjectProperty", "type": {"variable": "hydra.owl.syntax.TransitiveObjectProperty"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL axiom about object properties"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL axiom about object properties"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectPropertyDomain",
@@ -1216,7 +1287,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting the domain of an object property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting the domain of an object property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectPropertyExpression",
@@ -1232,7 +1304,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL object property expression: an object property or its inverse"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL object property expression: an object property or its inverse"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectPropertyRange",
@@ -1249,7 +1322,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting the range of an object property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting the range of an object property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectSomeValuesFrom",
@@ -1263,7 +1337,8 @@
                   {"name": "class", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL existential object property restriction"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL existential object property restriction"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ObjectUnionOf",
@@ -1280,7 +1355,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL class expression which is the union of two or more class expressions"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL class expression which is the union of two or more class expressions"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.Ontology",
@@ -1297,7 +1373,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL ontology: a set of imports, annotations, and axioms"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL ontology: a set of imports, annotations, and axioms"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.ReflexiveObjectProperty",
@@ -1313,7 +1390,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting a characteristic (e.g. symmetric, transitive) of an object property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting a characteristic (e.g. symmetric, transitive) of an object property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.SameIndividual",
@@ -1334,7 +1412,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting that two or more individuals are the same"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting that two or more individuals are the same"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.SubAnnotationPropertyOf",
@@ -1351,7 +1430,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting an annotation-property subsumption relationship"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting an annotation-property subsumption relationship"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.SubClassOf",
@@ -1366,7 +1446,8 @@
                   {"name": "superClass", "type": {"variable": "hydra.owl.syntax.ClassExpression"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL axiom asserting a subclass relationship"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An OWL axiom asserting a subclass relationship"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.SubDataPropertyOf",
@@ -1383,7 +1464,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting a data-property subsumption relationship"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting a data-property subsumption relationship"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.SubObjectPropertyOf",
@@ -1405,7 +1487,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting an object-property subsumption relationship"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting an object-property subsumption relationship"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.SymmetricObjectProperty",
@@ -1421,7 +1504,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting a characteristic (e.g. symmetric, transitive) of an object property"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OWL axiom asserting a characteristic (e.g. symmetric, transitive) of an object property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.owl.syntax.TransitiveObjectProperty",
@@ -1437,4 +1521,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OWL axiom asserting a characteristic (e.g. symmetric, transitive) of an object property"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "An OWL axiom asserting a characteristic (e.g. symmetric, transitive) of an object property"}}}]}}},
+          "constraints": []}}}]}

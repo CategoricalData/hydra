@@ -18,7 +18,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An approximate (floating-point) numeric literal, such as 1.5E10"}}}]}}}}}},
+                    "value": {"literal": {"string": "An approximate (floating-point) numeric literal, such as 1.5E10"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ApproximateNumericType",
@@ -35,7 +36,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An approximate numeric type: FLOAT, REAL, or DOUBLE PRECISION"}}}]}}}}}},
+                    "value": {"literal": {"string": "An approximate numeric type: FLOAT, REAL, or DOUBLE PRECISION"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ArrayElement",
@@ -44,7 +46,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpression"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single element of an array value"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single element of an array value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ArrayElementList",
@@ -60,7 +63,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty, comma-separated list of array elements"}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of array elements"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ArrayElementReference",
@@ -71,7 +75,8 @@
               "body": {"wrap": "unit"},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to an element of an array by index"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to an element of an array by index"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ArrayType",
@@ -80,7 +85,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": "unit"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An ARRAY collection type"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An ARRAY collection type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ArrayValueConstructor",
@@ -96,7 +102,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A constructor for an array value, either by enumeration or by query"}}}]}}}}}},
+                    "value": {"literal": {"string": "A constructor for an array value, either by enumeration or by query"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ArrayValueConstructorByEnumeration",
@@ -113,7 +120,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An array value constructed by explicitly enumerating its elements"}}}]}}}}}},
+                    "value": {"literal": {"string": "An array value constructed by explicitly enumerating its elements"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ArrayValueConstructorByQuery",
@@ -126,7 +134,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An array value constructed from the result of a query"}}}]}}}}}},
+                    "value": {"literal": {"string": "An array value constructed from the result of a query"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ArrayValueExpression",
@@ -137,7 +146,8 @@
               "body": {"wrap": "unit"},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An expression that evaluates to an array value"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An expression that evaluates to an array value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.AsSubqueryClause",
@@ -150,7 +160,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A clause introducing a table's contents as the result of a subquery"}}}]}}}}}},
+                    "value": {"literal": {"string": "A clause introducing a table's contents as the result of a subquery"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.AttributeOrMethodReference",
@@ -163,7 +174,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to an attribute or method of a structured value"}}}]}}}}}},
+                    "value": {"literal": {"string": "A reference to an attribute or method of a structured value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BinaryLargeObjectStringType",
@@ -179,7 +191,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary large object string type: BINARY LARGE OBJECT or BLOB"}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary large object string type: BINARY LARGE OBJECT or BLOB"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BinaryStringLiteral",
@@ -189,7 +202,8 @@
             "annotated": {
               "body": {"wrap": "unit"},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A binary string literal, e.g. X'FF00'"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A binary string literal, e.g. X'FF00'"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanFactor",
@@ -202,7 +216,8 @@
                   {"name": "NOT", "type": {"optional": "unit"}},
                   {"name": "BooleanTest", "type": {"variable": "hydra.sql.syntax.BooleanTest"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean test, optionally negated with NOT"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean test, optionally negated with NOT"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanLiteral",
@@ -212,7 +227,8 @@
             "annotated": {
               "body": {"union": [{"name": "TRUE", "type": "unit"}, {"name": "FALSE", "type": "unit"}, {"name": "UNKNOWN", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean literal: TRUE, FALSE, or UNKNOWN"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean literal: TRUE, FALSE, or UNKNOWN"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanPredicand",
@@ -221,7 +237,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": "unit"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An operand of a boolean predicate"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An operand of a boolean predicate"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanPrimary",
@@ -237,7 +254,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A boolean primary expression: either a predicate or a boolean predicand"}}}]}}}}}},
+                    "value": {"literal": {"string": "A boolean primary expression: either a predicate or a boolean predicand"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanTerm",
@@ -253,7 +271,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A boolean term: a factor, or a conjunction of terms with AND"}}}]}}}}}},
+                    "value": {"literal": {"string": "A boolean term: a factor, or a conjunction of terms with AND"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanTermAnd",
@@ -269,7 +288,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A conjunction of two boolean terms joined by AND"}}}]}}}}}},
+                    "value": {"literal": {"string": "A conjunction of two boolean terms joined by AND"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanTest",
@@ -285,7 +305,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A boolean primary, optionally compared against a truth value with IS"}}}]}}}}}},
+                    "value": {"literal": {"string": "A boolean primary, optionally compared against a truth value with IS"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanTestSequenceOption",
@@ -301,7 +322,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The IS [NOT] truth-value suffix of a boolean test"}}}]}}}}}},
+                    "value": {"literal": {"string": "The IS [NOT] truth-value suffix of a boolean test"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanType",
@@ -310,7 +332,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": "unit"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The BOOLEAN data type"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The BOOLEAN data type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanValueExpression",
@@ -326,7 +349,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A boolean value expression: a term, or a disjunction of terms with OR"}}}]}}}}}},
+                    "value": {"literal": {"string": "A boolean value expression: a term, or a disjunction of terms with OR"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.BooleanValueExpressionOr",
@@ -342,7 +366,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A disjunction of two boolean value expressions joined by OR"}}}]}}}}}},
+                    "value": {"literal": {"string": "A disjunction of two boolean value expressions joined by OR"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.CaseExpression",
@@ -355,7 +380,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A CASE expression, selecting a result from among several alternatives"}}}]}}}}}},
+                    "value": {"literal": {"string": "A CASE expression, selecting a result from among several alternatives"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.CastSpecification",
@@ -368,7 +394,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A CAST expression, converting a value to a specified data type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A CAST expression, converting a value to a specified data type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.CharacterSetSpecification",
@@ -377,7 +404,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": "unit"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a character set"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a character set"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.CharacterStringLiteral",
@@ -387,7 +415,8 @@
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A character string literal, e.g. 'hello'"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A character string literal, e.g. 'hello'"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.CharacterStringType",
@@ -409,7 +438,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A character string type: CHARACTER, VARCHAR, or CHARACTER LARGE OBJECT"}}}]}}}}}},
+                    "value": {"literal": {"string": "A character string type: CHARACTER, VARCHAR, or CHARACTER LARGE OBJECT"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.CollateClause",
@@ -422,7 +452,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A COLLATE clause specifying the collation to apply to a character value"}}}]}}}}}},
+                    "value": {"literal": {"string": "A COLLATE clause specifying the collation to apply to a character value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.CollectionType",
@@ -435,7 +466,8 @@
                   {"name": "array", "type": {"variable": "hydra.sql.syntax.ArrayType"}},
                   {"name": "multiset", "type": {"variable": "hydra.sql.syntax.MultisetType"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A collection type: ARRAY or MULTISET"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A collection type: ARRAY or MULTISET"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.CollectionValueConstructor",
@@ -451,7 +483,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A constructor for a collection value: an array or multiset constructor"}}}]}}}}}},
+                    "value": {"literal": {"string": "A constructor for a collection value: an array or multiset constructor"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.CollectionValueExpression",
@@ -467,7 +500,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression that evaluates to a collection value"}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression that evaluates to a collection value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ColumnConstraintDefinition",
@@ -480,7 +514,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A constraint attached to a single column definition"}}}]}}}}}},
+                    "value": {"literal": {"string": "A constraint attached to a single column definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ColumnDefinition",
@@ -502,7 +537,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The definition of a single column within a table definition"}}}]}}}}}},
+                    "value": {"literal": {"string": "The definition of a single column within a table definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ColumnDefinitionDefaultOrIdentityOrGenerationOption",
@@ -519,7 +555,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A column's default value, identity, or generation specification"}}}]}}}}}},
+                    "value": {"literal": {"string": "A column's default value, identity, or generation specification"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ColumnDefinitionTypeOrDomainOption",
@@ -532,7 +569,8 @@
                   {"name": "DataType", "type": {"variable": "hydra.sql.syntax.DataType"}},
                   {"name": "DomainName", "type": {"variable": "hydra.sql.syntax.DomainName"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A column's declared data type or domain"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A column's declared data type or domain"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ColumnName",
@@ -541,7 +579,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a table column"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a table column"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ColumnNameList",
@@ -557,7 +596,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty, comma-separated list of column names"}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of column names"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ColumnOptions",
@@ -570,7 +610,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The WITH OPTIONS clause of a column definition inherited via LIKE"}}}]}}}}}},
+                    "value": {"literal": {"string": "The WITH OPTIONS clause of a column definition inherited via LIKE"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ColumnReference",
@@ -583,7 +624,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to a column, optionally qualified by a table or correlation name"}}}]}}}}}},
+                    "value": {"literal": {"string": "A reference to a column, optionally qualified by a table or correlation name"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.CommonValueExpression",
@@ -606,7 +648,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A value expression common to numeric, string, datetime, interval, user-defined, reference, and collection types"}}}]}}}}}},
+                        "string": "A value expression common to numeric, string, datetime, interval, user-defined, reference, and collection types"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ContextuallyTypedRowValueConstructor",
@@ -619,7 +662,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A row value constructor whose element types are inferred from context"}}}]}}}}}},
+                    "value": {"literal": {"string": "A row value constructor whose element types are inferred from context"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ContextuallyTypedRowValueExpression",
@@ -635,7 +679,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A contextually typed row value expression: a special case or a constructor"}}}]}}}}}},
+                    "value": {"literal": {"string": "A contextually typed row value expression: a special case or a constructor"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ContextuallyTypedRowValueExpressionList",
@@ -651,7 +696,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty, comma-separated list of contextually typed row value expressions"}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of contextually typed row value expressions"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ContextuallyTypedTableValueConstructor",
@@ -664,7 +710,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A table value constructor built from a list of contextually typed row values"}}}]}}}}}},
+                    "value": {"literal": {"string": "A table value constructor built from a list of contextually typed row values"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.DataType",
@@ -683,7 +730,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A data type: predefined, row, named, reference, or collection"}}}]}}}}}},
+                    "value": {"literal": {"string": "A data type: predefined, row, named, reference, or collection"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.DateLiteral",
@@ -692,7 +740,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"variable": "hydra.sql.syntax.DateString"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A DATE literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A DATE literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.DateString",
@@ -705,7 +754,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The string representation of a date literal, e.g. '2003-01-01'"}}}]}}}}}},
+                    "value": {"literal": {"string": "The string representation of a date literal, e.g. '2003-01-01'"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.DatetimeLiteral",
@@ -722,7 +772,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A datetime literal: a date, time, or timestamp literal"}}}]}}}}}},
+                    "value": {"literal": {"string": "A datetime literal: a date, time, or timestamp literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.DatetimeType",
@@ -732,7 +783,8 @@
             "annotated": {
               "body": {"wrap": "unit"},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A datetime type: DATE, TIME, or TIMESTAMP"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A datetime type: DATE, TIME, or TIMESTAMP"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.DatetimeValueExpression",
@@ -745,7 +797,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression that evaluates to a datetime value"}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression that evaluates to a datetime value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.DefaultClause",
@@ -758,7 +811,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A DEFAULT clause specifying a column's default value"}}}]}}}}}},
+                    "value": {"literal": {"string": "A DEFAULT clause specifying a column's default value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.DomainName",
@@ -767,7 +821,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a user-defined domain"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a user-defined domain"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ExactNumericLiteral",
@@ -780,7 +835,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An exact numeric literal, such as an integer or fixed-point decimal"}}}]}}}}}},
+                    "value": {"literal": {"string": "An exact numeric literal, such as an integer or fixed-point decimal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ExactNumericType",
@@ -801,7 +857,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An exact numeric type: NUMERIC, DECIMAL, DEC, SMALLINT, INTEGER, INT, or BIGINT"}}}]}}}}}},
+                    "value": {"literal": {"string": "An exact numeric type: NUMERIC, DECIMAL, DEC, SMALLINT, INTEGER, INT, or BIGINT"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ExactNumericTypeDecOption",
@@ -815,7 +872,8 @@
                   {"name": "Sequence", "type": {"optional": {"variable": "hydra.sql.syntax.Scale"}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The precision and optional scale of a DEC type"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The precision and optional scale of a DEC type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ExactNumericTypeDecimalOption",
@@ -831,7 +889,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The precision and optional scale of a DECIMAL type"}}}]}}}}}},
+                    "value": {"literal": {"string": "The precision and optional scale of a DECIMAL type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ExactNumericTypeNumericOption",
@@ -847,7 +906,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The precision and optional scale of a NUMERIC type"}}}]}}}}}},
+                    "value": {"literal": {"string": "The precision and optional scale of a NUMERIC type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.FieldReference",
@@ -860,7 +920,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to a field of a row or structured value"}}}]}}}}}},
+                    "value": {"literal": {"string": "A reference to a field of a row or structured value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.FromConstructor",
@@ -878,7 +939,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "An INSERT source specified by an explicit value constructor, with optional column list and override clause"}}}]}}}}}},
+                      "literal": {"string": "An INSERT source specified by an explicit value constructor, with optional column list and override clause"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.FromDefault",
@@ -888,7 +950,8 @@
             "annotated": {
               "body": {"wrap": "unit"},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An INSERT source specified as DEFAULT VALUES"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An INSERT source specified as DEFAULT VALUES"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.FromSubquery",
@@ -901,7 +964,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An INSERT source specified as the result of a subquery"}}}]}}}}}},
+                    "value": {"literal": {"string": "An INSERT source specified as the result of a subquery"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.GeneralLiteral",
@@ -922,7 +986,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A general literal: a string, datetime, interval, or boolean literal"}}}]}}}}}},
+                    "value": {"literal": {"string": "A general literal: a string, datetime, interval, or boolean literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.GeneralValueSpecification",
@@ -935,7 +1000,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A general value specification, such as a parameter or dynamic value"}}}]}}}}}},
+                    "value": {"literal": {"string": "A general value specification, such as a parameter or dynamic value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.GenerationClause",
@@ -948,7 +1014,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GENERATED ALWAYS AS clause for a computed column"}}}]}}}}}},
+                    "value": {"literal": {"string": "A GENERATED ALWAYS AS clause for a computed column"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.GlobalOrLocal",
@@ -961,7 +1028,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The GLOBAL or LOCAL qualifier of a temporary table scope"}}}]}}}}}},
+                    "value": {"literal": {"string": "The GLOBAL or LOCAL qualifier of a temporary table scope"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.IdentityColumnSpecification",
@@ -974,7 +1042,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A GENERATED ... AS IDENTITY column specification"}}}]}}}}}},
+                    "value": {"literal": {"string": "A GENERATED ... AS IDENTITY column specification"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.InsertColumnList",
@@ -987,7 +1056,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The parenthesized list of target column names in an INSERT statement"}}}]}}}}}},
+                    "value": {"literal": {"string": "The parenthesized list of target column names in an INSERT statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.InsertColumnsAndSource",
@@ -1004,7 +1074,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The column list and value source of an INSERT statement: a subquery, constructor, or default"}}}]}}}}}},
+                    "value": {"literal": {"string": "The column list and value source of an INSERT statement: a subquery, constructor, or default"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.InsertStatement",
@@ -1016,7 +1087,8 @@
                 "record": [
                   {"name": "target", "type": {"variable": "hydra.sql.syntax.InsertionTarget"}},
                   {"name": "columnsAndSource", "type": {"variable": "hydra.sql.syntax.InsertColumnsAndSource"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An ANSI SQL INSERT statement"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An ANSI SQL INSERT statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.InsertionTarget",
@@ -1029,7 +1101,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The table into which an INSERT statement inserts rows"}}}]}}}}}},
+                    "value": {"literal": {"string": "The table into which an INSERT statement inserts rows"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.IntervalLiteral",
@@ -1038,7 +1111,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": "unit"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An INTERVAL literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An INTERVAL literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.IntervalType",
@@ -1047,7 +1121,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": "unit"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The INTERVAL data type"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The INTERVAL data type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.IntervalValueExpression",
@@ -1060,7 +1135,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression that evaluates to an interval value"}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression that evaluates to an interval value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.LargeObjectLength",
@@ -1073,7 +1149,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The length specification of a large object type, e.g. 1K, 1M, or 1G"}}}]}}}}}},
+                    "value": {"literal": {"string": "The length specification of a large object type, e.g. 1K, 1M, or 1G"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.LeftBracketOrTrigraph",
@@ -1086,7 +1163,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A left square bracket, or its trigraph equivalent ??("}}}]}}}}}},
+                    "value": {"literal": {"string": "A left square bracket, or its trigraph equivalent ??("}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.Length",
@@ -1099,7 +1177,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The length specification of a character or binary string type"}}}]}}}}}},
+                    "value": {"literal": {"string": "The length specification of a character or binary string type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.LikeClause",
@@ -1112,7 +1191,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A LIKE clause, copying column definitions from another table"}}}]}}}}}},
+                    "value": {"literal": {"string": "A LIKE clause, copying column definitions from another table"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.MethodInvocation",
@@ -1125,7 +1205,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An invocation of a method on a structured value"}}}]}}}}}},
+                    "value": {"literal": {"string": "An invocation of a method on a structured value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.MultisetElementReference",
@@ -1138,7 +1219,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to an element of a multiset by way of the ELEMENT function"}}}]}}}}}},
+                    "value": {"literal": {"string": "A reference to an element of a multiset by way of the ELEMENT function"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.MultisetType",
@@ -1151,7 +1233,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A MULTISET collection type over a given element data type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A MULTISET collection type over a given element data type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.MultisetValueConstructor",
@@ -1160,7 +1243,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": "unit"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constructor for a multiset value"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constructor for a multiset value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.MultisetValueExpression",
@@ -1173,7 +1257,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression that evaluates to a multiset value"}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression that evaluates to a multiset value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.NationalCharacterStringLiteral",
@@ -1186,7 +1271,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A national character string literal, e.g. N'hello'"}}}]}}}}}},
+                    "value": {"literal": {"string": "A national character string literal, e.g. N'hello'"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.NationalCharacterStringType",
@@ -1199,7 +1285,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A national character string type: NATIONAL CHARACTER or NATIONAL CHARACTER VARYING"}}}]}}}}}},
+                    "value": {"literal": {"string": "A national character string type: NATIONAL CHARACTER or NATIONAL CHARACTER VARYING"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.NewSpecification",
@@ -1212,7 +1299,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A NEW invocation, constructing an instance of a structured type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A NEW invocation, constructing an instance of a structured type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.NextValueExpression",
@@ -1225,7 +1313,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A NEXT VALUE FOR expression, retrieving the next value of a sequence generator"}}}]}}}}}},
+                    "value": {"literal": {"string": "A NEXT VALUE FOR expression, retrieving the next value of a sequence generator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.NonparenthesizedValueExpressionPrimary",
@@ -1258,7 +1347,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A value expression primary that does not begin with a parenthesis"}}}]}}}}}},
+                    "value": {"literal": {"string": "A value expression primary that does not begin with a parenthesis"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.NumericType",
@@ -1271,7 +1361,8 @@
                   {"name": "exact", "type": {"variable": "hydra.sql.syntax.ExactNumericType"}},
                   {"name": "approximate", "type": {"variable": "hydra.sql.syntax.ApproximateNumericType"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A numeric type: exact or approximate"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A numeric type: exact or approximate"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.NumericValueExpression",
@@ -1284,7 +1375,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression that evaluates to a numeric value"}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression that evaluates to a numeric value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.OverrideClause",
@@ -1297,7 +1389,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An OVERRIDING USER VALUE or OVERRIDING SYSTEM VALUE clause of an INSERT statement"}}}]}}}}}},
+                    "value": {"literal": {"string": "An OVERRIDING USER VALUE or OVERRIDING SYSTEM VALUE clause of an INSERT statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ParenthesizedValueExpression",
@@ -1307,7 +1400,8 @@
             "annotated": {
               "body": {"wrap": {"variable": "hydra.sql.syntax.ValueExpression"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A value expression enclosed in parentheses"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A value expression enclosed in parentheses"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.PathResolvedUserDefinedTypeName",
@@ -1320,7 +1414,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A user-defined type name, resolved against the current schema path"}}}]}}}}}},
+                    "value": {"literal": {"string": "A user-defined type name, resolved against the current schema path"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.Precision",
@@ -1333,7 +1428,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The precision of a numeric type, as an unsigned integer"}}}]}}}}}},
+                    "value": {"literal": {"string": "The precision of a numeric type, as an unsigned integer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.PredefinedType",
@@ -1354,7 +1450,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A predefined data type: string, numeric, boolean, datetime, or interval"}}}]}}}}}},
+                    "value": {"literal": {"string": "A predefined data type: string, numeric, boolean, datetime, or interval"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.PredefinedTypeNationalString",
@@ -1370,7 +1467,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A national character string type together with an optional COLLATE clause"}}}]}}}}}},
+                    "value": {"literal": {"string": "A national character string type together with an optional COLLATE clause"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.PredefinedTypeString",
@@ -1387,7 +1485,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A character string type together with an optional character set and COLLATE clause"}}}]}}}}}},
+                    "value": {"literal": {"string": "A character string type together with an optional character set and COLLATE clause"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.Predicate",
@@ -1400,7 +1499,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A predicate, evaluating to a boolean truth value"}}}]}}}}}},
+                    "value": {"literal": {"string": "A predicate, evaluating to a boolean truth value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.QueryExpression",
@@ -1413,7 +1513,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A query expression, such as a SELECT statement possibly combined with set operators"}}}]}}}}}},
+                    "value": {"literal": {"string": "A query expression, such as a SELECT statement possibly combined with set operators"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ReferenceResolution",
@@ -1426,7 +1527,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The DEREF operator, resolving a reference to the value it targets"}}}]}}}}}},
+                    "value": {"literal": {"string": "The DEREF operator, resolving a reference to the value it targets"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ReferenceScopeCheck",
@@ -1439,7 +1541,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A REFERENCES ARE [NOT] CHECKED clause on a reference-typed column"}}}]}}}}}},
+                    "value": {"literal": {"string": "A REFERENCES ARE [NOT] CHECKED clause on a reference-typed column"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ReferenceType",
@@ -1452,7 +1555,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A REF reference type over a given referenced type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A REF reference type over a given referenced type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ReferenceValueExpression",
@@ -1465,7 +1569,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression that evaluates to a reference value"}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression that evaluates to a reference value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.RightBracketOrTrigraph",
@@ -1478,7 +1583,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A right square bracket, or its trigraph equivalent ??)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A right square bracket, or its trigraph equivalent ??)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.RoutineInvocation",
@@ -1488,7 +1594,8 @@
             "annotated": {
               "body": {"wrap": "unit"},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An invocation of a user-defined SQL routine"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An invocation of a user-defined SQL routine"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.RowType",
@@ -1501,7 +1608,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A ROW type, defined by a list of field name and data type pairs"}}}]}}}}}},
+                    "value": {"literal": {"string": "A ROW type, defined by a list of field name and data type pairs"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.RowValueExpression",
@@ -1511,7 +1619,8 @@
             "annotated": {
               "body": {"wrap": "unit"},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An expression that evaluates to a row value"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An expression that evaluates to a row value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.RowValueSpecialCase",
@@ -1524,7 +1633,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A row value expressed as a single nonparenthesized value expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A row value expressed as a single nonparenthesized value expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ScalarSubquery",
@@ -1537,7 +1647,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A subquery that returns exactly one row and one column"}}}]}}}}}},
+                    "value": {"literal": {"string": "A subquery that returns exactly one row and one column"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.Scale",
@@ -1550,7 +1661,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The scale of a numeric type, as an unsigned integer"}}}]}}}}}},
+                    "value": {"literal": {"string": "The scale of a numeric type, as an unsigned integer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.SelfReferencingColumnSpecification",
@@ -1563,7 +1675,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A REF IS clause identifying a table's self-referencing column"}}}]}}}}}},
+                    "value": {"literal": {"string": "A REF IS clause identifying a table's self-referencing column"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.SetFunctionSpecification",
@@ -1576,7 +1689,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A set (aggregate) function invocation, such as COUNT or SUM"}}}]}}}}}},
+                    "value": {"literal": {"string": "A set (aggregate) function invocation, such as COUNT or SUM"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.StaticMethodInvocation",
@@ -1589,7 +1703,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An invocation of a static method on a user-defined type"}}}]}}}}}},
+                    "value": {"literal": {"string": "An invocation of a static method on a user-defined type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.StringValueExpression",
@@ -1602,7 +1717,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression that evaluates to a character, binary, or Unicode string value"}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression that evaluates to a character, binary, or Unicode string value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.Subquery",
@@ -1615,7 +1731,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A parenthesized query expression used as an operand"}}}]}}}}}},
+                    "value": {"literal": {"string": "A parenthesized query expression used as an operand"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.SubtableClause",
@@ -1628,7 +1745,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An UNDER clause declaring a table as a subtable of a supertable"}}}]}}}}}},
+                    "value": {"literal": {"string": "An UNDER clause declaring a table as a subtable of a supertable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.SubtypeTreatment",
@@ -1641,7 +1759,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A TREAT AS expression, treating a value as an instance of a subtype"}}}]}}}}}},
+                    "value": {"literal": {"string": "A TREAT AS expression, treating a value as an instance of a subtype"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableCommitAction",
@@ -1654,7 +1773,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The ON COMMIT action of a temporary table: PRESERVE ROWS or DELETE ROWS"}}}]}}}}}},
+                    "value": {"literal": {"string": "The ON COMMIT action of a temporary table: PRESERVE ROWS or DELETE ROWS"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableConstraintDefinition",
@@ -1663,7 +1783,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": "unit"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A table-level constraint definition"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A table-level constraint definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableContentsSource",
@@ -1680,7 +1801,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The source of a table's contents: an element list, a supertable, or a query"}}}]}}}}}},
+                    "value": {"literal": {"string": "The source of a table's contents: an element list, a supertable, or a query"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableContentsSourceSubtable",
@@ -1697,7 +1819,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A table's contents defined as a subtable of a named user-defined type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A table's contents defined as a subtable of a named user-defined type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableDefinition",
@@ -1711,7 +1834,8 @@
                   {"name": "name", "type": {"variable": "hydra.sql.syntax.TableName"}},
                   {"name": "source", "type": {"variable": "hydra.sql.syntax.TableContentsSource"}},
                   {"name": "commitActions", "type": {"optional": {"variable": "hydra.sql.syntax.TableCommitAction"}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An ANSI SQL CREATE TABLE statement"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An ANSI SQL CREATE TABLE statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableElement",
@@ -1730,7 +1854,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An element of a table definition: a column, constraint, LIKE clause, or related option"}}}]}}}}}},
+                    "value": {"literal": {"string": "An element of a table definition: a column, constraint, LIKE clause, or related option"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableElementList",
@@ -1746,7 +1871,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty, comma-separated list of table elements"}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty, comma-separated list of table elements"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableName",
@@ -1755,7 +1881,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a table"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a table"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TableScope",
@@ -1768,7 +1895,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The GLOBAL or LOCAL TEMPORARY scope of a table definition"}}}]}}}}}},
+                    "value": {"literal": {"string": "The GLOBAL or LOCAL TEMPORARY scope of a table definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TimeLiteral",
@@ -1777,7 +1905,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"variable": "hydra.sql.syntax.TimeString"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A TIME literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A TIME literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TimeString",
@@ -1790,7 +1919,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The string representation of a time literal, e.g. '12:00:00'"}}}]}}}}}},
+                    "value": {"literal": {"string": "The string representation of a time literal, e.g. '12:00:00'"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TimestampLiteral",
@@ -1803,7 +1933,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A timestamp literal, combining a date and a time"}}}]}}}}}},
+                    "value": {"literal": {"string": "A timestamp literal, combining a date and a time"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.TruthValue",
@@ -1816,7 +1947,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A three-valued logic truth value: TRUE, FALSE, or UNKNOWN"}}}]}}}}}},
+                    "value": {"literal": {"string": "A three-valued logic truth value: TRUE, FALSE, or UNKNOWN"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.UnicodeCharacterStringLiteral",
@@ -1829,7 +1961,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Unicode character string literal, e.g. U&'hello'"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Unicode character string literal, e.g. U&'hello'"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.UnsignedInteger",
@@ -1838,7 +1971,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An unsigned integer literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An unsigned integer literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.UnsignedLiteral",
@@ -1854,7 +1988,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An unsigned literal: a numeric or general literal"}}}]}}}}}},
+                    "value": {"literal": {"string": "An unsigned literal: a numeric or general literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.UnsignedNumericLiteral",
@@ -1870,7 +2005,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An unsigned numeric literal: exact or approximate"}}}]}}}}}},
+                    "value": {"literal": {"string": "An unsigned numeric literal: exact or approximate"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.UnsignedValueSpecification",
@@ -1886,7 +2022,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An unsigned value specification: a literal or a general value specification"}}}]}}}}}},
+                    "value": {"literal": {"string": "An unsigned value specification: a literal or a general value specification"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.UserDefinedTypeValueExpression",
@@ -1899,7 +2036,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression that evaluates to a value of a user-defined type"}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression that evaluates to a value of a user-defined type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ValueExpression",
@@ -1916,7 +2054,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A value expression: common, boolean, or row-valued"}}}]}}}}}},
+                    "value": {"literal": {"string": "A value expression: common, boolean, or row-valued"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.ValueExpressionPrimary",
@@ -1932,7 +2071,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A value expression primary, optionally parenthesized"}}}]}}}}}},
+                    "value": {"literal": {"string": "A value expression primary, optionally parenthesized"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.sql.syntax.WindowFunction",
@@ -1945,4 +2085,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A window function invocation, such as ROW_NUMBER() OVER (...)"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A window function invocation, such as ROW_NUMBER() OVER (...)"}}}]}}},
+          "constraints": []}}}]}

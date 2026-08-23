@@ -134,7 +134,7 @@
                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Name"}}},
                                                     "type": {"variable": "t0"}}},
                                                 "argument": {"variable": "rp"}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -147,7 +147,7 @@
                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Name"}}},
                                                         "type": {"variable": "t0"}}},
                                                     "argument": {"variable": "rp"}}},
-                                                "typeScheme": {"variables": [], "body": {"variable": "t0"}}}],
+                                                "typeScheme": {"variables": [], "body": {"variable": "t0"}, "constraints": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -160,7 +160,7 @@
                                                             "body": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "errors"}},
                                                             "type": {"variable": "t0"}}},
                                                         "argument": {"variable": "acc"}}},
-                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}}}],
+                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}, "constraints": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -173,7 +173,7 @@
                                                                 "body": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "warnings"}},
                                                                 "type": {"variable": "t0"}}},
                                                             "argument": {"variable": "acc"}}},
-                                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}}}],
+                                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}, "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {
@@ -375,7 +375,7 @@
                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Name"}}},
                                                     "type": {"variable": "t0"}}},
                                                 "argument": {"variable": "rp"}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -388,7 +388,7 @@
                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Name"}}},
                                                         "type": {"variable": "t0"}}},
                                                     "argument": {"variable": "rp"}}},
-                                                "typeScheme": {"variables": [], "body": {"variable": "t0"}}}],
+                                                "typeScheme": {"variables": [], "body": {"variable": "t0"}, "constraints": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -401,7 +401,7 @@
                                                             "body": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "errors"}},
                                                             "type": {"variable": "t0"}}},
                                                         "argument": {"variable": "acc"}}},
-                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}}}],
+                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}, "constraints": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -414,7 +414,7 @@
                                                                 "body": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "warnings"}},
                                                                 "type": {"variable": "t0"}}},
                                                             "argument": {"variable": "acc"}}},
-                                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}}}],
+                                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}, "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {
@@ -725,7 +725,8 @@
                                 "argument": {"variable": "nodes"}}}}},
                         "typeScheme": {
                           "variables": [],
-                          "body": {"map": {"keys": {"literal": "string"}, "values": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}}],
+                          "body": {"map": {"keys": {"literal": "string"}, "values": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
+                          "constraints": []}}],
                     "body": {
                       "lambda": {
                         "parameter": "eid",
@@ -1193,7 +1194,8 @@
                                         "optional": {
                                           "function": {
                                             "domain": {"variable": "hydra.neo4j.model.ElementId"},
-                                            "codomain": {"optional": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}}}},
+                                            "codomain": {"optional": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}},
+                                      "constraints": []}},
                                   {
                                     "name": "nodeFindings",
                                     "term": {
@@ -1249,7 +1251,7 @@
                                                             "function": {"application": {"function": {"variable": "hydra.validate.neo4j.validateNode"}, "argument": {"variable": "p"}}},
                                                             "argument": {"variable": "gt"}}},
                                                         "argument": {"variable": "n"}}}}}}}}}}},
-                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.error.neo4j.InvalidGraphError"}}}},
+                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.error.neo4j.InvalidGraphError"}}, "constraints": []}},
                                   {
                                     "name": "relFindings",
                                     "term": {
@@ -1311,7 +1313,7 @@
                                                                 "argument": {"variable": "resolver"}}},
                                                             "argument": {"variable": "gt"}}},
                                                         "argument": {"variable": "r"}}}}}}}}}}},
-                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.error.neo4j.InvalidGraphError"}}}}],
+                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.error.neo4j.InvalidGraphError"}}, "constraints": []}}],
                                 "body": {
                                   "let": {
                                     "bindings": [
@@ -1335,7 +1337,7 @@
                                                       "typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.error.neo4j.InvalidGraphError"}}},
                                                     "argument": {"variable": "nodeFindings"}}},
                                                 "argument": {"variable": "relFindings"}}}}},
-                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.error.neo4j.InvalidGraphError"}}}}],
+                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.error.neo4j.InvalidGraphError"}}, "constraints": []}}],
                                     "body": {
                                       "typeApplication": {
                                         "body": {
@@ -1389,7 +1391,7 @@
                                 "name": "nodeLabels",
                                 "term": {
                                   "application": {"function": {"project": {"typeName": "hydra.neo4j.model.Node", "fieldName": "labels"}}, "argument": {"variable": "el"}}},
-                                "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
+                                "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}, "constraints": []}},
                               {
                                 "name": "props",
                                 "term": {
@@ -1398,7 +1400,8 @@
                                     "argument": {"variable": "el"}}},
                                 "typeScheme": {
                                   "variables": [],
-                                  "body": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}}}},
+                                  "body": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}},
+                                  "constraints": []}},
                               {
                                 "name": "matches",
                                 "term": {
@@ -1426,7 +1429,7 @@
                                       "application": {
                                         "function": {"project": {"typeName": "hydra.neo4j.model.GraphType", "fieldName": "nodes"}},
                                         "argument": {"variable": "gt"}}}}},
-                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.neo4j.model.NodeElementType"}}}},
+                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.neo4j.model.NodeElementType"}}, "constraints": []}},
                               {
                                 "name": "noMatchCheck",
                                 "term": {
@@ -1482,7 +1485,7 @@
                                                         "argument": {
                                                           "application": {
                                                             "function": {
-                                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.neo4j.model.NodeElementType"}}},
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.neo4j.model.NodeElementType"}}},
                                                             "argument": {"variable": "matches"}}}}},
                                                     "argument": {
                                                       "optional": {
@@ -1509,7 +1512,8 @@
                                 "typeScheme": {
                                   "variables": [],
                                   "body": {
-                                    "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.neo4j.InvalidNodeError"}}}}}},
+                                    "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.neo4j.InvalidNodeError"}}}},
+                                  "constraints": []}},
                               {
                                 "name": "matchChecks",
                                 "term": {
@@ -1998,7 +2002,8 @@
                                   "variables": [],
                                   "body": {
                                     "list": {
-                                      "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.neo4j.InvalidNodeError"}}}}}}}],
+                                      "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.neo4j.InvalidNodeError"}}}}},
+                                  "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {
@@ -2159,7 +2164,7 @@
                                       "application": {
                                         "function": {"project": {"typeName": "hydra.neo4j.model.Relationship", "fieldName": "type"}},
                                         "argument": {"variable": "rel"}}},
-                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.neo4j.model.RelationshipType"}}},
+                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.neo4j.model.RelationshipType"}, "constraints": []}},
                                   {
                                     "name": "props",
                                     "term": {
@@ -2168,7 +2173,8 @@
                                         "argument": {"variable": "rel"}}},
                                     "typeScheme": {
                                       "variables": [],
-                                      "body": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}}}},
+                                      "body": {"map": {"keys": {"variable": "hydra.neo4j.model.Key"}, "values": {"variable": "hydra.neo4j.model.Value"}}},
+                                      "constraints": []}},
                                   {
                                     "name": "startLabels",
                                     "term": {
@@ -2203,7 +2209,7 @@
                                                   "application": {
                                                     "function": {"project": {"typeName": "hydra.neo4j.model.Relationship", "fieldName": "start"}},
                                                     "argument": {"variable": "rel"}}}}}}}}},
-                                    "typeScheme": {"variables": [], "body": {"optional": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
+                                    "typeScheme": {"variables": [], "body": {"optional": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}, "constraints": []}},
                                   {
                                     "name": "endLabels",
                                     "term": {
@@ -2238,7 +2244,7 @@
                                                   "application": {
                                                     "function": {"project": {"typeName": "hydra.neo4j.model.Relationship", "fieldName": "end"}},
                                                     "argument": {"variable": "rel"}}}}}}}}},
-                                    "typeScheme": {"variables": [], "body": {"optional": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
+                                    "typeScheme": {"variables": [], "body": {"optional": {"set": {"variable": "hydra.neo4j.model.NodeLabel"}}}, "constraints": []}},
                                   {
                                     "name": "candidates",
                                     "term": {
@@ -2268,7 +2274,7 @@
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.neo4j.model.GraphType", "fieldName": "relationships"}},
                                             "argument": {"variable": "gt"}}}}},
-                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.neo4j.model.RelationshipElementType"}}}},
+                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.neo4j.model.RelationshipElementType"}}, "constraints": []}},
                                   {
                                     "name": "matched",
                                     "term": {
@@ -2343,7 +2349,7 @@
                                                                         "argument": {"variable": "ret"}}}}},
                                                                 "argument": {"variable": "ls"}}}}}}}}}}}}},
                                         "argument": {"variable": "candidates"}}},
-                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.neo4j.model.RelationshipElementType"}}}},
+                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.neo4j.model.RelationshipElementType"}}, "constraints": []}},
                                   {
                                     "name": "noSuchTypeCheck",
                                     "term": {
@@ -2405,7 +2411,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "function": {
-                                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.neo4j.model.RelationshipElementType"}}},
+                                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.neo4j.model.RelationshipElementType"}}},
                                                                 "argument": {"variable": "candidates"}}}}},
                                                         "argument": {
                                                           "optional": {
@@ -2427,7 +2433,8 @@
                                       "variables": [],
                                       "body": {
                                         "optional": {
-                                          "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.neo4j.InvalidRelationshipError"}}}}}},
+                                          "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.neo4j.InvalidRelationshipError"}}}},
+                                      "constraints": []}},
                                   {
                                     "name": "noPatternCheck",
                                     "term": {
@@ -2497,7 +2504,7 @@
                                                                         "argument": {
                                                                           "application": {
                                                                             "function": {
-                                                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.neo4j.model.RelationshipElementType"}}},
+                                                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.neo4j.model.RelationshipElementType"}}},
                                                                             "argument": {"variable": "candidates"}}}}}}},
                                                                 "argument": {
                                                                   "application": {
@@ -2522,7 +2529,7 @@
                                                                     "argument": {
                                                                       "application": {
                                                                         "function": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.neo4j.model.RelationshipElementType"}}},
+                                                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.neo4j.model.RelationshipElementType"}}},
                                                                         "argument": {"variable": "matched"}}}}}}}}},
                                                         "argument": {
                                                           "optional": {
@@ -2624,7 +2631,8 @@
                                       "variables": [],
                                       "body": {
                                         "optional": {
-                                          "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.neo4j.InvalidRelationshipError"}}}}}},
+                                          "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.neo4j.InvalidRelationshipError"}}}},
+                                      "constraints": []}},
                                   {
                                     "name": "propChecks",
                                     "term": {
@@ -3034,7 +3042,8 @@
                                       "body": {
                                         "list": {
                                           "optional": {
-                                            "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.neo4j.InvalidRelationshipError"}}}}}}}],
+                                            "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.neo4j.InvalidRelationshipError"}}}}},
+                                      "constraints": []}}],
                                 "body": {
                                   "application": {
                                     "function": {

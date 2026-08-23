@@ -93,7 +93,7 @@
                                         "function": {
                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.AdjacentEdge", "fieldName": "label"}}, "type": {"variable": "t0"}}},
                                         "argument": {"variable": "edge"}}},
-                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.EdgeLabel"}}}],
+                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.EdgeLabel"}, "constraints": []}}],
                                 "body": {
                                   "let": {
                                     "bindings": [
@@ -104,7 +104,7 @@
                                             "function": {
                                               "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.AdjacentEdge", "fieldName": "id"}}, "type": {"variable": "t0"}}},
                                             "argument": {"variable": "edge"}}},
-                                        "typeScheme": {"variables": [], "body": {"variable": "t0"}}}],
+                                        "typeScheme": {"variables": [], "body": {"variable": "t0"}, "constraints": []}}],
                                     "body": {
                                       "let": {
                                         "bindings": [
@@ -115,7 +115,7 @@
                                                 "function": {
                                                   "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.AdjacentEdge", "fieldName": "vertex"}}, "type": {"variable": "t0"}}},
                                                 "argument": {"variable": "edge"}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "t0"}}}],
+                                            "typeScheme": {"variables": [], "body": {"variable": "t0"}, "constraints": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -128,7 +128,10 @@
                                                         "body": {"project": {"typeName": "hydra.pg.model.AdjacentEdge", "fieldName": "properties"}},
                                                         "type": {"variable": "t0"}}},
                                                     "argument": {"variable": "edge"}}},
-                                                "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}}}],
+                                                "typeScheme": {
+                                                  "variables": [],
+                                                  "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}},
+                                                  "constraints": []}}],
                                             "body": {
                                               "application": {
                                                 "function": {
@@ -328,7 +331,7 @@
                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "t0"}}},
                                                             "type": {"variable": "t1"}}},
                                                         "argument": {"variable": "p"}}},
-                                                    "typeScheme": {"variables": [], "body": {"variable": "t0"}}}],
+                                                    "typeScheme": {"variables": [], "body": {"variable": "t0"}, "constraints": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -341,7 +344,7 @@
                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "t0"}}},
                                                                 "type": {"variable": "t1"}}},
                                                             "argument": {"variable": "p"}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "t1"}}}],
+                                                        "typeScheme": {"variables": [], "body": {"variable": "t1"}, "constraints": []}}],
                                                     "body": {
                                                       "let": {
                                                         "bindings": [
@@ -357,7 +360,7 @@
                                                                         "type": {"list": {"variable": "t1"}}}},
                                                                     "argument": {"variable": "k"}}},
                                                                 "argument": {"variable": "m"}}},
-                                                            "typeScheme": {"variables": [], "body": {"optional": {"list": {"variable": "t1"}}}}}],
+                                                            "typeScheme": {"variables": [], "body": {"optional": {"list": {"variable": "t1"}}}, "constraints": []}}],
                                                         "body": {
                                                           "application": {
                                                             "function": {
@@ -382,7 +385,7 @@
                                                                             "argument": {"variable": "existing"}}},
                                                                         "argument": {
                                                                           "application": {
-                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.pure"}, "type": {"variable": "t1"}}},
+                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.singleton"}, "type": {"variable": "t1"}}},
                                                                             "argument": {"variable": "v"}}}}},
                                                                     "argument": {
                                                                       "lambda": {
@@ -623,7 +626,8 @@
                                         "argument": {"variable": "vae"}}},
                                     "typeScheme": {
                                       "variables": [],
-                                      "body": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}}}}],
+                                      "body": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "t0"}}},
+                                      "constraints": []}}],
                                 "body": {
                                   "let": {
                                     "bindings": [
@@ -638,7 +642,8 @@
                                             "argument": {"variable": "vae"}}},
                                         "typeScheme": {
                                           "variables": [],
-                                          "body": {"list": {"application": {"function": {"variable": "hydra.pg.model.AdjacentEdge"}, "argument": {"variable": "t0"}}}}}}],
+                                          "body": {"list": {"application": {"function": {"variable": "hydra.pg.model.AdjacentEdge"}, "argument": {"variable": "t0"}}}},
+                                          "constraints": []}}],
                                     "body": {
                                       "let": {
                                         "bindings": [
@@ -653,7 +658,8 @@
                                                 "argument": {"variable": "vae"}}},
                                             "typeScheme": {
                                               "variables": [],
-                                              "body": {"list": {"application": {"function": {"variable": "hydra.pg.model.AdjacentEdge"}, "argument": {"variable": "t0"}}}}}}],
+                                              "body": {"list": {"application": {"function": {"variable": "hydra.pg.model.AdjacentEdge"}, "argument": {"variable": "t0"}}}},
+                                              "constraints": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -664,7 +670,7 @@
                                                     "function": {
                                                       "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "label"}}, "type": {"variable": "t0"}}},
                                                     "argument": {"variable": "vertex"}}},
-                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.VertexLabel"}}}],
+                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.VertexLabel"}, "constraints": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -675,7 +681,7 @@
                                                         "function": {
                                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "id"}}, "type": {"variable": "t0"}}},
                                                         "argument": {"variable": "vertex"}}},
-                                                    "typeScheme": {"variables": [], "body": {"variable": "t0"}}}],
+                                                    "typeScheme": {"variables": [], "body": {"variable": "t0"}, "constraints": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -686,7 +692,10 @@
                                                             "function": {
                                                               "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "properties"}}, "type": {"variable": "t0"}}},
                                                             "argument": {"variable": "vertex"}}},
-                                                        "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}}}],
+                                                        "typeScheme": {
+                                                          "variables": [],
+                                                          "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}},
+                                                          "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {

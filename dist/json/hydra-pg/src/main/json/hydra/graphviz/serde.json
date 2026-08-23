@@ -115,14 +115,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.graphviz.dot.AttrStmt", "fieldName": "type"}},
                             "argument": {"variable": "as"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.AttrType"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.AttrType"}, "constraints": []}},
                       {
                         "name": "attr",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.graphviz.dot.AttrStmt", "fieldName": "attributes"}},
                             "argument": {"variable": "as"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.AttrList"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.AttrList"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -298,21 +298,21 @@
                               "application": {
                                 "function": {"project": {"typeName": "hydra.graphviz.dot.EdgeStmt", "fieldName": "left"}},
                                 "argument": {"variable": "es"}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}}},
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}, "constraints": []}},
                           {
                             "name": "r",
                             "term": {
                               "application": {
                                 "function": {"project": {"typeName": "hydra.graphviz.dot.EdgeStmt", "fieldName": "right"}},
                                 "argument": {"variable": "es"}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.graphviz.dot.NodeOrSubgraph"}}, "constraints": []}},
                           {
                             "name": "attr",
                             "term": {
                               "application": {
                                 "function": {"project": {"typeName": "hydra.graphviz.dot.EdgeStmt", "fieldName": "attributes"}},
                                 "argument": {"variable": "es"}}},
-                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.AttrList"}}}},
+                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.AttrList"}}, "constraints": []}},
                           {
                             "name": "arrow",
                             "term": {
@@ -325,7 +325,7 @@
                                         "argument": {"variable": "directed"}}},
                                     "argument": {"literal": {"string": "->"}}}},
                                 "argument": {"literal": {"string": "--"}}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                           {
                             "name": "rhsParts",
                             "term": {
@@ -353,7 +353,7 @@
                                                       "application": {"function": {"variable": "hydra.graphviz.serde.nodeOrSubgraphToExpr"}, "argument": {"variable": "directed"}}},
                                                     "argument": {"variable": "n"}}}]}}}}},
                                     "argument": {"variable": "r"}}}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}},
                           {
                             "name": "attrParts",
                             "term": {
@@ -375,7 +375,7 @@
                                     "domain": {"variable": "hydra.graphviz.dot.AttrList"},
                                     "body": {
                                       "list": [{"application": {"function": {"variable": "hydra.graphviz.serde.attrListToExpr"}, "argument": {"variable": "a"}}}]}}}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}}],
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {"variable": "hydra.serialization.spaceSep"},
@@ -417,14 +417,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.graphviz.dot.EqualityPair", "fieldName": "left"}},
                             "argument": {"variable": "eq"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.Id"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.Id"}, "constraints": []}},
                       {
                         "name": "r",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.graphviz.dot.EqualityPair", "fieldName": "right"}},
                             "argument": {"variable": "eq"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.Id"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.Id"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -457,21 +457,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.graphviz.dot.Graph", "fieldName": "strict"}},
                             "argument": {"variable": "g"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "directed",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.graphviz.dot.Graph", "fieldName": "directed"}},
                             "argument": {"variable": "g"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "stmts",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.graphviz.dot.Graph", "fieldName": "statements"}},
                             "argument": {"variable": "g"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}, "constraints": []}},
                       {
                         "name": "graphKeyword",
                         "term": {
@@ -484,7 +484,7 @@
                                     "argument": {"variable": "directed"}}},
                                 "argument": {"literal": {"string": "digraph"}}}},
                             "argument": {"literal": {"string": "graph"}}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "graphExpr",
                         "term": {
@@ -503,7 +503,7 @@
                                         {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "strict"}}}},
                                         {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"variable": "graphKeyword"}}}]}}}}},
                             "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"variable": "graphKeyword"}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
@@ -529,7 +529,7 @@
                                             "type": {"variable": "hydra.ast.Expr"}}},
                                         "argument": {"application": {"function": {"variable": "hydra.graphviz.serde.stmtToExpr"}, "argument": {"variable": "directed"}}}}},
                                     "argument": {"variable": "stmts"}}}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -581,14 +581,14 @@
                         "name": "i",
                         "term": {
                           "application": {"function": {"project": {"typeName": "hydra.graphviz.dot.NodeId", "fieldName": "id"}}, "argument": {"variable": "nid"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.Id"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.Id"}, "constraints": []}},
                       {
                         "name": "mp",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.graphviz.dot.NodeId", "fieldName": "port"}},
                             "argument": {"variable": "nid"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.Port"}}}}],
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.Port"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.noSep"},
@@ -599,7 +599,7 @@
                               "list": [
                                 {
                                   "application": {
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                     "argument": {"application": {"function": {"variable": "hydra.graphviz.serde.idToExpr"}, "argument": {"variable": "i"}}}}},
                                 {
                                   "application": {
@@ -680,14 +680,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.graphviz.dot.NodeStmt", "fieldName": "id"}},
                             "argument": {"variable": "ns"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.NodeId"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.graphviz.dot.NodeId"}, "constraints": []}},
                       {
                         "name": "attr",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.graphviz.dot.NodeStmt", "fieldName": "attributes"}},
                             "argument": {"variable": "ns"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.AttrList"}}}}],
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.AttrList"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -698,7 +698,7 @@
                               "list": [
                                 {
                                   "application": {
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                     "argument": {"application": {"function": {"variable": "hydra.graphviz.serde.nodeIdToExpr"}, "argument": {"variable": "i"}}}}},
                                 {
                                   "application": {
@@ -733,14 +733,14 @@
                         "name": "mi",
                         "term": {
                           "application": {"function": {"project": {"typeName": "hydra.graphviz.dot.Port", "fieldName": "id"}}, "argument": {"variable": "p"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.Id"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.Id"}}, "constraints": []}},
                       {
                         "name": "mp",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.graphviz.dot.Port", "fieldName": "position"}},
                             "argument": {"variable": "p"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.CompassPt"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.CompassPt"}}, "constraints": []}},
                       {
                         "name": "pre",
                         "term": {
@@ -763,7 +763,7 @@
                                   "list": [
                                     {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": ":"}}}},
                                     {"application": {"function": {"variable": "hydra.graphviz.serde.idToExpr"}, "argument": {"variable": "i"}}}]}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}},
                       {
                         "name": "suf",
                         "term": {
@@ -787,7 +787,7 @@
                                   "list": [
                                     {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": ":"}}}},
                                     {"application": {"function": {"variable": "hydra.graphviz.serde.compassPtToExpr"}, "argument": {"variable": "cp"}}}]}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.ast.Expr"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.noSep"},
@@ -888,7 +888,7 @@
                           "list": [
                             {
                               "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                 "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "subgraph"}}}}}},
                             {
                               "application": {
@@ -931,14 +931,14 @@
                               "application": {
                                 "function": {"project": {"typeName": "hydra.graphviz.dot.Subgraph", "fieldName": "subgraphId"}},
                                 "argument": {"variable": "sg"}}},
-                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.SubgraphId"}}}},
+                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.graphviz.dot.SubgraphId"}}, "constraints": []}},
                           {
                             "name": "stmts",
                             "term": {
                               "application": {
                                 "function": {"project": {"typeName": "hydra.graphviz.dot.Subgraph", "fieldName": "statements"}},
                                 "argument": {"variable": "sg"}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.graphviz.dot.Stmt"}}, "constraints": []}},
                           {
                             "name": "body",
                             "term": {
@@ -961,7 +961,7 @@
                                                 "type": {"variable": "hydra.ast.Expr"}}},
                                             "argument": {"application": {"function": {"variable": "hydra.graphviz.serde.stmtToExpr"}, "argument": {"variable": "directed"}}}}},
                                         "argument": {"variable": "stmts"}}}}}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {"variable": "hydra.serialization.spaceSep"},
@@ -983,6 +983,6 @@
                                         "argument": {"variable": "mid"}}},
                                     {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                         "argument": {"variable": "body"}}}]}}}}}}}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a subgraph to an expression"}}}]}}}}}]}

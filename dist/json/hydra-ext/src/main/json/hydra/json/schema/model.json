@@ -22,7 +22,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "Whether additional array items beyond those explicitly typed are permitted, and if so, their schema"}}}]}}}}}},
+                      "literal": {"string": "Whether additional array items beyond those explicitly typed are permitted, and if so, their schema"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.ArrayRestriction",
@@ -42,7 +43,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A restriction on array-typed values: items, additionalItems, minItems, maxItems, or uniqueItems"}}}]}}}}}},
+                      "literal": {"string": "A restriction on array-typed values: items, additionalItems, minItems, maxItems, or uniqueItems"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.Document",
@@ -63,7 +65,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A JSON Schema document: an optional id, optional local definitions, and a root schema"}}}]}}}}}},
+                    "value": {"literal": {"string": "A JSON Schema document: an optional id, optional local definitions, and a root schema"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.Items",
@@ -85,7 +88,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The schema(s) for array items: either a single schema shared by all items, or one schema per item"}}}]}}}}}},
+                      "literal": {"string": "The schema(s) for array items: either a single schema shared by all items, or one schema per item"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.Keyword",
@@ -98,7 +102,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A property name used as a key in a JSON Schema keyword-to-schema map"}}}]}}}}}},
+                    "value": {"literal": {"string": "A property name used as a key in a JSON Schema keyword-to-schema map"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.Limit",
@@ -112,7 +117,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A numeric bound with a flag indicating whether the bound itself is excluded"}}}]}}}}}},
+                    "value": {"literal": {"string": "A numeric bound with a flag indicating whether the bound itself is excluded"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.MultipleRestriction",
@@ -151,7 +157,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A restriction combining multiple schemas: allOf, anyOf, oneOf, not, or enum"}}}]}}}}}},
+                    "value": {"literal": {"string": "A restriction combining multiple schemas: allOf, anyOf, oneOf, not, or enum"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.NumericRestriction",
@@ -168,7 +175,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A restriction on numeric-typed values: a minimum, a maximum, or a multipleOf constraint"}}}]}}}}}},
+                    "value": {"literal": {"string": "A restriction on numeric-typed values: a minimum, a maximum, or a multipleOf constraint"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.ObjectRestriction",
@@ -208,7 +216,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A restriction on object-typed values: properties, additionalProperties, required, and related keywords"}}}]}}}}}},
+                      "literal": {"string": "A restriction on object-typed values: properties, additionalProperties, required, and related keywords"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.RegularExpression",
@@ -221,7 +230,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A regular expression pattern, as used by the pattern and patternProperties keywords"}}}]}}}}}},
+                    "value": {"literal": {"string": "A regular expression pattern, as used by the pattern and patternProperties keywords"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.Restriction",
@@ -244,7 +254,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single JSON Schema restriction: a type, value restriction, reference, title, or description"}}}]}}}}}},
+                    "value": {"literal": {"string": "A single JSON Schema restriction: a type, value restriction, reference, title, or description"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.Schema",
@@ -261,7 +272,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A JSON schema: a non-empty list of restrictions that a conforming value must satisfy"}}}]}}}}}},
+                    "value": {"literal": {"string": "A JSON schema: a non-empty list of restrictions that a conforming value must satisfy"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.SchemaOrArray",
@@ -277,7 +289,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A dependency value: either a schema, or a list of required keyword names"}}}]}}}}}},
+                    "value": {"literal": {"string": "A dependency value: either a schema, or a list of required keyword names"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.SchemaReference",
@@ -287,7 +300,8 @@
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to another schema by URI"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to another schema by URI"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.StringRestriction",
@@ -304,7 +318,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A restriction on string-typed values: minLength, maxLength, or pattern"}}}]}}}}}},
+                    "value": {"literal": {"string": "A restriction on string-typed values: minLength, maxLength, or pattern"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.Type",
@@ -325,7 +340,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A type restriction: a single type name, or a list of alternative type names"}}}]}}}}}},
+                    "value": {"literal": {"string": "A type restriction: a single type name, or a list of alternative type names"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.json.schema.model.TypeName",
@@ -343,4 +359,5 @@
                   {"name": "array", "type": "unit"},
                   {"name": "object", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a JSON Schema primitive type"}}}]}}}}}}]}
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a JSON Schema primitive type"}}}]}}},
+          "constraints": []}}}]}

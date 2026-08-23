@@ -4199,54 +4199,32 @@
                                             "application": {
                                               "function": {
                                                 "lambda": {
-                                                  "parameter": "opt",
-                                                  "domain": {
-                                                    "optional": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}},
+                                                  "parameter": "m",
+                                                  "domain": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
                                                       "field": {
-                                                        "name": "optional",
+                                                        "name": "map",
                                                         "term": {
                                                           "application": {
                                                             "function": {
                                                               "application": {
                                                                 "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {
+                                                                  "application": {
+                                                                    "function": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.lib.optionals.map"},
-                                                                        "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}},
-                                                                    "type": {"variable": "hydra.core.Term"}}},
-                                                                "argument": {
-                                                                  "lambda": {
-                                                                    "parameter": "m",
-                                                                    "domain": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}},
-                                                                    "body": {
-                                                                      "inject": {
-                                                                        "typeName": "hydra.core.Term",
-                                                                        "field": {
-                                                                          "name": "map",
-                                                                          "term": {
-                                                                            "application": {
-                                                                              "function": {
-                                                                                "application": {
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "function": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {
-                                                                                            "typeApplication": {
-                                                                                              "body": {
-                                                                                                "typeApplication": {
-                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.bimap"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                  "type": {"variable": "hydra.core.Term"}}},
-                                                                                              "type": {"variable": "hydra.core.TypeVariableConstraints"}}},
-                                                                                          "type": {"variable": "hydra.core.Term"}}},
-                                                                                      "argument": {"variable": "hydra.encode.core.name"}}},
-                                                                                  "argument": {"variable": "hydra.encode.core.typeVariableConstraints"}}},
-                                                                              "argument": {"variable": "m"}}}}}}}}}},
-                                                            "argument": {"variable": "opt"}}}}}}}},
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.bimap"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                "type": {"variable": "hydra.core.Term"}}},
+                                                                            "type": {"variable": "hydra.core.TypeVariableConstraints"}}},
+                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                    "argument": {"variable": "hydra.encode.core.name"}}},
+                                                                "argument": {"variable": "hydra.encode.core.typeVariableConstraints"}}},
+                                                            "argument": {"variable": "m"}}}}}}}},
                                               "argument": {
                                                 "application": {
                                                   "function": {"project": {"typeName": "hydra.core.TypeScheme", "fieldName": "constraints"}},
@@ -4292,13 +4270,13 @@
                                             "application": {
                                               "function": {
                                                 "lambda": {
-                                                  "parameter": "xs",
-                                                  "domain": {"list": {"variable": "hydra.core.TypeClassConstraint"}},
+                                                  "parameter": "s",
+                                                  "domain": {"set": {"variable": "hydra.core.TypeClassConstraint"}},
                                                   "body": {
                                                     "inject": {
                                                       "typeName": "hydra.core.Term",
                                                       "field": {
-                                                        "name": "list",
+                                                        "name": "set",
                                                         "term": {
                                                           "application": {
                                                             "function": {
@@ -4306,10 +4284,10 @@
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}},
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.sets.map"}, "type": {"variable": "hydra.core.TypeClassConstraint"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                 "argument": {"variable": "hydra.encode.core.typeClassConstraint"}}},
-                                                            "argument": {"variable": "xs"}}}}}}}},
+                                                            "argument": {"variable": "s"}}}}}}}},
                                               "argument": {
                                                 "application": {
                                                   "function": {"project": {"typeName": "hydra.core.TypeVariableConstraints", "fieldName": "classes"}},

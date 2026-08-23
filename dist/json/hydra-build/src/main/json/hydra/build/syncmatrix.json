@@ -255,7 +255,7 @@
                           {
                             "name": "expandedHosts",
                             "term": {"application": {"function": {"variable": "hydra.build.langexpansion.expandLangs"}, "argument": {"variable": "hosts"}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -263,7 +263,7 @@
                                 "name": "expandedTargets",
                                 "term": {
                                   "application": {"function": {"variable": "hydra.build.langexpansion.expandLangs"}, "argument": {"variable": "targets"}}},
-                                "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                                "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                             "body": {
                               "let": {
                                 "bindings": [
@@ -273,7 +273,7 @@
                                       "application": {
                                         "function": {"application": {"function": {"variable": "hydra.build.langexpansion.langUnion"}, "argument": {"variable": "hosts"}}},
                                         "argument": {"variable": "targets"}}},
-                                    "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                                    "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                                 "body": {
                                   "application": {
                                     "function": {

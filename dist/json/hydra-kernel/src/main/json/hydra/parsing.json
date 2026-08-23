@@ -29,7 +29,8 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "The remaining input (as codepoints) at the point of failure"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error which occurred while parsing"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error which occurred while parsing"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parsing.ParseResult",
@@ -62,7 +63,8 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "A failed parse, with an error message and the remaining input"}}}]}}}}]}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The result of a parse operation"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The result of a parse operation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parsing.ParseSuccess",
@@ -91,7 +93,8 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "The remaining unparsed input, as codepoints. Represented as a list rather than a string"}}}]}}}}]}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A successful parse result"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A successful parse result"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parsing.Parser",
@@ -113,4 +116,5 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A parser which consumes characters from a codepoint list and produces a value. The input is a list, rather than a string, so that consuming one character is a constant-time operation rather than a linear-time string copy."}}}]}}}}}}]}
+                        "string": "A parser which consumes characters from a codepoint list and produces a value. The input is a list, rather than a string, so that consuming one character is a constant-time operation rather than a linear-time string copy."}}}]}}},
+          "constraints": []}}}]}

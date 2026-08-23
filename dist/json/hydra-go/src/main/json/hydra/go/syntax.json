@@ -20,7 +20,8 @@
                   {"name": "bitwiseOr", "type": "unit"},
                   {"name": "bitwiseXor", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go additive operator: +, -, |, or ^"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go additive operator: +, -, |, or ^"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.AliasDecl",
@@ -34,7 +35,8 @@
                   {"name": "type", "type": {"variable": "hydra.go.syntax.Type"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Go type alias declaration: identifier = Type"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Go type alias declaration: identifier = Type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.AnnotatedDeclaration",
@@ -50,7 +52,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A top-level Go declaration together with its preceding comment"}}}]}}}}}},
+                    "value": {"literal": {"string": "A top-level Go declaration together with its preceding comment"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Arguments",
@@ -69,7 +72,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "The argument list of a Go call expression, with an optional leading type argument and an optional trailing ellipsis for spread calls"}}}]}}}}}},
+                        "string": "The argument list of a Go call expression, with an optional leading type argument and an optional trailing ellipsis for spread calls"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ArrayType",
@@ -85,7 +89,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go array type: a fixed length and an element type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go array type: a fixed length and an element type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.AssignOp",
@@ -102,7 +107,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go assignment operator: plain =, or an additive/multiplicative compound assignment"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go assignment operator: plain =, or an additive/multiplicative compound assignment"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Assignment",
@@ -131,7 +137,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A Go assignment statement: a left-hand expression list, an assignment operator, and a right-hand expression list"}}}]}}}}}},
+                        "string": "A Go assignment statement: a left-hand expression list, an assignment operator, and a right-hand expression list"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.BasicLit",
@@ -150,7 +157,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go basic literal: an integer, floating-point, imaginary, rune, or string literal"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go basic literal: an integer, floating-point, imaginary, rune, or string literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.BinaryExpr",
@@ -167,7 +175,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go binary expression: a left operand, a binary operator, and a right operand"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go binary expression: a left operand, a binary operator, and a right operand"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.BinaryOp",
@@ -200,7 +209,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go binary operator, covering logical, relational, additive, and multiplicative operators"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go binary operator, covering logical, relational, additive, and multiplicative operators"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Block",
@@ -213,7 +223,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go block: a brace-delimited list of statements"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go block: a brace-delimited list of statements"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.BreakStmt",
@@ -226,7 +237,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go break statement, with an optional target label"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go break statement, with an optional target label"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.CallExpr",
@@ -242,7 +254,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go call expression: a function together with its arguments"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go call expression: a function together with its arguments"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ChannelDirection",
@@ -256,7 +269,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The direction of a Go channel type: bidirectional, send-only, or receive-only"}}}]}}}}}},
+                    "value": {"literal": {"string": "The direction of a Go channel type: bidirectional, send-only, or receive-only"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ChannelType",
@@ -272,7 +286,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go channel type: a direction and an element type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go channel type: a direction and an element type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.CommCase",
@@ -289,7 +304,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go communication case in a select statement: a send, a receive, or the default case"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go communication case in a select statement: a send, a receive, or the default case"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.CommClause",
@@ -305,7 +321,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go communication clause: a comm case together with its statement list"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go communication clause: a comm case together with its statement list"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.CompositeLit",
@@ -321,7 +338,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go composite literal: a literal type together with its literal value"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go composite literal: a literal type together with its literal value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ConstDecl",
@@ -338,7 +356,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go constant declaration: one or more constant specs"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go constant declaration: one or more constant specs"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ConstSpec",
@@ -360,7 +379,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go constant spec: a list of names, an optional type, and a list of value expressions"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go constant spec: a list of names, an optional type, and a list of value expressions"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ContinueStmt",
@@ -373,7 +393,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go continue statement, with an optional target label"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go continue statement, with an optional target label"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Conversion",
@@ -389,7 +410,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go type conversion expression: a target type applied to an expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go type conversion expression: a target type applied to an expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Declaration",
@@ -406,7 +428,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go declaration: a constant, type, or variable declaration"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go declaration: a constant, type, or variable declaration"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.DeferStmt",
@@ -419,7 +442,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go defer statement, wrapping the deferred expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go defer statement, wrapping the deferred expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Element",
@@ -435,7 +459,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go composite-literal element: an expression or a nested literal value"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go composite-literal element: an expression or a nested literal value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ElementList",
@@ -452,7 +477,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A non-empty list of keyed elements in a Go composite literal"}}}]}}}}}},
+                    "value": {"literal": {"string": "A non-empty list of keyed elements in a Go composite literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ElseClause",
@@ -468,7 +494,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The else clause of a Go if statement: another if statement or a block"}}}]}}}}}},
+                    "value": {"literal": {"string": "The else clause of a Go if statement: another if statement or a block"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.EmbeddedField",
@@ -486,7 +513,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A Go embedded (anonymous) struct field: a type name, an optional pointer marker, and an optional tag"}}}]}}}}}},
+                      "literal": {"string": "A Go embedded (anonymous) struct field: a type name, an optional pointer marker, and an optional tag"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.EmptyStmt",
@@ -495,7 +523,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": "unit"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go empty statement"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go empty statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ExprCaseClause",
@@ -519,7 +548,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A case clause of a Go expression switch: an optional expression list (absent for default) and a statement list"}}}]}}}}}},
+                        "string": "A case clause of a Go expression switch: an optional expression list (absent for default) and a statement list"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ExprSwitchStmt",
@@ -538,7 +568,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A Go expression switch statement: an optional init statement, an optional tag expression, and its case clauses"}}}]}}}}}},
+                        "string": "A Go expression switch statement: an optional init statement, an optional tag expression, and its case clauses"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Expression",
@@ -554,7 +585,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go expression: a unary expression, or a binary expression combining two expressions"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go expression: a unary expression, or a binary expression combining two expressions"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ExpressionStmt",
@@ -567,7 +599,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go expression statement, wrapping a single expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go expression statement, wrapping a single expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.FallthroughStmt",
@@ -576,7 +609,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": "unit"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go fallthrough statement"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go fallthrough statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.FieldDecl",
@@ -592,7 +626,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go struct field declaration: a named field or an embedded field"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go struct field declaration: a named field or an embedded field"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.FloatLit",
@@ -605,7 +640,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go floating-point literal, in decimal or hexadecimal form"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go floating-point literal, in decimal or hexadecimal form"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ForClause",
@@ -624,7 +660,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A Go C-style for-loop clause: an optional init statement, an optional condition, and an optional post statement"}}}]}}}}}},
+                        "string": "A Go C-style for-loop clause: an optional init statement, an optional condition, and an optional post statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ForClauseOrRange",
@@ -641,7 +678,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The header of a Go for statement: a bare condition, a for clause, or a range clause"}}}]}}}}}},
+                    "value": {"literal": {"string": "The header of a Go for statement: a bare condition, a for clause, or a range clause"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ForStmt",
@@ -657,7 +695,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go for statement: an optional loop header and a body block"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go for statement: an optional loop header and a body block"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.FullSlice",
@@ -674,7 +713,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go three-index slice expression, with low, high, and max bounds"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go three-index slice expression, with low, high, and max bounds"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.FunctionBody",
@@ -683,7 +723,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"variable": "hydra.go.syntax.Block"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The body of a Go function: a block"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The body of a Go function: a block"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.FunctionDecl",
@@ -702,7 +743,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A Go top-level function declaration: a name, optional type parameters, a signature, and an optional body"}}}]}}}}}},
+                      "literal": {"string": "A Go top-level function declaration: a name, optional type parameters, a signature, and an optional body"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.FunctionLit",
@@ -718,7 +760,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go function literal: a signature together with its body"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go function literal: a signature together with its body"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.FunctionType",
@@ -727,7 +770,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"variable": "hydra.go.syntax.Signature"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go function type: a signature"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go function type: a signature"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.GoStmt",
@@ -740,7 +784,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go go statement, launching the given expression as a goroutine"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go go statement, launching the given expression as a goroutine"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.GotoStmt",
@@ -750,7 +795,8 @@
             "annotated": {
               "body": {"wrap": {"variable": "hydra.go.syntax.Identifier"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go goto statement, naming its target label"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go goto statement, naming its target label"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Identifier",
@@ -763,7 +809,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go identifier: a letter followed by letters and unicode digits"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go identifier: a letter followed by letters and unicode digits"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.IfStmt",
@@ -782,7 +829,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A Go if statement: an optional init statement, a condition, a then block, and an optional else clause"}}}]}}}}}},
+                      "literal": {"string": "A Go if statement: an optional init statement, a condition, a then block, and an optional else clause"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ImaginaryLit",
@@ -795,7 +843,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go imaginary literal: a decimal or floating-point literal suffixed with 'i'"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go imaginary literal: a decimal or floating-point literal suffixed with 'i'"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ImportAlias",
@@ -809,7 +858,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The optional alias of a Go import spec: a dot for a dot import, or an identifier for a named alias"}}}]}}}}}},
+                      "literal": {"string": "The optional alias of a Go import spec: a dot for a dot import, or an identifier for a named alias"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ImportDecl",
@@ -826,7 +876,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go import declaration: one or more import specs"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go import declaration: one or more import specs"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ImportPath",
@@ -835,7 +886,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"variable": "hydra.go.syntax.StringLit"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The path string of a Go import spec"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The path string of a Go import spec"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ImportSpec",
@@ -851,7 +903,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go import spec: an optional dot or package-name alias together with an import path"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go import spec: an optional dot or package-name alias together with an import path"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.IncDecStmt",
@@ -867,7 +920,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go increment or decrement statement: an expression followed by ++ or --"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go increment or decrement statement: an expression followed by ++ or --"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Index",
@@ -881,7 +935,8 @@
                     "body": {"list": {"variable": "hydra.go.syntax.Expression"}},
                     "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go index expression's bracketed index"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go index expression's bracketed index"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.IndexExpr",
@@ -897,7 +952,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go index expression: a primary expression subscripted by an index"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go index expression: a primary expression subscripted by an index"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.IntLit",
@@ -910,7 +966,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go integer literal, in decimal, binary, octal, or hexadecimal form"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go integer literal, in decimal, binary, octal, or hexadecimal form"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.InterfaceElem",
@@ -926,7 +983,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go interface element: a method element or a type element"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go interface element: a method element or a type element"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.InterfaceType",
@@ -939,7 +997,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go interface type: a brace-delimited list of interface elements"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go interface type: a brace-delimited list of interface elements"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.InterpretedStringLit",
@@ -952,7 +1011,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go interpreted (double-quoted) string literal"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go interpreted (double-quoted) string literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Key",
@@ -969,7 +1029,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The key of a Go keyed element: a field name, an expression, or a literal value"}}}]}}}}}},
+                    "value": {"literal": {"string": "The key of a Go keyed element: a field name, an expression, or a literal value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.KeyedElement",
@@ -985,7 +1046,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go composite-literal element with an optional key"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go composite-literal element with an optional key"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.LabeledStmt",
@@ -1001,7 +1063,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go labeled statement: a label together with the statement it labels"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go labeled statement: a label together with the statement it labels"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Literal",
@@ -1018,7 +1081,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go literal: a basic literal, a composite literal, or a function literal"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go literal: a basic literal, a composite literal, or a function literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.LiteralType",
@@ -1039,7 +1103,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The type of a Go composite literal: a struct, array, elided-length array, slice, map, or named type"}}}]}}}}}},
+                      "literal": {"string": "The type of a Go composite literal: a struct, array, elided-length array, slice, map, or named type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.LiteralValue",
@@ -1052,7 +1117,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go composite literal's brace-delimited value: an optional element list"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go composite literal's brace-delimited value: an optional element list"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.MapType",
@@ -1066,7 +1132,8 @@
                   {"name": "value", "type": {"variable": "hydra.go.syntax.Type"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Go map type: a key type and an element type"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Go map type: a key type and an element type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.MethodDecl",
@@ -1084,7 +1151,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go method declaration: a receiver, a method name, a signature, and an optional body"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go method declaration: a receiver, a method name, a signature, and an optional body"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.MethodElem",
@@ -1100,7 +1168,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go interface method element: a method name together with its signature"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go interface method element: a method name together with its signature"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.MethodExpr",
@@ -1116,7 +1185,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go method expression: a receiver type together with a method name"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go method expression: a receiver type together with a method name"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Module",
@@ -1133,7 +1203,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go source file: a package clause, imports, and top-level declarations"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go source file: a package clause, imports, and top-level declarations"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.MulOp",
@@ -1154,7 +1225,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go multiplicative operator: *, /, %, <<, >>, &, or &^"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go multiplicative operator: *, /, %, <<, >>, &, or &^"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.NamedField",
@@ -1176,7 +1248,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go named struct field: a list of names, a type, and an optional tag"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go named struct field: a list of names, a type, and an optional tag"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Operand",
@@ -1194,7 +1267,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A Go operand: a literal, an operand name with optional type arguments, or a parenthesized expression"}}}]}}}}}},
+                      "literal": {"string": "A Go operand: a literal, an operand name with optional type arguments, or a parenthesized expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.OperandName",
@@ -1210,7 +1284,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go operand name: a plain identifier or a package-qualified identifier"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go operand name: a plain identifier or a package-qualified identifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.PackageClause",
@@ -1220,7 +1295,8 @@
             "annotated": {
               "body": {"wrap": {"variable": "hydra.go.syntax.Identifier"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go package clause, naming the package"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go package clause, naming the package"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ParameterDecl",
@@ -1238,7 +1314,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A Go parameter declaration: an optional identifier list, an optional variadic marker, and a type"}}}]}}}}}},
+                      "literal": {"string": "A Go parameter declaration: an optional identifier list, an optional variadic marker, and a type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Parameters",
@@ -1251,7 +1328,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go parameter list, parenthesized and comma-separated"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go parameter list, parenthesized and comma-separated"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.PointerType",
@@ -1261,7 +1339,8 @@
             "annotated": {
               "body": {"wrap": {"variable": "hydra.go.syntax.Type"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go pointer type: a pointer to a base type"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go pointer type: a pointer to a base type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.PrimaryExpr",
@@ -1285,7 +1364,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A Go primary expression: an operand, conversion, or method expression, possibly followed by a selector, index, slice, type assertion, or call"}}}]}}}}}},
+                        "string": "A Go primary expression: an operand, conversion, or method expression, possibly followed by a selector, index, slice, type assertion, or call"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.QualifiedIdent",
@@ -1301,7 +1381,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go qualified identifier: a package name together with an identifier"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go qualified identifier: a package name together with an identifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.RangeClause",
@@ -1318,7 +1399,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A Go range clause: an optional assignment or short variable declaration over a ranged expression"}}}]}}}}}},
+                      "literal": {"string": "A Go range clause: an optional assignment or short variable declaration over a ranged expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.RangeVars",
@@ -1344,7 +1426,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The loop variables of a Go range clause: an assignment or a short variable declaration"}}}]}}}}}},
+                    "value": {"literal": {"string": "The loop variables of a Go range clause: an assignment or a short variable declaration"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.RawStringLit",
@@ -1354,7 +1437,8 @@
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go raw (back-quoted) string literal"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go raw (back-quoted) string literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ReceiveCase",
@@ -1370,7 +1454,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go receive case in a select statement, with an optional assignment or declaration"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go receive case in a select statement, with an optional assignment or declaration"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Receiver",
@@ -1386,7 +1471,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The receiver of a Go method declaration: a single non-variadic parameter"}}}]}}}}}},
+                    "value": {"literal": {"string": "The receiver of a Go method declaration: a single non-variadic parameter"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.RelOp",
@@ -1406,7 +1492,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go relational operator: ==, !=, <, <=, >, or >="}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go relational operator: ==, !=, <, <=, >, or >="}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Result",
@@ -1422,7 +1509,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The result of a Go function signature: a parameter list or a bare type"}}}]}}}}}},
+                    "value": {"literal": {"string": "The result of a Go function signature: a parameter list or a bare type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ReturnStmt",
@@ -1435,7 +1523,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go return statement, with an optional expression list"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go return statement, with an optional expression list"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.RuneLit",
@@ -1444,7 +1533,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": {"integer": "int32"}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go rune literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go rune literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.SelectStmt",
@@ -1457,7 +1547,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go select statement: a brace-delimited list of communication clauses"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go select statement: a brace-delimited list of communication clauses"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Selector",
@@ -1468,7 +1559,8 @@
               "body": {"wrap": {"variable": "hydra.go.syntax.Identifier"}},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Go selector: a dot followed by an identifier"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Go selector: a dot followed by an identifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.SelectorExpr",
@@ -1484,7 +1576,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go selector expression: a primary expression together with a field or method selector"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go selector expression: a primary expression together with a field or method selector"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.SendStmt",
@@ -1500,7 +1593,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go send statement: a channel expression together with the value sent on it"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go send statement: a channel expression together with the value sent on it"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.ShortVarDecl",
@@ -1526,7 +1620,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go short variable declaration: an identifier list assigned via :="}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go short variable declaration: an identifier list assigned via :="}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Signature",
@@ -1542,7 +1637,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go function signature: a parameter list and an optional result"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go function signature: a parameter list and an optional result"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.SimpleSlice",
@@ -1558,7 +1654,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go two-index slice expression, with optional low and high bounds"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go two-index slice expression, with optional low and high bounds"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.SimpleStmt",
@@ -1580,7 +1677,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A Go simple statement: an empty, expression, send, increment/decrement, assignment, or short variable declaration statement"}}}]}}}}}},
+                        "string": "A Go simple statement: an empty, expression, send, increment/decrement, assignment, or short variable declaration statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Slice",
@@ -1596,7 +1694,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go slice expression's bracketed bounds, either two-index or three-index"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go slice expression's bracketed bounds, either two-index or three-index"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.SliceExpr",
@@ -1612,7 +1711,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go slice expression: a primary expression together with a simple or full slice"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go slice expression: a primary expression together with a simple or full slice"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.SliceType",
@@ -1621,7 +1721,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"variable": "hydra.go.syntax.Type"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go slice type: an element type"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go slice type: an element type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.SourceFile",
@@ -1638,7 +1739,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go source file: a package clause, imports, and top-level declarations"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go source file: a package clause, imports, and top-level declarations"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Statement",
@@ -1667,7 +1769,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go statement, covering every statement form in the grammar"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go statement, covering every statement form in the grammar"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.StringLit",
@@ -1683,7 +1786,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go string literal: a raw or interpreted string literal"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go string literal: a raw or interpreted string literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.StructType",
@@ -1696,7 +1800,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go struct type: a brace-delimited list of field declarations"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go struct type: a brace-delimited list of field declarations"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.SwitchStmt",
@@ -1712,7 +1817,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go switch statement: an expression switch or a type switch"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go switch statement: an expression switch or a type switch"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Tag",
@@ -1722,7 +1828,8 @@
             "annotated": {
               "body": {"wrap": {"variable": "hydra.go.syntax.StringLit"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go struct field tag: a string literal"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go struct field tag: a string literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TopLevelDecl",
@@ -1740,7 +1847,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A Go top-level declaration: a plain declaration, a function declaration, or a method declaration"}}}]}}}}}},
+                      "literal": {"string": "A Go top-level declaration: a plain declaration, a function declaration, or a method declaration"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.Type",
@@ -1757,7 +1865,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go type: a type name with optional type arguments, a type literal, or a parenthesized type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go type: a type name with optional type arguments, a type literal, or a parenthesized type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeAssertion",
@@ -1770,7 +1879,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go type assertion's parenthesized target type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go type assertion's parenthesized target type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeAssertionExpr",
@@ -1786,7 +1896,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go type assertion expression: a primary expression together with its asserted type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go type assertion expression: a primary expression together with its asserted type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeCaseClause",
@@ -1809,7 +1920,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A case clause of a Go type switch: an optional type list (absent for default) and a statement list"}}}]}}}}}},
+                      "literal": {"string": "A case clause of a Go type switch: an optional type list (absent for default) and a statement list"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeConstraint",
@@ -1820,7 +1932,8 @@
               "body": {"wrap": {"variable": "hydra.go.syntax.TypeElem"}},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Go type parameter constraint: a type element"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Go type parameter constraint: a type element"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeDecl",
@@ -1835,7 +1948,8 @@
                     "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Go type declaration: one or more type specs"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Go type declaration: one or more type specs"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeDef",
@@ -1852,7 +1966,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go type definition: an identifier, optional type parameters, and an underlying type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go type definition: an identifier, optional type parameters, and an underlying type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeElem",
@@ -1869,7 +1984,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go type element: one or more type terms joined by union operators"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go type element: one or more type terms joined by union operators"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeLit",
@@ -1892,7 +2008,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A Go type literal: an array, struct, pointer, function, interface, slice, map, or channel type"}}}]}}}}}},
+                      "literal": {"string": "A Go type literal: an array, struct, pointer, function, interface, slice, map, or channel type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeName",
@@ -1908,7 +2025,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go type name: a plain identifier or a package-qualified identifier"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go type name: a plain identifier or a package-qualified identifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeParamDecl",
@@ -1929,7 +2047,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go type parameter declaration: an identifier list together with a type constraint"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go type parameter declaration: an identifier list together with a type constraint"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeParameters",
@@ -1946,7 +2065,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go type parameter list, bracketed and comma-separated"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go type parameter list, bracketed and comma-separated"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeSpec",
@@ -1962,7 +2082,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go type spec: an alias declaration or a type definition"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go type spec: an alias declaration or a type definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeSwitchGuard",
@@ -1979,7 +2100,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The guard of a Go type switch: an optional bound identifier together with the asserted primary expression"}}}]}}}}}},
+                      "literal": {"string": "The guard of a Go type switch: an optional bound identifier together with the asserted primary expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeSwitchStmt",
@@ -1997,7 +2119,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A Go type switch statement: an optional init statement, a type switch guard, and its case clauses"}}}]}}}}}},
+                      "literal": {"string": "A Go type switch statement: an optional init statement, a type switch guard, and its case clauses"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.TypeTerm",
@@ -2011,7 +2134,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go type element term: a type, or its underlying-type form"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go type element term: a type, or its underlying-type form"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.UnaryExpr",
@@ -2027,7 +2151,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go unary expression: a primary expression or a unary operator applied to a unary expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go unary expression: a primary expression or a unary operator applied to a unary expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.UnaryOp",
@@ -2045,7 +2170,8 @@
                   {"name": "addressOf", "type": "unit"},
                   {"name": "receive", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go unary operator: +, -, !, ^, *, &, or <-"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Go unary operator: +, -, !, ^, *, &, or <-"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.UnaryOperation",
@@ -2061,7 +2187,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go unary expression's operator together with its operand"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go unary expression's operator together with its operand"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.VarDecl",
@@ -2078,7 +2205,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go variable declaration: one or more var specs"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Go variable declaration: one or more var specs"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.go.syntax.VarSpec",
@@ -2100,4 +2228,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Go var spec: an identifier list with a type, an initializer expression list, or both"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A Go var spec: an identifier list with a type, an initializer expression list, or both"}}}]}}},
+          "constraints": []}}}]}

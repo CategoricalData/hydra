@@ -14684,15 +14684,14 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {
-                        "optional": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}},
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}},
                       "annotation": {
                         "map": [
                           {
                             "key": {"variable": "description"},
                             "value": {
                               "literal": {
-                                "string": "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names."}}}]}}}}},
+                                "string": "Constraints on type variables, including typeclass constraints. The map keys are type variable names; an empty map means no constraints."}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.core.TypeScheme"}}}}},
@@ -14726,15 +14725,14 @@
                             "function": {"variable": "hydra.typed.TypedTerm"},
                             "argument": {
                               "annotated": {
-                                "body": {
-                                  "optional": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}},
+                                "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}},
                                 "annotation": {
                                   "map": [
                                     {
                                       "key": {"variable": "description"},
                                       "value": {
                                         "literal": {
-                                          "string": "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names."}}}]}}}}},
+                                          "string": "Constraints on type variables, including typeclass constraints. The map keys are type variable names; an empty map means no constraints."}}}]}}}}},
                         "body": {
                           "wrap": {
                             "typeName": "hydra.typed.TypedTerm",
@@ -14914,15 +14912,14 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {
-                      "optional": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}},
+                    "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}},
                     "annotation": {
                       "map": [
                         {
                           "key": {"variable": "description"},
                           "value": {
                             "literal": {
-                              "string": "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names."}}}]}}}}}}},
+                              "string": "Constraints on type variables, including typeclass constraints. The map keys are type variable names; an empty map means no constraints."}}}]}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -15257,15 +15254,14 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {
-                        "optional": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}},
+                      "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}},
                       "annotation": {
                         "map": [
                           {
                             "key": {"variable": "description"},
                             "value": {
                               "literal": {
-                                "string": "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names."}}}]}}}}},
+                                "string": "Constraints on type variables, including typeclass constraints. The map keys are type variable names; an empty map means no constraints."}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.core.TypeScheme"}}}}},
@@ -15283,15 +15279,14 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {
-                              "optional": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}},
+                            "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}},
                             "annotation": {
                               "map": [
                                 {
                                   "key": {"variable": "description"},
                                   "value": {
                                     "literal": {
-                                      "string": "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names."}}}]}}}}},
+                                      "string": "Constraints on type variables, including typeclass constraints. The map keys are type variable names; an empty map means no constraints."}}}]}}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -15425,7 +15420,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}},
+                      "body": {"set": {"variable": "hydra.core.TypeClassConstraint"}},
                       "annotation": {
                         "map": [
                           {
@@ -15445,7 +15440,7 @@
                     "function": {"variable": "hydra.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}},
+                        "body": {"set": {"variable": "hydra.core.TypeClassConstraint"}},
                         "annotation": {
                           "map": [
                             {
@@ -15500,7 +15495,7 @@
                 "function": {"variable": "hydra.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}},
+                    "body": {"set": {"variable": "hydra.core.TypeClassConstraint"}},
                     "annotation": {
                       "map": [
                         {
@@ -15566,7 +15561,7 @@
                   "function": {"variable": "hydra.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}},
+                      "body": {"set": {"variable": "hydra.core.TypeClassConstraint"}},
                       "annotation": {
                         "map": [
                           {
@@ -15591,7 +15586,7 @@
                         "function": {"variable": "hydra.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"list": {"variable": "hydra.core.TypeClassConstraint"}},
+                            "body": {"set": {"variable": "hydra.core.TypeClassConstraint"}},
                             "annotation": {
                               "map": [
                                 {

@@ -1351,4 +1351,5 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Points to the versioned resource from which this working copy was obtained. [RFC5829]"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An IANA link relation type"}}}]}}}}}}]}
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An IANA link relation type"}}}]}}},
+          "constraints": []}}}]}

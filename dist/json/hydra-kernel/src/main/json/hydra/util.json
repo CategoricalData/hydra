@@ -20,7 +20,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A naming convention for symbols, such as camelCase or snake_case"}}}]}}}}}},
+                    "value": {"literal": {"string": "A naming convention for symbols, such as camelCase or snake_case"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.util.Comparison",
@@ -34,7 +35,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An equality judgement: less than, equal to, or greater than"}}}]}}}}}},
+                    "value": {"literal": {"string": "An equality judgement: less than, equal to, or greater than"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.util.ModuleNames",
@@ -67,7 +69,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A mapping from module names to values of type n, with a focus on one module name"}}}]}}}}}},
+                    "value": {"literal": {"string": "A mapping from module names to values of type n, with a focus on one module name"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.util.Precision",
@@ -94,7 +97,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Numeric precision: arbitrary precision, or precision to a specified number of bits"}}}]}}}}}},
+                    "value": {"literal": {"string": "Numeric precision: arbitrary precision, or precision to a specified number of bits"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.util.QualifiedName",
@@ -120,4 +124,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A qualified name consisting of an optional module name together with a mandatory local name"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A qualified name consisting of an optional module name together with a mandatory local name"}}}]}}},
+          "constraints": []}}}]}

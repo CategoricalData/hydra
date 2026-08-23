@@ -1,6 +1,9 @@
 {
   "name": "hydra.parsers",
-  "metadata": {"description": "General-purpose parser combinators", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "General-purpose parser combinators, operating on a Parser type. A helper library, not a set of parse<T> convention functions (see docs/specification/index.md, Conventions).",
+    "comments": [],
+    "seeAlso": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -138,7 +141,8 @@
                                   "body": {
                                     "function": {
                                       "domain": {"list": {"literal": {"integer": "int32"}}},
-                                      "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "t0"}}}}}}}],
+                                      "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "t0"}}}}},
+                                  "constraints": []}}],
                             "body": {
                               "typeApplication": {"body": {"wrap": {"typeName": "hydra.parsing.Parser", "body": {"variable": "parse"}}}, "type": {"variable": "t0"}}}}}}}}},
                 "annotation": {
@@ -327,7 +331,8 @@
                                       "body": {
                                         "function": {
                                           "domain": {"list": {"literal": {"integer": "int32"}}},
-                                          "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "t1"}}}}}}}],
+                                          "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "t1"}}}}},
+                                      "constraints": []}}],
                                 "body": {
                                   "typeApplication": {"body": {"wrap": {"typeName": "hydra.parsing.Parser", "body": {"variable": "parse"}}}, "type": {"variable": "t1"}}}}}}}}},
                     "annotation": {
@@ -526,7 +531,8 @@
                                       "body": {
                                         "function": {
                                           "domain": {"list": {"literal": {"integer": "int32"}}},
-                                          "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "t1"}}}}}}}],
+                                          "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "t1"}}}}},
+                                      "constraints": []}}],
                                 "body": {
                                   "typeApplication": {"body": {"wrap": {"typeName": "hydra.parsing.Parser", "body": {"variable": "parse"}}}, "type": {"variable": "t1"}}}}}}}}},
                     "annotation": {
@@ -636,7 +642,7 @@
                                         "type": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": "unit"}}}},
                                     "argument": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"literal": {"integer": "int32"}}}},
                                         "argument": {"variable": "input"}}}}},
                                 "argument": {
                                   "typeApplication": {
@@ -810,7 +816,8 @@
                               "body": {
                                 "function": {
                                   "domain": {"list": {"literal": {"integer": "int32"}}},
-                                  "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"list": {"variable": "t0"}}}}}}}}],
+                                  "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"list": {"variable": "t0"}}}}}},
+                              "constraints": []}}],
                         "body": {
                           "typeApplication": {
                             "body": {"wrap": {"typeName": "hydra.parsing.Parser", "body": {"variable": "parse"}}},
@@ -1036,7 +1043,8 @@
                                       "body": {
                                         "function": {
                                           "domain": {"list": {"literal": {"integer": "int32"}}},
-                                          "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "t1"}}}}}}}],
+                                          "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"variable": "t1"}}}}},
+                                      "constraints": []}}],
                                 "body": {
                                   "typeApplication": {"body": {"wrap": {"typeName": "hydra.parsing.Parser", "body": {"variable": "parse"}}}, "type": {"variable": "t1"}}}}}}}}},
                     "annotation": {
@@ -1075,7 +1083,7 @@
                                       "typeApplication": {
                                         "body": {"typeApplication": {"body": {"variable": "hydra.parsers.map"}, "type": {"variable": "t0"}}},
                                         "type": {"optional": {"variable": "t0"}}}},
-                                    "argument": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "t0"}}}}},
+                                    "argument": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "t0"}}}}},
                                 "argument": {"variable": "p"}}}}},
                         "argument": {
                           "application": {
@@ -1245,7 +1253,7 @@
                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": {"integer": "int32"}}}},
                                                     "type": {"list": {"literal": {"integer": "int32"}}}}},
                                                 "argument": {"variable": "uc"}}},
-                                            "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}}],
+                                            "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -1258,7 +1266,7 @@
                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": {"integer": "int32"}}}},
                                                         "type": {"list": {"literal": {"integer": "int32"}}}}},
                                                     "argument": {"variable": "uc"}}},
-                                                "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}}}],
+                                                "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}, "constraints": []}}],
                                             "body": {
                                               "application": {
                                                 "function": {
@@ -1304,7 +1312,8 @@
                           "body": {
                             "function": {
                               "domain": {"list": {"literal": {"integer": "int32"}}},
-                              "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"literal": {"integer": "int32"}}}}}}}}],
+                              "codomain": {"application": {"function": {"variable": "hydra.parsing.ParseResult"}, "argument": {"literal": {"integer": "int32"}}}}}},
+                          "constraints": []}}],
                     "body": {
                       "typeApplication": {
                         "body": {"wrap": {"typeName": "hydra.parsing.Parser", "body": {"variable": "parse"}}},
@@ -1536,7 +1545,7 @@
                       {
                         "name": "strCodes",
                         "term": {"application": {"function": {"variable": "hydra.lib.strings.toList"}, "argument": {"variable": "str"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -1546,7 +1555,7 @@
                               "application": {
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"literal": {"integer": "int32"}}}},
                                 "argument": {"variable": "strCodes"}}},
-                            "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}}],
+                            "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}}],
                         "body": {
                           "typeApplication": {
                             "body": {
@@ -1568,7 +1577,7 @@
                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.take"}, "type": {"literal": {"integer": "int32"}}}},
                                                     "argument": {"variable": "strLen"}}},
                                                 "argument": {"variable": "input"}}},
-                                            "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}}}],
+                                            "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}, "constraints": []}}],
                                         "body": {
                                           "application": {
                                             "function": {

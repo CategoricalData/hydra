@@ -123,7 +123,8 @@
                                     "argument": {"variable": "pkgs"}}}}},
                             "typeScheme": {
                               "variables": [],
-                              "body": {"list": {"pair": {"first": {"variable": "hydra.packaging.ModuleName"}, "second": {"variable": "t0"}}}}}}],
+                              "body": {"list": {"pair": {"first": {"variable": "hydra.packaging.ModuleName"}, "second": {"variable": "t0"}}}},
+                              "constraints": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -207,7 +208,8 @@
                                         "argument": {"variable": "pkgs"}}}}},
                                 "typeScheme": {
                                   "variables": [],
-                                  "body": {"list": {"pair": {"first": {"variable": "hydra.packaging.ModuleName"}, "second": {"variable": "t0"}}}}}}],
+                                  "body": {"list": {"pair": {"first": {"variable": "hydra.packaging.ModuleName"}, "second": {"variable": "t0"}}}},
+                                  "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {
@@ -256,21 +258,21 @@
                       {
                         "name": "dsl",
                         "term": {"application": {"function": {"variable": "hydra.dsls.dslModuleName"}, "argument": {"variable": "m"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
                           {
                             "name": "enc",
                             "term": {"application": {"function": {"variable": "hydra.encoding.encodeModuleName"}, "argument": {"variable": "m"}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}}}],
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}, "constraints": []}}],
                         "body": {
                           "let": {
                             "bindings": [
                               {
                                 "name": "dec",
                                 "term": {"application": {"function": {"variable": "hydra.decoding.decodeModuleName"}, "argument": {"variable": "m"}}},
-                                "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}}}],
+                                "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}, "constraints": []}}],
                             "body": {
                               "list": [
                                 {"variable": "dsl"},
@@ -421,7 +423,8 @@
                                           "codomain": {
                                             "either": {
                                               "left": {"variable": "hydra.errors.Error"},
-                                              "right": {"map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "hydra.packaging.Module"}}}}}}}}}}}}],
+                                              "right": {"map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "hydra.packaging.Module"}}}}}}}}}},
+                                  "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {
@@ -588,7 +591,7 @@
                           "application": {
                             "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
                             "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "ns"}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -604,7 +607,7 @@
                                       "list": [
                                         {"literal": {"string": "hydra.sources."}},
                                         {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "ns"}}}]}}}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}}}],
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {

@@ -75,7 +75,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A two-level bidirectional encoder which adapts types to types and terms to terms"}}}]}}}}}},
+                    "value": {"literal": {"string": "A two-level bidirectional encoder which adapts types to types and terms to terms"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coders.AdapterContext",
@@ -131,7 +132,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An evaluation context together with a source language and a target language"}}}]}}}}}},
+                    "value": {"literal": {"string": "An evaluation context together with a source language and a target language"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coders.Bicoder",
@@ -204,7 +206,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A two-level encoder and decoder, operating both at a type level and an instance (data) level"}}}]}}}}}},
+                    "value": {"literal": {"string": "A two-level encoder and decoder, operating both at a type level and an instance (data) level"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coders.CaseConventions",
@@ -298,7 +301,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Per-target case conventions for name forms that vary across emission targets"}}}]}}}}}},
+                    "value": {"literal": {"string": "Per-target case conventions for name forms that vary across emission targets"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coders.Coder",
@@ -343,7 +347,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An encoder and decoder; a pair of partial functions between two types"}}}]}}}}}},
+                    "value": {"literal": {"string": "An encoder and decoder; a pair of partial functions between two types"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coders.CoderDirection",
@@ -356,7 +361,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Indicates either the 'out' or the 'in' direction of a coder"}}}]}}}}}},
+                    "value": {"literal": {"string": "Indicates either the 'out' or the 'in' direction of a coder"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coders.Language",
@@ -419,7 +425,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A named language together with its grammar constraints, capability profile, naming conventions, and conventional file extension"}}}]}}}}}},
+                        "string": "A named language together with its grammar constraints, capability profile, naming conventions, and conventional file extension"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coders.LanguageConstraints",
@@ -473,7 +480,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A set of constraints on valid type and term expressions, characterizing a language"}}}]}}}}}},
+                    "value": {"literal": {"string": "A set of constraints on valid type and term expressions, characterizing a language"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coders.LanguageFeature",
@@ -525,7 +533,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A target-language or target-runtime capability the coder may rely on. Absence from a Language's supportedFeatures set means the emitter must work around the missing capability."}}}]}}}}}},
+                        "string": "A target-language or target-runtime capability the coder may rely on. Absence from a Language's supportedFeatures set means the emitter must work around the missing capability."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coders.LanguageName",
@@ -534,7 +543,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique name of a language"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unique name of a language"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coders.SymmetricAdapter",
@@ -568,7 +578,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A bidirectional encoder which maps between the same type and term languages on either side"}}}]}}}}}},
+                    "value": {"literal": {"string": "A bidirectional encoder which maps between the same type and term languages on either side"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coders.TraversalOrder",
@@ -594,7 +605,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Specifies either a pre-order or post-order traversal"}}}]}}}}}},
+                    "value": {"literal": {"string": "Specifies either a pre-order or post-order traversal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coders.TypeAdapter",
@@ -623,4 +635,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A function which maps a Hydra type to a symmetric adapter between types and terms"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A function which maps a Hydra type to a symmetric adapter between types and terms"}}}]}}},
+          "constraints": []}}}]}

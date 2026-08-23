@@ -113,6 +113,19 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.lib.strings.isEmpty",
+        "metadata": {
+          "description": "Check whether a string is empty.",
+          "comments": ["isEmpty(s) returns true iff s is the empty string.", "Total. Corresponds to Haskell's null :: String -> Bool."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "s", "description": "the string to test for emptiness", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.strings.join",
         "metadata": {
           "description": "Join a list of strings with a separator between each element.",
@@ -146,19 +159,6 @@
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to measure", "type": {"literal": "string"}, "isLazy": false}],
           "result": {"type": {"literal": {"integer": "int32"}}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.strings.null",
-        "metadata": {
-          "description": "Check whether a string is empty.",
-          "comments": ["null(s) returns true iff s is the empty string.", "Total. Corresponds to Haskell's null :: String -> Bool."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "s", "description": "the string to test for emptiness", "type": {"literal": "string"}, "isLazy": false}],
-          "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},
     {

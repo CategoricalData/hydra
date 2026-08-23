@@ -36,7 +36,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "State threaded through Protobuf encoding: inference context plus field-index counter"}}}]}}}}}},
+                    "value": {"literal": {"string": "State threaded through Protobuf encoding: inference context plus field-index counter"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.protobuf.environment.StructuralTypeRef",
@@ -70,4 +71,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to a structural type (Either or Pair) with its component types"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A reference to a structural type (Either or Pair) with its component types"}}}]}}},
+          "constraints": []}}}]}

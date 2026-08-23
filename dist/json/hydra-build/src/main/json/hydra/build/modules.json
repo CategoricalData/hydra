@@ -93,7 +93,7 @@
                                           "application": {
                                             "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"variable": "prefix"}}},
                                             "argument": {"variable": "s"}}},
-                                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                                     "body": {
                                       "application": {
                                         "function": {
@@ -123,7 +123,7 @@
                                                     "function": {"variable": "hydra.lib.logic.and"},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {"variable": "hydra.lib.strings.null"},
+                                                        "function": {"variable": "hydra.lib.strings.isEmpty"},
                                                         "argument": {
                                                           "application": {
                                                             "function": {
@@ -136,7 +136,7 @@
                                                     "function": {"variable": "hydra.lib.logic.not"},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"literal": "string"}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"literal": "string"}}},
                                                         "argument": {
                                                           "application": {
                                                             "function": {
@@ -149,7 +149,8 @@
                           "body": {
                             "function": {
                               "domain": {"literal": "string"},
-                              "codomain": {"function": {"domain": {"literal": "string"}, "codomain": {"literal": "boolean"}}}}}}}],
+                              "codomain": {"function": {"domain": {"literal": "string"}, "codomain": {"literal": "boolean"}}}}},
+                          "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -169,7 +170,7 @@
                                             "function": {"unwrap": "hydra.packaging.ModuleName"},
                                             "argument": {
                                               "application": {"function": {"project": {"typeName": "hydra.packaging.Module", "fieldName": "name"}}, "argument": {"variable": "m"}}}}},
-                                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                     "body": {
                                       "application": {
                                         "function": {
@@ -283,7 +284,7 @@
                           "application": {
                             "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "/"}}}},
                             "argument": {"variable": "rel"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {

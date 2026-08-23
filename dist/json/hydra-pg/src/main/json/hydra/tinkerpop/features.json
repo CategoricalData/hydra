@@ -147,7 +147,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Base interface for features that relate to supporting different data types."}}}]}}}}}},
+                    "value": {"literal": {"string": "Base interface for features that relate to supporting different data types."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.features.EdgeFeatures",
@@ -193,7 +194,8 @@
                                   "string": "Determines if the Graph implementation uses upsert functionality as opposed to insert functionality for Vertex.addEdge(String, Vertex, Object...)."}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Features that are related to Edge operations."}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Features that are related to Edge operations."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.features.EdgePropertyFeatures",
@@ -206,7 +208,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Features that are related to Edge Property objects."}}}]}}}}}},
+                    "value": {"literal": {"string": "Features that are related to Edge Property objects."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.features.ElementFeatures",
@@ -298,7 +301,8 @@
                               "value": {"literal": {"string": "Determines if an Element has UUID identifiers as their internal representation."}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Features that are related to Element objects."}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Features that are related to Element objects."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.features.ExtraFeatures",
@@ -320,7 +324,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Additional features which are needed for the complete specification of language constraints in Hydra, above and beyond TinkerPop Graph.Features"}}}]}}}}}},
+                        "string": "Additional features which are needed for the complete specification of language constraints in Hydra, above and beyond TinkerPop Graph.Features"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.features.Features",
@@ -359,7 +364,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "An interface that represents the capabilities of a Graph implementation. By default all methods of features return true and it is up to implementers to disable feature they don't support. Users should check features prior to using various functions of TinkerPop to help ensure code portability across implementations. For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().\n\nAs an additional notice to Graph Providers, feature methods will be used by the test suite to determine which tests will be ignored and which will be executed, therefore proper setting of these features is essential to maximizing the amount of testing performed by the suite. Further note, that these methods may be called by the TinkerPop core code to determine what operations may be appropriately executed which will have impact on features utilized by users."}}}]}}}}}},
+                        "string": "An interface that represents the capabilities of a Graph implementation. By default all methods of features return true and it is up to implementers to disable feature they don't support. Users should check features prior to using various functions of TinkerPop to help ensure code portability across implementations. For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().\n\nAs an additional notice to Graph Providers, feature methods will be used by the test suite to determine which tests will be ignored and which will be executed, therefore proper setting of these features is essential to maximizing the amount of testing performed by the suite. Further note, that these methods may be called by the TinkerPop core code to determine what operations may be appropriately executed which will have impact on features utilized by users."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.features.GraphFeatures",
@@ -459,7 +465,8 @@
                               "value": {"literal": {"string": "Gets the features related to graph sideEffects operation."}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Features specific to a operations of a graph."}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Features specific to a operations of a graph."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.features.PropertyFeatures",
@@ -485,7 +492,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A base interface for Edge or Vertex Property features."}}}]}}}}}},
+                    "value": {"literal": {"string": "A base interface for Edge or Vertex Property features."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.features.VariableFeatures",
@@ -507,7 +515,8 @@
                               "key": {"variable": "description"},
                               "value": {
                                 "literal": {"string": "If any of the features on Graph.Features.VariableFeatures is true then this value must be true."}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Features for Graph.Variables."}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Features for Graph.Variables."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.features.VertexFeatures",
@@ -585,7 +594,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Features that are related to Vertex operations."}}}]}}}}}},
+                    "value": {"literal": {"string": "Features that are related to Vertex operations."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.features.VertexPropertyFeatures",
@@ -612,4 +622,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Features that are related to Vertex Property objects."}}}]}}}}}}]}
+                    "value": {"literal": {"string": "Features that are related to Vertex Property objects."}}}]}}},
+          "constraints": []}}}]}

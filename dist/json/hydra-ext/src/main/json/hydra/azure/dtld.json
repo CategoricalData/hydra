@@ -120,7 +120,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Command describes a function or operation that can be performed on any digital twin."}}}]}}}}}},
+                    "value": {"literal": {"string": "A Command describes a function or operation that can be performed on any digital twin."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.CommandPayload",
@@ -209,7 +210,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A CommandPayload describes the inputs to or the outputs from a Command."}}}]}}}}}},
+                    "value": {"literal": {"string": "A CommandPayload describes the inputs to or the outputs from a Command."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.CommandType",
@@ -224,7 +226,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "CommandType is deprecated. Either value, synchronous or asynchronous, has the same meaning: a command that starts execution within a configurable time and that completes execution within a configurable time."}}}]}}}}}},
+                        "string": "CommandType is deprecated. Either value, synchronous or asynchronous, has the same meaning: a command that starts execution within a configurable time and that completes execution within a configurable time."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.Component",
@@ -321,7 +324,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Components enable interfaces to be composed of other interfaces. Components are different from relationships because they describe contents that are directly part of the interface. (A relationship describes a link between two interfaces.)"}}}]}}}}}},
+                        "string": "Components enable interfaces to be composed of other interfaces. Components are different from relationships because they describe contents that are directly part of the interface. (A relationship describes a link between two interfaces.)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.Dtmi",
@@ -330,7 +334,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A digital twin model identifier"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A digital twin model identifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.EnumValue",
@@ -423,7 +428,8 @@
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An EnumValue describes an element of an Enum."}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An EnumValue describes an element of an Enum."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.Field",
@@ -509,7 +515,8 @@
                                   {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Field describes a field in an Object."}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Field describes a field in an Object."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.IntegerOrString",
@@ -523,7 +530,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A value which may be either an integer or a string"}}}]}}}}}},
+                    "value": {"literal": {"string": "A value which may be either an integer or a string"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.Interface",
@@ -650,7 +658,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "An Interface describes the contents (Telemetry, Properties, Commands, Relationships, and Components) of any digital twin."}}}]}}}}}},
+                        "string": "An Interface describes the contents (Telemetry, Properties, Commands, Relationships, and Components) of any digital twin."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.InterfaceContents",
@@ -671,7 +680,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "One of the kinds of content an Interface may contain: a Command, Component, Property, Relationship, or Telemetry"}}}]}}}}}},
+                        "string": "One of the kinds of content an Interface may contain: a Command, Component, Property, Relationship, or Telemetry"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.Iri",
@@ -681,7 +691,8 @@
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Internationalized Resource Identifier"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Internationalized Resource Identifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.MapKey",
@@ -770,7 +781,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A MapKey describes the key in a Map. The schema of a MapKey must be string."}}}]}}}}}},
+                    "value": {"literal": {"string": "A MapKey describes the key in a Map. The schema of a MapKey must be string."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.MapValue",
@@ -856,7 +868,8 @@
                                   {"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A localizable name for display"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A MapValue describes the values in a Map."}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A MapValue describes the values in a Map."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.Property",
@@ -980,7 +993,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A Property describes the read-only and read/write state of any digital twin. For example, a device serial number may be a read-only property, the desired temperature on a thermostat may be a read-write property; and the name of a room may be a read-write property."}}}]}}}}}},
+                        "string": "A Property describes the read-only and read/write state of any digital twin. For example, a device serial number may be a read-only property, the desired temperature on a thermostat may be a read-write property; and the name of a room may be a read-write property."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.Relationship",
@@ -1141,7 +1155,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A Relationship describes a link to another digital twin and enables graphs of digital twins to be created. Relationships are different from Components because they describe a link to a separate digital twin."}}}]}}}}}},
+                        "string": "A Relationship describes a link to another digital twin and enables graphs of digital twins to be created. Relationships are different from Components because they describe a link to a separate digital twin."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.Schema",
@@ -1159,7 +1174,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Schemas are used to describe the on-the-wire or serialized format of the data in a digital twin interface. A full set of primitive data types are provided, along with support for a variety of complex schemas in the forms of Arrays, Enums, Maps, and Objects. Schemas described through digital twin's schema definition language are compatible with popular serialization formats, including JSON, Avro, and Protobuf."}}}]}}}}}},
+                        "string": "Schemas are used to describe the on-the-wire or serialized format of the data in a digital twin interface. A full set of primitive data types are provided, along with support for a variety of complex schemas in the forms of Arrays, Enums, Maps, and Objects. Schemas described through digital twin's schema definition language are compatible with popular serialization formats, including JSON, Avro, and Protobuf."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.SchemaArray",
@@ -1242,7 +1258,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "An Array describes an indexable data type where each element is of the same schema. An Array elements' schema can itself be a primitive or complex schema."}}}]}}}}}},
+                        "string": "An Array describes an indexable data type where each element is of the same schema. An Array elements' schema can itself be a primitive or complex schema."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.SchemaComplex",
@@ -1262,7 +1279,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Complex schemas are designed for supporting complex data types made up of primitive data types. Currently the following complex schemas are provided: Array, Enum, Map, and Object. A complex schema can be specified directly as the value in a schema statement or described in the interface schemas set and referenced in the schema statement."}}}]}}}}}},
+                        "string": "Complex schemas are designed for supporting complex data types made up of primitive data types. Currently the following complex schemas are provided: Array, Enum, Map, and Object. A complex schema can be specified directly as the value in a schema statement or described in the interface schemas set and referenced in the schema statement."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.SchemaEnum",
@@ -1356,7 +1374,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "An Enum describes a data type with a set of named labels that map to values. The values in an Enum can be either integers or strings, but the labels are always strings."}}}]}}}}}},
+                        "string": "An Enum describes a data type with a set of named labels that map to values. The values in an Enum can be either integers or strings, but the labels are always strings."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.SchemaInterface",
@@ -1433,7 +1452,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Within an interface definition, complex schemas may be defined for reusability across Telemetry, Properties, and Commands. This is designed to promote readability and improved maintenance because schemas that are reused can be defined once (per interface). Interface schemas are defined in the schemas property of an interface."}}}]}}}}}},
+                        "string": "Within an interface definition, complex schemas may be defined for reusability across Telemetry, Properties, and Commands. This is designed to promote readability and improved maintenance because schemas that are reused can be defined once (per interface). Interface schemas are defined in the schemas property of an interface."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.SchemaInterfaceType",
@@ -1451,7 +1471,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The type of a reusable interface schema: Array, Enum, Map, or Object"}}}]}}}}}},
+                    "value": {"literal": {"string": "The type of a reusable interface schema: Array, Enum, Map, or Object"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.SchemaMap",
@@ -1542,7 +1563,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A Map describes a data type of key-value pairs where the values share the same schema. The key in a Map must be a string. The values in a Map can be any schema."}}}]}}}}}},
+                        "string": "A Map describes a data type of key-value pairs where the values share the same schema. The key in a Map must be a string. The values in a Map can be any schema."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.SchemaObject",
@@ -1630,7 +1652,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "An Object describes a data type made up of named fields (like a struct in C). The fields in an Object map can be primitive or complex schemas."}}}]}}}}}},
+                        "string": "An Object describes a data type made up of named fields (like a struct in C). The fields in an Object map can be primitive or complex schemas."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.SchemaPrimitive",
@@ -1714,7 +1737,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A full set of primitive data types are provided and can be specified directly as the value in a schema statement in a digital twin interface."}}}]}}}}}},
+                        "string": "A full set of primitive data types are provided and can be specified directly as the value in a schema statement in a digital twin interface."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.Telemetry",
@@ -1826,7 +1850,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Telemetry describes the data emitted by any digital twin, whether the data is a regular stream of sensor readings or a computed stream of data, such as occupancy, or an occasional error or information message."}}}]}}}}}},
+                        "string": "Telemetry describes the data emitted by any digital twin, whether the data is a regular stream of sensor readings or a computed stream of data, such as occupancy, or an occasional error or information message."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.azure.dtld.Unit",
@@ -1839,4 +1864,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The unit type of a Property or Telemetry value, available when a semantic type is present"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "The unit type of a Property or Telemetry value, available when a semantic type is present"}}}]}}},
+          "constraints": []}}}]}

@@ -57,7 +57,8 @@
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generated Hydra elements"}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Environment for Avro-to-Hydra code generation"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Environment for Avro-to-Hydra code generation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.environment.AvroForeignKey",
@@ -91,7 +92,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An Avro foreign key annotation linking a field to another type"}}}]}}}}}},
+                    "value": {"literal": {"string": "An Avro foreign key annotation linking a field to another type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.environment.AvroPrimaryKey",
@@ -121,7 +123,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An Avro primary key annotation identifying the element name field"}}}]}}}}}},
+                    "value": {"literal": {"string": "An Avro primary key annotation identifying the element name field"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.environment.AvroQualifiedName",
@@ -145,7 +148,8 @@
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The local name"}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro qualified name with optional namespace"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro qualified name with optional namespace"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.environment.EncodeEnvironment",
@@ -191,4 +195,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Environment for Hydra-to-Avro encoding, tracking which named types have been emitted"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "Environment for Hydra-to-Avro encoding, tracking which named types have been emitted"}}}]}}},
+          "constraints": []}}}]}

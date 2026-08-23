@@ -17,7 +17,8 @@
                 "record": [
                   {"name": "elementType", "type": {"variable": "hydra.delta.parquet.DataType"}},
                   {"name": "containsNull", "type": {"literal": "boolean"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represent array data type."}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Represent array data type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.delta.parquet.BasePrimitiveType",
@@ -122,7 +123,8 @@
                                 "literal": {
                                   "string": "A timestamp type, supporting [0001-01-01T00:00:00.000000Z, 9999-12-31T23:59:59.999999Z] where the left/right-bound is a date and time of the proleptic Gregorian calendar in UTC+00:00. Internally, this is represented as the number of microseconds since the Unix epoch, 1970-01-01 00:00:00 UTC."}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Base class for all primitive types DataType."}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Base class for all primitive types DataType."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.delta.parquet.DataType",
@@ -171,7 +173,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Delta Parquet data type, either array, primitive, decimal, map, or struct."}}}]}}}}}},
+                    "value": {"literal": {"string": "A Delta Parquet data type, either array, primitive, decimal, map, or struct."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.delta.parquet.DecimalType",
@@ -189,7 +192,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A decimal data type with fixed precision (the maximum number of digits) and scale (the number of digits on right side of dot). The precision can be up to 38, scale can also be up to 38 (less or equal to precision)."}}}]}}}}}},
+                        "string": "A decimal data type with fixed precision (the maximum number of digits) and scale (the number of digits on right side of dot). The precision can be up to 38, scale can also be up to 38 (less or equal to precision)."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.delta.parquet.MapType",
@@ -202,7 +206,8 @@
                   {"name": "keyType", "type": {"variable": "hydra.delta.parquet.DataType"}},
                   {"name": "valueType", "type": {"variable": "hydra.delta.parquet.DataType"}},
                   {"name": "valueContainsNull", "type": {"literal": "boolean"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Data type representing a map type."}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Data type representing a map type."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.delta.parquet.StructField",
@@ -219,7 +224,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Represents a subfield of StructType with additional properties and metadata."}}}]}}}}}},
+                    "value": {"literal": {"string": "Represents a subfield of StructType with additional properties and metadata."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.delta.parquet.StructType",
@@ -232,4 +238,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Struct type which contains one or more columns."}}}]}}}}}}]}
+                    "value": {"literal": {"string": "Struct type which contains one or more columns."}}}]}}},
+          "constraints": []}}}]}

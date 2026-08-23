@@ -15,7 +15,8 @@
                   {"name": "Relation", "type": {"variable": "hydra.datalog.syntax.Relation"}},
                   {"name": "TermList", "type": {"variable": "hydra.datalog.syntax.TermList"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A relation applied to a list of terms"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A relation applied to a list of terms"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.AtomList",
@@ -28,7 +29,8 @@
                   {"name": "single", "type": {"variable": "hydra.datalog.syntax.Atom"}},
                   {"name": "many", "type": {"variable": "hydra.datalog.syntax.AtomListMultiple"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A nonempty, comma-separated list of atoms"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A nonempty, comma-separated list of atoms"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.AtomListMultiple",
@@ -44,7 +46,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An atom followed by the remainder of a comma-separated atom list"}}}]}}}}}},
+                    "value": {"literal": {"string": "An atom followed by the remainder of a comma-separated atom list"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Constant",
@@ -57,7 +60,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A constant term, e.g. an atomic value such as a symbol or number"}}}]}}}}}},
+                    "value": {"literal": {"string": "A constant term, e.g. an atomic value such as a symbol or number"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.ConstantList",
@@ -71,7 +75,8 @@
                   {"name": "many", "type": {"variable": "hydra.datalog.syntax.ConstantListMultiple"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A nonempty, comma-separated list of constants"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A nonempty, comma-separated list of constants"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.ConstantListMultiple",
@@ -87,7 +92,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A constant followed by the remainder of a comma-separated constant list"}}}]}}}}}},
+                    "value": {"literal": {"string": "A constant followed by the remainder of a comma-separated constant list"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Fact",
@@ -103,7 +109,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An unconditional assertion of a relation applied to a list of constants"}}}]}}}}}},
+                    "value": {"literal": {"string": "An unconditional assertion of a relation applied to a list of constants"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Program",
@@ -113,7 +120,8 @@
             "annotated": {
               "body": {"wrap": {"list": {"variable": "hydra.datalog.syntax.ProgramElmt"}}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Datalog program: a list of facts and rules"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Datalog program: a list of facts and rules"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.ProgramElmt",
@@ -129,7 +137,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single element of a Datalog program: either a fact or a rule"}}}]}}}}}},
+                    "value": {"literal": {"string": "A single element of a Datalog program: either a fact or a rule"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Relation",
@@ -142,7 +151,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The name of a predicate (relation) used in facts, rules, and queries"}}}]}}}}}},
+                    "value": {"literal": {"string": "The name of a predicate (relation) used in facts, rules, and queries"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Rule",
@@ -158,7 +168,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A conditional assertion: a head atom implied by a conjunction of body atoms"}}}]}}}}}},
+                    "value": {"literal": {"string": "A conditional assertion: a head atom implied by a conjunction of body atoms"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Term",
@@ -174,7 +185,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An argument to an atom: either a constant or a variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "An argument to an atom: either a constant or a variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.TermList",
@@ -187,7 +199,8 @@
                   {"name": "single", "type": {"variable": "hydra.datalog.syntax.Term"}},
                   {"name": "many", "type": {"variable": "hydra.datalog.syntax.TermListMultiple"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A nonempty, comma-separated list of terms"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A nonempty, comma-separated list of terms"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.TermListMultiple",
@@ -203,7 +216,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A term followed by the remainder of a comma-separated term list"}}}]}}}}}},
+                    "value": {"literal": {"string": "A term followed by the remainder of a comma-separated term list"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.datalog.syntax.Variable",
@@ -216,4 +230,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A logic variable, which may be bound to different constants across a query"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A logic variable, which may be bound to different constants across a query"}}}]}}},
+          "constraints": []}}}]}

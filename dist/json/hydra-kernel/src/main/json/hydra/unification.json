@@ -76,14 +76,14 @@
                                       {
                                         "name": "sleft",
                                         "term": {"application": {"function": {"variable": "hydra.strip.deannotateType"}, "argument": {"variable": "left"}}},
-                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}}}],
+                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}, "constraints": []}}],
                                     "body": {
                                       "let": {
                                         "bindings": [
                                           {
                                             "name": "sright",
                                             "term": {"application": {"function": {"variable": "hydra.strip.deannotateType"}, "argument": {"variable": "right"}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}}}],
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}, "constraints": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -115,7 +115,8 @@
                                                   "body": {
                                                     "function": {
                                                       "domain": {"variable": "hydra.core.Type"},
-                                                      "codomain": {"function": {"domain": {"variable": "hydra.core.Type"}, "codomain": {"variable": "hydra.typing.TypeConstraint"}}}}}}}],
+                                                      "codomain": {"function": {"domain": {"variable": "hydra.core.Type"}, "codomain": {"variable": "hydra.typing.TypeConstraint"}}}}},
+                                                  "constraints": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -159,7 +160,8 @@
                                                             "type": {"variable": "t1"}}}}},
                                                     "typeScheme": {
                                                       "variables": ["t1"],
-                                                      "body": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "t1"}}}}}],
+                                                      "body": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "t1"}}},
+                                                      "constraints": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -195,7 +197,8 @@
                                                                 "argument": {"typeApplication": {"body": {"variable": "cannotUnify"}, "type": {"list": {"variable": "t1"}}}}}}}},
                                                         "typeScheme": {
                                                           "variables": ["t1"],
-                                                          "body": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"list": {"variable": "t1"}}}}}}],
+                                                          "body": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"list": {"variable": "t1"}}}},
+                                                          "constraints": [{"key": "t1", "value": {"classes": []}}]}}],
                                                     "body": {
                                                       "let": {
                                                         "bindings": [
@@ -268,7 +271,8 @@
                                                                     "function": {
                                                                       "domain": {"list": {"variable": "hydra.core.Type"}},
                                                                       "codomain": {
-                                                                        "either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}}}}}}}],
+                                                                        "either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}}}}},
+                                                              "constraints": []}}],
                                                         "body": {
                                                           "let": {
                                                             "bindings": [
@@ -436,7 +440,8 @@
                                                                         "function": {
                                                                           "domain": {"list": {"variable": "hydra.core.FieldType"}},
                                                                           "codomain": {
-                                                                            "either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}}}}}}}],
+                                                                            "either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"list": {"variable": "hydra.typing.TypeConstraint"}}}}}}}},
+                                                                  "constraints": []}}],
                                                             "body": {
                                                               "application": {
                                                                 "function": {
@@ -1054,7 +1059,7 @@
                                                           "application": {
                                                             "function": {"project": {"typeName": "hydra.typing.TypeConstraint", "fieldName": "left"}},
                                                             "argument": {"variable": "c"}}}}},
-                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}}}],
+                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}, "constraints": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -1067,7 +1072,7 @@
                                                               "application": {
                                                                 "function": {"project": {"typeName": "hydra.typing.TypeConstraint", "fieldName": "right"}},
                                                                 "argument": {"variable": "c"}}}}},
-                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}}}],
+                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}, "constraints": []}}],
                                                     "body": {
                                                       "let": {
                                                         "bindings": [
@@ -1077,7 +1082,7 @@
                                                               "application": {
                                                                 "function": {"project": {"typeName": "hydra.typing.TypeConstraint", "fieldName": "comment"}},
                                                                 "argument": {"variable": "c"}}},
-                                                            "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                                         "body": {
                                                           "let": {
                                                             "bindings": [
@@ -1100,7 +1105,7 @@
                                                                                   "application": {
                                                                                     "function": {"application": {"function": {"variable": "hydra.substitution.singletonTypeSubst"}, "argument": {"variable": "v"}}},
                                                                                     "argument": {"variable": "t"}}},
-                                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.typing.TypeSubst"}}}],
+                                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.typing.TypeSubst"}, "constraints": []}}],
                                                                             "body": {
                                                                               "let": {
                                                                                 "bindings": [
@@ -1116,7 +1121,8 @@
                                                                                             "argument": {"variable": "s"}}}}},
                                                                                     "typeScheme": {
                                                                                       "variables": [],
-                                                                                      "body": {"function": {"domain": {"variable": "hydra.typing.TypeSubst"}, "codomain": {"variable": "hydra.typing.TypeSubst"}}}}}],
+                                                                                      "body": {"function": {"domain": {"variable": "hydra.typing.TypeSubst"}, "codomain": {"variable": "hydra.typing.TypeSubst"}}},
+                                                                                      "constraints": []}}],
                                                                                 "body": {
                                                                                   "application": {
                                                                                     "function": {
@@ -1151,7 +1157,8 @@
                                                                       "codomain": {
                                                                         "function": {
                                                                           "domain": {"variable": "hydra.core.Type"},
-                                                                          "codomain": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}}}}}}}}],
+                                                                          "codomain": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}}}}}},
+                                                                  "constraints": []}}],
                                                             "body": {
                                                               "let": {
                                                                 "bindings": [
@@ -1242,7 +1249,8 @@
                                                                           "codomain": {
                                                                             "function": {
                                                                               "domain": {"variable": "hydra.core.Type"},
-                                                                              "codomain": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}}}}}}}}],
+                                                                              "codomain": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}}}}}},
+                                                                      "constraints": []}}],
                                                                 "body": {
                                                                   "let": {
                                                                     "bindings": [
@@ -1277,7 +1285,8 @@
                                                                                       "application": {"function": {"project": {"typeName": "hydra.core.TypeScheme", "fieldName": "body"}}, "argument": {"variable": "ts"}}}}}}}}},
                                                                         "typeScheme": {
                                                                           "variables": [],
-                                                                          "body": {"function": {"domain": {"variable": "hydra.core.TypeScheme"}, "codomain": {"literal": "boolean"}}}}}],
+                                                                          "body": {"function": {"domain": {"variable": "hydra.core.TypeScheme"}, "codomain": {"literal": "boolean"}}},
+                                                                          "constraints": []}}],
                                                                     "body": {
                                                                       "let": {
                                                                         "bindings": [
@@ -1395,7 +1404,8 @@
                                                                                   "codomain": {
                                                                                     "function": {
                                                                                       "domain": {"variable": "hydra.core.Type"},
-                                                                                      "codomain": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}}}}}}}}],
+                                                                                      "codomain": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}}}}}},
+                                                                              "constraints": []}}],
                                                                         "body": {
                                                                           "let": {
                                                                             "bindings": [
@@ -1432,7 +1442,8 @@
                                                                                           "body": {
                                                                                             "function": {
                                                                                               "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}},
-                                                                                              "codomain": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}}}}}}],
+                                                                                              "codomain": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}}}},
+                                                                                          "constraints": []}}],
                                                                                     "body": {
                                                                                       "application": {
                                                                                         "function": {
@@ -1461,7 +1472,8 @@
                                                                                         "argument": {"variable": "withConstraints"}}}}},
                                                                                 "typeScheme": {
                                                                                   "variables": [],
-                                                                                  "body": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}}}}],
+                                                                                  "body": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}},
+                                                                                  "constraints": []}}],
                                                                             "body": {
                                                                               "let": {
                                                                                 "bindings": [
@@ -1487,7 +1499,8 @@
                                                                                         "argument": {"variable": "sright"}}},
                                                                                     "typeScheme": {
                                                                                       "variables": [],
-                                                                                      "body": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}}}}],
+                                                                                      "body": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}},
+                                                                                      "constraints": []}}],
                                                                                 "body": {
                                                                                   "application": {
                                                                                     "function": {
@@ -1663,7 +1676,8 @@
                                           "codomain": {
                                             "function": {
                                               "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}},
-                                              "codomain": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}}}}}}}}],
+                                              "codomain": {"either": {"left": {"variable": "hydra.errors.UnificationError"}, "right": {"variable": "hydra.typing.TypeSubst"}}}}}}},
+                                      "constraints": []}}],
                                 "body": {
                                   "application": {
                                     "function": {
@@ -1789,7 +1803,8 @@
                                               "body": {
                                                 "function": {
                                                   "domain": {"variable": "hydra.core.Type"},
-                                                  "codomain": {"function": {"domain": {"variable": "hydra.core.Type"}, "codomain": {"variable": "hydra.typing.TypeConstraint"}}}}}}}],
+                                                  "codomain": {"function": {"domain": {"variable": "hydra.core.Type"}, "codomain": {"variable": "hydra.typing.TypeConstraint"}}}}},
+                                              "constraints": []}}],
                                         "body": {
                                           "application": {
                                             "function": {
@@ -1949,7 +1964,8 @@
                               "body": {
                                 "function": {
                                   "domain": {"literal": "boolean"},
-                                  "codomain": {"function": {"domain": {"variable": "hydra.core.Type"}, "codomain": {"literal": "boolean"}}}}}}}],
+                                  "codomain": {"function": {"domain": {"variable": "hydra.core.Type"}, "codomain": {"literal": "boolean"}}}}},
+                              "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {

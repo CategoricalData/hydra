@@ -106,14 +106,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.AddOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AdditiveExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AdditiveExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.AddOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -373,14 +373,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.BaseSpecifier", "fieldName": "access"}},
                             "argument": {"variable": "bs"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AccessSpecifier"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AccessSpecifier"}, "constraints": []}},
                       {
                         "name": "name",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.BaseSpecifier", "fieldName": "name"}},
                             "argument": {"variable": "bs"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -498,14 +498,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.BitwiseAndOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AndExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AndExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.BitwiseAndOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.EqualityExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.EqualityExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -542,14 +542,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.BitwiseOrOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.InclusiveOrExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.InclusiveOrExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.BitwiseOrOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ExclusiveOrExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ExclusiveOrExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -587,14 +587,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.BitwiseXorOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ExclusiveOrExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ExclusiveOrExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.BitwiseXorOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AndExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AndExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -707,14 +707,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.Capture", "fieldName": "name"}},
                             "argument": {"variable": "cap"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "byRef",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.Capture", "fieldName": "byReference"}},
                             "argument": {"variable": "cap"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -796,14 +796,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.CaseValue", "fieldName": "value"}},
                             "argument": {"variable": "cv"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "statement",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.CaseValue", "fieldName": "statement"}},
                             "argument": {"variable": "cv"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Statement"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Statement"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -884,21 +884,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ClassDeclaration", "fieldName": "specifier"}},
                             "argument": {"variable": "cd"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ClassSpecifier"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ClassSpecifier"}, "constraints": []}},
                       {
                         "name": "mbody",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ClassDeclaration", "fieldName": "body"}},
                             "argument": {"variable": "cd"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.cpp.syntax.ClassBody"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.cpp.syntax.ClassBody"}}, "constraints": []}},
                       {
                         "name": "key",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ClassSpecifier", "fieldName": "key"}},
                             "argument": {"variable": "spec"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ClassKey"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ClassKey"}, "constraints": []}},
                       {
                         "name": "isEnum",
                         "term": {
@@ -922,7 +922,7 @@
                                       "typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"variable": "hydra.cpp.syntax.ClassKey"}}},
                                     "argument": {"variable": "key"}}},
                                 "argument": {"inject": {"typeName": "hydra.cpp.syntax.ClassKey", "field": {"name": "enumClass", "term": "unit"}}}}}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.withSemi"},
@@ -1029,21 +1029,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ClassSpecifier", "fieldName": "key"}},
                             "argument": {"variable": "cs"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ClassKey"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ClassKey"}, "constraints": []}},
                       {
                         "name": "name",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ClassSpecifier", "fieldName": "name"}},
                             "argument": {"variable": "cs"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "inheritance",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ClassSpecifier", "fieldName": "inheritance"}},
                             "argument": {"variable": "cs"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.BaseSpecifier"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.BaseSpecifier"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -1066,7 +1066,7 @@
                                             "argument": {
                                               "application": {
                                                 "function": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.cpp.syntax.BaseSpecifier"}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.cpp.syntax.BaseSpecifier"}}},
                                                 "argument": {"variable": "inheritance"}}}}},
                                         "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}}}},
                                     "argument": {
@@ -1111,14 +1111,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.CommaExpression", "fieldName": "left"}},
                             "argument": {"variable": "ce"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.CommaExpression", "fieldName": "right"}},
                             "argument": {"variable": "ce"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AssignmentExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AssignmentExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -1150,14 +1150,14 @@
                         "name": "text",
                         "term": {
                           "application": {"function": {"project": {"typeName": "hydra.cpp.syntax.Comment", "fieldName": "text"}}, "argument": {"variable": "c"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "isMultiline",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.Comment", "fieldName": "isMultiline"}},
                             "argument": {"variable": "c"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.cst"},
@@ -1260,28 +1260,28 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ConstructorDeclaration", "fieldName": "name"}},
                             "argument": {"variable": "cd"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "params",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ConstructorDeclaration", "fieldName": "parameters"}},
                             "argument": {"variable": "cd"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Parameter"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Parameter"}}, "constraints": []}},
                       {
                         "name": "inits",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ConstructorDeclaration", "fieldName": "initializers"}},
                             "argument": {"variable": "cd"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.MemInitializer"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.MemInitializer"}}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ConstructorDeclaration", "fieldName": "body"}},
                             "argument": {"variable": "cd"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.FunctionBody"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.FunctionBody"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -1321,7 +1321,7 @@
                                             "argument": {
                                               "application": {
                                                 "function": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.cpp.syntax.MemInitializer"}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.cpp.syntax.MemInitializer"}}},
                                                 "argument": {"variable": "inits"}}}}},
                                         "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.ast.Expr"}}}}},
                                     "argument": {
@@ -1451,21 +1451,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.DefineDirective", "fieldName": "name"}},
                             "argument": {"variable": "dd"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "params",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.DefineDirective", "fieldName": "parameters"}},
                             "argument": {"variable": "dd"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"list": {"literal": "string"}}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"list": {"literal": "string"}}}, "constraints": []}},
                       {
                         "name": "replacement",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.DefineDirective", "fieldName": "replacement"}},
                             "argument": {"variable": "dd"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}}}],
+                        "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -1554,28 +1554,28 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.DestructorDeclaration", "fieldName": "prefixSpecifiers"}},
                             "argument": {"variable": "dd"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.FunctionSpecifierPrefix"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.FunctionSpecifierPrefix"}}, "constraints": []}},
                       {
                         "name": "name",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.DestructorDeclaration", "fieldName": "name"}},
                             "argument": {"variable": "dd"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "suffixSpecs",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.DestructorDeclaration", "fieldName": "suffixSpecifiers"}},
                             "argument": {"variable": "dd"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.FunctionSpecifierSuffix"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.FunctionSpecifierSuffix"}}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.DestructorDeclaration", "fieldName": "body"}},
                             "argument": {"variable": "dd"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.FunctionBody"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.FunctionBody"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -1653,14 +1653,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.DivideOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.DivideOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.UnaryExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.UnaryExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -1694,14 +1694,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.DoStatement", "fieldName": "body"}},
                             "argument": {"variable": "ds"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Statement"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Statement"}, "constraints": []}},
                       {
                         "name": "cond",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.DoStatement", "fieldName": "condition"}},
                             "argument": {"variable": "ds"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.newlineSep"},
@@ -1812,14 +1812,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.EqualOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.EqualityExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.EqualityExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.EqualOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.RelationalExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.RelationalExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -1967,21 +1967,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ExplicitAssignment", "fieldName": "left"}},
                             "argument": {"variable": "ea"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.LogicalOrExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.LogicalOrExpression"}, "constraints": []}},
                       {
                         "name": "op",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ExplicitAssignment", "fieldName": "op"}},
                             "argument": {"variable": "ea"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AssignmentOperator"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AssignmentOperator"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ExplicitAssignment", "fieldName": "right"}},
                             "argument": {"variable": "ea"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AssignmentExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AssignmentExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -2101,28 +2101,28 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ForStatement", "fieldName": "init"}},
                             "argument": {"variable": "fs"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ForInit"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ForInit"}, "constraints": []}},
                       {
                         "name": "cond",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ForStatement", "fieldName": "condition"}},
                             "argument": {"variable": "fs"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "inc",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ForStatement", "fieldName": "increment"}},
                             "argument": {"variable": "fs"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ForStatement", "fieldName": "body"}},
                             "argument": {"variable": "fs"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Statement"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Statement"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.newlineSep"},
@@ -2172,14 +2172,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.FunctionApplication", "fieldName": "function"}},
                             "argument": {"variable": "fa"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.FunctionIdentifier"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.FunctionIdentifier"}, "constraints": []}},
                       {
                         "name": "args",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.FunctionApplication", "fieldName": "arguments"}},
                             "argument": {"variable": "fa"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Expression"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -2283,14 +2283,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.FunctionCallOperation", "fieldName": "function"}},
                             "argument": {"variable": "fco"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.PostfixExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.PostfixExpression"}, "constraints": []}},
                       {
                         "name": "args",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.FunctionCallOperation", "fieldName": "arguments"}},
                             "argument": {"variable": "fco"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Expression"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.noSep"},
@@ -2337,42 +2337,42 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.FunctionDeclaration", "fieldName": "prefixSpecifiers"}},
                             "argument": {"variable": "fd"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.FunctionSpecifierPrefix"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.FunctionSpecifierPrefix"}}, "constraints": []}},
                       {
                         "name": "retType",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.FunctionDeclaration", "fieldName": "returnType"}},
                             "argument": {"variable": "fd"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}, "constraints": []}},
                       {
                         "name": "name",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.FunctionDeclaration", "fieldName": "name"}},
                             "argument": {"variable": "fd"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "params",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.FunctionDeclaration", "fieldName": "parameters"}},
                             "argument": {"variable": "fd"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Parameter"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Parameter"}}, "constraints": []}},
                       {
                         "name": "suffixSpecs",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.FunctionDeclaration", "fieldName": "suffixSpecifiers"}},
                             "argument": {"variable": "fd"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.FunctionSpecifierSuffix"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.FunctionSpecifierSuffix"}}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.FunctionDeclaration", "fieldName": "body"}},
                             "argument": {"variable": "fd"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.FunctionBody"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.FunctionBody"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -2597,14 +2597,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.FunctionType", "fieldName": "returnType"}},
                             "argument": {"variable": "ft"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}, "constraints": []}},
                       {
                         "name": "params",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.FunctionType", "fieldName": "parameters"}},
                             "argument": {"variable": "ft"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Parameter"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Parameter"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -2648,14 +2648,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.GreaterEqualOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.RelationalExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.RelationalExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.GreaterEqualOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ShiftExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ShiftExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -2692,14 +2692,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.GreaterOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.RelationalExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.RelationalExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.GreaterOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ShiftExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ShiftExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -2820,14 +2820,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.IncludeDirective", "fieldName": "name"}},
                             "argument": {"variable": "incl"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "isSystem",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.IncludeDirective", "fieldName": "isSystem"}},
                             "argument": {"variable": "incl"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -2921,7 +2921,7 @@
                                 "body": {
                                   "application": {
                                     "function": {"variable": "hydra.serialization.cst"},
-                                    "argument": {"application": {"function": {"variable": "hydra.lib.literals.showBigint"}, "argument": {"variable": "n"}}}}}}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.lib.literals.printBigint"}, "argument": {"variable": "n"}}}}}}}},
                           {
                             "name": "hexadecimal",
                             "handler": {
@@ -3123,14 +3123,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LabeledStatement", "fieldName": "label"}},
                             "argument": {"variable": "ls"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "stmt",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LabeledStatement", "fieldName": "statement"}},
                             "argument": {"variable": "ls"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Statement"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Statement"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.newlineSep"},
@@ -3168,28 +3168,28 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LambdaExpression", "fieldName": "captures"}},
                             "argument": {"variable": "le"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.CaptureList"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.CaptureList"}, "constraints": []}},
                       {
                         "name": "params",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LambdaExpression", "fieldName": "parameters"}},
                             "argument": {"variable": "le"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Parameter"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Parameter"}}, "constraints": []}},
                       {
                         "name": "retType",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LambdaExpression", "fieldName": "returnType"}},
                             "argument": {"variable": "le"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.cpp.syntax.TypeExpression"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.cpp.syntax.TypeExpression"}}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LambdaExpression", "fieldName": "body"}},
                             "argument": {"variable": "le"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.CompoundStatement"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.CompoundStatement"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -3205,7 +3205,8 @@
                                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}},
                                         "argument": {
                                           "application": {
-                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.cpp.syntax.Parameter"}}},
+                                            "function": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.cpp.syntax.Parameter"}}},
                                             "argument": {"variable": "params"}}}}},
                                     "argument": {
                                       "application": {
@@ -3273,14 +3274,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LeftShiftOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ShiftExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ShiftExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LeftShiftOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AdditiveExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AdditiveExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -3317,14 +3318,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LessEqualOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.RelationalExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.RelationalExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LessEqualOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ShiftExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ShiftExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -3361,14 +3362,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LessOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.RelationalExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.RelationalExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LessOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ShiftExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ShiftExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -3403,14 +3404,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LineDirective", "fieldName": "lineNumber"}},
                             "argument": {"variable": "ld"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}},
+                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}},
                       {
                         "name": "filename",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LineDirective", "fieldName": "filename"}},
                             "argument": {"variable": "ld"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}}}],
+                        "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -3425,7 +3426,7 @@
                                     {
                                       "application": {
                                         "function": {"variable": "hydra.serialization.cst"},
-                                        "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "lineNumber"}}}}}]},
+                                        "argument": {"application": {"function": {"variable": "hydra.lib.literals.printInt32"}, "argument": {"variable": "lineNumber"}}}}}]},
                                 {
                                   "application": {
                                     "function": {
@@ -3490,7 +3491,7 @@
                                     "function": {"variable": "hydra.serialization.cst"},
                                     "argument": {
                                       "application": {
-                                        "function": {"variable": "hydra.lib.literals.showFloat64"},
+                                        "function": {"variable": "hydra.lib.literals.printFloat64"},
                                         "argument": {"application": {"function": {"unwrap": "hydra.cpp.syntax.FloatingLiteral"}, "argument": {"variable": "f"}}}}}}}}}},
                           {
                             "name": "character",
@@ -3604,14 +3605,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LogicalAndOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.LogicalAndExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.LogicalAndExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LogicalAndOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.InclusiveOrExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.InclusiveOrExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -3688,14 +3689,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LogicalOrOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.LogicalOrExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.LogicalOrExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.LogicalOrOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.LogicalAndExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.LogicalAndExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -3731,14 +3732,14 @@
                         "name": "key",
                         "term": {
                           "application": {"function": {"project": {"typeName": "hydra.cpp.syntax.MapEntry", "fieldName": "key"}}, "argument": {"variable": "me"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "val",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.MapEntry", "fieldName": "value"}},
                             "argument": {"variable": "me"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -3779,17 +3780,17 @@
                         "name": "keyType",
                         "term": {
                           "application": {"function": {"project": {"typeName": "hydra.cpp.syntax.Map", "fieldName": "keyType"}}, "argument": {"variable": "m"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}, "constraints": []}},
                       {
                         "name": "valType",
                         "term": {
                           "application": {"function": {"project": {"typeName": "hydra.cpp.syntax.Map", "fieldName": "valueType"}}, "argument": {"variable": "m"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}, "constraints": []}},
                       {
                         "name": "entries",
                         "term": {
                           "application": {"function": {"project": {"typeName": "hydra.cpp.syntax.Map", "fieldName": "entries"}}, "argument": {"variable": "m"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.MapEntry"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.MapEntry"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -3847,14 +3848,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.MemInitializer", "fieldName": "name"}},
                             "argument": {"variable": "mi"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "args",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.MemInitializer", "fieldName": "arguments"}},
                             "argument": {"variable": "mi"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Expression"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.noSep"},
@@ -3899,14 +3900,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.MemberAccessOperation", "fieldName": "object"}},
                             "argument": {"variable": "mao"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.PostfixExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.PostfixExpression"}, "constraints": []}},
                       {
                         "name": "member",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.MemberAccessOperation", "fieldName": "member"}},
                             "argument": {"variable": "mao"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.noSep"},
@@ -4074,14 +4075,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ModuloOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.ModuloOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.UnaryExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.UnaryExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -4168,14 +4169,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.MultiplyOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.MultiplyOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.UnaryExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.UnaryExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -4210,14 +4211,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.NamespaceDeclaration", "fieldName": "name"}},
                             "argument": {"variable": "nd"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "decls",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.NamespaceDeclaration", "fieldName": "declarations"}},
                             "argument": {"variable": "nd"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Declaration"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Declaration"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -4277,14 +4278,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.NotEqualOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.EqualityExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.EqualityExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.NotEqualOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.RelationalExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.RelationalExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -4320,14 +4321,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.Optional", "fieldName": "valueType"}},
                             "argument": {"variable": "opt"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}, "constraints": []}},
                       {
                         "name": "val",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.Optional", "fieldName": "value"}},
                             "argument": {"variable": "opt"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.cpp.syntax.Expression"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -4431,28 +4432,28 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.Parameter", "fieldName": "type"}},
                             "argument": {"variable": "p"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}, "constraints": []}},
                       {
                         "name": "name",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.Parameter", "fieldName": "name"}},
                             "argument": {"variable": "p"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "unnamed",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.Parameter", "fieldName": "unnamed"}},
                             "argument": {"variable": "p"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "defaultVal",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.Parameter", "fieldName": "defaultValue"}},
                             "argument": {"variable": "p"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.cpp.syntax.Expression"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.cpp.syntax.Expression"}}, "constraints": []}},
                       {
                         "name": "nameExpr",
                         "term": {
@@ -4471,7 +4472,7 @@
                                         "function": {"variable": "hydra.lib.strings.concat"},
                                         "argument": {"list": [{"literal": {"string": "/*"}}, {"variable": "name"}, {"literal": {"string": "*/"}}]}}}}},
                                 "argument": {"variable": "name"}}}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -4529,14 +4530,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.PatternMatch", "fieldName": "visitor"}},
                             "argument": {"variable": "pm"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Visitor"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Visitor"}, "constraints": []}},
                       {
                         "name": "variant",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.PatternMatch", "fieldName": "variant"}},
                             "argument": {"variable": "pm"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -4575,14 +4576,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.PointerMemberAccessOperation", "fieldName": "pointer"}},
                             "argument": {"variable": "pmao"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.PostfixExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.PostfixExpression"}, "constraints": []}},
                       {
                         "name": "member",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.PointerMemberAccessOperation", "fieldName": "member"}},
                             "argument": {"variable": "pmao"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.noSep"},
@@ -4917,21 +4918,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.Program", "fieldName": "preprocessorDirectives"}},
                             "argument": {"variable": "prog"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.PreprocessorDirective"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.PreprocessorDirective"}}, "constraints": []}},
                       {
                         "name": "includes",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.Program", "fieldName": "includes"}},
                             "argument": {"variable": "prog"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.IncludeDirective"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.IncludeDirective"}}, "constraints": []}},
                       {
                         "name": "decls",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.Program", "fieldName": "declarations"}},
                             "argument": {"variable": "prog"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Declaration"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Declaration"}}, "constraints": []}},
                       {
                         "name": "separate",
                         "term": {
@@ -4957,7 +4958,7 @@
                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "t1"}}}},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "t0"}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "t0"}}},
                                                         "argument": {"variable": "defs"}}}}},
                                                 "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "t1"}}}}},
                                             "argument": {"optional": {"application": {"function": {"variable": "sep"}, "argument": {"variable": "defs"}}}}}}}}}}}}}},
@@ -4966,7 +4967,8 @@
                           "body": {
                             "function": {
                               "domain": {"function": {"domain": {"list": {"variable": "t0"}}, "codomain": {"variable": "t1"}}},
-                              "codomain": {"function": {"domain": {"list": {"variable": "t0"}}, "codomain": {"optional": {"variable": "t1"}}}}}}}}],
+                              "codomain": {"function": {"domain": {"list": {"variable": "t0"}}, "codomain": {"optional": {"variable": "t1"}}}}}},
+                          "constraints": [{"key": "t0", "value": {"classes": []}}, {"key": "t1", "value": {"classes": []}}]}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.doubleNewlineSep"},
@@ -5057,14 +5059,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.QualifiedIdentifier", "fieldName": "namespace"}},
                             "argument": {"variable": "qi"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "name",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.QualifiedIdentifier", "fieldName": "name"}},
                             "argument": {"variable": "qi"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.cst"},
@@ -5099,14 +5101,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.QualifiedType", "fieldName": "baseType"}},
                             "argument": {"variable": "qt"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}, "constraints": []}},
                       {
                         "name": "qualifier",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.QualifiedType", "fieldName": "qualifier"}},
                             "argument": {"variable": "qt"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeQualifier"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeQualifier"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -5194,28 +5196,28 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.RangeForStatement", "fieldName": "type"}},
                             "argument": {"variable": "rfs"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}, "constraints": []}},
                       {
                         "name": "var",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.RangeForStatement", "fieldName": "variable"}},
                             "argument": {"variable": "rfs"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "range",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.RangeForStatement", "fieldName": "range"}},
                             "argument": {"variable": "rfs"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.RangeForStatement", "fieldName": "body"}},
                             "argument": {"variable": "rfs"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Statement"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Statement"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.newlineSep"},
@@ -5326,14 +5328,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.RightShiftOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ShiftExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ShiftExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.RightShiftOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AdditiveExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AdditiveExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -5370,21 +5372,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.SelectionStatement", "fieldName": "condition"}},
                             "argument": {"variable": "ss"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "thenBranch",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.SelectionStatement", "fieldName": "thenBranch"}},
                             "argument": {"variable": "ss"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Statement"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Statement"}, "constraints": []}},
                       {
                         "name": "elseBranch",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.SelectionStatement", "fieldName": "elseBranch"}},
                             "argument": {"variable": "ss"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.cpp.syntax.Statement"}}}}],
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.cpp.syntax.Statement"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.newlineSep"},
@@ -5450,12 +5452,12 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.Set", "fieldName": "elementType"}},
                             "argument": {"variable": "s"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}, "constraints": []}},
                       {
                         "name": "elems",
                         "term": {
                           "application": {"function": {"project": {"typeName": "hydra.cpp.syntax.Set", "fieldName": "elements"}}, "argument": {"variable": "s"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Expression"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -5666,14 +5668,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.SubscriptOperation", "fieldName": "array"}},
                             "argument": {"variable": "so"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.PostfixExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.PostfixExpression"}, "constraints": []}},
                       {
                         "name": "index",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.SubscriptOperation", "fieldName": "index"}},
                             "argument": {"variable": "so"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.noSep"},
@@ -5709,14 +5711,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.SubtractOperation", "fieldName": "left"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AdditiveExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.AdditiveExpression"}, "constraints": []}},
                       {
                         "name": "right",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.SubtractOperation", "fieldName": "right"}},
                             "argument": {"variable": "op"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -5752,14 +5754,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.SwitchStatement", "fieldName": "value"}},
                             "argument": {"variable": "ss"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "match",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.SwitchStatement", "fieldName": "cases"}},
                             "argument": {"variable": "ss"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.CaseStatement"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.CaseStatement"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -5850,21 +5852,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.TemplateDeclaration", "fieldName": "inline"}},
                             "argument": {"variable": "td"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "params",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.TemplateDeclaration", "fieldName": "parameters"}},
                             "argument": {"variable": "td"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
                       {
                         "name": "declaration",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.TemplateDeclaration", "fieldName": "declaration"}},
                             "argument": {"variable": "td"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Declaration"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Declaration"}, "constraints": []}},
                       {
                         "name": "sep",
                         "term": {
@@ -5882,7 +5884,8 @@
                             "argument": {"variable": "hydra.serialization.newlineSep"}}},
                         "typeScheme": {
                           "variables": [],
-                          "body": {"function": {"domain": {"list": {"variable": "hydra.ast.Expr"}}, "codomain": {"variable": "hydra.ast.Expr"}}}}}],
+                          "body": {"function": {"domain": {"list": {"variable": "hydra.ast.Expr"}}, "codomain": {"variable": "hydra.ast.Expr"}}},
+                          "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "sep"},
@@ -5943,21 +5946,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.TemplateFunctionCallOperation", "fieldName": "function"}},
                             "argument": {"variable": "tfco"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.PostfixExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.PostfixExpression"}, "constraints": []}},
                       {
                         "name": "templateArgs",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.TemplateFunctionCallOperation", "fieldName": "templateArguments"}},
                             "argument": {"variable": "tfco"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.TemplateArgument"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.TemplateArgument"}}, "constraints": []}},
                       {
                         "name": "args",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.TemplateFunctionCallOperation", "fieldName": "arguments"}},
                             "argument": {"variable": "tfco"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Expression"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.noSep"},
@@ -6021,14 +6024,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.TemplateType", "fieldName": "name"}},
                             "argument": {"variable": "tt"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "args",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.TemplateType", "fieldName": "arguments"}},
                             "argument": {"variable": "tt"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.TemplateArgument"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.TemplateArgument"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.noSep"},
@@ -6076,21 +6079,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.TernaryExpression", "fieldName": "condition"}},
                             "argument": {"variable": "te"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.LogicalOrExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.LogicalOrExpression"}, "constraints": []}},
                       {
                         "name": "trueExpr",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.TernaryExpression", "fieldName": "trueExpr"}},
                             "argument": {"variable": "te"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "falseExpr",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.TernaryExpression", "fieldName": "falseExpr"}},
                             "argument": {"variable": "te"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ConditionalExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.ConditionalExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -6240,21 +6243,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.TypedefDeclaration", "fieldName": "name"}},
                             "argument": {"variable": "td"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "typ",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.TypedefDeclaration", "fieldName": "type"}},
                             "argument": {"variable": "td"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}, "constraints": []}},
                       {
                         "name": "isUsing",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.TypedefDeclaration", "fieldName": "isUsing"}},
                             "argument": {"variable": "td"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -6359,14 +6362,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.UnaryOperation", "fieldName": "operator"}},
                             "argument": {"variable": "uo"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.UnaryOperator"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.UnaryOperator"}, "constraints": []}},
                       {
                         "name": "operand",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.UnaryOperation", "fieldName": "operand"}},
                             "argument": {"variable": "uo"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.UnaryExpression"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.UnaryExpression"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -6511,28 +6514,28 @@
                               "application": {
                                 "function": {"project": {"typeName": "hydra.cpp.syntax.VariableDeclaration", "fieldName": "type"}},
                                 "argument": {"variable": "vd"}}},
-                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.cpp.syntax.TypeExpression"}}}},
+                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.cpp.syntax.TypeExpression"}}, "constraints": []}},
                           {
                             "name": "name",
                             "term": {
                               "application": {
                                 "function": {"project": {"typeName": "hydra.cpp.syntax.VariableDeclaration", "fieldName": "name"}},
                                 "argument": {"variable": "vd"}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                           {
                             "name": "init",
                             "term": {
                               "application": {
                                 "function": {"project": {"typeName": "hydra.cpp.syntax.VariableDeclaration", "fieldName": "initializer"}},
                                 "argument": {"variable": "vd"}}},
-                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.cpp.syntax.Expression"}}}},
+                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.cpp.syntax.Expression"}}, "constraints": []}},
                           {
                             "name": "isAuto",
                             "term": {
                               "application": {
                                 "function": {"project": {"typeName": "hydra.cpp.syntax.VariableDeclaration", "fieldName": "isAuto"}},
                                 "argument": {"variable": "vd"}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                           {
                             "name": "terminator",
                             "term": {
@@ -6550,7 +6553,8 @@
                                 "argument": {"variable": "hydra.serialization.withSemi"}}},
                             "typeScheme": {
                               "variables": [],
-                              "body": {"function": {"domain": {"variable": "hydra.ast.Expr"}, "codomain": {"variable": "hydra.ast.Expr"}}}}}],
+                              "body": {"function": {"domain": {"variable": "hydra.ast.Expr"}, "codomain": {"variable": "hydra.ast.Expr"}}},
+                              "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {"variable": "terminator"},
@@ -6640,14 +6644,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.Vector", "fieldName": "elementType"}},
                             "argument": {"variable": "v"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.TypeExpression"}, "constraints": []}},
                       {
                         "name": "elems",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.Vector", "fieldName": "elements"}},
                             "argument": {"variable": "v"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Expression"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.cpp.syntax.Expression"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -6763,14 +6767,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.WhileStatement", "fieldName": "condition"}},
                             "argument": {"variable": "ws"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Expression"}, "constraints": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.cpp.syntax.WhileStatement", "fieldName": "body"}},
                             "argument": {"variable": "ws"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Statement"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.cpp.syntax.Statement"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.newlineSep"},

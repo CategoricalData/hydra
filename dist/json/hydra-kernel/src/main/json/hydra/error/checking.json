@@ -130,7 +130,8 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "A reference to a term variable whose type is not known, encountered during checking"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error that occurred during type checking"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An error that occurred during type checking"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.error.checking.IncorrectUnificationError",
@@ -151,7 +152,8 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "The substitution that failed the consistency check"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A post-unification consistency check failure"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A post-unification consistency check failure"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.error.checking.NotAForallTypeError",
@@ -178,7 +180,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A type that is not a forall type when type arguments are being applied"}}}]}}}}}},
+                    "value": {"literal": {"string": "A type that is not a forall type when type arguments are being applied"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.error.checking.NotAFunctionTypeError",
@@ -198,7 +201,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A type that is not a function type when one was expected in an application"}}}]}}}}}},
+                    "value": {"literal": {"string": "A type that is not a function type when one was expected in an application"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.error.checking.OtherCheckingError",
@@ -228,7 +232,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A generic checking error: message + subterm path"}}}]}}}}}},
+                    "value": {"literal": {"string": "A generic checking error: message + subterm path"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.error.checking.TypeArityMismatchError",
@@ -269,7 +274,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A type constructor applied to the wrong number of type arguments"}}}]}}}}}},
+                    "value": {"literal": {"string": "A type constructor applied to the wrong number of type arguments"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.error.checking.TypeMismatchError",
@@ -295,7 +301,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A type mismatch between expected and actual types"}}}]}}}}}},
+                    "value": {"literal": {"string": "A type mismatch between expected and actual types"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.error.checking.UnboundTypeVariablesError",
@@ -323,7 +330,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Type variables that appear free in a type but are not bound in scope"}}}]}}}}}},
+                    "value": {"literal": {"string": "Type variables that appear free in a type but are not bound in scope"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.error.checking.UndefinedTermVariableCheckingError",
@@ -353,7 +361,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to a term variable that is not bound in scope, encountered during checking"}}}]}}}}}},
+                    "value": {"literal": {"string": "A reference to a term variable that is not bound in scope, encountered during checking"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.error.checking.UnequalTypesError",
@@ -384,7 +393,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Multiple types that should all be equal but are not"}}}]}}}}}},
+                    "value": {"literal": {"string": "Multiple types that should all be equal but are not"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.error.checking.UnsupportedTermVariantError",
@@ -404,7 +414,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A term variant that the type checker does not support"}}}]}}}}}},
+                    "value": {"literal": {"string": "A term variant that the type checker does not support"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.error.checking.UntypedLambdaError",
@@ -417,7 +428,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A lambda expression without a type annotation on its parameter"}}}]}}}}}},
+                    "value": {"literal": {"string": "A lambda expression without a type annotation on its parameter"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.error.checking.UntypedLetBindingError",
@@ -434,7 +446,8 @@
                         "body": {"variable": "hydra.core.Binding"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The untyped binding"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A let binding without a type annotation"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A let binding without a type annotation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.error.checking.UntypedTermVariableCheckingError",
@@ -464,4 +477,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to a term variable whose type is not known, encountered during checking"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A reference to a term variable whose type is not known, encountered during checking"}}}]}}},
+          "constraints": []}}}]}

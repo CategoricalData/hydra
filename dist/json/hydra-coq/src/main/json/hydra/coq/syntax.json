@@ -26,7 +26,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq application with an explicit universe/type annotation on the function"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq application with an explicit universe/type annotation on the function"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Application",
@@ -42,7 +43,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq application: a normal application or an annotated application"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq application: a normal application or an annotated application"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Arg",
@@ -59,7 +61,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single argument of a Coq application: an identifier, a natural number, or a term"}}}]}}}}}},
+                    "value": {"literal": {"string": "A single argument of a Coq application: an identifier, a natural number, or a term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.AxiomDeclaration",
@@ -73,7 +76,8 @@
                   {"name": "type", "type": {"variable": "hydra.coq.syntax.Type"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An Axiom declaration: `Axiom <name> : <type>.`"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An Axiom declaration: `Axiom <name> : <type>.`"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Binder",
@@ -94,7 +98,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A Coq binder: a name, typed binder, let-binder, implicit binder, generalizing binder, or pattern"}}}]}}}}}},
+                      "literal": {"string": "A Coq binder: a name, typed binder, let-binder, implicit binder, generalizing binder, or pattern"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.CaseItem",
@@ -111,7 +116,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "One scrutinee of a Coq match, with optional as-name and in-pattern clauses"}}}]}}}}}},
+                    "value": {"literal": {"string": "One scrutinee of a Coq match, with optional as-name and in-pattern clauses"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Cofix",
@@ -127,7 +133,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq cofix expression: a cofixpoint body with an optional qualifier"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq cofix expression: a cofixpoint body with an optional qualifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.CofixBody",
@@ -145,7 +152,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of one cofixpoint definition: an identifier, binders, an optional type, and a term"}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of one cofixpoint definition: an identifier, binders, an optional type, and a term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.CofixQual",
@@ -161,7 +169,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The qualifier following a Coq cofix expression: an in-term or a with clause"}}}]}}}}}},
+                    "value": {"literal": {"string": "The qualifier following a Coq cofix expression: an in-term or a with clause"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.CofixWith",
@@ -182,7 +191,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A with clause listing mutually corecursive cofixpoint bodies"}}}]}}}}}},
+                    "value": {"literal": {"string": "A with clause listing mutually corecursive cofixpoint bodies"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Comment",
@@ -191,7 +201,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq comment (* ... *)"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq comment (* ... *)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Constructor",
@@ -205,7 +216,8 @@
                   {"name": "binders", "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
                   {"name": "type", "type": {"optional": {"variable": "hydra.coq.syntax.Type"}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constructor in an Inductive definition"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constructor in an Inductive definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Definition",
@@ -224,7 +236,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Definition or Let command: Definition name binders : type := term."}}}]}}}}}},
+                    "value": {"literal": {"string": "A Definition or Let command: Definition name binders : type := term."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Document",
@@ -233,7 +246,8 @@
           "body": {
             "annotated": {
               "body": {"record": [{"name": "sentences", "type": {"list": {"variable": "hydra.coq.syntax.Sentence"}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A complete Coq .v file"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A complete Coq .v file"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Equation",
@@ -258,7 +272,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "One equation of a Coq match expression: a list of pattern lists together with the result term"}}}]}}}}}},
+                    "value": {"literal": {"string": "One equation of a Coq match expression: a list of pattern lists together with the result term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.ExistentialVariable",
@@ -271,7 +286,8 @@
                   {"name": "ident", "type": {"variable": "hydra.coq.syntax.Ident"}},
                   {"name": "variant", "type": {"variable": "hydra.coq.syntax.ExistentialVariableVariant"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq existential variable reference"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq existential variable reference"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.ExistentialVariableVariant",
@@ -289,7 +305,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The form of a Coq existential variable reference"}}}]}}}}}},
+                    "value": {"literal": {"string": "The form of a Coq existential variable reference"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.FieldIdent",
@@ -302,7 +319,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A field identifier used in a qualified identifier"}}}]}}}}}},
+                    "value": {"literal": {"string": "A field identifier used in a qualified identifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Fix",
@@ -318,7 +336,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq fix expression: a fixpoint declaration with an optional qualifier"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq fix expression: a fixpoint declaration with an optional qualifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.FixAnnot",
@@ -335,7 +354,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An annotation on a Coq fix expression: a structural, well-founded, or measure annotation"}}}]}}}}}},
+                    "value": {"literal": {"string": "An annotation on a Coq fix expression: a structural, well-founded, or measure annotation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.FixAnnot_Measure",
@@ -352,7 +372,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A measure annotation on a Coq fix expression, used for well-founded recursion by measure"}}}]}}}}}},
+                    "value": {"literal": {"string": "A measure annotation on a Coq fix expression, used for well-founded recursion by measure"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.FixAnnot_Wf",
@@ -368,7 +389,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A well-founded-relation annotation on a Coq fix expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A well-founded-relation annotation on a Coq fix expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.FixWith",
@@ -389,7 +411,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A with clause listing mutually recursive fixpoint declarations"}}}]}}}}}},
+                    "value": {"literal": {"string": "A with clause listing mutually recursive fixpoint declarations"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Fix_Decl",
@@ -409,7 +432,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A single fixpoint declaration: an identifier, binders, an optional annotation and type, and a term"}}}]}}}}}},
+                      "literal": {"string": "A single fixpoint declaration: an identifier, binders, an optional annotation and type, and a term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Fix_Qual",
@@ -425,7 +449,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The qualifier following a Coq fix expression: an in-term or a with clause"}}}]}}}}}},
+                    "value": {"literal": {"string": "The qualifier following a Coq fix expression: an in-term or a with clause"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.FixpointDefinition",
@@ -443,7 +468,8 @@
                   {"name": "body", "type": {"variable": "hydra.coq.syntax.Term"}},
                   {"name": "with", "type": {"list": {"variable": "hydra.coq.syntax.Fix_Decl"}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Fixpoint command for recursive definitions"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Fixpoint command for recursive definitions"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Forall",
@@ -459,7 +485,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq forall (dependent product) term: binders together with a body type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq forall (dependent product) term: binders together with a body type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.ForallOrFun",
@@ -471,7 +498,8 @@
                 "union": [
                   {"name": "forall", "type": {"variable": "hydra.coq.syntax.Forall"}},
                   {"name": "fun", "type": {"variable": "hydra.coq.syntax.Fun"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq forall or fun term"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq forall or fun term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Fun",
@@ -487,7 +515,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq fun (lambda abstraction) term: binders together with a body term"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq fun (lambda abstraction) term: binders together with a body term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.GeneralizingBinder",
@@ -533,7 +562,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A Coq generalizing binder, whose free variables are introduced as explicit or implicit arguments"}}}]}}}}}},
+                      "literal": {"string": "A Coq generalizing binder, whose free variables are introduced as explicit or implicit arguments"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Ident",
@@ -542,7 +572,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"variable": "hydra.coq.syntax.String"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq identifier"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq identifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.IdentArg",
@@ -558,7 +589,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An identifier argument bound to a term, as used in existential-variable instantiation"}}}]}}}}}},
+                    "value": {"literal": {"string": "An identifier argument bound to a term, as used in existential-variable instantiation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.If",
@@ -572,7 +604,8 @@
                   {"name": "returnAs", "type": {"optional": {"variable": "hydra.coq.syntax.ReturnAs"}}},
                   {"name": "then", "type": {"variable": "hydra.coq.syntax.Term"}},
                   {"name": "else", "type": {"variable": "hydra.coq.syntax.Term"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Pattern match on boolean values"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Pattern match on boolean values"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.ImplicitBinders",
@@ -607,7 +640,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "In the context of a function definition, these forms specify that name is an implicit argument."}}}]}}}}}},
+                      "literal": {"string": "In the context of a function definition, these forms specify that name is an implicit argument."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.ImportQualification",
@@ -617,7 +651,8 @@
             "annotated": {
               "body": {"union": [{"name": "import", "type": "unit"}, {"name": "export", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Qualification for Require/Import commands"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Qualification for Require/Import commands"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.InductiveBody",
@@ -635,7 +670,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single body in an Inductive definition (supports mutual induction via 'with')"}}}]}}}}}},
+                    "value": {"literal": {"string": "A single body in an Inductive definition (supports mutual induction via 'with')"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.InductiveDefinition",
@@ -657,7 +693,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An Inductive or CoInductive definition with one or more mutually inductive bodies"}}}]}}}}}},
+                    "value": {"literal": {"string": "An Inductive or CoInductive definition with one or more mutually inductive bodies"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Let",
@@ -669,7 +706,8 @@
                 "record": [
                   {"name": "bindings", "type": {"variable": "hydra.coq.syntax.LetBindings"}},
                   {"name": "in", "type": {"variable": "hydra.coq.syntax.Term"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A let-in definition"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A let-in definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.LetBinder",
@@ -686,7 +724,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Some constructions allow the binding of a variable to value. This is called a 'let-binder'."}}}]}}}}}},
+                    "value": {"literal": {"string": "Some constructions allow the binding of a variable to value. This is called a 'let-binder'."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.LetBindings",
@@ -702,7 +741,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The bindings of a Coq let expression: a named binder or a destructuring pattern"}}}]}}}}}},
+                    "value": {"literal": {"string": "The bindings of a Coq let expression: a named binder or a destructuring pattern"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.LetDestructuring",
@@ -719,7 +759,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A destructuring pattern in a Coq let expression, in one of three grammar variants"}}}]}}}}}},
+                    "value": {"literal": {"string": "A destructuring pattern in a Coq let expression, in one of three grammar variants"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.LetDestructuring_Variant1",
@@ -736,7 +777,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A let-destructuring binding a list of names, with an optional return-as clause"}}}]}}}}}},
+                    "value": {"literal": {"string": "A let-destructuring binding a list of names, with an optional return-as clause"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.LetDestructuring_Variant2",
@@ -753,7 +795,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A let-destructuring binding a single pattern, with an optional return type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A let-destructuring binding a single pattern, with an optional return type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.LetDestructuring_Variant3",
@@ -771,7 +814,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A let-destructuring binding a pair of patterns, with a return type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A let-destructuring binding a pair of patterns, with a return type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.LetNamed",
@@ -787,7 +831,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A named let-binder together with any additional binders"}}}]}}}}}},
+                    "value": {"literal": {"string": "A named let-binder together with any additional binders"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Locality",
@@ -797,7 +842,8 @@
             "annotated": {
               "body": {"union": [{"name": "local", "type": "unit"}, {"name": "global", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Local or Global qualifier for commands"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Local or Global qualifier for commands"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Match",
@@ -820,7 +866,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq match expression: case items, an optional return clause, and its equations"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq match expression: case items, an optional return clause, and its equations"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.ModuleDefinition",
@@ -832,7 +879,8 @@
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
                   {"name": "sentences", "type": {"list": {"variable": "hydra.coq.syntax.Sentence"}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Module ... End block"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Module ... End block"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Name",
@@ -845,7 +893,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq name: an optional identifier (absent for the wildcard name)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq name: an optional identifier (absent for the wildcard name)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Natural",
@@ -855,7 +904,8 @@
             "annotated": {
               "body": {"wrap": {"literal": {"integer": "bigint"}}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A non-negative arbitrary-precision integer"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A non-negative arbitrary-precision integer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.NaturalArg",
@@ -871,7 +921,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A natural-number argument bound to a term, as used in existential-variable instantiation"}}}]}}}}}},
+                    "value": {"literal": {"string": "A natural-number argument bound to a term, as used in existential-variable instantiation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.NormalApplication",
@@ -892,7 +943,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq function application: a head term applied to one or more arguments"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq function application: a head term applied to one or more arguments"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.NotationDeclaration",
@@ -906,7 +958,8 @@
                   {"name": "definition", "type": {"variable": "hydra.coq.syntax.Term"}},
                   {"name": "level", "type": {"optional": {"variable": "hydra.coq.syntax.Natural"}}},
                   {"name": "associativity", "type": {"optional": {"literal": "string"}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Notation declaration"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Notation declaration"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Number",
@@ -915,7 +968,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": {"float": "float64"}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq floating-point number literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq floating-point number literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.OneTerm",
@@ -931,7 +985,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single Coq term, either an explicit qualified identifier or a lower-precedence term"}}}]}}}}}},
+                    "value": {"literal": {"string": "A single Coq term, either an explicit qualified identifier or a lower-precedence term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.OpenBinders",
@@ -947,7 +1002,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The binders of a Coq forall or fun term: a single typed group or a list of binders"}}}]}}}}}},
+                    "value": {"literal": {"string": "The binders of a Coq forall or fun term: a single typed group or a list of binders"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Pattern",
@@ -963,7 +1019,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq pattern: an inner pattern with an optional type ascription"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq pattern: an inner pattern with an optional type ascription"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Pattern0",
@@ -990,7 +1047,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "The lowest-precedence Coq pattern: a qualified identifier, applied pattern, wildcard, parenthesized patterns, or a literal"}}}]}}}}}},
+                        "string": "The lowest-precedence Coq pattern: a qualified identifier, applied pattern, wildcard, parenthesized patterns, or a literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Pattern1",
@@ -1006,7 +1064,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq pattern together with an optional notation scope"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq pattern together with an optional notation scope"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Pattern10",
@@ -1024,7 +1083,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The highest-precedence Coq pattern: an as-pattern, applied patterns, or a qualified identifier pattern"}}}]}}}}}},
+                      "literal": {"string": "The highest-precedence Coq pattern: an as-pattern, applied patterns, or a qualified identifier pattern"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Pattern10_As",
@@ -1038,7 +1098,8 @@
                   {"name": "as", "type": {"variable": "hydra.coq.syntax.Name"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq pattern bound to a name via an as-clause"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq pattern bound to a name via an as-clause"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Pattern10_Patterns",
@@ -1054,7 +1115,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq pattern applied to one or more sub-patterns"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq pattern applied to one or more sub-patterns"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Pattern10_Qualid",
@@ -1070,7 +1132,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq pattern matching a qualified identifier applied to sub-patterns"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq pattern matching a qualified identifier applied to sub-patterns"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.PrimitiveNotations",
@@ -1086,7 +1149,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq primitive notation literal: a number or a string"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq primitive notation literal: a number or a string"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Qualid",
@@ -1098,7 +1162,8 @@
                 "record": [
                   {"name": "id", "type": {"variable": "hydra.coq.syntax.Ident"}},
                   {"name": "fieldIds", "type": {"list": {"variable": "hydra.coq.syntax.FieldIdent"}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A qualified identifier"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A qualified identifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.QualidAndPattern",
@@ -1114,7 +1179,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A qualified identifier together with a pattern, used in existential-variable and match forms"}}}]}}}}}},
+                    "value": {"literal": {"string": "A qualified identifier together with a pattern, used in existential-variable and match forms"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.QualidAnnotated",
@@ -1130,7 +1196,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A qualified identifier with an optional universe annotation"}}}]}}}}}},
+                    "value": {"literal": {"string": "A qualified identifier with an optional universe annotation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.RecordBody",
@@ -1142,7 +1209,8 @@
                 "record": [
                   {"name": "constructor", "type": {"optional": {"variable": "hydra.coq.syntax.Ident"}}},
                   {"name": "fields", "type": {"list": {"variable": "hydra.coq.syntax.RecordField"}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The body of a Record definition"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The body of a Record definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.RecordDefinition",
@@ -1157,7 +1225,8 @@
                   {"name": "binders", "type": {"list": {"variable": "hydra.coq.syntax.Binder"}}},
                   {"name": "sort", "type": {"optional": {"variable": "hydra.coq.syntax.Sort"}}},
                   {"name": "body", "type": {"variable": "hydra.coq.syntax.RecordBody"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Record or Structure definition"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Record or Structure definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.RecordField",
@@ -1169,7 +1238,8 @@
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
                   {"name": "type", "type": {"variable": "hydra.coq.syntax.Type"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A field in a Record definition"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A field in a Record definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.RequireImport",
@@ -1188,7 +1258,8 @@
                       "annotated": {
                         "body": {"list": {"variable": "hydra.coq.syntax.Qualid"}},
                         "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Require Import/Export command"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Require Import/Export command"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.ReturnAs",
@@ -1204,7 +1275,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The return clause of a Coq match or let, with an optional as-name"}}}]}}}}}},
+                    "value": {"literal": {"string": "The return clause of a Coq match or let, with an optional as-name"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.ScopeKey",
@@ -1213,7 +1285,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"variable": "hydra.coq.syntax.Ident"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a Coq notation scope"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a Coq notation scope"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.SectionDefinition",
@@ -1225,7 +1298,8 @@
                 "record": [
                   {"name": "name", "type": {"variable": "hydra.coq.syntax.Ident"}},
                   {"name": "sentences", "type": {"list": {"variable": "hydra.coq.syntax.Sentence"}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Section ... End block"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Section ... End block"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Sentence",
@@ -1241,7 +1315,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A top-level sentence in a Coq document, optionally preceded by a comment"}}}]}}}}}},
+                    "value": {"literal": {"string": "A top-level sentence in a Coq document, optionally preceded by a comment"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.SentenceContent",
@@ -1261,7 +1336,8 @@
                   {"name": "requireImport", "type": {"variable": "hydra.coq.syntax.RequireImport"}},
                   {"name": "section", "type": {"variable": "hydra.coq.syntax.SectionDefinition"}},
                   {"name": "theorem", "type": {"variable": "hydra.coq.syntax.TheoremBody"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The content of a top-level sentence"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The content of a top-level sentence"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Sort",
@@ -1307,7 +1383,8 @@
                   {"name": "typeWithAnyUniverse", "type": "unit"},
                   {"name": "typeWithUniverse", "type": {"variable": "hydra.coq.syntax.Universe"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The types of types are called sorts."}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The types of types are called sorts."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.String",
@@ -1316,7 +1393,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq string literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq string literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Term",
@@ -1336,7 +1414,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq term: the top-level term grammar production, covering all term forms"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq term: the top-level term grammar production, covering all term forms"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Term0",
@@ -1359,7 +1438,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq term at the lowest precedence level, covering atomic and bracketed forms"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq term at the lowest precedence level, covering atomic and bracketed forms"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Term1",
@@ -1376,7 +1456,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq term with optional trailing projection or scope annotations"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq term with optional trailing projection or scope annotations"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Term10",
@@ -1392,7 +1473,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq term at application precedence: an application or a single term"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq term at application precedence: an application or a single term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Term100",
@@ -1406,7 +1488,8 @@
                   {"name": "term10", "type": {"variable": "hydra.coq.syntax.Term10"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq term with an optional trailing type cast"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq term with an optional trailing type cast"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.TheoremBody",
@@ -1423,7 +1506,8 @@
                   {"name": "proof", "type": {"variable": "hydra.coq.syntax.Term"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Theorem/Lemma/Proposition with a proof term"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A Theorem/Lemma/Proposition with a proof term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.TheoremKind",
@@ -1438,7 +1522,8 @@
                   {"name": "proposition", "type": "unit"},
                   {"name": "corollary", "type": "unit"},
                   {"name": "example", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The kind of theorem command"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The kind of theorem command"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Type",
@@ -1447,7 +1532,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"variable": "hydra.coq.syntax.Term"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq type, represented as a term"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Coq type, represented as a term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.TypeBinders",
@@ -1468,7 +1554,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A group of Coq binder names sharing a single type annotation"}}}]}}}}}},
+                    "value": {"literal": {"string": "A group of Coq binder names sharing a single type annotation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.TypeCast",
@@ -1485,7 +1572,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq type-cast expression: a term, its ascribed type, and the cast operator used"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq type-cast expression: a term, its ascribed type, and the cast operator used"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.TypeCastOperator",
@@ -1534,7 +1622,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The operator of a Coq type-cast expression: normal, vm_compute, or native_compute checking"}}}]}}}}}},
+                    "value": {"literal": {"string": "The operator of a Coq type-cast expression: normal, vm_compute, or native_compute checking"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.TypeclassConstraint",
@@ -1551,7 +1640,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq typeclass constraint binder, with an optional name and a generalizing flag"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq typeclass constraint binder, with an optional name and a generalizing flag"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.UnivAnnot",
@@ -1564,7 +1654,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A universe annotation: a list of universe levels"}}}]}}}}}},
+                    "value": {"literal": {"string": "A universe annotation: a list of universe levels"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Universe",
@@ -1585,7 +1676,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq universe expression: a maximum of universe expressions, or a single universe expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq universe expression: a maximum of universe expressions, or a single universe expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.UniverseLevel",
@@ -1604,7 +1696,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Coq universe level: Set, Prop, Type, an ignored level, or a qualified identifier"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Coq universe level: Set, Prop, Type, an ignored level, or a qualified identifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.UniverseName",
@@ -1621,7 +1714,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The name component of a universe expression: a qualified identifier, Set, or Prop"}}}]}}}}}},
+                    "value": {"literal": {"string": "The name component of a universe expression: a qualified identifier, Set, or Prop"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.coq.syntax.Universe_Expr",
@@ -1637,4 +1731,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single universe expression: a universe name with an optional offset"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A single universe expression: a universe name with an optional offset"}}}]}}},
+          "constraints": []}}}]}

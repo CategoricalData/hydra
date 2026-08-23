@@ -1,6 +1,9 @@
 {
   "name": "hydra.parse.docs",
-  "metadata": {"description": "Parser for Hydra documentation strings, producing DocSegment lists", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Parser for Hydra documentation strings, producing DocSegment lists. A bespoke helper parser, not a parse<T> convention function (see docs/specification/index.md, Conventions).",
+    "comments": [],
+    "seeAlso": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -54,7 +57,7 @@
                           "application": {
                             "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": " "}}}},
                             "argument": {"variable": "inner"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
                       {
                         "name": "tag",
                         "term": {
@@ -67,7 +70,7 @@
                               "application": {
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"literal": "string"}}},
                                 "argument": {"variable": "parts"}}}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "rhs",
                         "term": {
@@ -80,7 +83,7 @@
                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.drop"}, "type": {"literal": "string"}}},
                                     "argument": {"literal": {"integer": {"int32": 1}}}}},
                                 "argument": {"variable": "parts"}}}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -260,7 +263,7 @@
                           "application": {
                             "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "{@"}}}},
                             "argument": {"variable": "s"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
                       {
                         "name": "head_",
                         "term": {
@@ -273,7 +276,7 @@
                               "application": {
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"literal": "string"}}},
                                 "argument": {"variable": "parts"}}}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "tail_",
                         "term": {
@@ -283,7 +286,7 @@
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.drop"}, "type": {"literal": "string"}}},
                                 "argument": {"literal": {"integer": {"int32": 1}}}}},
                             "argument": {"variable": "parts"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
                       {
                         "name": "toSeg",
                         "term": {
@@ -299,7 +302,7 @@
                                       "application": {
                                         "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "}"}}}},
                                         "argument": {"variable": "part"}}},
-                                    "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
+                                    "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
                                   {
                                     "name": "inner",
                                     "term": {
@@ -312,7 +315,7 @@
                                           "application": {
                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"literal": "string"}}},
                                             "argument": {"variable": "subparts"}}}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                   {
                                     "name": "after",
                                     "term": {
@@ -325,11 +328,11 @@
                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.drop"}, "type": {"literal": "string"}}},
                                                 "argument": {"literal": {"integer": {"int32": 1}}}}},
                                             "argument": {"variable": "subparts"}}}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                   {
                                     "name": "mref",
                                     "term": {"application": {"function": {"variable": "hydra.parse.docs.parseDocAnnotation"}, "argument": {"variable": "inner"}}},
-                                    "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.packaging.EntityReference"}}}}],
+                                    "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.packaging.EntityReference"}}, "constraints": []}}],
                                 "body": {
                                   "application": {
                                     "function": {
@@ -383,7 +386,8 @@
                                                       "optional": {"inject": {"typeName": "hydra.docs.DocSegment", "field": {"name": "text", "term": {"variable": "after"}}}}}}}]}}}}}}}}}}},
                         "typeScheme": {
                           "variables": [],
-                          "body": {"function": {"domain": {"literal": "string"}, "codomain": {"list": {"variable": "hydra.docs.DocSegment"}}}}}}],
+                          "body": {"function": {"domain": {"literal": "string"}, "codomain": {"list": {"variable": "hydra.docs.DocSegment"}}}},
+                          "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {

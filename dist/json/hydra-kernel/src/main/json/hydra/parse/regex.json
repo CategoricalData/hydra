@@ -1,7 +1,7 @@
 {
   "name": "hydra.parse.regex",
   "metadata": {
-    "description": "Parser for Hydra's translingual regular-expression syntax (docs/specification/regex.md): text -> hydra.regex AST. Built on the hydra.parsers combinators. Rejects ill-formed patterns (empty alternation branches, empty classes, out-of-range code points) via the ParseResult failure channel, so 'well-formed' is portable across hosts. See issue #567.",
+    "description": "Parser for Hydra's translingual regular-expression syntax (docs/specification/regex.md): text -> hydra.regex AST. Built on the hydra.parsers combinators. Rejects ill-formed patterns (empty alternation branches, empty classes, out-of-range code points) via the ParseResult failure channel, so 'well-formed' is portable across hosts. See issue #567. A structured textual-syntax parser (precedent for the general parser in #497), not a scalar parse<T> convention function (see docs/specification/index.md, Conventions).",
     "comments": [],
     "seeAlso": []},
   "dependencies": [
@@ -101,11 +101,11 @@
                                                     "function": {"application": {"function": {"variable": "hydra.lib.logic.or"}, "argument": {"variable": "acc"}}},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.regex.Quantified"}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.regex.Quantified"}}},
                                                         "argument": {"variable": "b"}}}}}}}}}}},
                                     "argument": {"literal": {"boolean": false}}}},
                                 "argument": {"variable": "branches"}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}}},
+                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                           {
                             "name": "multi",
                             "term": {
@@ -119,7 +119,7 @@
                                           "typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"list": {"variable": "hydra.regex.Quantified"}}}},
                                         "argument": {"variable": "branches"}}}}},
                                 "argument": {"literal": {"integer": {"int32": 1}}}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {
@@ -419,7 +419,8 @@
                                             "argument": {"literal": {"integer": {"int32": 92}}}}}}}}}}}}}}},
                     "typeScheme": {
                       "variables": [],
-                      "body": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"literal": {"integer": "int32"}}}}}}],
+                      "body": {"application": {"function": {"variable": "hydra.parsing.Parser"}, "argument": {"literal": {"integer": "int32"}}}},
+                      "constraints": []}}],
                 "body": {
                   "application": {
                     "function": {
@@ -662,7 +663,7 @@
                                                     "type": {"optional": {"list": {"list": {"variable": "hydra.regex.Quantified"}}}}}},
                                                 "argument": {
                                                   "application": {
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"literal": {"integer": "int32"}}}},
                                                     "argument": {
                                                       "application": {
                                                         "function": {

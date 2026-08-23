@@ -1335,6 +1335,48 @@
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.lib.lists.intersperse"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.lib.lists.isEmpty",
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"variable": "x"}}}},
+              "isLazy": false}],
+          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "boolean"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "xs",
+                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"variable": "x"}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.isEmpty"}}}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "xs"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.lib.lists.isEmpty"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.lib.lists.join",
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
@@ -1833,48 +1875,6 @@
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.lib.lists.member"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.dsl.lib.lists.null",
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"variable": "x"}}}},
-              "isLazy": false}],
-          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"literal": "boolean"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "xs",
-                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"variable": "x"}}}},
-                "body": {
-                  "wrap": {
-                    "typeName": "hydra.typed.TypedTerm",
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.Term",
-                        "field": {
-                          "name": "application",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.Application",
-                              "fields": [
-                                {
-                                  "name": "function",
-                                  "term": {
-                                    "inject": {
-                                      "typeName": "hydra.core.Term",
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.null"}}}}}}}},
-                                {
-                                  "name": "argument",
-                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "xs"}}}}]}}}}}}}}},
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.lib.lists.null"}}}]}}}}},
-    {
-      "term": {
         "name": "hydra.dsl.lib.lists.partition",
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
@@ -1947,48 +1947,6 @@
                                       "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "xs"}}}}]}}}}}}}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.lib.lists.partition"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.dsl.lib.lists.pure",
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}},
-              "isLazy": false}],
-          "result": {"type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"variable": "x"}}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "x",
-                "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}},
-                "body": {
-                  "wrap": {
-                    "typeName": "hydra.typed.TypedTerm",
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.Term",
-                        "field": {
-                          "name": "application",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.Application",
-                              "fields": [
-                                {
-                                  "name": "function",
-                                  "term": {
-                                    "inject": {
-                                      "typeName": "hydra.core.Term",
-                                      "field": {
-                                        "name": "variable",
-                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.pure"}}}}}}}},
-                                {
-                                  "name": "argument",
-                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.lib.lists.pure"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.lib.lists.replicate",

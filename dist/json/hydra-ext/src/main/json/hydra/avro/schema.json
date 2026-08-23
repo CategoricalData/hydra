@@ -14,7 +14,8 @@
           "body": {
             "annotated": {
               "body": {"record": [{"name": "items", "type": {"variable": "hydra.avro.schema.Schema"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro array schema"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro array schema"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.schema.Enum",
@@ -48,7 +49,8 @@
                               "value": {
                                 "literal": {
                                   "string": "A default value for this enumeration, used during resolution when the reader encounters a symbol from the writer that isn't defined in the reader's schema. The value provided here must be a JSON string that's a member of the symbols array"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro enum schema"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro enum schema"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.schema.Field",
@@ -122,7 +124,8 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Any additional key/value pairs attached to the field"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro record field"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro record field"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.schema.Fixed",
@@ -142,7 +145,8 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "an integer, specifying the number of bytes per value"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro fixed-size binary schema"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro fixed-size binary schema"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.schema.Map",
@@ -151,7 +155,8 @@
           "body": {
             "annotated": {
               "body": {"record": [{"name": "values", "type": {"variable": "hydra.avro.schema.Schema"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro map schema"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro map schema"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.schema.Named",
@@ -205,7 +210,8 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Any additional key/value pairs attached to the type"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro named schema: enum, fixed, or record"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro named schema: enum, fixed, or record"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.schema.NamedType",
@@ -222,7 +228,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The type-specific content of an Avro named schema"}}}]}}}}}},
+                    "value": {"literal": {"string": "The type-specific content of an Avro named schema"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.schema.Order",
@@ -236,7 +243,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Specifies how a field impacts sort ordering of its enclosing record"}}}]}}}}}},
+                    "value": {"literal": {"string": "Specifies how a field impacts sort ordering of its enclosing record"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.schema.Primitive",
@@ -302,7 +310,8 @@
                       "annotated": {
                         "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "unicode character sequence"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro primitive type"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro primitive type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.schema.Record",
@@ -318,7 +327,8 @@
                       "annotated": {
                         "body": {"list": {"variable": "hydra.avro.schema.Field"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "a JSON array, listing fields"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro record schema"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro record schema"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.schema.Schema",
@@ -343,7 +353,8 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "A reference by name to a previously defined type"}}}]}}}},
                   {"name": "union", "type": {"variable": "hydra.avro.schema.Union"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro schema, in any of its forms"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An Avro schema, in any of its forms"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.schema.Union",
@@ -356,4 +367,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An Avro union schema: a list of alternative schemas"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "An Avro union schema: a list of alternative schemas"}}}]}}},
+          "constraints": []}}}]}

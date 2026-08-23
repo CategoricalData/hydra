@@ -637,7 +637,7 @@
                                                                                       "function": {
                                                                                         "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "label"}}, "type": {"variable": "t2"}}},
                                                                                       "argument": {"variable": "vertex"}}}}}}}},
-                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.json.model.Value"}}}],
+                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.json.model.Value"}, "constraints": []}}],
                                                                     "body": {
                                                                       "application": {
                                                                         "function": {
@@ -732,7 +732,8 @@
                                                                                                       "application": {
                                                                                                         "function": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.null"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                                            "body": {
+                                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.maps.isEmpty"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                                             "type": {"variable": "t2"}}},
                                                                                                         "argument": {"variable": "pairs"}}}}},
                                                                                                 "argument": {
@@ -806,7 +807,7 @@
                                                                                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                                                             "type": {"variable": "t2"}}},
                                                                                                                         "argument": {"variable": "pair"}}},
-                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.PropertyKey"}, "constraints": []}},
                                                                                                                   {
                                                                                                                     "name": "v",
                                                                                                                     "term": {
@@ -817,7 +818,7 @@
                                                                                                                               "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                                                             "type": {"variable": "t2"}}},
                                                                                                                         "argument": {"variable": "pair"}}},
-                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "t2"}}}],
+                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "t2"}, "constraints": []}}],
                                                                                                                 "body": {
                                                                                                                   "application": {
                                                                                                                     "function": {
@@ -1068,7 +1069,7 @@
                                                                                                       "function": {
                                                                                                         "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "label"}}, "type": {"variable": "t2"}}},
                                                                                                       "argument": {"variable": "edge"}}}}}}}},
-                                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.json.model.Value"}}}],
+                                                                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.json.model.Value"}, "constraints": []}}],
                                                                                     "body": {
                                                                                       "application": {
                                                                                         "function": {
@@ -1195,7 +1196,8 @@
                                                                                                                       "application": {
                                                                                                                         "function": {
                                                                                                                           "typeApplication": {
-                                                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.null"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                                                            "body": {
+                                                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.maps.isEmpty"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                                                             "type": {"variable": "t2"}}},
                                                                                                                         "argument": {"variable": "pairs"}}}}},
                                                                                                                 "argument": {
@@ -1269,7 +1271,7 @@
                                                                                                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                                                                             "type": {"variable": "t2"}}},
                                                                                                                                         "argument": {"variable": "pair"}}},
-                                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.PropertyKey"}, "constraints": []}},
                                                                                                                                   {
                                                                                                                                     "name": "v",
                                                                                                                                     "term": {
@@ -1280,7 +1282,7 @@
                                                                                                                                               "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                                                                                             "type": {"variable": "t2"}}},
                                                                                                                                         "argument": {"variable": "pair"}}},
-                                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "t2"}}}],
+                                                                                                                                    "typeScheme": {"variables": [], "body": {"variable": "t2"}, "constraints": []}}],
                                                                                                                                 "body": {
                                                                                                                                   "application": {
                                                                                                                                     "function": {
@@ -1822,7 +1824,8 @@
                                                                                                   "body": {
                                                                                                     "function": {
                                                                                                       "domain": {"application": {"function": {"variable": "hydra.pg.model.ElementTree"}, "argument": {"variable": "t4"}}},
-                                                                                                      "codomain": {"list": {"application": {"function": {"variable": "hydra.pg.model.Element"}, "argument": {"variable": "t4"}}}}}}}}],
+                                                                                                      "codomain": {"list": {"application": {"function": {"variable": "hydra.pg.model.Element"}, "argument": {"variable": "t4"}}}}}},
+                                                                                                  "constraints": [{"key": "t4", "value": {"classes": []}}]}}],
                                                                                             "body": {
                                                                                               "application": {
                                                                                                 "function": {"typeApplication": {"body": {"variable": "flattenTree"}, "type": {"variable": "t2"}}},

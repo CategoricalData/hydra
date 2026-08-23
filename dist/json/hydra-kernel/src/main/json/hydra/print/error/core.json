@@ -348,7 +348,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.error.core.ExtraRecordFieldsError", "fieldName": "typeName"}},
                             "argument": {"variable": "e"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -358,7 +358,7 @@
                               "application": {
                                 "function": {"project": {"typeName": "hydra.error.core.ExtraRecordFieldsError", "fieldName": "fieldNames"}},
                                 "argument": {"variable": "e"}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}}}],
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {"variable": "hydra.lib.strings.concat"},
@@ -730,7 +730,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.error.core.MissingCaseBranchesError", "fieldName": "typeName"}},
                             "argument": {"variable": "e"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -740,7 +740,7 @@
                               "application": {
                                 "function": {"project": {"typeName": "hydra.error.core.MissingCaseBranchesError", "fieldName": "variantNames"}},
                                 "argument": {"variable": "e"}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}}}],
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {"variable": "hydra.lib.strings.concat"},
@@ -787,7 +787,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.error.core.MissingRecordFieldsError", "fieldName": "typeName"}},
                             "argument": {"variable": "e"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -797,7 +797,7 @@
                               "application": {
                                 "function": {"project": {"typeName": "hydra.error.core.MissingRecordFieldsError", "fieldName": "fieldNames"}},
                                 "argument": {"variable": "e"}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}}}],
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {"variable": "hydra.lib.strings.concat"},
@@ -888,7 +888,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.error.core.NominalTypeKindMismatchError", "fieldName": "typeName"}},
                             "argument": {"variable": "e"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -898,7 +898,7 @@
                               "application": {
                                 "function": {"project": {"typeName": "hydra.error.core.NominalTypeKindMismatchError", "fieldName": "expectedVariant"}},
                                 "argument": {"variable": "e"}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.variants.TypeVariant"}}}],
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.variants.TypeVariant"}, "constraints": []}}],
                         "body": {
                           "let": {
                             "bindings": [
@@ -908,7 +908,7 @@
                                   "application": {
                                     "function": {"project": {"typeName": "hydra.error.core.NominalTypeKindMismatchError", "fieldName": "actualVariant"}},
                                     "argument": {"variable": "e"}}},
-                                "typeScheme": {"variables": [], "body": {"variable": "hydra.variants.TypeVariant"}}}],
+                                "typeScheme": {"variables": [], "body": {"variable": "hydra.variants.TypeVariant"}, "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {"variable": "hydra.lib.strings.concat"},
@@ -1189,7 +1189,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.error.core.UndeclaredVariantError", "fieldName": "typeName"}},
                             "argument": {"variable": "e"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -1199,7 +1199,7 @@
                               "application": {
                                 "function": {"project": {"typeName": "hydra.error.core.UndeclaredVariantError", "fieldName": "variantName"}},
                                 "argument": {"variable": "e"}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {"variable": "hydra.lib.strings.concat"},
@@ -1233,7 +1233,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.error.core.UndefinedFieldError", "fieldName": "fieldName"}},
                             "argument": {"variable": "e"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -1243,7 +1243,7 @@
                               "application": {
                                 "function": {"project": {"typeName": "hydra.error.core.UndefinedFieldError", "fieldName": "typeName"}},
                                 "argument": {"variable": "e"}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {"variable": "hydra.lib.strings.concat"},
@@ -1434,7 +1434,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.error.core.UnexpectedTermVariantError", "fieldName": "expectedVariant"}},
                             "argument": {"variable": "e"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.variants.TermVariant"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.variants.TermVariant"}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -1444,7 +1444,7 @@
                               "application": {
                                 "function": {"project": {"typeName": "hydra.error.core.UnexpectedTermVariantError", "fieldName": "actualTerm"}},
                                 "argument": {"variable": "e"}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}}}],
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Term"}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {"variable": "hydra.lib.strings.concat"},
@@ -1481,7 +1481,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.error.core.UnexpectedTypeVariantError", "fieldName": "expectedVariant"}},
                             "argument": {"variable": "e"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.variants.TypeVariant"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.variants.TypeVariant"}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -1491,7 +1491,7 @@
                               "application": {
                                 "function": {"project": {"typeName": "hydra.error.core.UnexpectedTypeVariantError", "fieldName": "actualType"}},
                                 "argument": {"variable": "e"}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}}}],
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {"variable": "hydra.lib.strings.concat"},
@@ -1528,7 +1528,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.error.core.UnknownCaseAlternativeError", "fieldName": "typeName"}},
                             "argument": {"variable": "e"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -1538,7 +1538,7 @@
                               "application": {
                                 "function": {"project": {"typeName": "hydra.error.core.UnknownCaseAlternativeError", "fieldName": "name"}},
                                 "argument": {"variable": "e"}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {"variable": "hydra.lib.strings.concat"},
@@ -1606,7 +1606,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.error.core.UnknownProjectedFieldError", "fieldName": "typeName"}},
                             "argument": {"variable": "e"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                     "body": {
                       "let": {
                         "bindings": [
@@ -1616,7 +1616,7 @@
                               "application": {
                                 "function": {"project": {"typeName": "hydra.error.core.UnknownProjectedFieldError", "fieldName": "fieldName"}},
                                 "argument": {"variable": "e"}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {"variable": "hydra.lib.strings.concat"},

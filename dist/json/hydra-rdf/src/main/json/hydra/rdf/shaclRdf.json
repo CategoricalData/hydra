@@ -283,14 +283,14 @@
                                               "application": {
                                                 "function": {"project": {"typeName": "hydra.shacl.model.Pattern", "fieldName": "regex"}},
                                                 "argument": {"variable": "pat"}}},
-                                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                           {
                                             "name": "flags_",
                                             "term": {
                                               "application": {
                                                 "function": {"project": {"typeName": "hydra.shacl.model.Pattern", "fieldName": "flags"}},
                                                 "argument": {"variable": "pat"}}},
-                                            "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}}}],
+                                            "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}, "constraints": []}}],
                                         "body": {
                                           "application": {
                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
@@ -880,7 +880,7 @@
                                 "body": {"project": {"typeName": "hydra.shacl.model.Definition", "fieldName": "iri"}},
                                 "type": {"variable": "hydra.shacl.model.Shape"}}},
                             "argument": {"variable": "d"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.rdf.syntax.Iri"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.rdf.syntax.Iri"}, "constraints": []}},
                       {
                         "name": "shape",
                         "term": {
@@ -890,7 +890,7 @@
                                 "body": {"project": {"typeName": "hydra.shacl.model.Definition", "fieldName": "target"}},
                                 "type": {"variable": "hydra.shacl.model.Shape"}}},
                             "argument": {"variable": "d"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.shacl.model.Shape"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.shacl.model.Shape"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -947,7 +947,7 @@
                           "fields": [
                             {
                               "name": "lexicalForm",
-                              "term": {"application": {"function": {"variable": "hydra.lib.literals.showBigint"}, "argument": {"variable": "n"}}}},
+                              "term": {"application": {"function": {"variable": "hydra.lib.literals.printBigint"}, "argument": {"variable": "n"}}}},
                             {
                               "name": "datatypeIri",
                               "term": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.xsd"}, "argument": {"literal": {"string": "integer"}}}}},
@@ -1204,7 +1204,7 @@
                                                         "body": {"project": {"typeName": "hydra.shacl.model.Definition", "fieldName": "iri"}},
                                                         "type": {"variable": "hydra.shacl.model.PropertyShape"}}},
                                                     "argument": {"variable": "def"}}},
-                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.rdf.syntax.Iri"}}},
+                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.rdf.syntax.Iri"}, "constraints": []}},
                                               {
                                                 "name": "ps",
                                                 "term": {
@@ -1214,7 +1214,7 @@
                                                         "body": {"project": {"typeName": "hydra.shacl.model.Definition", "fieldName": "target"}},
                                                         "type": {"variable": "hydra.shacl.model.PropertyShape"}}},
                                                     "argument": {"variable": "def"}}},
-                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.shacl.model.PropertyShape"}}}],
+                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.shacl.model.PropertyShape"}, "constraints": []}}],
                                             "body": {
                                               "application": {
                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
@@ -1507,7 +1507,7 @@
                       {
                         "name": "triples",
                         "term": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.shapesGraphToTriples"}, "argument": {"variable": "sg"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.rdf.syntax.Triple"}}, "constraints": []}},
                       {
                         "name": "descs",
                         "term": {
@@ -1524,7 +1524,7 @@
                                     "domain": {"variable": "hydra.rdf.syntax.Triple"},
                                     "body": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.tripleToDescription"}, "argument": {"variable": "t"}}}}}}},
                             "argument": {"variable": "triples"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.rdf.syntax.Description"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.rdf.serde.rdfGraphToNtriples"},
@@ -1779,7 +1779,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.rdf.syntax.Triple", "fieldName": "subject"}},
                             "argument": {"variable": "t"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.rdf.syntax.Resource"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.rdf.syntax.Resource"}, "constraints": []}}],
                     "body": {
                       "record": {
                         "typeName": "hydra.rdf.syntax.Description",

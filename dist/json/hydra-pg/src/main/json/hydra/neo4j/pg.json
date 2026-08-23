@@ -46,7 +46,7 @@
                                   {
                                     "name": "typeStr",
                                     "term": {"application": {"function": {"unwrap": "hydra.neo4j.model.RelationshipType"}, "argument": {"variable": "relType"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                   {
                                     "name": "matching",
                                     "term": {
@@ -76,7 +76,7 @@
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.neo4j.model.GraphType", "fieldName": "relationships"}},
                                             "argument": {"variable": "gt"}}}}},
-                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.neo4j.model.RelationshipElementType"}}}},
+                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.neo4j.model.RelationshipElementType"}}, "constraints": []}},
                                   {
                                     "name": "camelType",
                                     "term": {
@@ -89,15 +89,15 @@
                                                 "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "upperSnake", "term": "unit"}}}}},
                                             "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}}},
                                         "argument": {"variable": "typeStr"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                   {
                                     "name": "startStr",
                                     "term": {"application": {"function": {"unwrap": "hydra.neo4j.model.NodeLabel"}, "argument": {"variable": "startLabel"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                   {
                                     "name": "endStr",
                                     "term": {"application": {"function": {"unwrap": "hydra.neo4j.model.NodeLabel"}, "argument": {"variable": "endLabel"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                   {
                                     "name": "expanded",
                                     "term": {
@@ -132,7 +132,7 @@
                                                             "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "pascal", "term": "unit"}}}}},
                                                         "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}}},
                                                     "argument": {"variable": "endStr"}}}}}]}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                 "body": {
                                   "wrap": {
                                     "typeName": "hydra.pg.model.EdgeLabel",
@@ -721,7 +721,8 @@
                                                                 "argument": {"variable": "nodes"}}}}},
                                                         "typeScheme": {
                                                           "variables": [],
-                                                          "body": {"map": {"keys": {"literal": "string"}, "values": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}}],
+                                                          "body": {"map": {"keys": {"literal": "string"}, "values": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
+                                                          "constraints": []}}],
                                                     "body": {
                                                       "lambda": {
                                                         "parameter": "eid",
@@ -827,7 +828,8 @@
                                           "body": {
                                             "function": {
                                               "domain": {"variable": "hydra.neo4j.model.ElementId"},
-                                              "codomain": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.neo4j.model.NodeLabel"}}}}}}}],
+                                              "codomain": {"either": {"left": {"literal": "string"}, "right": {"variable": "hydra.neo4j.model.NodeLabel"}}}}},
+                                          "constraints": []}}],
                                     "body": {
                                       "application": {
                                         "function": {
@@ -1030,7 +1032,7 @@
                                       "application": {
                                         "function": {"project": {"typeName": "hydra.neo4j.model.Node", "fieldName": "labels"}},
                                         "argument": {"variable": "node"}}}}},
-                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}}},
+                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.neo4j.model.NodeLabel"}}, "constraints": []}},
                               {
                                 "name": "soleLabel",
                                 "term": {
@@ -1044,7 +1046,7 @@
                                       "application": {
                                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"variable": "hydra.neo4j.model.NodeLabel"}}},
                                         "argument": {"variable": "labels"}}}}},
-                                "typeScheme": {"variables": [], "body": {"variable": "hydra.neo4j.model.NodeLabel"}}}],
+                                "typeScheme": {"variables": [], "body": {"variable": "hydra.neo4j.model.NodeLabel"}, "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {

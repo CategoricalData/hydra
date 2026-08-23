@@ -126,70 +126,58 @@
                       "key": {"variable": "description"},
                       "value": {"literal": {"string": "Build an encoder for a list, given an encoder for its element type"}}}]}}}}}}},
     {
-      "term": {
+      "primitive": {
         "name": "hydra.refs.encodeMap",
+        "metadata": {"description": "Build an encoder for a map, given encoders for its key and value types", "comments": [], "seeAlso": []},
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}, {"name": "t1", "constraints": []}],
+          "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
             {
-              "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+              "name": "keyEncoder",
+              "description": "the encoder for the map's key type",
+              "type": {"function": {"domain": {"variable": "k"}, "codomain": {"variable": "hydra.core.Term"}}},
               "isLazy": false},
             {
-              "name": "arg1",
-              "type": {"function": {"domain": {"variable": "t1"}, "codomain": {"variable": "hydra.core.Term"}}},
+              "name": "valEncoder",
+              "description": "the encoder for the map's value type",
+              "type": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "hydra.core.Term"}}},
               "isLazy": false},
-            {"name": "arg2", "type": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t1"}}}, "isLazy": false}],
+            {
+              "name": "m",
+              "description": "the map to encode",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
-        "body": {
-          "typeLambda": {
-            "parameter": "t0",
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
             "body": {
-              "typeLambda": {
-                "parameter": "t1",
+              "lambda": {
+                "parameter": "keyEncoder",
                 "body": {
-                  "annotated": {
+                  "lambda": {
+                    "parameter": "valEncoder",
                     "body": {
                       "lambda": {
-                        "parameter": "keyEncoder",
-                        "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+                        "parameter": "m",
                         "body": {
-                          "lambda": {
-                            "parameter": "valEncoder",
-                            "domain": {"function": {"domain": {"variable": "t1"}, "codomain": {"variable": "hydra.core.Term"}}},
-                            "body": {
-                              "lambda": {
-                                "parameter": "m",
-                                "domain": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t1"}}},
-                                "body": {
-                                  "inject": {
-                                    "typeName": "hydra.core.Term",
-                                    "field": {
-                                      "name": "map",
-                                      "term": {
-                                        "application": {
-                                          "function": {
-                                            "application": {
-                                              "function": {
-                                                "application": {
-                                                  "function": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "typeApplication": {
-                                                          "body": {
-                                                            "typeApplication": {
-                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.bimap"}, "type": {"variable": "t0"}}},
-                                                              "type": {"variable": "hydra.core.Term"}}},
-                                                          "type": {"variable": "t1"}}},
-                                                      "type": {"variable": "hydra.core.Term"}}},
-                                                  "argument": {"variable": "keyEncoder"}}},
-                                              "argument": {"variable": "valEncoder"}}},
-                                          "argument": {"variable": "m"}}}}}}}}}}}},
-                    "annotation": {
-                      "map": [
-                        {
-                          "key": {"variable": "description"},
-                          "value": {"literal": {"string": "Build an encoder for a map, given encoders for its key and value types"}}}]}}}}}}}}},
+                          "inject": {
+                            "typeName": "hydra.core.Term",
+                            "field": {
+                              "name": "map",
+                              "term": {
+                                "application": {
+                                  "function": {
+                                    "application": {
+                                      "function": {"application": {"function": {"variable": "hydra.lib.maps.bimap"}, "argument": {"variable": "keyEncoder"}}},
+                                      "argument": {"variable": "valEncoder"}}},
+                                  "argument": {"variable": "m"}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build an encoder for a map, given encoders for its key and value types"}}}]}}}}},
     {
       "term": {
         "name": "hydra.refs.encodeOptional",
@@ -344,50 +332,43 @@
                       "key": {"variable": "description"},
                       "value": {"literal": {"string": "Look up the encoder function for a type given its TypedName token"}}}]}}}}}}},
     {
-      "term": {
+      "primitive": {
         "name": "hydra.refs.encodeSet",
+        "metadata": {"description": "Build an encoder for a set, given an encoder for its element type", "comments": [], "seeAlso": []},
         "signature": {
-          "typeParameters": [{"name": "t0", "constraints": []}],
+          "typeParameters": [{"name": "a", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
             {
-              "name": "arg0",
-              "type": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+              "name": "elemEncoder",
+              "description": "the encoder for the set's element type",
+              "type": {"function": {"domain": {"variable": "a"}, "codomain": {"variable": "hydra.core.Term"}}},
               "isLazy": false},
-            {"name": "arg1", "type": {"set": {"variable": "t0"}}, "isLazy": false}],
+            {"name": "xs", "description": "the set to encode", "type": {"set": {"variable": "a"}}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.Term"}}},
-        "body": {
-          "typeLambda": {
-            "parameter": "t0",
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "annotated": {
             "body": {
-              "annotated": {
+              "lambda": {
+                "parameter": "elemEncoder",
                 "body": {
                   "lambda": {
-                    "parameter": "elemEncoder",
-                    "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}},
+                    "parameter": "xs",
                     "body": {
-                      "lambda": {
-                        "parameter": "xs",
-                        "domain": {"set": {"variable": "t0"}},
-                        "body": {
-                          "inject": {
-                            "typeName": "hydra.core.Term",
-                            "field": {
-                              "name": "set",
-                              "term": {
-                                "application": {
-                                  "function": {
-                                    "application": {
-                                      "function": {
-                                        "typeApplication": {
-                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.sets.map"}, "type": {"variable": "t0"}}},
-                                          "type": {"variable": "hydra.core.Term"}}},
-                                      "argument": {"variable": "elemEncoder"}}},
-                                  "argument": {"variable": "xs"}}}}}}}}}},
-                "annotation": {
-                  "map": [
-                    {
-                      "key": {"variable": "description"},
-                      "value": {"literal": {"string": "Build an encoder for a set, given an encoder for its element type"}}}]}}}}}}},
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "set",
+                          "term": {
+                            "application": {
+                              "function": {"application": {"function": {"variable": "hydra.lib.sets.map"}, "argument": {"variable": "elemEncoder"}}},
+                              "argument": {"variable": "xs"}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Build an encoder for a set, given an encoder for its element type"}}}]}}}}},
     {
       "term": {
         "name": "hydra.refs.showRef",

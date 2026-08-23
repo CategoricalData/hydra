@@ -18,7 +18,8 @@
                   {"name": "greaterThan", "type": "unit"},
                   {"name": "lessThanOrEqual", "type": "unit"},
                   {"name": "greaterThanOrEqual", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "One of several comparison operators"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "One of several comparison operators"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.query.Edge",
@@ -59,7 +60,8 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "The field representing the in-projection of the edge. Defaults to 'in'."}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An abstract edge based on a record type"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An abstract edge based on a record type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.query.GraphPattern",
@@ -86,7 +88,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A query pattern which matches within a designated component subgraph"}}}]}}}}}},
+                    "value": {"literal": {"string": "A query pattern which matches within a designated component subgraph"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.query.Node",
@@ -130,7 +133,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A node in a query expression; it may be a term, a variable, or a wildcard"}}}]}}}}}},
+                    "value": {"literal": {"string": "A node in a query expression; it may be a term, a variable, or a wildcard"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.query.Path",
@@ -163,7 +167,8 @@
                         "body": {"variable": "hydra.query.Path"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A path given by the inverse of another path"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A query path"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A query path"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.query.PathEquation",
@@ -189,7 +194,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A declared equivalence between two abstract paths in a graph"}}}]}}}}}},
+                    "value": {"literal": {"string": "A declared equivalence between two abstract paths in a graph"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.query.Pattern",
@@ -241,7 +247,8 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "A pattern which matches within a named subgraph"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A query pattern"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A query pattern"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.query.PatternImplication",
@@ -277,7 +284,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns."}}}]}}}}}},
+                        "string": "A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.query.Query",
@@ -300,7 +308,8 @@
                         "body": {"list": {"variable": "hydra.query.Pattern"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The patterns to be matched"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A SELECT-style graph pattern matching query"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A SELECT-style graph pattern matching query"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.query.Range",
@@ -322,7 +331,8 @@
                       "annotated": {
                         "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The maximum value (inclusive)"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A range from min to max, inclusive"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A range from min to max, inclusive"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.query.RegexQuantifier",
@@ -399,7 +409,8 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "The {n, m} quantifier; matches between n and m (inclusive) occurrences"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A regular expression quantifier"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A regular expression quantifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.query.RegexSequence",
@@ -422,7 +433,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.query.RegexQuantifier"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The quantifier"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A path with a regex quantifier"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A path with a regex quantifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.query.Step",
@@ -460,7 +472,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "An atomic function as part of a query. When applied to a graph, steps are typed by function types."}}}]}}}}}},
+                      "literal": {"string": "An atomic function as part of a query. When applied to a graph, steps are typed by function types."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.query.TriplePattern",
@@ -489,7 +502,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.query.Node"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The object of the pattern"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A subject/predicate/object pattern"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A subject/predicate/object pattern"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.query.Variable",
@@ -498,4 +512,5 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A query variable"}}}]}}}}}}]}
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A query variable"}}}]}}},
+          "constraints": []}}}]}

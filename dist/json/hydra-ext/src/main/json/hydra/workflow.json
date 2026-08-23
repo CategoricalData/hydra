@@ -34,7 +34,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The specification of a Hydra schema, provided as a set of modules and a distinguished type"}}}]}}}}}},
+                    "value": {"literal": {"string": "The specification of a Hydra schema, provided as a set of modules and a distinguished type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.workflow.SchemaSpec",
@@ -74,7 +75,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The specification of a schema at the source end of a workflow"}}}]}}}}}},
+                    "value": {"literal": {"string": "The specification of a schema at the source end of a workflow"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.workflow.TransformWorkflow",
@@ -114,4 +116,5 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "The specification of a workflow which takes a schema specification, reads data from a directory, and writes data to another directory"}}}]}}}}}}]}
+                        "string": "The specification of a workflow which takes a schema specification, reads data from a directory, and writes data to another directory"}}}]}}},
+          "constraints": []}}}]}

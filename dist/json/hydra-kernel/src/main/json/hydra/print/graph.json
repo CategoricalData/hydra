@@ -61,7 +61,7 @@
                                     "type": {"literal": "string"}}},
                                 "argument": {"variable": "hydra.print.core.binding"}}},
                             "argument": {"variable": "elements"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.lib.strings.concat"},

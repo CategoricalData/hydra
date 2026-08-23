@@ -68,7 +68,7 @@
                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Name"}}},
                                                     "type": {"variable": "t0"}}},
                                                 "argument": {"variable": "rp"}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -81,7 +81,7 @@
                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Name"}}},
                                                         "type": {"variable": "t0"}}},
                                                     "argument": {"variable": "rp"}}},
-                                                "typeScheme": {"variables": [], "body": {"variable": "t0"}}}],
+                                                "typeScheme": {"variables": [], "body": {"variable": "t0"}, "constraints": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -94,7 +94,7 @@
                                                             "body": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "errors"}},
                                                             "type": {"variable": "t0"}}},
                                                         "argument": {"variable": "acc"}}},
-                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}}}],
+                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}, "constraints": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -107,7 +107,7 @@
                                                                 "body": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "warnings"}},
                                                                 "type": {"variable": "t0"}}},
                                                             "argument": {"variable": "acc"}}},
-                                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}}}],
+                                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}, "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {
@@ -307,7 +307,7 @@
                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Name"}}},
                                                     "type": {"variable": "t0"}}},
                                                 "argument": {"variable": "rp"}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -320,7 +320,7 @@
                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Name"}}},
                                                         "type": {"variable": "t0"}}},
                                                     "argument": {"variable": "rp"}}},
-                                                "typeScheme": {"variables": [], "body": {"variable": "t0"}}}],
+                                                "typeScheme": {"variables": [], "body": {"variable": "t0"}, "constraints": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -333,7 +333,7 @@
                                                             "body": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "errors"}},
                                                             "type": {"variable": "t0"}}},
                                                         "argument": {"variable": "acc"}}},
-                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}}}],
+                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}, "constraints": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -346,7 +346,7 @@
                                                                 "body": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "warnings"}},
                                                                 "type": {"variable": "t0"}}},
                                                             "argument": {"variable": "acc"}}},
-                                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}}}],
+                                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}, "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {
@@ -546,7 +546,7 @@
                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Name"}}},
                                                     "type": {"variable": "t0"}}},
                                                 "argument": {"variable": "rp"}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -559,7 +559,7 @@
                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Name"}}},
                                                         "type": {"variable": "t0"}}},
                                                     "argument": {"variable": "rp"}}},
-                                                "typeScheme": {"variables": [], "body": {"variable": "t0"}}}],
+                                                "typeScheme": {"variables": [], "body": {"variable": "t0"}, "constraints": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -572,7 +572,7 @@
                                                             "body": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "errors"}},
                                                             "type": {"variable": "t0"}}},
                                                         "argument": {"variable": "acc"}}},
-                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}}}],
+                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}, "constraints": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -585,7 +585,7 @@
                                                                 "body": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "warnings"}},
                                                                 "type": {"variable": "t0"}}},
                                                             "argument": {"variable": "acc"}}},
-                                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}}}],
+                                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}, "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {
@@ -785,7 +785,7 @@
                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.core.Name"}}},
                                                     "type": {"variable": "t0"}}},
                                                 "argument": {"variable": "rp"}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}, "constraints": []}}],
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -798,7 +798,7 @@
                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.core.Name"}}},
                                                         "type": {"variable": "t0"}}},
                                                     "argument": {"variable": "rp"}}},
-                                                "typeScheme": {"variables": [], "body": {"variable": "t0"}}}],
+                                                "typeScheme": {"variables": [], "body": {"variable": "t0"}, "constraints": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -811,7 +811,7 @@
                                                             "body": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "errors"}},
                                                             "type": {"variable": "t0"}}},
                                                         "argument": {"variable": "acc"}}},
-                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}}}],
+                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}, "constraints": []}}],
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
@@ -824,7 +824,7 @@
                                                                 "body": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "warnings"}},
                                                                 "type": {"variable": "t0"}}},
                                                             "argument": {"variable": "acc"}}},
-                                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}}}],
+                                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "t0"}}, "constraints": []}}],
                                                     "body": {
                                                       "application": {
                                                         "function": {
@@ -1260,7 +1260,7 @@
                                                                         "function": {
                                                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.EdgeType", "fieldName": "label"}}, "type": {"variable": "t0"}}},
                                                                         "argument": {"variable": "typ"}}},
-                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.EdgeLabel"}}},
+                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.EdgeLabel"}, "constraints": []}},
                                                                   {
                                                                     "name": "actual",
                                                                     "term": {
@@ -1268,7 +1268,7 @@
                                                                         "function": {
                                                                           "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Edge", "fieldName": "label"}}, "type": {"variable": "t1"}}},
                                                                         "argument": {"variable": "el"}}},
-                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.EdgeLabel"}}}],
+                                                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.EdgeLabel"}, "constraints": []}}],
                                                                 "body": {
                                                                   "application": {
                                                                     "function": {
@@ -2007,7 +2007,8 @@
                                                 "typeScheme": {
                                                   "variables": [],
                                                   "body": {
-                                                    "optional": {"function": {"domain": {"variable": "t0"}, "codomain": {"optional": {"variable": "hydra.pg.model.VertexLabel"}}}}}}},
+                                                    "optional": {"function": {"domain": {"variable": "t0"}, "codomain": {"optional": {"variable": "hydra.pg.model.VertexLabel"}}}}},
+                                                  "constraints": []}},
                                               {
                                                 "name": "vertexFindings",
                                                 "term": {
@@ -2061,7 +2062,8 @@
                                                                         "argument": {"variable": "schema"}}}}},
                                                                 "typeScheme": {
                                                                   "variables": [],
-                                                                  "body": {"optional": {"application": {"function": {"variable": "hydra.pg.model.VertexType"}, "argument": {"variable": "t1"}}}}}},
+                                                                  "body": {"optional": {"application": {"function": {"variable": "hydra.pg.model.VertexType"}, "argument": {"variable": "t1"}}}},
+                                                                  "constraints": []}},
                                                               {
                                                                 "name": "perVertex",
                                                                 "term": {
@@ -2136,7 +2138,8 @@
                                                                   "body": {
                                                                     "application": {
                                                                       "function": {"variable": "hydra.validation.ValidationResult"},
-                                                                      "argument": {"variable": "hydra.error.pg.InvalidVertexError"}}}}}],
+                                                                      "argument": {"variable": "hydra.error.pg.InvalidVertexError"}}},
+                                                                  "constraints": []}}],
                                                             "body": {
                                                               "application": {
                                                                 "function": {
@@ -2183,7 +2186,8 @@
                                                 "typeScheme": {
                                                   "variables": [],
                                                   "body": {
-                                                    "list": {"application": {"function": {"variable": "hydra.error.pg.InvalidGraphError"}, "argument": {"variable": "t0"}}}}}},
+                                                    "list": {"application": {"function": {"variable": "hydra.error.pg.InvalidGraphError"}, "argument": {"variable": "t0"}}}},
+                                                  "constraints": []}},
                                               {
                                                 "name": "edgeFindings",
                                                 "term": {
@@ -2237,7 +2241,8 @@
                                                                         "argument": {"variable": "schema"}}}}},
                                                                 "typeScheme": {
                                                                   "variables": [],
-                                                                  "body": {"optional": {"application": {"function": {"variable": "hydra.pg.model.EdgeType"}, "argument": {"variable": "t1"}}}}}},
+                                                                  "body": {"optional": {"application": {"function": {"variable": "hydra.pg.model.EdgeType"}, "argument": {"variable": "t1"}}}},
+                                                                  "constraints": []}},
                                                               {
                                                                 "name": "perEdge",
                                                                 "term": {
@@ -2315,7 +2320,8 @@
                                                                   "body": {
                                                                     "application": {
                                                                       "function": {"variable": "hydra.validation.ValidationResult"},
-                                                                      "argument": {"variable": "hydra.error.pg.InvalidEdgeError"}}}}}],
+                                                                      "argument": {"variable": "hydra.error.pg.InvalidEdgeError"}}},
+                                                                  "constraints": []}}],
                                                             "body": {
                                                               "application": {
                                                                 "function": {
@@ -2362,7 +2368,8 @@
                                                 "typeScheme": {
                                                   "variables": [],
                                                   "body": {
-                                                    "list": {"application": {"function": {"variable": "hydra.error.pg.InvalidGraphError"}, "argument": {"variable": "t0"}}}}}}],
+                                                    "list": {"application": {"function": {"variable": "hydra.error.pg.InvalidGraphError"}, "argument": {"variable": "t0"}}}},
+                                                  "constraints": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
@@ -2381,7 +2388,8 @@
                                                     "typeScheme": {
                                                       "variables": [],
                                                       "body": {
-                                                        "list": {"application": {"function": {"variable": "hydra.error.pg.InvalidGraphError"}, "argument": {"variable": "t0"}}}}}},
+                                                        "list": {"application": {"function": {"variable": "hydra.error.pg.InvalidGraphError"}, "argument": {"variable": "t0"}}}},
+                                                      "constraints": []}},
                                                   {
                                                     "name": "newErrs",
                                                     "term": {
@@ -2415,7 +2423,8 @@
                                                     "typeScheme": {
                                                       "variables": [],
                                                       "body": {
-                                                        "list": {"application": {"function": {"variable": "hydra.error.pg.InvalidGraphError"}, "argument": {"variable": "t0"}}}}}}],
+                                                        "list": {"application": {"function": {"variable": "hydra.error.pg.InvalidGraphError"}, "argument": {"variable": "t0"}}}},
+                                                      "constraints": []}}],
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {
@@ -2540,7 +2549,10 @@
                                                                     "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                 "type": {"variable": "t0"}}}}}}},
                                                     "argument": {"variable": "types"}}}}},
-                                            "typeScheme": {"variables": [], "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}}},
+                                            "typeScheme": {
+                                              "variables": [],
+                                              "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}},
+                                              "constraints": []}},
                                           {
                                             "name": "missingChecks",
                                             "term": {
@@ -2682,7 +2694,8 @@
                                               "body": {
                                                 "list": {
                                                   "optional": {
-                                                    "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}}}}},
+                                                    "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}}},
+                                              "constraints": []}},
                                           {
                                             "name": "valueChecks",
                                             "term": {
@@ -2721,7 +2734,7 @@
                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                     "type": {"variable": "t1"}}},
                                                                 "argument": {"variable": "kv"}}},
-                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.PropertyKey"}}},
+                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.PropertyKey"}, "constraints": []}},
                                                           {
                                                             "name": "val",
                                                             "term": {
@@ -2732,7 +2745,7 @@
                                                                       "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.pg.model.PropertyKey"}}},
                                                                     "type": {"variable": "t1"}}},
                                                                 "argument": {"variable": "kv"}}},
-                                                            "typeScheme": {"variables": [], "body": {"variable": "t1"}}}],
+                                                            "typeScheme": {"variables": [], "body": {"variable": "t1"}, "constraints": []}}],
                                                         "body": {
                                                           "list": [
                                                             {
@@ -2920,7 +2933,8 @@
                                               "body": {
                                                 "list": {
                                                   "optional": {
-                                                    "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}}}}}],
+                                                    "pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.pg.InvalidElementPropertyError"}}}}},
+                                              "constraints": []}}],
                                         "body": {
                                           "application": {
                                             "function": {
@@ -3224,7 +3238,7 @@
                                                                     "function": {
                                                                       "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.VertexType", "fieldName": "label"}}, "type": {"variable": "t0"}}},
                                                                     "argument": {"variable": "typ"}}},
-                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.VertexLabel"}}},
+                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.VertexLabel"}, "constraints": []}},
                                                               {
                                                                 "name": "actual",
                                                                 "term": {
@@ -3232,7 +3246,7 @@
                                                                     "function": {
                                                                       "typeApplication": {"body": {"project": {"typeName": "hydra.pg.model.Vertex", "fieldName": "label"}}, "type": {"variable": "t1"}}},
                                                                     "argument": {"variable": "el"}}},
-                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.VertexLabel"}}}],
+                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.pg.model.VertexLabel"}, "constraints": []}}],
                                                             "body": {
                                                               "application": {
                                                                 "function": {

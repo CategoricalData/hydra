@@ -33,7 +33,8 @@
                       "annotated": {
                         "body": {"list": {"variable": "hydra.yaml.model.Node"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A sequence of nodes"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A YAML node (value)"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A YAML node (value)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.yaml.model.Scalar",
@@ -93,4 +94,5 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here"}}}]}}}}}}]}
+                      "literal": {"string": "A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here"}}}]}}},
+          "constraints": []}}}]}

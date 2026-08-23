@@ -658,26 +658,26 @@
                         "name": "name_",
                         "term": {
                           "application": {"function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "name"}}, "argument": {"variable": "tg"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "desc",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "description"}},
                             "argument": {"variable": "tg"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}, "constraints": []}},
                       {
                         "name": "subgroups",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "subgroups"}},
                             "argument": {"variable": "tg"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestGroup"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestGroup"}}, "constraints": []}},
                       {
                         "name": "cases_",
                         "term": {
                           "application": {"function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "cases"}}, "argument": {"variable": "tg"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}, "constraints": []}},
                       {
                         "name": "transformedCases",
                         "term": {
@@ -705,7 +705,7 @@
                                                 "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
                                             "argument": {"variable": "tc"}}}}}}},
                                 "argument": {"variable": "cases_"}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}, "constraints": []}},
                       {
                         "name": "transformedSubgroups",
                         "term": {
@@ -727,7 +727,7 @@
                                         "body": {
                                           "application": {"function": {"variable": "hydra.test.transform.transformToCompiledTests"}, "argument": {"variable": "sg"}}}}}}},
                                 "argument": {"variable": "subgroups"}}}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestGroup"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestGroup"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -744,11 +744,11 @@
                                         "argument": {
                                           "application": {
                                             "function": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
+                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}},
                                             "argument": {"variable": "transformedCases"}}}}},
                                     "argument": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.testing.TestGroup"}}},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.testing.TestGroup"}}},
                                         "argument": {"variable": "transformedSubgroups"}}}}}}},
                             "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.testing.TestGroup"}}}}},
                         "argument": {

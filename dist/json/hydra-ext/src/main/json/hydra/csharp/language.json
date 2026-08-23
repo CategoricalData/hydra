@@ -55,7 +55,7 @@
                             {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "float", "term": "unit"}}},
                             {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "integer", "term": "unit"}}},
                             {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "string", "term": "unit"}}}]}}},
-                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}}},
+                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.variants.LiteralVariant"}}, "constraints": []}},
                   {
                     "name": "floatTypes",
                     "term": {
@@ -65,7 +65,7 @@
                           "list": [
                             {"inject": {"typeName": "hydra.core.FloatType", "field": {"name": "float32", "term": "unit"}}},
                             {"inject": {"typeName": "hydra.core.FloatType", "field": {"name": "float64", "term": "unit"}}}]}}},
-                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.core.FloatType"}}}},
+                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.core.FloatType"}}, "constraints": []}},
                   {
                     "name": "integerTypes",
                     "term": {
@@ -81,7 +81,7 @@
                             {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "uint16", "term": "unit"}}},
                             {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "uint32", "term": "unit"}}},
                             {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "uint64", "term": "unit"}}}]}}},
-                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.core.IntegerType"}}}},
+                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.core.IntegerType"}}, "constraints": []}},
                   {
                     "name": "termVariants",
                     "term": {
@@ -107,7 +107,7 @@
                             {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "inject", "term": "unit"}}},
                             {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "variable", "term": "unit"}}},
                             {"inject": {"typeName": "hydra.variants.TermVariant", "field": {"name": "wrap", "term": "unit"}}}]}}},
-                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.variants.TermVariant"}}}},
+                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.variants.TermVariant"}}, "constraints": []}},
                   {
                     "name": "typeVariants",
                     "term": {
@@ -129,14 +129,17 @@
                             {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "union", "term": "unit"}}},
                             {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "variable", "term": "unit"}}},
                             {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "wrap", "term": "unit"}}}]}}},
-                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.variants.TypeVariant"}}}},
+                    "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.variants.TypeVariant"}}, "constraints": []}},
                   {
                     "name": "typePredicate",
                     "term": {
                       "typeLambda": {
                         "parameter": "t0",
                         "body": {"lambda": {"parameter": "_", "domain": {"variable": "t0"}, "body": {"literal": {"boolean": true}}}}}},
-                    "typeScheme": {"variables": ["t0"], "body": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "boolean"}}}}}],
+                    "typeScheme": {
+                      "variables": ["t0"],
+                      "body": {"function": {"domain": {"variable": "t0"}, "codomain": {"literal": "boolean"}}},
+                      "constraints": []}}],
                 "body": {
                   "record": {
                     "typeName": "hydra.coders.Language",
@@ -301,7 +304,7 @@
                         {"literal": {"string": "void"}},
                         {"literal": {"string": "volatile"}},
                         {"literal": {"string": "while"}}]},
-                    "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
+                    "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
                   {
                     "name": "contextualKeywords",
                     "term": {
@@ -335,7 +338,7 @@
                         {"literal": {"string": "when"}},
                         {"literal": {"string": "where"}},
                         {"literal": {"string": "yield"}}]},
-                    "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                    "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                 "body": {
                   "application": {
                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": "string"}}},

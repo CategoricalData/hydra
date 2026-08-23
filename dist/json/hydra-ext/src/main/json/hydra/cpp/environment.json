@@ -30,4 +30,5 @@
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Environment for C++ code generation"}}}]}}}}}}]}
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Environment for C++ code generation"}}}]}}},
+          "constraints": []}}}]}

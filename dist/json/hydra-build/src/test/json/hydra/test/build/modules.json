@@ -319,8 +319,8 @@
                                                                                                             "name": "constraints",
                                                                                                             "term": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"optional": null},
-                                                                                                                "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}},
+                                                                                                                "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}},
                                                                           {
                                                                             "record": {
                                                                               "typeName": "hydra.packaging.Module",
@@ -375,8 +375,8 @@
                                                                                                             "name": "constraints",
                                                                                                             "term": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"optional": null},
-                                                                                                                "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}]}}}}}}}},
+                                                                                                                "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}]}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -453,8 +453,8 @@
                                                                                                         "name": "constraints",
                                                                                                         "term": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"optional": null},
-                                                                                                            "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}]}}}}}}]}}}}}},
+                                                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}]}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                     {
@@ -554,8 +554,8 @@
                                                                                                             "name": "constraints",
                                                                                                             "term": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"optional": null},
-                                                                                                                "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}},
+                                                                                                                "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}},
                                                                           {
                                                                             "record": {
                                                                               "typeName": "hydra.packaging.Module",
@@ -610,8 +610,8 @@
                                                                                                             "name": "constraints",
                                                                                                             "term": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"optional": null},
-                                                                                                                "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}]}}}}}}}},
+                                                                                                                "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}]}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -688,8 +688,8 @@
                                                                                                         "name": "constraints",
                                                                                                         "term": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"optional": null},
-                                                                                                            "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}]}}}}}}]}}}}}},
+                                                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}]}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                     {
@@ -787,8 +787,8 @@
                                                                                                             "name": "constraints",
                                                                                                             "term": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"optional": null},
-                                                                                                                "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}]}}}}}}}},
+                                                                                                                "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}]}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -865,8 +865,8 @@
                                                                                                         "name": "constraints",
                                                                                                         "term": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"optional": null},
-                                                                                                            "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}]}}}}}}]}}}}}},
+                                                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}]}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                     {
@@ -1040,8 +1040,8 @@
                                                                                                             "name": "constraints",
                                                                                                             "term": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"optional": null},
-                                                                                                                "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}]}}}}}}}},
+                                                                                                                "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}]}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -1118,8 +1118,8 @@
                                                                                                         "name": "constraints",
                                                                                                         "term": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"optional": null},
-                                                                                                            "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}]}}}}}}]}}}}}},
+                                                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}]}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                     {
@@ -1438,8 +1438,8 @@
                                                                                                             "name": "constraints",
                                                                                                             "term": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"optional": null},
-                                                                                                                "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}]}}}}}}}},
+                                                                                                                "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}]}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -1546,8 +1546,8 @@
                                                                                                         "name": "constraints",
                                                                                                         "term": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"optional": null},
-                                                                                                            "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}]}}}}}}]}}}}}},
+                                                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}]}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                         {
@@ -2318,8 +2318,8 @@
                                                                                                                   "name": "constraints",
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {
-                                                                                                                      "body": {"optional": null},
-                                                                                                                      "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}},
+                                                                                                                      "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                      "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}},
                                                                                                   {
                                                                                                     "name": "body",
                                                                                                     "term": {
@@ -2392,8 +2392,8 @@
                                                                                                                   "name": "constraints",
                                                                                                                   "term": {
                                                                                                                     "typeApplication": {
-                                                                                                                      "body": {"optional": null},
-                                                                                                                      "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}},
+                                                                                                                      "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                      "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}},
                                                                                                   {
                                                                                                     "name": "body",
                                                                                                     "term": {
@@ -2445,8 +2445,8 @@
                                                                                                             "name": "constraints",
                                                                                                             "term": {
                                                                                                               "typeApplication": {
-                                                                                                                "body": {"optional": null},
-                                                                                                                "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}]}}}}}}}},
+                                                                                                                "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}]}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -2702,8 +2702,8 @@
                                                                                                         "name": "constraints",
                                                                                                         "term": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {"optional": null},
-                                                                                                            "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}]}}}}}}]}}}}}},
+                                                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}]}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                         {
@@ -2813,8 +2813,8 @@
                                                                                                                           "name": "constraints",
                                                                                                                           "term": {
                                                                                                                             "typeApplication": {
-                                                                                                                              "body": {"optional": null},
-                                                                                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}},
+                                                                                                                              "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                              "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}},
                                                                                                           {
                                                                                                             "name": "body",
                                                                                                             "term": {
@@ -2986,8 +2986,8 @@
                                                                                                                           "name": "constraints",
                                                                                                                           "term": {
                                                                                                                             "typeApplication": {
-                                                                                                                              "body": {"optional": null},
-                                                                                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}},
+                                                                                                                              "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                              "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}},
                                                                                                           {
                                                                                                             "name": "body",
                                                                                                             "term": {
@@ -3301,8 +3301,8 @@
                                                                                                                     "name": "constraints",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
-                                                                                                                        "body": {"optional": null},
-                                                                                                                        "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}}}}}}},
+                                                                                                                        "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                        "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}}}}}}},
                                                                       {"literal": {"string": "|"}},
                                                                       {
                                                                         "application": {
@@ -3456,8 +3456,8 @@
                                                                                                                     "name": "constraints",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
-                                                                                                                        "body": {"optional": null},
-                                                                                                                        "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}}}}}}}]}}}}}},
+                                                                                                                        "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                        "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}}}}}}}]}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -3529,8 +3529,8 @@
                                                                                                                 "name": "constraints",
                                                                                                                 "term": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"optional": null},
-                                                                                                                    "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}}}}},
+                                                                                                                    "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                    "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}}}}},
                                                                       {"literal": {"string": "|"}},
                                                                       {
                                                                         "application": {
@@ -3681,8 +3681,8 @@
                                                                                                                 "name": "constraints",
                                                                                                                 "term": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"optional": null},
-                                                                                                                    "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}}}}}]}}}}}}]}}}}}},
+                                                                                                                    "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                    "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}}}}}]}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                     {
@@ -3779,8 +3779,8 @@
                                                                                                                           "name": "constraints",
                                                                                                                           "term": {
                                                                                                                             "typeApplication": {
-                                                                                                                              "body": {"optional": null},
-                                                                                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}},
+                                                                                                                              "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                              "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}},
                                                                                                           {
                                                                                                             "name": "body",
                                                                                                             "term": {
@@ -3832,8 +3832,8 @@
                                                                                                                     "name": "constraints",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
-                                                                                                                        "body": {"optional": null},
-                                                                                                                        "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}}}}}}},
+                                                                                                                        "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                        "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}}}}}}},
                                                                       {"literal": {"string": "|"}},
                                                                       {
                                                                         "application": {
@@ -3991,8 +3991,8 @@
                                                                                                                           "name": "constraints",
                                                                                                                           "term": {
                                                                                                                             "typeApplication": {
-                                                                                                                              "body": {"optional": null},
-                                                                                                                              "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}}},
+                                                                                                                              "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                              "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}},
                                                                                                           {
                                                                                                             "name": "body",
                                                                                                             "term": {
@@ -4044,8 +4044,8 @@
                                                                                                                     "name": "constraints",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
-                                                                                                                        "body": {"optional": null},
-                                                                                                                        "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}}}}}}}]}}}}}},
+                                                                                                                        "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                        "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}}}}}}}]}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -4147,8 +4147,8 @@
                                                                                                                 "name": "constraints",
                                                                                                                 "term": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"optional": null},
-                                                                                                                    "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}}}}},
+                                                                                                                    "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                    "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}}}}},
                                                                       {"literal": {"string": "|"}},
                                                                       {
                                                                         "application": {
@@ -4329,8 +4329,8 @@
                                                                                                                 "name": "constraints",
                                                                                                                 "term": {
                                                                                                                   "typeApplication": {
-                                                                                                                    "body": {"optional": null},
-                                                                                                                    "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}]}}}}}]}}]}}}}}}]}}}}}}]}}}}}},
+                                                                                                                    "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                    "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}]}}}}}]}}]}}}}}}]}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                     {
@@ -4426,8 +4426,8 @@
                                                                                                                         "name": "constraints",
                                                                                                                         "term": {
                                                                                                                           "typeApplication": {
-                                                                                                                            "body": {"optional": null},
-                                                                                                                            "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}},
+                                                                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                            "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}},
                                                                                                           {"name": "isPure", "term": {"literal": {"boolean": true}}},
                                                                                                           {"name": "isTotal", "term": {"literal": {"boolean": true}}},
                                                                                                           {
@@ -4589,8 +4589,8 @@
                                                                                                                         "name": "constraints",
                                                                                                                         "term": {
                                                                                                                           "typeApplication": {
-                                                                                                                            "body": {"optional": null},
-                                                                                                                            "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}},
+                                                                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                            "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}},
                                                                                                           {"name": "isPure", "term": {"literal": {"boolean": true}}},
                                                                                                           {"name": "isTotal", "term": {"literal": {"boolean": true}}},
                                                                                                           {
@@ -4670,8 +4670,8 @@
                                                                                                                     "name": "constraints",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
-                                                                                                                        "body": {"optional": null},
-                                                                                                                        "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}},
+                                                                                                                        "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                        "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}},
                                                                                                       {"name": "isPure", "term": {"literal": {"boolean": true}}},
                                                                                                       {"name": "isTotal", "term": {"literal": {"boolean": true}}},
                                                                                                       {
@@ -4830,8 +4830,8 @@
                                                                                                                     "name": "constraints",
                                                                                                                     "term": {
                                                                                                                       "typeApplication": {
-                                                                                                                        "body": {"optional": null},
-                                                                                                                        "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}}},
+                                                                                                                        "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                        "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}},
                                                                                                       {"name": "isPure", "term": {"literal": {"boolean": true}}},
                                                                                                       {"name": "isTotal", "term": {"literal": {"boolean": true}}},
                                                                                                       {

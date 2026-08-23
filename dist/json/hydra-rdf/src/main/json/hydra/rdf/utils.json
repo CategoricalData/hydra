@@ -198,7 +198,7 @@
                                                     "fields": [
                                                       {
                                                         "name": "lexicalForm",
-                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showFloat32"}, "argument": {"variable": "v"}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.printFloat32"}, "argument": {"variable": "v"}}}},
                                                       {
                                                         "name": "datatypeIri",
                                                         "term": {
@@ -218,7 +218,7 @@
                                                     "fields": [
                                                       {
                                                         "name": "lexicalForm",
-                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showFloat64"}, "argument": {"variable": "v"}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.printFloat64"}, "argument": {"variable": "v"}}}},
                                                       {
                                                         "name": "datatypeIri",
                                                         "term": {
@@ -251,7 +251,7 @@
                                                     "fields": [
                                                       {
                                                         "name": "lexicalForm",
-                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showBigint"}, "argument": {"variable": "v"}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.printBigint"}, "argument": {"variable": "v"}}}},
                                                       {
                                                         "name": "datatypeIri",
                                                         "term": {
@@ -271,7 +271,7 @@
                                                     "fields": [
                                                       {
                                                         "name": "lexicalForm",
-                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showInt8"}, "argument": {"variable": "v"}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.printInt8"}, "argument": {"variable": "v"}}}},
                                                       {
                                                         "name": "datatypeIri",
                                                         "term": {
@@ -291,7 +291,7 @@
                                                     "fields": [
                                                       {
                                                         "name": "lexicalForm",
-                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showInt16"}, "argument": {"variable": "v"}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.printInt16"}, "argument": {"variable": "v"}}}},
                                                       {
                                                         "name": "datatypeIri",
                                                         "term": {
@@ -311,7 +311,7 @@
                                                     "fields": [
                                                       {
                                                         "name": "lexicalForm",
-                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "v"}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.printInt32"}, "argument": {"variable": "v"}}}},
                                                       {
                                                         "name": "datatypeIri",
                                                         "term": {
@@ -331,7 +331,7 @@
                                                     "fields": [
                                                       {
                                                         "name": "lexicalForm",
-                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showInt64"}, "argument": {"variable": "v"}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.printInt64"}, "argument": {"variable": "v"}}}},
                                                       {
                                                         "name": "datatypeIri",
                                                         "term": {
@@ -351,7 +351,7 @@
                                                     "fields": [
                                                       {
                                                         "name": "lexicalForm",
-                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showUint8"}, "argument": {"variable": "v"}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.printUint8"}, "argument": {"variable": "v"}}}},
                                                       {
                                                         "name": "datatypeIri",
                                                         "term": {
@@ -371,7 +371,7 @@
                                                     "fields": [
                                                       {
                                                         "name": "lexicalForm",
-                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showUint16"}, "argument": {"variable": "v"}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.printUint16"}, "argument": {"variable": "v"}}}},
                                                       {
                                                         "name": "datatypeIri",
                                                         "term": {
@@ -391,7 +391,7 @@
                                                     "fields": [
                                                       {
                                                         "name": "lexicalForm",
-                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showUint32"}, "argument": {"variable": "v"}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.printUint32"}, "argument": {"variable": "v"}}}},
                                                       {
                                                         "name": "datatypeIri",
                                                         "term": {
@@ -411,7 +411,7 @@
                                                     "fields": [
                                                       {
                                                         "name": "lexicalForm",
-                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.showUint64"}, "argument": {"variable": "v"}}}},
+                                                        "term": {"application": {"function": {"variable": "hydra.lib.literals.printUint64"}, "argument": {"variable": "v"}}}},
                                                       {
                                                         "name": "datatypeIri",
                                                         "term": {
@@ -623,7 +623,7 @@
                                       "body": {
                                         "application": {
                                           "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "b"}}}},
-                                          "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "counter"}}}}}}}}}},
+                                          "argument": {"application": {"function": {"variable": "hydra.lib.literals.printInt32"}, "argument": {"variable": "counter"}}}}}}}}}},
                             "second": {
                               "application": {
                                 "function": {
@@ -663,21 +663,21 @@
                           {
                             "name": "qualName",
                             "term": {"application": {"function": {"variable": "hydra.names.qualifyName"}, "argument": {"variable": "rname"}}},
-                            "typeScheme": {"variables": [], "body": {"variable": "hydra.util.QualifiedName"}}},
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.util.QualifiedName"}, "constraints": []}},
                           {
                             "name": "gname",
                             "term": {
                               "application": {
                                 "function": {"project": {"typeName": "hydra.util.QualifiedName", "fieldName": "moduleName"}},
                                 "argument": {"variable": "qualName"}}},
-                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.packaging.ModuleName"}}}},
+                            "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.packaging.ModuleName"}}, "constraints": []}},
                           {
                             "name": "local_",
                             "term": {
                               "application": {
                                 "function": {"project": {"typeName": "hydra.util.QualifiedName", "fieldName": "local"}},
                                 "argument": {"variable": "qualName"}}},
-                            "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                         "body": {
                           "wrap": {
                             "typeName": "hydra.rdf.syntax.Iri",

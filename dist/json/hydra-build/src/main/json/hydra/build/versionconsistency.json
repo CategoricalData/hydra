@@ -69,7 +69,7 @@
                                   "application": {
                                     "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"variable": "open"}}},
                                     "argument": {"variable": "s"}}},
-                                "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                                "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {
@@ -116,7 +116,7 @@
                                                   "application": {
                                                     "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"variable": "close"}}},
                                                     "argument": {"variable": "after"}}},
-                                                "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                                                "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                                             "body": {
                                               "application": {
                                                 "function": {
@@ -157,7 +157,7 @@
                               "application": {
                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"variable": "marker"}}},
                                 "argument": {"variable": "s"}}},
-                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}}],
+                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {

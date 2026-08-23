@@ -117,21 +117,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.EnumDefinition", "fieldName": "name"}},
                             "argument": {"variable": "ed"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.TypeName"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.TypeName"}, "constraints": []}},
                       {
                         "name": "values",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.EnumDefinition", "fieldName": "values"}},
                             "argument": {"variable": "ed"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.EnumValue"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.EnumValue"}}, "constraints": []}},
                       {
                         "name": "options",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.EnumDefinition", "fieldName": "options"}},
                             "argument": {"variable": "ed"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -186,21 +186,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.EnumValue", "fieldName": "name"}},
                             "argument": {"variable": "ev"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.EnumValueName"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.EnumValueName"}, "constraints": []}},
                       {
                         "name": "number",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.EnumValue", "fieldName": "number"}},
                             "argument": {"variable": "ev"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}},
+                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}},
                       {
                         "name": "options",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.EnumValue", "fieldName": "options"}},
                             "argument": {"variable": "ev"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -223,7 +223,7 @@
                                     {
                                       "application": {
                                         "function": {"variable": "hydra.serialization.cst"},
-                                        "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "number"}}}}}]}}}}}}}}}}},
+                                        "argument": {"application": {"function": {"variable": "hydra.lib.literals.printInt32"}, "argument": {"variable": "number"}}}}}]}}}}}}}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert an enum value to an expression"}}}]}}}}},
     {
@@ -301,14 +301,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.Option", "fieldName": "name"}},
                             "argument": {"variable": "opt"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "value",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.Option", "fieldName": "value"}},
                             "argument": {"variable": "opt"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.Value"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.Value"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.serialization.spaceSep"},
@@ -339,7 +339,7 @@
                         "name": "opts",
                         "term": {
                           "application": {"function": {"variable": "hydra.protobuf.serde.excludeInternalOptions"}, "argument": {"variable": "opts0"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -351,12 +351,12 @@
                                 "argument": {
                                   "application": {
                                     "function": {
-                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.protobuf.proto3.Option"}}},
+                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.protobuf.proto3.Option"}}},
                                     "argument": {"variable": "opts"}}}}},
                             "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "argument": {
                           "application": {
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                             "argument": {
                               "application": {
                                 "function": {
@@ -400,28 +400,28 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.Field", "fieldName": "name"}},
                             "argument": {"variable": "f"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.FieldName"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.FieldName"}, "constraints": []}},
                       {
                         "name": "typ",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.Field", "fieldName": "type"}},
                             "argument": {"variable": "f"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.FieldType"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.FieldType"}, "constraints": []}},
                       {
                         "name": "num",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.Field", "fieldName": "number"}},
                             "argument": {"variable": "f"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}}},
+                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}},
                       {
                         "name": "options",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.Field", "fieldName": "options"}},
                             "argument": {"variable": "f"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -478,14 +478,14 @@
                                                   "application": {
                                                     "function": {"project": {"typeName": "hydra.protobuf.proto3.MapType", "fieldName": "keys"}},
                                                     "argument": {"variable": "mt"}}},
-                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.SimpleType"}}},
+                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.SimpleType"}, "constraints": []}},
                                               {
                                                 "name": "vt",
                                                 "term": {
                                                   "application": {
                                                     "function": {"project": {"typeName": "hydra.protobuf.proto3.MapType", "fieldName": "values"}},
                                                     "argument": {"variable": "mt"}}},
-                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.SimpleType"}}}],
+                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.SimpleType"}, "constraints": []}}],
                                             "body": {
                                               "application": {
                                                 "function": {"variable": "hydra.protobuf.serde.semi"},
@@ -499,26 +499,26 @@
                                                           "list": [
                                                             {
                                                               "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                                                 "argument": {"application": {"function": {"variable": "hydra.protobuf.serde.fieldTypeToExpr"}, "argument": {"variable": "typ"}}}}},
                                                             {
                                                               "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {"variable": "hydra.serialization.cst"},
                                                                     "argument": {"application": {"function": {"unwrap": "hydra.protobuf.proto3.FieldName"}, "argument": {"variable": "name"}}}}}}},
                                                             {
                                                               "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                                                 "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "="}}}}}},
                                                             {
                                                               "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                                                 "argument": {
                                                                   "application": {
                                                                     "function": {"variable": "hydra.serialization.cst"},
-                                                                    "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "num"}}}}}}},
+                                                                    "argument": {"application": {"function": {"variable": "hydra.lib.literals.printInt32"}, "argument": {"variable": "num"}}}}}}},
                                                             {
                                                               "application": {"function": {"variable": "hydra.protobuf.serde.fieldOptionsToExpr"}, "argument": {"variable": "options"}}}]}}}}}}}}}}}},
                                   {
@@ -540,26 +540,26 @@
                                                       "list": [
                                                         {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                                             "argument": {"application": {"function": {"variable": "hydra.protobuf.serde.fieldTypeToExpr"}, "argument": {"variable": "typ"}}}}},
                                                         {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                                             "argument": {
                                                               "application": {
                                                                 "function": {"variable": "hydra.serialization.cst"},
                                                                 "argument": {"application": {"function": {"unwrap": "hydra.protobuf.proto3.FieldName"}, "argument": {"variable": "name"}}}}}}},
                                                         {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                                             "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "="}}}}}},
                                                         {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                                             "argument": {
                                                               "application": {
                                                                 "function": {"variable": "hydra.serialization.cst"},
-                                                                "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "num"}}}}}}},
+                                                                "argument": {"application": {"function": {"variable": "hydra.lib.literals.printInt32"}, "argument": {"variable": "num"}}}}}}},
                                                         {
                                                           "application": {"function": {"variable": "hydra.protobuf.serde.fieldOptionsToExpr"}, "argument": {"variable": "options"}}}]}}}}}}}}}},
                                   {
@@ -581,26 +581,26 @@
                                                       "list": [
                                                         {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                                             "argument": {"application": {"function": {"variable": "hydra.protobuf.serde.fieldTypeToExpr"}, "argument": {"variable": "typ"}}}}},
                                                         {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                                             "argument": {
                                                               "application": {
                                                                 "function": {"variable": "hydra.serialization.cst"},
                                                                 "argument": {"application": {"function": {"unwrap": "hydra.protobuf.proto3.FieldName"}, "argument": {"variable": "name"}}}}}}},
                                                         {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                                             "argument": {"application": {"function": {"variable": "hydra.serialization.cst"}, "argument": {"literal": {"string": "="}}}}}},
                                                         {
                                                           "application": {
-                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                                             "argument": {
                                                               "application": {
                                                                 "function": {"variable": "hydra.serialization.cst"},
-                                                                "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "num"}}}}}}},
+                                                                "argument": {"application": {"function": {"variable": "hydra.lib.literals.printInt32"}, "argument": {"variable": "num"}}}}}}},
                                                         {
                                                           "application": {"function": {"variable": "hydra.protobuf.serde.fieldOptionsToExpr"}, "argument": {"variable": "options"}}}]}}}}}}}}}}]}},
                             "argument": {"variable": "typ"}}}}}}}}},
@@ -639,14 +639,14 @@
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.protobuf.proto3.MapType", "fieldName": "keys"}},
                                             "argument": {"variable": "mt"}}},
-                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.SimpleType"}}},
+                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.SimpleType"}, "constraints": []}},
                                       {
                                         "name": "vt",
                                         "term": {
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.protobuf.proto3.MapType", "fieldName": "values"}},
                                             "argument": {"variable": "mt"}}},
-                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.SimpleType"}}}],
+                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.SimpleType"}, "constraints": []}}],
                                     "body": {
                                       "application": {
                                         "function": {"variable": "hydra.serialization.noSep"},
@@ -715,14 +715,14 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.Option", "fieldName": "name"}},
                             "argument": {"variable": "opt"}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                       {
                         "name": "value",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.Option", "fieldName": "value"}},
                             "argument": {"variable": "opt"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.Value"}}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.Value"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.protobuf.serde.semi"},
@@ -757,7 +757,7 @@
                         "name": "opts",
                         "term": {
                           "application": {"function": {"variable": "hydra.protobuf.serde.excludeInternalOptions"}, "argument": {"variable": "opts0"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -769,12 +769,12 @@
                                 "argument": {
                                   "application": {
                                     "function": {
-                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.protobuf.proto3.Option"}}},
+                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.protobuf.proto3.Option"}}},
                                     "argument": {"variable": "opts"}}}}},
                             "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.ast.Expr"}}}}},
                         "argument": {
                           "application": {
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                             "argument": {
                               "application": {
                                 "function": {"variable": "hydra.serialization.newlineSep"},
@@ -849,21 +849,21 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.MessageDefinition", "fieldName": "name"}},
                             "argument": {"variable": "md"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.TypeName"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.TypeName"}, "constraints": []}},
                       {
                         "name": "fields",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.MessageDefinition", "fieldName": "fields"}},
                             "argument": {"variable": "md"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Field"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Field"}}, "constraints": []}},
                       {
                         "name": "options",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.MessageDefinition", "fieldName": "options"}},
                             "argument": {"variable": "md"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}}}],
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -946,7 +946,7 @@
                                                         "argument": {"variable": "opt"}}}}},
                                                 "argument": {"literal": {"string": "_description"}}}}}}}},
                                     "argument": {"variable": "opts"}}},
-                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}}}],
+                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}, "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {
@@ -977,7 +977,7 @@
                                               "application": {
                                                 "function": {"project": {"typeName": "hydra.protobuf.proto3.Option", "fieldName": "value"}},
                                                 "argument": {"variable": "firstDesc"}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.Value"}}},
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.Value"}, "constraints": []}},
                                           {
                                             "name": "descStr",
                                             "term": {
@@ -1006,7 +1006,7 @@
                                                         "name": "string",
                                                         "handler": {"lambda": {"parameter": "s", "domain": {"literal": "string"}, "body": {"variable": "s"}}}}]}},
                                                 "argument": {"variable": "descValue"}}},
-                                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                           {
                                             "name": "commentLines",
                                             "term": {
@@ -1041,7 +1041,7 @@
                                                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "// "}}}},
                                                                 "argument": {"variable": "line"}}}}}}}}},
                                                 "argument": {"application": {"function": {"variable": "hydra.formatting.lines"}, "argument": {"variable": "descStr"}}}}},
-                                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
+                                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
                                           {
                                             "name": "comment",
                                             "term": {
@@ -1051,7 +1051,7 @@
                                                   "application": {
                                                     "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "\n"}}}},
                                                     "argument": {"variable": "commentLines"}}}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}},
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}},
                                           {
                                             "name": "sep",
                                             "term": {
@@ -1070,7 +1070,7 @@
                                                   "application": {
                                                     "function": {"variable": "hydra.serialization.newlineSep"},
                                                     "argument": {"list": [{"variable": "comment"}, {"variable": "expr"}]}}}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}}}],
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.ast.Expr"}, "constraints": []}}],
                                         "body": {"variable": "sep"}}}}}}}}}}}}}}},
             "annotation": {
               "map": [
@@ -1125,33 +1125,33 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.ProtoFile", "fieldName": "package"}},
                             "argument": {"variable": "pf"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.PackageName"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.protobuf.proto3.PackageName"}, "constraints": []}},
                       {
                         "name": "imports",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.ProtoFile", "fieldName": "imports"}},
                             "argument": {"variable": "pf"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.FileReference"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.FileReference"}}, "constraints": []}},
                       {
                         "name": "defs",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.ProtoFile", "fieldName": "types"}},
                             "argument": {"variable": "pf"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Definition"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Definition"}}, "constraints": []}},
                       {
                         "name": "options",
                         "term": {
                           "application": {
                             "function": {"project": {"typeName": "hydra.protobuf.proto3.ProtoFile", "fieldName": "options"}},
                             "argument": {"variable": "pf"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}, "constraints": []}},
                       {
                         "name": "headerSec",
                         "term": {
                           "application": {
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                             "argument": {
                               "application": {
                                 "function": {"variable": "hydra.serialization.newlineSep"},
@@ -1175,7 +1175,7 @@
                                                   "application": {
                                                     "function": {"variable": "hydra.serialization.cst"},
                                                     "argument": {"application": {"function": {"unwrap": "hydra.protobuf.proto3.PackageName"}, "argument": {"variable": "pkg"}}}}}]}}}}}]}}}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.ast.Expr"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.ast.Expr"}}, "constraints": []}},
                       {
                         "name": "importsSec",
                         "term": {
@@ -1189,12 +1189,12 @@
                                     "argument": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.protobuf.proto3.FileReference"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.protobuf.proto3.FileReference"}}},
                                         "argument": {"variable": "imports"}}}}},
                                 "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.ast.Expr"}}}}},
                             "argument": {
                               "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                 "argument": {
                                   "application": {
                                     "function": {"variable": "hydra.serialization.newlineSep"},
@@ -1209,7 +1209,7 @@
                                                 "type": {"variable": "hydra.ast.Expr"}}},
                                             "argument": {"variable": "hydra.protobuf.serde.importToExpr"}}},
                                         "argument": {"variable": "imports"}}}}}}}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.ast.Expr"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.ast.Expr"}}, "constraints": []}},
                       {
                         "name": "options1",
                         "term": {
@@ -1236,12 +1236,12 @@
                                                     "argument": {"variable": "opt"}}}}},
                                             "argument": {"literal": {"string": "_description"}}}}}}}}}},
                             "argument": {"variable": "options"}}},
-                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}, "constraints": []}},
                       {
                         "name": "optionsSec",
                         "term": {
                           "application": {"function": {"variable": "hydra.protobuf.serde.fileOptionsToExpr"}, "argument": {"variable": "options1"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.ast.Expr"}}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.ast.Expr"}}, "constraints": []}},
                       {
                         "name": "defsSec",
                         "term": {
@@ -1255,12 +1255,12 @@
                                     "argument": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.protobuf.proto3.Definition"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.protobuf.proto3.Definition"}}},
                                         "argument": {"variable": "defs"}}}}},
                                 "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.ast.Expr"}}}}},
                             "argument": {
                               "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.pure"}, "type": {"variable": "hydra.ast.Expr"}}},
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.given"}, "type": {"variable": "hydra.ast.Expr"}}},
                                 "argument": {
                                   "application": {
                                     "function": {"variable": "hydra.serialization.doubleNewlineSep"},
@@ -1275,7 +1275,7 @@
                                                 "type": {"variable": "hydra.ast.Expr"}}},
                                             "argument": {"variable": "hydra.protobuf.serde.definitionToExpr"}}},
                                         "argument": {"variable": "defs"}}}}}}}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.ast.Expr"}}}}],
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.ast.Expr"}}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {

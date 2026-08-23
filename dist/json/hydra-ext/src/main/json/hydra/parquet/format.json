@@ -39,7 +39,8 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "In files encrypted with AAD prefix without storing it, readers must supply the prefix"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "AES GCM CTR mode encryption parameters"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "AES GCM CTR mode encryption parameters"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.AesGcmV1",
@@ -72,7 +73,8 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "In files encrypted with AAD prefix without storing it, readers must supply the prefix"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "AES GCM mode encryption parameters"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "AES GCM mode encryption parameters"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.BloomFilterAlgorithm",
@@ -88,7 +90,8 @@
                       "annotated": {
                         "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Block-based Bloom filter."}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The algorithm used in Bloom filter."}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The algorithm used in Bloom filter."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.BloomFilterCompression",
@@ -98,7 +101,8 @@
             "annotated": {
               "body": {"union": [{"name": "uncompressed", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The compression used in the Bloom filter."}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The compression used in the Bloom filter."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.BloomFilterHash",
@@ -120,7 +124,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "The hash function used in Bloom filter. This function takes the hash of a column value using plain encoding."}}}]}}}}}},
+                        "string": "The hash function used in Bloom filter. This function takes the hash of a column value using plain encoding."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.BloomFilterHeader",
@@ -161,7 +166,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "Bloom filter header is stored at beginning of Bloom filter data of each column and followed by its bitset."}}}]}}}}}},
+                      "literal": {"string": "Bloom filter header is stored at beginning of Bloom filter data of each column and followed by its bitset."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.BoundaryOrder",
@@ -177,7 +183,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Enum to annotate whether lists of min/max elements inside ColumnIndex are ordered and if so, in which direction."}}}]}}}}}},
+                        "string": "Enum to annotate whether lists of min/max elements inside ColumnIndex are ordered and if so, in which direction."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.ColumnChunk",
@@ -265,7 +272,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Metadata and location of a single column's data within a row group"}}}]}}}}}},
+                    "value": {"literal": {"string": "Metadata and location of a single column's data within a row group"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.ColumnCryptoMetaData",
@@ -281,7 +289,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Crypto metadata for a column, specifying which key was used to encrypt it"}}}]}}}}}},
+                    "value": {"literal": {"string": "Crypto metadata for a column, specifying which key was used to encrypt it"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.ColumnIndex",
@@ -343,7 +352,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "Description for ColumnIndex. Each <array-field>[i] refers to the page at OffsetIndex.page_locations[i]"}}}]}}}}}},
+                      "literal": {"string": "Description for ColumnIndex. Each <array-field>[i] refers to the page at OffsetIndex.page_locations[i]"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.ColumnMetaData",
@@ -475,7 +485,8 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Byte offset from beginning of file to Bloom filter data."}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Description for column metadata"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Description for column metadata"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.ColumnOrder",
@@ -503,7 +514,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Union to specify the order used for the min_value and max_value fields for a column. This union takes the role of an enhanced enum that allows rich elements (which will be needed for a collation-based ordering in the future). Possible values are:\n* TypeDefinedOrder - the column uses the order defined by its logical or physical type (if there is no logical type).\nIf the reader does not support the value of this union, min and max stats for this column should be ignored. "}}}]}}}}}},
+                        "string": "Union to specify the order used for the min_value and max_value fields for a column. This union takes the role of an enhanced enum that allows rich elements (which will be needed for a collation-based ordering in the future). Possible values are:\n* TypeDefinedOrder - the column uses the order defined by its logical or physical type (if there is no logical type).\nIf the reader does not support the value of this union, min and max stats for this column should be ignored. "}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.CompressionCodec",
@@ -541,7 +553,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Supported compression algorithms. Codecs added in format version X.Y can be read by readers based on X.Y and later. Codec support may vary between readers based on the format version and libraries available at runtime. See Compression.md for a detailed specification of these algorithms."}}}]}}}}}},
+                        "string": "Supported compression algorithms. Codecs added in format version X.Y can be read by readers based on X.Y and later. Codec support may vary between readers based on the format version and libraries available at runtime. See Compression.md for a detailed specification of these algorithms."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.DataPageHeader",
@@ -587,7 +600,8 @@
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "Optional statistics for the data in this page"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Data page header"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Data page header"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.DataPageHeaderV2",
@@ -673,7 +687,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "New page format allowing reading levels without decompressing the data Repetition and definition levels are uncompressed The remaining section containing the data is compressed if is_compressed is true"}}}]}}}}}},
+                        "string": "New page format allowing reading levels without decompressing the data Repetition and definition levels are uncompressed The remaining section containing the data is compressed if is_compressed is true"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.DecimalType",
@@ -691,7 +706,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Decimal logical type annotation. To maintain forward-compatibility in v1, implementations using this logical type must also set scale and precision on the annotated SchemaElement. Allowed for physical types: INT32, INT64, FIXED, and BINARY"}}}]}}}}}},
+                        "string": "Decimal logical type annotation. To maintain forward-compatibility in v1, implementations using this logical type must also set scale and precision on the annotated SchemaElement. Allowed for physical types: INT32, INT64, FIXED, and BINARY"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.DictionaryPageHeader",
@@ -729,7 +745,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "The dictionary page must be placed at the first position of the column chunk if it is partly or completely dictionary encoded. At most one dictionary page can be placed in a column chunk."}}}]}}}}}},
+                        "string": "The dictionary page must be placed at the first position of the column chunk if it is partly or completely dictionary encoded. At most one dictionary page can be placed in a column chunk."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.Encoding",
@@ -837,7 +854,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Encodings supported by Parquet.  Not all encodings are valid for all types.  These enums are also used to specify the encoding of definition and repetition levels. See the accompanying doc for the details of the more complicated encodings."}}}]}}}}}},
+                        "string": "Encodings supported by Parquet.  Not all encodings are valid for all types.  These enums are also used to specify the encoding of definition and repetition levels. See the accompanying doc for the details of the more complicated encodings."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.EncryptionAlgorithm",
@@ -853,7 +871,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The encryption algorithm used to protect a Parquet file, with its parameters"}}}]}}}}}},
+                    "value": {"literal": {"string": "The encryption algorithm used to protect a Parquet file, with its parameters"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.EncryptionWithColumnKey",
@@ -880,7 +899,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Identifies a column as encrypted with its own per-column encryption key"}}}]}}}}}},
+                    "value": {"literal": {"string": "Identifies a column as encrypted with its own per-column encryption key"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.EncryptionWithFooterKey",
@@ -893,7 +913,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Identifies a column as encrypted with the same key used to encrypt the footer"}}}]}}}}}},
+                    "value": {"literal": {"string": "Identifies a column as encrypted with the same key used to encrypt the footer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.FieldRepetitionType",
@@ -933,7 +954,8 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "The field is repeated and can contain 0 or more values"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Representation of Schemas"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Representation of Schemas"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.FileCryptoMetaData",
@@ -969,7 +991,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Crypto metadata for files with encrypted footer"}}}]}}}}}},
+                    "value": {"literal": {"string": "Crypto metadata for files with encrypted footer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.FileMetaData",
@@ -1062,7 +1085,8 @@
                               "key": {"variable": "description"},
                               "value": {
                                 "literal": {"string": "Retrieval metadata of key used for signing the footer. Used only in encrypted files with plaintext footer."}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Description for file metadata"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Description for file metadata"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.IndexPageHeader",
@@ -1075,7 +1099,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Header for an index page (currently unused in the Parquet format)"}}}]}}}}}},
+                    "value": {"literal": {"string": "Header for an index page (currently unused in the Parquet format)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.IntType",
@@ -1091,7 +1116,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Integer logical type annotation. bitWidth must be 8, 16, 32, or 64. Allowed for physical types: INT32, INT64"}}}]}}}}}},
+                        "string": "Integer logical type annotation. bitWidth must be 8, 16, 32, or 64. Allowed for physical types: INT32, INT64"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.KeyValue",
@@ -1101,7 +1127,8 @@
             "annotated": {
               "body": {
                 "record": [{"name": "key", "type": {"literal": "string"}}, {"name": "value", "type": {"optional": {"literal": "string"}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Wrapper struct to store key values"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Wrapper struct to store key values"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.LogicalType",
@@ -1211,7 +1238,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "LogicalType annotations to replace ConvertedType. To maintain compatibility, implementations using LogicalType for a SchemaElement aust also set the corresponding ConvertedType (if any) from the following table."}}}]}}}}}},
+                        "string": "LogicalType annotations to replace ConvertedType. To maintain compatibility, implementations using LogicalType for a SchemaElement aust also set the corresponding ConvertedType (if any) from the following table."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.OffsetIndex",
@@ -1237,7 +1265,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The offset index for a column chunk, giving byte offsets and row indices of its pages"}}}]}}}}}},
+                    "value": {"literal": {"string": "The offset index for a column chunk, giving byte offsets and row indices of its pages"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.PageEncodingStats",
@@ -1270,7 +1299,8 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "number of pages of this type with this encoding"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "statistics of a given page type and encoding"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "statistics of a given page type and encoding"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.PageHeader",
@@ -1330,7 +1360,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Common header shared by all page types, wrapping a type-specific header"}}}]}}}}}},
+                    "value": {"literal": {"string": "Common header shared by all page types, wrapping a type-specific header"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.PageLocation",
@@ -1372,7 +1403,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Location and size of a single page, used as an entry in an OffsetIndex"}}}]}}}}}},
+                    "value": {"literal": {"string": "Location and size of a single page, used as an entry in an OffsetIndex"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.PageType",
@@ -1387,7 +1419,8 @@
                   {"name": "dictionaryPage", "type": "unit"},
                   {"name": "dataPageV2", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a page within a column chunk"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a page within a column chunk"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.RowGroup",
@@ -1467,7 +1500,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Metadata for a horizontal partition of the data into a row group"}}}]}}}}}},
+                    "value": {"literal": {"string": "Metadata for a horizontal partition of the data into a row group"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.SchemaElement",
@@ -1558,7 +1592,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Represents a element inside a schema definition.\n- if it is a group (inner node) then type is undefined and num_children is defined\n- if it is a primitive type (leaf) then type is defined and num_children is undefined\nthe nodes are listed in depth first traversal order."}}}]}}}}}},
+                        "string": "Represents a element inside a schema definition.\n- if it is a group (inner node) then type is undefined and num_children is defined\n- if it is a primitive type (leaf) then type is defined and num_children is undefined\nthe nodes are listed in depth first traversal order."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.SortingColumn",
@@ -1596,7 +1631,8 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "If true, nulls will come before non-null values, otherwise, nulls go at the end."}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Wrapper struct to specify sort order"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Wrapper struct to specify sort order"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.Statistics",
@@ -1636,7 +1672,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Statistics per row group and per page. All fields are optional."}}}]}}}}}},
+                    "value": {"literal": {"string": "Statistics per row group and per page. All fields are optional."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.TimeType",
@@ -1653,7 +1690,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "Time logical type annotation. Allowed for physical types: INT32 (millis), INT64 (micros, nanos)"}}}]}}}}}},
+                      "literal": {"string": "Time logical type annotation. Allowed for physical types: INT32 (millis), INT64 (micros, nanos)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.TimeUnit",
@@ -1666,7 +1704,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The unit of measurement for a TIME or TIMESTAMP logical type"}}}]}}}}}},
+                    "value": {"literal": {"string": "The unit of measurement for a TIME or TIMESTAMP logical type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.TimestampType",
@@ -1682,7 +1721,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Timestamp logical type annotation. Allowed for physical types: INT64"}}}]}}}}}},
+                    "value": {"literal": {"string": "Timestamp logical type annotation. Allowed for physical types: INT64"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.parquet.format.Type",
@@ -1705,4 +1745,5 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Types supported by Parquet.  These types are intended to be used in combination with the encodings to control the on disk storage format. For example INT16 is not included as a type since a good encoding of INT32 would handle this."}}}]}}}}}}]}
+                        "string": "Types supported by Parquet.  These types are intended to be used in combination with the encodings to control the on disk storage format. For example INT16 is not included as a type since a good encoding of INT32 would handle this."}}}]}}},
+          "constraints": []}}}]}

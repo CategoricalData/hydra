@@ -23,7 +23,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ member or base-class access specifier: public, protected, or private"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ member or base-class access specifier: public, protected, or private"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.AddOperation",
@@ -39,7 +40,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ binary addition expression (left + right)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ binary addition expression (left + right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.AdditiveExpression",
@@ -56,7 +58,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ additive-expression: a multiplicative expression, an addition, or a subtraction"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ additive-expression: a multiplicative expression, an addition, or a subtraction"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.AndExpression",
@@ -72,7 +75,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ and-expression: an equality expression or a bitwise AND operation"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ and-expression: an equality expression or a bitwise AND operation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.AssignmentExpression",
@@ -88,7 +92,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ assignment-expression: a conditional expression or an explicit assignment"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ assignment-expression: a conditional expression or an explicit assignment"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.AssignmentOperator",
@@ -113,7 +118,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ assignment operator, such as =, +=, or <<="}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ assignment operator, such as =, +=, or <<="}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.BaseSpecifier",
@@ -129,7 +135,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ base class specifier within a class's inheritance list"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ base class specifier within a class's inheritance list"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.BasicType",
@@ -148,7 +155,8 @@
                   {"name": "string", "type": "unit"},
                   {"name": "auto", "type": "unit"},
                   {"name": "named", "type": {"literal": "string"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ built-in or named basic type"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ built-in or named basic type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.BinaryOperator",
@@ -176,7 +184,8 @@
                   {"name": "greaterEqual", "type": "unit"},
                   {"name": "leftShift", "type": "unit"},
                   {"name": "rightShift", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ binary operator"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ binary operator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.BitwiseAndOperation",
@@ -189,7 +198,8 @@
                   {"name": "left", "type": {"variable": "hydra.cpp.syntax.AndExpression"}},
                   {"name": "right", "type": {"variable": "hydra.cpp.syntax.EqualityExpression"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ bitwise AND expression (left & right)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ bitwise AND expression (left & right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.BitwiseOrOperation",
@@ -202,7 +212,8 @@
                   {"name": "left", "type": {"variable": "hydra.cpp.syntax.InclusiveOrExpression"}},
                   {"name": "right", "type": {"variable": "hydra.cpp.syntax.ExclusiveOrExpression"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ bitwise OR expression (left | right)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ bitwise OR expression (left | right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.BitwiseXorOperation",
@@ -215,7 +226,8 @@
                   {"name": "left", "type": {"variable": "hydra.cpp.syntax.ExclusiveOrExpression"}},
                   {"name": "right", "type": {"variable": "hydra.cpp.syntax.AndExpression"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ bitwise XOR expression (left ^ right)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ bitwise XOR expression (left ^ right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.BooleanLiteral",
@@ -225,7 +237,8 @@
             "annotated": {
               "body": {"wrap": {"literal": "boolean"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ boolean literal (true or false)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ boolean literal (true or false)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Capture",
@@ -238,7 +251,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single variable captured by a C++ lambda expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A single variable captured by a C++ lambda expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.CaptureList",
@@ -254,7 +268,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ lambda capture list: capture-by-value ([=]) or an explicit list of captures"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ lambda capture list: capture-by-value ([=]) or an explicit list of captures"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.CaseStatement",
@@ -270,7 +285,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single case or default branch of a C++ switch statement"}}}]}}}}}},
+                    "value": {"literal": {"string": "A single case or default branch of a C++ switch statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.CaseValue",
@@ -286,7 +302,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ switch case label together with its associated statement"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ switch case label together with its associated statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.CharacterLiteral",
@@ -295,7 +312,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ character literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ character literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ClassBody",
@@ -308,7 +326,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of a C++ class, struct, or enum declaration: a list of member specifications"}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of a C++ class, struct, or enum declaration: a list of member specifications"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ClassDeclaration",
@@ -324,7 +343,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ class, struct, or enum declaration, with an optional body"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ class, struct, or enum declaration, with an optional body"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ClassKey",
@@ -342,7 +362,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The keyword introducing a C++ class-like declaration: class, enum, enum class, or struct"}}}]}}}}}},
+                    "value": {"literal": {"string": "The keyword introducing a C++ class-like declaration: class, enum, enum class, or struct"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ClassSpecifier",
@@ -359,7 +380,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The head of a C++ class declaration: its key, name, and base class list"}}}]}}}}}},
+                    "value": {"literal": {"string": "The head of a C++ class declaration: its key, name, and base class list"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.CommaExpression",
@@ -372,7 +394,8 @@
                   {"name": "left", "type": {"variable": "hydra.cpp.syntax.Expression"}},
                   {"name": "right", "type": {"variable": "hydra.cpp.syntax.AssignmentExpression"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ comma expression (left, right)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ comma expression (left, right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Comment",
@@ -381,7 +404,8 @@
           "body": {
             "annotated": {
               "body": {"record": [{"name": "text", "type": {"literal": "string"}}, {"name": "isMultiline", "type": {"literal": "boolean"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ line or block comment"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ line or block comment"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.CompoundStatement",
@@ -394,7 +418,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ compound statement: a brace-enclosed block of statements"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ compound statement: a brace-enclosed block of statements"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ConditionalExpression",
@@ -410,7 +435,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ conditional-expression: a logical-or expression or a ternary expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ conditional-expression: a logical-or expression or a ternary expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ConstructorDeclaration",
@@ -428,7 +454,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ constructor declaration, with parameters, member initializers, and a body"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ constructor declaration, with parameters, member initializers, and a body"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ContainerDeclaration",
@@ -446,7 +473,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A declaration of a standard-library container type alias: list, map, set, or optional"}}}]}}}}}},
+                    "value": {"literal": {"string": "A declaration of a standard-library container type alias: list, map, set, or optional"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Declaration",
@@ -463,7 +491,8 @@
                   {"name": "typedef", "type": {"variable": "hydra.cpp.syntax.TypedefDeclaration"}},
                   {"name": "namespace", "type": {"variable": "hydra.cpp.syntax.NamespaceDeclaration"}},
                   {"name": "template", "type": {"variable": "hydra.cpp.syntax.TemplateDeclaration"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A top-level C++ declaration"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A top-level C++ declaration"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.DefineDirective",
@@ -480,7 +509,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C preprocessor #define directive, optionally function-like"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C preprocessor #define directive, optionally function-like"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.DestructorDeclaration",
@@ -494,7 +524,8 @@
                   {"name": "name", "type": {"literal": "string"}},
                   {"name": "suffixSpecifiers", "type": {"list": {"variable": "hydra.cpp.syntax.FunctionSpecifierSuffix"}}},
                   {"name": "body", "type": {"variable": "hydra.cpp.syntax.FunctionBody"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ destructor declaration"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ destructor declaration"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.DivideOperation",
@@ -507,7 +538,8 @@
                   {"name": "left", "type": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"}},
                   {"name": "right", "type": {"variable": "hydra.cpp.syntax.UnaryExpression"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ division expression (left / right)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ division expression (left / right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.DoStatement",
@@ -519,7 +551,8 @@
                 "record": [
                   {"name": "body", "type": {"variable": "hydra.cpp.syntax.Statement"}},
                   {"name": "condition", "type": {"variable": "hydra.cpp.syntax.Expression"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ do-while statement"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ do-while statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ElifDirective",
@@ -528,7 +561,8 @@
           "body": {
             "annotated": {
               "body": {"record": [{"name": "condition", "type": {"literal": "string"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #elif directive"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #elif directive"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ElseDirective",
@@ -537,7 +571,8 @@
           "body": {
             "annotated": {
               "body": "unit",
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #else directive"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #else directive"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.EndifDirective",
@@ -546,7 +581,8 @@
           "body": {
             "annotated": {
               "body": "unit",
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #endif directive"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #endif directive"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.EqualOperation",
@@ -562,7 +598,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ equality comparison expression (left == right)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ equality comparison expression (left == right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.EqualityExpression",
@@ -579,7 +616,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ equality-expression: a relational expression, an equality, or an inequality"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ equality-expression: a relational expression, an equality, or an inequality"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ErrorDirective",
@@ -588,7 +626,8 @@
           "body": {
             "annotated": {
               "body": {"record": [{"name": "message", "type": {"literal": "string"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #error directive"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #error directive"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ExclusiveOrExpression",
@@ -604,7 +643,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ exclusive-or-expression: an and expression or a bitwise XOR operation"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ exclusive-or-expression: an and expression or a bitwise XOR operation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ExplicitAssignment",
@@ -621,7 +661,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ assignment expression with an explicit operator (e.g. left += right)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ assignment expression with an explicit operator (e.g. left += right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Expression",
@@ -637,7 +678,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ expression: an assignment expression or a comma expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ expression: an assignment expression or a comma expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ExpressionStatement",
@@ -650,7 +692,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ expression statement: an expression followed by a semicolon"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ expression statement: an expression followed by a semicolon"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.FloatingLiteral",
@@ -659,7 +702,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": {"float": "float64"}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ floating-point literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ floating-point literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ForInit",
@@ -676,7 +720,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The initializer clause of a C++ for statement: an expression, a declaration, or empty"}}}]}}}}}},
+                    "value": {"literal": {"string": "The initializer clause of a C++ for statement: an expression, a declaration, or empty"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ForStatement",
@@ -690,7 +735,8 @@
                   {"name": "condition", "type": {"variable": "hydra.cpp.syntax.Expression"}},
                   {"name": "increment", "type": {"variable": "hydra.cpp.syntax.Expression"}},
                   {"name": "body", "type": {"variable": "hydra.cpp.syntax.Statement"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ for statement"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ for statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionApplication",
@@ -706,7 +752,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simplified function call: a function identifier applied to a list of arguments"}}}]}}}}}},
+                    "value": {"literal": {"string": "A simplified function call: a function identifier applied to a list of arguments"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionBody",
@@ -724,7 +771,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The body of a C++ function: a compound statement, or a declaration-only/pure/default marker"}}}]}}}}}},
+                    "value": {"literal": {"string": "The body of a C++ function: a compound statement, or a declaration-only/pure/default marker"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionCallOperation",
@@ -740,7 +788,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ function call expression: a postfix expression applied to arguments"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ function call expression: a postfix expression applied to arguments"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionDeclaration",
@@ -757,7 +806,8 @@
                   {"name": "suffixSpecifiers", "type": {"list": {"variable": "hydra.cpp.syntax.FunctionSpecifierSuffix"}}},
                   {"name": "body", "type": {"variable": "hydra.cpp.syntax.FunctionBody"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ function declaration or definition"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ function declaration or definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionIdentifier",
@@ -773,7 +823,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The identifier of a called function: a simple name or a qualified name"}}}]}}}}}},
+                    "value": {"literal": {"string": "The identifier of a called function: a simple name or a qualified name"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionSpecifierPrefix",
@@ -792,7 +843,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A C++ function specifier that appears before the declaration: inline, virtual, static, or explicit"}}}]}}}}}},
+                      "literal": {"string": "A C++ function specifier that appears before the declaration: inline, virtual, static, or explicit"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionSpecifierSuffix",
@@ -811,7 +863,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A C++ function specifier that appears after the parameter list: const, noexcept, override, or final"}}}]}}}}}},
+                      "literal": {"string": "A C++ function specifier that appears after the parameter list: const, noexcept, override, or final"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.FunctionType",
@@ -827,7 +880,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ function type: a return type together with parameter types"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ function type: a return type together with parameter types"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.GreaterEqualOperation",
@@ -843,7 +897,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ greater-than-or-equal comparison expression (left >= right)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ greater-than-or-equal comparison expression (left >= right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.GreaterOperation",
@@ -859,7 +914,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ greater-than comparison expression (left > right)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ greater-than comparison expression (left > right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Identifier",
@@ -868,7 +924,8 @@
           "body": {
             "annotated": {
               "body": {"literal": "string"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ identifier"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ identifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.IfDirective",
@@ -877,7 +934,8 @@
           "body": {
             "annotated": {
               "body": {"record": [{"name": "condition", "type": {"literal": "string"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #if directive"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #if directive"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.IfdefDirective",
@@ -886,7 +944,8 @@
           "body": {
             "annotated": {
               "body": {"record": [{"name": "identifier", "type": {"literal": "string"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #ifdef directive"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #ifdef directive"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.IfndefDirective",
@@ -895,7 +954,8 @@
           "body": {
             "annotated": {
               "body": {"record": [{"name": "identifier", "type": {"literal": "string"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #ifndef directive"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #ifndef directive"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.IncludeDirective",
@@ -908,7 +968,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C preprocessor #include directive, for a system or local header"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C preprocessor #include directive, for a system or local header"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.InclusiveOrExpression",
@@ -924,7 +985,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ inclusive-or-expression: an exclusive-or expression or a bitwise OR operation"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ inclusive-or-expression: an exclusive-or expression or a bitwise OR operation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.IntegerLiteral",
@@ -942,7 +1004,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ integer literal, in decimal, hexadecimal, octal, or binary form"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ integer literal, in decimal, hexadecimal, octal, or binary form"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.IterationStatement",
@@ -960,7 +1023,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ iteration statement: while, do-while, for, or range-based for"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ iteration statement: while, do-while, for, or range-based for"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.JumpStatement",
@@ -979,7 +1043,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ jump statement: break, continue, return (with or without a value), or throw"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ jump statement: break, continue, return (with or without a value), or throw"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.LabeledStatement",
@@ -991,7 +1056,8 @@
                 "record": [
                   {"name": "label", "type": {"literal": "string"}},
                   {"name": "statement", "type": {"variable": "hydra.cpp.syntax.Statement"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ labeled statement"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ labeled statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.LambdaExpression",
@@ -1005,7 +1071,8 @@
                   {"name": "parameters", "type": {"list": {"variable": "hydra.cpp.syntax.Parameter"}}},
                   {"name": "returnType", "type": {"optional": {"variable": "hydra.cpp.syntax.TypeExpression"}}},
                   {"name": "body", "type": {"variable": "hydra.cpp.syntax.CompoundStatement"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ lambda expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ lambda expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.LeftShiftOperation",
@@ -1018,7 +1085,8 @@
                   {"name": "left", "type": {"variable": "hydra.cpp.syntax.ShiftExpression"}},
                   {"name": "right", "type": {"variable": "hydra.cpp.syntax.AdditiveExpression"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ left shift expression (left << right)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ left shift expression (left << right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.LessEqualOperation",
@@ -1034,7 +1102,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ less-than-or-equal comparison expression (left <= right)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ less-than-or-equal comparison expression (left <= right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.LessOperation",
@@ -1050,7 +1119,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ less-than comparison expression (left < right)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ less-than comparison expression (left < right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.LineDirective",
@@ -1062,7 +1132,8 @@
                 "record": [
                   {"name": "lineNumber", "type": {"literal": {"integer": "int32"}}},
                   {"name": "filename", "type": {"optional": {"literal": "string"}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #line directive"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #line directive"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ListDeclaration",
@@ -1078,7 +1149,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A declaration of a named std::vector type alias"}}}]}}}}}},
+                    "value": {"literal": {"string": "A declaration of a named std::vector type alias"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Literal",
@@ -1094,7 +1166,8 @@
                   {"name": "string", "type": {"variable": "hydra.cpp.syntax.StringLiteral"}},
                   {"name": "boolean", "type": {"variable": "hydra.cpp.syntax.BooleanLiteral"}},
                   {"name": "null", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ literal value"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ literal value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.LogicalAndExpression",
@@ -1110,7 +1183,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ logical-and-expression: an inclusive-or expression or a logical AND operation"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ logical-and-expression: an inclusive-or expression or a logical AND operation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.LogicalAndOperation",
@@ -1123,7 +1197,8 @@
                   {"name": "left", "type": {"variable": "hydra.cpp.syntax.LogicalAndExpression"}},
                   {"name": "right", "type": {"variable": "hydra.cpp.syntax.InclusiveOrExpression"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ logical AND expression (left && right)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ logical AND expression (left && right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.LogicalOrExpression",
@@ -1139,7 +1214,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ logical-or-expression: a logical-and expression or a logical OR operation"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ logical-or-expression: a logical-and expression or a logical OR operation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.LogicalOrOperation",
@@ -1152,7 +1228,8 @@
                   {"name": "left", "type": {"variable": "hydra.cpp.syntax.LogicalOrExpression"}},
                   {"name": "right", "type": {"variable": "hydra.cpp.syntax.LogicalAndExpression"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ logical OR expression (left || right)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ logical OR expression (left || right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Map",
@@ -1169,7 +1246,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ std::map literal, with a key type, a value type, and entries"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ std::map literal, with a key type, a value type, and entries"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.MapDeclaration",
@@ -1183,7 +1261,8 @@
                   {"name": "valueType", "type": {"variable": "hydra.cpp.syntax.TypeExpression"}},
                   {"name": "name", "type": {"literal": "string"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A declaration of a named std::map type alias"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A declaration of a named std::map type alias"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.MapEntry",
@@ -1197,7 +1276,8 @@
                   {"name": "value", "type": {"variable": "hydra.cpp.syntax.Expression"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A single key/value entry in a C++ map literal"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A single key/value entry in a C++ map literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.MemInitializer",
@@ -1213,7 +1293,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ member initializer in a constructor's initializer list"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ member initializer in a constructor's initializer list"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.MemberAccessOperation",
@@ -1227,7 +1308,8 @@
                   {"name": "member", "type": {"literal": "string"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ member access expression (object.member)"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ member access expression (object.member)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.MemberDeclaration",
@@ -1247,7 +1329,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single member declaration within a C++ class body"}}}]}}}}}},
+                    "value": {"literal": {"string": "A single member declaration within a C++ class body"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.MemberSpecification",
@@ -1263,7 +1346,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An entry in a C++ class body: an access-level label or a member declaration"}}}]}}}}}},
+                    "value": {"literal": {"string": "An entry in a C++ class body: an access-level label or a member declaration"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ModuloOperation",
@@ -1276,7 +1360,8 @@
                   {"name": "left", "type": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"}},
                   {"name": "right", "type": {"variable": "hydra.cpp.syntax.UnaryExpression"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ modulo expression (left % right)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ modulo expression (left % right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.MultiplicativeExpression",
@@ -1295,7 +1380,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A C++ multiplicative-expression: a unary expression, a multiplication, a division, or a modulo"}}}]}}}}}},
+                      "literal": {"string": "A C++ multiplicative-expression: a unary expression, a multiplication, a division, or a modulo"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.MultiplyOperation",
@@ -1309,7 +1395,8 @@
                   {"name": "right", "type": {"variable": "hydra.cpp.syntax.UnaryExpression"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ multiplication expression (left * right)"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ multiplication expression (left * right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.NamespaceDeclaration",
@@ -1325,7 +1412,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ namespace declaration enclosing a list of declarations"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ namespace declaration enclosing a list of declarations"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.NotEqualOperation",
@@ -1341,7 +1429,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ inequality comparison expression (left != right)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ inequality comparison expression (left != right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Optional",
@@ -1357,7 +1446,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ std::optional literal, with a value type and an optional contained value"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ std::optional literal, with a value type and an optional contained value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.OptionalDeclaration",
@@ -1373,7 +1463,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A declaration of a named std::optional type alias"}}}]}}}}}},
+                    "value": {"literal": {"string": "A declaration of a named std::optional type alias"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.OverloadedLambdas",
@@ -1386,7 +1477,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A set of lambda expressions combined via an overload pattern (e.g. a visitor helper)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A set of lambda expressions combined via an overload pattern (e.g. a visitor helper)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Parameter",
@@ -1400,7 +1492,8 @@
                   {"name": "name", "type": {"literal": "string"}},
                   {"name": "unnamed", "type": {"literal": "boolean"}},
                   {"name": "defaultValue", "type": {"optional": {"variable": "hydra.cpp.syntax.Expression"}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ function or lambda parameter"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ function or lambda parameter"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.PatternMatch",
@@ -1416,7 +1509,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A std::visit-style pattern match: a visitor applied to a variant expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A std::visit-style pattern match: a visitor applied to a variant expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.PointerMemberAccessOperation",
@@ -1432,7 +1526,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ pointer member access expression (pointer->member)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ pointer member access expression (pointer->member)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.PostfixExpression",
@@ -1454,7 +1549,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ postfix-expression: a primary expression optionally followed by a postfix operation"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ postfix-expression: a primary expression optionally followed by a postfix operation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.PragmaDirective",
@@ -1463,7 +1559,8 @@
           "body": {
             "annotated": {
               "body": {"record": [{"name": "content", "type": {"literal": "string"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #pragma directive"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #pragma directive"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.PreprocessorDirective",
@@ -1486,7 +1583,8 @@
                   {"name": "line", "type": {"variable": "hydra.cpp.syntax.LineDirective"}},
                   {"name": "error", "type": {"variable": "hydra.cpp.syntax.ErrorDirective"}},
                   {"name": "warning", "type": {"variable": "hydra.cpp.syntax.WarningDirective"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor directive"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor directive"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.PrimaryExpression",
@@ -1504,7 +1602,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ primary-expression: an identifier, a literal, a parenthesized expression, or a lambda"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ primary-expression: an identifier, a literal, a parenthesized expression, or a lambda"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ProductDeclaration",
@@ -1520,7 +1619,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A declaration of a product type as a C++ struct with named fields"}}}]}}}}}},
+                    "value": {"literal": {"string": "A declaration of a product type as a C++ struct with named fields"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Program",
@@ -1537,7 +1637,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A complete C++ source or header file: preprocessor directives, includes, and declarations"}}}]}}}}}},
+                    "value": {"literal": {"string": "A complete C++ source or header file: preprocessor directives, includes, and declarations"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.QualifiedIdentifier",
@@ -1550,7 +1651,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ namespace-qualified identifier (namespace::name)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ namespace-qualified identifier (namespace::name)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.QualifiedType",
@@ -1566,7 +1668,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ type expression qualified by const, a reference, or a pointer"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ type expression qualified by const, a reference, or a pointer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.RangeForStatement",
@@ -1580,7 +1683,8 @@
                   {"name": "variable", "type": {"literal": "string"}},
                   {"name": "range", "type": {"variable": "hydra.cpp.syntax.Expression"}},
                   {"name": "body", "type": {"variable": "hydra.cpp.syntax.Statement"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ range-based for statement"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ range-based for statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.RelationalExpression",
@@ -1599,7 +1703,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ relational-expression: a shift expression or a relational comparison"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ relational-expression: a shift expression or a relational comparison"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.RightShiftOperation",
@@ -1612,7 +1717,8 @@
                   {"name": "left", "type": {"variable": "hydra.cpp.syntax.ShiftExpression"}},
                   {"name": "right", "type": {"variable": "hydra.cpp.syntax.AdditiveExpression"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ right shift expression (left >> right)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ right shift expression (left >> right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.SelectionStatement",
@@ -1629,7 +1735,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ if statement, with an optional else branch"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ if statement, with an optional else branch"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Set",
@@ -1645,7 +1752,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ std::set literal, with an element type and elements"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ std::set literal, with an element type and elements"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.SetDeclaration",
@@ -1658,7 +1766,8 @@
                   {"name": "elementType", "type": {"variable": "hydra.cpp.syntax.TypeExpression"}},
                   {"name": "name", "type": {"literal": "string"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A declaration of a named std::set type alias"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A declaration of a named std::set type alias"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.ShiftExpression",
@@ -1675,7 +1784,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ shift-expression: an additive expression, a left shift, or a right shift"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ shift-expression: an additive expression, a left shift, or a right shift"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.SizeofExpression",
@@ -1685,7 +1795,8 @@
             "annotated": {
               "body": {"wrap": {"variable": "hydra.cpp.syntax.TypeExpression"}},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ sizeof expression applied to a type"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ sizeof expression applied to a type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Statement",
@@ -1703,7 +1814,8 @@
                   {"name": "jump", "type": {"variable": "hydra.cpp.syntax.JumpStatement"}},
                   {"name": "declaration", "type": {"variable": "hydra.cpp.syntax.VariableDeclaration"}},
                   {"name": "expression", "type": {"variable": "hydra.cpp.syntax.Expression"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ statement"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.StringLiteral",
@@ -1712,7 +1824,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ string literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ string literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.SubscriptOperation",
@@ -1728,7 +1841,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ array subscript expression (array[index])"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ array subscript expression (array[index])"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.SubtractOperation",
@@ -1741,7 +1855,8 @@
                   {"name": "left", "type": {"variable": "hydra.cpp.syntax.AdditiveExpression"}},
                   {"name": "right", "type": {"variable": "hydra.cpp.syntax.MultiplicativeExpression"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ subtraction expression (left - right)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ subtraction expression (left - right)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.SwitchStatement",
@@ -1753,7 +1868,8 @@
                 "record": [
                   {"name": "value", "type": {"variable": "hydra.cpp.syntax.Expression"}},
                   {"name": "cases", "type": {"list": {"variable": "hydra.cpp.syntax.CaseStatement"}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ switch statement"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ switch statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.TemplateArgument",
@@ -1769,7 +1885,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single argument to a C++ template instantiation: a type or a value"}}}]}}}}}},
+                    "value": {"literal": {"string": "A single argument to a C++ template instantiation: a type or a value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.TemplateDeclaration",
@@ -1786,7 +1903,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ template declaration wrapping a class or function declaration"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ template declaration wrapping a class or function declaration"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.TemplateFunctionCallOperation",
@@ -1803,7 +1921,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ explicit template function call (func<Args...>(arguments))"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ explicit template function call (func<Args...>(arguments))"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.TemplateType",
@@ -1819,7 +1938,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ template instantiation type (e.g. std::vector<int>)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ template instantiation type (e.g. std::vector<int>)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.TernaryExpression",
@@ -1836,7 +1956,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ ternary conditional expression (condition ? trueExpr : falseExpr)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ ternary conditional expression (condition ? trueExpr : falseExpr)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.TypeExpression",
@@ -1851,7 +1972,8 @@
                   {"name": "template", "type": {"variable": "hydra.cpp.syntax.TemplateType"}},
                   {"name": "function", "type": {"variable": "hydra.cpp.syntax.FunctionType"}},
                   {"name": "auto", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ type expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ type expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.TypeQualifier",
@@ -1869,7 +1991,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ type qualifier: const, lvalue reference, rvalue reference, or pointer"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ type qualifier: const, lvalue reference, rvalue reference, or pointer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.TypedefDeclaration",
@@ -1884,7 +2007,8 @@
                   {"name": "isUsing", "type": {"literal": "boolean"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ typedef or using type alias declaration"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ typedef or using type alias declaration"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.UnaryExpression",
@@ -1901,7 +2025,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ unary-expression: a postfix expression, a unary operation, or a sizeof expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ unary-expression: a postfix expression, a unary operation, or a sizeof expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.UnaryOperation",
@@ -1917,7 +2042,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ unary operation applied to an operand (e.g. -x, !x, *x)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ unary operation applied to an operand (e.g. -x, !x, *x)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.UnaryOperator",
@@ -1935,7 +2061,8 @@
                   {"name": "addressOf", "type": "unit"},
                   {"name": "preIncrement", "type": "unit"},
                   {"name": "preDecrement", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ unary operator"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ unary operator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.UndefDirective",
@@ -1944,7 +2071,8 @@
           "body": {
             "annotated": {
               "body": {"record": [{"name": "name", "type": {"literal": "string"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #undef directive"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #undef directive"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.VariableDeclaration",
@@ -1962,7 +2090,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ variable declaration, with an optional type (for auto) and initializer"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ variable declaration, with an optional type (for auto) and initializer"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.VariantDeclaration",
@@ -1978,7 +2107,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A declaration of a named std::variant type alias over a list of member types"}}}]}}}}}},
+                    "value": {"literal": {"string": "A declaration of a named std::variant type alias over a list of member types"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Vector",
@@ -1994,7 +2124,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ std::vector literal, with an element type and elements"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ std::vector literal, with an element type and elements"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.Visitor",
@@ -2010,7 +2141,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A C++ visitor used in a pattern match: a single lambda or a set of overloaded lambdas"}}}]}}}}}},
+                    "value": {"literal": {"string": "A C++ visitor used in a pattern match: a single lambda or a set of overloaded lambdas"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.WarningDirective",
@@ -2019,7 +2151,8 @@
           "body": {
             "annotated": {
               "body": {"record": [{"name": "message", "type": {"literal": "string"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #warning directive"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C preprocessor #warning directive"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.WhileStatement",
@@ -2031,4 +2164,5 @@
                 "record": [
                   {"name": "condition", "type": {"variable": "hydra.cpp.syntax.Expression"}},
                   {"name": "body", "type": {"variable": "hydra.cpp.syntax.Statement"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ while statement"}}}]}}}}}}]}
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A C++ while statement"}}}]}}},
+          "constraints": []}}}]}

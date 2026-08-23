@@ -23,7 +23,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'between' range test on an expression, optionally negated"}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'between' range test on an expression, optionally negated"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.BinaryExpression",
@@ -40,7 +41,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary operator expression, combining a left and right operand"}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary operator expression, combining a left and right operand"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.BinaryOperator",
@@ -72,7 +74,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A binary comparison or arithmetic operator used in KQL expressions"}}}]}}}}}},
+                    "value": {"literal": {"string": "A binary comparison or arithmetic operator used in KQL expressions"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.BuiltInFunction",
@@ -99,7 +102,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "One of the built-in scalar or aggregation functions supported by KQL"}}}]}}}}}},
+                    "value": {"literal": {"string": "One of the built-in scalar or aggregation functions supported by KQL"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.ColumnAlias",
@@ -115,7 +119,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An association between a column and an alternate (renamed) column name"}}}]}}}}}},
+                    "value": {"literal": {"string": "An association between a column and an alternate (renamed) column name"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.ColumnAssignment",
@@ -131,7 +136,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An assignment of a computed expression to a column"}}}]}}}}}},
+                    "value": {"literal": {"string": "An assignment of a computed expression to a column"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.ColumnName",
@@ -140,7 +146,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a table column"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a table column"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Columns",
@@ -153,7 +160,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A selection of either all columns, or a single named column"}}}]}}}}}},
+                    "value": {"literal": {"string": "A selection of either all columns, or a single named column"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Command",
@@ -236,7 +244,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A tabular operator, applied in sequence within a pipeline expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A tabular operator, applied in sequence within a pipeline expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Datetime",
@@ -245,7 +254,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A KQL datetime literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A KQL datetime literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Duration",
@@ -261,7 +271,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A duration (timespan) literal, expressed as a value and a unit"}}}]}}}}}},
+                    "value": {"literal": {"string": "A duration (timespan) literal, expressed as a value and a unit"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.DurationUnit",
@@ -271,7 +282,8 @@
             "annotated": {
               "body": {"union": [{"name": "second", "type": "unit"}, {"name": "minute", "type": "unit"}, {"name": "hour", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unit of measure of a Duration value"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The unit of measure of a Duration value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Expression",
@@ -305,7 +317,8 @@
                   {"name": "parentheses", "type": {"variable": "hydra.kusto.kql.Expression"}},
                   {"name": "property", "type": {"variable": "hydra.kusto.kql.PropertyExpression"}},
                   {"name": "unary", "type": {"variable": "hydra.kusto.kql.UnaryExpression"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A KQL scalar expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A KQL scalar expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Function",
@@ -321,7 +334,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A reference to either a built-in or a user-defined function"}}}]}}}}}},
+                    "value": {"literal": {"string": "A reference to either a built-in or a user-defined function"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.FunctionExpression",
@@ -337,7 +351,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An invocation of a function with a list of argument expressions"}}}]}}}}}},
+                    "value": {"literal": {"string": "An invocation of a function with a list of argument expressions"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.FunctionName",
@@ -346,7 +361,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a user-defined function"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a user-defined function"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.IndexExpression",
@@ -362,7 +378,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An indexing operation applied to an expression, e.g. array or property access"}}}]}}}}}},
+                    "value": {"literal": {"string": "An indexing operation applied to an expression, e.g. array or property access"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.JoinCommand",
@@ -379,7 +396,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'join' operator combining rows from the current and a second tabular expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'join' operator combining rows from the current and a second tabular expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.JoinKind",
@@ -402,7 +420,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The kind of join to perform, e.g. inner, left outer, or left semi/anti"}}}]}}}}}},
+                    "value": {"literal": {"string": "The kind of join to perform, e.g. inner, left outer, or left semi/anti"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.KeyValuePair",
@@ -416,7 +435,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A key-value pair extracted by a 'parse' command"}}}]}}}}}},
+                    "value": {"literal": {"string": "A key-value pair extracted by a 'parse' command"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.LetBinding",
@@ -432,7 +452,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single 'let' binding of a name to an expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A single 'let' binding of a name to an expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.LetExpression",
@@ -453,7 +474,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A sequence of 'let' bindings followed by a tabular expression that may reference them"}}}]}}}}}},
+                    "value": {"literal": {"string": "A sequence of 'let' bindings followed by a tabular expression that may reference them"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Literal",
@@ -470,7 +492,8 @@
                   {"name": "long", "type": {"literal": {"integer": "int64"}}},
                   {"name": "double", "type": {"literal": {"float": "float64"}}},
                   {"name": "boolean", "type": {"literal": "boolean"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A literal value in a KQL expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A literal value in a KQL expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Order",
@@ -483,7 +506,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The sort direction for an 'order by' or 'sort by' clause"}}}]}}}}}},
+                    "value": {"literal": {"string": "The sort direction for an 'order by' or 'sort by' clause"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Parameter",
@@ -497,7 +521,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A named parameter with a literal value, e.g. for a union operator"}}}]}}}}}},
+                    "value": {"literal": {"string": "A named parameter with a literal value, e.g. for a union operator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.ParseCommand",
@@ -518,7 +543,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'parse' command that extracts key-value pairs from a column into new columns"}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'parse' command that extracts key-value pairs from a column into new columns"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.PipelineExpression",
@@ -535,7 +561,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A pipe ('|')-separated sequence of tabular expressions"}}}]}}}}}},
+                    "value": {"literal": {"string": "A pipe ('|')-separated sequence of tabular expressions"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.PrintCommand",
@@ -551,7 +578,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'print' command that outputs the value of an expression, optionally naming a column"}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'print' command that outputs the value of an expression, optionally naming a column"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Projection",
@@ -567,7 +595,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression to project as a column, with an optional alias, used by a 'project' command"}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression to project as a column, with an optional alias, used by a 'project' command"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.PropertyExpression",
@@ -583,7 +612,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A dotted property access on an expression, e.g. 'x.property'"}}}]}}}}}},
+                    "value": {"literal": {"string": "A dotted property access on an expression, e.g. 'x.property'"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.Query",
@@ -596,7 +626,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A complete KQL query, consisting of a single tabular expression"}}}]}}}}}},
+                    "value": {"literal": {"string": "A complete KQL query, consisting of a single tabular expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.SearchCommand",
@@ -612,7 +643,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Search across all datasets and columns or, if provided, specific datasets and/or columns"}}}]}}}}}},
+                    "value": {"literal": {"string": "Search across all datasets and columns or, if provided, specific datasets and/or columns"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.SortBy",
@@ -628,7 +660,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single sort key with an optional sort order, used by 'order by'/'sort by'"}}}]}}}}}},
+                    "value": {"literal": {"string": "A single sort key with an optional sort order, used by 'order by'/'sort by'"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.SummarizeCommand",
@@ -649,7 +682,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'summarize' command that computes aggregate columns, optionally grouped by other columns"}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'summarize' command that computes aggregate columns, optionally grouped by other columns"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.TableName",
@@ -658,7 +692,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a table or dataset"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of a table or dataset"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.TabularExpression",
@@ -676,7 +711,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An expression which produces a table: a command, pipeline, let expression, or table reference"}}}]}}}}}},
+                    "value": {"literal": {"string": "An expression which produces a table: a command, pipeline, let expression, or table reference"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.TopCommand",
@@ -692,7 +728,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'top' command that returns the first N rows sorted by the given columns"}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'top' command that returns the first N rows sorted by the given columns"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.UnaryExpression",
@@ -708,7 +745,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A unary operator expression applied to a single operand"}}}]}}}}}},
+                    "value": {"literal": {"string": "A unary operator expression applied to a single operand"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.UnaryOperator",
@@ -718,7 +756,8 @@
             "annotated": {
               "body": {"union": [{"name": "not", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unary operator used in KQL expressions"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unary operator used in KQL expressions"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.UnionCommand",
@@ -742,7 +781,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A 'union' command that combines rows from multiple tables"}}}]}}}}}},
+                    "value": {"literal": {"string": "A 'union' command that combines rows from multiple tables"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.kusto.kql.UnionKind",
@@ -755,4 +795,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Whether a union preserves only common columns (inner) or all columns (outer)"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "Whether a union preserves only common columns (inner) or all columns (outer)"}}}]}}},
+          "constraints": []}}}]}

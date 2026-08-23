@@ -91,6 +91,17 @@
                           {
                             "key": {"variable": "description"},
                             "value": {"literal": {"string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}]}}}}},
+              "isLazy": false},
+            {
+              "name": "arg4",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": "boolean"},
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the module uses Data.Void (Void)"}}}]}}}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -156,57 +167,76 @@
                                           "key": {"variable": "description"},
                                           "value": {"literal": {"string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}]}}}}},
                             "body": {
-                              "wrap": {
-                                "typeName": "hydra.typed.TypedTerm",
+                              "lambda": {
+                                "parameter": "usesVoid",
+                                "domain": {
+                                  "application": {
+                                    "function": {"variable": "hydra.typed.TypedTerm"},
+                                    "argument": {
+                                      "annotated": {
+                                        "body": {"literal": "boolean"},
+                                        "annotation": {
+                                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the module uses Data.Void (Void)"}}}]}}}}},
                                 "body": {
-                                  "inject": {
-                                    "typeName": "hydra.core.Term",
-                                    "field": {
-                                      "name": "record",
-                                      "term": {
-                                        "record": {
-                                          "typeName": "hydra.core.Record",
-                                          "fields": [
-                                            {
-                                              "name": "typeName",
-                                              "term": {
-                                                "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
-                                            {
-                                              "name": "fields",
-                                              "term": {
-                                                "list": [
-                                                  {
-                                                    "record": {
-                                                      "typeName": "hydra.core.Field",
-                                                      "fields": [
-                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesByteString"}}}}},
-                                                        {
-                                                          "name": "term",
-                                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "usesByteString"}}}}]}},
-                                                  {
-                                                    "record": {
-                                                      "typeName": "hydra.core.Field",
-                                                      "fields": [
-                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesInt"}}}}},
-                                                        {
-                                                          "name": "term",
-                                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "usesInt"}}}}]}},
-                                                  {
-                                                    "record": {
-                                                      "typeName": "hydra.core.Field",
-                                                      "fields": [
-                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesMap"}}}}},
-                                                        {
-                                                          "name": "term",
-                                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "usesMap"}}}}]}},
-                                                  {
-                                                    "record": {
-                                                      "typeName": "hydra.core.Field",
-                                                      "fields": [
-                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesSet"}}}}},
-                                                        {
-                                                          "name": "term",
-                                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "usesSet"}}}}]}}]}}]}}}}}}}}}}}}}}},
+                                  "wrap": {
+                                    "typeName": "hydra.typed.TypedTerm",
+                                    "body": {
+                                      "inject": {
+                                        "typeName": "hydra.core.Term",
+                                        "field": {
+                                          "name": "record",
+                                          "term": {
+                                            "record": {
+                                              "typeName": "hydra.core.Record",
+                                              "fields": [
+                                                {
+                                                  "name": "typeName",
+                                                  "term": {
+                                                    "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
+                                                {
+                                                  "name": "fields",
+                                                  "term": {
+                                                    "list": [
+                                                      {
+                                                        "record": {
+                                                          "typeName": "hydra.core.Field",
+                                                          "fields": [
+                                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesByteString"}}}}},
+                                                            {
+                                                              "name": "term",
+                                                              "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "usesByteString"}}}}]}},
+                                                      {
+                                                        "record": {
+                                                          "typeName": "hydra.core.Field",
+                                                          "fields": [
+                                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesInt"}}}}},
+                                                            {
+                                                              "name": "term",
+                                                              "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "usesInt"}}}}]}},
+                                                      {
+                                                        "record": {
+                                                          "typeName": "hydra.core.Field",
+                                                          "fields": [
+                                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesMap"}}}}},
+                                                            {
+                                                              "name": "term",
+                                                              "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "usesMap"}}}}]}},
+                                                      {
+                                                        "record": {
+                                                          "typeName": "hydra.core.Field",
+                                                          "fields": [
+                                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesSet"}}}}},
+                                                            {
+                                                              "name": "term",
+                                                              "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "usesSet"}}}}]}},
+                                                      {
+                                                        "record": {
+                                                          "typeName": "hydra.core.Field",
+                                                          "fields": [
+                                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesVoid"}}}}},
+                                                            {
+                                                              "name": "term",
+                                                              "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "usesVoid"}}}}]}}]}}]}}}}}}}}}}}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -496,6 +526,73 @@
                   "value": {"literal": {"string": "DSL accessor for the usesSet field of hydra.haskell.environment.HaskellModuleMetadata"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataUsesVoid",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "annotated": {
+                    "body": {"literal": "boolean"},
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the module uses Data.Void (Void)"}}}]}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "typeName": "hydra.core.Projection",
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {
+                                                  "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
+                                              {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesVoid"}}}}}]}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the usesVoid field of hydra.haskell.environment.HaskellModuleMetadata"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.haskell.environment.haskellModuleMetadataWithUsesByteString",
         "signature": {
           "typeParameters": [],
@@ -679,6 +776,41 @@
                                                                               "term": {
                                                                                 "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
                                                                             {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesSet"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesVoid"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {
+                                                                                "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
+                                                                            {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesVoid"}}}}}]}}}}}},
                                                               {
                                                                 "name": "argument",
                                                                 "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}}]}}]}}}}}}}}}}},
@@ -876,6 +1008,41 @@
                                                                             {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesSet"}}}}}]}}}}}},
                                                               {
                                                                 "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesVoid"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {
+                                                                                "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
+                                                                            {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesVoid"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
                                                                 "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}}]}}]}}}}}}}}}}},
             "annotation": {
               "map": [
@@ -1069,6 +1236,41 @@
                                                                               "term": {
                                                                                 "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
                                                                             {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesSet"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesVoid"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {
+                                                                                "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
+                                                                            {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesVoid"}}}}}]}}}}}},
                                                               {
                                                                 "name": "argument",
                                                                 "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}}]}}]}}}}}}}}}}},
@@ -1266,9 +1468,268 @@
                                                 {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesSet"}}}}},
                                                 {
                                                   "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesVoid"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {
+                                                                                "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
+                                                                            {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesVoid"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}}]}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the usesSet field of hydra.haskell.environment.HaskellModuleMetadata"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.haskell.environment.haskellModuleMetadataWithUsesVoid",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": "boolean"},
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the module uses Data.Void (Void)"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "original",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "newVal",
+                    "domain": {
+                      "application": {
+                        "function": {"variable": "hydra.typed.TypedTerm"},
+                        "argument": {
+                          "annotated": {
+                            "body": {"literal": "boolean"},
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the module uses Data.Void (Void)"}}}]}}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.Term",
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Record",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesByteString"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {
+                                                                                "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesByteString"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesInt"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {
+                                                                                "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
+                                                                            {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesInt"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesMap"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {
+                                                                                "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
+                                                                            {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesMap"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesSet"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {
+                                                                                "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}}}},
+                                                                            {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesSet"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "usesVoid"}}}}},
+                                                {
+                                                  "name": "term",
                                                   "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}}]}}]}}}}}}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL updater for the usesSet field of hydra.haskell.environment.HaskellModuleMetadata"}}}]}}}}}]}
+                  "value": {"literal": {"string": "DSL updater for the usesVoid field of hydra.haskell.environment.HaskellModuleMetadata"}}}]}}}}}]}

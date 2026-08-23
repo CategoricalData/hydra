@@ -21,7 +21,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An RPQ alternation: either of two sub-expressions"}}}]}}}}}},
+                    "value": {"literal": {"string": "An RPQ alternation: either of two sub-expressions"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.BoolOp",
@@ -34,7 +35,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A boolean operator combining complex conditions: and or or"}}}]}}}}}},
+                    "value": {"literal": {"string": "A boolean operator combining complex conditions: and or or"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.CompareSym",
@@ -54,7 +56,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A comparison symbol used in a path algebra condition"}}}]}}}}}},
+                    "value": {"literal": {"string": "A comparison symbol used in a path algebra condition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.ComplexCondition",
@@ -70,7 +73,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A complex condition: a simple condition or a compound of conditions"}}}]}}}}}},
+                    "value": {"literal": {"string": "A complex condition: a simple condition or a compound of conditions"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.ComplexFunction",
@@ -87,7 +91,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A complex path algebra function taking a name, an inner function, and an additional argument"}}}]}}}}}},
+                    "value": {"literal": {"string": "A complex path algebra function taking a name, an inner function, and an additional argument"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.CompoundComplexCondition",
@@ -106,7 +111,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A compound complex condition combining a simple condition and another complex condition with a boolean operator"}}}]}}}}}},
+                        "string": "A compound complex condition combining a simple condition and another complex condition with a boolean operator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Concatenation",
@@ -122,7 +128,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An RPQ concatenation: two sub-expressions in sequence"}}}]}}}}}},
+                    "value": {"literal": {"string": "An RPQ concatenation: two sub-expressions in sequence"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Condition",
@@ -139,7 +146,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A path algebra condition: a function, a comparison symbol, and a value"}}}]}}}}}},
+                    "value": {"literal": {"string": "A path algebra condition: a function, a comparison symbol, and a value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.EdgeDirection",
@@ -153,7 +161,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The direction of an edge pattern: outgoing, incoming, or undirected"}}}]}}}}}},
+                    "value": {"literal": {"string": "The direction of an edge pattern: outgoing, incoming, or undirected"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.EdgePattern",
@@ -169,7 +178,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A pattern matching an edge, with a direction and an optional regular path query"}}}]}}}}}},
+                    "value": {"literal": {"string": "A pattern matching an edge, with a direction and an optional regular path query"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Function",
@@ -186,7 +196,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A path algebra function: simple, nested, or complex"}}}]}}}}}},
+                    "value": {"literal": {"string": "A path algebra function: simple, nested, or complex"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.GroupBy",
@@ -197,7 +208,8 @@
               "body": {"wrap": {"variable": "com.gdblab.pathAlgebra.syntax.GroupByOption"}},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A group-by clause, wrapping a group-by option"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A group-by clause, wrapping a group-by option"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.GroupByOption",
@@ -215,7 +227,8 @@
                   {"name": "targetLength", "type": "unit"},
                   {"name": "sourceTargetLength", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The grouping dimension of a group-by clause"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The grouping dimension of a group-by clause"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.GroupProj",
@@ -229,7 +242,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The group-count projection of a path query: all groups, or a limited number"}}}]}}}}}},
+                    "value": {"literal": {"string": "The group-count projection of a path query: all groups, or a limited number"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Label",
@@ -238,7 +252,8 @@
           "body": {
             "annotated": {
               "body": {"literal": "string"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An edge label"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An edge label"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.NestedFunction",
@@ -254,7 +269,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A nested path algebra function taking a name and an inner function"}}}]}}}}}},
+                    "value": {"literal": {"string": "A nested path algebra function taking a name and an inner function"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.NodePattern",
@@ -267,7 +283,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A pattern matching a node, with an optional binding variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A pattern matching a node, with an optional binding variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Number",
@@ -276,7 +293,8 @@
           "body": {
             "annotated": {
               "body": {"literal": {"integer": "bigint"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A numeric literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A numeric literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.OrderBy",
@@ -289,7 +307,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An order-by clause, wrapping an order-by option"}}}]}}}}}},
+                    "value": {"literal": {"string": "An order-by clause, wrapping an order-by option"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.OrderByOption",
@@ -307,7 +326,8 @@
                   {"name": "groupPath", "type": "unit"},
                   {"name": "partitionGroupPath", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The ordering dimension of an order-by clause"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The ordering dimension of an order-by clause"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PartProj",
@@ -321,7 +341,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The path-count projection of a path query: all paths, or a limited number"}}}]}}}}}},
+                    "value": {"literal": {"string": "The path-count projection of a path query: all paths, or a limited number"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PathName",
@@ -330,7 +351,8 @@
           "body": {
             "annotated": {
               "body": {"literal": "string"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name bound to a matched path"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name bound to a matched path"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PathPattern",
@@ -349,7 +371,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A pattern matching a path: a name, start node, edge, end node, and an optional condition"}}}]}}}}}},
+                    "value": {"literal": {"string": "A pattern matching a path: a name, start node, edge, end node, and an optional condition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PathProj",
@@ -363,7 +386,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The path projection of a path query: all paths, or a limited number"}}}]}}}}}},
+                    "value": {"literal": {"string": "The path projection of a path query: all paths, or a limited number"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.PathQuery",
@@ -383,7 +407,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A path algebra query: a projection, optional restrictor, path pattern, and optional grouping/ordering"}}}]}}}}}},
+                      "literal": {"string": "A path algebra query: a projection, optional restrictor, path pattern, and optional grouping/ordering"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Plus",
@@ -399,7 +424,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An RPQ one-or-more repetition of a sub-expression, with an optional restrictor"}}}]}}}}}},
+                    "value": {"literal": {"string": "An RPQ one-or-more repetition of a sub-expression, with an optional restrictor"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Projection",
@@ -416,7 +442,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The projection of a path query: part, group, and path projections"}}}]}}}}}},
+                    "value": {"literal": {"string": "The projection of a path query: part, group, and path projections"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.RestrictorExt",
@@ -435,7 +462,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A path restrictor: walk, trail, simple, acyclic, or shortest"}}}]}}}}}},
+                    "value": {"literal": {"string": "A path restrictor: walk, trail, simple, acyclic, or shortest"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Rpq",
@@ -454,7 +482,8 @@
                   {"name": "star", "type": {"variable": "com.gdblab.pathAlgebra.syntax.Star"}},
                   {"name": "concatenation", "type": {"variable": "com.gdblab.pathAlgebra.syntax.Concatenation"}},
                   {"name": "alternation", "type": {"variable": "com.gdblab.pathAlgebra.syntax.Alternation"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A regular path query expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A regular path query expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.RpqRestrictor",
@@ -467,7 +496,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A restrictor applied to a regular path query, wrapping a restrictor extension"}}}]}}}}}},
+                    "value": {"literal": {"string": "A restrictor applied to a regular path query, wrapping a restrictor extension"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.SimpleFunction",
@@ -483,7 +513,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple path algebra function taking a name and a single argument"}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple path algebra function taking a name and a single argument"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Star",
@@ -499,7 +530,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An RPQ zero-or-more repetition of a sub-expression, with an optional restrictor"}}}]}}}}}},
+                    "value": {"literal": {"string": "An RPQ zero-or-more repetition of a sub-expression, with an optional restrictor"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Text",
@@ -508,7 +540,8 @@
           "body": {
             "annotated": {
               "body": {"literal": "string"},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A text literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A text literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "com.gdblab.pathAlgebra.syntax.Variable",
@@ -518,4 +551,5 @@
             "annotated": {
               "body": {"literal": "string"},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A variable name bound in a path pattern"}}}]}}}}}}]}
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A variable name bound in a path pattern"}}}]}}},
+          "constraints": []}}}]}

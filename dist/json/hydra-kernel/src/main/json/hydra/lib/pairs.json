@@ -105,6 +105,24 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.lib.pairs.pair",
+        "metadata": {
+          "description": "Construct a pair from two values.",
+          "comments": [
+            "pair(x, y) returns the pair (x, y).",
+            "The type-free pair constructor, useful point-free (e.g. zipWith(pair, xs, ys)).",
+            "Total. Corresponds to Haskell's (,) :: a -> b -> (a, b)."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "a", "constraints": []}, {"name": "b", "constraints": []}],
+          "parameters": [
+            {"name": "x", "description": "the first element", "type": {"variable": "a"}, "isLazy": false},
+            {"name": "y", "description": "the second element", "type": {"variable": "b"}, "isLazy": false}],
+          "result": {"type": {"pair": {"first": {"variable": "a"}, "second": {"variable": "b"}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.pairs.second",
         "metadata": {
           "description": "Get the second element of a pair.",

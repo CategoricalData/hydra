@@ -63,7 +63,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A single copy-or-link operation in an assembly plan: realize a source tree at a destination tree by the given kind, optionally excluding matching relative paths."}}}]}}}}}},
+                        "string": "A single copy-or-link operation in an assembly plan: realize a source tree at a destination tree by the given kind, optionally excluding matching relative paths."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.assembly.AssemblyEntryKind",
@@ -120,7 +121,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "How an assembly entry's source tree is realized at its destination. The distinction gates the host-native executor's dispatch (merge-copy vs. wipe-then-copy vs. symlink)."}}}]}}}}}},
+                        "string": "How an assembly entry's source tree is realized at its destination. The distinction gates the host-native executor's dispatch (merge-copy vs. wipe-then-copy vs. symlink)."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.assembly.AssemblyPlan",
@@ -156,7 +158,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "The complete assembly plan for one distribution package in one target language: the ordered copy/symlink entries to realize and the keep-paths a pruning consumer must protect. Entries are ordered because realization order can matter (e.g. a package that links its own subtree back into an already-assembled dependency's tree)."}}}]}}}}}},
+                        "string": "The complete assembly plan for one distribution package in one target language: the ordered copy/symlink entries to realize and the keep-paths a pruning consumer must protect. Entries are ordered because realization order can matter (e.g. a package that links its own subtree back into an already-assembled dependency's tree)."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.build.assembly.KeepPathEntry",
@@ -192,4 +195,5 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "One protected path in a keep-paths manifest: a source-set directory paired with a file's path relative to it. Serialized by the native executor as <sourceSetDir>\\t<relPath>, bit-compatible with the prune-stale (#357) and digest-check --keep-paths-from consumers."}}}]}}}}}}]}
+                        "string": "One protected path in a keep-paths manifest: a source-set directory paired with a file's path relative to it. Serialized by the native executor as <sourceSetDir>\\t<relPath>, bit-compatible with the prune-stale (#357) and digest-check --keep-paths-from consumers."}}}]}}},
+          "constraints": []}}}]}

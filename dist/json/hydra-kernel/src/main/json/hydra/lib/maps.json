@@ -468,6 +468,27 @@
         "isTotal": true}},
     {
       "primitive": {
+        "name": "hydra.lib.maps.isEmpty",
+        "metadata": {
+          "description": "Test whether a map is empty.",
+          "comments": [
+            "isEmpty(m) returns true iff m has no bindings.",
+            "Requires an 'ordering' constraint on the key type.",
+            "Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
+          "parameters": [
+            {
+              "name": "m",
+              "description": "the map to test",
+              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
+              "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.maps.keys",
         "metadata": {
           "description": "Return the keys of a map (in key order).",
@@ -631,27 +652,6 @@
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
             {"name": "k", "description": "the key to test for", "type": {"variable": "k"}, "isLazy": false},
-            {
-              "name": "m",
-              "description": "the map to test",
-              "type": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}},
-              "isLazy": false}],
-          "result": {"type": {"literal": "boolean"}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.maps.null",
-        "metadata": {
-          "description": "Test whether a map is empty.",
-          "comments": [
-            "null(m) returns true iff m has no bindings.",
-            "Requires an 'ordering' constraint on the key type.",
-            "Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
-          "parameters": [
             {
               "name": "m",
               "description": "the map to test",

@@ -18,7 +18,8 @@
                   {"name": "first", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}},
                   {"name": "rest", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin as() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin as() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.BarrierArgs",
@@ -31,7 +32,8 @@
                   {"name": "consumer", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalSackMethodArgument"}},
                   {"name": "int", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin barrier() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin barrier() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.BooleanArgument",
@@ -47,7 +49,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin boolean argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin boolean argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ByArgs",
@@ -61,7 +64,8 @@
                   {"name": "token", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalTokenArgument"}},
                   {"name": "other", "type": {"variable": "hydra.tinkerpop.gremlin.ByOtherArgs"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin by() modulator"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin by() modulator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ByOtherArgs",
@@ -79,7 +83,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The arguments of a Gremlin by() modulator taking another traversal or comparator"}}}]}}}}}},
+                    "value": {"literal": {"string": "The arguments of a Gremlin by() modulator taking another traversal or comparator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.CardinalityAndMap",
@@ -95,7 +100,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A cardinality value together with a property map, as used in a merge step"}}}]}}}}}},
+                    "value": {"literal": {"string": "A cardinality value together with a property map, as used in a merge step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.CardinalityAndObjects",
@@ -116,7 +122,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A cardinality value together with key-value object pairs, as used in a property() step"}}}]}}}}}},
+                    "value": {"literal": {"string": "A cardinality value together with key-value object pairs, as used in a property() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ChainedTraversal",
@@ -133,7 +140,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin traversal expressed as a chain of method calls"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin traversal expressed as a chain of method calls"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ChooseArgs",
@@ -147,7 +155,8 @@
                   {"name": "predicateTraversal", "type": {"variable": "hydra.tinkerpop.gremlin.PredicateOrTraversalChoice"}},
                   {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin choose() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin choose() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ConcatArgs",
@@ -170,7 +179,8 @@
                         "body": {"list": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}},
                         "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin concat() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin concat() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.Configuration",
@@ -182,7 +192,8 @@
                 "record": [
                   {"name": "key", "type": {"variable": "hydra.tinkerpop.gremlin.KeywordOrIdentifier"}},
                   {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin configuration map"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin configuration map"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ConnectedComponentConstants",
@@ -196,7 +207,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The named constants used by the Gremlin connectedComponent() step"}}}]}}}}}},
+                    "value": {"literal": {"string": "The named constants used by the Gremlin connectedComponent() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.DateAddArgs",
@@ -209,7 +221,8 @@
                   {"name": "unit", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalDTArgument"}},
                   {"name": "duration", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin dateAdd() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin dateAdd() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.DateArgument",
@@ -225,7 +238,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin date argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin date argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.DateDiffArgs",
@@ -238,7 +252,8 @@
                   {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}},
                   {"name": "date", "type": {"variable": "hydra.tinkerpop.gremlin.DateArgument"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin dateDiff() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin dateDiff() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.DateLiteral",
@@ -247,7 +262,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"optional": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin date literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin date literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.DedupArgs",
@@ -265,7 +281,8 @@
                         "body": {"list": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}},
                         "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin dedup() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin dedup() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.DirectionAndVarargs",
@@ -281,7 +298,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A direction argument together with a variadic list of further arguments"}}}]}}}}}},
+                    "value": {"literal": {"string": "A direction argument together with a variadic list of further arguments"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.FloatArgument",
@@ -297,7 +315,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin floating-point argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin floating-point argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.FloatLiteral",
@@ -310,7 +329,8 @@
                   {"name": "float", "type": {"literal": {"float": "float32"}}},
                   {"name": "double", "type": {"literal": {"float": "float64"}}},
                   {"name": "big", "type": {"literal": "decimal"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin floating-point literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin floating-point literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.FoldArgs",
@@ -323,7 +343,8 @@
                   {"name": "seed", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}},
                   {"name": "biFunction", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalBiFunctionArgument"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin fold() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin fold() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.FromArgs",
@@ -337,7 +358,8 @@
                   {"name": "vertex", "type": {"variable": "hydra.tinkerpop.gremlin.StructureVertexArgument"}},
                   {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin from() modulator"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin from() modulator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.GenericLiteral",
@@ -372,7 +394,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin generic literal: any of the supported literal forms"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin generic literal: any of the supported literal forms"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.GenericLiteralArgument",
@@ -388,7 +411,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin generic-literal argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin generic-literal argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.GenericLiteralCollection",
@@ -401,7 +425,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin literal collection: a list, set, or map literal"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin literal collection: a list, set, or map literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.GenericLiteralList",
@@ -410,7 +435,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"list": {"variable": "hydra.tinkerpop.gremlin.GenericLiteral"}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin list literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin list literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.GenericLiteralListArgument",
@@ -426,7 +452,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin list-literal argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin list-literal argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.GenericLiteralMap",
@@ -435,7 +462,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"list": {"variable": "hydra.tinkerpop.gremlin.MapEntry"}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin map literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin map literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.GenericLiteralMapArgument",
@@ -451,7 +479,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin map-literal argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin map-literal argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgument",
@@ -467,7 +496,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin optional map-literal argument: a literal value, a bound variable, or null"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin optional map-literal argument: a literal value, a bound variable, or null"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.GenericLiteralRange",
@@ -479,7 +509,8 @@
                 "union": [
                   {"name": "integer", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerRange"}},
                   {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringRange"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin literal range expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin literal range expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.GenericLiteralSet",
@@ -488,7 +519,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"list": {"variable": "hydra.tinkerpop.gremlin.GenericLiteral"}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin set literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin set literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.HasArgs",
@@ -501,7 +533,8 @@
                   {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.HasArgsWithKey"}},
                   {"name": "traversalToken", "type": {"variable": "hydra.tinkerpop.gremlin.HasArgsWithToken"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin has() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin has() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.HasArgsWithKey",
@@ -517,7 +550,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The arguments of a Gremlin has() step qualified by a property key"}}}]}}}}}},
+                    "value": {"literal": {"string": "The arguments of a Gremlin has() step qualified by a property key"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.HasArgsWithToken",
@@ -533,7 +567,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The arguments of a Gremlin has() step qualified by a traversal token"}}}]}}}}}},
+                    "value": {"literal": {"string": "The arguments of a Gremlin has() step qualified by a traversal token"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.HasValueClause",
@@ -552,7 +587,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The value-matching clause of a Gremlin has() step"}}}]}}}}}},
+                    "value": {"literal": {"string": "The value-matching clause of a Gremlin has() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.Identifier",
@@ -561,7 +597,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin identifier"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin identifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.IntegerArgument",
@@ -577,7 +614,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin integer argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin integer argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.IntegerLiteral",
@@ -592,7 +630,8 @@
                   {"name": "int", "type": {"literal": {"integer": "int32"}}},
                   {"name": "long", "type": {"literal": {"integer": "int64"}}},
                   {"name": "big", "type": {"literal": {"integer": "bigint"}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin integer literal"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin integer literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.IntegerRange",
@@ -604,7 +643,8 @@
                 "record": [
                   {"name": "left", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerLiteral"}},
                   {"name": "right", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerLiteral"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin integer range expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin integer range expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.IoOptionsKeys",
@@ -617,7 +657,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The named keys accepted by a Gremlin io() step's options"}}}]}}}}}},
+                    "value": {"literal": {"string": "The named keys accepted by a Gremlin io() step's options"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.IoOptionsValues",
@@ -630,7 +671,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The named values accepted by a Gremlin io() step's options"}}}]}}}}}},
+                    "value": {"literal": {"string": "The named values accepted by a Gremlin io() step's options"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.Keyword",
@@ -644,7 +686,8 @@
                   {"name": "keys", "type": "unit"},
                   {"name": "new", "type": "unit"},
                   {"name": "values", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reserved Gremlin keyword"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reserved Gremlin keyword"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.KeywordOrIdentifier",
@@ -657,7 +700,8 @@
                   {"name": "keyword", "type": {"variable": "hydra.tinkerpop.gremlin.Keyword"}},
                   {"name": "identifier", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin keyword or a plain identifier"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin keyword or a plain identifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.MapEntry",
@@ -670,7 +714,8 @@
                   {"name": "key", "type": {"variable": "hydra.tinkerpop.gremlin.MapKey"}},
                   {"name": "value", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteral"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key-value entry in a Gremlin map literal"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key-value entry in a Gremlin map literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.MapKey",
@@ -689,7 +734,8 @@
                   {"name": "map", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralMap"}},
                   {"name": "keyword", "type": {"variable": "hydra.tinkerpop.gremlin.Keyword"}},
                   {"name": "identifier", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The key of a Gremlin map entry"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The key of a Gremlin map entry"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.MergeArgs",
@@ -705,7 +751,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The arguments of a Gremlin mergeV()/mergeE() step"}}}]}}}}}},
+                    "value": {"literal": {"string": "The arguments of a Gremlin mergeV()/mergeE() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.MergeMapOption",
@@ -718,7 +765,8 @@
                   {"name": "merge", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalMergeArgument"}},
                   {"name": "map", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgument"}},
                   {"name": "cardinality", "type": {"optional": {"variable": "hydra.tinkerpop.gremlin.TraversalCardinality"}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A merge option expressed as a map"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A merge option expressed as a map"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.MergeTraversalOption",
@@ -732,7 +780,8 @@
                   {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A merge option expressed as a nested traversal"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A merge option expressed as a nested traversal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.NestedTraversal",
@@ -749,7 +798,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A traversal nested within another traversal step's arguments"}}}]}}}}}},
+                    "value": {"literal": {"string": "A traversal nested within another traversal step's arguments"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.NumericArgument",
@@ -765,7 +815,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin numeric argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin numeric argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.NumericLiteral",
@@ -781,7 +832,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin numeric literal: an integer or a float"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin numeric literal: an integer or a float"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ObjectAndTraversal",
@@ -797,7 +849,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An object argument together with a nested traversal"}}}]}}}}}},
+                    "value": {"literal": {"string": "An object argument together with a nested traversal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.OptionArgs",
@@ -813,7 +866,8 @@
                   {"name": "objectTraversal", "type": {"variable": "hydra.tinkerpop.gremlin.ObjectAndTraversal"}},
                   {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin option() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin option() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.PageRankConstants",
@@ -827,7 +881,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The named constants used by the Gremlin pageRank() step"}}}]}}}}}},
+                    "value": {"literal": {"string": "The named constants used by the Gremlin pageRank() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.PeerPressureConstants",
@@ -841,7 +896,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The named constants used by the Gremlin peerPressure() step"}}}]}}}}}},
+                    "value": {"literal": {"string": "The named constants used by the Gremlin peerPressure() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.PopAndTraversal",
@@ -854,7 +910,8 @@
                   {"name": "pop", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPopArgument"}},
                   {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Pop value together with a nested traversal"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Pop value together with a nested traversal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.PredicateAndTraversal",
@@ -867,7 +924,8 @@
                   {"name": "predicate", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicate"}},
                   {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A predicate together with a nested traversal"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A predicate together with a nested traversal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.PredicateOrObject",
@@ -883,7 +941,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A traversal predicate or a plain object argument"}}}]}}}}}},
+                    "value": {"literal": {"string": "A traversal predicate or a plain object argument"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.PredicateOrObjects",
@@ -899,7 +958,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A traversal predicate or a variadic list of object arguments"}}}]}}}}}},
+                    "value": {"literal": {"string": "A traversal predicate or a variadic list of object arguments"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.PredicateOrStrings",
@@ -920,7 +980,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A traversal predicate or a variadic list of string arguments"}}}]}}}}}},
+                    "value": {"literal": {"string": "A traversal predicate or a variadic list of string arguments"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.PredicateOrTraversal",
@@ -933,7 +994,8 @@
                   {"name": "predicate", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicate"}},
                   {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A traversal predicate or a nested traversal"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A traversal predicate or a nested traversal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.PredicateOrTraversalChoice",
@@ -950,7 +1012,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A choice between a traversal predicate and a nested traversal, used in filter steps"}}}]}}}}}},
+                    "value": {"literal": {"string": "A choice between a traversal predicate and a nested traversal, used in filter steps"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.PropertyArgs",
@@ -970,7 +1033,8 @@
                   {"name": "object", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralMapNullableArgument"}},
                   {"name": "cardinalityObject", "type": {"variable": "hydra.tinkerpop.gremlin.CardinalityAndMap"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin property() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin property() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.Query",
@@ -984,7 +1048,8 @@
                   {"name": "rootTraversal", "type": {"variable": "hydra.tinkerpop.gremlin.RootTraversalQuery"}},
                   {"name": "toString", "type": "unit"},
                   {"name": "empty", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin query"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin query"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.QueryList",
@@ -997,7 +1062,8 @@
                   "annotated": {
                     "body": {"list": {"variable": "hydra.tinkerpop.gremlin.Query"}},
                     "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A sequence of Gremlin queries"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A sequence of Gremlin queries"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.RangeArgs",
@@ -1011,7 +1077,8 @@
                   {"name": "min", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}},
                   {"name": "max", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin range() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin range() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.RangeArgument",
@@ -1023,7 +1090,8 @@
                 "record": [
                   {"name": "min", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}},
                   {"name": "max", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin range-valued argument"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin range-valued argument"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.RepeatArgs",
@@ -1036,7 +1104,8 @@
                   {"name": "string", "type": {"optional": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}}},
                   {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin repeat() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin repeat() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ReplaceArgs",
@@ -1050,7 +1119,8 @@
                   {"name": "from", "type": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}},
                   {"name": "to", "type": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin replace() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin replace() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.RootTraversal",
@@ -1064,7 +1134,8 @@
                   {"name": "spawnMethod", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod"}},
                   {"name": "chained", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.TraversalMethod"}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin root-level traversal expression"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin root-level traversal expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.RootTraversalQuery",
@@ -1077,7 +1148,8 @@
                   {"name": "root", "type": {"variable": "hydra.tinkerpop.gremlin.RootTraversal"}},
                   {"name": "terminalMethod", "type": {"optional": {"variable": "hydra.tinkerpop.gremlin.TraversalTerminalMethod"}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A query rooted at a Gremlin traversal source"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A query rooted at a Gremlin traversal source"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.SampleByScope",
@@ -1091,7 +1163,8 @@
                   {"name": "integer", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The scope argument of a Gremlin sample() step"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "The scope argument of a Gremlin sample() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ScopeAndInteger",
@@ -1107,7 +1180,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Scope value together with an integer argument"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Scope value together with an integer argument"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ScopeStringArgs",
@@ -1120,7 +1194,8 @@
                   {"name": "scope", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalScopeArgument"}},
                   {"name": "strings", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Scope value together with string arguments"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Scope value together with string arguments"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.SelectArgs",
@@ -1141,7 +1216,8 @@
                         "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                   {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin select() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin select() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.SelectByKeys",
@@ -1159,7 +1235,8 @@
                         "body": {"list": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}},
                         "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The keys selected by a Gremlin select() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The keys selected by a Gremlin select() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ServiceArguments",
@@ -1175,7 +1252,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The arguments of a Gremlin call() service invocation"}}}]}}}}}},
+                    "value": {"literal": {"string": "The arguments of a Gremlin call() service invocation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ServiceCall",
@@ -1187,7 +1265,8 @@
                 "record": [
                   {"name": "service", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}},
                   {"name": "arguments", "type": {"variable": "hydra.tinkerpop.gremlin.ServiceArguments"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin call() service invocation"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin call() service invocation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ShortestPathConstants",
@@ -1206,7 +1285,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The named constants used by the Gremlin shortestPath() step"}}}]}}}}}},
+                    "value": {"literal": {"string": "The named constants used by the Gremlin shortestPath() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.SplitArgs",
@@ -1219,7 +1299,8 @@
                   {"name": "scope", "type": {"optional": {"variable": "hydra.tinkerpop.gremlin.TraversalScopeArgument"}}},
                   {"name": "delimiter", "type": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin split() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin split() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.StringAndObject",
@@ -1235,7 +1316,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A string argument together with an object argument"}}}]}}}}}},
+                    "value": {"literal": {"string": "A string argument together with an object argument"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.StringAndOptionalObject",
@@ -1251,7 +1333,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A string argument together with an optional object argument"}}}]}}}}}},
+                    "value": {"literal": {"string": "A string argument together with an optional object argument"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.StringArgument",
@@ -1267,7 +1350,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin string argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin string argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.StringArgumentOrNestedTraversal",
@@ -1280,7 +1364,8 @@
                   {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}},
                   {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string argument or a nested traversal"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string argument or a nested traversal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.StringKeyAndObject",
@@ -1293,7 +1378,8 @@
                   {"name": "key", "type": {"variable": "hydra.tinkerpop.gremlin.StringNullableArgument"}},
                   {"name": "object", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string key together with an object value"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A string key together with an object value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.StringKeyAndPredicate",
@@ -1309,7 +1395,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A string key together with a traversal predicate"}}}]}}}}}},
+                    "value": {"literal": {"string": "A string key together with a traversal predicate"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.StringNullableArgument",
@@ -1325,7 +1412,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin optional string argument: a literal value, a bound variable, or null"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin optional string argument: a literal value, a bound variable, or null"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.StringRange",
@@ -1334,7 +1422,8 @@
           "body": {
             "annotated": {
               "body": {"record": [{"name": "left", "type": {"literal": "string"}}, {"name": "right", "type": {"literal": "string"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin string range expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin string range expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.StructureVertex",
@@ -1348,7 +1437,8 @@
                   {"name": "id", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}},
                   {"name": "label", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin structure-level vertex reference"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin structure-level vertex reference"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.StructureVertexArgument",
@@ -1364,7 +1454,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin structure-vertex argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin structure-vertex argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.SubstringArgs",
@@ -1378,7 +1469,8 @@
                   {"name": "start", "type": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}},
                   {"name": "end", "type": {"optional": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin substring() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin substring() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TailArgs",
@@ -1391,7 +1483,8 @@
                   {"name": "scope", "type": {"optional": {"variable": "hydra.tinkerpop.gremlin.TraversalScopeArgument"}}},
                   {"name": "integer", "type": {"optional": {"variable": "hydra.tinkerpop.gremlin.IntegerArgument"}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin tail() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin tail() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TerminatedTraversal",
@@ -1407,7 +1500,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin traversal terminated by a terminal method"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin traversal terminated by a terminal method"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ToArgs",
@@ -1422,7 +1516,8 @@
                   {"name": "vertex", "type": {"variable": "hydra.tinkerpop.gremlin.StructureVertexArgument"}},
                   {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin to() modulator"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin to() modulator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TransactionPart",
@@ -1435,7 +1530,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single part of a Gremlin transaction statement"}}}]}}}}}},
+                    "value": {"literal": {"string": "A single part of a Gremlin transaction statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalBiFunctionArgument",
@@ -1451,7 +1547,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin BiFunction argument: a named function or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin BiFunction argument: a named function or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalCardinality",
@@ -1468,7 +1565,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin property cardinality: single, list, or set"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin property cardinality: single, list, or set"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalCardinalityArgument",
@@ -1484,7 +1582,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin cardinality argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin cardinality argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalColumn",
@@ -1497,7 +1596,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin traversal column selector: keys or values"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin traversal column selector: keys or values"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalColumnArgument",
@@ -1513,7 +1613,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin column argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin column argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalComparatorArgument",
@@ -1529,7 +1630,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin comparator argument: a named comparator or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin comparator argument: a named comparator or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalDT",
@@ -1543,7 +1645,8 @@
                   {"name": "minute", "type": "unit"},
                   {"name": "hour", "type": "unit"},
                   {"name": "day", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin date/time unit"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin date/time unit"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalDTArgument",
@@ -1559,7 +1662,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin date/time-unit argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin date/time-unit argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalDirection",
@@ -1575,7 +1679,8 @@
                   {"name": "from", "type": "unit"},
                   {"name": "to", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin edge direction: in, out, or both"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin edge direction: in, out, or both"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalDirectionArgument",
@@ -1591,7 +1696,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin direction argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin direction argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalFunction",
@@ -1603,7 +1709,8 @@
                 "union": [
                   {"name": "token", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalToken"}},
                   {"name": "column", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalColumn"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin named function reference"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin named function reference"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalFunctionArgument",
@@ -1619,7 +1726,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin function argument: a named function or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin function argument: a named function or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalGType",
@@ -1683,7 +1791,8 @@
                   {"name": "vertexU", "type": "unit"},
                   {"name": "vproperty", "type": "unit"},
                   {"name": "vpropertyU", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin graph type constant"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin graph type constant"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalGTypeArgument",
@@ -1699,7 +1808,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin graph-type argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin graph-type argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalMerge",
@@ -1713,7 +1823,8 @@
                   {"name": "onMatch", "type": "unit"},
                   {"name": "outV", "type": "unit"},
                   {"name": "inV", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin merge-option selector"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin merge-option selector"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalMergeArgument",
@@ -1729,7 +1840,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin merge-option argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin merge-option argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalMethod",
@@ -1948,7 +2060,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A single method call within a Gremlin traversal"}}}]}}}}}},
+                    "value": {"literal": {"string": "A single method call within a Gremlin traversal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalOperator",
@@ -1969,7 +2082,8 @@
                   {"name": "or", "type": "unit"},
                   {"name": "sum", "type": "unit"},
                   {"name": "sumLong", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin traversal operator"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin traversal operator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalOrder",
@@ -1982,7 +2096,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin sort order: ascending, descending, or shuffle"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin sort order: ascending, descending, or shuffle"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalOrderArgument",
@@ -1998,7 +2113,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin order argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin order argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalPick",
@@ -2008,7 +2124,8 @@
             "annotated": {
               "body": {"union": [{"name": "any", "type": "unit"}, {"name": "none", "type": "unit"}, {"name": "unproductive", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin Pick selector: any or none"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin Pick selector: any or none"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalPop",
@@ -2026,7 +2143,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin Pop selector: first, last, all, or mixed"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin Pop selector: first, last, all, or mixed"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalPopArgument",
@@ -2042,7 +2160,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin Pop argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin Pop argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalPredicate",
@@ -2076,7 +2195,8 @@
                   {"name": "and", "type": {"variable": "hydra.tinkerpop.gremlin.TwoTraversalPredicates"}},
                   {"name": "or", "type": {"variable": "hydra.tinkerpop.gremlin.TwoTraversalPredicates"}},
                   {"name": "negate", "type": {"variable": "hydra.tinkerpop.gremlin.TraversalPredicate"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin traversal predicate"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin traversal predicate"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalSackMethodArgument",
@@ -2090,7 +2210,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin sack-method argument: a named function or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin sack-method argument: a named function or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalScope",
@@ -2100,7 +2221,8 @@
             "annotated": {
               "body": {"union": [{"name": "local", "type": "unit"}, {"name": "global", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin traversal scope: local or global"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin traversal scope: local or global"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalScopeArgument",
@@ -2116,7 +2238,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin scope argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin scope argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalSource",
@@ -2129,7 +2252,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin traversal source: g, or a variable bound to one"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin traversal source: g, or a variable bound to one"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalSourceQuery",
@@ -2143,7 +2267,8 @@
                   {"name": "transactionPart", "type": {"optional": {"variable": "hydra.tinkerpop.gremlin.TransactionPart"}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A query built from a Gremlin traversal source"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A query built from a Gremlin traversal source"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalSourceSelfMethod",
@@ -2174,7 +2299,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A traversal-source configuration method that returns the same source"}}}]}}}}}},
+                    "value": {"literal": {"string": "A traversal-source configuration method that returns the same source"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalSourceSpawnMethod",
@@ -2213,7 +2339,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A traversal-source method that spawns a new traversal"}}}]}}}}}},
+                    "value": {"literal": {"string": "A traversal-source method that spawns a new traversal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalStrategy",
@@ -2227,7 +2354,8 @@
                   {"name": "class", "type": {"variable": "hydra.tinkerpop.gremlin.Identifier"}},
                   {"name": "configurations", "type": {"list": {"variable": "hydra.tinkerpop.gremlin.Configuration"}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin traversal strategy reference"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Gremlin traversal strategy reference"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalTerminalMethod",
@@ -2249,7 +2377,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A terminal method that ends a Gremlin traversal, such as next() or toList()"}}}]}}}}}},
+                    "value": {"literal": {"string": "A terminal method that ends a Gremlin traversal, such as next() or toList()"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalToken",
@@ -2267,7 +2396,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin element token: id, label, key, or value"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin element token: id, label, key, or value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TraversalTokenArgument",
@@ -2283,7 +2413,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Gremlin token argument: a literal value or a bound variable"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Gremlin token argument: a literal value or a bound variable"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TwoTraversalPredicates",
@@ -2299,7 +2430,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A pair of traversal predicates, as used in a between-style filter"}}}]}}}}}},
+                    "value": {"literal": {"string": "A pair of traversal predicates, as used in a between-style filter"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.TypeOfArg",
@@ -2315,7 +2447,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The argument of a Gremlin type-checking predicate"}}}]}}}}}},
+                    "value": {"literal": {"string": "The argument of a Gremlin type-checking predicate"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ValueMapArgs",
@@ -2333,7 +2466,8 @@
                         "annotation": {"map": [{"key": {"variable": "minLength"}, "value": {"literal": {"integer": {"int32": 1}}}}]}}}},
                   {"name": "boolean", "type": {"variable": "hydra.tinkerpop.gremlin.ValueMapBooleanArgs"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin valueMap() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin valueMap() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.ValueMapBooleanArgs",
@@ -2355,7 +2489,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The boolean-flag arguments of a Gremlin valueMap() step"}}}]}}}}}},
+                    "value": {"literal": {"string": "The boolean-flag arguments of a Gremlin valueMap() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.WhereArgs",
@@ -2369,7 +2504,8 @@
                   {"name": "string", "type": {"variable": "hydra.tinkerpop.gremlin.StringArgument"}},
                   {"name": "traversal", "type": {"variable": "hydra.tinkerpop.gremlin.NestedTraversal"}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin where() step"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin where() step"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.WhereWithPredicateArgs",
@@ -2385,7 +2521,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The arguments of a Gremlin where() step qualified by a predicate"}}}]}}}}}},
+                    "value": {"literal": {"string": "The arguments of a Gremlin where() step qualified by a predicate"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.WithArgs",
@@ -2398,7 +2535,8 @@
                   {"name": "keys", "type": {"variable": "hydra.tinkerpop.gremlin.WithArgsKeys"}},
                   {"name": "values", "type": {"optional": {"variable": "hydra.tinkerpop.gremlin.WithArgsValues"}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin with() modulator"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin with() modulator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.WithArgsKeys",
@@ -2414,7 +2552,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The named keys accepted by a Gremlin with() modulator"}}}]}}}}}},
+                    "value": {"literal": {"string": "The named keys accepted by a Gremlin with() modulator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.WithArgsValues",
@@ -2431,7 +2570,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The named values accepted by a Gremlin with() modulator"}}}]}}}}}},
+                    "value": {"literal": {"string": "The named values accepted by a Gremlin with() modulator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.WithOptionKeys",
@@ -2452,7 +2592,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The named option keys accepted by a Gremlin with() modulator"}}}]}}}}}},
+                    "value": {"literal": {"string": "The named option keys accepted by a Gremlin with() modulator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.WithOptionsValues",
@@ -2475,7 +2616,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The named option values accepted by a Gremlin with() modulator"}}}]}}}}}},
+                    "value": {"literal": {"string": "The named option values accepted by a Gremlin with() modulator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tinkerpop.gremlin.WithSackArgs",
@@ -2488,4 +2630,5 @@
                   {"name": "initialValue", "type": {"variable": "hydra.tinkerpop.gremlin.GenericLiteralArgument"}},
                   {"name": "biFunction", "type": {"optional": {"variable": "hydra.tinkerpop.gremlin.TraversalBiFunctionArgument"}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin withSack() step"}}}]}}}}}}]}
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments of a Gremlin withSack() step"}}}]}}},
+          "constraints": []}}}]}

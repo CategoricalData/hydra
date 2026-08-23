@@ -10467,32 +10467,27 @@
                                                                       "inject": {
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
-                                                                          "name": "optional",
+                                                                          "name": "map",
                                                                           "term": {
-                                                                            "inject": {
-                                                                              "typeName": "hydra.core.Type",
-                                                                              "field": {
-                                                                                "name": "map",
-                                                                                "term": {
-                                                                                  "record": {
-                                                                                    "typeName": "hydra.core.MapType",
-                                                                                    "fields": [
-                                                                                      {
-                                                                                        "name": "keys",
-                                                                                        "term": {
-                                                                                          "inject": {
-                                                                                            "typeName": "hydra.core.Type",
-                                                                                            "field": {
-                                                                                              "name": "variable",
-                                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.core.Name"}}}}}}}},
-                                                                                      {
-                                                                                        "name": "values",
-                                                                                        "term": {
-                                                                                          "inject": {
-                                                                                            "typeName": "hydra.core.Type",
-                                                                                            "field": {
-                                                                                              "name": "variable",
-                                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.core.TypeVariableConstraints"}}}}}}}}]}}}}}}}}},
+                                                                            "record": {
+                                                                              "typeName": "hydra.core.MapType",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "keys",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "typeName": "hydra.core.Type",
+                                                                                      "field": {
+                                                                                        "name": "variable",
+                                                                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.core.Name"}}}}}}}},
+                                                                                {
+                                                                                  "name": "values",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "typeName": "hydra.core.Type",
+                                                                                      "field": {
+                                                                                        "name": "variable",
+                                                                                        "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.core.TypeVariableConstraints"}}}}}}}}]}}}}}},
                                                                   {
                                                                     "name": "annotation",
                                                                     "term": {
@@ -10519,7 +10514,7 @@
                                                                                             "name": "string",
                                                                                             "term": {
                                                                                               "literal": {
-                                                                                                "string": "Optional constraints on type variables, including typeclass constraints. The map keys are type variable names."}}}}}}}}}]}}}}}]}}}}}}]}}]}}}}},
+                                                                                                "string": "Constraints on type variables, including typeclass constraints. The map keys are type variable names; an empty map means no constraints."}}}}}}}}}]}}}}}]}}}}}}]}}]}}}}},
                                   {
                                     "name": "annotation",
                                     "term": {
@@ -10590,7 +10585,7 @@
                                                                       "inject": {
                                                                         "typeName": "hydra.core.Type",
                                                                         "field": {
-                                                                          "name": "list",
+                                                                          "name": "set",
                                                                           "term": {
                                                                             "inject": {
                                                                               "typeName": "hydra.core.Type",

@@ -21,7 +21,8 @@
                       "annotated": {
                         "body": {"list": {"variable": "hydra.rust.syntax.GenericArg"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The generic arguments"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Angle-bracketed generic arguments"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Angle-bracketed generic arguments"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.ArrayExpr",
@@ -43,7 +44,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.ArrayRepeat"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An array repeat expression"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An array expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An array expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.ArrayRepeat",
@@ -66,7 +68,8 @@
                         "body": {"variable": "hydra.rust.syntax.Expression"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The length expression"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An array repeat expression (e.g., [0; 10])"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An array repeat expression (e.g., [0; 10])"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.ArrayType",
@@ -91,7 +94,8 @@
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The array length (as a constant expression)"}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An array type with a fixed size (e.g., [T; 3])"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "An array type with a fixed size (e.g., [T; 3])"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.AssignExpr",
@@ -113,7 +117,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Expression"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand side (value)"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An assignment expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An assignment expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.Attribute",
@@ -151,7 +156,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An attribute (e.g., #[derive(Clone)], #[cfg(test)])"}}}]}}}}}},
+                    "value": {"literal": {"string": "An attribute (e.g., #[derive(Clone)], #[cfg(test)])"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.BinaryExpr",
@@ -179,7 +185,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Expression"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand operand"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A binary operation"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A binary operation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.BinaryOp",
@@ -207,7 +214,8 @@
                   {"name": "le", "type": "unit"},
                   {"name": "gt", "type": "unit"},
                   {"name": "ge", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A binary operator"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A binary operator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.Block",
@@ -229,7 +237,8 @@
                       "annotated": {
                         "body": {"optional": {"variable": "hydra.rust.syntax.Expression"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional trailing expression"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A block expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A block expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.CallExpr",
@@ -251,7 +260,8 @@
                       "annotated": {
                         "body": {"list": {"variable": "hydra.rust.syntax.Expression"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function call expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function call expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.CastExpr",
@@ -273,7 +283,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Type"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The target type"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type cast expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type cast expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.ClosureExpr",
@@ -308,7 +319,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Expression"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The closure body"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A closure expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A closure expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.ClosureParam",
@@ -330,7 +342,8 @@
                       "annotated": {
                         "body": {"optional": {"variable": "hydra.rust.syntax.Type"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional type annotation"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A closure parameter"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A closure parameter"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.CompoundAssignExpr",
@@ -358,7 +371,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Expression"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand side (value)"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A compound assignment expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A compound assignment expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.CompoundAssignOp",
@@ -378,7 +392,8 @@
                   {"name": "bitXorAssign", "type": "unit"},
                   {"name": "shlAssign", "type": "unit"},
                   {"name": "shrAssign", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A compound assignment operator"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A compound assignment operator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.ConstDef",
@@ -419,7 +434,8 @@
                         "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constant item (e.g., const FOO: u32 = 42;)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constant item (e.g., const FOO: u32 = 42;)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.Crate",
@@ -439,7 +455,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Rust crate, represented as a collection of top-level items"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Rust crate, represented as a collection of top-level items"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.EnumDef",
@@ -495,7 +512,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An enum definition (e.g., enum Foo<T> { Bar(T), Baz { x: i32 } })"}}}]}}}}}},
+                    "value": {"literal": {"string": "An enum definition (e.g., enum Foo<T> { Bar(T), Baz { x: i32 } })"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.EnumVariant",
@@ -524,7 +542,8 @@
                         "body": {"optional": {"literal": "string"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment for the variant"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A variant of an enum definition"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A variant of an enum definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.EnumVariantBody",
@@ -554,7 +573,8 @@
                         "body": {"list": {"variable": "hydra.rust.syntax.StructField"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A struct variant (e.g., Foo { x: i32 })"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The body of an enum variant"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The body of an enum variant"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.ExprPath",
@@ -576,7 +596,8 @@
                       "annotated": {
                         "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The path segments"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A path used as an expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A path used as an expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.Expression",
@@ -785,7 +806,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Expression"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A parenthesized expression"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Rust expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Rust expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.FieldAccessExpr",
@@ -807,7 +829,8 @@
                       "annotated": {
                         "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The field name"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A field access expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A field access expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.FieldPattern",
@@ -831,7 +854,8 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The field pattern (None for shorthand)"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A field pattern within a struct pattern"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A field pattern within a struct pattern"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.FieldValue",
@@ -855,7 +879,8 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The field value (None for shorthand syntax)"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A field-value pair in a struct literal"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A field-value pair in a struct literal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.FloatLiteral",
@@ -879,7 +904,8 @@
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional type suffix"}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A floating-point literal with optional suffix"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A floating-point literal with optional suffix"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.FnDef",
@@ -959,7 +985,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A function definition (e.g., fn foo<T>(x: T) -> String { ... })"}}}]}}}}}},
+                    "value": {"literal": {"string": "A function definition (e.g., fn foo<T>(x: T) -> String { ... })"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.FnParam",
@@ -981,7 +1008,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Type"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The parameter type"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function parameter"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A function parameter"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.FnPointerType",
@@ -1007,7 +1035,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A function pointer type (e.g., fn(i32, i32) -> i32)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A function pointer type (e.g., fn(i32, i32) -> i32)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.ForExpr",
@@ -1041,7 +1070,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Block"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The loop body"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A for expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A for expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.GenericArg",
@@ -1075,7 +1105,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.TypeBinding"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An associated type binding"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single generic argument"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single generic argument"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.GenericArguments",
@@ -1104,7 +1135,8 @@
                         "body": {"variable": "hydra.rust.syntax.ParenthesizedArgs"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parenthesized arguments for Fn traits"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generic arguments to a path segment"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generic arguments to a path segment"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.GenericParam",
@@ -1130,7 +1162,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A generic type parameter (e.g., T: Clone + Debug)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A generic type parameter (e.g., T: Clone + Debug)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.IdentifierPattern",
@@ -1159,7 +1192,8 @@
                         "body": {"optional": {"variable": "hydra.rust.syntax.Pattern"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional sub-pattern (e.g., x @ Some(_))"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An identifier pattern"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An identifier pattern"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.IfCondition",
@@ -1181,7 +1215,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.LetCondition"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A let condition"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The condition of an if expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The condition of an if expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.IfExpr",
@@ -1210,7 +1245,8 @@
                         "body": {"optional": {"variable": "hydra.rust.syntax.Expression"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional else branch"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An if expression, optionally with if let"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An if expression, optionally with if let"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.ImplBlock",
@@ -1260,7 +1296,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An impl block (e.g., impl<T> Trait for Foo<T> { ... })"}}}]}}}}}},
+                    "value": {"literal": {"string": "An impl block (e.g., impl<T> Trait for Foo<T> { ... })"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.ImplItem",
@@ -1288,7 +1325,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.ConstDef"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An associated constant"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An item within an impl block"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An item within an impl block"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.ImplMethod",
@@ -1357,7 +1395,8 @@
                       "annotated": {
                         "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A method within an impl block"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A method within an impl block"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.IndexExpr",
@@ -1379,7 +1418,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Expression"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The index expression"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An index expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An index expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.IntegerLiteral",
@@ -1402,7 +1442,8 @@
                         "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional type suffix"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An integer literal with optional suffix"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An integer literal with optional suffix"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.Item",
@@ -1479,7 +1520,8 @@
                         "body": {"variable": "hydra.rust.syntax.MacroInvocation"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A macro invocation as an item"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A top-level item in a Rust module or crate"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A top-level item in a Rust module or crate"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.ItemWithComments",
@@ -1511,7 +1553,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An item together with optional doc comments and visibility"}}}]}}}}}},
+                    "value": {"literal": {"string": "An item together with optional doc comments and visibility"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.LetCondition",
@@ -1534,7 +1577,8 @@
                         "body": {"variable": "hydra.rust.syntax.Expression"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The expression being matched"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A let condition (e.g., let Some(x) = opt)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A let condition (e.g., let Some(x) = opt)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.LetStatement",
@@ -1568,7 +1612,8 @@
                       "annotated": {
                         "body": {"optional": {"variable": "hydra.rust.syntax.Expression"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional initializer expression"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A let statement"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A let statement"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.Lifetime",
@@ -1586,7 +1631,8 @@
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "The lifetime name (without the leading quote)"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A lifetime (e.g., 'a, 'static)"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A lifetime (e.g., 'a, 'static)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.Literal",
@@ -1644,7 +1690,8 @@
                       "annotated": {
                         "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean literal"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A literal value"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A literal value"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.LoopExpr",
@@ -1666,7 +1713,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Block"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The loop body"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A loop expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A loop expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.MacroDelimiter",
@@ -1676,7 +1724,8 @@
             "annotated": {
               "body": {"union": [{"name": "paren", "type": "unit"}, {"name": "bracket", "type": "unit"}, {"name": "brace", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The delimiter style for a macro invocation"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The delimiter style for a macro invocation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.MacroInvocation",
@@ -1704,7 +1753,8 @@
                       "annotated": {
                         "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The token stream as a raw string"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A macro invocation"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A macro invocation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.MatchArm",
@@ -1732,7 +1782,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Expression"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The body expression"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single arm in a match expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single arm in a match expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.MatchExpr",
@@ -1754,7 +1805,8 @@
                       "annotated": {
                         "body": {"list": {"variable": "hydra.rust.syntax.MatchArm"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The match arms"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A match expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A match expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.MethodCallExpr",
@@ -1790,7 +1842,8 @@
                         "body": {"list": {"variable": "hydra.rust.syntax.Expression"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The arguments (excluding the receiver)"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A method call expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A method call expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.MethodParam",
@@ -1816,7 +1869,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A method parameter, which may be self or a regular parameter"}}}]}}}}}},
+                    "value": {"literal": {"string": "A method parameter, which may be self or a regular parameter"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.ModDef",
@@ -1855,7 +1909,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A module definition (either inline or external)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A module definition (either inline or external)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.ParenthesizedArgs",
@@ -1879,7 +1934,8 @@
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The output type"}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Parenthesized generic arguments for Fn traits"}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Parenthesized generic arguments for Fn traits"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.PathSegment",
@@ -1901,7 +1957,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.GenericArguments"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generic arguments, if any"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A segment within a type path"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A segment within a type path"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.Pattern",
@@ -1993,7 +2050,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A Rust pattern (used in let, match, function parameters, etc.)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A Rust pattern (used in let, match, function parameters, etc.)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.RangeExpr",
@@ -2021,7 +2079,8 @@
                       "annotated": {
                         "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the range is inclusive"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A range expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A range expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.RangePattern",
@@ -2049,7 +2108,8 @@
                       "annotated": {
                         "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the range is inclusive"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A range pattern"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A range pattern"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.RawPointerType",
@@ -2076,7 +2136,8 @@
                         "body": {"variable": "hydra.rust.syntax.Type"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The pointed-to type"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A raw pointer type (e.g., *const T, *mut T)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A raw pointer type (e.g., *const T, *mut T)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.RefExpr",
@@ -2098,7 +2159,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Expression"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The expression being referenced"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.RefPattern",
@@ -2120,7 +2182,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Pattern"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The inner pattern"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference pattern"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference pattern"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.ReferenceType",
@@ -2149,7 +2212,8 @@
                         "body": {"variable": "hydra.rust.syntax.Type"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The referenced type"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference type (e.g., &T, &mut T, &'a T)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference type (e.g., &T, &mut T, &'a T)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.SelfParam",
@@ -2158,7 +2222,8 @@
           "body": {
             "annotated": {
               "body": {"union": [{"name": "owned", "type": "unit"}, {"name": "ref", "type": "unit"}, {"name": "refMut", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A self parameter in a method"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A self parameter in a method"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.Statement",
@@ -2192,7 +2257,8 @@
                       "annotated": {
                         "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An empty statement"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A statement within a block"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A statement within a block"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.StaticDef",
@@ -2239,7 +2305,8 @@
                         "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A static item (e.g., static FOO: u32 = 42;)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A static item (e.g., static FOO: u32 = 42;)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.StructBody",
@@ -2267,7 +2334,8 @@
                       "annotated": {
                         "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unit struct"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The body of a struct definition"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The body of a struct definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.StructDef",
@@ -2327,7 +2395,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A struct definition (e.g., struct Foo<T> { bar: T })"}}}]}}}}}},
+                    "value": {"literal": {"string": "A struct definition (e.g., struct Foo<T> { bar: T })"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.StructExpr",
@@ -2359,7 +2428,8 @@
                             {
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Optional base expression for struct update syntax"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A struct literal expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A struct literal expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.StructField",
@@ -2394,7 +2464,8 @@
                         "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment for the field"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A named field within a struct definition"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A named field within a struct definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.StructPattern",
@@ -2424,7 +2495,8 @@
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the pattern has a rest (..) at the end"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A struct pattern"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A struct pattern"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.TraitConst",
@@ -2459,7 +2531,8 @@
                         "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An associated constant within a trait"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An associated constant within a trait"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.TraitDef",
@@ -2521,7 +2594,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A trait definition (e.g., trait Foo<T>: Bar + Baz { ... })"}}}]}}}}}},
+                    "value": {"literal": {"string": "A trait definition (e.g., trait Foo<T>: Bar + Baz { ... })"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.TraitItem",
@@ -2550,7 +2624,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.TraitConst"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An associated constant"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An item within a trait definition"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An item within a trait definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.TraitMethod",
@@ -2607,7 +2682,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A method signature or default method within a trait"}}}]}}}}}},
+                    "value": {"literal": {"string": "A method signature or default method within a trait"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.TraitType",
@@ -2641,7 +2717,8 @@
                       "annotated": {
                         "body": {"optional": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Optional doc comment"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An associated type within a trait"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An associated type within a trait"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.TupleField",
@@ -2664,7 +2741,8 @@
                         "body": {"literal": "boolean"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the field is public"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A positional field within a tuple struct"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A positional field within a tuple struct"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.TupleIndexExpr",
@@ -2686,7 +2764,8 @@
                       "annotated": {
                         "body": {"literal": {"integer": "int32"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The index (0-based)"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A tuple index expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A tuple index expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.TupleStructPattern",
@@ -2709,7 +2788,8 @@
                       "annotated": {
                         "body": {"list": {"variable": "hydra.rust.syntax.Pattern"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The element patterns"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A tuple struct pattern"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A tuple struct pattern"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.Type",
@@ -2798,7 +2878,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.MacroInvocation"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A macro invocation in type position"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Rust type expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A Rust type expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.TypeAlias",
@@ -2842,7 +2923,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A type alias definition (e.g., type Foo<T> = Bar<T>;)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A type alias definition (e.g., type Foo<T> = Bar<T>;)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.TypeAscriptionExpr",
@@ -2864,7 +2946,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Type"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The ascribed type"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type ascription expression"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type ascription expression"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.TypeBinding",
@@ -2890,7 +2973,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An associated type binding within generic arguments"}}}]}}}}}},
+                    "value": {"literal": {"string": "An associated type binding within generic arguments"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.TypeParamBound",
@@ -2912,7 +2996,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Lifetime"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A lifetime bound"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A bound on a type parameter"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A bound on a type parameter"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.TypePath",
@@ -2940,7 +3025,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A path-based type, possibly with generic arguments"}}}]}}}}}},
+                    "value": {"literal": {"string": "A path-based type, possibly with generic arguments"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.UnaryExpr",
@@ -2962,7 +3048,8 @@
                       "annotated": {
                         "body": {"variable": "hydra.rust.syntax.Expression"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The operand"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unary operation"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unary operation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.UnaryOp",
@@ -2971,7 +3058,8 @@
           "body": {
             "annotated": {
               "body": {"union": [{"name": "neg", "type": "unit"}, {"name": "not", "type": "unit"}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unary operator"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A unary operator"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.UseDeclaration",
@@ -2998,7 +3086,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A use declaration (e.g., use std::collections::BTreeMap;)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A use declaration (e.g., use std::collections::BTreeMap;)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.UseGroup",
@@ -3025,7 +3114,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A grouped import (e.g., std::collections::{BTreeMap, BTreeSet})"}}}]}}}}}},
+                    "value": {"literal": {"string": "A grouped import (e.g., std::collections::{BTreeMap, BTreeSet})"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.UsePath",
@@ -3042,7 +3132,8 @@
                         "body": {"list": {"literal": "string"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The path segments"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A simple path import within a use tree"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A simple path import within a use tree"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.UseRename",
@@ -3065,7 +3156,8 @@
                         "body": {"literal": "string"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The alias name"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A renamed import (e.g., BTreeMap as Map)"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A renamed import (e.g., BTreeMap as Map)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.UseTree",
@@ -3107,7 +3199,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A use tree, representing the structure of a use path"}}}]}}}}}},
+                    "value": {"literal": {"string": "A use tree, representing the structure of a use path"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.Visibility",
@@ -3142,7 +3235,8 @@
                       "annotated": {
                         "body": "unit",
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Private (default)"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A visibility qualifier"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A visibility qualifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.WhereClause",
@@ -3162,7 +3256,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A where clause (e.g., where T: Clone, U: Debug)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A where clause (e.g., where T: Clone, U: Debug)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.WherePredicate",
@@ -3185,7 +3280,8 @@
                         "body": {"list": {"variable": "hydra.rust.syntax.TypeParamBound"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The bounds on the type"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single predicate in a where clause"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single predicate in a where clause"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.rust.syntax.WhileExpr",
@@ -3215,4 +3311,5 @@
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The loop body"}}}]}}}}]},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A while expression, optionally with while let"}}}]}}}}}}]}
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A while expression, optionally with while let"}}}]}}},
+          "constraints": []}}}]}

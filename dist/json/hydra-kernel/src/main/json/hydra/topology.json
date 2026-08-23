@@ -16,7 +16,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A directed graph represented as an adjacency list mapping vertices to their outgoing neighbors"}}}]}}}}}},
+                      "literal": {"string": "A directed graph represented as an adjacency list mapping vertices to their outgoing neighbors"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.topology.OrderingIsomorphism",
@@ -53,7 +54,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A pair of inverse permutations on lists, used to relate two orderings of the same elements"}}}]}}}}}},
+                    "value": {"literal": {"string": "A pair of inverse permutations on lists, used to relate two orderings of the same elements"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.topology.TarjanState",
@@ -128,7 +130,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "State carried by Tarjan's strongly connected components algorithm during a depth-first traversal"}}}]}}}}}},
+                      "literal": {"string": "State carried by Tarjan's strongly connected components algorithm during a depth-first traversal"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.topology.Vertex",
@@ -141,4 +144,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A graph vertex, represented as a 32-bit integer identifier"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A graph vertex, represented as a 32-bit integer identifier"}}}]}}},
+          "constraints": []}}}]}

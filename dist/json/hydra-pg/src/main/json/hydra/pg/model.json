@@ -50,7 +50,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An edge which is adjacent to a given vertex. Only the other endpoint of the edge is provided."}}}]}}}}}},
+                    "value": {"literal": {"string": "An edge which is adjacent to a given vertex. Only the other endpoint of the edge is provided."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.Direction",
@@ -65,7 +66,8 @@
                   {"name": "both", "type": "unit"},
                   {"name": "undirected", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The direction of an edge or edge pattern"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The direction of an edge or edge pattern"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.Edge",
@@ -110,7 +112,8 @@
                           "annotated": {
                             "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of edge properties"}}}]}}}}]}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An edge"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An edge"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.EdgeLabel",
@@ -119,7 +122,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of an edge"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The label of an edge"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.EdgeType",
@@ -181,7 +185,8 @@
                                   "value": {
                                     "literal": {
                                       "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}]}}}}]}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of an edge"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of an edge"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.Element",
@@ -200,7 +205,8 @@
                       {
                         "name": "edge",
                         "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "v"}}}}]}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Either a vertex or an edge"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Either a vertex or an edge"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.ElementKind",
@@ -210,7 +216,8 @@
             "annotated": {
               "body": {"union": [{"name": "vertex", "type": "unit"}, {"name": "edge", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The kind of an element: vertex or edge"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The kind of an element: vertex or edge"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.ElementTree",
@@ -233,7 +240,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An element together with its dependencies in some context"}}}]}}}}}},
+                    "value": {"literal": {"string": "An element together with its dependencies in some context"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.ElementType",
@@ -252,7 +260,8 @@
                       {
                         "name": "edge",
                         "type": {"application": {"function": {"variable": "hydra.pg.model.EdgeType"}, "argument": {"variable": "t"}}}}]}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a vertex or edge"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a vertex or edge"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.ElementTypeTree",
@@ -275,7 +284,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An element type together with its dependencies in some context"}}}]}}}}}},
+                    "value": {"literal": {"string": "An element type together with its dependencies in some context"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.Graph",
@@ -304,7 +314,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A graph; a self-contained collection of vertices and edges"}}}]}}}}}},
+                    "value": {"literal": {"string": "A graph; a self-contained collection of vertices and edges"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.GraphSchema",
@@ -348,7 +359,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A graph schema; a vertex and edge types for the vertices and edges of a graph conforming to the schema"}}}]}}}}}},
+                      "literal": {"string": "A graph schema; a vertex and edge types for the vertices and edges of a graph conforming to the schema"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.Label",
@@ -360,7 +372,8 @@
                 "union": [
                   {"name": "vertex", "type": {"variable": "hydra.pg.model.VertexLabel"}},
                   {"name": "edge", "type": {"variable": "hydra.pg.model.EdgeLabel"}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Either a vertex or edge label"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Either a vertex or edge label"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.LazyGraph",
@@ -385,7 +398,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A graph which does not assume that vertex or edge ids are unique. This is useful in mappings because the id specifications for vertices and/or edges may be non-unique."}}}]}}}}}},
+                        "string": "A graph which does not assume that vertex or edge ids are unique. This is useful in mappings because the id specifications for vertices and/or edges may be non-unique."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.Property",
@@ -410,7 +424,8 @@
                           "annotated": {
                             "body": {"variable": "v"},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value of the property"}}}]}}}}]}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value property"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.PropertyKey",
@@ -419,7 +434,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property key"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A property key"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.PropertyType",
@@ -454,7 +470,8 @@
                                 {
                                   "key": {"variable": "description"},
                                   "value": {"literal": {"string": "Whether the property is required; values may be omitted from a property map otherwise"}}}]}}}}]}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a property"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a property"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.Vertex",
@@ -486,7 +503,8 @@
                             "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "v"}}},
                             "annotation": {
                               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A key/value map of vertex properties"}}}]}}}}]}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A vertex"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A vertex"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.VertexLabel",
@@ -499,7 +517,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The label of a vertex. The default (null) vertex is represented by the empty string"}}}]}}}}}},
+                    "value": {"literal": {"string": "The label of a vertex. The default (null) vertex is represented by the empty string"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.VertexType",
@@ -541,7 +560,8 @@
                                   "value": {
                                     "literal": {
                                       "string": "A list of property types. The types are ordered for the sake of applications in which property order is significant."}}}]}}}}]}}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a vertex"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type of a vertex"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.pg.model.VertexWithAdjacentEdges",
@@ -584,4 +604,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A vertex together with any outgoing and/or incoming edges; a vertex object"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A vertex together with any outgoing and/or incoming edges; a vertex object"}}}]}}},
+          "constraints": []}}}]}

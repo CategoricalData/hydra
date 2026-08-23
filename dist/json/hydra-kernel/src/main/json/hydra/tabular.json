@@ -18,7 +18,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A column type, consisting of a name and a value type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A column type, consisting of a name and a value type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tabular.DataRow",
@@ -31,7 +32,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A data row, containing optional-valued cells; one per column"}}}]}}}}}},
+                    "value": {"literal": {"string": "A data row, containing optional-valued cells; one per column"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tabular.HeaderRow",
@@ -44,7 +46,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A header row, containing column names (but no types or data)"}}}]}}}}}},
+                    "value": {"literal": {"string": "A header row, containing column names (but no types or data)"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tabular.Table",
@@ -83,7 +86,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A simple table as in a CSV file, having an optional header row and any number of data rows"}}}]}}}}}},
+                    "value": {"literal": {"string": "A simple table as in a CSV file, having an optional header row and any number of data rows"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.tabular.TableType",
@@ -99,4 +103,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A type definition for a table, including column names and types"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A type definition for a table, including column names and types"}}}]}}},
+          "constraints": []}}}]}

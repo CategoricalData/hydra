@@ -57,4 +57,5 @@
                         "body": {"variable": "hydra.file.FilePath"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The host denied access to the requested path"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A recoverable file-system error"}}}]}}}}}}]}
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A recoverable file-system error"}}}]}}},
+          "constraints": []}}}]}

@@ -34,7 +34,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A definition, which may be either a term, type, or primitive definition"}}}]}}}}}},
+                    "value": {"literal": {"string": "A definition, which may be either a term, type, or primitive definition"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.DefinitionReference",
@@ -70,7 +71,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A typed reference to a definition: a type, a term, or a primitive, identified by name"}}}]}}}}}},
+                    "value": {"literal": {"string": "A typed reference to a definition: a type, a term, or a primitive, identified by name"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.DependencyScope",
@@ -130,7 +132,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "The scope in which a package dependency is required. Relevant mainly to dependencies on third-party (non-Hydra) artifacts, where build systems distinguish compile-time, runtime, test-only, and build-tool-only dependencies. Hydra inter-package dependencies normally leave the scope unspecified."}}}]}}}}}},
+                        "string": "The scope in which a package dependency is required. Relevant mainly to dependencies on third-party (non-Hydra) artifacts, where build systems distinguish compile-time, runtime, test-only, and build-tool-only dependencies. Hydra inter-package dependencies normally leave the scope unspecified."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.EntityMetadata",
@@ -188,7 +191,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Documentation and lifecycle metadata attachable to a packaging entity (package, module, or definition). Bundling these fields in one type lets future metadata be added without changing the field shape of the entities that carry it."}}}]}}}}}},
+                        "string": "Documentation and lifecycle metadata attachable to a packaging entity (package, module, or definition). Bundling these fields in one type lets future metadata be added without changing the field shape of the entities that carry it."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.EntityReference",
@@ -246,7 +250,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A typed reference to a Hydra entity: a package, a module, a definition (by name), or an inline type or term expression in Hydra textual syntax."}}}]}}}}}},
+                        "string": "A typed reference to a Hydra entity: a package, a module, a definition (by name), or an inline type or term expression in Hydra textual syntax."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.LifecycleInfo",
@@ -282,7 +287,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Version-lifecycle milestones for a packaging entity. Each milestone is independently optional; further milestones (e.g. stableSince, removedSince) may be added without changing dependent types."}}}]}}}}}},
+                        "string": "Version-lifecycle milestones for a packaging entity. Each milestone is independently optional; further milestones (e.g. stableSince, removedSince) may be added without changing dependent types."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.Module",
@@ -334,7 +340,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A logical collection of elements sharing a common module name, having dependencies on zero or more other modules"}}}]}}}}}},
+                        "string": "A logical collection of elements sharing a common module name, having dependencies on zero or more other modules"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.ModuleDependency",
@@ -366,7 +373,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A dependency on another module, identified by its name and (optionally) the package which provides it. When the package is omitted, the resolver searches all packages in scope; a duplicate module name across packages is a resolution error which can be disambiguated by naming the intended package explicitly."}}}]}}}}}},
+                        "string": "A dependency on another module, identified by its name and (optionally) the package which provides it. When the package is omitted, the resolver searches all packages in scope; a duplicate module name across packages is a resolution error which can be disambiguated by naming the intended package explicitly."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.ModuleName",
@@ -379,7 +387,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "The unique name of a module; a prefix for the names of elements defined in the module."}}}]}}}}}},
+                    "value": {"literal": {"string": "The unique name of a module; a prefix for the names of elements defined in the module."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.Package",
@@ -422,7 +431,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A package, which is a named collection of modules with metadata and dependencies"}}}]}}}}}},
+                    "value": {"literal": {"string": "A package, which is a named collection of modules with metadata and dependencies"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.PackageDependency",
@@ -465,7 +475,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A dependency on another package, identified by name and constrained by an optional version specifier"}}}]}}}}}},
+                      "literal": {"string": "A dependency on another package, identified by name and constrained by an optional version specifier"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.PackageName",
@@ -480,7 +491,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\". For dependencies on third-party artifacts in ecosystems with a group/namespace component (notably Maven), the group and artifact are carried in a single name separated by a colon, e.g. \"org.eclipse.rdf4j:rdf4j-rio-ntriples\"; the consuming host splits on the colon to recover the group when emitting build configuration. Hydra package names contain no colon."}}}]}}}}}},
+                        "string": "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\". For dependencies on third-party artifacts in ecosystems with a group/namespace component (notably Maven), the group and artifact are carried in a single name separated by a colon, e.g. \"org.eclipse.rdf4j:rdf4j-rio-ntriples\"; the consuming host splits on the colon to recover the group when emitting build configuration. Hydra package names contain no colon."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.PrimitiveDefinition",
@@ -556,7 +568,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, documentation and lifecycle metadata, totality and purity flags, and an optional default implementation expressed as a Hydra term."}}}]}}}}}},
+                        "string": "A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, documentation and lifecycle metadata, totality and purity flags, and an optional default implementation expressed as a Hydra term."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.TermDefinition",
@@ -602,7 +615,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A term-level definition, including a name, an optional signature, and a term"}}}]}}}}}},
+                    "value": {"literal": {"string": "A term-level definition, including a name, an optional signature, and a term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.TypeDefinition",
@@ -638,7 +652,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A type-level definition, including a name and the type scheme"}}}]}}}}}},
+                    "value": {"literal": {"string": "A type-level definition, including a name and the type scheme"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.Version",
@@ -649,7 +664,8 @@
               "body": {"wrap": {"literal": "string"}},
               "annotation": {
                 "map": [
-                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A version string, e.g. \"0.15\" or \"1.0.0\"."}}}]}}}}}},
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A version string, e.g. \"0.15\" or \"1.0.0\"."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.VersionRange",
@@ -683,7 +699,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A version range with an optional inclusive lower bound and an optional exclusive upper bound."}}}]}}}}}},
+                    "value": {"literal": {"string": "A version range with an optional inclusive lower bound and an optional exclusive upper bound."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.packaging.VersionSpecifier",
@@ -738,4 +755,5 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A specifier constraining acceptable versions of a dependency. Build systems render each variant into their own syntax (e.g. a range becomes \">=3.7,<4.0\" for PyPI or \"[3.7,4.0)\" for Maven). Further variants such as `caret` may be added without breaking consumers of the existing forms."}}}]}}}}}}]}
+                        "string": "A specifier constraining acceptable versions of a dependency. Build systems render each variant into their own syntax (e.g. a range becomes \">=3.7,<4.0\" for PyPI or \"[3.7,4.0)\" for Maven). Further variants such as `caret` may be added without breaking consumers of the existing forms."}}}]}}},
+          "constraints": []}}}]}

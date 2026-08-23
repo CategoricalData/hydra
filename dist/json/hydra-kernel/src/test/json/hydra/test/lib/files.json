@@ -1057,7 +1057,7 @@
                                                                                               "domain": {"list": {"variable": "hydra.file.FilePath"}},
                                                                                               "body": {
                                                                                                 "application": {
-                                                                                                  "function": {"variable": "hydra.lib.literals.showInt32"},
+                                                                                                  "function": {"variable": "hydra.lib.literals.printInt32"},
                                                                                                   "argument": {
                                                                                                     "application": {
                                                                                                       "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.file.FilePath"}}},
@@ -1896,7 +1896,7 @@
                                                                                               "domain": {"variable": "hydra.file.FileStatus"},
                                                                                               "body": {
                                                                                                 "application": {
-                                                                                                  "function": {"variable": "hydra.lib.literals.showInt64"},
+                                                                                                  "function": {"variable": "hydra.lib.literals.printInt64"},
                                                                                                   "argument": {
                                                                                                     "application": {"function": {"project": {"typeName": "hydra.file.FileStatus", "fieldName": "size"}}, "argument": {"variable": "s"}}}}}}}}},
                                                                                       "argument": {"variable": "r"}}}}}}},

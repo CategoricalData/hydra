@@ -252,6 +252,22 @@
                     "argument": {"application": {"function": {"variable": "hydra.lib.sets.toList"}, "argument": {"variable": "s1"}}}}}}}}}}},
     {
       "primitive": {
+        "name": "hydra.lib.sets.isEmpty",
+        "metadata": {
+          "description": "Test whether a set is empty.",
+          "comments": [
+            "isEmpty(s) returns true iff s has no elements.",
+            "Requires an 'ordering' constraint on the element type.",
+            "Total. Corresponds to Haskell's Data.Set.null :: Set a -> Bool."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [{"name": "s", "description": "the set to test for emptiness", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.sets.map",
         "metadata": {
           "description": "Map a function over a set.",
@@ -300,22 +316,6 @@
           "parameters": [
             {"name": "x", "description": "the element to test for membership", "type": {"variable": "x"}, "isLazy": false},
             {"name": "s", "description": "the set to test against", "type": {"set": {"variable": "x"}}, "isLazy": false}],
-          "result": {"type": {"literal": "boolean"}}},
-        "isPure": true,
-        "isTotal": true}},
-    {
-      "primitive": {
-        "name": "hydra.lib.sets.null",
-        "metadata": {
-          "description": "Test whether a set is empty.",
-          "comments": [
-            "null(s) returns true iff s has no elements.",
-            "Requires an 'ordering' constraint on the element type.",
-            "Total. Corresponds to Haskell's Data.Set.null :: Set a -> Bool."],
-          "seeAlso": []},
-        "signature": {
-          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
-          "parameters": [{"name": "s", "description": "the set to test for emptiness", "type": {"set": {"variable": "x"}}, "isLazy": false}],
           "result": {"type": {"literal": "boolean"}}},
         "isPure": true,
         "isTotal": true}},

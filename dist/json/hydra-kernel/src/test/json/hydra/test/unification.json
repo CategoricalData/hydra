@@ -1698,8 +1698,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -1951,8 +1951,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -2194,8 +2194,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -2433,8 +2433,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -2690,8 +2690,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -2947,8 +2947,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -3190,8 +3190,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -3457,8 +3457,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -3710,8 +3710,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -4011,8 +4011,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -4302,8 +4302,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -4569,8 +4569,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -4870,8 +4870,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -5171,8 +5171,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -5472,8 +5472,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -5739,8 +5739,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -5972,8 +5972,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -6150,8 +6150,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -6362,8 +6362,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}}},
@@ -6536,8 +6536,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"list": [{"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "Foo"}}}}]}}}}}}},
@@ -6775,8 +6775,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"list": [{"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "Foo"}}}}]}}}}}}},
@@ -7018,8 +7018,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"list": [{"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "Foo"}}}}]}}}}}}},
@@ -7264,8 +7264,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"list": [{"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "Foo"}}}}]}}}}}}},
@@ -7443,8 +7443,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"list": [{"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "Foo"}}}}]}}}}}}},
@@ -7619,8 +7619,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"list": [{"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "Foo"}}}}]}}}}}}},
@@ -7876,8 +7876,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {"list": [{"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "Foo"}}}}]}}}}}}},
@@ -8125,8 +8125,8 @@
                                                                                                                       "name": "constraints",
                                                                                                                       "term": {
                                                                                                                         "typeApplication": {
-                                                                                                                          "body": {"optional": null},
-                                                                                                                          "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableConstraints"}}}}}}]}}}},
+                                                                                                                          "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                          "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}},
                                                                                                           "type": {"variable": "hydra.core.Name"}}},
                                                                                                       "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                                                           "argument": {

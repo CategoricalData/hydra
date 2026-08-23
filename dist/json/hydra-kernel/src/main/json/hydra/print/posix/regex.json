@@ -80,11 +80,11 @@
                   "list": [
                     {"literal": {"string": "["}},
                     {
-                      "application": {"function": {"variable": "hydra.print.posix.regex.showCodePoint"}, "argument": {"literal": {"integer": {"int32": 0}}}}},
+                      "application": {"function": {"variable": "hydra.print.posix.regex.printCodePoint"}, "argument": {"literal": {"integer": {"int32": 0}}}}},
                     {"literal": {"string": "-"}},
                     {
                       "application": {
-                        "function": {"variable": "hydra.print.posix.regex.showCodePoint"},
+                        "function": {"variable": "hydra.print.posix.regex.printCodePoint"},
                         "argument": {"literal": {"integer": {"int32": 1114111}}}}},
                     {"literal": {"string": "]"}}]}}},
             "annotation": {
@@ -317,7 +317,7 @@
                                 {"literal": {"integer": {"int32": 93}}},
                                 {"literal": {"integer": {"int32": 94}}},
                                 {"literal": {"integer": {"int32": 45}}}]}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -329,8 +329,8 @@
                             "argument": {
                               "application": {
                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "\\"}}}},
-                                "argument": {"application": {"function": {"variable": "hydra.print.posix.regex.showCodePoint"}, "argument": {"variable": "c"}}}}}}},
-                        "argument": {"application": {"function": {"variable": "hydra.print.posix.regex.showCodePoint"}, "argument": {"variable": "c"}}}}}}}}},
+                                "argument": {"application": {"function": {"variable": "hydra.print.posix.regex.printCodePoint"}, "argument": {"variable": "c"}}}}}}},
+                        "argument": {"application": {"function": {"variable": "hydra.print.posix.regex.printCodePoint"}, "argument": {"variable": "c"}}}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -400,7 +400,7 @@
                                 {"literal": {"integer": {"int32": 125}}},
                                 {"literal": {"integer": {"int32": 124}}},
                                 {"literal": {"integer": {"int32": 92}}}]}}},
-                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}}}],
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
@@ -412,14 +412,33 @@
                             "argument": {
                               "application": {
                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "\\"}}}},
-                                "argument": {"application": {"function": {"variable": "hydra.print.posix.regex.showCodePoint"}, "argument": {"variable": "c"}}}}}}},
-                        "argument": {"application": {"function": {"variable": "hydra.print.posix.regex.showCodePoint"}, "argument": {"variable": "c"}}}}}}}}},
+                                "argument": {"application": {"function": {"variable": "hydra.print.posix.regex.printCodePoint"}, "argument": {"variable": "c"}}}}}}},
+                        "argument": {"application": {"function": {"variable": "hydra.print.posix.regex.printCodePoint"}, "argument": {"variable": "c"}}}}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {"string": "Render a literal code point in top-level context, backslash-escaping POSIX ERE metacharacters."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.posix.regex.printCodePoint",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "c",
+                "domain": {"literal": {"integer": "int32"}},
+                "body": {"application": {"function": {"variable": "hydra.lib.strings.fromList"}, "argument": {"list": [{"variable": "c"}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a single Unicode code point as a one-character string."}}}]}}}}},
     {
       "term": {
         "name": "hydra.print.posix.regex.printRegex",
@@ -513,7 +532,7 @@
                                     "argument": {
                                       "list": [
                                         {"literal": {"string": "{"}},
-                                        {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "n"}}},
+                                        {"application": {"function": {"variable": "hydra.lib.literals.printInt32"}, "argument": {"variable": "n"}}},
                                         {"literal": {"string": "}"}}]}}}}}},
                           {
                             "name": "atLeast",
@@ -527,7 +546,7 @@
                                     "argument": {
                                       "list": [
                                         {"literal": {"string": "{"}},
-                                        {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "n"}}},
+                                        {"application": {"function": {"variable": "hydra.lib.literals.printInt32"}, "argument": {"variable": "n"}}},
                                         {"literal": {"string": ",}"}}]}}}}}},
                           {
                             "name": "range",
@@ -543,7 +562,7 @@
                                         {"literal": {"string": "{"}},
                                         {
                                           "application": {
-                                            "function": {"variable": "hydra.lib.literals.showInt32"},
+                                            "function": {"variable": "hydra.lib.literals.printInt32"},
                                             "argument": {
                                               "application": {
                                                 "function": {"project": {"typeName": "hydra.regex.QuantifierRange", "fieldName": "min"}},
@@ -551,7 +570,7 @@
                                         {"literal": {"string": ","}},
                                         {
                                           "application": {
-                                            "function": {"variable": "hydra.lib.literals.showInt32"},
+                                            "function": {"variable": "hydra.lib.literals.printInt32"},
                                             "argument": {
                                               "application": {
                                                 "function": {"project": {"typeName": "hydra.regex.QuantifierRange", "fieldName": "max"}},
@@ -593,23 +612,4 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Render a sequence of quantified atoms by concatenation."}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.print.posix.regex.showCodePoint",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
-          "result": {"type": {"literal": "string"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "c",
-                "domain": {"literal": {"integer": "int32"}},
-                "body": {"application": {"function": {"variable": "hydra.lib.strings.fromList"}, "argument": {"list": [{"variable": "c"}]}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Render a single Unicode code point as a one-character string."}}}]}}}}}]}
+                  "value": {"literal": {"string": "Render a sequence of quantified atoms by concatenation."}}}]}}}}}]}

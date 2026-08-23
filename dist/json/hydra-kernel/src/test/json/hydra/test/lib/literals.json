@@ -7043,7 +7043,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "showDecimal"}}},
+                              {"name": "name", "term": {"literal": {"string": "printDecimal"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -7123,7 +7123,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showDecimal"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printDecimal"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -7220,7 +7220,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showDecimal"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printDecimal"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -7317,7 +7317,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showDecimal"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printDecimal"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -7414,7 +7414,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showDecimal"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printDecimal"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -7511,7 +7511,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showDecimal"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printDecimal"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -7541,7 +7541,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "readDecimal"}}},
+                              {"name": "name", "term": {"literal": {"string": "parseDecimal"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -7621,7 +7621,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readDecimal"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseDecimal"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -7724,7 +7724,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readDecimal"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseDecimal"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -7827,7 +7827,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readDecimal"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseDecimal"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -7930,7 +7930,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readDecimal"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseDecimal"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -7958,7 +7958,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "showInt8"}}},
+                              {"name": "name", "term": {"literal": {"string": "printInt8"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -8038,7 +8038,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showInt8"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printInt8"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -8141,7 +8141,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showInt8"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printInt8"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -8177,7 +8177,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "showInt16"}}},
+                              {"name": "name", "term": {"literal": {"string": "printInt16"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -8257,7 +8257,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showInt16"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printInt16"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -8360,7 +8360,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showInt16"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printInt16"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -8396,7 +8396,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "showInt32"}}},
+                              {"name": "name", "term": {"literal": {"string": "printInt32"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -8476,7 +8476,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showInt32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printInt32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -8579,7 +8579,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showInt32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printInt32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -8682,7 +8682,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showInt32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printInt32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -8718,7 +8718,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "showInt64"}}},
+                              {"name": "name", "term": {"literal": {"string": "printInt64"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -8798,7 +8798,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showInt64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printInt64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -8903,7 +8903,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showInt64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printInt64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -8941,7 +8941,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "showUint8"}}},
+                              {"name": "name", "term": {"literal": {"string": "printUint8"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -9021,7 +9021,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showUint8"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printUint8"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -9124,7 +9124,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showUint8"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printUint8"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -9160,7 +9160,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "showUint16"}}},
+                              {"name": "name", "term": {"literal": {"string": "printUint16"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -9240,7 +9240,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showUint16"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printUint16"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -9343,7 +9343,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showUint16"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printUint16"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -9379,7 +9379,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "showUint32"}}},
+                              {"name": "name", "term": {"literal": {"string": "printUint32"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -9459,7 +9459,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showUint32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printUint32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -9562,7 +9562,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showUint32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printUint32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -9600,7 +9600,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "showUint64"}}},
+                              {"name": "name", "term": {"literal": {"string": "printUint64"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -9680,7 +9680,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showUint64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printUint64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -9783,7 +9783,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showUint64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printUint64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -9821,7 +9821,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "showBigint"}}},
+                              {"name": "name", "term": {"literal": {"string": "printBigint"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -9901,7 +9901,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showBigint"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printBigint"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -10004,7 +10004,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showBigint"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printBigint"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -10109,7 +10109,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showBigint"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printBigint"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -10145,7 +10145,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "showFloat32"}}},
+                              {"name": "name", "term": {"literal": {"string": "printFloat32"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -10225,7 +10225,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showFloat32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printFloat32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -10328,7 +10328,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showFloat32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printFloat32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -10431,7 +10431,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showFloat32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printFloat32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -10534,7 +10534,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showFloat32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printFloat32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -10637,7 +10637,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showFloat32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printFloat32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -10740,7 +10740,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showFloat32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printFloat32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -10843,7 +10843,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showFloat32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printFloat32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -10879,7 +10879,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "showFloat64"}}},
+                              {"name": "name", "term": {"literal": {"string": "printFloat64"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -10959,7 +10959,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showFloat64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printFloat64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -11064,7 +11064,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showFloat64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printFloat64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -11167,7 +11167,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showFloat64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printFloat64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -11270,7 +11270,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showFloat64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printFloat64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -11373,7 +11373,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showFloat64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printFloat64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -11476,7 +11476,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.showFloat64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.printFloat64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -11512,7 +11512,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "showBoolean"}}},
+                              {"name": "name", "term": {"literal": {"string": "printBoolean"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -11719,7 +11719,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "showString"}}},
+                              {"name": "name", "term": {"literal": {"string": "printString"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -13290,7 +13290,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "readInt8"}}},
+                              {"name": "name", "term": {"literal": {"string": "parseInt8"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -13370,7 +13370,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readInt8"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseInt8"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -13479,7 +13479,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readInt8"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseInt8"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -13588,7 +13588,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readInt8"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseInt8"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -13697,7 +13697,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readInt8"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseInt8"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -13806,7 +13806,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readInt8"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseInt8"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -13901,7 +13901,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readInt8"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseInt8"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -13929,7 +13929,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "readInt16"}}},
+                              {"name": "name", "term": {"literal": {"string": "parseInt16"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -14009,7 +14009,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readInt16"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseInt16"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -14118,7 +14118,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readInt16"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseInt16"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -14227,7 +14227,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readInt16"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseInt16"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -14255,7 +14255,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "readInt32"}}},
+                              {"name": "name", "term": {"literal": {"string": "parseInt32"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -14335,7 +14335,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readInt32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseInt32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -14444,7 +14444,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readInt32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseInt32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -14553,7 +14553,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readInt32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseInt32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -14581,7 +14581,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "readInt64"}}},
+                              {"name": "name", "term": {"literal": {"string": "parseInt64"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -14661,7 +14661,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readInt64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseInt64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -14772,7 +14772,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readInt64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseInt64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -14883,7 +14883,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readInt64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseInt64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -14911,7 +14911,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "readUint8"}}},
+                              {"name": "name", "term": {"literal": {"string": "parseUint8"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -14991,7 +14991,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint8"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint8"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -15100,7 +15100,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint8"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint8"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -15209,7 +15209,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint8"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint8"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -15318,7 +15318,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint8"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint8"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -15413,7 +15413,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint8"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint8"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -15441,7 +15441,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "readUint16"}}},
+                              {"name": "name", "term": {"literal": {"string": "parseUint16"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -15521,7 +15521,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint16"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint16"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -15630,7 +15630,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint16"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint16"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -15739,7 +15739,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint16"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint16"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -15834,7 +15834,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint16"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint16"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -15862,7 +15862,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "readUint32"}}},
+                              {"name": "name", "term": {"literal": {"string": "parseUint32"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -15942,7 +15942,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -16051,7 +16051,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -16162,7 +16162,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -16257,7 +16257,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -16285,7 +16285,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "readUint64"}}},
+                              {"name": "name", "term": {"literal": {"string": "parseUint64"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -16365,7 +16365,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -16474,7 +16474,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -16585,7 +16585,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -16680,7 +16680,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readUint64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseUint64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -16708,7 +16708,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "readBigint"}}},
+                              {"name": "name", "term": {"literal": {"string": "parseBigint"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -16788,7 +16788,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readBigint"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseBigint"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -16897,7 +16897,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readBigint"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseBigint"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -17008,7 +17008,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readBigint"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseBigint"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -17117,7 +17117,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readBigint"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseBigint"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -17231,7 +17231,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readBigint"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseBigint"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -17259,7 +17259,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "readFloat32"}}},
+                              {"name": "name", "term": {"literal": {"string": "parseFloat32"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -17339,7 +17339,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readFloat32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseFloat32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -17448,7 +17448,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readFloat32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseFloat32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -17557,7 +17557,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readFloat32"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseFloat32"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -17585,7 +17585,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "readFloat64"}}},
+                              {"name": "name", "term": {"literal": {"string": "parseFloat64"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -17665,7 +17665,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readFloat64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseFloat64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -17776,7 +17776,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readFloat64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseFloat64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -17887,7 +17887,7 @@
                                                                                         "typeName": "hydra.core.Term",
                                                                                         "field": {
                                                                                           "name": "variable",
-                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.readFloat64"}}}}}}}},
+                                                                                          "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.literals.parseFloat64"}}}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -17915,7 +17915,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "readBoolean"}}},
+                              {"name": "name", "term": {"literal": {"string": "parseBoolean"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",
@@ -18229,7 +18229,7 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "readString"}}},
+                              {"name": "name", "term": {"literal": {"string": "parseString"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
                                 "name": "subgroups",

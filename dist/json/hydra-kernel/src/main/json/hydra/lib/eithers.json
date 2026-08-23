@@ -388,6 +388,21 @@
                 "argument": {"variable": "e"}}}}}}},
     {
       "primitive": {
+        "name": "hydra.lib.eithers.left",
+        "metadata": {
+          "description": "Construct a left (error/exceptional) either value.",
+          "comments": [
+            "left(x) is Left x. The dual constructor to right, injecting into the Left (error/exceptional) side of an either.",
+            "Total. Corresponds to Haskell's Left :: a -> Either a b."],
+          "seeAlso": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [{"name": "x", "description": "the value to wrap as a Left", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
         "name": "hydra.lib.eithers.lefts",
         "metadata": {
           "description": "Extract all Left values from a list of either values.",
@@ -601,10 +616,14 @@
           "description": "Map a function returning either over a set, collecting results or short-circuiting on Left.",
           "comments": [
             "mapSet(f, s) applies f to each element of s in unspecified order. If every application returns Right, the result is Right of the set of contained values (deduplicated by the result type's ordering); the first application returning Left short-circuits the whole result to that Left.",
+            "Requires an 'ordering' constraint on the input and output element types.",
             "Total. Corresponds to Haskell's traverse-style operation specialised to Set."],
           "seeAlso": []},
         "signature": {
-          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
+          "typeParameters": [
+            {"name": "x", "constraints": [{"simple": "ordering"}]},
+            {"name": "y", "constraints": [{"simple": "ordering"}]},
+            {"name": "z", "constraints": []}],
           "parameters": [
             {
               "name": "f",
@@ -736,21 +755,19 @@
                 "argument": {"variable": "xs"}}}}}}},
     {
       "primitive": {
-        "name": "hydra.lib.eithers.pure",
+        "name": "hydra.lib.eithers.right",
         "metadata": {
-          "description": "Wrap a value as a right.",
+          "description": "Construct a right (success/normal) either value.",
           "comments": [
-            "pure(x) is right(x); this defining equation is the specification, and the default implementation.",
-            "This is the unit of the either monad; it exists so that code written generically over a monad can reach the unit.",
-            "Total. Corresponds to Haskell's pure / Right for Either."],
+            "right(x) is Right x. The dual constructor to left, injecting into the Right (success/normal) side of an either.",
+            "Total. Corresponds to Haskell's Right :: b -> Either a b."],
           "seeAlso": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [{"name": "x", "description": "the value to wrap as a Right", "type": {"variable": "y"}, "isLazy": false}],
           "result": {"type": {"either": {"left": {"variable": "x"}, "right": {"variable": "y"}}}}},
         "isPure": true,
-        "isTotal": true,
-        "defaultImplementation": {"lambda": {"parameter": "x", "body": {"either": {"right": {"variable": "x"}}}}}}},
+        "isTotal": true}},
     {
       "primitive": {
         "name": "hydra.lib.eithers.rights",

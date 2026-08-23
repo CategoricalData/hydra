@@ -65,7 +65,7 @@
                           "application": {
                             "function": {
                               "typeApplication": {
-                                "body": {"variable": "hydra.lib.lists.null"},
+                                "body": {"variable": "hydra.lib.lists.isEmpty"},
                                 "type": {"pair": {"first": {"variable": "hydra.packaging.PackageName"}, "second": {"variable": "hydra.packaging.PackageName"}}}}},
                             "argument": {
                               "application": {

@@ -120,7 +120,8 @@
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Schema serialization to and from JSON"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A test case for the bidirectional Avro coder"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A test case for the bidirectional Avro coder"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.LossinessTestCase",
@@ -184,7 +185,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A test case which verifies that lossy conversions stash original information in annotations"}}}]}}}}}},
+                    "value": {"literal": {"string": "A test case which verifies that lossy conversions stash original information in annotations"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.NameMappingTestCase",
@@ -230,7 +232,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A test case for bidirectional name mapping between Hydra and Avro"}}}]}}}}}},
+                    "value": {"literal": {"string": "A test case for bidirectional name mapping between Hydra and Avro"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.SchemaSerializationTestCase",
@@ -268,7 +271,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A test case for Avro schema serialization to and from JSON"}}}]}}}}}},
+                    "value": {"literal": {"string": "A test case for Avro schema serialization to and from JSON"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.TermLevelForwardTestCase",
@@ -311,7 +315,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A test case which encodes a JSON value as a Hydra term using an Avro schema"}}}]}}}}}},
+                    "value": {"literal": {"string": "A test case which encodes a JSON value as a Hydra term using an Avro schema"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.TermLevelReverseTestCase",
@@ -357,7 +362,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A test case which decodes a Hydra term to a JSON value using an Avro schema"}}}]}}}}}},
+                    "value": {"literal": {"string": "A test case which decodes a Hydra term to a JSON value using an Avro schema"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.TermLevelRoundTripJsonTestCase",
@@ -406,7 +412,8 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "A test case which encodes a JSON value as a Hydra term and decodes it back, verifying the result"}}}]}}}}}},
+                      "literal": {"string": "A test case which encodes a JSON value as a Hydra term and decodes it back, verifying the result"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.TermLevelRoundTripTermTestCase",
@@ -453,7 +460,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A test case which decodes a Hydra term to JSON and encodes it back, verifying the result"}}}]}}}}}},
+                    "value": {"literal": {"string": "A test case which decodes a Hydra term to JSON and encodes it back, verifying the result"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.TypeLevelForwardTestCase",
@@ -489,7 +497,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A test case which maps an Avro schema to a Hydra type and compares the result"}}}]}}}}}},
+                    "value": {"literal": {"string": "A test case which maps an Avro schema to a Hydra type and compares the result"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.TypeLevelReverseTestCase",
@@ -525,7 +534,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A test case which maps a Hydra type to an Avro schema and compares the result"}}}]}}}}}},
+                    "value": {"literal": {"string": "A test case which maps a Hydra type to an Avro schema and compares the result"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.TypeLevelRoundTripAvroTestCase",
@@ -567,7 +577,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A test case which maps an Avro schema to a Hydra type and back, verifying the result"}}}]}}}}}},
+                    "value": {"literal": {"string": "A test case which maps an Avro schema to a Hydra type and back, verifying the result"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.TypeLevelRoundTripHydraTestCase",
@@ -609,7 +620,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A test case which maps a Hydra type to an Avro schema and back, verifying the result"}}}]}}}}}},
+                    "value": {"literal": {"string": "A test case which maps a Hydra type to an Avro schema and back, verifying the result"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.avro.testing.UnionTestCase",
@@ -662,4 +674,5 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "A test case for union type encoding and decoding, covering the various strategies for representing unions in Avro"}}}]}}}}}}]}
+                        "string": "A test case for union type encoding and decoding, covering the various strategies for representing unions in Avro"}}}]}}},
+          "constraints": []}}}]}

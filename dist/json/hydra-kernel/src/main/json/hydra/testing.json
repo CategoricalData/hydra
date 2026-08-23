@@ -38,7 +38,8 @@
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "An effectful test case: the actual value is a thunk producing an effect, which the test runner interprets (performing host interactions, e.g. file I/O within a per-case empty temporary directory) to obtain a result string; the expected value is a thunk producing a string."}}}]}}}}}},
+                        "string": "An effectful test case: the actual value is a thunk producing an effect, which the test runner interprets (performing host interactions, e.g. file I/O within a per-case empty temporary directory) to obtain a result string; the expected value is a thunk producing a string."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.testing.Tag",
@@ -47,7 +48,8 @@
           "body": {
             "annotated": {
               "body": {"wrap": {"literal": "string"}},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A tag for test cases"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A tag for test cases"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.testing.TestCase",
@@ -78,7 +80,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A test case with an actual and expected string for comparison"}}}]}}}}}},
+                    "value": {"literal": {"string": "A test case with an actual and expected string for comparison"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.testing.TestCaseWithMetadata",
@@ -116,7 +119,8 @@
                       "annotated": {
                         "body": {"list": {"variable": "hydra.testing.Tag"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Zero or more tags for the test case"}}}]}}}}]},
-              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A test case together with metadata"}}}]}}}}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A test case together with metadata"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.testing.TestGroup",
@@ -158,7 +162,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A collection of test cases with a name and optional description"}}}]}}}}}},
+                    "value": {"literal": {"string": "A collection of test cases with a name and optional description"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.testing.UniversalTestCase",
@@ -192,4 +197,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A universal test case: the actual and expected values are thunks producing strings."}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A universal test case: the actual and expected values are thunks producing strings."}}}]}}},
+          "constraints": []}}}]}

@@ -35,7 +35,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An edge in a subterm graph, connecting two nodes via a path"}}}]}}}}}},
+                    "value": {"literal": {"string": "An edge in a subterm graph, connecting two nodes via a path"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.paths.SubtermGraph",
@@ -61,7 +62,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A graph of subterm nodes and edges, representing term access patterns"}}}]}}}}}},
+                    "value": {"literal": {"string": "A graph of subterm nodes and edges, representing term access patterns"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.paths.SubtermNode",
@@ -93,7 +95,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A node in a subterm graph, representing a term or subterm"}}}]}}}}}},
+                    "value": {"literal": {"string": "A node in a subterm graph, representing a term or subterm"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.paths.SubtermPath",
@@ -106,7 +109,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A sequence of subterm steps forming a path through a term"}}}]}}}}}},
+                    "value": {"literal": {"string": "A sequence of subterm steps forming a path through a term"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.paths.SubtermStep",
@@ -268,7 +272,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A function which maps from a term to a particular immediate subterm"}}}]}}}}}},
+                    "value": {"literal": {"string": "A function which maps from a term to a particular immediate subterm"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.paths.SubtypeEdge",
@@ -301,7 +306,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "An edge in a subtype graph, connecting two nodes via a path"}}}]}}}}}},
+                    "value": {"literal": {"string": "An edge in a subtype graph, connecting two nodes via a path"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.paths.SubtypeGraph",
@@ -327,7 +333,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A graph of subtype nodes and edges, representing type access patterns"}}}]}}}}}},
+                    "value": {"literal": {"string": "A graph of subtype nodes and edges, representing type access patterns"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.paths.SubtypeNode",
@@ -359,7 +366,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A node in a subtype graph, representing a type or subtype"}}}]}}}}}},
+                    "value": {"literal": {"string": "A node in a subtype graph, representing a type or subtype"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.paths.SubtypePath",
@@ -372,7 +380,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A sequence of subtype steps forming a path through a type"}}}]}}}}}},
+                    "value": {"literal": {"string": "A sequence of subtype steps forming a path through a type"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.paths.SubtypeStep",
@@ -519,4 +528,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A function which maps from a type to a particular immediate subtype"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "A function which maps from a type to a particular immediate subtype"}}}]}}},
+          "constraints": []}}}]}

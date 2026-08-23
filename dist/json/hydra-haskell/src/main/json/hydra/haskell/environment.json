@@ -51,9 +51,17 @@
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}]}}}}]},
+                              "value": {"literal": {"string": "Whether the module uses Data.Set (S.Set, S.fromList, S.empty)"}}}]}}}},
+                  {
+                    "name": "usesVoid",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the module uses Data.Void (Void)"}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Metadata used to determine which standard imports are needed in a generated Haskell module"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "Metadata used to determine which standard imports are needed in a generated Haskell module"}}}]}}},
+          "constraints": []}}}]}

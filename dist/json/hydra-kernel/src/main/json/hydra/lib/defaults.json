@@ -2526,38 +2526,6 @@
                                                   "typeName": "hydra.core.Term",
                                                   "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "xs"}}}}}}}}]}}}}}}]}}}}}},
                 {
-                  "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.eithers.pure"}}}},
-                  "value": {
-                    "inject": {
-                      "typeName": "hydra.core.Term",
-                      "field": {
-                        "name": "lambda",
-                        "term": {
-                          "record": {
-                            "typeName": "hydra.core.Lambda",
-                            "fields": [
-                              {"name": "parameter", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "x"}}}}},
-                              {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
-                              {
-                                "name": "body",
-                                "term": {
-                                  "inject": {
-                                    "typeName": "hydra.core.Term",
-                                    "field": {
-                                      "name": "either",
-                                      "term": {
-                                        "typeApplication": {
-                                          "body": {
-                                            "typeApplication": {
-                                              "body": {
-                                                "either": {
-                                                  "right": {
-                                                    "inject": {
-                                                      "typeName": "hydra.core.Term",
-                                                      "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "x"}}}}}}}}},
-                                              "type": {"variable": "hydra.core.Term"}}},
-                                          "type": {"variable": "hydra.core.Term"}}}}}}}]}}}}}},
-                {
                   "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.eithers.rights"}}}},
                   "value": {
                     "inject": {
@@ -4283,7 +4251,7 @@
                                                                                                                                                                                                             "typeName": "hydra.core.Term",
                                                                                                                                                                                                             "field": {
                                                                                                                                                                                                               "name": "variable",
-                                                                                                                                                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.null"}}}}}}}},
+                                                                                                                                                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.lists.isEmpty"}}}}}}}},
                                                                                                                                                                                                       {
                                                                                                                                                                                                         "name": "argument",
                                                                                                                                                                                                         "term": {
@@ -6825,7 +6793,7 @@
                                                                                                           "typeName": "hydra.core.Term",
                                                                                                           "field": {
                                                                                                             "name": "variable",
-                                                                                                            "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.optionals.pure"}}}}}}}},
+                                                                                                            "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.optionals.given"}}}}}}}},
                                                                                                     {
                                                                                                       "name": "argument",
                                                                                                       "term": {
@@ -7605,7 +7573,7 @@
                                                                                             "typeName": "hydra.core.Term",
                                                                                             "field": {
                                                                                               "name": "variable",
-                                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.optionals.pure"}}}}}}}},
+                                                                                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.optionals.given"}}}}}}}},
                                                                                       {
                                                                                         "name": "argument",
                                                                                         "term": {
@@ -8041,7 +8009,7 @@
                                                                                                           "typeName": "hydra.core.Term",
                                                                                                           "field": {
                                                                                                             "name": "variable",
-                                                                                                            "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.optionals.pure"}}}}}}}},
+                                                                                                            "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.optionals.given"}}}}}}}},
                                                                                                     {
                                                                                                       "name": "argument",
                                                                                                       "term": {
@@ -8073,31 +8041,6 @@
                                                                                           "inject": {
                                                                                             "typeName": "hydra.core.Term",
                                                                                             "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "s"}}}}}}}}]}}}}}}]}}}}}}]}}}}}}]}}}}}}]}}}}}},
-                {
-                  "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.optionals.pure"}}}},
-                  "value": {
-                    "inject": {
-                      "typeName": "hydra.core.Term",
-                      "field": {
-                        "name": "lambda",
-                        "term": {
-                          "record": {
-                            "typeName": "hydra.core.Lambda",
-                            "fields": [
-                              {"name": "parameter", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "x"}}}}},
-                              {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
-                              {
-                                "name": "body",
-                                "term": {
-                                  "inject": {
-                                    "typeName": "hydra.core.Term",
-                                    "field": {
-                                      "name": "optional",
-                                      "term": {
-                                        "optional": {
-                                          "inject": {
-                                            "typeName": "hydra.core.Term",
-                                            "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "x"}}}}}}}}}}}}]}}}}}},
                 {
                   "key": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.optionals.toList"}}}},
                   "value": {
