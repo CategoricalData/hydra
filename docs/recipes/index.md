@@ -57,10 +57,28 @@ for extending Hydra, implementing new features, and working with Hydra's archite
 
 - **[Troubleshooting guide](../troubleshooting.md)** - Debugging strategies, primitive dispatch tracing, and common errors across all implementations
 
-### Historical investigations
+### History
 
-Completed work products from past investigations, kept for reference. These are *not* current recipes; they
-capture what was tried, what worked, and what didn't.
+Retrospectives on settled work, kept for reference — feature histories (why a major feature was built the
+way it was) and completed investigations (what was tried, what worked, what didn't). These are *not*
+current recipes; the shipped mechanics live in the main docs, and each entry links out to them.
+
+Feature retrospectives:
+
+- **[Self-hosting: transposing the coders to host-native DSLs](../history/self-hosting-coder-transpose.md)** —
+  the #182/#344/#346 migration that made Java, Python, and Scala generate from host-native coders; byte-identity
+  as the oracle, the cold-start bootstrap paradox, and the bugs the transpose surfaced.
+- **[The overlay/ restructuring and the hydra.overlay namespace](../history/overlay-restructuring.md)** —
+  #418/#434/#501/#511: how host-native source consolidated under `overlay/`, why the namespace boundary
+  exists, and how `bindings/` was folded in with build config modeled as Hydra types.
+- **[Consuming the published host, and how "oil and water" was forged](../history/published-host-consume-model.md)** —
+  #369/#370/#500/#608: the bootstrap-circularity problem, the consume-published decision, the `--local-host`
+  shim, and the two bugs that turned oil-and-water into a CI-enforced invariant.
+- **[Design record: `hydra.pg.model` ↔ `hydra.neo4j.model` mapping](../history/design-pg-neo4j-mapping.md)** —
+  the design rationale behind the shipped `hydra.neo4j.pg` mapping (#510); the feature itself is documented
+  in the [hydra-pg README](../../packages/hydra-pg/README.md).
+
+Completed investigations:
 
 - **[Python host performance investigation](../history/python-host-perf-investigation.md)** — multi-session
   work that brought Hydra-Python from "unusable for term-level workloads" to "competitive with Haskell and
@@ -75,12 +93,6 @@ capture what was tried, what worked, and what didn't.
   measured-failed experiment to address the cold-CI heap overflow; documents the ~4× peak-memory and ~2×
   wall-time regression of a naive per-SCC fold. Useful if anyone revisits incremental inference. Preserved
   on local branch `wip_per_scc_inferModules`.
-- **[Lazy fix design: Coder.hs edits](../history/lazy-fix-design.md)** — pre-edit design sketch for replacing
-  the eager-walrus + `@lru_cache(1)` pattern with `hydra.python.util.Lazy` in the *legacy Haskell* Python
-  coder. **Status: likely superseded** by the Python-native coder rewrite (#344). Kept pending review.
-- **[Design record: `hydra.pg.model` ↔ `hydra.neo4j.model` mapping](../history/design-pg-neo4j-mapping.md)** —
-  the design rationale behind the shipped `hydra.neo4j.pg` mapping (#510); the feature itself is documented
-  in the [hydra-pg README](../../packages/hydra-pg/README.md).
 
 ## About Recipes
 
