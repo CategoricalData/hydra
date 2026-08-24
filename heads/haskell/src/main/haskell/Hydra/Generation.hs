@@ -168,28 +168,26 @@ kernelTypeUniverse = [
 -- to hydra.overlay.<lang>.lib.<sub> directly inside each coder (Haskell,
 -- TypeScript, Scala, Python, Lisp family), consulted at coding time via an
 -- explicit overlaySubs parameter threaded through each coder's entry point
--- (#630), for every driver EXCEPT the published-host cold seeder (below).
+-- (#630).
 --
--- #630 cold-clone circularity (found + reverted 2026-08-06): a first attempt
--- at #630 also switched heads/haskell/json-driver/app/ColdSeedMain.hs to the
--- new overlaySubs-parameterized coder calls, source-dirring the freshly
--- regenerated dist/haskell/hydra-{haskell,python,scala,typescript,lisp} into
--- json-driver's stack project to satisfy the new signature against the
--- (stale, pre-#630) published Hackage packages. That is CIRCULAR on a
--- genuinely cold clone: dist/haskell is gitignored/absent pre-seed, but the
--- seeder that CREATES it needs those same trees as compile-time inputs to
--- build itself. Landed, then reverted when cold-clone CI (a real cold
--- environment, unlike a warm dev worktree) caught it. ColdSeedMain.hs
--- therefore keeps calling the OLD published (pre-#630) coder signature and
--- relies on THIS driver-level POST-generation correction pass
--- ('correctHaskellLibRedirect'/'correctTypeScriptLibRedirect'/
--- 'redirectLibBack') to narrow the published coders' unconditional redirect
--- down to only the subs with a real overlay -- the same mechanism already
--- kept alive here for Java (deferred to #633). Every OTHER driver
--- (bootstrap-from-json/Main.hs, heads/{scala,python}'s own native drivers)
--- and every coder DSL source use the full emission-time fix; this is a
--- narrow, self-documenting exception scoped to the published-pinned cold
--- seeder alone, retired at the next hostVersion publish.
+-- #630 cold-clone circularity (found + reverted 2026-08-06, historical): a
+-- first attempt at #630 also switched the (since-retired, #703) Haskell
+-- cold-seeder to the new overlaySubs-parameterized coder calls,
+-- source-dirring the freshly regenerated dist/haskell/hydra-{haskell,python,
+-- scala,typescript,lisp} into the seeder's own stack project to satisfy the
+-- new signature against the (stale, pre-#630) published Hackage packages.
+-- That was CIRCULAR on a genuinely cold clone: dist/haskell is
+-- gitignored/absent pre-seed, but the seeder that CREATES it needed those
+-- same trees as compile-time inputs to build itself. Landed, then reverted
+-- when cold-clone CI (a real cold environment, unlike a warm dev worktree)
+-- caught it. The #703 cold-seeder replacement (Java host, schema-walking
+-- JSON->text) has no compiled-type dependency on any target's dist/ tree at
+-- all, so this class of circularity does not apply to it. This driver-level
+-- POST-generation correction pass ('correctHaskellLibRedirect'/
+-- 'correctTypeScriptLibRedirect'/'redirectLibBack') is kept for Java
+-- (deferred to #633); every other driver (bootstrap-from-json/Main.hs,
+-- heads/{scala,python}'s own native drivers) and every coder DSL source use
+-- the full emission-time fix.
 
 -- | #568 structural fix: the redirectable @hydra.lib.\<sub\>@ sub-namespaces for a
 -- given host, derived from which overlay lib files actually exist on disk rather
@@ -361,14 +359,15 @@ validationFindingsNull (ValidationFindings pkgs types terms) =
 -- 'packagingProfileFor') and the 'validatePackagesStructural' entry point that
 -- applies them were MOVED to "Hydra.PackagingGeneration". They delegate to the
 -- promoted, translingual @hydra.build.packagingProfile@ module, so keeping them
--- here would put a dependency on that generated hydra-build module onto this file
--- — and this module is copied into the cold-seeder's headmods and compiled against the
--- PUBLISHED hydra lib, which does not yet carry that module (the #560/#607
--- cold-seed-from-json revert class, enforced by cold-seed-dist-haskell.sh's
--- ALLOWED_BUILD_IMPORTS invariant). Only update-json-main consumes structural
--- validation, and the cold-seed path does not run it, so the coupled cluster
--- lives on the full-sync-only side of the seam (mirroring how 'Hydra.ExtGeneration'
--- is kept out of the cold-seeder's import graph). See "Hydra.PackagingGeneration".
+-- here would put a dependency on that generated hydra-build module onto this
+-- file (historical: this module was copied into the retired Haskell
+-- cold-seeder's headmods and compiled against a PUBLISHED hydra lib that
+-- might not carry a HEAD-new hydra-build module — the #560/#607 revert
+-- class; the #703 cold-seeder replacement has no such constraint, see
+-- docs/build-system.md). Only update-json-main consumes structural
+-- validation; the coupled cluster lives on the full-sync-only side of the
+-- seam (mirroring how 'Hydra.ExtGeneration' stays decoupled here too). See
+-- "Hydra.PackagingGeneration".
 
 -- | Semantic (core) type/term-tree validation against a list of packages,
 -- INCLUDING derived modules (hydra.dsl.*/encode.*/decode.*) — a broken
@@ -1917,9 +1916,10 @@ writeManifestJson basePath kernelModules kernelTypesModules mainModules testModu
 
 -- Per-package manifest.json generation (writePerPackageManifestsJson) moved to
 -- Hydra.ManifestGeneration (#622) — it delegates to Hydra.Build.ManifestWriter,
--- an unpublished-at-times hydra-build module the cold-seeder headmods must not
--- depend on; the new module is used only by update-json-manifest, which always
--- runs against a local (non-cold-seed) build.
+-- an unpublished-at-times hydra-build module (historical: this file's copy
+-- into the retired Haskell cold-seeder's headmods must not have depended on
+-- it, #703); the new module is used only by update-json-manifest, which
+-- always runs against a local build.
 
 ----------------------------------------
 -- JSON Module Import

@@ -309,7 +309,7 @@ if [ "$HASKELL_HOST_MODE" = "published" ]; then
 fi
 python3 "$HYDRA_ROOT/bin/lib/generate-head-haskell-build.py" --mode "$HASKELL_HOST_MODE"
 
-# #376: dist/haskell/ is gitignored (untracked), so a genuinely cold checkout
+# #376/#703: dist/haskell/ is gitignored (untracked), so a genuinely cold checkout
 # has it ABSENT. Everything below — overlay-kernel-runtime.sh, the Phase 0
 # stack build, sync-haskell.sh's own Phase 1 — assumes dist/haskell/hydra-kernel/
 # already exists on disk as a source-dir. Detect cold-start via a sentinel
@@ -317,12 +317,26 @@ python3 "$HYDRA_ROOT/bin/lib/generate-head-haskell-build.py" --mode "$HASKELL_HO
 # tracked dist/json/ BEFORE anything tries to compile against it. Mirrors the
 # JAVA_JSON_SENTINEL / HYDRA_INCLUDE_JAVA_PYTHON cold-start pattern below for
 # dist/json/hydra-{java,python}.
+#
+# #703: seeds via the JAVA host (heads/java/bin/seed-dist-haskell.sh), a pure
+# schema-walking JSON->Haskell-text decoder with no compiled-type dependency on any
+# published hydra-kernel shape — replacing the retired Haskell cold-seeder
+# (heads/haskell/json-driver/, deleted), which linked a published hydra-kernel and
+# broke on every kernel-shape change. See docs/build-system.md for the invariant.
+#
+# The seed alone is not enough to build the LOCAL host: the published hydra-haskell
+# coder it reads through may predate a kernel addition's own coder-emission logic
+# (e.g. #684's "always import Data.Void" rule). patch-void-import.sh applies the one
+# bootstrap patch (Step 8, extending-hydra-core.md) currently known to bridge that
+# gap; it is idempotent and a no-op once a locally-built, current host regenerates
+# this file for real (see the script's own header for the full invariant).
 HASKELL_DIST_SENTINEL="$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Adapt.hs"
 if [ ! -f "$HASKELL_DIST_SENTINEL" ]; then
     echo ""
     echo "Cold-start detected (missing dist/haskell/hydra-kernel); seeding dist/haskell/"
-    echo "from tracked dist/json/ via the published-host cold seeder (#376)..."
-    "$HYDRA_HASKELL_DIR/json-driver/bin/cold-seed-dist-haskell.sh" --repo-root "$HYDRA_ROOT"
+    echo "from tracked dist/json/ via the Java-host cold seeder (#703)..."
+    "$HYDRA_ROOT/heads/java/bin/seed-dist-haskell.sh" --repo-root "$HYDRA_ROOT"
+    "$HYDRA_ROOT/heads/java/bin/patch-void-import.sh" --repo-root "$HYDRA_ROOT"
     echo ""
 fi
 

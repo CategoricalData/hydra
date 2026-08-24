@@ -258,7 +258,7 @@ never from an empty one. So `dist/json` must ship, and does.
 
 `dist/json` is the only tracked tree under `dist/`. Every per-language output tree is gitignored and
 regenerated from `dist/json` on each sync — on a cold clone, `dist/haskell` is seeded by the
-published-host driver (`heads/haskell/json-driver/`; see
+published-host driver (`heads/java/bin/seed-dist-haskell.sh`; see
 [build-system.md § Bootstrapping dist/haskell/ from the published host](build-system.md#bootstrapping-disthaskell-from-the-published-host)).
 This cold rebuild is verified end-to-end (a genuinely cold `git archive` checkout seeds, builds, and
 passes `stack test`), so the source archive stays buildable without any per-language tree entering it.

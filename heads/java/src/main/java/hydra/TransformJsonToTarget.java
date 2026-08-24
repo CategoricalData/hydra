@@ -293,12 +293,15 @@ public class TransformJsonToTarget {
         }
 
         // #473 lib pass + redirect, mirroring Bootstrap's main-pass handling — required for
-        // self-host correctness on every non-Haskell target.
-        if (!target.equals("haskell")) {
-            written.addAll(Bootstrap.runLibPass(repoRoot, target, outDir, universeMods, modsToGenerate));
-            Bootstrap.redirectLibCalls(repoRoot, target, outDir);
-            Bootstrap.redirectTestEnv(target, outDir);
-        }
+        // self-host correctness on every target, including haskell (#703: the haskell exclusion
+        // here left hydra.lib.* primitive-only modules unemitted for the haskell target, since
+        // the ordinary main pass's hasTermDefinitions/hasTypeDefinitions filters never match
+        // _Definition_primitive — see Bootstrap.runLibPass's comment). redirectLibCalls and
+        // redirectTestEnv already self-guard to the targets they apply to, so enabling this
+        // block for haskell is a safe no-op for those two calls.
+        written.addAll(Bootstrap.runLibPass(repoRoot, target, outDir, universeMods, modsToGenerate));
+        Bootstrap.redirectLibCalls(repoRoot, target, outDir);
+        Bootstrap.redirectTestEnv(target, outDir);
 
         // #459 (H1): prune stale outputs — delete any file under outDir not just written and not
         // protected by --keep-paths-from. The Java counterpart to bootstrap-from-json's pruneDir

@@ -791,10 +791,8 @@ of module names:
   Haskell overlay to redirect generated non-Java/non-Haskell consumer code to — see
   [How primitive names flow](#how-primitive-names-flow)):
   - [ ] `libSubs` in `heads/haskell/src/exec/bootstrap-from-json/Main.hs`
-  - [ ] the identical `libSubs` in `heads/haskell/json-driver/app/ColdSeedMain.hs` (kept in sync
-    by hand with the above — both must change together)
   - [ ] if the module is effectful, also add it to the relevant per-host variants
-    (`libSubsPython`/`libSubsScala`/`libSubsClojure`/`libSubsScheme`/`libSubsLisp`) in both files
+    (`libSubsPython`/`libSubsScala`/`libSubsClojure`/`libSubsScheme`/`libSubsLisp`)
 - [ ] **Java**
   - [ ] `overlayJavaLibPackageAliases` in `packages/hydra-java/src/main/java/hydra/sources/java/Utils.java`
   - [ ] a `<sub>Primitives()` function plus its call in `standardPrimitives()`, in

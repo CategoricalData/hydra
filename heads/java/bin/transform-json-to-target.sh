@@ -70,9 +70,20 @@ fi
 
 cd "$HYDRA_JAVA_HEAD"
 
+# HYDRA_HOST_VERSION forwards -PhostVersion to target-driver (see its build.gradle),
+# pinning the published-host classpath explicitly instead of deriving it from
+# hydra.json. Used by the cold-seed path (#703) to bypass a hostOverrides:local
+# shim that would otherwise make target-driver's classpath unresolvable. An env
+# var (not a CLI flag) so it threads transparently through run_layer1_transform /
+# assemble-distribution.sh without changing their argument-forwarding contract.
+GRADLE_HOST_PROP=()
+if [ -n "${HYDRA_HOST_VERSION:-}" ]; then
+    GRADLE_HOST_PROP=(-PhostVersion="$HYDRA_HOST_VERSION")
+fi
+
 JAVA_CP=""
-if ./gradlew --quiet -p target-driver classes >/dev/null 2>&1; then
-    JAVA_CP=$(./gradlew --quiet -p target-driver printRuntimeClasspath | tail -1)
+if ./gradlew --quiet "${GRADLE_HOST_PROP[@]}" -p target-driver classes >/dev/null 2>&1; then
+    JAVA_CP=$(./gradlew --quiet "${GRADLE_HOST_PROP[@]}" -p target-driver printRuntimeClasspath | tail -1)
 else
     echo "transform-json-to-target.sh: published-host classpath unresolvable" \
          "(target-driver); falling back to local headsExtras build" \

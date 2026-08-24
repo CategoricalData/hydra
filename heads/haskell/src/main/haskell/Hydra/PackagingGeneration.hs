@@ -7,23 +7,21 @@
 -- native-side CONSUMER of that generated policy — a thin delegation, plus the
 -- 'validatePackagesStructural' entry point that applies it.
 --
--- It lives here, separate from "Hydra.Generation", specifically so that the
--- cold-seeder's headmods copy of Generation.hs stays free of any
--- @Hydra.Build.*@ import that is not confirmed published at the pinned
--- hydra-build version. 'Hydra.Generation' is copied into the cold-seeder's
--- headmods (json-driver's cold-seed-dist-haskell.sh) and compiled against the
+-- It lives here, separate from "Hydra.Generation", so that "Hydra.Generation"
+-- stays free of any @Hydra.Build.*@ import that is not confirmed published at
+-- the pinned hydra-build version (historical: this module was copied into
+-- the retired Haskell cold-seeder's headmods and compiled against a
 -- PUBLISHED hydra lib; importing the newly-added, not-yet-published
--- @Hydra.Build.PackagingProfile@ from there would break cold-seed-from-json
--- (the #560/#607 revert-main class, enforced by cold-seed-dist-haskell.sh's
--- ALLOWED_BUILD_IMPORTS invariant). This mirrors the same reason
--- 'Hydra.ExtGeneration' is kept out of the cold-seeder's import graph
--- (see ColdSeedMain.hs). Only "Hydra.Generation"'s Build-free helpers
--- ('isDerivedModule', 'ValidationFindings', 'ValidationResult') are imported
--- here; the Build.* coupling stays on this (full-sync-only) side of the seam.
+-- @Hydra.Build.PackagingProfile@ from there would have broken the seed — the
+-- #560/#607 revert-main class. The #703 cold-seeder replacement has no such
+-- constraint; see docs/build-system.md). This mirrors the same reason
+-- 'Hydra.ExtGeneration' stays decoupled from "Hydra.Generation". Only
+-- "Hydra.Generation"'s Build-free helpers ('isDerivedModule',
+-- 'ValidationFindings', 'ValidationResult') are imported here; the Build.*
+-- coupling stays on this side of the seam.
 --
--- The sole consumer of this module is update-json-main/Main.hs (the full sync's
--- structural-validation gate). The cold-seed path does not run structural
--- validation, so nothing on that path needs these definitions.
+-- The sole consumer of this module is update-json-main/Main.hs (the full
+-- sync's structural-validation gate).
 module Hydra.PackagingGeneration (
   module Hydra.PackagingGeneration,
 ) where

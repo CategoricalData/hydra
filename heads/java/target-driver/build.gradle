@@ -26,7 +26,9 @@ def hydraRoot = file("$projectDir/../../..")
 // Single source of truth for the published host version: hydra.json
 // (hostOverrides["java"] -> hostVersion), read via bin/lib/hydra-packages.py
 // so Gradle and the shell scripts always agree. Mirrors json-driver/build.gradle.
-def hostVersion = providers.exec {
+// -PhostVersion=<version> overrides the computed value — used by the cold-seed CI
+// step to pin a version (e.g. one not yet reflected in hydra.json) without a shim.
+def hostVersion = findProperty('hostVersion') ?: providers.exec {
     workingDir = hydraRoot
     commandLine 'python3', 'bin/lib/hydra-packages.py', 'host-version', 'hydra-java'
 }.standardOutput.asText.get().trim()
@@ -44,23 +46,10 @@ java {
 sourceSets {
     main {
         java {
-            // hydra-build's generated hydra.build.Routing (#560) PLUS the
-            // overlay-copied hydra.overlay.java.build.Generation (#459: moved
-            // from heads/java into the hydra-build overlay, so copy-overlay.sh
-            // merges it onto this same dist tree on every assemble). Sourcing
-            // both from the assembled dist/java/hydra-build — rather than
-            // adding overlay/java/hydra-build as a SECOND srcDir — avoids
-            // compiling Generation.java twice ("duplicate class"): dist/java
-            // already carries the merged copy. hydra-build itself is not
-            // published (no Maven artifact), so it's compiled here from its
-            // generated dist/java source, mirroring json-driver/build.gradle.
-            srcDir file("$hydraRoot/dist/java/hydra-build/src/main/java")
             // The two remaining cross-target driver files from heads/java.
             // Everything else under heads/java either needs the local dist
             // (other GenerationTargets callers) or isn't needed for this path.
             srcDir file("$hydraRoot/heads/java/src/main/java")
-            include 'hydra/build/**'
-            include 'hydra/overlay/java/build/**'
             include 'hydra/Bootstrap.java'
             include 'hydra/GenerationTargets.java'
             include 'hydra/TransformJsonToTarget.java'
@@ -84,6 +73,17 @@ dependencies {
     api "net.fortytwo.hydra.java:hydra-typescript:${hostVersion}"
     api "net.fortytwo.hydra.java:hydra-lisp:${hostVersion}"
     api "net.fortytwo.hydra.java:hydra-haskell:${hostVersion}"
+    // #703: hydra-build IS published (net.fortytwo.hydra.java:hydra-build), despite
+    // the prior local srcDir workaround's comment claiming otherwise (stale — that
+    // comment predates hydra-build's publication). The published jar carries both
+    // hydra.build.* (Routing etc., #560) and the overlay-merged
+    // hydra.overlay.java.build.Generation (#459) — confirmed via `jar tf` on the
+    // 0.17.5 artifact. Consuming it here (instead of srcDir'ing the locally-
+    // assembled dist/java/hydra-build/src) breaks the cold-clone circularity: this
+    // driver no longer needs a local dist/java/hydra-build to exist before it can
+    // bootstrap, which was blocking the Java-host cold-seed path on a genuinely
+    // cold tree (no local Java or Haskell host built yet).
+    api "net.fortytwo.hydra.java:hydra-build:${hostVersion}"
 }
 
 // Print the runtime classpath (compiled driver classes + the published hosts and

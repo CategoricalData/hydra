@@ -60,12 +60,10 @@ module_ = Module {
 -- exit: the common test runner does not control what is attached to its own standard input across
 -- hosts, so there is no deterministic content to assert.
 --
--- Note: hydra.lib.system.writeStderr/writeStdout tests are deferred until hydra-kernel 0.17.2
--- publishes with these primitives (published-host cold-seed seam, F2 / #376 json-driver pin):
--- heads/haskell/json-driver hard-pins hydra-kernel==0.17.1 from Hackage, but its build also
--- compiles this file, so referencing DefSystem.writeStderr/writeStdout here breaks the cold-seed
--- build until the published kernel actually has them. Re-add systemWriteStderr/systemWriteStdout
--- (removed below) once hostVersion advances to 0.17.2. See #526.
+-- Note: hydra.lib.system.writeStderr/writeStdout tests were deferred (F2/#376, historical: the
+-- since-retired Haskell cold-seeder pinned an older published hydra-kernel that predated these
+-- primitives, and its build also compiled this file). That constraint no longer applies (#703).
+-- Re-add systemWriteStderr/systemWriteStdout (removed below) if still missing. See #526.
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $

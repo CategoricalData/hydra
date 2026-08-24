@@ -6,11 +6,7 @@
 -- encode/decode modules, replacing Hydra.Digest's hand-rolled regex codec.
 --
 -- Module placement (#622 pattern): this module — not Hydra.Digest — carries
--- the Hydra.Build.* imports, so the Build.* coupling of the cold-seeder
--- headmods stays isolated in one place. When the callers migrate, this module
--- joins the seeder's headmods copy list and the Format modules join the
--- seeder's import allow-list, with the json-driver pin floor at
--- hydra-build-0.17.3 (the first release carrying Hydra.Build.Format).
+-- the Hydra.Build.* imports, keeping that coupling isolated in one place.
 --
 -- Layering: DigestFormat sits BELOW Hydra.Generation (Generation may import
 -- DigestFormat, never the reverse) and beside Hydra.Digest, whose hashing and
@@ -99,9 +95,7 @@ mkFormatContext bsGraph mods = FormatContext g (Codegen.buildSchemaMap g)
 -- | The shared codec context: the kernel type modules plus the format
 -- module itself. A CAF — the schema graph is built once, on first use,
 -- and shared by every digest read/write in the process. This is why the
--- Sources imports above live HERE rather than in callers: Generation (a
--- cold-seeder headmod) may import this module because the seeder's
--- typesmods tree carries exactly these DSL sources.
+-- Sources imports above live HERE rather than in callers.
 defaultFormatContext :: FormatContext
 defaultFormatContext = mkFormatContext bootstrapGraph
   (kernelTypesModules ++ [SourcesBuildFormat.module_])

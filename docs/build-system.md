@@ -752,11 +752,14 @@ published host — it is the **correct** tool whenever no published coder packag
 target (see the next subsection).
 
 The rule covers **every** build that compiles current-revision source — including cold-seed and bootstrap
-tools that run *before* `dist/haskell/` exists (e.g. the `#376` `cold-seed-from-json` seeder). Such a tool
-feels like an exception because it predates the co-generated tree, but it is not: if it source-dirs HEAD's
-authoring modules, it must generate the local kernel first and compile against *that* — it must never list
-a published `hydra-*` package as a library (extra-dep) dependency while source-dir'ing the matching local
-`packages/<pkg>` tree. That combination is the violation, however "cold" the tool is.
+tools that run *before* `dist/haskell/` exists. Such a tool feels like an exception because it predates
+the co-generated tree, but it is not: if it source-dirs HEAD's authoring modules, it must generate the
+local kernel first and compile against *that* — it must never list a published `hydra-*` package as a
+library (extra-dep) dependency while source-dir'ing the matching local `packages/<pkg>` tree. That
+combination is the violation, however "cold" the tool is. (The retired `#376` Haskell cold-seeder violated
+exactly this — see [Bootstrapping dist/haskell/ from the published
+host](#bootstrapping-disthaskell-from-the-published-host) below for the #703 replacement, which sidesteps
+the violation structurally rather than by convention: it never compiles against a Hydra type at all.)
 
 The sharpest symptom is a **bootstrap circularity on new kernel types.** A DSL authoring source is often
 phantom-annotated with the *generated* type it helps define — e.g.
@@ -834,8 +837,82 @@ the oil-and-water principle holds throughout:
    actually emits the shipped targets. The bootstrap `dist/haskell/` is the local "shim": it exists on
    disk during the build but **at no point enters the repository**.
 
-There is no deadlock here: step 2's generator is the *published* host (a working, prior-release binary),
-not the not-yet-built current host — so it can seed `dist/haskell/` before HEAD compiles.
+There is no deadlock here for a **warm** tree, where some host has already been built at least once this
+session: step 2's generator can be *any* already-built host, published or local, and step 3 proceeds
+straight through.
+
+#### The genuinely cold case: seeding `dist/haskell/hydra-kernel` with no host built anywhere yet
+
+The three steps above still leave one gap: on a genuinely cold checkout, `dist/haskell/hydra-kernel`
+itself does not exist, and step 2 as described needs *some* Haskell host to run the generation — but no
+Haskell host, published or local, has been built yet in this environment. Something has to seed
+`dist/haskell/hydra-kernel` before *any* Haskell process can run at all.
+
+**Retired approach (#376, deleted by #703):** a standalone `ColdSeedMain.hs` executable
+(`heads/haskell/json-driver/`) compiled against the *published* `hydra-kernel` package from Hackage, using
+that published host's compiled types to decode `dist/json` and emit `dist/haskell`. This worked as long as
+the published kernel's compiled Haskell types matched the shape the JSON decoder expected — but a kernel
+**shape** change (e.g. #683's `TypeScheme.constraints` becoming a bare map instead of `Maybe`-wrapped) is
+exactly the case where they diverge: `ColdSeedMain.hs`'s own DSL-authoring-source copy (`typesmods/`,
+a Terms-free mirror of the kernel Types) was refreshed from *current* HEAD source on every run, so it
+described the *new* shape, but it still had to **type-check against the *published*, old-shape kernel**
+it linked — a genuine oil-and-water violation baked into the seeder's own design (see the principle above:
+authoring sources may depend on the published host as a *toolchain*, but never in a way that requires the
+published host's *compiled types* to already match HEAD's shape). Every kernel-shape-changing batch broke
+this seeder, a recurring class of red CI (#500, #608, #617, and the #703 investigation itself).
+
+**Current approach (#703): seed via the JAVA host instead, as a pure schema-walking JSON→text decoder.**
+`heads/java/bin/seed-dist-haskell.sh` drives `hydra.TransformJsonToTarget`
+(`heads/java/target-driver/`) with `--target haskell`, once per package. This driver:
+
+- Resolves the **published** Java host (`net.fortytwo.hydra.java:hydra-java` and its published
+  target-coder siblings, incl. `hydra-build`) from Maven — no local Java or Haskell build required.
+- Reads `dist/json`'s term-AST directly and walks it to produce Haskell source **text**. Crucially, it
+  never compiles or type-checks against any Haskell type at all — Haskell is purely the *output
+  language*, a string it writes, not something the Java process links against. A kernel shape change
+  changes the *shape of the JSON*, which the Java-side decoder transcribes faithfully regardless — there
+  is no compiled-type boundary for the shape to break against.
+
+This closes the #376-era gap for good: **no cold-seed generator in this pipeline compiles against a
+published Hydra type whose shape might have moved on.** The published Java host's own compiled *coder
+logic* (which imports to emit, which primitive names to reference) can still be stale relative to
+not-yet-published kernel/coder changes — see the bootstrap patch below for the one such gap known today.
+
+**Known gap and its bootstrap patch: coder-emission logic vs. kernel data.** The distinction that matters
+is DATA (the JSON term-AST, which any coder version transcribes correctly) vs. LOGIC (the coder's own
+compiled emission rules — which imports to always add, which primitive name to print for a given
+namespace). A kernel *shape* change is DATA and survives Option 2 (above) untouched. A change to the
+**coder's own emission logic** — e.g. #684 adding `hydra.lib.functions.absurd`, which requires the
+Haskell coder to *always* emit `import Data.Void` — is a LOGIC change, and the published Java host's
+compiled `hydra.haskell.Coder` predates it. Until a host carrying the fix is published, the seed step
+alone cannot produce a `dist/haskell/hydra-kernel` that compiles.
+
+`heads/java/bin/patch-void-import.sh` is the sanctioned Step-8 bootstrap patch (see
+[Extending hydra-core § Step 8](recipes/extending-hydra-core.md)) for this one known gap: it adds the
+missing `import Data.Void` line to the one seeded file that needs it, unblocking a *local* Haskell host
+build. It is idempotent (no-ops if the import is already present) and strictly ephemeral: the very next
+`GENERATOR_HOST=haskell` regeneration — run by the local host this patch enabled — emits that file fresh
+from the *current* (locally-built, non-stale) coder, overwriting the patch with generator-produced content
+that already contains the import. A patch that survives a subsequent regeneration unchanged would indicate
+the coder still lacks the fix; one that gets cleanly overwritten (as verified during #703's own landing) is
+the correct, expected outcome.
+
+**Sequencing, seed to fully-native:**
+
+1. `heads/java/bin/seed-dist-haskell.sh` — Java-host, schema-walking seed of all 16 `dist/haskell/<pkg>/`
+   trees from tracked `dist/json/`, published Java host only, no local build required.
+2. `heads/java/bin/patch-void-import.sh` — the one known bootstrap patch (see above); a no-op once
+   unneeded.
+3. `heads/haskell/bin/overlay-kernel-runtime.sh` — restores hand-written overlay source (including the
+   `Hydra.Test.{TestEnv,DefaultImplGraph}` test bridge files) that step 1's `--prune-stale` removed, since
+   those files are copied, not generated. **Must run after step 1**, not before.
+4. `stack build` / `stack test` in `heads/haskell` — now succeeds against a fully Java-seeded,
+   patch-bridged `dist/haskell/`.
+5. From here on, a **locally-built, fully current** Haskell host exists. `GENERATOR_HOST=haskell`
+   regeneration (the normal, warm-tree path from step 2/3 of the section above) now runs against that
+   local host — which has neither the shape gap nor the coder-logic gap, since it was compiled from
+   current source — and its output is the authoritative `dist/haskell`/`dist/json`, superseding anything
+   the cold seed or bootstrap patch produced.
 
 ## Operational entry points
 

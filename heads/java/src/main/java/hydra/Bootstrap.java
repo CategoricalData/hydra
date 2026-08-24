@@ -254,21 +254,26 @@ public class Bootstrap {
         // #473 Step 0 — lib pass + redirect. The hydra.lib.* primitive IMPLEMENTATIONS live at
         // hydra.overlay.<lang>.lib.* (the analog of Haskell's Hydra.Overlay.Haskell.Lib.*), so hydra.lib.* is free
         // for the generated PrimitiveDefinition def-modules. This mirrors the Haskell driver's
-        // twoPassLib logic in bootstrap-from-json/Main.hs: when the Java host generates a target
-        // that consumes def-modules (everything except haskell, which uses the registry), it must
-        //   (1) emit the hydra.lib.* def-modules from their LOWERED form (lib pass), and
+        // twoPassLib logic in bootstrap-from-json/Main.hs: the Java host must, for every target incl. haskell:
+        //   (1) emit the hydra.lib.* def-modules from their LOWERED form (lib pass) — a primitive-only
+        //       module has no term/type definitions (moduleTermBindings/moduleTypeBindings both match
+        //       only _Definition_term/_Definition_type, never _Definition_primitive — see
+        //       Hydra.Sources.Kernel.Terms.Generation's modulePrimitiveDefaultBindings comment), so
+        //       the ordinary main pass silently drops it; lowerPrimitiveDefinitions converts it into
+        //       an emittable term module first.
         //   (2) redirect generated CONSUMER call-sites hydra.lib.<sub>.<fn> -> hydra.<lang>.lib.<sub>.<fn>
-        //       so they resolve to the relocated impls (redirect; a no-op for Java, whose def-modules
-        //       are capitalized classes that don't collide with the lowercase impl subpackages).
-        // Without this, self-host (java-to-java, java-to-python, ...) emits impls whose name() refers
-        // to hydra.lib.Math_ etc. but never emits those def-modules -> "cannot find symbol" /
-        // "PrimitiveDefinition object is not callable". See project_473_self_host_lib_pass_gap.
+        //       so they resolve to the relocated impls (redirect; a no-op for Java/Haskell, whose def-modules
+        //       are capitalized classes/modules that don't collide with the lowercase impl subpackages).
+        // Without this, self-host (java-to-java, java-to-python, java-to-haskell, ...) emits impls whose
+        // name() refers to hydra.lib.Math_ etc. but never emits those def-modules -> "cannot find symbol" /
+        // "PrimitiveDefinition object is not callable" / GHC "Could not find module". #703 found the haskell
+        // gap: the lib pass was gated OFF for haskell on the assumption its def-modules came from elsewhere
+        // ("the registry" — Hydra.Overlay.Haskell.Libraries, the hand-written IMPL registry, which is a
+        // different thing from the def-modules it imports). See project_473_self_host_lib_pass_gap.
         // The lib pass runs now (alongside the main pass output); the redirect runs LAST (after the
         // test + ext-for-tests passes below also write into outMain/<target> and outTest/<target>),
         // so every generated consumer file gets its hydra.lib.* impl call-sites redirected.
-        if (!target.equals("haskell")) {
-            runLibPass(repoRoot, target, outMain + File.separator + target, allMainMods, modsToGenerate);
-        }
+        runLibPass(repoRoot, target, outMain + File.separator + target, allMainMods, modsToGenerate);
 
         stepTime = System.currentTimeMillis() - stepStart;
 
@@ -608,7 +613,8 @@ public class Bootstrap {
             case "scheme":      return GenerationTargets.writeLispDialect(repoRoot, langDir, "scheme", "scm", libUniverse, libMods);
             case "common-lisp": return GenerationTargets.writeLispDialect(repoRoot, langDir, "commonLisp", "lisp", libUniverse, libMods);
             case "emacs-lisp":  return GenerationTargets.writeLispDialect(repoRoot, langDir, "emacsLisp", "el", libUniverse, libMods);
-            default:            return new ArrayList<>(); /* haskell handled by caller guard */
+            case "haskell":     return GenerationTargets.writeHaskell(repoRoot, langDir, libUniverse, libMods);
+            default:            return new ArrayList<>();
         }
     }
 

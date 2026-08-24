@@ -97,14 +97,8 @@ jobs:
       # 0.17.1). Check 2 (#617) fails if the cold-seeder's own generation
       # modules import a Hydra.Build.* module not yet published at the pinned
       # hostVersion — the #560/#607 revert shape. Needs only python3 + git.
-      - name: Check oil-and-water invariant for published-host drivers (#608, #617)
+      - name: Check oil-and-water invariant for published-host drivers (#608)
         run: python3 bin/check-oil-and-water.py
-      # ghc-version pinned: this job's bin/sync.sh cold-start path builds the
-      # json-driver (heads/haskell/json-driver/, system-ghc/resolver lts-24.7 =>
-      # ghc-9.10.2) whenever dist/haskell/ is absent — e.g. after a version bump
-      # invalidates the ~/.stack cache. Without the pin, haskell-actions/setup
-      # provisions a different GHC and the cold-seed fails with S-6362. Same fix
-      # as the cold-clone-haskell and Regression-harnesses jobs.
       - uses: haskell-actions/setup@v2
         with:
           ghc-version: '9.10.2'
@@ -303,49 +297,73 @@ jobs:
     timeout-minutes: 240
     steps:
       - uses: actions/checkout@v4
-      # ghc-version pinned for the cold-seed's json-driver build (system-ghc,
-      # resolver lts-24.7 => ghc-9.10.2); see the cold-clone-haskell job.
+      # ghc-version pinned for this job's own heads/haskell/ stack project
+      # (system-ghc, resolver lts-24.7 => ghc-9.10.2).
       - uses: haskell-actions/setup@v2
         with:
           ghc-version: '9.10.2'
           enable-stack: true
           stack-version: latest
       - uses: astral-sh/setup-uv@v5
+      # #703: the Java-host cold-seeder (heads/java/bin/seed-dist-haskell.sh)
+      # runs target-driver (heads/java/target-driver/), a Gradle/JVM build — needs a
+      # JDK. See the target-driver build.gradle for its sourceCompatibility (11).
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11.0.19'
       - uses: actions/cache@v4
         with:
           path: ~/.stack
           key: stack-${{ hashFiles('heads/haskell/stack.yaml', 'heads/haskell/package.yaml') }}
           restore-keys: stack-
-      # #376: dist/haskell/ is untracked (gitignored), so a fresh checkout has
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('heads/java/target-driver/build.gradle') }}
+          restore-keys: gradle-
+      # #703: dist/haskell/ is untracked (gitignored), so a fresh checkout has
       # no generated kernel tree — bin/test-regressions.sh's stack build fails
       # with GHC-87110 "Could not find module 'Hydra.Typing'" etc. Cold-seed it
-      # from the committed dist/json/ first (same path bin/sync.sh's cold-start
-      # detection uses), exactly like the cold-clone-haskell job.
-      - name: Cold-seed dist/haskell from committed dist/json (published host)
-        run: heads/haskell/json-driver/bin/cold-seed-dist-haskell.sh
+      # from the committed dist/json/ via the Java host first (same path
+      # bin/sync.sh's cold-start detection uses), exactly like the
+      # cold-clone-haskell job. See heads/java/bin/seed-dist-haskell.sh and
+      # docs/build-system.md for the mechanism this replaces (#703).
+      - name: Cold-seed dist/haskell from committed dist/json (Java host)
+        run: heads/java/bin/seed-dist-haskell.sh
+      # #703: bootstrap patch (Step 8) — see heads/java/bin/patch-void-import.sh's
+      # own header. Idempotent; a no-op once a local host regenerates this file.
+      - name: Apply Void-import bootstrap patch
+        run: heads/java/bin/patch-void-import.sh
       # Post-#418 the overlay/haskell/hydra-kernel runtime files are untracked,
       # so a fresh checkout alone can't build the Haskell project (GHC fails
       # with "Could not find module 'Hydra.Overlay.Haskell.Lib.*'"). git
-      # checkout can't restore them either. This is the canonical fix.
+      # checkout can't restore them either. This is the canonical fix. Must run
+      # AFTER the cold-seed step: the seed's --prune-stale removes hand-written
+      # overlay files (e.g. the Test/{TestEnv,DefaultImplGraph}.hs test bridge)
+      # that aren't part of its own generated keep-set; this restores them.
       - name: Restore overlay kernel runtime
         run: heads/haskell/bin/overlay-kernel-runtime.sh
       - name: Run regression harnesses
         run: bin/test-regressions.sh
 
-  # #376: durable cold-clone gate. dist/haskell/ is untracked (gitignored) —
+  # #376/#703: durable cold-clone gate. dist/haskell/ is untracked (gitignored) —
   # this is the job that actually proves a genuinely fresh checkout (no
   # dist/haskell/ on disk, none of the haskell job's warm .stack-work state)
-  # can still bootstrap: the cold-only json-driver (heads/haskell/json-driver/)
-  # seeds all 16 dist/haskell/<pkg>/ trees from the COMMITTED dist/json/ using
-  # only the PUBLISHED Hackage coder packages (never a locally-built host —
-  # that's the whole point: it must work before the head can compile), then
-  # bin/sync.sh's own cold-start detection (the dist/haskell/hydra-kernel
-  # sentinel check) picks up from there to build the full host and run tests.
-  # Independent of the `haskell` job above: this checkout never runs
-  # `bin/sync.sh` with a warm dist/haskell/ already present, so a regression
-  # in the cold-seed path (missing package, wrong load flags, a coder that
-  # silently isn't on Hackage at the pinned version) fails HERE even if the
-  # warm `haskell` job's regenerate-and-diff checks stay green.
+  # can still bootstrap: the Java-host cold seeder (heads/java/bin/cold-seed-
+  # dist-haskell.sh) seeds all 16 dist/haskell/<pkg>/ trees from the COMMITTED
+  # dist/json/ using only the PUBLISHED Maven coder packages (never a locally-
+  # built host — that's the whole point: it must work before the head can
+  # compile), a bootstrap patch bridges the one known coder-emission gap
+  # (patch-void-import.sh), then bin/sync.sh's own cold-start detection (the
+  # dist/haskell/hydra-kernel sentinel check) picks up from there to build the
+  # full host and run tests. Independent of the `haskell` job above: this
+  # checkout never runs `bin/sync.sh` with a warm dist/haskell/ already
+  # present, so a regression in the cold-seed path (missing package, wrong
+  # load flags, a coder no longer resolvable at the pinned version) fails HERE
+  # even if the warm `haskell` job's regenerate-and-diff checks stay green.
   cold-clone-haskell:
     name: Cold-clone Haskell sync (no committed dist/haskell)
     runs-on: ubuntu-latest
@@ -357,25 +375,31 @@ jobs:
     timeout-minutes: 240
     steps:
       - uses: actions/checkout@v4
-      # Pin the GHC the json-driver's stack.yaml expects (resolver lts-24.7 =>
-      # ghc-9.10.2). The json-driver project uses system-ghc:true/install-ghc:false,
-      # so haskell-actions/setup must provision the matching system GHC or the
-      # cold-seed `stack build` fails with S-6362 "No compiler found". The warm
-      # `haskell` job builds heads/haskell/'s own project and doesn't hit this.
       - uses: haskell-actions/setup@v2
         with:
           ghc-version: '9.10.2'
           enable-stack: true
           stack-version: latest
       - uses: astral-sh/setup-uv@v5
+      # #703: the Java-host cold-seeder (heads/java/bin/seed-dist-haskell.sh)
+      # runs target-driver (heads/java/target-driver/), a Gradle/JVM build — needs a
+      # JDK. See the target-driver build.gradle for its sourceCompatibility (11).
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11.0.19'
       - uses: actions/cache@v4
         with:
           path: ~/.stack
-          # Separate cache key from the `haskell` job: this job builds the
-          # json-driver's own stack project (heads/haskell/json-driver/), a
-          # different set of packages than heads/haskell/'s own stack.yaml.
-          key: stack-cold-clone-${{ hashFiles('heads/haskell/json-driver/stack.yaml', 'heads/haskell/json-driver/package.yaml') }}
+          key: stack-cold-clone-${{ hashFiles('heads/haskell/stack.yaml', 'heads/haskell/package.yaml') }}
           restore-keys: stack-cold-clone-
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('heads/java/target-driver/build.gradle') }}
+          restore-keys: gradle-
       - name: Confirm dist/haskell is absent on a fresh checkout
         run: |
           if [ -d dist/haskell ]; then
@@ -383,14 +407,19 @@ jobs:
             exit 1
           fi
           echo "confirmed: no committed dist/haskell/"
-      # This is the #376 linchpin: seed every dist/haskell/<pkg>/ tree from
-      # the committed dist/json/ using only published Hackage coders, with
+      # This is the #703 linchpin: seed every dist/haskell/<pkg>/ tree from
+      # the committed dist/json/ using only the published Java host, with
       # dist/haskell/ absent going in. Same driver bin/sync.sh's own
       # cold-start detection calls; invoked directly here so this job's
       # failure signal is specific to the seed step, not buried inside a
-      # full bin/sync.sh run.
-      - name: Cold-seed dist/haskell from committed dist/json (published host)
-        run: heads/haskell/json-driver/bin/cold-seed-dist-haskell.sh
+      # full bin/sync.sh run. See docs/build-system.md for the mechanism this
+      # replaces (the Haskell cold-seeder, deleted).
+      - name: Cold-seed dist/haskell from committed dist/json (Java host)
+        run: heads/java/bin/seed-dist-haskell.sh
+      # #703: bootstrap patch (Step 8) — see heads/java/bin/patch-void-import.sh's
+      # own header. Idempotent; a no-op once a local host regenerates this file.
+      - name: Apply Void-import bootstrap patch
+        run: heads/java/bin/patch-void-import.sh
       - name: Verify all 16 package trees were seeded
         run: |
           FAIL=0

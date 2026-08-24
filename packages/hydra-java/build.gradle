@@ -140,6 +140,18 @@ compileJava {
     options.forkOptions.memoryMaximumSize = '6g'
 }
 
+// #703: compileHeadsExtrasJava (the headsExtras source set's auto-generated compile
+// task) had no fork/heap tuning, unlike compileJava above. It compiles the same
+// deeply-nested-generic Bootstrap/Generation/GenerationTargets source as the
+// CLI-driven -Xss64m siblings (update-java-json.sh, transform-json-to-target.sh).
+// Stack-size tuning for this task's worker is set daemon-wide via
+// org.gradle.jvmargs in gradle.properties (forkOptions.jvmArgs did not reliably
+// propagate to this task in Gradle 7.6.4).
+compileHeadsExtrasJava {
+    options.fork = true
+    options.forkOptions.memoryMaximumSize = '6g'
+}
+
 // Test-side excludes: tests that imported the cypher/rdf/pg code now living as
 // overlay source under overlay/java/hydra-{pg,rdf}/ (folded from the former
 // bindings/java/* in #511; see docs/overlays.md). The tests themselves still live
