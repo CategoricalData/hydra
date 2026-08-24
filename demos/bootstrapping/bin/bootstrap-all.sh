@@ -660,7 +660,7 @@ compare_output() {
     ext=$(ext_for_target "$target")
     local baseline_proj
     baseline_proj=$(baseline_dir_for_target "$target")
-    local baseline_dir="$HYDRA_ROOT/$baseline_proj/src/main"
+    local baseline_dir="$HYDRA_ROOT/$baseline_proj"
 
     local total=0 identical=0 different=0 missing_in_baseline=0
     local diff_files=()
@@ -683,8 +683,14 @@ compare_output() {
             common-lisp) lang_dir="common-lisp" ;;
             emacs-lisp)  lang_dir="emacs-lisp" ;;
         esac
-        local mod_path="${rel#src/main/${lang_dir}/}"
-        local ref="$baseline_dir/${lang_dir}/$mod_path"
+        local src_root
+        case "$rel" in
+            src/main/${lang_dir}/*) src_root="src/main" ;;
+            src/test/${lang_dir}/*) src_root="src/test" ;;
+            *) src_root="" ;;
+        esac
+        local mod_path="${rel#${src_root}/${lang_dir}/}"
+        local ref="$baseline_dir/${src_root}/${lang_dir}/$mod_path"
 
         if [ -f "$ref" ]; then
             total=$((total + 1))
@@ -706,7 +712,7 @@ compare_output() {
         fi
     done < <(find "$demo_dir" -name "*${ext}" 2>/dev/null | sort)
 
-    echo "  Comparison against baseline ($baseline_proj/src/main):" >&2
+    echo "  Comparison against baseline ($baseline_proj):" >&2
     echo "    Matched to baseline:  $total" >&2
     echo "    Identical:            $identical" >&2
     if [ "$different" -gt 0 ]; then
