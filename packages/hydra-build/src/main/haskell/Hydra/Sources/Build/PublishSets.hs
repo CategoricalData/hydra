@@ -8,11 +8,13 @@ import qualified Hydra.Dsl.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Lib.Equality as Equality
 import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Dsl.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Sorting      as Sorting
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.List                   as L
+import qualified Data.Set                    as S
 
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 
@@ -49,6 +51,7 @@ module_ = Module {
      toDefinition isPublishSetClosed,
      toDefinition packageDepNames,
      toDefinition publishSetTopoOrder,
+     toDefinition reverseDepClosure,
      toDefinition strandedDeps]
 
 -- | Whether the publish set is dependency-closed given the externally-satisfied
@@ -91,6 +94,29 @@ publishSetTopoOrder = define "publishSetTopoOrder" $
           (Lists.filter
             ("pkg" ~> Lists.member (Packaging.packageName (var "pkg")) (var "publishSet"))
             (var "packages"))))
+
+-- | Every package that transitively depends on the root package (including the
+-- root itself), sorted. This is the reverse-dependency (dirty-set forward
+-- propagation) closure behind @sync-packages.sh --from <pkg>@: "regenerate <pkg>
+-- and everything downstream of it." Promotes the pure graph algorithm formerly in
+-- @bin/lib/hydra-packages.py cmd_reverse_closure@ (#416).
+--
+-- Reuses the kernel's transitive-reachability engine 'Sorting.findReachableNodes'
+-- (the same helper 'Hydra.Sources.Kernel.Terms.Dependencies' uses for let-pruning),
+-- fed a successor function that yields, for a package name, the set of package names
+-- that directly depend on it (the reverse edges built from 'packageDepNames'). A
+-- finite graph reaches its full closure without any explicit loop construct.
+reverseDepClosure :: TypedTermDefinition ([Package] -> PackageName -> [PackageName])
+reverseDepClosure = define "reverseDepClosure" $
+  doc "Every package that transitively depends on the root (including the root), sorted" $
+  "packages" ~> "root" ~>
+    "dependents" <~ ("name" ~> (Sets.fromList (Lists.map
+      ("pkg" ~> Packaging.packageName (var "pkg"))
+      (Lists.filter
+        ("pkg" ~> Lists.member (var "name") (packageDepNames @@ var "pkg"))
+        (var "packages"))) :: TypedTerm (S.Set PackageName))) $
+    Lists.sortBy ("n" ~> unwrap _PackageName @@ var "n") (Sets.toList
+      (Sorting.findReachableNodes (var "dependents") (var "root" :: TypedTerm PackageName)))
 
 -- | The (member, missingDependency) pairs that would be stranded by publishing
 -- the given set: for each package in the set, each direct dependency whose name
