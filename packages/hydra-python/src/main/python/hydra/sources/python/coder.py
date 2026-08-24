@@ -2034,7 +2034,7 @@ def _encode_definition():
                                 string("hydra.core.Unit"),
                             )
                         ),
-                        nothing(),
+                        Maps.empty(),
                     ), lam("sig", hydra.dsl.scoping.term_signature_to_type_scheme(var("sig"))),),
             ),
         ],
