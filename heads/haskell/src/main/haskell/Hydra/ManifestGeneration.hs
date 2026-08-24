@@ -3,6 +3,7 @@
 -- 'Hydra.Build.ManifestWriter' coupling. Used only by the update-json-manifest
 -- driver, which always runs against a local (non-cold-seed) build.
 module Hydra.ManifestGeneration (
+  writeExpectedLibrariesJson,
   writeLanguagesJson,
   writePerPackageManifestsJson,
 ) where
@@ -13,6 +14,7 @@ import Hydra.PackageRouting (RoutingMap, groupByPackageIn)
 import qualified Hydra.Build.ManifestWriter as GenManifestWriter
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
+import qualified Hydra.Sources.Build.Libraries as Libraries
 import qualified Hydra.Sources.Build.Registry as Registry
 
 import qualified Control.Monad as CM
@@ -105,5 +107,34 @@ writeLanguagesJson distJsonRoot = do
     SD.createDirectoryIfMissing True pkgDir
     writeFile filePath (jsonStr ++ "\n")
     putStrLn $ "Wrote languages: " ++ filePath
+  where
+    arr names = Json.ValueArray (Json.ValueString <$> names)
+
+-- | Write the expected @hydra.lib.\<sub>@ library set to
+-- @dist/json/hydra-build/src/main/json/expected-libraries.json@ (#416/#533).
+--
+-- The Option-A emitted-artifact bridge for #533: every self-hosting host is
+-- expected to register, load, and test the same set of @hydra.lib.*@ modules.
+-- The canonical list lives once in 'Hydra.Sources.Build.Libraries.expectedLibraryNames'
+-- (validated against the actual kernel @Lib/*.hs@ set by @Hydra.BuildLibrariesSpec@);
+-- emitting it as a data artifact lets the non-Haskell host loaders (the CL/EL flat
+-- loaders today) fail immediately, with the named culprit, if their native runtime
+-- is missing a library the kernel provides — the whole point of #533 — WITHOUT
+-- needing the (still-unpublished) hydra.build library linked into each host.
+--
+-- Names are emitted BARE (@"chars"@, @"effects"@, …), matching 'expectedLibraryNames'
+-- and the @hydra.lib.\<sub>@ sub-namespace convention; each loader knows its own
+-- @hydra.lib.@ prefix. Emitted with the same 'Hydra.Json.Writer' the manifests use,
+-- so it is a normal tracked generated dist/json artifact.
+writeExpectedLibrariesJson :: FilePath -> IO ()
+writeExpectedLibrariesJson distJsonRoot = do
+    let jsonVal = Json.ValueObject [
+          ("expectedLibraries", arr Libraries.expectedLibraryNames)]
+        jsonStr = JsonWriter.printJson jsonVal
+        pkgDir  = distJsonRoot FP.</> "hydra-build" FP.</> "src" FP.</> "main" FP.</> "json"
+        filePath = pkgDir FP.</> "expected-libraries.json"
+    SD.createDirectoryIfMissing True pkgDir
+    writeFile filePath (jsonStr ++ "\n")
+    putStrLn $ "Wrote expected-libraries: " ++ filePath
   where
     arr names = Json.ValueArray (Json.ValueString <$> names)

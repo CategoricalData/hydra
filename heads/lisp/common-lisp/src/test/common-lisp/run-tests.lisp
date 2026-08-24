@@ -190,6 +190,62 @@
 (load (hydra-dist-main-path "overlay/common_lisp/lib/system.lisp"))
 
 ;; ============================================================================
+;; 3b. #533: validate the native runtime library set against the emitted
+;;     expected-libraries.json (Option-A bridge, like languages.json).
+;; ============================================================================
+;; The canonical hydra.lib.<sub> set every self-hosting host must register lives
+;; once in hydra.build.libraries and is emitted (bare names) to
+;; dist/json/hydra-build/src/main/json/expected-libraries.json by update-json-manifest.
+;; Here we fail LOUDLY, with the named culprit, if this host's native runtime is
+;; missing any expected library — the #533 payoff. "Registered" is probed at the
+;; RUNTIME level (is there a bound hydra_overlay_common_lisp_lib_<name>_* symbol?)
+;; rather than by inspecting any hardcoded load list, so the check is immune to
+;; drift between the loader's and this harness's native-lib dolists.
+;;
+;; The artifact lives in the hydra-build json dist tree, resolved as a sibling of
+;; the head dir (repo layout) — the same ../../../dist/... idiom the test-data
+;; base uses. In the bootstrap-demo flat layout (HYDRA_LISP_DIST_BASE set) the
+;; hydra-build json tree is not assembled, so the check is skipped there.
+(defvar *hydra-expected-libraries-json*
+  (unless *hydra-cl-dist-base-env*
+    (merge-pathnames
+      "../../../dist/json/hydra-build/src/main/json/expected-libraries.json"
+      *hydra-cl-head*)))
+
+(defun hydra-native-library-registered-p (name)
+  "True if this host's native runtime defines at least one symbol for the
+   hydra.lib.<name> library, i.e. a bound HYDRA_OVERLAY_COMMON_LISP_LIB_<NAME>_*."
+  (let ((prefix (string-upcase
+                  (concatenate 'string "HYDRA_OVERLAY_COMMON_LISP_LIB_" name "_"))))
+    (do-symbols (sym (find-package :cl-user))
+      (let ((sname (symbol-name sym)))
+        (when (and (>= (length sname) (length prefix))
+                   (string= prefix (subseq sname 0 (length prefix)))
+                   (boundp sym))
+          (return-from hydra-native-library-registered-p t))))
+    nil))
+
+(defun hydra-validate-expected-libraries ()
+  "Read expected-libraries.json and fail loudly if any expected hydra.lib.<sub>
+   is not registered by this host's native runtime (#533)."
+  (when (and *hydra-expected-libraries-json*
+             (probe-file *hydra-expected-libraries-json*))
+    (let* ((obj (json-read-file *hydra-expected-libraries-json*))
+           (expected (cdr (assoc "expectedLibraries" obj :test #'string=)))
+           (missing (remove-if #'hydra-native-library-registered-p expected)))
+      (when missing
+        (error "#533: Common Lisp host missing native runtime for hydra.lib: ~{~A~^, ~}~%~
+                (expected-libraries.json declares ~A libraries; ~A not registered)"
+               missing (length expected) (length missing)))
+      (format t "#533: all ~A expected hydra.lib.* libraries registered.~%"
+              (length expected)))))
+
+;; json-read-file lives in json-reader.lisp; ensure it is available before use.
+(let ((jr (hydra-dist-main-path "json-reader.lisp")))
+  (when (probe-file jr) (load jr)))
+(hydra-validate-expected-libraries)
+
+;; ============================================================================
 ;; 4. Load primitive infrastructure and test runner
 ;; ============================================================================
 (format t "Loading primitive infrastructure...~%")

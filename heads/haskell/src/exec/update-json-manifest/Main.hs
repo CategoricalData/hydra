@@ -8,7 +8,7 @@
 module Main where
 
 import Hydra.Generation (generateEncoderModules, generateDecoderModules)
-import Hydra.ManifestGeneration (writeLanguagesJson, writePerPackageManifestsJson)
+import Hydra.ManifestGeneration (writeExpectedLibrariesJson, writeLanguagesJson, writePerPackageManifestsJson)
 import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
@@ -91,5 +91,9 @@ main = do
   -- #416 piece 3 step 2: emit the language scope lists the build shell scripts
   -- read via jq, so they stop hardcoding language enumerations (Option A bridge).
   writeLanguagesJson defaultDistJsonRoot
+  -- #416/#533: emit the expected hydra.lib.* library set so the non-Haskell host
+  -- loaders can fail-fast (named culprit) when their native runtime is missing a
+  -- library the kernel provides (Option A bridge, same as languages.json).
+  writeExpectedLibrariesJson defaultDistJsonRoot
   putStrLn ""
   putStrLn "=== Done! ==="

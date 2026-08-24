@@ -54,6 +54,47 @@
 ;; Load prims and libraries
 (hydra-load-prims-and-libraries)
 
+;; #533: validate the native runtime library set against the emitted
+;; expected-libraries.json (Option-A bridge, like languages.json). The canonical
+;; hydra.lib.<sub> set every self-hosting host must register lives once in
+;; hydra.build.libraries and is emitted (bare names) to
+;; dist/json/hydra-build/src/main/json/expected-libraries.json by update-json-manifest.
+;; Fail LOUDLY, named culprit, if this host's native runtime is missing an expected
+;; library — the #533 payoff. "Registered" is probed at the RUNTIME level (is there a
+;; bound hydra_overlay_emacs_lisp_lib_<name>_* symbol?), immune to load-list drift.
+;; The artifact lives in the hydra-build json dist tree, resolved as a head sibling
+;; (../../../dist/...); in the bootstrap-demo flat layout (HYDRA_LISP_DIST_BASE set)
+;; that tree is not assembled, so the check is skipped there.
+(require 'json)
+(defun hydra-native-library-registered-p (name)
+  "True if this host's native runtime defines at least one bound symbol for the
+hydra.lib.NAME library, i.e. hydra_overlay_emacs_lisp_lib_<name>_*."
+  (let ((prefix (concat "hydra_overlay_emacs_lisp_lib_" name "_"))
+        (found nil))
+    (mapatoms
+     (lambda (sym)
+       (when (and (not found)
+                  (boundp sym)
+                  (string-prefix-p prefix (symbol-name sym)))
+         (setq found t))))
+    found))
+(let* ((env-base (getenv "HYDRA_LISP_DIST_BASE"))
+       (json-path (unless (and env-base (> (length env-base) 0))
+                    (expand-file-name
+                     "../../../dist/json/hydra-build/src/main/json/expected-libraries.json"
+                     (file-name-directory load-file-name)))))
+  (when (and json-path (file-exists-p json-path))
+    (let* ((json-array-type 'list)
+           (json-object-type 'alist)
+           (json-key-type 'string)
+           (obj (json-read-file json-path))
+           (expected (cdr (assoc "expectedLibraries" obj)))
+           (missing (seq-remove #'hydra-native-library-registered-p expected)))
+      (when missing
+        (error "#533: Emacs Lisp host missing native runtime for hydra.lib: %s (expected-libraries.json declares %d libraries; %d not registered)"
+               (mapconcat #'identity missing ", ") (length expected) (length missing)))
+      (message "#533: all %d expected hydra.lib.* libraries registered." (length expected)))))
+
 ;; Load annotation bindings (Term AST definitions for kernel annotation functions)
 (let ((ann-path (expand-file-name "src/test/emacs-lisp/hydra/annotation_bindings.el"
                                    (file-name-directory load-file-name))))
