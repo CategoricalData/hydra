@@ -1,0 +1,22 @@
+{
+  "expectedLibraries": [
+    "chars",
+    "effects",
+    "eithers",
+    "equality",
+    "files",
+    "functions",
+    "hashing",
+    "lists",
+    "literals",
+    "logic",
+    "maps",
+    "math",
+    "optionals",
+    "ordering",
+    "pairs",
+    "regex",
+    "sets",
+    "strings",
+    "system",
+    "text"]}
