@@ -213,7 +213,7 @@
                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.scala.syntax.Data"}}},
                                 "argument": {
                                   "application": {
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.scala.syntax.Type"}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.scala.syntax.Type"}}},
                                     "argument": {"variable": "typeArgs"}}}}},
                             "argument": {"variable": "fun"}}},
                         "argument": {

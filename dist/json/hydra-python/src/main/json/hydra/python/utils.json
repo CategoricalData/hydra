@@ -390,7 +390,7 @@
                                     "argument": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}},
                                         "argument": {"variable": "rhs"}}}}}}},
                             "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Primary"}}}}},
                         "argument": {
@@ -1098,7 +1098,7 @@
                                             "argument": {
                                               "application": {
                                                 "function": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.python.syntax.Statement"}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.python.syntax.Statement"}}},
                                                 "argument": {"variable": "g"}}}}}}}}},
                                 "argument": {
                                   "application": {
@@ -1119,7 +1119,7 @@
                                     "argument": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"list": {"variable": "hydra.python.syntax.Statement"}}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"list": {"variable": "hydra.python.syntax.Statement"}}}},
                                         "argument": {"variable": "groups"}}}}},
                                 "argument": {
                                   "inject": {
@@ -1304,7 +1304,7 @@
                                                       "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.python.syntax.Primary"}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.python.syntax.Primary"}}},
                                                         "argument": {
                                                           "application": {
                                                             "function": {
@@ -3579,7 +3579,7 @@
                                                                             "argument": {
                                                                               "application": {
                                                                                 "function": {
-                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.python.syntax.Statement"}}},
+                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.python.syntax.Statement"}}},
                                                                                 "argument": {"variable": "extraStmts"}}}}},
                                                                         "argument": {
                                                                           "let": {

@@ -345,7 +345,7 @@
                                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "string"}}},
                                                                 "argument": {
                                                                   "application": {
-                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"literal": "string"}}},
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"literal": "string"}}},
                                                                     "argument": {"variable": "groupPath"}}}}},
                                                             "argument": {"variable": "name_"}}},
                                                         "argument": {

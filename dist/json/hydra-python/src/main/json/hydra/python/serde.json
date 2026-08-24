@@ -1267,7 +1267,7 @@
                                 "argument": {
                                   "application": {
                                     "function": {
-                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}},
+                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}},
                                     "argument": {"variable": "rhs"}}}}},
                             "argument": {"application": {"function": {"variable": "hydra.python.serde.bitwiseOrToExpr"}, "argument": {"variable": "lhs"}}}}},
                         "argument": {
@@ -1900,7 +1900,7 @@
                                     "argument": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.python.syntax.TypeParameter"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.python.syntax.TypeParameter"}}},
                                         "argument": {"variable": "tparams"}}}}},
                                 "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.ast.Expr"}}}}},
                             "argument": {
@@ -3109,7 +3109,7 @@
                                     "argument": {
                                       "application": {
                                         "function": {"variable": "hydra.python.serde.pythonFloatLiteralText"},
-                                        "argument": {"application": {"function": {"variable": "hydra.lib.literals.showFloat64"}, "argument": {"variable": "f"}}}}}}}}}},
+                                        "argument": {"application": {"function": {"variable": "hydra.lib.literals.printFloat64"}, "argument": {"variable": "f"}}}}}}}}}},
                           {
                             "name": "imaginary",
                             "handler": {
@@ -3127,7 +3127,7 @@
                                             "argument": {
                                               "application": {
                                                 "function": {"variable": "hydra.python.serde.pythonFloatLiteralText"},
-                                                "argument": {"application": {"function": {"variable": "hydra.lib.literals.showFloat64"}, "argument": {"variable": "f"}}}}}}},
+                                                "argument": {"application": {"function": {"variable": "hydra.lib.literals.printFloat64"}, "argument": {"variable": "f"}}}}}}},
                                         "argument": {"literal": {"string": "j"}}}}}}}}},
                           {
                             "name": "integer",
@@ -3138,7 +3138,7 @@
                                 "body": {
                                   "application": {
                                     "function": {"variable": "hydra.serialization.cst"},
-                                    "argument": {"application": {"function": {"variable": "hydra.lib.literals.showBigint"}, "argument": {"variable": "i"}}}}}}}}]}},
+                                    "argument": {"application": {"function": {"variable": "hydra.lib.literals.printBigint"}, "argument": {"variable": "i"}}}}}}}}]}},
                     "argument": {"variable": "num"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a Python number literal"}}}]}}}}},
     {
@@ -5009,7 +5009,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "function": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.python.syntax.TypeParameter"}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.python.syntax.TypeParameter"}}},
                                                     "argument": {"variable": "tparams"}}}}},
                                             "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.ast.Expr"}}}}},
                                         "argument": {

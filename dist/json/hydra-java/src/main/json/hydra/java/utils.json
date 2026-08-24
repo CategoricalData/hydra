@@ -5329,7 +5329,7 @@
                                     "argument": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.java.syntax.TypeArgument"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.isEmpty"}, "type": {"variable": "hydra.java.syntax.TypeArgument"}}},
                                         "argument": {"variable": "targs"}}}}},
                                 "argument": {
                                   "application": {
@@ -6708,7 +6708,7 @@
                                 "body": {
                                   "application": {
                                     "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "base"}}},
-                                    "argument": {"application": {"function": {"variable": "hydra.lib.literals.showInt32"}, "argument": {"variable": "n"}}}}}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.lib.literals.printInt32"}, "argument": {"variable": "n"}}}}}}},
                             "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Name"}}}],
                         "body": {
                           "application": {
