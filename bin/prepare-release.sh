@@ -99,6 +99,24 @@ WARNINGS=0
 banner1 "Hydra Release Preparation"
 echo ""
 
+# --- Step 0: publish-time toolchain preflight ---------------------------------
+# Not a release-artifact gate (no numbered step), so it doesn't affect
+# TOTAL_STEPS. Surfaces the class of failure #704 was filed for — JDK/twine/gpg/
+# credential problems that otherwise only appear mid-publish-run, after several
+# other channels have already succeeded — as a WARNING here, up front. Each
+# per-channel publish-*.sh still hard-gates its own requirement at upload time;
+# this is an early heads-up, not a duplicate gate.
+echo "Step 0: Checking publish-time toolchain (bin/check-release-env.sh)"
+echo ""
+if bash "$HYDRA_ROOT/bin/check-release-env.sh"; then
+    echo "  OK: release environment checks passed"
+else
+    echo "  WARNING: release environment checks failed — see above. Publishing will"
+    echo "           likely fail mid-run; fix now to avoid an out-of-band mid-release fix."
+    WARNINGS=$((WARNINGS + 1))
+fi
+echo ""
+
 step 1 $TOTAL_STEPS "Checking version synchronization"
 echo ""
 

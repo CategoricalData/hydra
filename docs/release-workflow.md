@@ -126,7 +126,12 @@ bin/bump-version.sh 0.14.0         # Open the next dev cycle (run immediately af
 Publishing requires accounts, roles, and credentials on each external registry.
 These are **not** stored in the repo; confirm them *before* a release, since a
 missing or wrongly-scoped credential surfaces only at upload time (often as a
-`403`). Per-registry:
+`403`). Run `bin/check-release-env.sh` before the first upload to catch this class of
+problem up front: it asserts JDK 17+, `twine>=7` (and the Python floor it silently
+depends on), sbt, a working gpg-agent signature, and the presence (not validity) of
+each credential below in one pass, instead of each surfacing mid-publish-run across
+several separate channels (`bin/prepare-release.sh` also runs it as an early,
+non-blocking check). See #704. Per-registry:
 
 | Registry | What you need | Where |
 |----------|---------------|-------|
