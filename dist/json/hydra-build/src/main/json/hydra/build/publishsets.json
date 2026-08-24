@@ -230,6 +230,107 @@
                   "value": {"literal": {"string": "The publish set in leaves-first topological order"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.build.publishsets.reverseDepClosure",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"list": {"variable": "hydra.packaging.Package"}}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.packaging.PackageName"}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "hydra.packaging.PackageName"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "packages",
+                "domain": {"list": {"variable": "hydra.packaging.Package"}},
+                "body": {
+                  "lambda": {
+                    "parameter": "root",
+                    "domain": {"variable": "hydra.packaging.PackageName"},
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "dependents",
+                            "term": {
+                              "lambda": {
+                                "parameter": "name",
+                                "domain": {"variable": "hydra.packaging.PackageName"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.packaging.PackageName"}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.Package"}}},
+                                                "type": {"variable": "hydra.packaging.PackageName"}}},
+                                            "argument": {
+                                              "lambda": {
+                                                "parameter": "pkg",
+                                                "domain": {"variable": "hydra.packaging.Package"},
+                                                "body": {
+                                                  "application": {"function": {"project": {"typeName": "hydra.packaging.Package", "fieldName": "name"}}, "argument": {"variable": "pkg"}}}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.filter"}, "type": {"variable": "hydra.packaging.Package"}}},
+                                                "argument": {
+                                                  "lambda": {
+                                                    "parameter": "pkg",
+                                                    "domain": {"variable": "hydra.packaging.Package"},
+                                                    "body": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.member"}, "type": {"variable": "hydra.packaging.PackageName"}}},
+                                                            "argument": {"variable": "name"}}},
+                                                        "argument": {"application": {"function": {"variable": "hydra.build.publishsets.packageDepNames"}, "argument": {"variable": "pkg"}}}}}}}}},
+                                            "argument": {"variable": "packages"}}}}}}}}},
+                            "typeScheme": {
+                              "variables": [],
+                              "body": {
+                                "function": {
+                                  "domain": {"variable": "hydra.packaging.PackageName"},
+                                  "codomain": {"set": {"variable": "hydra.packaging.PackageName"}}}}}}],
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.sortBy"}, "type": {"variable": "hydra.packaging.PackageName"}}},
+                                    "type": {"literal": "string"}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "n",
+                                    "domain": {"variable": "hydra.packaging.PackageName"},
+                                    "body": {"application": {"function": {"unwrap": "hydra.packaging.PackageName"}, "argument": {"variable": "n"}}}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.packaging.PackageName"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {"body": {"variable": "hydra.sorting.findReachableNodes"}, "type": {"variable": "hydra.packaging.PackageName"}}},
+                                        "argument": {"variable": "dependents"}}},
+                                    "argument": {"variable": "root"}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Every package that transitively depends on the root (including the root), sorted"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.build.publishsets.strandedDeps",
         "signature": {
           "typeParameters": [],
