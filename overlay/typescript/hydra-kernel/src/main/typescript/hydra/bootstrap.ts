@@ -538,7 +538,7 @@ const main = async (): Promise<void> => {
       } catch (e) {
         const err = e as Error;
         console.error(`  warning: ${isTest ? "test" : "main"} codegen exception on module ${modName}: ${err.message}`);
-        if (process.env.HYDRA_DEBUG) console.error(err.stack);
+        console.error(err.stack);
       }
     }
     return count;
