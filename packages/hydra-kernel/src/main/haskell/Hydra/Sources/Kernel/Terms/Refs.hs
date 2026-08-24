@@ -63,6 +63,7 @@ encodeList = define "encodeList" $
 -- propagate a callee's class constraint through a function-domain (contravariant) position, so a
 -- plain TypedTermDefinition here would compile in Haskell but generate a TypeScheme with no
 -- 'ordering' constraint for the other 8 hosts to consume (see #702 for the general inference fix).
+-- unregistered: helper consumed by encodeMapDefinition (toPrimitive); the emitted primitive is registered as encodeMapDefinition. See #702.
 encodeMap :: TypedTermDefinition ((Int -> Term) -> (Int -> Term) -> M.Map Int Int -> Term)
 encodeMap = define "encodeMap" $
   doc "Build an encoder for a map, given encoders for its key and value types" $
@@ -105,6 +106,7 @@ encodeRef = define "encodeRef" $
 -- | Build an encoder for a set, given an encoder for its element type.
 -- Declared with an explicit constrained TermSignature (via toPrimitive); see encodeMapDefinition
 -- for why this is necessary rather than relying on inference (#702).
+-- unregistered: helper consumed by encodeSetDefinition (toPrimitive); the emitted primitive is registered as encodeSetDefinition. See #702.
 encodeSet :: TypedTermDefinition ((Int -> Term) -> S.Set Int -> Term)
 encodeSet = define "encodeSet" $
   doc "Build an encoder for a set, given an encoder for its element type" $

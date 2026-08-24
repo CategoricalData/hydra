@@ -147,9 +147,12 @@ def find_assembly_references(text: str) -> set:
                 continue
             token = re.sub(r"^toDefinition\s+", "", token)
             token = token.lstrip("(").strip()
-            id_match = IDENTIFIER_RE.match(token)
+            # A qualified reference (e.g. Hydra.Sources.Kernel.Lib.Eithers.left) must
+            # resolve to its bare binding name; IDENTIFIER_RE stops at the first dot,
+            # so match the full (optionally-dotted) token and take the last segment.
+            id_match = re.match(r"[A-Za-z_][A-Za-z0-9_'.]*", token)
             if id_match:
-                names.add(id_match.group(0))
+                names.add(id_match.group(0).split(".")[-1])
     return names
 
 
