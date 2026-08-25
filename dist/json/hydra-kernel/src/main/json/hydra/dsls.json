@@ -6,6 +6,8 @@
     {"module": "hydra.formatting"},
     {"module": "hydra.lexical"},
     {"module": "hydra.names"},
+    {"module": "hydra.reflect"},
+    {"module": "hydra.rewriting"},
     {"module": "hydra.scoping"},
     {"module": "hydra.strip"},
     {"module": "hydra.constants"},
@@ -4029,6 +4031,67 @@
                                             "parameter": "sig",
                                             "domain": {"variable": "hydra.typing.TermSignature"},
                                             "body": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                            "type": {"either": {"left": {"variable": "t0"}, "right": {"list": {"variable": "hydra.core.Binding"}}}}}},
+                                                        "argument": {"application": {"function": {"variable": "hydra.dsls.signatureIsVoidFree"}, "argument": {"variable": "sig"}}}}},
+                                                    "argument": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "either": {
+                                                                "right": {
+                                                                  "list": [
+                                                                    {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "function": {"variable": "hydra.dsls.generateSignatureRef"},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {"project": {"typeName": "hydra.packaging.TermDefinition", "fieldName": "name"}},
+                                                                                "argument": {"variable": "td"}}}}},
+                                                                        "argument": {"variable": "sig"}}}]}}},
+                                                            "type": {"variable": "t0"}}},
+                                                        "type": {"list": {"variable": "hydra.core.Binding"}}}}}},
+                                                "argument": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"either": {"right": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Binding"}}}}},
+                                                        "type": {"variable": "t0"}}},
+                                                    "type": {"list": {"variable": "hydra.core.Binding"}}}}}}}}}}}}},
+                              {
+                                "name": "primitive",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "pd",
+                                    "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                    "type": {"either": {"left": {"variable": "t0"}, "right": {"list": {"variable": "hydra.core.Binding"}}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"variable": "hydra.dsls.signatureIsVoidFree"},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"project": {"typeName": "hydra.packaging.PrimitiveDefinition", "fieldName": "signature"}},
+                                                        "argument": {"variable": "pd"}}}}}}},
+                                            "argument": {
                                               "typeApplication": {
                                                 "body": {
                                                   "typeApplication": {
@@ -4043,40 +4106,21 @@
                                                                     "function": {"variable": "hydra.dsls.generateSignatureRef"},
                                                                     "argument": {
                                                                       "application": {
-                                                                        "function": {"project": {"typeName": "hydra.packaging.TermDefinition", "fieldName": "name"}},
-                                                                        "argument": {"variable": "td"}}}}},
-                                                                "argument": {"variable": "sig"}}}]}}},
+                                                                        "function": {"project": {"typeName": "hydra.packaging.PrimitiveDefinition", "fieldName": "name"}},
+                                                                        "argument": {"variable": "pd"}}}}},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {"project": {"typeName": "hydra.packaging.PrimitiveDefinition", "fieldName": "signature"}},
+                                                                    "argument": {"variable": "pd"}}}}}]}}},
                                                     "type": {"variable": "t0"}}},
-                                                "type": {"list": {"variable": "hydra.core.Binding"}}}}}}}}}}},
-                              {
-                                "name": "primitive",
-                                "handler": {
-                                  "lambda": {
-                                    "parameter": "pd",
-                                    "domain": {"variable": "hydra.packaging.PrimitiveDefinition"},
-                                    "body": {
-                                      "typeApplication": {
-                                        "body": {
+                                                "type": {"list": {"variable": "hydra.core.Binding"}}}}}},
+                                        "argument": {
                                           "typeApplication": {
                                             "body": {
-                                              "either": {
-                                                "right": {
-                                                  "list": [
-                                                    {
-                                                      "application": {
-                                                        "function": {
-                                                          "application": {
-                                                            "function": {"variable": "hydra.dsls.generateSignatureRef"},
-                                                            "argument": {
-                                                              "application": {
-                                                                "function": {"project": {"typeName": "hydra.packaging.PrimitiveDefinition", "fieldName": "name"}},
-                                                                "argument": {"variable": "pd"}}}}},
-                                                        "argument": {
-                                                          "application": {
-                                                            "function": {"project": {"typeName": "hydra.packaging.PrimitiveDefinition", "fieldName": "signature"}},
-                                                            "argument": {"variable": "pd"}}}}}]}}},
-                                            "type": {"variable": "t0"}}},
-                                        "type": {"list": {"variable": "hydra.core.Binding"}}}}}}}]}},
+                                              "typeApplication": {
+                                                "body": {"either": {"right": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Binding"}}}}},
+                                                "type": {"variable": "t0"}}},
+                                            "type": {"list": {"variable": "hydra.core.Binding"}}}}}}}}}]}},
                         "argument": {"variable": "d"}}}}},
                 "annotation": {
                   "map": [
@@ -5726,4 +5770,158 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Build the nominal result type with type applications for forall variables"}}}]}}}}}]}
+                  "value": {"literal": {"string": "Build the nominal result type with type applications for forall variables"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsls.signatureIsVoidFree",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.typing.TermSignature"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "sig",
+                "domain": {"variable": "hydra.typing.TermSignature"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "paramTypes",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.typing.Parameter"}}},
+                                    "type": {"variable": "hydra.core.Type"}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "p",
+                                    "domain": {"variable": "hydra.typing.Parameter"},
+                                    "body": {
+                                      "application": {"function": {"project": {"typeName": "hydra.typing.Parameter", "fieldName": "type"}}, "argument": {"variable": "p"}}}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.typing.TermSignature", "fieldName": "parameters"}},
+                                "argument": {"variable": "sig"}}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Type"}}, "constraints": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "resultType",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.typing.Result", "fieldName": "type"}},
+                                "argument": {
+                                  "application": {
+                                    "function": {"project": {"typeName": "hydra.typing.TermSignature", "fieldName": "result"}},
+                                    "argument": {"variable": "sig"}}}}},
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}, "constraints": []}}],
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"literal": "boolean"}}},
+                                        "type": {"variable": "hydra.core.Type"}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "acc",
+                                        "domain": {"literal": "boolean"},
+                                        "body": {
+                                          "lambda": {
+                                            "parameter": "t",
+                                            "domain": {"variable": "hydra.core.Type"},
+                                            "body": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.lib.logic.and"}, "argument": {"variable": "acc"}}},
+                                                "argument": {"application": {"function": {"variable": "hydra.dsls.typeIsVoidFree"}, "argument": {"variable": "t"}}}}}}}}}}},
+                                "argument": {"application": {"function": {"variable": "hydra.dsls.typeIsVoidFree"}, "argument": {"variable": "resultType"}}}}},
+                            "argument": {"variable": "paramTypes"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check whether a term signature's parameter and result types are all void-free"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsls.typeIsVoidFree",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.Type"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "typ",
+                "domain": {"variable": "hydra.core.Type"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "allVariants",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.variants.TypeVariant"}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.Type"}}},
+                                        "type": {"variable": "hydra.variants.TypeVariant"}}},
+                                    "argument": {"variable": "hydra.reflect.typeVariant"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {"body": {"variable": "hydra.rewriting.foldOverType"}, "type": {"list": {"variable": "hydra.core.Type"}}}},
+                                                "argument": {"inject": {"typeName": "hydra.coders.TraversalOrder", "field": {"name": "pre", "term": "unit"}}}}},
+                                            "argument": {
+                                              "lambda": {
+                                                "parameter": "m",
+                                                "domain": {"list": {"variable": "hydra.core.Type"}},
+                                                "body": {
+                                                  "lambda": {
+                                                    "parameter": "t",
+                                                    "domain": {"variable": "hydra.core.Type"},
+                                                    "body": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.core.Type"}}},
+                                                            "argument": {"variable": "t"}}},
+                                                        "argument": {"variable": "m"}}}}}}}}},
+                                        "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Type"}}}}},
+                                    "argument": {"variable": "typ"}}}}}}},
+                        "typeScheme": {"variables": [], "body": {"set": {"variable": "hydra.variants.TypeVariant"}}, "constraints": []}}],
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.lib.logic.not"},
+                        "argument": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"variable": "hydra.variants.TypeVariant"}}},
+                                "argument": {"inject": {"typeName": "hydra.variants.TypeVariant", "field": {"name": "void", "term": "unit"}}}}},
+                            "argument": {"variable": "allVariants"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Check whether a type contains no occurrence of the void type at any depth"}}}]}}}}}]}

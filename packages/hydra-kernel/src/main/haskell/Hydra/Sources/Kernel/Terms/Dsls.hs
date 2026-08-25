@@ -8,6 +8,7 @@ import Hydra.Kernel
 import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
 import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
+import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Lib.Equality as Equality
 import qualified Hydra.Dsl.Lib.Lists    as Lists
@@ -20,6 +21,7 @@ import qualified Hydra.Dsl.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Typing          as Typing
+import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (
   elimination, field, fieldType, floatType, floatValue, function, injection, integerType, integerValue, lambda, literal,
@@ -30,6 +32,8 @@ import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
+import qualified Hydra.Sources.Kernel.Terms.Reflect as Reflect
+import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
@@ -51,7 +55,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Scoping.ns, Strip.ns, ModuleName "hydra.constants", ModuleName "hydra.decode.core", ModuleName "hydra.encode.core"] L.++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Reflect.ns, Rewriting.ns, Scoping.ns, Strip.ns, ModuleName "hydra.constants", ModuleName "hydra.decode.core", ModuleName "hydra.encode.core"] L.++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Functions for generating domain-specific DSL modules from type modules")}
   where
     definitions = [
@@ -75,7 +79,9 @@ module_ = Module {
       toDefinition generateUnionInjector,
       toDefinition generateWrappedTypeAccessors,
       toDefinition isDslEligibleBinding,
-      toDefinition nominalResultType]
+      toDefinition nominalResultType,
+      toDefinition signatureIsVoidFree,
+      toDefinition typeIsVoidFree]
 
 define :: String -> TypedTerm x -> TypedTermDefinition x
 define = definitionInModule module_
@@ -272,6 +278,13 @@ dslModule = define "dslModule" $
 -- (empty list), not an error. Wiring term-level DSL refs (which need a signature source)
 -- is a later phase; until then the type path covers each module's type definitions and
 -- the primitive path covers each library's primitives.
+-- A signature with a void-typed parameter or result (e.g. hydra.lib.functions.absurd ::
+-- void -> t1, the void eliminator) is excluded: void is deliberately non-serializable
+-- (#690's isSerializableType forbids it), and a TypedTerm-wrapped DSL ref would carry
+-- that void type straight into per-target emission, where a target coder's encodeType
+-- has no case for it (there is nothing a target host could ever construct to pass in).
+-- No definition anywhere calls absurd, so skipping its DSL ref is safe housekeeping,
+-- not a loss of capability.
 generateRefBindings :: TypedTermDefinition (Definition -> Either Error [Binding])
 generateRefBindings = define "generateRefBindings" $
   doc "Generate typed reference DSL bindings for a primitive (or signature-carrying term) definition" $
@@ -281,9 +294,38 @@ generateRefBindings = define "generateRefBindings" $
     _Definition_term>>: "td" ~>
       Optionals.match (Packaging.termDefinitionSignature (var "td"))
         (right (list ([] :: [TypedTerm Binding])))
-        ("sig" ~> right (list [generateSignatureRef @@ (Packaging.termDefinitionName (var "td")) @@ var "sig"])),
+        ("sig" ~> Logic.ifElse (signatureIsVoidFree @@ var "sig")
+          (right (list [generateSignatureRef @@ (Packaging.termDefinitionName (var "td")) @@ var "sig"]))
+          (right (list ([] :: [TypedTerm Binding])))),
     _Definition_primitive>>: "pd" ~>
-      right (list [generateSignatureRef @@ (Packaging.primitiveDefinitionName (var "pd")) @@ (Packaging.primitiveDefinitionSignature (var "pd"))])]
+      Logic.ifElse (signatureIsVoidFree @@ (Packaging.primitiveDefinitionSignature (var "pd")))
+        (right (list [generateSignatureRef @@ (Packaging.primitiveDefinitionName (var "pd")) @@ (Packaging.primitiveDefinitionSignature (var "pd"))]))
+        (right (list ([] :: [TypedTerm Binding])))]
+
+-- | Check whether a term signature's parameter and result types are all free of the
+-- void type. Used to exclude void-eliminating definitions (e.g. absurd) from DSL
+-- reference generation, since void is not serializable to a per-target coder (#690).
+signatureIsVoidFree :: TypedTermDefinition (TermSignature -> Bool)
+signatureIsVoidFree = define "signatureIsVoidFree" $
+  doc "Check whether a term signature's parameter and result types are all void-free" $
+  "sig" ~>
+  "paramTypes" <~ (Lists.map ("p" ~> Typing.parameterType (var "p")) (Typing.termSignatureParameters (var "sig"))) $
+  "resultType" <~ (Typing.resultType (Typing.termSignatureResult (var "sig"))) $
+  Lists.foldl
+    ("acc" ~> "t" ~> Logic.and (var "acc") (typeIsVoidFree @@ var "t"))
+    (typeIsVoidFree @@ var "resultType")
+    (var "paramTypes")
+
+-- | Check whether a type contains no occurrence of the void type, at any depth.
+typeIsVoidFree :: TypedTermDefinition (Type -> Bool)
+typeIsVoidFree = define "typeIsVoidFree" $
+  doc "Check whether a type contains no occurrence of the void type at any depth" $
+  "typ" ~>
+  "allVariants" <~ (Sets.fromList (Lists.map (asTerm Reflect.typeVariant)
+    (Rewriting.foldOverType @@ Coders.traversalOrderPre @@
+      ("m" ~> "t" ~> Lists.cons (var "t") (var "m")) @@ list ([] :: [TypedTerm Type]) @@ var "typ")) :: TypedTerm (S.Set TypeVariant)) $
+  Logic.not (Sets.member Variants.typeVariantVoid (var "allVariants"))
+
 -- | Generate a DSL module name from a source module name
 -- For example, "hydra.core" -> "hydra.dsl.core"
 dslModuleName :: TypedTermDefinition (ModuleName -> ModuleName)
