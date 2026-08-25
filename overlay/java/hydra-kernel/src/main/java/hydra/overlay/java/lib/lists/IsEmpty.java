@@ -23,7 +23,7 @@ import hydra.overlay.java.util.Either;
  */
 public class IsEmpty extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.isEmpty_().name;
+        return hydra.lib.Lists.isEmpty().name;
     }
 
     @Override

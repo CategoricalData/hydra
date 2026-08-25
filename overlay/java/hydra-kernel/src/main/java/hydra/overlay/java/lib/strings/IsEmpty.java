@@ -26,7 +26,7 @@ public class IsEmpty extends PrimitiveFunction {
      * @return the name "hydra.lib.strings.isEmpty"
      */
     public Name name() {
-        return hydra.lib.Strings.isEmpty_().name;
+        return hydra.lib.Strings.isEmpty().name;
     }
 
     /**
