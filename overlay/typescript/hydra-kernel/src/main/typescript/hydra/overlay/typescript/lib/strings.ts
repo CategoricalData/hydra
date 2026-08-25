@@ -32,7 +32,7 @@ export const toList = (s: string): readonly number[] => {
   return out;
 };
 
-export const isEmpty_ = (s: string): boolean => s.length === 0;
+export const isEmpty = (s: string): boolean => s.length === 0;
 
 export const toUpper = (s: string): string => s.toUpperCase();
 export const toLower = (s: string): string => s.toLowerCase();

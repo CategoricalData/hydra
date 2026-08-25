@@ -125,7 +125,7 @@ export const map = (f: (a: any) => any, s: any): any => {
   return mkCanon(next);
 };
 
-export const isEmpty_ = (s: any): boolean => toCanon(s)._internal.size === 0;
+export const isEmpty = (s: any): boolean => toCanon(s)._internal.size === 0;
 
 export const unions = (ss: any): any => {
   const next: any = new Map();

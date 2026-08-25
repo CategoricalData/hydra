@@ -1619,7 +1619,7 @@ const setsPrimitives = (): readonly Primitive[] => {
     prim("hydra.lib.sets.isEmpty", schemeC(tyFn(tySet(tyVar("a")), tyBool), ["a"], [["a", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "isEmpty"), (a0) =>
-          bind(asSet(a0), (s) => right(tBool(libSets.isEmpty_(s)))))),
+          bind(asSet(a0), (s) => right(tBool(libSets.isEmpty(s)))))),
     prim("hydra.lib.sets.member", schemeC(tyFnCurried(tyVar("a"), tySet(tyVar("a")), tyBool), ["a"], [["a", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "member"), (e) =>
@@ -1717,7 +1717,7 @@ const mapsPrimitives = (): readonly Primitive[] => {
     prim("hydra.lib.maps.isEmpty", schemeC(tyFn(tyMap(tyVar("k"), tyVar("v")), tyBool), ["k", "v"], [["k", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "isEmpty"), (a0) =>
-          bind(asMap(a0), (m) => right(tBool(libMaps.isEmpty_(m)))))),
+          bind(asMap(a0), (m) => right(tBool(libMaps.isEmpty(m)))))),
     prim("hydra.lib.maps.size", schemeC(tyFn(tyMap(tyVar("k"), tyVar("v")), tyInt32), ["k", "v"], [["k", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "size"), (a0) =>

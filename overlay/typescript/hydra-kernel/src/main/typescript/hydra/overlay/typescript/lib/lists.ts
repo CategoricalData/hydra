@@ -124,7 +124,7 @@ export const distinct = (xs: any): readonly any[] => {
   return out;
 };
 
-export const isEmpty_ = (xs: any): boolean => xs.length === 0;
+export const isEmpty = (xs: any): boolean => xs.length === 0;
 
 export const partition = <A>(p: (a: A) => boolean, xs: any): readonly [readonly A[], readonly A[]] => {
   const yes: A[] = [];

@@ -201,4 +201,4 @@ export const mapKeys = (f: (k: any) => any, m: any): any => {
   return mkCanon(next);
 };
 
-export const isEmpty_ = (m: any): boolean => toCanon(m)._internal.size === 0;
+export const isEmpty = (m: any): boolean => toCanon(m)._internal.size === 0;
