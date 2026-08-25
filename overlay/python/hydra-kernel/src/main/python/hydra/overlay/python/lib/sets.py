@@ -63,7 +63,7 @@ def member(x: A, s: AbstractSet[A]) -> bool:
     return x in s
 
 
-def null(s: AbstractSet[Any]) -> bool:
+def is_empty(s: AbstractSet[Any]) -> bool:
     """Check if a set is empty."""
     return len(s) == 0
 

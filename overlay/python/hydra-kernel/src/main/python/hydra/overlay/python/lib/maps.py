@@ -126,7 +126,7 @@ def member(key: K, mapping: Mapping[K, Any]) -> bool:
     return key in mapping
 
 
-def null(mapping: Mapping[Any, Any]) -> bool:
+def is_empty(mapping: Mapping[Any, Any]) -> bool:
     """Check if a map is empty."""
     return len(mapping) == 0
 

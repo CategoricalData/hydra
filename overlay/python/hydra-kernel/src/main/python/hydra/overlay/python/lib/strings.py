@@ -36,7 +36,7 @@ def char_at(i: int, s: str) -> Optional[int]:
     return Given(ord(s[i])) if 0 <= i < len(s) else None_()
 
 
-def null(s: str) -> bool:
+def is_empty(s: str) -> bool:
     """Check whether a string is empty."""
     return len(s) == 0
 

@@ -450,8 +450,8 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         prims.list_(a), prims.list_(a)
     )
     # prim1: null :: [a] -> Bool
-    primitives[def_lists.null.name] = prims.prim1(
-        def_lists.null.name, lists.null, [_a],
+    primitives[def_lists.is_empty.name] = prims.prim1(
+        def_lists.is_empty.name, lists.is_empty, [_a],
         prims.list_(a), prims.boolean()
     )
     # prim2: partition :: (a -> Bool) -> [a] -> ([a], [a])
@@ -643,8 +643,8 @@ def register_maps_primitives() -> dict[Name, Primitive]:
         k, map_kv, prims.boolean()
     )
     # prim1: null :: Ord k => Map k v -> Bool
-    primitives[def_maps.null.name] = prims.prim1(
-        def_maps.null.name, maps.null, [_kOrd, _v],
+    primitives[def_maps.is_empty.name] = prims.prim1(
+        def_maps.is_empty.name, maps.is_empty, [_kOrd, _v],
         map_kv, prims.boolean()
     )
     # prim2: singleton :: Ord k => k -> v -> Map k v
@@ -947,8 +947,8 @@ def register_sets_primitives() -> dict[Name, Primitive]:
         def_sets.member.name, sets.member, [_aOrd],
         a, prims.set_(a), prims.boolean()
     )
-    primitives[def_sets.null.name] = prims.prim1(
-        def_sets.null.name, sets.null, [_aOrd],
+    primitives[def_sets.is_empty.name] = prims.prim1(
+        def_sets.is_empty.name, sets.is_empty, [_aOrd],
         prims.set_(a), prims.boolean()
     )
     primitives[def_sets.singleton.name] = prims.prim1(
@@ -1029,8 +1029,8 @@ def register_strings_primitives() -> dict[Name, Primitive]:
     primitives[def_strings.char_at.name] = prims.prim2(
         def_strings.char_at.name, strings.char_at, [], prims.int32(), prims.string(), prims.optional(prims.int32())
     )
-    primitives[def_strings.null.name] = prims.prim1(
-        def_strings.null.name, strings.null, [], prims.string(), prims.boolean()
+    primitives[def_strings.is_empty.name] = prims.prim1(
+        def_strings.is_empty.name, strings.is_empty, [], prims.string(), prims.boolean()
     )
     primitives[def_strings.split_on.name] = prims.prim2(
         def_strings.split_on.name, strings.split_on, [], prims.string(), prims.string(),

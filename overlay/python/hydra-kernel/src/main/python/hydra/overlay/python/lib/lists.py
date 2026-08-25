@@ -200,7 +200,7 @@ def distinct(values: Sequence[A]) -> Sequence[A]:
     return ConsList.from_iterable(out)
 
 
-def null(values: Sequence[Any]) -> bool:
+def is_empty(values: Sequence[Any]) -> bool:
     """Check if a list is empty."""
     return len(values) == 0
 
