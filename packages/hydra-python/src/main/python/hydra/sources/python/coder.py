@@ -1001,7 +1001,7 @@ def _encode_application_inner():
     with_rest = lam(
         "e",
         Logic.if_else(
-            Lists.isEmpty(var("restArgs")),
+            Lists.is_empty(var("restArgs")),
             var("e"),
             _kref.utils_function_call(_kref.utils_py_expression_to_py_primary(var("e")), var("restArgs")),
         ),
@@ -1064,7 +1064,7 @@ def _encode_application_inner():
                 ),
             ],
             Logic.if_else(
-                Lists.isEmpty(var("allArgs")),
+                Lists.is_empty(var("allArgs")),
                 right(
                     pair(
                         var("valueExpr"), list_([])
@@ -1131,7 +1131,7 @@ def _encode_application_inner():
                 ),
             ],
             Logic.if_else(
-                Lists.isEmpty(var("consumedArgs")),
+                Lists.is_empty(var("consumedArgs")),
                 Eithers.bind(
                     _local("encodeVariable")(var("cx"), var("env"), var("name"), list_([])),
                     lam(
@@ -1538,7 +1538,7 @@ def _encode_binding_as():
     hoisted_branch = lam(
         "csa",
         Logic.if_else(
-            Lists.isEmpty(var("lambdaParams")),
+            Lists.is_empty(var("lambdaParams")),
             no_ts_no_csa_branch,
             let_chain(
                 [
@@ -2500,7 +2500,7 @@ def _encode_python_module():
                     Lists.filter(
                         lam(
                             "group",
-                            Logic.not_(Lists.isEmpty(var("group"))),
+                            Logic.not_(Lists.is_empty(var("group"))),
                         ),
                         Lists.concat(
                             list_(
@@ -3090,7 +3090,7 @@ def _encode_type_quoted():
                 "pytype",
                 right(
                     Logic.if_else(
-                        Sets.isEmpty(
+                        Sets.is_empty(
                             hydra.dsl.variables.free_variables_in_type(var("typ"))
                         ),
                         var("pytype"),
@@ -3178,7 +3178,7 @@ def _encode_term_assignment():
                         Logic.if_else(
                             Logic.and_(
                                 Logic.not_(var("topLevel")),
-                                Lists.isEmpty(var("params")),
+                                Lists.is_empty(var("params")),
                             ),
                             # Inner zero-arg thunk: emit `name = Lazy(lambda: <body>)`.
                             # Use sites emit `name()` which dispatches to Lazy.get()
@@ -3410,7 +3410,7 @@ def _encode_term_inline():
                                     ),
                                 ],
                                 Logic.if_else(
-                                    Lists.isEmpty(var("bindings")),
+                                    Lists.is_empty(var("bindings")),
                                     right(
                                         _local("makeUncurriedLambda")(var("pparams"), var("pbody"))
                                     ),
@@ -3524,7 +3524,7 @@ def _encode_term_inline():
                 ("body", Core.let_body(var("lt"))),
             ],
             Logic.if_else(
-                Lists.isEmpty(var("bindings")),
+                Lists.is_empty(var("bindings")),
                 _local("encodeTermInline")(var("cx"), var("env"), false(), var("body")),
                 _local("withLetInline")(var("env"), var("lt"), lam(
                         "innerEnv",
@@ -3985,7 +3985,7 @@ def _encode_term_multiline():
                     ("env2", fs_proj("environment")),
                 ],
                 Logic.if_else(
-                    Lists.isEmpty(var("bindings")),
+                    Lists.is_empty(var("bindings")),
                     Eithers.bind(
                         _local("encodeTermInline")(var("cx"), var("env"), false(), var("term")),
                         lam(
@@ -5053,7 +5053,7 @@ def _encode_union_field_alt():
                 ),
             ],
             Logic.if_else(
-                Lists.isEmpty(var("tparams")),
+                Lists.is_empty(var("tparams")),
                 var("namePrim"),
                 let_chain(
                     [
@@ -5633,7 +5633,7 @@ def _encode_variable():
     def as_function_ref(typ_var):
         return Logic.if_else(
             Logic.not_(
-                Sets.isEmpty(
+                Sets.is_empty(
                     hydra.dsl.variables.free_variables_in_type(var(typ_var))
                 )
             ),
@@ -5726,7 +5726,7 @@ def _encode_variable():
                             "asFunctionRef",
                             Logic.if_else(
                                 Logic.not_(
-                                    Sets.isEmpty(
+                                    Sets.is_empty(
                                         hydra.dsl.variables.free_variables_in_type(var("typ"))
                                     )
                                 ),
@@ -5772,7 +5772,7 @@ def _encode_variable():
                         "asFunctionRef",
                         Logic.if_else(
                             Logic.not_(
-                                Lists.isEmpty(
+                                Lists.is_empty(
                                     Core.type_scheme_variables(var("ts"))
                                 )
                             ),
@@ -5831,7 +5831,7 @@ def _encode_variable():
                             "asFunctionRef",
                             Logic.if_else(
                                 Logic.not_(
-                                    Lists.isEmpty(
+                                    Lists.is_empty(
                                         Core.type_scheme_variables(var("ts"))
                                     )
                                 ),
@@ -5976,7 +5976,7 @@ def _encode_variable():
                 ),
             ],
             Logic.if_else(
-                Logic.not_(Lists.isEmpty(var("args"))),
+                Logic.not_(Lists.is_empty(var("args"))),
                 # Non-empty args: inline-var calls need .get(); otherwise check primitives
                 Logic.if_else(
                     Sets.member(var("name"), var("inlineVars")),
@@ -6277,7 +6277,7 @@ def _extend_meta_for_type():
                     hydra.dsl.predicates.is_enum_row_type(var("rt")),
                     _local("setMetaUsesEnum")(var("metaWithSubtypes"), true()),
                     Logic.if_else(
-                        Logic.not_(Lists.isEmpty(var("rt"))),
+                        Logic.not_(Lists.is_empty(var("rt"))),
                         _local("setMetaUsesNode")(var("metaWithSubtypes"), true()),
                         var("metaWithSubtypes"),
                     ),
@@ -6328,7 +6328,7 @@ def _extend_meta_for_type():
                         (
                             "meta1",
                             Logic.if_else(
-                                Lists.isEmpty(var("rt")),
+                                Lists.is_empty(var("rt")),
                                 var("metaWithSubtypes"),
                                 _local("setMetaUsesDataclass")(var("metaWithSubtypes"), true()),
                             ),
@@ -6616,7 +6616,7 @@ def _function_definition_to_expr():
                         (
                             "isTCO",
                             Logic.and_(
-                                Logic.not_(Lists.isEmpty(var("args"))),
+                                Logic.not_(Lists.is_empty(var("args"))),
                                 hydra.dsl.analysis.is_self_tail_recursive(var("name"), var("body")),
                             ),
                         ),
@@ -6660,7 +6660,7 @@ def _function_definition_to_expr():
                                             ),
                                             (
                                                 "isThunk",
-                                                Lists.isEmpty(var("args")),
+                                                Lists.is_empty(var("args")),
                                             ),
                                             (
                                                 "mDecorators",
@@ -6848,7 +6848,7 @@ def _gather_metadata():
                     _local("setMetaUsesCast")(true(), _local("setMetaUsesLruCache")(true(), var("result"))),
                 ),
             ],
-            _local("setMetaUsesTypeVar")(var("result2"), Logic.not_(Sets.isEmpty(var("tvars")))),
+            _local("setMetaUsesTypeVar")(var("result2"), Logic.not_(Sets.is_empty(var("tvars")))),
         ),
     )
     return (_def("gatherMetadata")
@@ -6860,7 +6860,7 @@ def _generic_arg():
     body = lambdas(
         ["tparamList"],
         Logic.if_else(
-            Lists.isEmpty(var("tparamList")),
+            Lists.is_empty(var("tparamList")),
             nothing(),
             just(
                 _kref.utils_py_primary_to_py_expression(_kref.utils_primary_with_expression_slices(PySyn.primary_simple(PySyn.atom_name(_py_name("Generic"))), Lists.map(
@@ -6993,7 +6993,7 @@ def _is_type_module_check():
     body = lambdas(
         ["defs"],
         Logic.not_(
-            Lists.isEmpty(
+            Lists.is_empty(
                 Lists.filter(
                     lam(
                         "d",
@@ -7353,7 +7353,7 @@ def _module_standard_imports():
                                         ),
                                     ],
                                     Logic.if_else(
-                                        Lists.isEmpty(var("symbols")),
+                                        Lists.is_empty(var("symbols")),
                                         nothing(),
                                         just(
                                             pair(

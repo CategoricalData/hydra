@@ -510,7 +510,7 @@ def _comparison_to_expr():
             ("rhs", _proj("Comparison", "rhs", "cmp")),
         ],
         Logic.if_else(
-            Lists.isEmpty(var("rhs")),
+            Lists.is_empty(var("rhs")),
             _local("bitwiseOrToExpr")(var("lhs")),
             _space_sep(
                 Lists.cons(
@@ -726,7 +726,7 @@ def _function_def_raw_to_expr():
             ),
             field("tparamPart",
                 Logic.if_else(
-                    Lists.isEmpty(var("tparams")),
+                    Lists.is_empty(var("tparams")),
                     nothing(),
                     just(hydra.dsl.serialization.bracket_list(hydra.dsl.serialization.inline_style, Lists.map(_local("typeParameterToExpr"), var("tparams")))),
                 ),
@@ -1854,7 +1854,7 @@ def _type_alias_to_expr():
                 hydra.dsl.serialization.no_sep(Optionals.givens(list_([
                     just(_local("nameToExpr")(var("name"))),
                     Logic.if_else(
-                        Lists.isEmpty(var("tparams")),
+                        Lists.is_empty(var("tparams")),
                         nothing(),
                         just(hydra.dsl.serialization.bracket_list(hydra.dsl.serialization.inline_style, Lists.map(_local("typeParameterToExpr"), var("tparams")))),
                     ),
