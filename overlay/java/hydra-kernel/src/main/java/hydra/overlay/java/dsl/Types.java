@@ -457,7 +457,7 @@ public interface Types {
 
     /**
      * Convert a set of class identifier names into a set of TypeClassConstraint.Simple values,
-     * as expected by TypeVariableConstraints.classes (a set<TypeClassConstraint> per #685).
+     * as expected by TypeVariableConstraints.classes (a {@code Set<TypeClassConstraint>} per #685).
      */
     static Set<TypeClassConstraint> toConstraints(Set<Name> classes) {
         List<TypeClassConstraint> result = new java.util.ArrayList<>();
