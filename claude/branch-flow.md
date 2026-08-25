@@ -228,6 +228,31 @@ The fix is to treat **every heartbeat as two phases, in order**:
    guarantee phase 2 actually runs, schedule one whose sole job is the sweep; a short
    follow-up wake is cheap, a starved fleet is not.
 
+Prose alone has proved insufficient — the loop keeps observing fleet state and re-sleeping
+without dispatching.
+So phase 2 has a **forcing function**, not just a reminder:
+
+- **Phase 2 is a fill-in-the-blank you must answer with specifics before re-sleeping, not a
+  checkmark.**
+  Complete the assertion out loud: "Cores idle right now? → I started `<named work>`, or
+  nothing dispatchable because `<reason>`."
+  An unanswered blank means the tick is not done; a bare "swept, all quiet" is not an answer.
+- **"Idle cores + a healthy critical path" is itself a red flag to act on** — treat it with the
+  same urgency as a failing CI job.
+  A green critical path is not permission to idle the fleet; it is the cue to fill the idle
+  capacity.
+- **Lead the tick with a standing ready-work queue** so the effortful "dispatch" is the first
+  thing considered, not an afterthought buried under critical-path status.
+  Keep the queue populated: land-prep rebases, conflict resolution, tracker hygiene, doc
+  updates, near-ready worker relaunch.
+- **The `bin/staging-monitor.sh` FLEET-AUDIT event is the mechanical backstop.**
+  The monitor now emits a periodic idle-capacity notification (idle cores, disk headroom,
+  count of worktrees ahead-of-main) so the phase-2 check arrives as an *event* — like a red CI
+  job — rather than depending on the agent to remember to run it.
+  On a designated build machine (`~/.hydra-sandbox` present) it surfaces idle cores and disk;
+  everywhere it surfaces the landable-worktree count.
+  When a `FLEET-AUDIT:` line arrives, answer the fill-in-the-blank above before re-sleeping.
+
 **Why the sweep is always safe to run alongside the critical path: it is usually
 latency-bound, not CPU-bound.** Waiting on a ~90-minute cloud CI run, a remote publish,
 or a queued job consumes *zero* local compute — so there is no conflict between watching
