@@ -38,7 +38,7 @@
       (list :none)))))
 
 ;; null :: String -> Bool
-(def hydra_overlay_clojure_lib_strings_isEmpty
+(def hydra_overlay_clojure_lib_strings_is_empty
   "Check whether a string is empty."
   (fn [s] (= s "")))
 

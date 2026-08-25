@@ -50,7 +50,7 @@
   (fn [x] (fn [s] (contains? (to-hash-set s) x))))
 
 ;; null :: Set a -> Bool
-(def hydra_overlay_clojure_lib_sets_isEmpty
+(def hydra_overlay_clojure_lib_sets_is_empty
   (fn [s] (empty? s)))
 
 ;; size :: Set a -> Int

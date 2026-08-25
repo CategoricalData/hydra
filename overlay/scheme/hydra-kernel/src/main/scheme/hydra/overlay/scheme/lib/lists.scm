@@ -21,7 +21,7 @@
           hydra_overlay_scheme_lib_lists_last
           hydra_overlay_scheme_lib_lists_tail
           hydra_overlay_scheme_lib_lists_distinct
-          hydra_overlay_scheme_lib_lists_isEmpty
+          hydra_overlay_scheme_lib_lists_is_empty
           hydra_overlay_scheme_lib_lists_partition
           hydra_overlay_scheme_lib_lists_replicate
           hydra_overlay_scheme_lib_lists_reverse
@@ -264,7 +264,7 @@
                   (loop (cdr rest) (cons (car rest) seen) (cons (car rest) acc)))))))
 
     ;; isEmpty :: [a] -> Bool
-    (define hydra_overlay_scheme_lib_lists_isEmpty
+    (define hydra_overlay_scheme_lib_lists_is_empty
       (lambda (xs)
         (null? xs)))
 

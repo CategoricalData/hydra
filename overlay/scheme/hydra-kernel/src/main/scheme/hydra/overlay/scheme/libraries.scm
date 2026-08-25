@@ -380,7 +380,7 @@
           (cons (prim-name def:hydra_lib_lists_last)  (prim1 (prim-name def:hydra_lib_lists_last)  hydra_overlay_scheme_lib_lists_last #f (tc-list a) (tc-optional a)))
           (cons (prim-name def:hydra_lib_lists_tail)  (prim1 (prim-name def:hydra_lib_lists_tail)  hydra_overlay_scheme_lib_lists_tail #f (tc-list a) (tc-optional (tc-list a))))
           (cons (prim-name def:hydra_lib_lists_distinct)        (prim1 (prim-name def:hydra_lib_lists_distinct)        hydra_overlay_scheme_lib_lists_distinct        #f (tc-list a) (tc-list a) eq-a))
-          (cons (prim-name def:hydra_lib_lists_isEmpty)       (prim1 (prim-name def:hydra_lib_lists_isEmpty)       hydra_overlay_scheme_lib_lists_isEmpty       #f (tc-list a) (tc-boolean)))
+          (cons (prim-name def:hydra_lib_lists_is_empty)       (prim1 (prim-name def:hydra_lib_lists_is_empty)       hydra_overlay_scheme_lib_lists_is_empty       #f (tc-list a) (tc-boolean)))
           (cons (prim-name def:hydra_lib_lists_partition)   (prim2 (prim-name def:hydra_lib_lists_partition)
                                                   hydra_overlay_scheme_lib_lists_partition
                                                   #f (fun a (tc-boolean)) (tc-list a) (tc-pair (tc-list a) (tc-list a))))
@@ -486,7 +486,7 @@
             (cons (prim-name def:hydra_lib_maps_member)         (prim2 (prim-name def:hydra_lib_maps_member)
                                                       hydra_overlay_scheme_lib_maps_member
                                                       #f k map-kv (tc-boolean) ord-k))
-            (cons (prim-name def:hydra_lib_maps_isEmpty)           (prim1 (prim-name def:hydra_lib_maps_isEmpty)   hydra_overlay_scheme_lib_maps_isEmpty   #f map-kv (tc-boolean) ord-k))
+            (cons (prim-name def:hydra_lib_maps_is_empty)           (prim1 (prim-name def:hydra_lib_maps_is_empty)   hydra_overlay_scheme_lib_maps_is_empty   #f map-kv (tc-boolean) ord-k))
             (cons (prim-name def:hydra_lib_maps_singleton)      (prim2 (prim-name def:hydra_lib_maps_singleton)
                                                       hydra_overlay_scheme_lib_maps_singleton
                                                       #f k v map-kv ord-k))
@@ -652,7 +652,7 @@
           (cons (prim-name def:hydra_lib_sets_member)       (prim2 (prim-name def:hydra_lib_sets_member)
                                                   hydra_overlay_scheme_lib_sets_member
                                                   #f a (tc-set a) (tc-boolean) ord-a))
-          (cons (prim-name def:hydra_lib_sets_isEmpty)         (prim1 (prim-name def:hydra_lib_sets_isEmpty)     hydra_overlay_scheme_lib_sets_isEmpty     #f (tc-set a) (tc-boolean) ord-a))
+          (cons (prim-name def:hydra_lib_sets_is_empty)         (prim1 (prim-name def:hydra_lib_sets_is_empty)     hydra_overlay_scheme_lib_sets_is_empty     #f (tc-set a) (tc-boolean) ord-a))
           (cons (prim-name def:hydra_lib_sets_singleton)    (prim1 (prim-name def:hydra_lib_sets_singleton) hydra_overlay_scheme_lib_sets_singleton #f a (tc-set a) ord-a))
           (cons (prim-name def:hydra_lib_sets_size)         (prim1 (prim-name def:hydra_lib_sets_size)     hydra_overlay_scheme_lib_sets_size     #f (tc-set a) (tc-int32) ord-a))
           (cons (prim-name def:hydra_lib_sets_to_list)       (prim1 (prim-name def:hydra_lib_sets_to_list)   hydra_overlay_scheme_lib_sets_to_list  #f (tc-set a) (tc-list a) ord-a))
@@ -681,7 +681,7 @@
                                                   #f s (tc-list s) s))
           (cons (prim-name def:hydra_lib_strings_length)      (prim1 (prim-name def:hydra_lib_strings_length)      hydra_overlay_scheme_lib_strings_length      #f s i))
           (cons (prim-name def:hydra_lib_strings_char_at) (prim2 (prim-name def:hydra_lib_strings_char_at) hydra_overlay_scheme_lib_strings_char_at #f i s (tc-optional i)))
-          (cons (prim-name def:hydra_lib_strings_isEmpty)        (prim1 (prim-name def:hydra_lib_strings_isEmpty)        hydra_overlay_scheme_lib_strings_isEmpty        #f s b))
+          (cons (prim-name def:hydra_lib_strings_is_empty)        (prim1 (prim-name def:hydra_lib_strings_is_empty)        hydra_overlay_scheme_lib_strings_is_empty        #f s b))
           (cons (prim-name def:hydra_lib_strings_split_on)     (prim2 (prim-name def:hydra_lib_strings_split_on)
                                                   hydra_overlay_scheme_lib_strings_split_on
                                                   #f s s (tc-list s)))

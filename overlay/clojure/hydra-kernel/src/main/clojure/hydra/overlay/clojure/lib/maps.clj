@@ -125,7 +125,7 @@
   (fn [k] (fn [m] (contains? (to-hash-map m) k))))
 
 ;; null :: Map k v -> Bool
-(def hydra_overlay_clojure_lib_maps_isEmpty
+(def hydra_overlay_clojure_lib_maps_is_empty
   (fn [m] (or (nil? m) (empty? m))))
 
 ;; singleton :: k -> v -> Map k v

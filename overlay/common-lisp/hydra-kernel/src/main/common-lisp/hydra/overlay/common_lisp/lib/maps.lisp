@@ -507,7 +507,7 @@
       (nth-value 1 (maps-lookup-raw k m)))))
 
 ;; null :: Map k v -> Bool
-(defvar hydra_overlay_common_lisp_lib_maps_isEmpty
+(defvar hydra_overlay_common_lisp_lib_maps_is_empty
   (lambda (m)
     (cond
       ((null m) t)

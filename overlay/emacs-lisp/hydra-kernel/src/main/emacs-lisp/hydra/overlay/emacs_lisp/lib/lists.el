@@ -231,7 +231,7 @@
           (push x acc))))))
 
 ;; null :: [a] -> Bool
-(defvar hydra_overlay_emacs_lisp_lib_lists_isEmpty
+(defvar hydra_overlay_emacs_lisp_lib_lists_is_empty
   (lambda (xs)
     "Check if a list is empty."
     (null xs)))

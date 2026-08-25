@@ -16,7 +16,7 @@
           hydra_overlay_scheme_lib_maps_lookup
           hydra_overlay_scheme_lib_maps_map
           hydra_overlay_scheme_lib_maps_member
-          hydra_overlay_scheme_lib_maps_isEmpty
+          hydra_overlay_scheme_lib_maps_is_empty
           hydra_overlay_scheme_lib_maps_singleton
           hydra_overlay_scheme_lib_maps_size
           hydra_overlay_scheme_lib_maps_to_list
@@ -244,7 +244,7 @@
           (if (vhash-assoc k (ensure-vhash m)) #t #f))))
 
     ;; isEmpty :: Map k v -> Bool
-    (define hydra_overlay_scheme_lib_maps_isEmpty
+    (define hydra_overlay_scheme_lib_maps_is_empty
       (lambda (m)
         (cond
           ((vlist? m) (vlist-null? m))
