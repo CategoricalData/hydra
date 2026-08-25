@@ -32,7 +32,7 @@ object lists:
   def last[A](xs: Seq[A]): Option[A] = xs.lastOption
   def tail[A](xs: Seq[A]): Option[Seq[A]] = if xs.isEmpty then None else Some(xs.tail)
   def distinct[A](xs: Seq[A]): Seq[A] = xs.distinct
-  def `null`[A](xs: Seq[A]): Boolean = xs.isEmpty
+  def isEmpty[A](xs: Seq[A]): Boolean = xs.isEmpty
   def partition[A](p: A => Boolean)(xs: Seq[A]): (Seq[A], Seq[A]) = xs.partition(p)
   def pure[A](x: A): Seq[A] = Seq(x)
   def replicate[A](n: Int)(x: A): Seq[A] = Seq.fill(n)(x)

@@ -22,7 +22,7 @@ object maps:
   def map[V1, V2, K](f: V1 => V2)(m: Map[K, V1]): Map[K, V2] = m.map((k, v) => (k, f(v)))
   def mapKeys[K1, K2, V](f: K1 => K2)(m: Map[K1, V]): Map[K2, V] = m.map((k, v) => (f(k), v))
   def member[K, V](k: K)(m: Map[K, V]): Boolean = m.contains(k)
-  def `null`[K, V](m: Map[K, V]): Boolean = m.isEmpty
+  def isEmpty[K, V](m: Map[K, V]): Boolean = m.isEmpty
   def singleton[K, V](k: K)(v: V): Map[K, V] = Map(k -> v)
   def size[K, V](m: Map[K, V]): Int = m.size
   // Haskell's Data.Map.toList returns entries in ascending key order.

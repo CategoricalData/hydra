@@ -8,7 +8,6 @@ object strings:
   def isEmpty(s: String): Boolean = s.isEmpty
   def length(s: String): Int = s.codePointCount(0, s.length)
   def charAt(i: Int)(s: String): Option[Int] = if i >= 0 && i < s.length then Some(s.codePointAt(i)) else None
-  def `null`(s: String): Boolean = s.isEmpty
   def splitOn(sep: String)(s: String): Seq[String] =
     if sep.isEmpty then
       // Haskell Data.List.Split.splitOn "" "abc" = ["","a","b","c"]

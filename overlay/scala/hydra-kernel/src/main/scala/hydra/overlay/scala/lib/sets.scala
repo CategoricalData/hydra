@@ -9,7 +9,7 @@ object sets:
   def intersection[A](s1: Set[A])(s2: Set[A]): Set[A] = s1.intersect(s2)
   def map[A, B](f: A => B)(s: Set[A]): Set[B] = s.map(f)
   def member[A](x: A)(s: Set[A]): Boolean = s.contains(x)
-  def `null`[A](s: Set[A]): Boolean = s.isEmpty
+  def isEmpty[A](s: Set[A]): Boolean = s.isEmpty
   def singleton[A](x: A): Set[A] = Set(x)
   def size[A](s: Set[A]): Int = s.size
   // Haskell's Data.Set.toList returns elements in ascending order.
