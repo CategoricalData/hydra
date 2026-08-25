@@ -291,6 +291,32 @@ machine utilization:
   headroom, what parallel work is running — not just the critical-path status. Idle
   capacity the user cannot see is idle capacity that persists.
 
+**Slot/util checks must enumerate ALL heavy runtimes, not just `ghc`.** A slot or
+utilization sweep that greps only for `ghc`/`stack` is blind to the java (`gradlew`, `sbt`)
+and python (`uv`, `python`) and node (`tsc`) builds that peg cores just as hard. Enumerate the
+full set: `ghc`, `stack`, `java`/`gradlew`/`sbt`, `python`/`uv`, `node`/`tsc`,
+`TransformJsonToTarget` — and filter by **%CPU and owning worktree**, never by a single tool
+name. **A high load-average with "no builds found" means your filter is wrong, not that the
+machine is idle** — read the top `ps -eo pid,pcpu,comm --sort=-pcpu` rows and attribute them.
+
+**Fleet hygiene: reap your own orphaned builds.** Over a long session, build processes
+(gradle daemons, `uv` venvs, long syncs) from your own completed/landed worktrees and from
+finished subagents outlive the work and keep pegging cores. **An orphan burning a core is
+worse than an idle core** — it masks the machine's true state, so the util sweep reads "busy"
+when the real work is done. Periodically reap heavy builds in worktrees whose branch is
+already on main (landed) or whose subagent completed.
+- **Safe-to-kill test:** the worktree's commits are ancestors of `origin/main`
+  (`git -C <wt> merge-base --is-ancestor HEAD origin/main` — landed) **OR** it is an
+  `agent-*`/completed-subagent worktree, **AND** it has no live `claude` session cwd'd in it.
+- **Attribute before killing:** walk `/proc/<pid>/cwd` (and up a few parents) to resolve the
+  owning worktree. Leave anything ambiguous, or anything belonging to a live session.
+- **The `bin/staging-monitor.sh` FLEET-HYGIENE event is the mechanical backstop** — like
+  FLEET-AUDIT, the monitor now surfaces candidate orphans as an event
+  (`FLEET-HYGIENE: N heavy build(s) in landed/agent worktrees …`) on the same ~10-min cadence,
+  so you no longer depend on remembering to sweep. It only detects; reaping stays your call.
+- **Don't let process-forensics become the task.** One clean attribution pass (top CPU →
+  worktree → landed/live?), reap the clearly-dead, leave the ambiguous, and move on.
+
 Reserve for the user only what genuinely needs them (GitHub writes, worktree deletion,
 design calls); the parallel-safe work above is staging's to start on its own initiative
 — on a designated machine.
