@@ -39,11 +39,15 @@ export const mapList = <A, L, B>(f: (a: A) => Either<L, B>, xs: readonly A[]): E
 
 export const pure = <R, L = never>(x: R): Either<L, R> => Right(x);
 
+export const left = <L, R = never>(x: L): Either<L, R> => Left(x);
+
 export const lefts = <L, R>(es: readonly Either<L, R>[]): readonly L[] => {
   const out: L[] = [];
   for (const e of es) if (e.tag === "left") out.push(e.value);
   return out;
 };
+
+export const right = <R, L = never>(x: R): Either<L, R> => Right(x);
 
 export const rights = <L, R>(es: readonly Either<L, R>[]): readonly R[] => {
   const out: R[] = [];

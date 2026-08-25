@@ -20,6 +20,7 @@ object eithers:
     case Right(b) => b
   def isLeft[A, B](e: Either[A, B]): Boolean = e.isLeft
   def isRight[A, B](e: Either[A, B]): Boolean = e.isRight
+  def left[A, B](x: A): Either[A, B] = Left(x)
   def lefts[A, B](es: Seq[Either[A, B]]): Seq[A] = es.collect { case Left(a) => a }
   def map[B, C, A](f: B => C)(e: Either[A, B]): Either[A, C] = e.map(f)
   def mapList[B, C, A](f: B => Either[A, C])(xs: Seq[B]): Either[A, Seq[C]] =
@@ -35,4 +36,5 @@ object eithers:
     }
   def partition[A, B](es: Seq[Either[A, B]]): (Seq[A], Seq[B]) =
     (es.collect { case Left(a) => a }, es.collect { case Right(b) => b })
+  def right[A, B](x: B): Either[A, B] = Right(x)
   def rights[A, B](es: Seq[Either[A, B]]): Seq[B] = es.collect { case Right(b) => b }

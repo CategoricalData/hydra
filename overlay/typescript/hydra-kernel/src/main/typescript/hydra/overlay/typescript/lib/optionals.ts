@@ -54,6 +54,8 @@ export const mapOptional = (f: (a: any) => any, xs: any): readonly any[] => {
   return out;
 };
 
+export const given = <A>(x: A): Optional<A> => Given(x);
+
 export const pure = <A>(x: A): Optional<A> => Given(x);
 
 export const toList = (m: any): readonly any[] =>

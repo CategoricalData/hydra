@@ -5,6 +5,9 @@
 // without TS18046 "X is of type unknown"). They're total at runtime for
 // any 2-element array input.
 export const first = (p: unknown): any => (p as readonly [any, any])[0];
+
+export const pair = <A, B>(x: A, y: B): readonly [A, B] => [x, y];
+
 export const second = (p: unknown): any => (p as readonly [any, any])[1];
 
 export const swap = <A, B>(p: readonly [A, B]): readonly [B, A] => [p[1], p[0]];
