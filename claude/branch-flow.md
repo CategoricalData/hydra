@@ -209,6 +209,67 @@ A wall-clock timer (a cron/wakeup that re-arms itself) is the mechanism that kee
 this tick alive — do not gate the sweep on a single event (like one CI run), or the
 loop dies when that event resolves and staging goes silent.
 
+#### Every tick is two phases: critical path first, then sweep the fleet — never skip the sweep
+
+The characteristic failure of this role has a specific shape: staging locks onto **one
+legible, urgent critical-path task** — un-redding CI, driving a release — and pours all
+attention into it, leaving the rest of the fleet stalled until that one goal resolves.
+The critical-path task is the thing that generates events (a monitor, a red banner, a
+clear done-signal), so an event-driven loop optimizes it and starves everything that
+stays quiet. Treating "no one pinged me" as "nothing to do" is this role's most damaging
+failure, and it applies to *coordination* on every machine.
+
+The fix is to treat **every heartbeat as two phases, in order**:
+
+1. **Critical path first.** Check it, and work to get it back on track (diagnose the red,
+   land the fix, re-arm the monitor).
+2. **Then, before going idle, sweep the fleet — and never skip this half.** Run the
+   landable/coordinator/decisions sweep above. If a second heartbeat is needed to
+   guarantee phase 2 actually runs, schedule one whose sole job is the sweep; a short
+   follow-up wake is cheap, a starved fleet is not.
+
+**Why the sweep is always safe to run alongside the critical path: it is usually
+latency-bound, not CPU-bound.** Waiting on a ~90-minute cloud CI run, a remote publish,
+or a queued job consumes *zero* local compute — so there is no conflict between watching
+it and coordinating the rest of the fleet in the meantime. The one real serialization
+constraint on heavy local work is narrow: only Haskell `stack` builds contend (the shared
+`~/.stack` package DB — see §5). Do not generalize that narrow "one heavy Haskell build
+at a time" rule into a blanket "do nothing but watch the critical path."
+
+##### Machine-utilization — designated build machines ONLY
+
+The next part — actively filling *idle CPU cores* with parallel build/verification work —
+applies **only on a designated Hydra build machine**, never on a general-purpose machine
+(a laptop, a workstation someone is using). **Gate it on the `~/.hydra-sandbox` marker**
+(the same designated-machine signal described in
+[sandbox-permissions.md](sandbox-permissions.md)): present → this is a dedicated build
+box, use its spare capacity; absent → this is someone's personal machine, and staging
+**must not** try to saturate its CPU. On a non-designated machine, do the coordination
+sweep (phase 2 above) but leave the "keep the cores fed" behaviour off entirely.
+
+On a designated machine (`~/.hydra-sandbox` present), the phase-2 sweep also audits
+machine utilization:
+- **Cores idle while the critical path is latency-bound?** Pull the next parallel-safe
+  work off the ready-queue and start it (land-prep rebases and per-host verification,
+  Tier-2/3 progress, tracker hygiene, doc updates). Parallelizes freely: Java/Gradle and
+  Python/Scala/TypeScript compile-checks, git rebases, reviewing diffs, disk reclamation,
+  per-issue verification subagents, relaunching a near-ready worker (only Haskell `stack`
+  builds contend on `~/.stack`). Keep the cores fed.
+- **Disk / memory healthy?** Check `df -h /`. This fleet accumulates ~5–6 GB of
+  rebuildable `.stack-work` build cache *per worktree*; with dozens of worktrees that
+  silently fills the disk to the danger zone, where builds fail in confusing ways.
+  Clearing `.stack-work` of completed/idle worktrees reclaims tens of GB with **zero
+  git-state risk** (it is pure rebuildable cache) — one of the highest-leverage machine
+  actions available, and fully parallel with a running CI. (Deleting a *worktree* is a
+  heavier, gated call; clearing its build cache is not.)
+- **Report machine state in status.** Say what the *machine* is doing — idle cores, disk
+  headroom, what parallel work is running — not just the critical-path status. Idle
+  capacity the user cannot see is idle capacity that persists.
+
+Reserve for the user only what genuinely needs them (GitHub writes, worktree deletion,
+design calls); the parallel-safe work above is staging's to start on its own initiative
+— on a designated machine.
+
 **Drain the decisions channel first, and close every loop downward.** A blocking
 "needs-a-decision" condition reaches staging through the
 [`decisions/` channel](agent-hierarchy.md#design-decisions-a-distinct-channel-decisions)
