@@ -35,7 +35,7 @@ public class Zip extends PrimitiveFunction {
         return new hydra.core.TypeScheme(
                 Arrays.asList(new hydra.core.Name("a"), new hydra.core.Name("b")),
                 function(list("a"), list("b"), list(Types.pair(Types.variable("a"), Types.variable("b")))),
-                Optional.none());
+                hydra.overlay.java.util.PersistentMap.<hydra.core.Name, hydra.core.TypeVariableConstraints>empty());
     }
 
     @Override

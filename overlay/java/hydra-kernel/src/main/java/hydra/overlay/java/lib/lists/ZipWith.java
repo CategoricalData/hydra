@@ -35,7 +35,7 @@ public class ZipWith extends PrimitiveFunction {
         return new hydra.core.TypeScheme(
                 Arrays.asList(new hydra.core.Name("a"), new hydra.core.Name("b"), new hydra.core.Name("c")),
                 function(function(Types.var("a"), Types.var("b"), Types.var("c")), list("a"), list("b"), list("c")),
-                Optional.none());
+                hydra.overlay.java.util.PersistentMap.<hydra.core.Name, hydra.core.TypeVariableConstraints>empty());
     }
 
     @Override
