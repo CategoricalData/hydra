@@ -55,7 +55,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Classification of a Java symbol for code generation"}}}]}}}}}},
+                    "value": {"literal": {"string": "Classification of a Java symbol for code generation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.java.environment.JavaFeatures",
@@ -76,7 +77,8 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Whether the diamond operator (<>) is supported (Java 7+)"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Feature flags for the target Java version"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Feature flags for the target Java version"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.java.environment.Aliases",
@@ -204,7 +206,8 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "Variables that have been thunked (wrapped in Supplier) for lazy evaluation"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Aliases and context for Java code generation"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Aliases and context for Java code generation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.java.environment.JavaEnvironment",
@@ -227,4 +230,5 @@
                         "body": {"variable": "hydra.graph.Graph"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Graph context for type inference"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Environment for Java code generation"}}}]}}}}}}]}
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Environment for Java code generation"}}}]}}},
+          "constraints": []}}}]}

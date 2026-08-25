@@ -18,7 +18,8 @@
             "annotated": {
               "body": {"union": [{"name": "python310", "type": "unit"}, {"name": "python312", "type": "unit"}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Target Python version for code generation"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Target Python version for code generation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.python.environment.PythonEnvironment",
@@ -100,7 +101,8 @@
                                 "literal": {
                                   "string": "hydra.lib.<sub> sub-namespaces that have an overlay implementation on this host (#630) -- the on-disk existence signal driving emission-time redirect of primitive references to hydra.overlay.python.lib.<sub>"}}}]}}}}]},
               "annotation": {
-                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Environment for Python code generation"}}}]}}}}}},
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Environment for Python code generation"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.python.environment.PythonModuleMetadata",
@@ -148,7 +150,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Temporary metadata used to create the header section of a Python file"}}}]}}}}}},
+                    "value": {"literal": {"string": "Temporary metadata used to create the header section of a Python file"}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.python.environment.PyGraph",
@@ -174,4 +177,5 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Combined graph and metadata state for Python code generation"}}}]}}}}}}]}
+                    "value": {"literal": {"string": "Combined graph and metadata state for Python code generation"}}}]}}},
+          "constraints": []}}}]}

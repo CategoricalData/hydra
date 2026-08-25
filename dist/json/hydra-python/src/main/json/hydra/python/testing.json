@@ -68,7 +68,7 @@
                                       "application": {
                                         "function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "name"}},
                                         "argument": {"variable": "testGroup"}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                   {
                                     "name": "header",
                                     "term": {
@@ -86,7 +86,7 @@
                                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "# "}}}},
                                                 "argument": {"variable": "groupName_"}}},
                                             {"literal": {"string": "\n\n"}}]}}},
-                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                 "body": {
                                   "application": {
                                     "function": {"variable": "hydra.lib.strings.concat"},
@@ -172,14 +172,14 @@
                                   "application": {
                                     "function": {"project": {"typeName": "hydra.testing.TestCaseWithMetadata", "fieldName": "name"}},
                                     "argument": {"variable": "tcm"}}},
-                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                               {
                                 "name": "tcase",
                                 "term": {
                                   "application": {
                                     "function": {"project": {"typeName": "hydra.testing.TestCaseWithMetadata", "fieldName": "case"}},
                                     "argument": {"variable": "tcm"}}},
-                                "typeScheme": {"variables": [], "body": {"variable": "hydra.testing.TestCase"}}}],
+                                "typeScheme": {"variables": [], "body": {"variable": "hydra.testing.TestCase"}, "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {
@@ -204,7 +204,7 @@
                                                             "function": {"project": {"typeName": "hydra.testing.UniversalTestCase", "fieldName": "actual"}},
                                                             "argument": {"variable": "ucase"}}},
                                                         "argument": "unit"}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                                   {
                                                     "name": "expected_",
                                                     "term": {
@@ -214,7 +214,7 @@
                                                             "function": {"project": {"typeName": "hydra.testing.UniversalTestCase", "fieldName": "expected"}},
                                                             "argument": {"variable": "ucase"}}},
                                                         "argument": "unit"}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                                   {
                                                     "name": "fullName",
                                                     "term": {
@@ -239,12 +239,12 @@
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"literal": "string"}}},
                                                                     "argument": {"variable": "groupPath"}}},
                                                                 "argument": {"list": [{"variable": "name_"}]}}}}}}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                                   {
                                                     "name": "formattedName",
                                                     "term": {
                                                       "application": {"function": {"variable": "hydra.python.testing.formatPythonTestName"}, "argument": {"variable": "fullName"}}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {
@@ -348,14 +348,14 @@
                                   "application": {
                                     "function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "cases"}},
                                     "argument": {"variable": "testGroup"}}},
-                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}}},
+                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}, "constraints": []}},
                               {
                                 "name": "subgroups",
                                 "term": {
                                   "application": {
                                     "function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "subgroups"}},
                                     "argument": {"variable": "testGroup"}}},
-                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestGroup"}}}}],
+                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.TestGroup"}}, "constraints": []}}],
                             "body": {
                               "application": {
                                 "function": {
@@ -431,14 +431,14 @@
                                                                   "application": {
                                                                     "function": {"project": {"typeName": "hydra.testing.TestGroup", "fieldName": "name"}},
                                                                     "argument": {"variable": "subgroup"}}},
-                                                                "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                                               {
                                                                 "name": "header",
                                                                 "term": {
                                                                   "application": {
                                                                     "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "# "}}}},
                                                                     "argument": {"variable": "groupName"}}},
-                                                                "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                                             "body": {
                                                               "application": {
                                                                 "function": {
@@ -489,14 +489,14 @@
                                                           "application": {
                                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": "string"}}},
                                                             "argument": {"variable": "testCaseLines"}}}}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                                   {
                                                     "name": "subgroupsStr",
                                                     "term": {
                                                       "application": {
                                                         "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "\n\n"}}}},
                                                         "argument": {"variable": "subgroupBlocks"}}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {
@@ -600,21 +600,21 @@
                                                         "argument": {"variable": "testModule"}}},
                                                     "argument": {"variable": "testGroup"}}},
                                                 "argument": {"variable": "testBody"}}},
-                                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                           {
                                             "name": "ns_",
                                             "term": {
                                               "application": {
                                                 "function": {"project": {"typeName": "hydra.packaging.Module", "fieldName": "name"}},
                                                 "argument": {"variable": "testModule"}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}}},
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.packaging.ModuleName"}, "constraints": []}},
                                           {
                                             "name": "parts",
                                             "term": {
                                               "application": {
                                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
                                                 "argument": {"application": {"function": {"unwrap": "hydra.packaging.ModuleName"}, "argument": {"variable": "ns_"}}}}},
-                                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
+                                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
                                           {
                                             "name": "dirParts",
                                             "term": {
@@ -627,7 +627,7 @@
                                                   "application": {
                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.init"}, "type": {"literal": "string"}}},
                                                     "argument": {"variable": "parts"}}}}},
-                                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}}},
+                                            "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
                                           {
                                             "name": "fileName",
                                             "term": {
@@ -647,7 +647,7 @@
                                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.last"}, "type": {"literal": "string"}}},
                                                             "argument": {"variable": "parts"}}}}},
                                                     {"literal": {"string": ".py"}}]}}},
-                                            "typeScheme": {"variables": [], "body": {"literal": "string"}}},
+                                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                           {
                                             "name": "filePath",
                                             "term": {
@@ -661,7 +661,7 @@
                                                         "argument": {"variable": "dirParts"}}},
                                                     {"literal": {"string": "/"}},
                                                     {"variable": "fileName"}]}}},
-                                            "typeScheme": {"variables": [], "body": {"literal": "string"}}}],
+                                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                         "body": {
                                           "typeApplication": {
                                             "body": {

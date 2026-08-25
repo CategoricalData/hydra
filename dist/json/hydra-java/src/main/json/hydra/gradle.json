@@ -40,7 +40,8 @@
                 "map": [
                   {
                     "key": {"variable": "description"},
-                    "value": {"literal": {"string": "Configuration for the Gradle antlr plugin's grammar generation (generateGrammarSource)."}}}]}}}}}},
+                    "value": {"literal": {"string": "Configuration for the Gradle antlr plugin's grammar generation (generateGrammarSource)."}}}]}}},
+          "constraints": []}}},
     {
       "type": {
         "name": "hydra.gradle.GradleBuildConfiguration",
@@ -111,4 +112,5 @@
                   {
                     "key": {"variable": "description"},
                     "value": {
-                      "literal": {"string": "The build configuration for a single Gradle-built distribution package, beyond its generated sources."}}}]}}}}}}]}
+                      "literal": {"string": "The build configuration for a single Gradle-built distribution package, beyond its generated sources."}}}]}}},
+          "constraints": []}}}]}

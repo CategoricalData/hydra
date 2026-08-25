@@ -11,4 +11,5 @@
         "name": "hydra.python.pyproject.PyProjectBuildConfiguration",
         "body": {
           "variables": [],
-          "body": {"record": [{"name": "dependencies", "type": {"list": {"variable": "hydra.packaging.PackageDependency"}}}]}}}}]}
+          "body": {"record": [{"name": "dependencies", "type": {"list": {"variable": "hydra.packaging.PackageDependency"}}}]},
+          "constraints": []}}}]}
