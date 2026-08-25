@@ -282,7 +282,7 @@ public class Coder {
         .lam("cname").lam("tApps").lam("argTerms").lam("cx").lam("g")
         .to(() ->
                 Logic.ifElse(
-                    Lists.isEmpty_(var("tApps")),
+                    Lists.isEmpty(var("tApps")),
                     right(var("argTerms")),
                     Eithers.bind(
                         Eithers.bind(
@@ -319,7 +319,7 @@ public class Coder {
                                                 proj(TypeScheme.TYPE_, TypeScheme.VARIABLES, "ts"))),
                                         Logic.ifElse(
                                             Logic.or(
-                                                Lists.isEmpty_(var("schemeVars")),
+                                                Lists.isEmpty(var("schemeVars")),
                                                 Logic.not(
                                                     Equality.equal(
                                                         Lists.length(var("schemeVars")),
@@ -374,10 +374,10 @@ public class Coder {
                                 Sets.toList(var("castVars"))))),
                     field("isSafe",
                         Logic.or(
-                            Sets.isEmpty_(var("trusted")),
+                            Sets.isEmpty(var("trusted")),
                             Logic.or(
-                                Sets.isEmpty_(var("javaTypeVars")),
-                                Sets.isEmpty_(Sets.difference(var("javaTypeVars"), var("trusted")))))),
+                                Sets.isEmpty(var("javaTypeVars")),
+                                Sets.isEmpty(Sets.difference(var("javaTypeVars"), var("trusted")))))),
                     Logic.ifElse(
                         var("isSafe"),
                         Eithers.bind(
@@ -1155,7 +1155,7 @@ public class Coder {
                                 var("aliasesExtended")),
                             field(JavaEnvironment.GRAPH, var("gExtended"))))),
                     Logic.ifElse(
-                        Lists.isEmpty_(var("bindings")),
+                        Lists.isEmpty(var("bindings")),
                         right(pair(list(), var("envExtended"))),
                         Eithers.bind(
                             Eithers.mapList(
@@ -1910,7 +1910,7 @@ public class Coder {
                                 unit()))),
                     let("hasTypeParams",
                         Logic.not(
-                            Lists.isEmpty_(
+                            Lists.isEmpty(
                                 proj(TypeScheme.TYPE_, TypeScheme.VARIABLES, "ts"))),
                         Logic.ifElse(
                             var("hasTypeParams"),
@@ -2293,7 +2293,7 @@ public class Coder {
                                     field("restFields",
                                         Pairs.second(var("p"))),
                                     Logic.ifElse(
-                                        Lists.isEmpty_(var("restFields")),
+                                        Lists.isEmpty(var("restFields")),
                                         list(
                                             inject(BlockStatement.TYPE_,
                                                 BlockStatement.STATEMENT,
@@ -2711,7 +2711,7 @@ public class Coder {
                                                     var("fallbackTypeApps"))),
     field("filteredFallback",
                                                 Logic.ifElse(
-                                                    Maps.isEmpty_(var("overgenSubst")),
+                                                    Maps.isEmpty(var("overgenSubst")),
                                                     var("filteredFallback0"),
                                                     Lists.map(
                                                         lambda("t",
@@ -2722,7 +2722,7 @@ public class Coder {
                                                         var("filteredFallback0"))))),
                                             Logic.ifElse(
                                                 Logic.or(
-                                                    Lists.isEmpty_(var("schemeVars")),
+                                                    Lists.isEmpty(var("schemeVars")),
                                                     Logic.not(
                                                         Equality.equal(
                                                             Lists.length(var("schemeVars")),
@@ -2772,7 +2772,7 @@ public class Coder {
                         lambda("mArgTypes",
                             Logic.ifElse(
                                 Logic.not(
-                                    Lists.isEmpty_(
+                                    Lists.isEmpty(
                                         Lists.filter(
                                             lambda("m", Optionals.isNone(var("m"))),
                                             var("mArgTypes")))),
@@ -2795,7 +2795,7 @@ public class Coder {
                                                     var("d"))),
                                             var("schemeDoms"))),
                                     field("domsMatch",
-                                        Lists.isEmpty_(
+                                        Lists.isEmpty(
                                             Lists.filter(
                                                 lambda("p",
                                                     Logic.not(
@@ -2990,7 +2990,7 @@ public class Coder {
                                                                             string("}.")))),
                                                                 field("consComment",
                                                                     Logic.ifElse(
-                                                                        Lists.isEmpty_(
+                                                                        Lists.isEmpty(
                                                                             var("nonEmptyParamLines")),
                                                                         var("consBaseComment"),
                                                                         Strings.concat(
@@ -4067,7 +4067,7 @@ public class Coder {
                     Logic.ifElse(
                         Logic.and(
                             Ordering.gte(var("selfRefCount"), int32(2)),
-                            Logic.not(Lists.isEmpty_(var("safeNonSelfVars")))),
+                            Logic.not(Lists.isEmpty(var("safeNonSelfVars")))),
                         Lists.foldl(
                             lambda("s", lambda("v", Maps.insert(var("v"), var("inVar"), var("s")))),
                             var("subst"),
@@ -4082,7 +4082,7 @@ public class Coder {
                         ref(Coder.extractTypeApplicationArgs),
                         hydra.dsl.Strip.deannotateType( var("d"))),
                     Logic.ifElse(
-                        Logic.not(Lists.isEmpty_(var("args"))),
+                        Logic.not(Lists.isEmpty(var("args"))),
                         Eithers.mapList(
                             lambda("t",
                                 Eithers.bind(
@@ -4367,9 +4367,9 @@ public class Coder {
                                                                                     "filteredTypeApps",
                                                                                     Logic.ifElse(
                                                                                         Logic.or(
-                                                                                            Sets.isEmpty_(
+                                                                                            Sets.isEmpty(
                                                                                                 var("trusted")),
-                                                                                            Sets.isEmpty_(
+                                                                                            Sets.isEmpty(
                                                                                                 var("inScope"))),
                                                                                         list(),
                                                                                         let(
@@ -4384,13 +4384,13 @@ public class Coder {
                                                                                                     var("typeApps"))),
                                                                                             Logic.ifElse(
                                                                                                 Logic.not(
-                                                                                                    Sets.isEmpty_(
+                                                                                                    Sets.isEmpty(
                                                                                                         Sets.difference(
                                                                                                             var("allVars"),
                                                                                                             var("inScope")))),
                                                                                                 list(),
                                                                                                 Logic.ifElse(
-                                                                                                    Sets.isEmpty_(
+                                                                                                    Sets.isEmpty(
                                                                                                         Sets.difference(
                                                                                                             var("allVars"),
                                                                                                             var("trusted"))),
@@ -4398,7 +4398,7 @@ public class Coder {
                                                                                                     list()))))),
                                                                                 Eithers.bind(
                                                                                     Logic.ifElse(
-                                                                                        Lists.isEmpty_(
+                                                                                        Lists.isEmpty(
                                                                                             var("filteredTypeApps")),
                                                                                         right(
                                                                                             list()),
@@ -4562,7 +4562,7 @@ public class Coder {
                                                             Eithers.bind(
                                                                 Logic.ifElse(
                                                                     Logic.not(
-                                                                        Lists.isEmpty_(
+                                                                        Lists.isEmpty(
                                                                             apply(
                                                                                 ref(Coder.javaTypeArgumentsForType),
                                                                                 var("dom")))),
@@ -4596,7 +4596,7 @@ public class Coder {
                                                                                         right(
                                                                                             Logic.ifElse(
                                                                                                 Logic.not(
-                                                                                                    Lists.isEmpty_(
+                                                                                                    Lists.isEmpty(
                                                                                                         apply(
                                                                                                             ref(Coder.javaTypeArgumentsForType),
                                                                                                             var("rt")))),
@@ -4606,7 +4606,7 @@ public class Coder {
                                                                                     right(
                                                                                         Logic.ifElse(
                                                                                             Logic.not(
-                                                                                                Lists.isEmpty_(
+                                                                                                Lists.isEmpty(
                                                                                                     apply(
                                                                                                         ref(Coder.javaTypeArgumentsForType),
                                                                                                         var("rt")))),
@@ -4680,7 +4680,7 @@ public class Coder {
                         lambda("typeUnits",
                             Eithers.bind(
                                 Logic.ifElse(
-                                    Lists.isEmpty_(var("termDefs")),
+                                    Lists.isEmpty(var("termDefs")),
                                     right(list()),
                                     Eithers.bind(
                                         Eithers.mapList(
@@ -5088,7 +5088,7 @@ public class Coder {
                                                             lambda("jbody",
                                                                 let("lam1",
                                                                     Logic.ifElse(
-                                                                        Lists.isEmpty_(var("bindings")),
+                                                                        Lists.isEmpty(var("bindings")),
                                                                         apply(
                                                                             ref(Utils.javaLambda),
                                                                             var("lambdaVar"),
@@ -6078,7 +6078,7 @@ public class Coder {
                             var("g")),
                         lambda("targs",
                             Logic.ifElse(
-                                Lists.isEmpty_(var("targs")),
+                                Lists.isEmpty(var("targs")),
                                 let("header",
                                     inject(MethodInvocation_Header.TYPE_,
                                         MethodInvocation_Header.SIMPLE,
@@ -6201,7 +6201,7 @@ public class Coder {
                                                     var("schemeVars"))),
     field("tparams",
                                                 Logic.ifElse(
-                                                    Lists.isEmpty_(var("usedSchemeVars")),
+                                                    Lists.isEmpty(var("usedSchemeVars")),
                                                     var("termVars"),
                                                     var("usedSchemeVars"))),
     field("params",
@@ -6231,7 +6231,7 @@ public class Coder {
                                                 Sets.fromList(var("tparams")))),
                                             Eithers.bind(
                                                 Logic.ifElse(
-                                                    Lists.isEmpty_(var("tparams")),
+                                                    Lists.isEmpty(var("tparams")),
                                                     right(hydra.dsl.lib.Maps.empty()),
                                                     apply(
                                                         ref(Coder.buildSubstFromAnnotations),
@@ -6274,7 +6274,7 @@ public class Coder {
                                                                             var("overgenSubst")))))),
     field("fixedCod",
                                                             Logic.ifElse(
-                                                                Maps.isEmpty_(var("overgenSubst")),
+                                                                Maps.isEmpty(var("overgenSubst")),
                                                                 var("cod"),
                                                                 apply(
                                                                     ref(Coder.substituteTypeVarsWithTypes),
@@ -6282,7 +6282,7 @@ public class Coder {
                                                                     var("cod")))),
     field("fixedDoms",
                                                             Logic.ifElse(
-                                                                Maps.isEmpty_(var("overgenSubst")),
+                                                                Maps.isEmpty(var("overgenSubst")),
                                                                 var("schemeDoms"),
                                                                 Lists.map(
                                                                     lambda("d",
@@ -6293,7 +6293,7 @@ public class Coder {
                                                                     var("schemeDoms")))),
     field("fixedTparams",
                                                             Logic.ifElse(
-                                                                Maps.isEmpty_(var("overgenSubst")),
+                                                                Maps.isEmpty(var("overgenSubst")),
                                                                 var("tparams"),
                                                                 Lists.filter(
                                                                     lambda("v",
@@ -6402,7 +6402,7 @@ public class Coder {
                                                                             var("bindResult"))),
                                                                     Eithers.bind(
                                                                         Logic.ifElse(
-                                                                            Maps.isEmpty_(
+                                                                            Maps.isEmpty(
                                                                                 var("overgenSubst")),
                                                                             right(var("body")),
                                                                             apply(
@@ -6478,7 +6478,7 @@ public class Coder {
                                                                                                         "isTCO",
                                                                                                         Logic.and(
                                                                                                             Logic.not(
-                                                                                                                Lists.isEmpty_(var("params"))),
+                                                                                                                Lists.isEmpty(var("params"))),
                                                                                                             hydra.dsl.Analysis.isSelfTailRecursive(
                                                                                                                 var("name"),
                                                                                                                 var("body")))),
@@ -6531,7 +6531,7 @@ public class Coder {
                                                                                                                 field(
                                                                                                                     "tcoBody",
                                                                                                                     Logic.ifElse(
-                                                                                                                        Lists.isEmpty_(
+                                                                                                                        Lists.isEmpty(
                                                                                                                             var("bindings")),
                                                                                                                         var("annotatedBody"),
                                                                                                                         inject(
@@ -6691,7 +6691,7 @@ public class Coder {
                             lambda("et",
                                 Eithers.bind(
                                     Logic.ifElse(
-                                        Lists.isEmpty_(var("tyapps")),
+                                        Lists.isEmpty(var("tyapps")),
                                         right(nothing()),
                                         Eithers.bind(
                                             apply(
@@ -6881,7 +6881,7 @@ public class Coder {
                                     field("body",
                                         proj(Let.TYPE_, Let.BODY, "lt")),
                                     Logic.ifElse(
-                                        Lists.isEmpty_(var("bindings")),
+                                        Lists.isEmpty(var("bindings")),
                                         apply(
                                             ref(Coder.encodeTermInternal),
                                             var("env"),
@@ -7045,9 +7045,9 @@ public class Coder {
                             Term.LIST,
                             lambda("els",
                                 Logic.ifElse(
-                                    Lists.isEmpty_(var("els")),
+                                    Lists.isEmpty(var("els")),
                                     Logic.ifElse(
-                                        Lists.isEmpty_(var("tyapps")),
+                                        Lists.isEmpty(var("tyapps")),
                                         right(
                                             apply(
                                                 ref(Utils.javaMethodInvocationToJavaExpression),
@@ -7110,9 +7110,9 @@ public class Coder {
                             Term.MAP,
                             lambda("m",
                                 Logic.ifElse(
-                                    Maps.isEmpty_(var("m")),
+                                    Maps.isEmpty(var("m")),
                                     Logic.ifElse(
-                                        Lists.isEmpty_(var("tyapps")),
+                                        Lists.isEmpty(var("tyapps")),
                                         right(
                                             apply(
                                                 ref(Utils.javaMethodInvocationToJavaExpression),
@@ -7196,7 +7196,7 @@ public class Coder {
                                 Optionals.match(
                                     var("mt"),
                                     Logic.ifElse(
-                                        Lists.isEmpty_(var("tyapps")),
+                                        Lists.isEmpty(var("tyapps")),
                                         right(
                                             apply(
                                                 ref(Utils.javaMethodInvocationToJavaExpression),
@@ -7264,7 +7264,7 @@ public class Coder {
                                             lambda("jterm2",
                                                 Eithers.bind(
                                                     Logic.ifElse(
-                                                        Lists.isEmpty_(var("tyapps")),
+                                                        Lists.isEmpty(var("tyapps")),
                                                         right(nothing()),
                                                         Eithers.bind(
                                                             Eithers.mapList(
@@ -7382,7 +7382,7 @@ public class Coder {
                                                                                     var("recTyp")))),
                                                                         Logic.ifElse(
                                                                             Logic.or(
-                                                                                Lists.isEmpty_(
+                                                                                Lists.isEmpty(
                                                                                     var("args")),
                                                                                 Logic.not(
                                                                                     Equality.equal(
@@ -7456,7 +7456,7 @@ public class Coder {
                                                             Eithers.bind(
                                                                 Logic.ifElse(
                                                                     Logic.not(
-                                                                        Lists.isEmpty_(var("tyapps"))),
+                                                                        Lists.isEmpty(var("tyapps"))),
                                                                     Eithers.bind(
                                                                         Eithers.mapList(
                                                                             lambda("jt",
@@ -7517,7 +7517,7 @@ public class Coder {
                                                                                                 hydra.dsl.Strip.deannotateType(
                                                                                                     var("annTyp"))),
                                                                                             Logic.ifElse(
-                                                                                                Lists.isEmpty_(
+                                                                                                Lists.isEmpty(
                                                                                                     var("typeArgs")),
                                                                                                 right(
                                                                                                     nothing()),
@@ -7569,9 +7569,9 @@ public class Coder {
                             Term.SET,
                             lambda("s",
                                 Logic.ifElse(
-                                    Sets.isEmpty_(var("s")),
+                                    Sets.isEmpty(var("s")),
                                     Logic.ifElse(
-                                        Lists.isEmpty_(var("tyapps")),
+                                        Lists.isEmpty(var("tyapps")),
                                         right(
                                             apply(
                                                 ref(Utils.javaMethodInvocationToJavaExpression),
@@ -8266,7 +8266,7 @@ public class Coder {
                                                                 bool(false),
                                                                 lambda("ts",
                                                                     Logic.not(
-                                                                        Lists.isEmpty_(
+                                                                        Lists.isEmpty(
                                                                             proj(TypeScheme.TYPE_, TypeScheme.VARIABLES, "ts")))))),
                                                         field("domArgs",
                                                             Logic.ifElse(
@@ -8923,7 +8923,7 @@ public class Coder {
                             Type.RECORD,
                             lambda("rt",
                                 Logic.ifElse(
-                                    Lists.isEmpty_(var("rt")),
+                                    Lists.isEmpty(var("rt")),
                                     right(
                                         apply(
                                             ref(Utils.javaRefType),
@@ -9170,7 +9170,7 @@ public class Coder {
                                 lambda("ts",
                                     Logic.ifElse(
                                         Logic.not(
-                                            Lists.isEmpty_(
+                                            Lists.isEmpty(
                                                 proj(TypeScheme.TYPE_, TypeScheme.VARIABLES, "ts"))),
                                         right(nothing()),
                                         matchWithDefault(Type.TYPE_,
@@ -9883,7 +9883,7 @@ public class Coder {
                             lambda("p", Pairs.second(var("p"))),
                             Lists.zip(var("allTypeArgs"), var("keepFlags")))),
                     Logic.ifElse(
-                        Logic.not(Maps.isEmpty_(var("overgenSubst"))),
+                        Logic.not(Maps.isEmpty(var("overgenSubst"))),
                         Lists.map(
                             lambda("t",
                                 apply(
@@ -10111,7 +10111,7 @@ public class Coder {
                                                                         Strings.toList(var("s")))),
                                                                 var("m"))))))),
                                         Logic.ifElse(
-                                            Lists.isEmpty_(var("typeApps")),
+                                            Lists.isEmpty(var("typeApps")),
                                             let("header",
                                                 inject(
                                                     MethodInvocation_Header.TYPE_,
@@ -10776,8 +10776,8 @@ public class Coder {
                                         Logic.not(Equality.equal(var("firstCh"), int32(116))),
                                         bool(false),
                                         Logic.and(
-                                            Logic.not(Lists.isEmpty_(var("rest"))),
-                                            Lists.isEmpty_(
+                                            Logic.not(Lists.isEmpty(var("rest"))),
+                                            Lists.isEmpty(
                                                 Lists.filter(
                                                     lambda("c",
                                                         Logic.not(
@@ -10951,7 +10951,7 @@ public class Coder {
                     field("initParts",
                         Optionals.withDefault(list(), Lists.init(var("parts")))),
                     Logic.ifElse(
-                        Lists.isEmpty_(var("initParts")),
+                        Lists.isEmpty(var("initParts")),
                         nothing(),
                         just(
                             wrap(ModuleName.TYPE_,
@@ -11433,7 +11433,7 @@ public class Coder {
         .lam("f").lam("args").lam("fType")
         .to(() ->
                 Logic.ifElse(
-                    Lists.isEmpty_(var("args")),
+                    Lists.isEmpty(var("args")),
                     var("f"),
                     matchWithDefault(Type.TYPE_,
                         hydra.dsl.Strip.deannotateType( var("fType")),
@@ -11530,7 +11530,7 @@ public class Coder {
                     // non-generic record (new R(...)), or just(<V...>) to thread the type params.
                     field("mTypeArgs",
                         Logic.ifElse(
-                            Lists.isEmpty_(var("tparams")),
+                            Lists.isEmpty(var("tparams")),
                             nothing(),
                             just(
                                 inject(TypeArgumentsOrDiamond.TYPE_,
@@ -11937,7 +11937,7 @@ public class Coder {
                                 ref(Utils.javaReturnStatement),
                                 just(
                                     Logic.ifElse(
-                                        Lists.isEmpty_(var("fields")),
+                                        Lists.isEmpty(var("fields")),
                                         apply(
                                             ref(Utils.javaBooleanExpression),
                                             bool(true)),
@@ -11984,7 +11984,7 @@ public class Coder {
                         inject(BlockStatement.TYPE_,
                             BlockStatement.STATEMENT,
                             Logic.ifElse(
-                                Lists.isEmpty_(var("fields")),
+                                Lists.isEmpty(var("fields")),
                                 apply(
                                     ref(Utils.javaReturnStatement),
                                     just(
@@ -12703,7 +12703,7 @@ public class Coder {
                 lambda(
                 params("label", "n", "aliases", "anns", "tyapps", "cx", "g"),
                 Logic.ifElse(
-                    Logic.not(Lists.isEmpty_(var("tyapps"))),
+                    Logic.not(Lists.isEmpty(var("tyapps"))),
                     apply(
                         ref(Coder.takeTypeArgs),
                         var("label"),
@@ -13625,7 +13625,7 @@ public class Coder {
                                             bigint(java.math.BigInteger.valueOf(0L)))))))),
     field("valueCompareStmt",
                         Logic.ifElse(
-                            Lists.isEmpty_(var("fields")),
+                            Lists.isEmpty(var("fields")),
                             var("emptyReturn"),
                             Lists.concat2(
                                 list(var("castDeclStmt")),
