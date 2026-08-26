@@ -112,8 +112,8 @@ object Types:
     TypeScheme(vs.map(Terms.name), body, Map.empty)
 
   /** Convert a Set of class identifier Names into a list of TypeClassConstraint.simple values. */
-  def toConstraints(classes: Set[Name]): Seq[TypeClassConstraint] =
-    classes.toSeq.map(n => TypeClassConstraint.simple(n))
+  def toConstraints(classes: Set[Name]): Set[TypeClassConstraint] =
+    classes.map(n => TypeClassConstraint.simple(n))
 
   def polyConstrained(vsWithConstraints: Map[String, Set[Name]], body: Type): TypeScheme =
     val vars = vsWithConstraints.keys.toSeq.map(Terms.name)

@@ -9,6 +9,7 @@
 
 import type { Either, Optional } from "../../../runtime.js";
 import { Left, Right, Given, None } from "../../../runtime.js";
+import * as libSets from "./sets.js";
 
 export const bimap = (fl: (l: any) => any, fr: (r: any) => any, e: any): Either<any, any> =>
   e.tag === "left" ? Left(fl(e.value)) : Right(fr(e.value));
@@ -64,7 +65,9 @@ export const mapOptional = (f: (a: any) => any, m: any): Either<any, Optional<an
 
 export const mapSet = <A, L, B>(f: (a: A) => Either<L, B>, s: ReadonlySet<A>): Either<L, ReadonlySet<B>> => {
   const out = new Set<B>();
-  for (const x of s) {
+  // `s` is a Hydra canonical set (Map-backed wrapper, not a native ES Set), so
+  // `for..of s` throws "s is not iterable". Iterate its elements via sets.toList.
+  for (const x of libSets.toList(s)) {
     const r = f(x);
     if (r.tag === "left") return r as unknown as Either<L, ReadonlySet<B>>;
     out.add(r.value);

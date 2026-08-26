@@ -466,7 +466,7 @@ object Libraries:
   private def tSchemeConstrained(vars: Seq[(String, Seq[String])], t: Type): TypeScheme =
     val varNames = vars.map(_._1)
     val constraints = vars.collect { case (name, classes) if classes.nonEmpty =>
-      name -> TypeVariableConstraints(classes.map(c => TypeClassConstraint.simple(c)))
+      name -> TypeVariableConstraints(classes.map(c => TypeClassConstraint.simple(c)).toSet)
     }.toMap
     TypeScheme(varNames, t, constraints)
 
@@ -1173,7 +1173,7 @@ object Libraries:
       hydra.lib.optionals.isNone.name -> mkPrimImpl(hydra.lib.optionals.isNone.name, tScheme(Seq("a"),
         tFun(tOpt(a), tBool)),
         impl1(ma => mkBool(exMaybe(ma).isEmpty))),
-      hydra.lib.optionals.given.name -> mkPrimImpl(hydra.lib.optionals.given.name, tScheme(Seq("a"),
+      hydra.lib.optionals.`given`.name -> mkPrimImpl(hydra.lib.optionals.`given`.name, tScheme(Seq("a"),
         tFun(a, tOpt(a))),
         impl1(a => mkMaybe(Some(a)))),
       hydra.lib.optionals.toList.name -> mkPrimImpl(hydra.lib.optionals.toList.name, tScheme(Seq("a"),
