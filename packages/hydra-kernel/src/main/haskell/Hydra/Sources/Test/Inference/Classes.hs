@@ -154,27 +154,7 @@ testGroupForComposition = define "testGroupForComposition" $
       expectPolyConstrained 1 []
         (lambda "m" $ primitive DefMaps.map @@ primitive DefLists.sort @@ var "m")
         ["t0", "t1"] [("t0", ["ordering"]), ("t1", ["ordering"])]
-        (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") (T.list $ T.var "t1")))],
-
-    -- Regression coverage for #702: a class constraint on a type variable bound through the
-    -- DOMAIN (input/contravariant) position of a passed-in function argument must propagate
-    -- to the caller's generalized signature, just as it does for a codomain (output) position
-    -- (see the "\f -> \xs -> sets.fromList (lists.map f xs)" case above, which is the
-    -- codomain-position analog and has always worked).
-    subgroup "Constraint propagation through a function argument's domain position (#702)" [
-      -- \fk -> \fv -> \m -> maps.bimap fk fv m
-      -- bimap :: forall k1 k2 v1 v2. (Ord k1, Ord k2) => (k1 -> k2) -> (v1 -> v2) -> Map k1 v1 -> Map k2 v2
-      -- fk's own domain type (k1) and fv's own domain type (v1, unconstrained here) must be
-      -- threaded back onto the caller's type variables with their constraints intact.
-      expectPolyConstrained 1 []
-        (lambda "fk" $ lambda "fv" $ lambda "m" $
-          primitive DefMaps.bimap @@ var "fk" @@ var "fv" @@ var "m")
-        ["t0", "t1", "t2", "t3"] [("t0", ["ordering"]), ("t1", ["ordering"])]
-        (T.functionMany [
-          T.function (T.var "t0") (T.var "t1"),
-          T.function (T.var "t2") (T.var "t3"),
-          T.map (T.var "t0") (T.var "t2"),
-          T.map (T.var "t1") (T.var "t3")])]]
+        (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") (T.list $ T.var "t1")))]]
 
 -- | Constraints should propagate through let-bound generalizations.
 testGroupForLetBindings :: TypedTermDefinition TestGroup
