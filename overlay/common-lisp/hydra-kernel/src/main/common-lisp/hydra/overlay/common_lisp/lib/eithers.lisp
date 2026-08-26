@@ -88,11 +88,14 @@
                 (list :right (list :given (either-val result)))))))))
 
 ;; map_set :: (a -> Either e b) -> Set a -> Either e (Set b)
+;; `s` is a Set (RB-tree after #685, formerly a list); iterate its elements
+;; via sets-elements-sorted (accepts rbnode/list/nil) rather than `for x in s`,
+;; which would treat an RB-tree node as a LIST and error.
 (defvar hydra_overlay_common_lisp_lib_eithers_map_set
   (lambda (f)
     (lambda (s)
       (loop with acc = nil
-            for x in s
+            for x in (sets-elements-sorted s)
             for result = (funcall f x)
             do (if (eq (either-tag result) :left)
                    (return result)
