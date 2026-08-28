@@ -190,28 +190,28 @@
       "term": {
         "name": "hydra.dsl.refs.encodeMap",
         "signature": {
-          "typeParameters": [{"name": "k", "constraints": []}, {"name": "v", "constraints": []}],
+          "typeParameters": [{"name": "t0", "constraints": []}, {"name": "t1", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"function": {"domain": {"variable": "k"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+                  "argument": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}}}},
               "isLazy": false},
             {
               "name": "arg1",
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+                  "argument": {"function": {"domain": {"variable": "t1"}, "codomain": {"variable": "hydra.core.Term"}}}}},
               "isLazy": false},
             {
               "name": "arg2",
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
+                  "argument": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t1"}}}}},
               "isLazy": false}],
           "result": {
             "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.core.Term"}}}}},
@@ -219,25 +219,25 @@
           "annotated": {
             "body": {
               "lambda": {
-                "parameter": "keyEncoder",
+                "parameter": "arg0",
                 "domain": {
                   "application": {
                     "function": {"variable": "hydra.typed.TypedTerm"},
-                    "argument": {"function": {"domain": {"variable": "k"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+                    "argument": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}}}},
                 "body": {
                   "lambda": {
-                    "parameter": "valEncoder",
+                    "parameter": "arg1",
                     "domain": {
                       "application": {
                         "function": {"variable": "hydra.typed.TypedTerm"},
-                        "argument": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+                        "argument": {"function": {"domain": {"variable": "t1"}, "codomain": {"variable": "hydra.core.Term"}}}}},
                     "body": {
                       "lambda": {
-                        "parameter": "m",
+                        "parameter": "arg2",
                         "domain": {
                           "application": {
                             "function": {"variable": "hydra.typed.TypedTerm"},
-                            "argument": {"map": {"keys": {"variable": "k"}, "values": {"variable": "v"}}}}},
+                            "argument": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t1"}}}}},
                         "body": {
                           "wrap": {
                             "typeName": "hydra.typed.TypedTerm",
@@ -282,13 +282,13 @@
                                                                             "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.refs.encodeMap"}}}}}}}},
                                                                     {
                                                                       "name": "argument",
-                                                                      "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "keyEncoder"}}}}]}}}}}},
+                                                                      "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}},
                                                       {
                                                         "name": "argument",
-                                                        "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "valEncoder"}}}}]}}}}}},
+                                                        "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "arg1"}}}}]}}}}}},
                                         {
                                           "name": "argument",
-                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "m"}}}}]}}}}}}}}}}}}},
+                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "arg2"}}}}]}}}}}}}}}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.refs.encodeMap"}}}]}}}}},
     {
@@ -520,18 +520,18 @@
       "term": {
         "name": "hydra.dsl.refs.encodeSet",
         "signature": {
-          "typeParameters": [{"name": "a", "constraints": []}],
+          "typeParameters": [{"name": "t0", "constraints": []}],
           "parameters": [
             {
               "name": "arg0",
               "type": {
                 "application": {
                   "function": {"variable": "hydra.typed.TypedTerm"},
-                  "argument": {"function": {"domain": {"variable": "a"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+                  "argument": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}}}},
               "isLazy": false},
             {
               "name": "arg1",
-              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"set": {"variable": "a"}}}},
+              "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"set": {"variable": "t0"}}}},
               "isLazy": false}],
           "result": {
             "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.core.Term"}}}}},
@@ -539,15 +539,15 @@
           "annotated": {
             "body": {
               "lambda": {
-                "parameter": "elemEncoder",
+                "parameter": "arg0",
                 "domain": {
                   "application": {
                     "function": {"variable": "hydra.typed.TypedTerm"},
-                    "argument": {"function": {"domain": {"variable": "a"}, "codomain": {"variable": "hydra.core.Term"}}}}},
+                    "argument": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.Term"}}}}},
                 "body": {
                   "lambda": {
-                    "parameter": "xs",
-                    "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"set": {"variable": "a"}}}},
+                    "parameter": "arg1",
+                    "domain": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"set": {"variable": "t0"}}}},
                     "body": {
                       "wrap": {
                         "typeName": "hydra.typed.TypedTerm",
@@ -581,10 +581,10 @@
                                                           "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.refs.encodeSet"}}}}}}}},
                                                   {
                                                     "name": "argument",
-                                                    "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "elemEncoder"}}}}]}}}}}},
+                                                    "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "arg0"}}}}]}}}}}},
                                     {
                                       "name": "argument",
-                                      "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "xs"}}}}]}}}}}}}}}}},
+                                      "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "arg1"}}}}]}}}}}}}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL reference to hydra.refs.encodeSet"}}}]}}}}},
     {
