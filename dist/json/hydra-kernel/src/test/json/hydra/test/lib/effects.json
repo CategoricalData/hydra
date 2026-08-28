@@ -1,7 +1,7 @@
 {
   "name": "hydra.test.lib.effects",
   "metadata": {"description": "Effectful test cases for hydra.lib.effects primitives", "comments": [], "seeAlso": []},
-  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.testing"}],
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.file"}, {"module": "hydra.testing"}],
   "definitions": [
     {
       "term": {
@@ -148,6 +148,166 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
+                              {"name": "name", "term": {"literal": {"string": "bind (ordering)"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "bind performs the first effect before the second, each once"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.testing.TestCase",
+                                                "field": {
+                                                  "name": "effectful",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.testing.EffectfulTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"variable": "hydra.lib.effects.bind"},
+                                                                              "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}},
+                                                                          "type": {"literal": "string"}}},
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "function": {"variable": "hydra.lib.files.writeFile"},
+                                                                              "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/bind-order.txt"}}}}}},
+                                                                          "argument": {"literal": {"binary": ""}}}}}},
+                                                                  "argument": {
+                                                                    "lambda": {
+                                                                      "parameter": "_w",
+                                                                      "domain": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}},
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.lib.effects.bind"},
+                                                                                      "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}},
+                                                                                  "type": {"literal": "string"}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {"variable": "hydra.lib.files.appendFile"},
+                                                                                      "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/bind-order.txt"}}}}}},
+                                                                                  "argument": {"literal": {"binary": "QQ=="}}}}}},
+                                                                          "argument": {
+                                                                            "lambda": {
+                                                                              "parameter": "_a",
+                                                                              "domain": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}},
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"variable": "hydra.lib.effects.bind"},
+                                                                                              "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}},
+                                                                                          "type": {"literal": "string"}}},
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.lib.files.appendFile"},
+                                                                                              "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/bind-order.txt"}}}}}},
+                                                                                          "argument": {"literal": {"binary": "Qg=="}}}}}},
+                                                                                  "argument": {
+                                                                                    "lambda": {
+                                                                                      "parameter": "_b",
+                                                                                      "domain": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}},
+                                                                                      "body": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"variable": "hydra.lib.effects.map"},
+                                                                                                      "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": "binary"}}}}},
+                                                                                                  "type": {"literal": "string"}}},
+                                                                                              "argument": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "r",
+                                                                                                  "domain": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": "binary"}}},
+                                                                                                  "body": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "function": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {
+                                                                                                                    "typeApplication": {
+                                                                                                                      "body": {
+                                                                                                                        "typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.error.file.FileError"}}},
+                                                                                                                      "type": {"literal": "binary"}}},
+                                                                                                                  "type": {"literal": "string"}}},
+                                                                                                              "argument": {
+                                                                                                                "lambda": {"parameter": "_e", "domain": {"variable": "hydra.error.file.FileError"}, "body": {"literal": {"string": "ERR"}}}}}},
+                                                                                                          "argument": {
+                                                                                                            "lambda": {
+                                                                                                              "parameter": "b",
+                                                                                                              "domain": {"literal": "binary"},
+                                                                                                              "body": {
+                                                                                                                "application": {
+                                                                                                                  "function": {
+                                                                                                                    "application": {
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "function": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {
+                                                                                                                                "typeApplication": {
+                                                                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"literal": "string"}}},
+                                                                                                                                  "type": {"literal": "string"}}},
+                                                                                                                              "type": {"literal": "string"}}},
+                                                                                                                          "argument": {"lambda": {"parameter": "_e", "domain": {"literal": "string"}, "body": {"literal": {"string": "<decode error>"}}}}}},
+                                                                                                                      "argument": {"lambda": {"parameter": "s", "domain": {"literal": "string"}, "body": {"variable": "s"}}}}},
+                                                                                                                  "argument": {"application": {"function": {"variable": "hydra.lib.text.decodeUtf8"}, "argument": {"variable": "b"}}}}}}}}},
+                                                                                                      "argument": {"variable": "r"}}}}}}},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "function": {"variable": "hydra.lib.files.readFile"},
+                                                                                              "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/bind-order.txt"}}}}}}}}}}}}}}}}}}}}}}},
+                                                        {"name": "expected", "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "AB"}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.testing.TestGroup",
+                            "fields": [
                               {"name": "name", "term": {"literal": {"string": "compose"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
@@ -287,6 +447,180 @@
                           "record": {
                             "typeName": "hydra.testing.TestGroup",
                             "fields": [
+                              {"name": "name", "term": {"literal": {"string": "foldList (ordering)"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "foldList performs element effects left-to-right, each once"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.testing.TestCase",
+                                                "field": {
+                                                  "name": "effectful",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.testing.EffectfulTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"variable": "hydra.lib.effects.bind"},
+                                                                              "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}},
+                                                                          "type": {"literal": "string"}}},
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "function": {"variable": "hydra.lib.files.writeFile"},
+                                                                              "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/fold-order.txt"}}}}}},
+                                                                          "argument": {"literal": {"binary": ""}}}}}},
+                                                                  "argument": {
+                                                                    "lambda": {
+                                                                      "parameter": "_w",
+                                                                      "domain": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}},
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.bind"}, "type": {"literal": "string"}}},
+                                                                                  "type": {"literal": "string"}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.foldList"}, "type": {"literal": "string"}}},
+                                                                                              "type": {"literal": "binary"}}},
+                                                                                          "argument": {
+                                                                                            "lambda": {
+                                                                                              "parameter": "acc",
+                                                                                              "domain": {"literal": "string"},
+                                                                                              "body": {
+                                                                                                "lambda": {
+                                                                                                  "parameter": "x",
+                                                                                                  "domain": {"literal": "binary"},
+                                                                                                  "body": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "function": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"variable": "hydra.lib.effects.bind"},
+                                                                                                                  "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}},
+                                                                                                              "type": {"literal": "string"}}},
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "application": {
+                                                                                                                  "function": {"variable": "hydra.lib.files.appendFile"},
+                                                                                                                  "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/fold-order.txt"}}}}}},
+                                                                                                              "argument": {"variable": "x"}}}}},
+                                                                                                      "argument": {
+                                                                                                        "lambda": {
+                                                                                                          "parameter": "_a",
+                                                                                                          "domain": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}},
+                                                                                                          "body": {
+                                                                                                            "application": {
+                                                                                                              "function": {"typeApplication": {"body": {"variable": "hydra.lib.effects.pure"}, "type": {"literal": "string"}}},
+                                                                                                              "argument": {"variable": "acc"}}}}}}}}}}}}},
+                                                                                      "argument": {"literal": {"string": ""}}}},
+                                                                                  "argument": {"list": [{"literal": {"binary": "QQ=="}}, {"literal": {"binary": "Qg=="}}, {"literal": {"binary": "Qw=="}}]}}}}},
+                                                                          "argument": {
+                                                                            "lambda": {
+                                                                              "parameter": "_f",
+                                                                              "domain": {"literal": "string"},
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"variable": "hydra.lib.effects.map"},
+                                                                                              "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": "binary"}}}}},
+                                                                                          "type": {"literal": "string"}}},
+                                                                                      "argument": {
+                                                                                        "lambda": {
+                                                                                          "parameter": "r",
+                                                                                          "domain": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": "binary"}}},
+                                                                                          "body": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {
+                                                                                                                "typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.error.file.FileError"}}},
+                                                                                                              "type": {"literal": "binary"}}},
+                                                                                                          "type": {"literal": "string"}}},
+                                                                                                      "argument": {
+                                                                                                        "lambda": {"parameter": "_e", "domain": {"variable": "hydra.error.file.FileError"}, "body": {"literal": {"string": "ERR"}}}}}},
+                                                                                                  "argument": {
+                                                                                                    "lambda": {
+                                                                                                      "parameter": "b",
+                                                                                                      "domain": {"literal": "binary"},
+                                                                                                      "body": {
+                                                                                                        "application": {
+                                                                                                          "function": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "application": {
+                                                                                                                  "function": {
+                                                                                                                    "typeApplication": {
+                                                                                                                      "body": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"literal": "string"}}},
+                                                                                                                          "type": {"literal": "string"}}},
+                                                                                                                      "type": {"literal": "string"}}},
+                                                                                                                  "argument": {"lambda": {"parameter": "_e", "domain": {"literal": "string"}, "body": {"literal": {"string": "<decode error>"}}}}}},
+                                                                                                              "argument": {"lambda": {"parameter": "s", "domain": {"literal": "string"}, "body": {"variable": "s"}}}}},
+                                                                                                          "argument": {"application": {"function": {"variable": "hydra.lib.text.decodeUtf8"}, "argument": {"variable": "b"}}}}}}}}},
+                                                                                              "argument": {"variable": "r"}}}}}}},
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "function": {"variable": "hydra.lib.files.readFile"},
+                                                                                      "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/fold-order.txt"}}}}}}}}}}}}}}}}}}},
+                                                        {"name": "expected", "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "ABC"}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.testing.TestGroup",
+                            "fields": [
                               {"name": "name", "term": {"literal": {"string": "map"}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {
@@ -414,6 +748,157 @@
                                                                                       "argument": {"literal": {"string": "."}}}}}}}}}},
                                                                       "argument": {"list": [{"literal": {"string": "a"}}, {"literal": {"string": "b"}}]}}}}}}}},
                                                         {"name": "expected", "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "a.b."}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.testing.TestGroup",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "mapList (ordering)"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "mapList performs element effects left-to-right, each once"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.testing.TestCase",
+                                                "field": {
+                                                  "name": "effectful",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.testing.EffectfulTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"variable": "hydra.lib.effects.bind"},
+                                                                              "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}},
+                                                                          "type": {"literal": "string"}}},
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "function": {"variable": "hydra.lib.files.writeFile"},
+                                                                              "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/maplist-order.txt"}}}}}},
+                                                                          "argument": {"literal": {"binary": ""}}}}}},
+                                                                  "argument": {
+                                                                    "lambda": {
+                                                                      "parameter": "_w",
+                                                                      "domain": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}},
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.lib.effects.bind"},
+                                                                                      "type": {"list": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
+                                                                                  "type": {"literal": "string"}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.mapList"}, "type": {"literal": "binary"}}},
+                                                                                          "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}},
+                                                                                      "argument": {
+                                                                                        "lambda": {
+                                                                                          "parameter": "x",
+                                                                                          "domain": {"literal": "binary"},
+                                                                                          "body": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.lib.files.appendFile"},
+                                                                                                  "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/maplist-order.txt"}}}}}},
+                                                                                              "argument": {"variable": "x"}}}}}}},
+                                                                                  "argument": {"list": [{"literal": {"binary": "QQ=="}}, {"literal": {"binary": "Qg=="}}, {"literal": {"binary": "Qw=="}}]}}}}},
+                                                                          "argument": {
+                                                                            "lambda": {
+                                                                              "parameter": "_m",
+                                                                              "domain": {"list": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}},
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"variable": "hydra.lib.effects.map"},
+                                                                                              "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": "binary"}}}}},
+                                                                                          "type": {"literal": "string"}}},
+                                                                                      "argument": {
+                                                                                        "lambda": {
+                                                                                          "parameter": "r",
+                                                                                          "domain": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": "binary"}}},
+                                                                                          "body": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {
+                                                                                                                "typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.error.file.FileError"}}},
+                                                                                                              "type": {"literal": "binary"}}},
+                                                                                                          "type": {"literal": "string"}}},
+                                                                                                      "argument": {
+                                                                                                        "lambda": {"parameter": "_e", "domain": {"variable": "hydra.error.file.FileError"}, "body": {"literal": {"string": "ERR"}}}}}},
+                                                                                                  "argument": {
+                                                                                                    "lambda": {
+                                                                                                      "parameter": "b",
+                                                                                                      "domain": {"literal": "binary"},
+                                                                                                      "body": {
+                                                                                                        "application": {
+                                                                                                          "function": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "application": {
+                                                                                                                  "function": {
+                                                                                                                    "typeApplication": {
+                                                                                                                      "body": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"literal": "string"}}},
+                                                                                                                          "type": {"literal": "string"}}},
+                                                                                                                      "type": {"literal": "string"}}},
+                                                                                                                  "argument": {"lambda": {"parameter": "_e", "domain": {"literal": "string"}, "body": {"literal": {"string": "<decode error>"}}}}}},
+                                                                                                              "argument": {"lambda": {"parameter": "s", "domain": {"literal": "string"}, "body": {"variable": "s"}}}}},
+                                                                                                          "argument": {"application": {"function": {"variable": "hydra.lib.text.decodeUtf8"}, "argument": {"variable": "b"}}}}}}}}},
+                                                                                              "argument": {"variable": "r"}}}}}}},
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "function": {"variable": "hydra.lib.files.readFile"},
+                                                                                      "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/maplist-order.txt"}}}}}}}}}}}}}}}}}}},
+                                                        {"name": "expected", "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "ABC"}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                         {
@@ -556,6 +1041,295 @@
                                                         {
                                                           "name": "expected",
                                                           "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "<none>"}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.testing.TestGroup",
+                            "fields": [
+                              {"name": "name", "term": {"literal": {"string": "mapOptional (ordering)"}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {
+                                "name": "subgroups",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
+                              {
+                                "name": "cases",
+                                "term": {
+                                  "list": [
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "mapOptional over none performs no effect"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.testing.TestCase",
+                                                "field": {
+                                                  "name": "effectful",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.testing.EffectfulTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"variable": "hydra.lib.effects.bind"},
+                                                                              "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}},
+                                                                          "type": {"literal": "string"}}},
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "function": {"variable": "hydra.lib.files.writeFile"},
+                                                                              "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/mapopt-none.txt"}}}}}},
+                                                                          "argument": {"literal": {"binary": "c2VlZA=="}}}}}},
+                                                                  "argument": {
+                                                                    "lambda": {
+                                                                      "parameter": "_w",
+                                                                      "domain": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}},
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.lib.effects.bind"},
+                                                                                      "type": {"optional": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
+                                                                                  "type": {"literal": "string"}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.mapOptional"}, "type": "unit"}},
+                                                                                          "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}},
+                                                                                      "argument": {
+                                                                                        "lambda": {
+                                                                                          "parameter": "_x",
+                                                                                          "domain": "unit",
+                                                                                          "body": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.lib.files.appendFile"},
+                                                                                                  "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/mapopt-none.txt"}}}}}},
+                                                                                              "argument": {"literal": {"binary": "WA=="}}}}}}}},
+                                                                                  "argument": {"typeApplication": {"body": {"optional": null}, "type": "unit"}}}}}},
+                                                                          "argument": {
+                                                                            "lambda": {
+                                                                              "parameter": "_m",
+                                                                              "domain": {"optional": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}},
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"variable": "hydra.lib.effects.map"},
+                                                                                              "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": "binary"}}}}},
+                                                                                          "type": {"literal": "string"}}},
+                                                                                      "argument": {
+                                                                                        "lambda": {
+                                                                                          "parameter": "r",
+                                                                                          "domain": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": "binary"}}},
+                                                                                          "body": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {
+                                                                                                                "typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.error.file.FileError"}}},
+                                                                                                              "type": {"literal": "binary"}}},
+                                                                                                          "type": {"literal": "string"}}},
+                                                                                                      "argument": {
+                                                                                                        "lambda": {"parameter": "_e", "domain": {"variable": "hydra.error.file.FileError"}, "body": {"literal": {"string": "ERR"}}}}}},
+                                                                                                  "argument": {
+                                                                                                    "lambda": {
+                                                                                                      "parameter": "b",
+                                                                                                      "domain": {"literal": "binary"},
+                                                                                                      "body": {
+                                                                                                        "application": {
+                                                                                                          "function": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "application": {
+                                                                                                                  "function": {
+                                                                                                                    "typeApplication": {
+                                                                                                                      "body": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"literal": "string"}}},
+                                                                                                                          "type": {"literal": "string"}}},
+                                                                                                                      "type": {"literal": "string"}}},
+                                                                                                                  "argument": {"lambda": {"parameter": "_e", "domain": {"literal": "string"}, "body": {"literal": {"string": "<decode error>"}}}}}},
+                                                                                                              "argument": {"lambda": {"parameter": "s", "domain": {"literal": "string"}, "body": {"variable": "s"}}}}},
+                                                                                                          "argument": {"application": {"function": {"variable": "hydra.lib.text.decodeUtf8"}, "argument": {"variable": "b"}}}}}}}}},
+                                                                                              "argument": {"variable": "r"}}}}}}},
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "function": {"variable": "hydra.lib.files.readFile"},
+                                                                                      "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/mapopt-none.txt"}}}}}}}}}}}}}}}}}}},
+                                                        {"name": "expected", "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "seed"}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                                        "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "mapOptional over a present value performs exactly one effect"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.testing.TestCase",
+                                                "field": {
+                                                  "name": "effectful",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.testing.EffectfulTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"variable": "hydra.lib.effects.bind"},
+                                                                              "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}},
+                                                                          "type": {"literal": "string"}}},
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "function": {"variable": "hydra.lib.files.writeFile"},
+                                                                              "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/mapopt-given.txt"}}}}}},
+                                                                          "argument": {"literal": {"binary": "c2VlZA=="}}}}}},
+                                                                  "argument": {
+                                                                    "lambda": {
+                                                                      "parameter": "_w",
+                                                                      "domain": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}},
+                                                                      "body": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.lib.effects.bind"},
+                                                                                      "type": {"optional": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}}},
+                                                                                  "type": {"literal": "string"}}},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.effects.mapOptional"}, "type": {"literal": "binary"}}},
+                                                                                          "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}}},
+                                                                                      "argument": {
+                                                                                        "lambda": {
+                                                                                          "parameter": "_x",
+                                                                                          "domain": {"literal": "binary"},
+                                                                                          "body": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "function": {"variable": "hydra.lib.files.appendFile"},
+                                                                                                  "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/mapopt-given.txt"}}}}}},
+                                                                                              "argument": {"literal": {"binary": "WA=="}}}}}}}},
+                                                                                  "argument": {"optional": {"literal": {"binary": "YW55dGhpbmc="}}}}}}},
+                                                                          "argument": {
+                                                                            "lambda": {
+                                                                              "parameter": "_m",
+                                                                              "domain": {"optional": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": "unit"}}},
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"variable": "hydra.lib.effects.map"},
+                                                                                              "type": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": "binary"}}}}},
+                                                                                          "type": {"literal": "string"}}},
+                                                                                      "argument": {
+                                                                                        "lambda": {
+                                                                                          "parameter": "r",
+                                                                                          "domain": {"either": {"left": {"variable": "hydra.error.file.FileError"}, "right": {"literal": "binary"}}},
+                                                                                          "body": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {
+                                                                                                                "typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"variable": "hydra.error.file.FileError"}}},
+                                                                                                              "type": {"literal": "binary"}}},
+                                                                                                          "type": {"literal": "string"}}},
+                                                                                                      "argument": {
+                                                                                                        "lambda": {"parameter": "_e", "domain": {"variable": "hydra.error.file.FileError"}, "body": {"literal": {"string": "ERR"}}}}}},
+                                                                                                  "argument": {
+                                                                                                    "lambda": {
+                                                                                                      "parameter": "b",
+                                                                                                      "domain": {"literal": "binary"},
+                                                                                                      "body": {
+                                                                                                        "application": {
+                                                                                                          "function": {
+                                                                                                            "application": {
+                                                                                                              "function": {
+                                                                                                                "application": {
+                                                                                                                  "function": {
+                                                                                                                    "typeApplication": {
+                                                                                                                      "body": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.either"}, "type": {"literal": "string"}}},
+                                                                                                                          "type": {"literal": "string"}}},
+                                                                                                                      "type": {"literal": "string"}}},
+                                                                                                                  "argument": {"lambda": {"parameter": "_e", "domain": {"literal": "string"}, "body": {"literal": {"string": "<decode error>"}}}}}},
+                                                                                                              "argument": {"lambda": {"parameter": "s", "domain": {"literal": "string"}, "body": {"variable": "s"}}}}},
+                                                                                                          "argument": {"application": {"function": {"variable": "hydra.lib.text.decodeUtf8"}, "argument": {"variable": "b"}}}}}}}}},
+                                                                                              "argument": {"variable": "r"}}}}}}},
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "function": {"variable": "hydra.lib.files.readFile"},
+                                                                                      "argument": {"wrap": {"typeName": "hydra.file.FilePath", "body": {"literal": {"string": "/tmp/hydra-testing/mapopt-given.txt"}}}}}}}}}}}}}}}}}}},
+                                                        {"name": "expected", "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "seedX"}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                         {
