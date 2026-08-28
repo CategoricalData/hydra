@@ -25,6 +25,7 @@ import qualified Hydra.Dsl.Lib.Logic    as Logic
 import qualified Hydra.Dsl.Lib.Maps     as Maps
 import qualified Hydra.Dsl.Lib.Math     as Math
 import qualified Hydra.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Dsl.Lib.Ordering as Ordering
 import qualified Hydra.Dsl.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Lib.Sets     as Sets
 import qualified Hydra.Dsl.Lib.Strings  as Strings
@@ -54,6 +55,7 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
+import qualified Hydra.Sources.Kernel.Terms.Classes as Classes
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 
@@ -65,7 +67,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Rewriting.ns, Variables.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Classes.ns, Rewriting.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Variable substitution in type and term expressions."))}
   where
    definitions = [
@@ -127,18 +129,38 @@ singletonTypeSubst = define "singletonTypeSubst" $
   lambdas ["v", "t"] $ Typing.typeSubst $ Maps.singleton (var "v") (var "t")
 
 -- | Apply a type substitution to a map of class constraints.
--- When a type variable is mapped to another type variable, the constraint is transferred to the new variable.
--- When a type variable is mapped to a type with free variables, the constraint is propagated to those free
--- variables. When a type variable is mapped to a concrete type with NO free variables (e.g. a literal type
--- like int32), the constraint is retained under the ORIGINAL variable name rather than dropped: this is the
--- point at which entailment becomes checkable (see Classes.classIsSatisfiedByType and
--- Inference.dischargeClassConstraints), and a constrained variable resolving to a concrete type must remain
--- visible to that check, not silently vanish for lack of a free variable to carry it forward.
+-- When a type variable is mapped to another type variable, or to a type with genuine free type
+-- variables (see "isGenuineVarName" below), the constraint is re-keyed/propagated to those
+-- variables only. When a type variable is mapped to a type with no genuine free variables, the
+-- variable is dead: any class it satisfies (e.g. ordering/equality, which are universal) is
+-- dropped, since a later Inference.dischargeClassConstraints check against the same resolved type
+-- could only reach the same verdict -- dropping precomputes that inevitable success. Any class it
+-- does NOT satisfy is retained under the ORIGINAL variable name so discharge still rejects it (see
+-- Classes.classIsSatisfiedByType and Inference.dischargeClassConstraints); this is the point at
+-- which entailment becomes checkable, and a constrained variable resolving to a type that fails
+-- its constraint must remain visible to that check, not silently vanish.
+--
+-- Pruning dead-and-satisfied entries here (rather than leaving them for a later pass) matters
+-- because deadness is only decidable at the substitution moment: a retained entry's key is by
+-- construction absent from every later substitution, so it is indistinguishable from a live
+-- variable to any downstream code, and would otherwise be carried and re-walked for the rest of
+-- inference. Left unpruned, and combined with "genuine free variable" propagation additionally
+-- re-keying onto qualified nominal type names (which are never read by any consumer -- substs,
+-- generalize, and discharge all ignore them), constraint maps grow in proportion to term size and
+-- are rebuilt in full on every substitution, making whole-module constraint propagation quadratic
+-- in term size (#702). Pruning keeps the map bounded by the number of currently-live constrained
+-- variables, which is small (the polymorphic arity of the binding being inferred).
 substInClassConstraints :: TypedTermDefinition (TypeSubst -> M.Map Name TypeVariableConstraints -> M.Map Name TypeVariableConstraints)
 substInClassConstraints = define "substInClassConstraints" $
-  doc "Apply a type substitution to class constraints, propagating to free variables or retaining on concrete resolution" $
+  doc "Apply a type substitution to class constraints, propagating to free variables or discharging/retaining on concrete resolution" $
   "subst" ~> "constraints" ~>
   "substMap" <~ Typing.unTypeSubst (var "subst") $
+  Logic.ifElse (Logic.or (Maps.isEmpty (var "substMap" :: TypedTerm (M.Map Name Type))) (Maps.isEmpty (var "constraints" :: TypedTerm (M.Map Name TypeVariableConstraints))))
+    (var "constraints" :: TypedTerm (M.Map Name TypeVariableConstraints)) $
+  -- A qualified name (e.g. "hydra.core.Term") is a nominal type reference, not a genuine type
+  -- variable; only single-part names are genuine (mirrors generalize's own isTypeVarName test).
+  "isGenuineVarName" <~ ("name" ~>
+    Ordering.lte (Lists.length $ Strings.splitOn (string ".") (Core.unName $ var "name")) (int32 1)) $
   -- Helper to insert a constraint, merging with existing if present
   "insertOrMerge" <~ ("varName" ~> "metadata" ~> "acc" ~>
     Optionals.match (Maps.lookup (var "varName" :: TypedTerm Name) (var "acc")) (Maps.insert (var "varName" :: TypedTerm Name) (var "metadata") (var "acc")) ("existing" ~>
@@ -147,8 +169,10 @@ substInClassConstraints = define "substInClassConstraints" $
   -- For each (varName, metadata) in constraints:
   -- 1. Look up varName in the substitution
   -- 2. If not found, keep (varName, metadata) in result
-  -- 3. If found and the target type has free variables, propagate constraint to those free variables
-  -- 4. If found and the target type is concrete (no free variables), retain under the original varName
+  -- 3. If found and the target type has genuine free variables, re-key the constraint to those
+  --    variables only (dropping any vacuous nominal-name entries the naive free-variable set would add)
+  -- 4. If found and the target type has NO genuine free variables (the variable is dead), keep only
+  --    the classes it does NOT satisfy, retained under the original varName; drop the rest
   Lists.foldl
     ("acc" ~> "pair" ~>
       "varName" <~ Pairs.first (var "pair") $
@@ -157,16 +181,23 @@ substInClassConstraints = define "substInClassConstraints" $
         (Maps.lookup (var "varName" :: TypedTerm Name) (var "substMap"))
         -- Not in substitution: keep original
         (var "insertOrMerge" @@ var "varName" @@ var "metadata" @@ var "acc")
-        -- In substitution: propagate constraint to all free variables in the target type,
-        -- or retain under the original name if the target type is concrete
+        -- In substitution: re-key to genuine free variables, or discharge/retain if dead
         ("targetType" ~>
-          "freeVars" <~ Sets.toList (Variables.freeVariablesInType @@ var "targetType") $
-          Logic.ifElse (Lists.isEmpty (var "freeVars"))
-            (var "insertOrMerge" @@ var "varName" @@ var "metadata" @@ var "acc")
+          "genuineVars" <~ Lists.filter (var "isGenuineVarName") (Sets.toList (Variables.freeVariablesInType @@ var "targetType")) $
+          Logic.ifElse (Logic.not $ Lists.isEmpty (var "genuineVars"))
             (Lists.foldl
               ("acc2" ~> "freeVar" ~> var "insertOrMerge" @@ var "freeVar" @@ var "metadata" @@ var "acc2")
               (var "acc")
-              (var "freeVars"))))
+              (var "genuineVars"))
+            -- Dead variable: drop classes the target type already satisfies (discharge would
+            -- pass them anyway); retain only the unsatisfied ones, under the original name, so
+            -- discharge still rejects them.
+            ("unsatisfied" <~ Sets.filter
+              ("c" ~> Logic.not $ Classes.classIsSatisfiedByType @@ (match _TypeClassConstraint (var "c") Nothing [_TypeClassConstraint_simple>>: "n" ~> var "n"]) @@ var "targetType")
+              (Core.typeVariableConstraintsClasses $ var "metadata") $
+             Logic.ifElse (Sets.isEmpty (var "unsatisfied" :: TypedTerm (S.Set TypeClassConstraint)))
+               (var "acc")
+               (var "insertOrMerge" @@ var "varName" @@ (Core.typeVariableConstraints $ var "unsatisfied") @@ var "acc"))))
     (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))
     (Maps.toList $ (var "constraints" :: TypedTerm (M.Map Name TypeVariableConstraints)))
 

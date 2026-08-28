@@ -60,8 +60,12 @@ encodeList = define "encodeList" $
 encodeMap :: TypedTermDefinition ((k -> Term) -> (v -> Term) -> M.Map k v -> Term)
 encodeMap = define "encodeMap" $
   doc "Build an encoder for a map, given encoders for its key and value types" $
+  -- The M.Map Int Int ascription is a phantom-level pin only, required for GHC to solve
+  -- Maps.bimap's Ord constraint (GHC-39999); TypedTerm phantoms are erased, so the Hydra-level
+  -- type is unaffected and still inferred fully polymorphic, with the ordering constraint
+  -- derived by inference (#702).
   "keyEncoder" ~> "valEncoder" ~> "m" ~> Core.termMap
-    (Maps.bimap (var "keyEncoder") (var "valEncoder") (var "m"))
+    (Maps.bimap (var "keyEncoder") (var "valEncoder") (var "m" :: TypedTerm (M.Map Int Int)))
 
 -- | Build an encoder for an optional value, given an encoder for its element type.
 encodeOptional :: TypedTermDefinition ((a -> Term) -> Maybe a -> Term)
@@ -87,8 +91,12 @@ encodeRef = define "encodeRef" $
 encodeSet :: TypedTermDefinition ((a -> Term) -> S.Set a -> Term)
 encodeSet = define "encodeSet" $
   doc "Build an encoder for a set, given an encoder for its element type" $
+  -- The S.Set Int ascription is a phantom-level pin only, required for GHC to solve Sets.map's
+  -- Ord constraint (GHC-39999); TypedTerm phantoms are erased, so the Hydra-level type is
+  -- unaffected and still inferred fully polymorphic, with the ordering constraint derived by
+  -- inference (#702).
   "elemEncoder" ~> "xs" ~> Core.termSet
-    (Sets.map (var "elemEncoder") (var "xs"))
+    (Sets.map (var "elemEncoder") (var "xs" :: TypedTerm (S.Set Int)))
 
 -- | Look up the string-shower for a type given its TypedName token. The result is a
 -- term reference (Term.variable) to the type's hydra.print.<ns>.<local> binding;

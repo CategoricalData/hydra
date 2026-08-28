@@ -713,15 +713,30 @@ inferTypeOfInjection = define "inferTypeOfInjection" $
   "iterm" <~ Typing.inferenceResultTerm (var "result") $
   "ityp" <~ Typing.inferenceResultType (var "result") $
   "isubst" <~ Typing.inferenceResultSubst (var "result") $
+  "iconstraints" <~ Typing.inferenceResultClassConstraints (var "result") $
   "sfields" <<~ ExtractCore.unionType @@ var "tname" @@ var "stype" $
   "ftyp" <<~ Resolution.findFieldType @@ var "fcx3" @@ var "fname" @@ var "sfields" $
   "mcResult" <<~ mapConstraints @@ var "fcx3" @@ var "cx" @@
-    ("subst" ~> yield
-      @@ var "fcx3"
-      @@ (buildTypeApplicationTerm @@ var "svars"
-        @@ (Core.termInject $ Core.injection (var "tname") $ Core.field (var "fname") (var "iterm")))
-      @@ (Resolution.nominalApplication @@ var "tname" @@ Lists.map (reify Core.typeVariable) (var "svars"))
-      @@ (Substitution.composeTypeSubst @@ var "isubst" @@ var "subst")) @@
+    ("subst" ~>
+      -- Fast path: the overwhelming majority of injected subterms (every Core/AST/JSON union,
+      -- etc.) carry no class constraints at all, so skip the constraint-propagation machinery
+      -- entirely and match the original (pre-#702) cost exactly. Only nodes with a live
+      -- constraint (e.g. encodeMap/encodeSet's Ord-constrained bimap body) take the propagating
+      -- path below, which is rare (#702).
+      Logic.ifElse (Maps.isEmpty (var "iconstraints" :: TypedTerm (M.Map Name TypeVariableConstraints)))
+        (yield
+          @@ var "fcx3"
+          @@ (buildTypeApplicationTerm @@ var "svars"
+            @@ (Core.termInject $ Core.injection (var "tname") $ Core.field (var "fname") (var "iterm")))
+          @@ (Resolution.nominalApplication @@ var "tname" @@ Lists.map (reify Core.typeVariable) (var "svars"))
+          @@ (Substitution.composeTypeSubst @@ var "isubst" @@ var "subst"))
+        (yieldWithConstraints
+          @@ var "fcx3"
+          @@ (buildTypeApplicationTerm @@ var "svars"
+            @@ (Core.termInject $ Core.injection (var "tname") $ Core.field (var "fname") (var "iterm")))
+          @@ (Resolution.nominalApplication @@ var "tname" @@ Lists.map (reify Core.typeVariable) (var "svars"))
+          @@ (Substitution.composeTypeSubst @@ var "isubst" @@ var "subst")
+          @@ (Substitution.substInClassConstraints @@ var "subst" @@ var "iconstraints"))) @@
     list [Typing.typeConstraint (var "ftyp") (var "ityp") (string "schema type of injected field")] $
   right (var "mcResult")
 
