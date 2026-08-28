@@ -103,6 +103,17 @@
 (defvar hydra_overlay_emacs_lisp_lib_sets_empty nil
   "Create an empty set.")
 
+;; filter :: (a -> Bool) -> Set a -> Set a
+(defvar hydra_overlay_emacs_lisp_lib_sets_filter
+  (lambda (pred)
+    "Filter a set by a predicate."
+    (lambda (s)
+      (let ((result (make-hash-table :test 'equal)))
+        (hydra-set-foreach
+         (lambda (x) (when (funcall pred x) (puthash x t result)))
+         s)
+        result))))
+
 ;; from_list :: [a] -> Set a
 (defvar hydra_overlay_emacs_lisp_lib_sets_from_list
   (lambda (xs)

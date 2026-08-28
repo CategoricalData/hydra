@@ -77,6 +77,14 @@
 ;; empty :: Set a
 (defvar hydra_overlay_common_lisp_lib_sets_empty nil)
 
+;; filter :: (a -> Bool) -> Set a -> Set a
+(defvar hydra_overlay_common_lisp_lib_sets_filter
+  (lambda (pred)
+    (lambda (s)
+      (let ((result nil))
+        (sets-each s (lambda (x) (when (funcall pred x) (setf result (rb-insert result x t)))))
+        result))))
+
 ;; from_list :: [a] -> Set a
 (defvar hydra_overlay_common_lisp_lib_sets_from_list
   (lambda (xs) (sets-from-list-raw xs)))

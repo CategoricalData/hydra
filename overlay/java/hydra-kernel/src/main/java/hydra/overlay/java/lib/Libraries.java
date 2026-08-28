@@ -411,6 +411,7 @@ public class Libraries {
                 new Delete(),
                 new hydra.overlay.java.lib.sets.Difference(),
                 new hydra.overlay.java.lib.sets.Empty(),
+                new hydra.overlay.java.lib.sets.Filter(),
                 new hydra.overlay.java.lib.sets.FromList(),
                 new hydra.overlay.java.lib.sets.Insert(),
                 new hydra.overlay.java.lib.sets.Intersection(),

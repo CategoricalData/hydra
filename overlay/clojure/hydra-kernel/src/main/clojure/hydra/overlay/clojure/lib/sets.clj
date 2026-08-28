@@ -24,6 +24,10 @@
 ;; empty :: Set a
 (def hydra_overlay_clojure_lib_sets_empty #{})
 
+;; filter :: (a -> Bool) -> Set a -> Set a
+(def hydra_overlay_clojure_lib_sets_filter
+  (fn [pred_] (fn [s] (set (filter pred_ (to-hash-set s))))))
+
 ;; from_list :: [a] -> Set a
 (def hydra_overlay_clojure_lib_sets_from_list
   (fn [xs] (set xs)))

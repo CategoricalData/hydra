@@ -1349,14 +1349,17 @@ def register_default_fallback_primitives(already_native: dict[Name, Primitive]) 
     Each is registered via prims.default_fallback_primitive, which evaluates the default term via
     reduce_term rather than running Python logic.
 
-    Spike (#609 Stage 3): only lists.takeWhile is wired here, mirroring the Java validation case
-    (#609 Stage 2). Once confirmed here, the remaining 11 Group-A primitives are wired the same way.
+    Spike (#609 Stage 3): lists.takeWhile was the validation case, mirroring the Java validation
+    case (#609 Stage 2). sets.filter joined it (#702: the first kernel consumer of sets.filter,
+    which had no host overlay until then). Once confirmed here, the remaining 10 Group-A
+    primitives are wired the same way.
     """
     from hydra.lib import lists as def_lists
+    from hydra.lib import sets as def_sets
     from hydra.overlay.python.dsl.python import Given
 
     primitives: dict[Name, Primitive] = {}
-    for definition in [def_lists.take_while]:
+    for definition in [def_lists.take_while, def_sets.filter]:
         if definition.name not in already_native and isinstance(definition.default_implementation, Given):
             primitives[definition.name] = prims.default_fallback_primitive(definition)
     return primitives

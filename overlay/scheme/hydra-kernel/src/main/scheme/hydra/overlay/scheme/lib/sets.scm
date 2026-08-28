@@ -6,6 +6,7 @@
   (export hydra_overlay_scheme_lib_sets_delete
           hydra_overlay_scheme_lib_sets_difference
           hydra_overlay_scheme_lib_sets_empty
+          hydra_overlay_scheme_lib_sets_filter
           hydra_overlay_scheme_lib_sets_from_list
           hydra_overlay_scheme_lib_sets_insert
           hydra_overlay_scheme_lib_sets_intersection
@@ -89,6 +90,14 @@
 
     ;; Create an empty set.
     (define hydra_overlay_scheme_lib_sets_empty vlist-null)
+
+    ;; Filter a set by a predicate.
+    (define hydra_overlay_scheme_lib_sets_filter
+      (lambda (pred)
+        (lambda (s)
+          (vhash-fold (lambda (k v acc)
+                        (if (pred k) (vhash-cons k #t acc) acc))
+                      vlist-null (ensure-vhset s)))))
 
     ;; Create a set from a list.
     (define hydra_overlay_scheme_lib_sets_from_list

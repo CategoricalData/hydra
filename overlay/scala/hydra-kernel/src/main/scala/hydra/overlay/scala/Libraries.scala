@@ -385,13 +385,15 @@ object Libraries:
     Primitive(mkPrimDef(name, ts), impl)
 
   // Primitives which have no native Scala implementation, but do declare a portable
-  // defaultImplementation term. Spike (#609 Stage 3): only lists.takeWhile is wired here, mirroring
-  // the Java/Python validation case. Once confirmed, the remaining 11 Group-A names are wired the
-  // same way.
+  // defaultImplementation term. Spike (#609 Stage 3): lists.takeWhile was the validation case,
+  // mirroring the Java/Python validation case. sets.filter joined it (#702: the first kernel
+  // consumer of sets.filter, which had no host overlay until then). Once confirmed, the remaining
+  // 10 Group-A names are wired the same way.
   private def defaultFallbackPrimitives(alreadyNative: Set[String]): Map[String, Primitive] =
     val x = tVar("x")
     val candidates: Seq[(String, TypeScheme)] = Seq(
       hydra.lib.lists.takeWhile.name -> tScheme(Seq("x"), tFun(tFun(x, tBool), tFun(tList(x), tList(x)))),
+      hydra.lib.sets.filter.name -> tSchemeConstrained(Seq(("x", Seq("ordering"))), tFun(tFun(x, tBool), tFun(tSet(x), tSet(x)))),
     )
     candidates
       .filterNot((name, _) => alreadyNative.contains(name))
