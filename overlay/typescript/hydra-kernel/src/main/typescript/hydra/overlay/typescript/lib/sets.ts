@@ -125,6 +125,13 @@ export const map = (f: (a: any) => any, s: any): any => {
   return mkCanon(next);
 };
 
+export const filter = (p: (a: any) => boolean, s: any): any => {
+  const c = toCanon(s);
+  const next: any = new Map();
+  for (const [ck, x] of c._internal) { if (p(x)) next.set(ck, x); }
+  return mkCanon(next);
+};
+
 export const isEmpty = (s: any): boolean => toCanon(s)._internal.size === 0;
 
 export const unions = (ss: any): any => {

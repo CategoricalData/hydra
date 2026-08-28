@@ -190,6 +190,15 @@ object Libraries:
       } yield if exBool(result) then mkList(exList(acc) :+ x) else acc
     }
 
+  /** Apply predicate to each element of a set, keeping only those for which it holds. */
+  private def filterSet(g: hydra.graph.Graph, p: Term, xs: Set[Term]): E =
+    xs.foldLeft[E](ok(mkSet(Set.empty))) { (accE, x) =>
+      for {
+        acc <- accE
+        result <- applyAndReduce(g, p, x)
+      } yield if exBool(result) then mkSet(exSet(acc) + x) else acc
+    }
+
   /** Apply predicate to each element, partitioning into (true, false). */
   private def partitionList(g: hydra.graph.Graph, p: Term, xs: Seq[Term]): E =
     xs.foldLeft[E](ok(mkPairTerm(mkList(Seq.empty), mkList(Seq.empty)))) { (accE, x) =>
@@ -385,15 +394,13 @@ object Libraries:
     Primitive(mkPrimDef(name, ts), impl)
 
   // Primitives which have no native Scala implementation, but do declare a portable
-  // defaultImplementation term. Spike (#609 Stage 3): lists.takeWhile was the validation case,
-  // mirroring the Java/Python validation case. sets.filter joined it (#702: the first kernel
-  // consumer of sets.filter, which had no host overlay until then). Once confirmed, the remaining
-  // 10 Group-A names are wired the same way.
+  // defaultImplementation term. Spike (#609 Stage 3): only lists.takeWhile is wired here, mirroring
+  // the Java/Python validation case. Once confirmed, the remaining 11 Group-A names are wired the
+  // same way.
   private def defaultFallbackPrimitives(alreadyNative: Set[String]): Map[String, Primitive] =
     val x = tVar("x")
     val candidates: Seq[(String, TypeScheme)] = Seq(
       hydra.lib.lists.takeWhile.name -> tScheme(Seq("x"), tFun(tFun(x, tBool), tFun(tList(x), tList(x)))),
-      hydra.lib.sets.filter.name -> tSchemeConstrained(Seq(("x", Seq("ordering"))), tFun(tFun(x, tBool), tFun(tSet(x), tSet(x)))),
     )
     candidates
       .filterNot((name, _) => alreadyNative.contains(name))
@@ -1206,6 +1213,9 @@ object Libraries:
       hydra.lib.sets.empty.name -> mkPrimImpl(hydra.lib.sets.empty.name, tSchemeConstrained(aOrd,
         tSet(a)),
         impl0(mkSet(Set.empty))),
+      hydra.lib.sets.filter.name -> mkPrimImpl(hydra.lib.sets.filter.name, tSchemeConstrained(aOrd,
+        tFun(tFun(a, tBool), tFun(tSet(a), tSet(a)))),
+        g => args => filterSet(g, args(0), exSet(args(1)))),
       hydra.lib.sets.fromList.name -> mkPrimImpl(hydra.lib.sets.fromList.name, tSchemeConstrained(aOrd,
         tFun(tList(a), tSet(a))),
         impl1(xs => mkSet(exList(xs).toSet))),

@@ -38,6 +38,11 @@ def empty() -> AbstractSet[Any]:
     return PersistentSet.empty()
 
 
+def filter(p: Callable[[A], bool], s: AbstractSet[A]) -> AbstractSet[A]:
+    """Filter a set by a predicate."""
+    return PersistentSet.from_iterable(x for x in s if p(x))
+
+
 def from_list(xs: Sequence[A]) -> AbstractSet[A]:
     """Create a set from a list."""
     return PersistentSet.from_iterable(xs)

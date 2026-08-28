@@ -275,14 +275,11 @@ const defaultFallback = (qname: string, ts: TypeScheme): Primitive => {
 };
 
 // Primitives which have no native TypeScript implementation, but do declare a portable
-// defaultImplementation term. Spike (#609 Stage 3): lists.takeWhile was the validation case,
-// mirroring the Java/Python validation case. sets.filter joined it (#702: the first kernel
-// consumer of sets.filter, which had no host overlay until then). Once confirmed, the remaining
-// 10 Group-A names are wired the same way.
+// defaultImplementation term. Spike (#609 Stage 3): only lists.takeWhile is wired here so far;
+// once confirmed, the remaining Group-A names (sets.filter among them) are wired the same way.
 const defaultFallbackPrimitives = (alreadyNative: ReadonlySet<string>): readonly Primitive[] => {
   const candidates: ReadonlyArray<readonly [string, TypeScheme]> = [
     ["hydra.lib.lists.takeWhile", scheme(tyFnCurried(tyFn(tyVar("x"), tyBool), tyList(tyVar("x")), tyList(tyVar("x"))), ["x"])],
-    ["hydra.lib.sets.filter", schemeC(tyFnCurried(tyFn(tyVar("x"), tyBool), tySet(tyVar("x")), tySet(tyVar("x"))), ["x"], [["x", ["ordering"]]])],
   ];
   return candidates
     .filter(([qname]) => !alreadyNative.has(qname) && defaultImplementationsByName.has(qname))
@@ -1696,6 +1693,24 @@ const setsPrimitives = (): readonly Primitive[] => {
                 const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eg: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 out.push(r.value);
+              }
+              return right(mkSet(libSets.fromList(out)));
+            })))),
+    // sets.filter :: (a -> Bool) -> Set a -> Set a — ordering on a
+    prim("hydra.lib.sets.filter", schemeC(tyFnCurried(tyFn(tyVar("a"), tyBool), tySet(tyVar("a")), tySet(tyVar("a"))),
+        ["a"], [["a", ["ordering"]]]),
+      (g, args) =>
+        bind(need(args, 0, "sets.filter"), (fn) =>
+          bind(need(args, 1, "sets.filter"), (s) =>
+            bind(asSet(s), (st) => {
+              const out: Term[] = [];
+              for (const x of libSets.toList(st)) {
+                const app: Term = { tag: "application", value: { function_: fn, argument: x } } as never;
+                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eg: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                if (r.tag === "left") return r as Either<HydraError, Term>;
+                const v = r.value as { tag: string; value?: { tag?: string; value?: boolean } };
+                const b = v.tag === "literal" && v.value?.tag === "boolean" ? v.value.value : false;
+                if (b) out.push(x);
               }
               return right(mkSet(libSets.fromList(out)));
             })))),
