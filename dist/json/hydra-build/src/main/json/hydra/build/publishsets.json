@@ -343,7 +343,8 @@
                               "body": {
                                 "function": {
                                   "domain": {"variable": "hydra.packaging.PackageName"},
-                                  "codomain": {"set": {"variable": "hydra.packaging.PackageName"}}}}}}],
+                                  "codomain": {"set": {"variable": "hydra.packaging.PackageName"}}}},
+                              "constraints": []}}],
                         "body": {
                           "application": {
                             "function": {
