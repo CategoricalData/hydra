@@ -143,6 +143,39 @@ For a long compile, run in the background and tail-watch a specific filter
 rather than the raw log; the noise-to-signal ratio for full Stack output
 is high.
 
+### `Not in scope` errors naming symbols a recent kernel change renamed
+
+**Symptom**: a sync fails with many GHC `Not in scope` errors in `dist/haskell/**`, and every
+missing name is one that a recent kernel change renamed or removed (for example `Lists.null`
+after a `null` -> `isEmpty` rename). It looks as though the coder never learned the rename.
+
+**Cause**: usually not the generator. `dist/haskell/` is untracked and regenerated from
+`dist/json/` (#376), so a worktree you have not synced since before the change still holds the
+**old** generated tree. The Haskell host compiles that tree before anything regenerates it, so the
+compile fails and the regeneration step is never reached.
+
+**Diagnose**: check whether the failing file was actually just generated.
+
+```bash
+ls -la <failing file>                        # mtime today, or from before the change?
+git ls-files --error-unmatch <failing file>  # tracked, or an untracked leftover?
+```
+
+An old mtime on an untracked file is a stale leftover. Confirm the inputs are already correct —
+the new name should appear in `dist/json/` and in `overlay/haskell/` — which means the *output*
+predates the inputs.
+
+**Fix**: wipe the generated tree and re-sync. Nothing under `dist/haskell/` is tracked
+(`git ls-files dist/haskell | wc -l` is `0`), so removing it is safe:
+
+```bash
+rm -rf dist/haskell
+bin/sync.sh --hosts all --targets all
+```
+
+The sync rebuilds it from `dist/json/` via the Java-host cold-seed, which is data-driven and
+therefore unaffected by breaking kernel changes.
+
 ### "No such field: X" during code generation
 
 **Cause**: Missing entries in the variant enums (`TermVariant`/`TypeVariant`), defined in

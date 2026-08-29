@@ -77,6 +77,51 @@ wiping it is always safe and never affects shared history.
 
 Then sync forward into whatever target language consumes the regenerated coder.
 
+### A stale untracked `dist/haskell` blocks every sync after a breaking kernel change
+
+`dist/haskell` is **untracked by design** (#376): it is regenerated from `dist/json` and never
+checked in. In a long-lived worktree (`staging`, a feature branch you return to after weeks) it can
+therefore sit at whatever a *previous* sync produced. After a breaking kernel change lands — a
+primitive rename, a removal — that tree is pre-rename, and the Haskell host compiles it **before**
+anything regenerates it. The compile fails, so the regeneration step is never reached: a
+self-blocking deadlock.
+
+**Why it misleads.** The errors name exactly the renamed symbols, so they read as a *generator*
+bug — as if the coder never learned the rename, or a published host is emitting old code. During
+the 0.17.6 pre-release this produced 55 `Not in scope` errors (`Literals.show*` #691,
+`{Lists,Sets,Maps,Strings}.null` #682, `{Lists,Optionals}.pure` #687) across 14 files, and cost two
+full failed sync runs chasing a published-host theory. Re-running with `--local-host` reproduced
+byte-identical errors, which is the tell that the *host* is not the variable.
+
+**Diagnose before theorizing** — check whether the failing file was actually just generated:
+
+```sh
+ls -la dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sorting.hs   # mtime: today, or weeks old?
+git ls-files --error-unmatch <that file>                             # tracked, or untracked orphan?
+```
+
+An old mtime on an untracked file means a **stale orphan**, not a generator bug. Corroborate by
+confirming the source layers are already correct — the rename is present in `dist/json`
+(`grep -c 'lib\.lists\.isEmpty' -r dist/json`) and in `overlay/haskell/`. Correct inputs plus wrong
+output means the "output" predates the inputs.
+
+**Fix.** Confirm nothing tracked or hand-written lives there (`git ls-files dist/haskell | wc -l`
+must be `0`; the tree should be all `.hs`), then wipe and re-sync:
+
+```sh
+tar czf /tmp/dist-haskell-backup.tar.gz dist/haskell   # optional, cheap insurance
+rm -rf dist/haskell
+bin/sync.sh --hosts all --targets all
+```
+
+Sync detects the missing tree and invokes the **#703 Java-host cold-seed** to rebuild it from
+`dist/json` — the data-driven path that is immune to breaking core-type changes. Do **not** reach
+for `--local-host`; it addresses an unrelated problem and changes nothing here.
+
+**Fresh release worktrees never hit this**, since they have no `dist/haskell` at all — one of the
+concrete reasons the release procedure mandates a from-scratch worktree
+([docs/release-workflow.md](../docs/release-workflow.md)).
+
 ### Native (Java/Python) coder edits and the Phase-5-runs-last ordering
 
 The above is about the *legacy Haskell* coder DSL. The **native** coders
