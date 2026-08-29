@@ -551,6 +551,75 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
         (apply (var "wrapper") (int32 1))),
 
     -- ============================================================
+    -- Regression test for #717: augmentBindingsWithNewFreeVars must not silently
+    -- skip lambda-wrapping when a captured variable's type is unknown.
+    --
+    -- Structure (partially typed: lambda domain for 'x' is UNANNOTATED, unlike
+    -- the 'nested lets' case above where the captured variable has a known
+    -- monomorphic type from its let binding):
+    --   wrapper = \x ->                                  -- x's domain is untyped (Nothing)
+    --     let g : forall a. a -> a = \y -> add x y        -- poly, refs x (untyped)
+    --     in let h : forall b. b -> b = \z -> g z         -- poly, refs g
+    --        in h 42
+    --
+    -- When g is hoisted, it captures x -- but x has no known type, so (per
+    -- hoistOne's existing, unmodified behavior when captured types are
+    -- partially unknown) g's type scheme is dropped entirely rather than
+    -- extended, and no type lambda is re-added for it; g's term ends up with
+    -- no Λ wrapper, matching its Nothing scheme.
+    --
+    -- When h (already hoisted from the inner let, i.e. part of bindingsSoFar)
+    -- has its reference to g rewritten to (wrapper_g x), x becomes newly free
+    -- in h. Before the #717 fix, augmentBindingsWithNewFreeVars silently left
+    -- h unwrapped (since x's type is unknown), producing a top-level binding
+    -- with x free. The fix always wraps h in an (untyped-domain) lambda for x.
+    --
+    -- Unlike hoistOne, augment never strips/rebuilds the term's own
+    -- type-lambda wrappers -- wrapAfterTypeLambdas only inserts a new term
+    -- lambda AFTER existing type lambdas, recursing through them unchanged.
+    -- So when x's type is unknown, augment leaves h's ORIGINAL type scheme
+    -- (forall b. b -> b) as-is rather than dropping it to Nothing: h's term
+    -- already has Λb from its own earlier hoistOne pass (at the inner let,
+    -- before x became free in it, when h had no captures), and the reported
+    -- scheme must stay consistent with that existing Λb.
+    -- ============================================================
+
+    hoistPolyCase "captured variable with unknown type: augment still wraps (#717)"
+      (mkLet [(nm "wrapper",
+        lambda "x"
+          (Core.termLet $ mkLet [
+            (nm "g",
+              lambda "y" (apply (apply (primitive DefMath.add) (var "x")) (var "y")),
+              polyType ["a"] (T.function (T.var "a") (T.var "a")))]
+            (Core.termLet $ mkLet [
+              (nm "h",
+                lambda "z" (apply (var "g") (var "z")),
+                polyType ["b"] (T.function (T.var "b") (T.var "b")))]
+              (apply (var "h") (int32 42)))),
+        monoType (T.function T.int32 T.int32))]
+        (apply (var "wrapper") (int32 1)))
+      -- Expected: both g and h are hoisted; h captures x (untyped domain), just as
+      -- g does, since x's unknown type must not prevent the lambda-wrap.
+      -- g's type scheme is dropped (hoistOne's existing behavior: unknown captured
+      -- type -> no scheme, no Λa). h's ORIGINAL type scheme (forall b. b -> b) is
+      -- preserved unchanged by augment, consistent with its term's existing Λb.
+      (mkLet [
+        (nm "wrapper",
+          lambda "x"
+            (apply (apply (var "wrapper_h") (var "x")) (int32 42)),
+          monoType (T.function T.int32 T.int32)),
+        (nm "wrapper_g",
+          lambda "x"
+            (lambda "y" (apply (apply (primitive DefMath.add) (var "x")) (var "y"))),
+          Phantoms.nothing),
+        (nm "wrapper_h",
+          tylam "b"
+            (lambda "x"
+              (lambda "z" (apply (apply (var "wrapper_g") (var "x")) (var "z")))),
+          polyType ["b"] (T.function (T.var "b") (T.var "b")))]
+        (apply (var "wrapper") (int32 1))),
+
+    -- ============================================================
     -- Regression test: polymorphic binding with pair term must preserve
     -- type application wrappers after hoisting. This reproduces the
     -- "pair type requires 2 type arguments, got 0" error in Java code

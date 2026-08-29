@@ -124,22 +124,31 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
           (var "wrapAfterTypeLambdas" @@ var "vars" @@ (Core.typeLambdaBody $ var "tl"))]) $
   "augment" <~ ("b" ~>
     "freeVars" <~ Sets.toList (Sets.intersection (var "boundVars") (Variables.freeVariablesInTerm @@ (Core.bindingTerm $ var "b"))) $
+    -- Each captured variable's type may be unknown; the lambda's domain is optional, so we
+    -- always wrap regardless. The type scheme is extended only when every captured type is
+    -- known (see newTypeScheme below); otherwise it is left unchanged. Unlike hoistOne, augment
+    -- never strips or rebuilds the term's own type-lambda wrappers -- it only inserts new term
+    -- lambdas after them (wrapAfterTypeLambdas) -- so the reported scheme must stay consistent
+    -- with whatever type-lambda structure the term already has; dropping it to Nothing here
+    -- would leave an orphaned, unannotated type lambda in the term.
     "varTypePairs" <~ Lists.map ("v" ~> pair (var "v") (Maps.lookup (var "v" :: TypedTerm Name) (var "types"))) (var "freeVars") $
     "varTypes" <~ Optionals.givens (Lists.map (reify Pairs.second) (var "varTypePairs")) $
-    Logic.ifElse (Logic.or (Lists.isEmpty $ var "freeVars")
-                           (Logic.not $ Equality.equal (Lists.length $ var "varTypes") (Lists.length $ var "varTypePairs")))
+    "newTypeScheme" <~ Logic.ifElse (Equality.equal (Lists.length $ var "varTypes") (Lists.length $ var "varTypePairs"))
+      (Optionals.map ("ts" ~> Core.typeScheme
+        (Core.typeSchemeVariables $ var "ts")
+        (Lists.foldl
+          ("acc" ~> "t" ~> Core.typeFunction $ Core.functionType (var "t") (var "acc"))
+          (Core.typeSchemeBody $ var "ts")
+          (Lists.reverse $ var "varTypes"))
+        (Core.typeSchemeConstraints $ var "ts")) (Core.bindingTypeScheme $ var "b"))
+      (Core.bindingTypeScheme $ var "b") $
+    Logic.ifElse (Lists.isEmpty $ var "freeVars")
       (pair (var "b") nothing)
       (pair
         (Core.binding
           (Core.bindingName $ var "b")
           (var "wrapAfterTypeLambdas" @@ var "varTypePairs" @@ (Core.bindingTerm $ var "b"))
-          (Optionals.map ("ts" ~> Core.typeScheme
-            (Core.typeSchemeVariables $ var "ts")
-            (Lists.foldl
-              ("acc" ~> "t" ~> Core.typeFunction $ Core.functionType (var "t") (var "acc"))
-              (Core.typeSchemeBody $ var "ts")
-              (Lists.reverse $ var "varTypes"))
-            (Core.typeSchemeConstraints $ var "ts")) (Core.bindingTypeScheme $ var "b")))
+          (var "newTypeScheme"))
         (just $ pair
           (Core.bindingName $ var "b")
           (Lists.foldl
