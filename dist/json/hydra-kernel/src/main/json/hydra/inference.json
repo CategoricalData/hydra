@@ -4010,7 +4010,7 @@
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "function": {"variable": "hydra.names.pushSubtermStep"},
-                                                                                        "argument": {"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "unionCasesDefault", "term": "unit"}}}}},
+                                                                                        "argument": {"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "casesDefault", "term": "unit"}}}}},
                                                                                     "argument": {"variable": "fcx2"}}},
                                                                                 "typeScheme": {"variables": [], "body": {"variable": "hydra.typing.InferenceContext"}, "constraints": []}}],
                                                                             "body": {
@@ -5852,7 +5852,7 @@
                                                     "function": {
                                                       "application": {
                                                         "function": {"variable": "hydra.names.pushSubtermStep"},
-                                                        "argument": {"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "sumTerm", "term": "unit"}}}}},
+                                                        "argument": {"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "injectField", "term": {"variable": "fname"}}}}}},
                                                     "argument": {"variable": "fcx"}}},
                                                 "typeScheme": {"variables": [], "body": {"variable": "hydra.typing.InferenceContext"}, "constraints": []}}],
                                             "body": {
@@ -11158,7 +11158,7 @@
                                     "function": {
                                       "application": {
                                         "function": {"variable": "hydra.names.pushSubtermStep"},
-                                        "argument": {"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "typeApplicationTerm", "term": "unit"}}}}},
+                                        "argument": {"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "typeApplicationBody", "term": "unit"}}}}},
                                     "argument": {"variable": "fcx"}}},
                                 "typeScheme": {"variables": [], "body": {"variable": "hydra.typing.InferenceContext"}, "constraints": []}}],
                             "body": {
@@ -11962,7 +11962,7 @@
                                                             "function": {
                                                               "application": {
                                                                 "function": {"variable": "hydra.names.pushSubtermStep"},
-                                                                "argument": {"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "wrappedTerm", "term": "unit"}}}}},
+                                                                "argument": {"inject": {"typeName": "hydra.paths.SubtermStep", "field": {"name": "wrapBody", "term": "unit"}}}}},
                                                             "argument": {"variable": "fcx2"}}},
                                                         "typeScheme": {"variables": [], "body": {"variable": "hydra.typing.InferenceContext"}, "constraints": []}}],
                                                     "body": {

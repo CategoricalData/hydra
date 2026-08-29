@@ -5339,7 +5339,7 @@
                                                         "type": {"literal": "boolean"}}},
                                                     "type": {"literal": "boolean"}}}}}},
                                           {
-                                            "name": "typeApplicationTerm",
+                                            "name": "typeApplicationBody",
                                             "handler": {
                                               "lambda": {
                                                 "parameter": "_",
@@ -5396,7 +5396,7 @@
                                                             "type": {"literal": "boolean"}}},
                                                         "type": {"literal": "boolean"}}}}}}}},
                                           {
-                                            "name": "unionCasesBranch",
+                                            "name": "casesCase",
                                             "handler": {
                                               "lambda": {
                                                 "parameter": "_",
@@ -5427,7 +5427,7 @@
                                                             "type": {"literal": "boolean"}}},
                                                         "type": {"literal": "boolean"}}}}}}}},
                                           {
-                                            "name": "unionCasesDefault",
+                                            "name": "casesDefault",
                                             "handler": {
                                               "lambda": {
                                                 "parameter": "_",
