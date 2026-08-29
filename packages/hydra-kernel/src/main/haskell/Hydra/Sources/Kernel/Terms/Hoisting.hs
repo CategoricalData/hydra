@@ -851,7 +851,7 @@ updateHoistState = define "updateHoistState" $
       _SubtermStep_letBinding>>: constant $ pair true (var "usedApp"),
       -- Type-application and type-lambda are erased at the value level
       -- in every target, so a case inside either is still at top level.
-      _SubtermStep_typeApplicationTerm>>: constant $ pair true (var "usedApp"),
+      _SubtermStep_typeApplicationBody>>: constant $ pair true (var "usedApp"),
       _SubtermStep_typeLambdaBody>>: constant $ pair true (var "usedApp"),
       -- Lambda body: pass-through if we haven't used app LHS yet
       _SubtermStep_lambdaBody>>: constant $
@@ -859,11 +859,11 @@ updateHoistState = define "updateHoistState" $
           (pair false true)   -- After app LHS, lambda body is not pass-through
           (pair true false),  -- Before app LHS, lambda body is pass-through
       -- Case branches: same rules as lambda body
-      _SubtermStep_unionCasesBranch>>: constant $
+      _SubtermStep_casesCase>>: constant $
         Logic.ifElse (var "usedApp")
           (pair false true)
           (pair true false),
-      _SubtermStep_unionCasesDefault>>: constant $
+      _SubtermStep_casesDefault>>: constant $
         Logic.ifElse (var "usedApp")
           (pair false true)
           (pair true false),

@@ -23,6 +23,7 @@ import Hydra.Kernel hiding (
   subterms,
   subtermsWithSteps,
   subtypes,
+  subtypesWithSteps,
   wrapTermToRecord,
   wrapTypeToRecord)
 import Hydra.Overlay.Haskell.Libraries
@@ -110,6 +111,7 @@ module_ = Module {
      toDefinition subterms,
      toDefinition subtermsWithSteps,
      toDefinition subtypes,
+     toDefinition subtypesWithSteps,
      toDefinition wrapTermToRecord,
      toDefinition wrapTypeToRecord]
 
@@ -446,7 +448,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
       _Term_cases>>: "cs" ~>
         "rmd" <~ Optionals.map
           ("def" ~> var "recurse"
-            @@ Lists.concat2 (var "path") (list [Paths.subtermStepUnionCasesDefault])
+            @@ Lists.concat2 (var "path") (list [Paths.subtermStepCasesDefault])
             @@ var "val0"
             @@ var "def")
           (Core.caseStatementDefault $ var "cs") $
@@ -459,7 +461,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
           @@ var "val1"
           @@ Lists.map
             ("f" ~> pair
-              (Paths.subtermStepUnionCasesBranch $ Core.caseAlternativeName $ var "f")
+              (Paths.subtermStepCasesCase $ Core.caseAlternativeName $ var "f")
               (Core.caseAlternativeHandler $ var "f"))
             (Core.caseStatementCases $ var "cs") $
         pair
@@ -477,13 +479,13 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
       _Term_either>>: "e" ~> Eithers.either
         ("l" ~>
           "rl" <~ var "recurse"
-            @@ Lists.concat2 (var "path") (list [Paths.subtermStepSumTerm])
+            @@ Lists.concat2 (var "path") (list [Paths.subtermStepEitherLeft])
             @@ var "val0"
             @@ var "l" $
           pair (Pairs.first $ var "rl") (Core.termEither $ left $ Pairs.second $ var "rl"))
         ("r" ~>
           "rr" <~ var "recurse"
-            @@ Lists.concat2 (var "path") (list [Paths.subtermStepSumTerm])
+            @@ Lists.concat2 (var "path") (list [Paths.subtermStepEitherRight])
             @@ var "val0"
             @@ var "r" $
           pair (Pairs.first $ var "rr") (Core.termEither $ right $ Pairs.second $ var "rr"))
@@ -552,16 +554,16 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
         ("t" ~> var "forSingleWithAccessor"
           @@ var "recurse"
           @@ ("t1" ~> Core.termOptional $ just $ var "t1")
-          @@ Paths.subtermStepOptionalTerm
+          @@ Paths.subtermStepOptionalGiven
           @@ var "val0"
           @@ var "t"),
       _Term_pair>>: "p" ~>
         "rf" <~ var "recurse"
-          @@ Lists.concat2 (var "path") (list [Paths.subtermStepProductTerm $ int32 0])
+          @@ Lists.concat2 (var "path") (list [Paths.subtermStepPairFirst])
           @@ var "val0"
           @@ (Pairs.first $ var "p") $
         "rs" <~ var "recurse"
-          @@ Lists.concat2 (var "path") (list [Paths.subtermStepProductTerm $ int32 1])
+          @@ Lists.concat2 (var "path") (list [Paths.subtermStepPairSecond])
           @@ (Pairs.first $ var "rf")
           @@ (Pairs.second $ var "p") $
         pair (Pairs.first $ var "rs") (Core.termPair $ pair (Pairs.second $ var "rf") (Pairs.second $ var "rs")),
@@ -602,7 +604,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
       _Term_typeApplication>>: "ta" ~> var "forSingleWithAccessor"
         @@ var "recurse"
         @@ ("t" ~> Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeApplicationTermType $ var "ta"))
-        @@ Paths.subtermStepTypeApplicationTerm
+        @@ Paths.subtermStepTypeApplicationBody
         @@ var "val0"
         @@ (Core.typeApplicationTermBody $ var "ta"),
       _Term_typeLambda>>: "tl" ~> var "forSingleWithAccessor"
@@ -616,14 +618,14 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
         @@ ("t" ~> Core.termInject $ Core.injection
           (Core.injectionTypeName $ var "inj")
           (Core.field (Core.fieldName $ Core.injectionField $ var "inj") (var "t")))
-        @@ Paths.subtermStepInjectionTerm
+        @@ (Paths.subtermStepInjectField $ Core.fieldName $ Core.injectionField $ var "inj")
         @@ var "val0"
         @@ (Core.fieldTerm $ Core.injectionField $ var "inj"),
       _Term_unwrap>>: "n" ~> pair (var "val0") (Core.termUnwrap $ var "n"),
       _Term_wrap>>: "wt" ~> var "forSingleWithAccessor"
         @@ var "recurse"
         @@ ("t" ~> Core.termWrap $ Core.wrappedTerm (Core.wrappedTermTypeName $ var "wt") (var "t"))
-        @@ Paths.subtermStepWrappedTerm
+        @@ Paths.subtermStepWrapBody
         @@ var "val0"
         @@ (Core.wrappedTermBody $ var "wt")]) $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
@@ -1152,11 +1154,14 @@ subtermsWithSteps = define "subtermsWithSteps" $
       result Paths.subtermStepApplicationFunction $ Core.applicationFunction $ var "p",
       result Paths.subtermStepApplicationArgument $ Core.applicationArgument $ var "p"],
     _Term_cases>>: "cs" ~> Lists.concat2
-      (Optionals.match (Core.caseStatementDefault $ var "cs") none ("t" ~> single Paths.subtermStepUnionCasesDefault $ var "t"))
+      (Optionals.match (Core.caseStatementDefault $ var "cs") none ("t" ~> single Paths.subtermStepCasesDefault $ var "t"))
       (Lists.map
-        ("f" ~> result (Paths.subtermStepUnionCasesBranch $ Core.caseAlternativeName $ var "f") $ Core.caseAlternativeHandler $ var "f")
+        ("f" ~> result (Paths.subtermStepCasesCase $ Core.caseAlternativeName $ var "f") $ Core.caseAlternativeHandler $ var "f")
         (Core.caseStatementCases $ var "cs")),
-    _Term_either>>: "e" ~> single Paths.subtermStepSumTerm $ Eithers.either ("l" ~> var "l") ("r" ~> var "r") (var "e"),
+    _Term_either>>: "e" ~> Eithers.either
+      ("l" ~> single Paths.subtermStepEitherLeft $ var "l")
+      ("r" ~> single Paths.subtermStepEitherRight $ var "r")
+      (var "e"),
     _Term_lambda>>: "l" ~> single Paths.subtermStepLambdaBody $ Core.lambdaBody $ var "l",
     _Term_let>>: "lt" ~> Lists.cons
       (result Paths.subtermStepLetBody $ Core.letBody $ var "lt")
@@ -1171,28 +1176,28 @@ subtermsWithSteps = define "subtermsWithSteps" $
           result (Paths.subtermStepMapKey $ Pairs.first $ var "ip") $ Pairs.first $ Pairs.second $ var "ip",
           result (Paths.subtermStepMapValue $ Pairs.first $ var "ip") $ Pairs.second $ Pairs.second $ var "ip"])
         (withIndices $ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))),
-    _Term_optional>>: "m" ~> Optionals.match (var "m") none ("t" ~> single Paths.subtermStepOptionalTerm $ var "t"),
+    _Term_optional>>: "m" ~> Optionals.match (var "m") none ("t" ~> single Paths.subtermStepOptionalGiven $ var "t"),
     _Term_pair>>: "p" ~> list [
-      result (Paths.subtermStepProductTerm $ int32 0) $ Pairs.first $ var "p",
-      result (Paths.subtermStepProductTerm $ int32 1) $ Pairs.second $ var "p"],
+      result Paths.subtermStepPairFirst $ Pairs.first $ var "p",
+      result Paths.subtermStepPairSecond $ Pairs.second $ var "p"],
     _Term_project>>: constant none,
     _Term_record>>: "rt" ~> Lists.map
       ("f" ~> result (Paths.subtermStepRecordField $ Core.fieldName $ var "f") $ Core.fieldTerm $ var "f")
       (Core.recordFields $ var "rt"),
     _Term_set>>: "s" ~> indexed Paths.subtermStepSetElement $ Sets.toList (var "s" :: TypedTerm (S.Set Term)),
     _Term_typeApplication>>: "ta" ~>
-      single Paths.subtermStepTypeApplicationTerm $
+      single Paths.subtermStepTypeApplicationBody $
       Core.typeApplicationTermBody $ var "ta",
     _Term_typeLambda>>: "ta" ~>
       single Paths.subtermStepTypeLambdaBody $
       Core.typeLambdaBody $ var "ta",
     _Term_inject>>: "ut" ~>
-      single Paths.subtermStepInjectionTerm $
+      single (Paths.subtermStepInjectField $ Core.fieldName $ Core.injectionField $ var "ut") $
       Core.fieldTerm $ (Core.injectionField $ var "ut"),
     _Term_unit>>: constant none,
     _Term_unwrap>>: constant none,
     _Term_variable>>: constant none,
-    _Term_wrap>>: "n" ~> single Paths.subtermStepWrappedTerm $ Core.wrappedTermBody $ var "n"]
+    _Term_wrap>>: "n" ~> single Paths.subtermStepWrapBody $ Core.wrappedTermBody $ var "n"]
   where
     none = list ([] :: [TypedTerm (SubtermStep, Term)])
     single step term = list [result step term]
@@ -1238,6 +1243,47 @@ subtypes = define "subtypes" $
     _Type_variable>>: constant $ list ([] :: [TypedTerm Type]),
     _Type_void>>: constant $ list ([] :: [TypedTerm Type]),
     _Type_wrap>>: "nt" ~> list [var "nt"]]
+
+subtypesWithSteps :: TypedTermDefinition (Type -> [(SubtypeStep, Type)])
+subtypesWithSteps = define "subtypesWithSteps" $
+  doc "Find the children of a given type expression, each paired with the step by which it is reached" $
+  cases _Type Nothing [
+    _Type_annotated>>: "at" ~> single Paths.subtypeStepAnnotatedBody $ Core.annotatedTypeBody $ var "at",
+    _Type_application>>: "at" ~> list [
+      result Paths.subtypeStepApplicationFunction $ Core.applicationTypeFunction $ var "at",
+      result Paths.subtypeStepApplicationArgument $ Core.applicationTypeArgument $ var "at"],
+    _Type_effect>>: "et" ~> single Paths.subtypeStepEffectValue $ var "et",
+    _Type_either>>: "et" ~> list [
+      result Paths.subtypeStepEitherLeft $ Core.eitherTypeLeft $ var "et",
+      result Paths.subtypeStepEitherRight $ Core.eitherTypeRight $ var "et"],
+    _Type_forall>>: "lt" ~> single Paths.subtypeStepForallBody $ Core.forallTypeBody $ var "lt",
+    _Type_function>>: "ft" ~> list [
+      result Paths.subtypeStepFunctionDomain $ Core.functionTypeDomain $ var "ft",
+      result Paths.subtypeStepFunctionCodomain $ Core.functionTypeCodomain $ var "ft"],
+    _Type_list>>: "lt" ~> single Paths.subtypeStepListElement $ var "lt",
+    _Type_literal>>: constant none,
+    _Type_map>>: "mt" ~> list [
+      result Paths.subtypeStepMapKeys $ Core.mapTypeKeys $ var "mt",
+      result Paths.subtypeStepMapValues $ Core.mapTypeValues $ var "mt"],
+    _Type_optional>>: "ot" ~> single Paths.subtypeStepOptionalElement $ var "ot",
+    _Type_pair>>: "pt" ~> list [
+      result Paths.subtypeStepPairFirst $ Core.pairTypeFirst $ var "pt",
+      result Paths.subtypeStepPairSecond $ Core.pairTypeSecond $ var "pt"],
+    _Type_record>>: "rt" ~> Lists.map
+      ("f" ~> result (Paths.subtypeStepRecordField $ Core.fieldTypeName $ var "f") $ Core.fieldTypeType $ var "f")
+      (var "rt"),
+    _Type_set>>: "st" ~> single Paths.subtypeStepSetElement $ var "st",
+    _Type_union>>: "rt" ~> Lists.map
+      ("f" ~> result (Paths.subtypeStepUnionField $ Core.fieldTypeName $ var "f") $ Core.fieldTypeType $ var "f")
+      (var "rt"),
+    _Type_unit>>: constant none,
+    _Type_variable>>: constant none,
+    _Type_void>>: constant none,
+    _Type_wrap>>: "nt" ~> single Paths.subtypeStepWrapBody $ var "nt"]
+  where
+    none = list ([] :: [TypedTerm (SubtypeStep, Type)])
+    single step ty = list [result step ty]
+    result step ty = pair step ty
 
 wrapTermToRecord :: TypedTermDefinition (Name -> Term -> Term)
 wrapTermToRecord = define "wrapTermToRecord" $

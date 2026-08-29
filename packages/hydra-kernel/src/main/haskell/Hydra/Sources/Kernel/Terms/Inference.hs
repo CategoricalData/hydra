@@ -560,8 +560,8 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "stype" <~ Core.typeSchemeBody (var "schemaType") $
   "sfields" <<~ ExtractCore.unionType @@ var "tname" @@ var "stype" $
-  -- Descend into the default branch (if present) with unionCasesDefault step on the trace
-  "fcxDflt" <~ Names.pushSubtermStep @@ Paths.subtermStepUnionCasesDefault @@ var "fcx2" $
+  -- Descend into the default branch (if present) with casesDefault step on the trace
+  "fcxDflt" <~ Names.pushSubtermStep @@ Paths.subtermStepCasesDefault @@ var "fcx2" $
   "dfltRp" <<~ Eithers.mapOptional ("t" ~> inferTypeOfTerm @@ var "fcxDflt" @@ var "cx" @@ var "t" @@
     (Strings.concat $ list [(string "case "), Core.unName $ var "tname", (string ".<default>")])) (var "dflt") $
   -- dfltRp :: Maybe InferenceResult (context is inside the result)
@@ -700,8 +700,8 @@ inferTypeOfInjection = define "inferTypeOfInjection" $
   "field" <~ Core.injectionField (var "injection") $
   "fname" <~ Core.fieldName (var "field") $
   "term" <~ Core.fieldTerm (var "field") $
-  -- Descend into the injected term with sumTerm step on the trace
-  "fcxInj" <~ Names.pushSubtermStep @@ Paths.subtermStepSumTerm @@ var "fcx" $
+  -- Descend into the injected term with injectField step (carrying the field name) on the trace
+  "fcxInj" <~ Names.pushSubtermStep @@ (Paths.subtermStepInjectField $ var "fname") @@ var "fcx" $
   "result" <<~ inferTypeOfTerm @@ var "fcxInj" @@ var "cx" @@ var "term" @@ (string "injected term") $
   -- Restore the trace to the pre-descent level
   "fcx2" <~ Names.restoreTrace @@ var "fcx" @@ Typing.inferenceResultContext (var "result") $
@@ -1171,8 +1171,8 @@ inferTypeOfTypeApplication :: TypedTermDefinition (InferenceContext -> Graph -> 
 inferTypeOfTypeApplication = define "inferTypeOfTypeApplication" $
   doc "Infer the type of a type application (Either version). Paper: inference.tex, type application terms in the elaborated Term grammar." $
   "fcx" ~> "cx" ~> "tt" ~>
-  -- Descend into the applied term with typeApplicationTerm step on the trace
-  "fcxBody" <~ Names.pushSubtermStep @@ Paths.subtermStepTypeApplicationTerm @@ var "fcx" $
+  -- Descend into the applied term with typeApplicationBody step on the trace
+  "fcxBody" <~ Names.pushSubtermStep @@ Paths.subtermStepTypeApplicationBody @@ var "fcx" $
   "result" <<~ inferTypeOfTerm @@ var "fcxBody" @@ var "cx" @@ (Core.typeApplicationTermBody $ var "tt") @@ (string "type application term") $
   -- Restore the trace to the pre-descent level
   "fcx2" <~ Names.restoreTrace @@ var "fcx" @@ Typing.inferenceResultContext (var "result") $
@@ -1273,8 +1273,8 @@ inferTypeOfWrappedTerm = define "inferTypeOfWrappedTerm" $
   "stRp" <<~ Resolution.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "stRp") $
   "fcx2" <~ Pairs.second (var "stRp") $
-  -- Descend into the wrapped body with wrappedTerm step on the trace
-  "fcxBody" <~ Names.pushSubtermStep @@ Paths.subtermStepWrappedTerm @@ var "fcx2" $
+  -- Descend into the wrapped body with wrapBody step on the trace
+  "fcxBody" <~ Names.pushSubtermStep @@ Paths.subtermStepWrapBody @@ var "fcx2" $
   "result" <<~ inferTypeOfTerm @@ var "fcxBody" @@ var "cx" @@ var "term" @@ (string "wrapped term") $
   -- Restore the trace to the pre-descent level
   "fcx3" <~ Names.restoreTrace @@ var "fcx2" @@ Typing.inferenceResultContext (var "result") $
