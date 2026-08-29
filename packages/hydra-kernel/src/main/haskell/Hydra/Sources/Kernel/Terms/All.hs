@@ -57,6 +57,7 @@ import qualified Hydra.Sources.Kernel.Terms.Resolution     as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Rewriting       as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Scoping         as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
+import qualified Hydra.Sources.Kernel.Terms.Shredding       as Shredding
 import qualified Hydra.Sources.Kernel.Terms.Strip           as Strip
 import qualified Hydra.Sources.Kernel.Terms.Parse.Docs        as ParseDocs
 import qualified Hydra.Sources.Kernel.Terms.Print.Docs        as PrintDocs
@@ -142,6 +143,7 @@ kernelPrimaryTermsModules = [
   Rewriting.module_,
   Scoping.module_,
   Serialization.module_,
+  Shredding.module_,
   Strip.module_,
   ParseDocs.module_,
   PrintDocs.module_,
