@@ -1013,6 +1013,18 @@ The published wheels are:
 
 `hydra-ext` joined the publish set as of 0.17.4 (#636) — see the publish steps below.
 
+> **`hydra-ext` needs an extra sync in a fresh worktree** ([#705](https://github.com/CategoricalData/hydra/issues/705)).
+> `bin/sync.sh` deliberately excludes the extension packages from the host × target matrix, so a
+> from-scratch release worktree has no `dist/python/hydra-ext` and the PyPI publish dies partway
+> through — after earlier wheels have already uploaded, which is not reversible. Run this **before**
+> `publish-pypi.sh`:
+>
+> ```bash
+> bin/sync-packages.sh hydra-ext --targets python
+> ```
+>
+> Verify `dist/python/hydra-ext/` exists before starting the upload.
+
 Each wheel's `pyproject.toml` is regenerated from `packages/<pkg>/package.json` and
 `hydra.json:currentVersion` by `bin/lib/generate-python-package-build.py`.
 The kernel additionally has the hand-written runtime support overlaid in from
