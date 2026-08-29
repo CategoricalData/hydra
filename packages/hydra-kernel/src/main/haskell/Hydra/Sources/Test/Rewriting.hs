@@ -25,6 +25,7 @@ import qualified Hydra.Dsl.Coders        as Coders
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Dsl.Lib.Lists as Lists
+import qualified Hydra.Dsl.Lib.Strings as Strings
 import qualified Hydra.Dsl.Lib.Equality as Equality
 import qualified Hydra.Dsl.Lib.Logic as Logic
 import qualified Hydra.Dsl.Lib.Math as Math
@@ -181,7 +182,8 @@ allTests = define "allTests" $
       rewriteTypeGroup,
       rewriteTermGroup,
       rewriteAndFoldTermWithPathGroup,
-      subtermsWithStepsGroup]
+      subtermsWithStepsGroup,
+      subtypesWithStepsGroup]
 
 bar :: TypedTerm Term
 bar = string "bar"
@@ -522,6 +524,43 @@ subtermsWithStepsGroup = subgroup "subtermsWithSteps" [
       (list [nStr "a", int32 1, nStr "b", int32 2])]
   where
     nStr s = Core.termLiteral (Core.literalString (Phantoms.string s))
+
+-- | Render the child types found by subtypesWithSteps as a "/"-joined string of printed types.
+--   (The children are types, which can't be packed into a single Type for showType, so we join.)
+showSubtypeChildren :: TypedTerm [(SubtypeStep, Type)] -> TypedTerm String
+showSubtypeChildren pairs = Strings.join (Phantoms.string "/")
+  (Lists.map (Phantoms.lambda "st" (showType (Pairs.second (Phantoms.var "st")))) pairs)
+
+-- | Universal subtypesWithSteps test case: shows the child types found for a type, joined by "/".
+subtypesWithStepsCase :: String -> TypedTerm Type -> String -> TypedTerm TestCaseWithMetadata
+subtypesWithStepsCase cname input expected = universalCase cname
+  (showSubtypeChildren (Rewriting.subtypesWithSteps @@ input))
+  (Phantoms.string expected)
+
+-- | Test cases for subtypesWithSteps (#716): verifies that every Type variant's children are
+-- found (matching subtypes' child count) in order.
+subtypesWithStepsGroup :: TypedTerm TestGroup
+subtypesWithStepsGroup = subgroup "subtypesWithSteps" [
+    subtypesWithStepsCase "either children are found in order"
+      (T.either_ T.string T.int32) "string/int32",
+
+    subtypesWithStepsCase "pair children are found in order"
+      (T.pair T.string T.int32) "string/int32",
+
+    subtypesWithStepsCase "function domain and codomain are found in order"
+      (T.function T.string T.int32) "string/int32",
+
+    subtypesWithStepsCase "map keys and values are found in order"
+      (T.map T.string T.int32) "string/int32",
+
+    subtypesWithStepsCase "list element is found"
+      (T.list T.string) "string",
+
+    subtypesWithStepsCase "optional element is found"
+      (T.optional T.string) "string",
+
+    subtypesWithStepsCase "leaf types have no children"
+      T.string ""]
 
 -- | Test cases for rewriteType
 -- Using predefined type rewriter: replaceStringWithInt32

@@ -72,6 +72,7 @@ import qualified Hydra.Sources.Test.Rewriting as Rewriting
 import qualified Hydra.Sources.Test.Serialization as Serialization
 import qualified Hydra.Sources.Test.Sorting as Sorting
 import qualified Hydra.Sources.Test.Strip as Strip
+import qualified Hydra.Sources.Test.Shredding as Shredding
 import qualified Hydra.Sources.Test.Substitution as Substitution
 import qualified Hydra.Sources.Test.Unification as Unification
 import qualified Hydra.Sources.Test.Validate.All as ValidateAll
@@ -143,6 +144,7 @@ otherPairs = [
   (Reduction.ns, Reduction.allTests),
   (Rewriting.ns, Rewriting.allTests),
   (Serialization.ns, Serialization.allTests),
+  (Shredding.ns, Shredding.allTests),
   (Sorting.ns, Sorting.allTests),
   (Strip.ns, Strip.allTests),
   (Substitution.ns, Substitution.allTests),
@@ -168,7 +170,7 @@ testSuiteModules =
    Annotations.module_, Dependencies.module_, Differentiation.module_, EtaExpansion.module_, Formatting.module_,
    Generation.module_,
    JsonParser.module_, JsonRoundtrip.module_, JsonWriter.module_, JsonYaml.module_,
-   Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
+   Reduction.module_, Rewriting.module_, Serialization.module_, Shredding.module_, Sorting.module_,
    Strip.module_, Variables.module_, Ordering.module_,
    -- Checking tests (including sub-modules)
    CheckingAll.module_,
