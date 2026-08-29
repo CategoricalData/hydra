@@ -11257,6 +11257,750 @@
                                       "record": {
                                         "typeName": "hydra.testing.TestCaseWithMetadata",
                                         "fields": [
+                                          {"name": "name", "term": {"literal": {"string": "captured variable with unknown type: augment still wraps (#717)"}}},
+                                          {
+                                            "name": "case",
+                                            "term": {
+                                              "inject": {
+                                                "typeName": "hydra.testing.TestCase",
+                                                "field": {
+                                                  "name": "universal",
+                                                  "term": {
+                                                    "record": {
+                                                      "typeName": "hydra.testing.UniversalTestCase",
+                                                      "fields": [
+                                                        {
+                                                          "name": "actual",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {"variable": "hydra.print.core.let"},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {"variable": "hydra.hoisting.hoistPolymorphicLetBindings"},
+                                                                          "argument": {"lambda": {"parameter": "b", "domain": {"variable": "hydra.core.Binding"}, "body": {"literal": {"boolean": true}}}}}},
+                                                                      "argument": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.Let",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "bindings",
+                                                                              "term": {
+                                                                                "list": [
+                                                                                  {
+                                                                                    "record": {
+                                                                                      "typeName": "hydra.core.Binding",
+                                                                                      "fields": [
+                                                                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "wrapper"}}}}},
+                                                                                        {
+                                                                                          "name": "term",
+                                                                                          "term": {
+                                                                                            "inject": {
+                                                                                              "typeName": "hydra.core.Term",
+                                                                                              "field": {
+                                                                                                "name": "lambda",
+                                                                                                "term": {
+                                                                                                  "record": {
+                                                                                                    "typeName": "hydra.core.Lambda",
+                                                                                                    "fields": [
+                                                                                                      {"name": "parameter", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "x"}}}}},
+                                                                                                      {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                                      {
+                                                                                                        "name": "body",
+                                                                                                        "term": {
+                                                                                                          "inject": {
+                                                                                                            "typeName": "hydra.core.Term",
+                                                                                                            "field": {
+                                                                                                              "name": "let",
+                                                                                                              "term": {
+                                                                                                                "record": {
+                                                                                                                  "typeName": "hydra.core.Let",
+                                                                                                                  "fields": [
+                                                                                                                    {
+                                                                                                                      "name": "bindings",
+                                                                                                                      "term": {
+                                                                                                                        "list": [
+                                                                                                                          {
+                                                                                                                            "record": {
+                                                                                                                              "typeName": "hydra.core.Binding",
+                                                                                                                              "fields": [
+                                                                                                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "g"}}}}},
+                                                                                                                                {
+                                                                                                                                  "name": "term",
+                                                                                                                                  "term": {
+                                                                                                                                    "inject": {
+                                                                                                                                      "typeName": "hydra.core.Term",
+                                                                                                                                      "field": {
+                                                                                                                                        "name": "lambda",
+                                                                                                                                        "term": {
+                                                                                                                                          "record": {
+                                                                                                                                            "typeName": "hydra.core.Lambda",
+                                                                                                                                            "fields": [
+                                                                                                                                              {"name": "parameter", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "y"}}}}},
+                                                                                                                                              {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                                                                              {
+                                                                                                                                                "name": "body",
+                                                                                                                                                "term": {
+                                                                                                                                                  "inject": {
+                                                                                                                                                    "typeName": "hydra.core.Term",
+                                                                                                                                                    "field": {
+                                                                                                                                                      "name": "application",
+                                                                                                                                                      "term": {
+                                                                                                                                                        "record": {
+                                                                                                                                                          "typeName": "hydra.core.Application",
+                                                                                                                                                          "fields": [
+                                                                                                                                                            {
+                                                                                                                                                              "name": "function",
+                                                                                                                                                              "term": {
+                                                                                                                                                                "inject": {
+                                                                                                                                                                  "typeName": "hydra.core.Term",
+                                                                                                                                                                  "field": {
+                                                                                                                                                                    "name": "application",
+                                                                                                                                                                    "term": {
+                                                                                                                                                                      "record": {
+                                                                                                                                                                        "typeName": "hydra.core.Application",
+                                                                                                                                                                        "fields": [
+                                                                                                                                                                          {
+                                                                                                                                                                            "name": "function",
+                                                                                                                                                                            "term": {
+                                                                                                                                                                              "inject": {
+                                                                                                                                                                                "typeName": "hydra.core.Term",
+                                                                                                                                                                                "field": {
+                                                                                                                                                                                  "name": "variable",
+                                                                                                                                                                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.math.add"}}}}}}}},
+                                                                                                                                                                          {
+                                                                                                                                                                            "name": "argument",
+                                                                                                                                                                            "term": {
+                                                                                                                                                                              "inject": {
+                                                                                                                                                                                "typeName": "hydra.core.Term",
+                                                                                                                                                                                "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "x"}}}}}}}}]}}}}}},
+                                                                                                                                                            {
+                                                                                                                                                              "name": "argument",
+                                                                                                                                                              "term": {
+                                                                                                                                                                "inject": {
+                                                                                                                                                                  "typeName": "hydra.core.Term",
+                                                                                                                                                                  "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "y"}}}}}}}}]}}}}}}]}}}}}},
+                                                                                                                                {
+                                                                                                                                  "name": "typeScheme",
+                                                                                                                                  "term": {
+                                                                                                                                    "optional": {
+                                                                                                                                      "record": {
+                                                                                                                                        "typeName": "hydra.core.TypeScheme",
+                                                                                                                                        "fields": [
+                                                                                                                                          {
+                                                                                                                                            "name": "variables",
+                                                                                                                                            "term": {"list": [{"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "a"}}}}]}},
+                                                                                                                                          {
+                                                                                                                                            "name": "body",
+                                                                                                                                            "term": {
+                                                                                                                                              "inject": {
+                                                                                                                                                "typeName": "hydra.core.Type",
+                                                                                                                                                "field": {
+                                                                                                                                                  "name": "function",
+                                                                                                                                                  "term": {
+                                                                                                                                                    "record": {
+                                                                                                                                                      "typeName": "hydra.core.FunctionType",
+                                                                                                                                                      "fields": [
+                                                                                                                                                        {
+                                                                                                                                                          "name": "domain",
+                                                                                                                                                          "term": {
+                                                                                                                                                            "inject": {
+                                                                                                                                                              "typeName": "hydra.core.Type",
+                                                                                                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "a"}}}}}}}},
+                                                                                                                                                        {
+                                                                                                                                                          "name": "codomain",
+                                                                                                                                                          "term": {
+                                                                                                                                                            "inject": {
+                                                                                                                                                              "typeName": "hydra.core.Type",
+                                                                                                                                                              "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "a"}}}}}}}}]}}}}}},
+                                                                                                                                          {
+                                                                                                                                            "name": "constraints",
+                                                                                                                                            "term": {
+                                                                                                                                              "typeApplication": {
+                                                                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                                "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}]}}]}},
+                                                                                                                    {
+                                                                                                                      "name": "body",
+                                                                                                                      "term": {
+                                                                                                                        "inject": {
+                                                                                                                          "typeName": "hydra.core.Term",
+                                                                                                                          "field": {
+                                                                                                                            "name": "let",
+                                                                                                                            "term": {
+                                                                                                                              "record": {
+                                                                                                                                "typeName": "hydra.core.Let",
+                                                                                                                                "fields": [
+                                                                                                                                  {
+                                                                                                                                    "name": "bindings",
+                                                                                                                                    "term": {
+                                                                                                                                      "list": [
+                                                                                                                                        {
+                                                                                                                                          "record": {
+                                                                                                                                            "typeName": "hydra.core.Binding",
+                                                                                                                                            "fields": [
+                                                                                                                                              {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "h"}}}}},
+                                                                                                                                              {
+                                                                                                                                                "name": "term",
+                                                                                                                                                "term": {
+                                                                                                                                                  "inject": {
+                                                                                                                                                    "typeName": "hydra.core.Term",
+                                                                                                                                                    "field": {
+                                                                                                                                                      "name": "lambda",
+                                                                                                                                                      "term": {
+                                                                                                                                                        "record": {
+                                                                                                                                                          "typeName": "hydra.core.Lambda",
+                                                                                                                                                          "fields": [
+                                                                                                                                                            {"name": "parameter", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "z"}}}}},
+                                                                                                                                                            {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                                                                                            {
+                                                                                                                                                              "name": "body",
+                                                                                                                                                              "term": {
+                                                                                                                                                                "inject": {
+                                                                                                                                                                  "typeName": "hydra.core.Term",
+                                                                                                                                                                  "field": {
+                                                                                                                                                                    "name": "application",
+                                                                                                                                                                    "term": {
+                                                                                                                                                                      "record": {
+                                                                                                                                                                        "typeName": "hydra.core.Application",
+                                                                                                                                                                        "fields": [
+                                                                                                                                                                          {
+                                                                                                                                                                            "name": "function",
+                                                                                                                                                                            "term": {
+                                                                                                                                                                              "inject": {
+                                                                                                                                                                                "typeName": "hydra.core.Term",
+                                                                                                                                                                                "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "g"}}}}}}}},
+                                                                                                                                                                          {
+                                                                                                                                                                            "name": "argument",
+                                                                                                                                                                            "term": {
+                                                                                                                                                                              "inject": {
+                                                                                                                                                                                "typeName": "hydra.core.Term",
+                                                                                                                                                                                "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "z"}}}}}}}}]}}}}}}]}}}}}},
+                                                                                                                                              {
+                                                                                                                                                "name": "typeScheme",
+                                                                                                                                                "term": {
+                                                                                                                                                  "optional": {
+                                                                                                                                                    "record": {
+                                                                                                                                                      "typeName": "hydra.core.TypeScheme",
+                                                                                                                                                      "fields": [
+                                                                                                                                                        {
+                                                                                                                                                          "name": "variables",
+                                                                                                                                                          "term": {"list": [{"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "b"}}}}]}},
+                                                                                                                                                        {
+                                                                                                                                                          "name": "body",
+                                                                                                                                                          "term": {
+                                                                                                                                                            "inject": {
+                                                                                                                                                              "typeName": "hydra.core.Type",
+                                                                                                                                                              "field": {
+                                                                                                                                                                "name": "function",
+                                                                                                                                                                "term": {
+                                                                                                                                                                  "record": {
+                                                                                                                                                                    "typeName": "hydra.core.FunctionType",
+                                                                                                                                                                    "fields": [
+                                                                                                                                                                      {
+                                                                                                                                                                        "name": "domain",
+                                                                                                                                                                        "term": {
+                                                                                                                                                                          "inject": {
+                                                                                                                                                                            "typeName": "hydra.core.Type",
+                                                                                                                                                                            "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "b"}}}}}}}},
+                                                                                                                                                                      {
+                                                                                                                                                                        "name": "codomain",
+                                                                                                                                                                        "term": {
+                                                                                                                                                                          "inject": {
+                                                                                                                                                                            "typeName": "hydra.core.Type",
+                                                                                                                                                                            "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "b"}}}}}}}}]}}}}}},
+                                                                                                                                                        {
+                                                                                                                                                          "name": "constraints",
+                                                                                                                                                          "term": {
+                                                                                                                                                            "typeApplication": {
+                                                                                                                                                              "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                                              "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}]}}]}},
+                                                                                                                                  {
+                                                                                                                                    "name": "body",
+                                                                                                                                    "term": {
+                                                                                                                                      "inject": {
+                                                                                                                                        "typeName": "hydra.core.Term",
+                                                                                                                                        "field": {
+                                                                                                                                          "name": "application",
+                                                                                                                                          "term": {
+                                                                                                                                            "record": {
+                                                                                                                                              "typeName": "hydra.core.Application",
+                                                                                                                                              "fields": [
+                                                                                                                                                {
+                                                                                                                                                  "name": "function",
+                                                                                                                                                  "term": {
+                                                                                                                                                    "inject": {
+                                                                                                                                                      "typeName": "hydra.core.Term",
+                                                                                                                                                      "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "h"}}}}}}}},
+                                                                                                                                                {
+                                                                                                                                                  "name": "argument",
+                                                                                                                                                  "term": {
+                                                                                                                                                    "inject": {
+                                                                                                                                                      "typeName": "hydra.core.Term",
+                                                                                                                                                      "field": {
+                                                                                                                                                        "name": "literal",
+                                                                                                                                                        "term": {
+                                                                                                                                                          "inject": {
+                                                                                                                                                            "typeName": "hydra.core.Literal",
+                                                                                                                                                            "field": {
+                                                                                                                                                              "name": "integer",
+                                                                                                                                                              "term": {
+                                                                                                                                                                "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}}}}}}}}}}}]}}}}}}]}}}}}}]}}}}}}]}}}}}},
+                                                                                        {
+                                                                                          "name": "typeScheme",
+                                                                                          "term": {
+                                                                                            "optional": {
+                                                                                              "record": {
+                                                                                                "typeName": "hydra.core.TypeScheme",
+                                                                                                "fields": [
+                                                                                                  {"name": "variables", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
+                                                                                                  {
+                                                                                                    "name": "body",
+                                                                                                    "term": {
+                                                                                                      "inject": {
+                                                                                                        "typeName": "hydra.core.Type",
+                                                                                                        "field": {
+                                                                                                          "name": "function",
+                                                                                                          "term": {
+                                                                                                            "record": {
+                                                                                                              "typeName": "hydra.core.FunctionType",
+                                                                                                              "fields": [
+                                                                                                                {
+                                                                                                                  "name": "domain",
+                                                                                                                  "term": {
+                                                                                                                    "inject": {
+                                                                                                                      "typeName": "hydra.core.Type",
+                                                                                                                      "field": {
+                                                                                                                        "name": "literal",
+                                                                                                                        "term": {
+                                                                                                                          "inject": {
+                                                                                                                            "typeName": "hydra.core.LiteralType",
+                                                                                                                            "field": {
+                                                                                                                              "name": "integer",
+                                                                                                                              "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}},
+                                                                                                                {
+                                                                                                                  "name": "codomain",
+                                                                                                                  "term": {
+                                                                                                                    "inject": {
+                                                                                                                      "typeName": "hydra.core.Type",
+                                                                                                                      "field": {
+                                                                                                                        "name": "literal",
+                                                                                                                        "term": {
+                                                                                                                          "inject": {
+                                                                                                                            "typeName": "hydra.core.LiteralType",
+                                                                                                                            "field": {
+                                                                                                                              "name": "integer",
+                                                                                                                              "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}}]}}}}}},
+                                                                                                  {
+                                                                                                    "name": "constraints",
+                                                                                                    "term": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                        "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}]}}]}},
+                                                                            {
+                                                                              "name": "body",
+                                                                              "term": {
+                                                                                "inject": {
+                                                                                  "typeName": "hydra.core.Term",
+                                                                                  "field": {
+                                                                                    "name": "application",
+                                                                                    "term": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.core.Application",
+                                                                                        "fields": [
+                                                                                          {
+                                                                                            "name": "function",
+                                                                                            "term": {
+                                                                                              "inject": {
+                                                                                                "typeName": "hydra.core.Term",
+                                                                                                "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "wrapper"}}}}}}}},
+                                                                                          {
+                                                                                            "name": "argument",
+                                                                                            "term": {
+                                                                                              "inject": {
+                                                                                                "typeName": "hydra.core.Term",
+                                                                                                "field": {
+                                                                                                  "name": "literal",
+                                                                                                  "term": {
+                                                                                                    "inject": {
+                                                                                                      "typeName": "hydra.core.Literal",
+                                                                                                      "field": {
+                                                                                                        "name": "integer",
+                                                                                                        "term": {
+                                                                                                          "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}}}}}}}}}}}]}}}}}}]}}}}}}}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "parameter": "_",
+                                                              "domain": "unit",
+                                                              "body": {
+                                                                "application": {
+                                                                  "function": {"variable": "hydra.print.core.let"},
+                                                                  "argument": {
+                                                                    "record": {
+                                                                      "typeName": "hydra.core.Let",
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "bindings",
+                                                                          "term": {
+                                                                            "list": [
+                                                                              {
+                                                                                "record": {
+                                                                                  "typeName": "hydra.core.Binding",
+                                                                                  "fields": [
+                                                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "wrapper"}}}}},
+                                                                                    {
+                                                                                      "name": "term",
+                                                                                      "term": {
+                                                                                        "inject": {
+                                                                                          "typeName": "hydra.core.Term",
+                                                                                          "field": {
+                                                                                            "name": "lambda",
+                                                                                            "term": {
+                                                                                              "record": {
+                                                                                                "typeName": "hydra.core.Lambda",
+                                                                                                "fields": [
+                                                                                                  {"name": "parameter", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "x"}}}}},
+                                                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                                  {
+                                                                                                    "name": "body",
+                                                                                                    "term": {
+                                                                                                      "inject": {
+                                                                                                        "typeName": "hydra.core.Term",
+                                                                                                        "field": {
+                                                                                                          "name": "application",
+                                                                                                          "term": {
+                                                                                                            "record": {
+                                                                                                              "typeName": "hydra.core.Application",
+                                                                                                              "fields": [
+                                                                                                                {
+                                                                                                                  "name": "function",
+                                                                                                                  "term": {
+                                                                                                                    "inject": {
+                                                                                                                      "typeName": "hydra.core.Term",
+                                                                                                                      "field": {
+                                                                                                                        "name": "application",
+                                                                                                                        "term": {
+                                                                                                                          "record": {
+                                                                                                                            "typeName": "hydra.core.Application",
+                                                                                                                            "fields": [
+                                                                                                                              {
+                                                                                                                                "name": "function",
+                                                                                                                                "term": {
+                                                                                                                                  "inject": {
+                                                                                                                                    "typeName": "hydra.core.Term",
+                                                                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "wrapper_h"}}}}}}}},
+                                                                                                                              {
+                                                                                                                                "name": "argument",
+                                                                                                                                "term": {
+                                                                                                                                  "inject": {
+                                                                                                                                    "typeName": "hydra.core.Term",
+                                                                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "x"}}}}}}}}]}}}}}},
+                                                                                                                {
+                                                                                                                  "name": "argument",
+                                                                                                                  "term": {
+                                                                                                                    "inject": {
+                                                                                                                      "typeName": "hydra.core.Term",
+                                                                                                                      "field": {
+                                                                                                                        "name": "literal",
+                                                                                                                        "term": {
+                                                                                                                          "inject": {
+                                                                                                                            "typeName": "hydra.core.Literal",
+                                                                                                                            "field": {
+                                                                                                                              "name": "integer",
+                                                                                                                              "term": {
+                                                                                                                                "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}}}}}}}}}}}]}}}}}}]}}}}}},
+                                                                                    {
+                                                                                      "name": "typeScheme",
+                                                                                      "term": {
+                                                                                        "optional": {
+                                                                                          "record": {
+                                                                                            "typeName": "hydra.core.TypeScheme",
+                                                                                            "fields": [
+                                                                                              {"name": "variables", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
+                                                                                              {
+                                                                                                "name": "body",
+                                                                                                "term": {
+                                                                                                  "inject": {
+                                                                                                    "typeName": "hydra.core.Type",
+                                                                                                    "field": {
+                                                                                                      "name": "function",
+                                                                                                      "term": {
+                                                                                                        "record": {
+                                                                                                          "typeName": "hydra.core.FunctionType",
+                                                                                                          "fields": [
+                                                                                                            {
+                                                                                                              "name": "domain",
+                                                                                                              "term": {
+                                                                                                                "inject": {
+                                                                                                                  "typeName": "hydra.core.Type",
+                                                                                                                  "field": {
+                                                                                                                    "name": "literal",
+                                                                                                                    "term": {
+                                                                                                                      "inject": {
+                                                                                                                        "typeName": "hydra.core.LiteralType",
+                                                                                                                        "field": {
+                                                                                                                          "name": "integer",
+                                                                                                                          "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}},
+                                                                                                            {
+                                                                                                              "name": "codomain",
+                                                                                                              "term": {
+                                                                                                                "inject": {
+                                                                                                                  "typeName": "hydra.core.Type",
+                                                                                                                  "field": {
+                                                                                                                    "name": "literal",
+                                                                                                                    "term": {
+                                                                                                                      "inject": {
+                                                                                                                        "typeName": "hydra.core.LiteralType",
+                                                                                                                        "field": {
+                                                                                                                          "name": "integer",
+                                                                                                                          "term": {"inject": {"typeName": "hydra.core.IntegerType", "field": {"name": "int32", "term": "unit"}}}}}}}}}}]}}}}}},
+                                                                                              {
+                                                                                                "name": "constraints",
+                                                                                                "term": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                    "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}]}},
+                                                                              {
+                                                                                "record": {
+                                                                                  "typeName": "hydra.core.Binding",
+                                                                                  "fields": [
+                                                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "wrapper_g"}}}}},
+                                                                                    {
+                                                                                      "name": "term",
+                                                                                      "term": {
+                                                                                        "inject": {
+                                                                                          "typeName": "hydra.core.Term",
+                                                                                          "field": {
+                                                                                            "name": "lambda",
+                                                                                            "term": {
+                                                                                              "record": {
+                                                                                                "typeName": "hydra.core.Lambda",
+                                                                                                "fields": [
+                                                                                                  {"name": "parameter", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "x"}}}}},
+                                                                                                  {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                                  {
+                                                                                                    "name": "body",
+                                                                                                    "term": {
+                                                                                                      "inject": {
+                                                                                                        "typeName": "hydra.core.Term",
+                                                                                                        "field": {
+                                                                                                          "name": "lambda",
+                                                                                                          "term": {
+                                                                                                            "record": {
+                                                                                                              "typeName": "hydra.core.Lambda",
+                                                                                                              "fields": [
+                                                                                                                {"name": "parameter", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "y"}}}}},
+                                                                                                                {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                                                {
+                                                                                                                  "name": "body",
+                                                                                                                  "term": {
+                                                                                                                    "inject": {
+                                                                                                                      "typeName": "hydra.core.Term",
+                                                                                                                      "field": {
+                                                                                                                        "name": "application",
+                                                                                                                        "term": {
+                                                                                                                          "record": {
+                                                                                                                            "typeName": "hydra.core.Application",
+                                                                                                                            "fields": [
+                                                                                                                              {
+                                                                                                                                "name": "function",
+                                                                                                                                "term": {
+                                                                                                                                  "inject": {
+                                                                                                                                    "typeName": "hydra.core.Term",
+                                                                                                                                    "field": {
+                                                                                                                                      "name": "application",
+                                                                                                                                      "term": {
+                                                                                                                                        "record": {
+                                                                                                                                          "typeName": "hydra.core.Application",
+                                                                                                                                          "fields": [
+                                                                                                                                            {
+                                                                                                                                              "name": "function",
+                                                                                                                                              "term": {
+                                                                                                                                                "inject": {
+                                                                                                                                                  "typeName": "hydra.core.Term",
+                                                                                                                                                  "field": {
+                                                                                                                                                    "name": "variable",
+                                                                                                                                                    "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lib.math.add"}}}}}}}},
+                                                                                                                                            {
+                                                                                                                                              "name": "argument",
+                                                                                                                                              "term": {
+                                                                                                                                                "inject": {
+                                                                                                                                                  "typeName": "hydra.core.Term",
+                                                                                                                                                  "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "x"}}}}}}}}]}}}}}},
+                                                                                                                              {
+                                                                                                                                "name": "argument",
+                                                                                                                                "term": {
+                                                                                                                                  "inject": {
+                                                                                                                                    "typeName": "hydra.core.Term",
+                                                                                                                                    "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "y"}}}}}}}}]}}}}}}]}}}}}}]}}}}}},
+                                                                                    {
+                                                                                      "name": "typeScheme",
+                                                                                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.TypeScheme"}}}}]}},
+                                                                              {
+                                                                                "record": {
+                                                                                  "typeName": "hydra.core.Binding",
+                                                                                  "fields": [
+                                                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "wrapper_h"}}}}},
+                                                                                    {
+                                                                                      "name": "term",
+                                                                                      "term": {
+                                                                                        "inject": {
+                                                                                          "typeName": "hydra.core.Term",
+                                                                                          "field": {
+                                                                                            "name": "typeLambda",
+                                                                                            "term": {
+                                                                                              "record": {
+                                                                                                "typeName": "hydra.core.TypeLambda",
+                                                                                                "fields": [
+                                                                                                  {"name": "parameter", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "b"}}}}},
+                                                                                                  {
+                                                                                                    "name": "body",
+                                                                                                    "term": {
+                                                                                                      "inject": {
+                                                                                                        "typeName": "hydra.core.Term",
+                                                                                                        "field": {
+                                                                                                          "name": "lambda",
+                                                                                                          "term": {
+                                                                                                            "record": {
+                                                                                                              "typeName": "hydra.core.Lambda",
+                                                                                                              "fields": [
+                                                                                                                {"name": "parameter", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "x"}}}}},
+                                                                                                                {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                                                {
+                                                                                                                  "name": "body",
+                                                                                                                  "term": {
+                                                                                                                    "inject": {
+                                                                                                                      "typeName": "hydra.core.Term",
+                                                                                                                      "field": {
+                                                                                                                        "name": "lambda",
+                                                                                                                        "term": {
+                                                                                                                          "record": {
+                                                                                                                            "typeName": "hydra.core.Lambda",
+                                                                                                                            "fields": [
+                                                                                                                              {"name": "parameter", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "z"}}}}},
+                                                                                                                              {"name": "domain", "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.Type"}}}},
+                                                                                                                              {
+                                                                                                                                "name": "body",
+                                                                                                                                "term": {
+                                                                                                                                  "inject": {
+                                                                                                                                    "typeName": "hydra.core.Term",
+                                                                                                                                    "field": {
+                                                                                                                                      "name": "application",
+                                                                                                                                      "term": {
+                                                                                                                                        "record": {
+                                                                                                                                          "typeName": "hydra.core.Application",
+                                                                                                                                          "fields": [
+                                                                                                                                            {
+                                                                                                                                              "name": "function",
+                                                                                                                                              "term": {
+                                                                                                                                                "inject": {
+                                                                                                                                                  "typeName": "hydra.core.Term",
+                                                                                                                                                  "field": {
+                                                                                                                                                    "name": "application",
+                                                                                                                                                    "term": {
+                                                                                                                                                      "record": {
+                                                                                                                                                        "typeName": "hydra.core.Application",
+                                                                                                                                                        "fields": [
+                                                                                                                                                          {
+                                                                                                                                                            "name": "function",
+                                                                                                                                                            "term": {
+                                                                                                                                                              "inject": {
+                                                                                                                                                                "typeName": "hydra.core.Term",
+                                                                                                                                                                "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "wrapper_g"}}}}}}}},
+                                                                                                                                                          {
+                                                                                                                                                            "name": "argument",
+                                                                                                                                                            "term": {
+                                                                                                                                                              "inject": {
+                                                                                                                                                                "typeName": "hydra.core.Term",
+                                                                                                                                                                "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "x"}}}}}}}}]}}}}}},
+                                                                                                                                            {
+                                                                                                                                              "name": "argument",
+                                                                                                                                              "term": {
+                                                                                                                                                "inject": {
+                                                                                                                                                  "typeName": "hydra.core.Term",
+                                                                                                                                                  "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "z"}}}}}}}}]}}}}}}]}}}}}}]}}}}}}]}}}}}},
+                                                                                    {
+                                                                                      "name": "typeScheme",
+                                                                                      "term": {
+                                                                                        "optional": {
+                                                                                          "record": {
+                                                                                            "typeName": "hydra.core.TypeScheme",
+                                                                                            "fields": [
+                                                                                              {
+                                                                                                "name": "variables",
+                                                                                                "term": {"list": [{"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "b"}}}}]}},
+                                                                                              {
+                                                                                                "name": "body",
+                                                                                                "term": {
+                                                                                                  "inject": {
+                                                                                                    "typeName": "hydra.core.Type",
+                                                                                                    "field": {
+                                                                                                      "name": "function",
+                                                                                                      "term": {
+                                                                                                        "record": {
+                                                                                                          "typeName": "hydra.core.FunctionType",
+                                                                                                          "fields": [
+                                                                                                            {
+                                                                                                              "name": "domain",
+                                                                                                              "term": {
+                                                                                                                "inject": {
+                                                                                                                  "typeName": "hydra.core.Type",
+                                                                                                                  "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "b"}}}}}}}},
+                                                                                                            {
+                                                                                                              "name": "codomain",
+                                                                                                              "term": {
+                                                                                                                "inject": {
+                                                                                                                  "typeName": "hydra.core.Type",
+                                                                                                                  "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "b"}}}}}}}}]}}}}}},
+                                                                                              {
+                                                                                                "name": "constraints",
+                                                                                                "term": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.empty"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                    "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}]}}]}},
+                                                                        {
+                                                                          "name": "body",
+                                                                          "term": {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.core.Term",
+                                                                              "field": {
+                                                                                "name": "application",
+                                                                                "term": {
+                                                                                  "record": {
+                                                                                    "typeName": "hydra.core.Application",
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "function",
+                                                                                        "term": {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.Term",
+                                                                                            "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "wrapper"}}}}}}}},
+                                                                                      {
+                                                                                        "name": "argument",
+                                                                                        "term": {
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.core.Term",
+                                                                                            "field": {
+                                                                                              "name": "literal",
+                                                                                              "term": {
+                                                                                                "inject": {
+                                                                                                  "typeName": "hydra.core.Literal",
+                                                                                                  "field": {
+                                                                                                    "name": "integer",
+                                                                                                    "term": {
+                                                                                                      "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}}}}}}}}}}}]}}}}}}]}}}}}}}]}}}}}},
+                                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                                    {
+                                      "record": {
+                                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                                        "fields": [
                                           {"name": "name", "term": {"literal": {"string": "polymorphic binding with pair: type applications preserved"}}},
                                           {
                                             "name": "case",
