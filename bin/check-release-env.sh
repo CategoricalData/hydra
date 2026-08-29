@@ -78,7 +78,15 @@ fi
 # checks as two separate lines so that failure mode is legible instead of a
 # generic "twine missing".
 if command -v twine >/dev/null 2>&1; then
-    TWINE_PY_VERSION="$(twine --version 2>&1 | grep -oE 'Python [0-9]+\.[0-9]+' | head -n1 | awk '{print $2}')"
+    # Ask the interpreter that actually runs twine, via its shebang -- do NOT parse
+    # `twine --version`, which stopped reporting a Python version as of twine 7.x
+    # (the very version this script requires), making that probe always fail.
+    TWINE_PY="$(head -n1 "$(command -v twine)" 2>/dev/null | sed 's/^#!//' | awk '{print $1}')"
+    if [ -x "$TWINE_PY" ]; then
+        TWINE_PY_VERSION="$("$TWINE_PY" -c 'import sys; print("%d.%d" % sys.version_info[:2])' 2>/dev/null)"
+    else
+        TWINE_PY_VERSION="$(twine --version 2>&1 | grep -oE 'Python [0-9]+\.[0-9]+' | head -n1 | awk '{print $2}')"
+    fi
     TWINE_PY_NUM="$(printf '%s' "$TWINE_PY_VERSION" | awk -F. '{print $1*100+$2}')"
     if [ -n "$TWINE_PY_NUM" ] && [ "$TWINE_PY_NUM" -ge 310 ] 2>/dev/null; then
         ok "twine runs under Python >=3.10" "Python $TWINE_PY_VERSION"
@@ -101,7 +109,12 @@ fi
 
 # --- sbt present ---------------------------------------------------------------
 if command -v sbt >/dev/null 2>&1; then
-    ok "sbt (Scala publish)" "$(sbt --numeric-version 2>&1 | tail -n1)"
+    # Report the launcher version via --script-version: `--numeric-version` boots the
+    # full launcher outside any project and throws a ClassCastException on sbt 1.5.x
+    # under recent JDKs, which would land a Java stack trace in this OK line. The
+    # launcher bootstraps whatever sbt.version each project declares
+    # (heads/scala: 1.10.7), so the launcher's own version is informational only.
+    ok "sbt (Scala publish)" "launcher $(sbt --script-version 2>/dev/null | tail -n1)"
 else
     fail "sbt (Scala publish)" "sbt not found. brew install sbt  |  see https://www.scala-sbt.org/download.html"
 fi
