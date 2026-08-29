@@ -20,189 +20,262 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleMetadata = descriptionMetadata (Just "A model for subterm and subtype access patterns")}
+            moduleMetadata = descriptionMetadata (Just "Subterm and subtype access, and the link view of a graph")}
   where
     definitions = [
+      subtermAttribute,
       subtermEdge,
       subtermGraph,
+      subtermLink,
       subtermNode,
       subtermPath,
+      subtermProperty,
       subtermStep,
+      subtypeAttribute,
       subtypeEdge,
       subtypeGraph,
+      subtypeLink,
       subtypeNode,
       subtypePath,
-      subtypeStep]
+      subtypeProperty,
+      subtypeStep,
+      termAttribute,
+      typeAttribute]
 
--- Subterm types
+subtermAttribute :: TypeDefinition
+subtermAttribute = define "SubtermAttribute" $
+  doc "A link from a node to a non-term attribute of a position" $
+  T.record [
+    "path">:
+      doc "The subterm path at which the attribute occurs"
+      subtermPath,
+    "target">:
+      doc "The attribute value"
+      termAttribute]
 
 subtermEdge :: TypeDefinition
 subtermEdge = define "SubtermEdge" $
-  doc "An edge in a subterm graph, connecting two nodes via a path" $
+  doc "A link from a node to another binding of the graph, addressed by the path at which it occurs" $
   T.record [
-    "source">:
-      doc "The source node of the edge"
-      subtermNode,
     "path">:
-      doc "The subterm path connecting source to target"
+      doc "The subterm path at which the reference occurs"
       subtermPath,
     "target">:
-      doc "The target node of the edge"
-      subtermNode]
+      doc "The name of the referenced binding of the graph"
+      Core.name]
 
 subtermGraph :: TypeDefinition
 subtermGraph = define "SubtermGraph" $
-  doc "A graph of subterm nodes and edges, representing term access patterns" $
+  doc "The link view of a graph as subterm nodes and their links" $
   T.record [
     "nodes">:
       doc "All nodes in the graph" $
-      T.list subtermNode,
-    "edges">:
-      doc "All edges in the graph" $
-      T.list subtermEdge]
+      T.list subtermNode]
+
+subtermLink :: TypeDefinition
+subtermLink = define "SubtermLink" $
+  doc "An outgoing link of a subterm node: an edge, a property, or an attribute" $
+  T.union [
+    "edge">:
+      doc "A reference to another binding of the graph"
+      subtermEdge,
+    "property">:
+      doc "A leaf term"
+      subtermProperty,
+    "attribute">:
+      doc "A non-term attribute of a position"
+      subtermAttribute]
 
 subtermNode :: TypeDefinition
 subtermNode = define "SubtermNode" $
-  doc "A node in a subterm graph, representing a term or subterm" $
+  doc "A node in a subterm graph: a binding of the graph, with its type scheme and outgoing links" $
   T.record [
     "name">:
-      doc "The qualified name of the term"
+      doc "The name of the binding"
       Core.name,
-    "label">:
-      doc "A human-readable label for the node"
-      T.string,
-    "id" >:
-      doc "A unique identifier for the node"
-      T.string]
+    "type">:
+      doc "The type scheme of the binding"
+      Core.typeScheme,
+    "links">:
+      doc "The outgoing links of the node" $
+      T.list subtermLink]
 
 subtermPath :: TypeDefinition
 subtermPath = define "SubtermPath" $
-  doc "A sequence of subterm steps forming a path through a term" $
+  doc "A sequence of subterm steps forming a path through a term, root first" $
   T.wrap $ T.list subtermStep
+
+subtermProperty :: TypeDefinition
+subtermProperty = define "SubtermProperty" $
+  doc "A link from a node to a leaf term (literal, unit, projection, unwrap, or an unbound variable)" $
+  T.record [
+    "path">:
+      doc "The subterm path at which the leaf term occurs"
+      subtermPath,
+    "target">:
+      doc "The leaf term"
+      Core.term]
 
 subtermStep :: TypeDefinition
 subtermStep = define "SubtermStep" $
   doc "A function which maps from a term to a particular immediate subterm" $
   T.union [
+    "annotatedAnnotation">:
+      doc "Access the annotation of an annotated term"
+      T.unit,
     "annotatedBody">:
       doc "Access the body of an annotated term"
-      T.unit,
-    "applicationFunction">:
-      doc "Access the function of an application term"
       T.unit,
     "applicationArgument">:
       doc "Access the argument of an application term"
       T.unit,
+    "applicationFunction">:
+      doc "Access the function of an application term"
+      T.unit,
+    "casesCase">:
+      doc "Access the handler of a specific case of a case statement by field name"
+      Core.name,
+    "casesDefault">:
+      doc "Access the default case of a case statement"
+      T.unit,
+    "eitherLeft">:
+      doc "Access the left term of an either value"
+      T.unit,
+    "eitherRight">:
+      doc "Access the right term of an either value"
+      T.unit,
+    "injectField">:
+      doc "Access the injected term of a union injection by field name"
+      Core.name,
     "lambdaBody">:
       doc "Access the body of a lambda term"
-      T.unit,
-    "unionCasesDefault">:
-      doc "Access the default case of a union elimination"
-      T.unit,
-    "unionCasesBranch">:
-      doc "Access a specific branch of a union elimination by field name"
-      Core.name,
-    "letBody">:
-      doc "Access the body of a let term"
       T.unit,
     "letBinding">:
       doc "Access a specific binding in a let term by variable name"
       Core.name,
+    "letBody">:
+      doc "Access the body of a let term"
+      T.unit,
     "listElement">:
       doc "Access an element of a list by index"
       T.int32,
     "mapKey">:
-      doc "Access a key in a map by index"
+      doc "Access the key of the map entry at the given index"
       T.int32,
     "mapValue">:
-      doc "Access a value in a map by index"
+      doc "Access the value of the map entry at the given index"
       T.int32,
-    "optionalTerm">:
+    "optionalGiven">:
       doc "Access the term inside a given (present) optional value"
       T.unit,
-    "productTerm">:
-      doc "Access an element of a product (tuple) by index"
-      T.int32,
+    "pairFirst">:
+      doc "Access the first term of a pair"
+      T.unit,
+    "pairSecond">:
+      doc "Access the second term of a pair"
+      T.unit,
     "recordField">:
       doc "Access a field of a record by field name"
       Core.name,
     "setElement">:
       doc "Access an element of a set by index"
       T.int32,
-    "sumTerm">:
-      doc "Access the term inside a sum variant"
+    "typeApplicationBody">:
+      doc "Access the body of a type application term"
       T.unit,
     "typeLambdaBody">:
       doc "Access the body of a type lambda term"
       T.unit,
-    "typeApplicationTerm">:
-      doc "Access the term being applied to a type"
-      T.unit,
-    "injectionTerm">:
-      doc "Access the term inside a union injection"
-      T.unit,
-    "wrappedTerm">:
-      doc "Access the term inside a wrapped term"
+    "wrapBody">:
+      doc "Access the body of a wrapped term"
       T.unit]
 
--- Subtype types
+subtypeAttribute :: TypeDefinition
+subtypeAttribute = define "SubtypeAttribute" $
+  doc "A link from a node to a non-type attribute of a position" $
+  T.record [
+    "path">:
+      doc "The subtype path at which the attribute occurs"
+      subtypePath,
+    "target">:
+      doc "The attribute value"
+      typeAttribute]
 
 subtypeEdge :: TypeDefinition
 subtypeEdge = define "SubtypeEdge" $
-  doc "An edge in a subtype graph, connecting two nodes via a path" $
+  doc "A link from a node to a named type, addressed by the path at which it occurs" $
   T.record [
-    "source">:
-      doc "The source node of the edge"
-      subtypeNode,
     "path">:
-      doc "The subtype path connecting source to target"
+      doc "The subtype path at which the reference occurs"
       subtypePath,
     "target">:
-      doc "The target node of the edge"
-      subtypeNode]
+      doc "The name of the referenced type"
+      Core.name]
 
 subtypeGraph :: TypeDefinition
 subtypeGraph = define "SubtypeGraph" $
-  doc "A graph of subtype nodes and edges, representing type access patterns" $
+  doc "The link view of a schema as subtype nodes and their links" $
   T.record [
     "nodes">:
       doc "All nodes in the graph" $
-      T.list subtypeNode,
-    "edges">:
-      doc "All edges in the graph" $
-      T.list subtypeEdge]
+      T.list subtypeNode]
+
+subtypeLink :: TypeDefinition
+subtypeLink = define "SubtypeLink" $
+  doc "An outgoing link of a subtype node: an edge, a property, or an attribute" $
+  T.union [
+    "edge">:
+      doc "A reference to a named type"
+      subtypeEdge,
+    "property">:
+      doc "A leaf type"
+      subtypeProperty,
+    "attribute">:
+      doc "A non-type attribute of a position"
+      subtypeAttribute]
 
 subtypeNode :: TypeDefinition
 subtypeNode = define "SubtypeNode" $
-  doc "A node in a subtype graph, representing a type or subtype" $
+  doc "A node in a subtype graph: a named type, with its outgoing links" $
   T.record [
     "name">:
-      doc "The qualified name of the type"
+      doc "The name of the type"
       Core.name,
-    "label">:
-      doc "A human-readable label for the node"
-      T.string,
-    "id" >:
-      doc "A unique identifier for the node"
-      T.string]
+    "links">:
+      doc "The outgoing links of the node" $
+      T.list subtypeLink]
 
 subtypePath :: TypeDefinition
 subtypePath = define "SubtypePath" $
-  doc "A sequence of subtype steps forming a path through a type" $
+  doc "A sequence of subtype steps forming a path through a type, root first" $
   T.wrap $ T.list subtypeStep
+
+subtypeProperty :: TypeDefinition
+subtypeProperty = define "SubtypeProperty" $
+  doc "A link from a node to a leaf type (literal, unit, void, or a bound variable)" $
+  T.record [
+    "path">:
+      doc "The subtype path at which the leaf type occurs"
+      subtypePath,
+    "target">:
+      doc "The leaf type"
+      Core.type_]
 
 subtypeStep :: TypeDefinition
 subtypeStep = define "SubtypeStep" $
   doc "A function which maps from a type to a particular immediate subtype" $
   T.union [
     "annotatedBody">:
-      doc "Access the body of an annotated type"
+      doc "Access the body of an annotated type (the annotation is a term; there is no step for it)"
+      T.unit,
+    "applicationArgument">:
+      doc "Access the argument of an application type"
       T.unit,
     "applicationFunction">:
       doc "Access the function of an application type"
       T.unit,
-    "applicationArgument">:
-      doc "Access the argument of an application type"
+    "effectValue">:
+      doc "Access the value type of an effect type"
       T.unit,
     "eitherLeft">:
       doc "Access the left type of an either type"
@@ -213,11 +286,11 @@ subtypeStep = define "SubtypeStep" $
     "forallBody">:
       doc "Access the body of a universally quantified type"
       T.unit,
-    "functionDomain">:
-      doc "Access the domain type of a function type"
-      T.unit,
     "functionCodomain">:
       doc "Access the codomain type of a function type"
+      T.unit,
+    "functionDomain">:
+      doc "Access the domain type of a function type"
       T.unit,
     "listElement">:
       doc "Access the element type of a list type"
@@ -246,6 +319,55 @@ subtypeStep = define "SubtypeStep" $
     "unionField">:
       doc "Access a field type of a union type by field name"
       Core.name,
-    "wrappedType">:
-      doc "Access the type inside a wrapped type"
+    "wrapBody">:
+      doc "Access the body type of a wrapped type"
       T.unit]
+
+termAttribute :: TypeDefinition
+termAttribute = define "TermAttribute" $
+  doc "A non-term constituent of the term at a path, together with its value" $
+  T.union [
+    "casesTypeName">:
+      doc "The name of the union type eliminated by a case statement"
+      Core.name,
+    "injectTypeName">:
+      doc "The name of the union type of an injection"
+      Core.name,
+    "lambdaDomainGiven">:
+      doc "The (given) domain type of a lambda"
+      Core.type_,
+    "lambdaParameter">:
+      doc "The parameter name of a lambda"
+      Core.name,
+    "letBindingTypeSchemeGiven">:
+      doc "The name of a let binding together with its (given) type scheme" $
+      T.pair Core.name Core.typeScheme,
+    "projectFieldName">:
+      doc "The name of the field projected by a projection"
+      Core.name,
+    "projectTypeName">:
+      doc "The name of the record type of a projection"
+      Core.name,
+    "recordTypeName">:
+      doc "The name of the record type of a record term"
+      Core.name,
+    "typeApplicationType">:
+      doc "The type argument of a type application term"
+      Core.type_,
+    "typeLambdaParameter">:
+      doc "The type-variable parameter of a type lambda term"
+      Core.name,
+    "wrapTypeName">:
+      doc "The name of the wrapper type of a wrapped term"
+      Core.name]
+
+typeAttribute :: TypeDefinition
+typeAttribute = define "TypeAttribute" $
+  doc "A non-type constituent of the type at a path, together with its value" $
+  T.union [
+    "annotatedAnnotation">:
+      doc "The annotation of an annotated type (a term; not descended into)"
+      Core.term,
+    "forallParameter">:
+      doc "The type-variable parameter of a universally quantified type"
+      Core.name]
