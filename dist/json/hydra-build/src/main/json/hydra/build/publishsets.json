@@ -39,6 +39,22 @@
   "definitions": [
     {
       "term": {
+        "name": "hydra.build.publishsets.coderBaselinePackages",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"list": {"variable": "hydra.packaging.PackageName"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "list": [
+                {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "hydra-kernel"}}}},
+                {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "hydra-haskell"}}}}]},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "The packages that need no coders loaded during JSON->target transform (hydra-kernel, hydra-haskell)"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.build.publishsets.isPublishSetClosed",
         "signature": {
           "typeParameters": [],
@@ -228,6 +244,36 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "The publish set in leaves-first topological order"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.build.publishsets.requiresCoders",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.packaging.PackageName"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "pkg",
+                "domain": {"variable": "hydra.packaging.PackageName"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.logic.not"},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {"body": {"variable": "hydra.lib.lists.member"}, "type": {"variable": "hydra.packaging.PackageName"}}},
+                            "argument": {"variable": "pkg"}}},
+                        "argument": {"variable": "hydra.build.publishsets.coderBaselinePackages"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Whether a package needs coders loaded during JSON->target transform (all but the baseline packages)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.build.publishsets.reverseDepClosure",
