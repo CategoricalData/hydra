@@ -1770,8 +1770,10 @@ see [docs/release-workflow.md](release-workflow.md) (procedure) and the
 The sync system is organized in three layers under per-package dist trees
 (`dist/<lang>/<pkg>/src/main/<lang>/...`):
 
-- **Layer 1 (transforms):** per-language `transform-json-to-<lang>.sh` scripts in `heads/haskell/bin/`
-  convert the JSON universe into source files for one target.
+- **Layer 1 (transforms):** the unified `transform-json-to-target.sh <target>` script in
+  `heads/haskell/bin/` (and its Java-host counterpart in `heads/java/bin/`, selected by
+  `GENERATOR_HOST`) converts the JSON universe into source files for one target.
+  (`transform-json-to-go.sh` remains as a thin per-target wrapper for the Go head.)
 - **Layer 2 (assemblers):** per-language `heads/<lang>/bin/assemble-all.sh` scripts produce complete
   per-package distributions for one target in batch mode (one Haskell universe load per target).
 - **Layer 2.5 (testers):** per-language `heads/<lang>/bin/test-*.sh` scripts compile and test the
@@ -1830,10 +1832,9 @@ Shell script wrappers live in `heads/haskell/bin/`. Executables without shell wr
 | `assemble-all.sh` | **Layer 2 batch assembler.** Produce Haskell distributions for every package in one `bootstrap-from-json` invocation. |
 | `assemble-distribution.sh <pkg>` | Layer 2 single-package assembler for one Haskell target package. |
 | `transform-haskell-dsl-to-json.sh` | Transform Haskell DSL sources into the JSON universe under `dist/json/`. |
-| `transform-json-to-haskell.sh` | Transform JSON into Haskell source files. |
-| `transform-json-to-{java,python,scala,lisp,target}.sh` | Layer 1 per-target transforms. |
+| `transform-json-to-target.sh <target>` | Layer 1 unified transform: JSON → source for any target (`transform-json-to-go.sh` wraps it for the Go head). |
 | `test-distribution.sh` | Layer 2.5 tester for Haskell distributions. |
-| `update-json-{kernel,main,test,manifest}.sh` | Export kernel / non-kernel / test / manifest modules to JSON. |
+| `update-json-{kernel,main,test}.sh` | Export kernel / non-kernel / test modules to JSON. |
 | `verify-json-kernel.sh` | Verify the JSON kernel round-trips correctly. |
 | `bootstrap-from-json` | Hydrate target-language distributions from the per-package JSON exports (executable; supports `--scoped`, `--all-packages`, and flat modes). |
 | `digest-check` | Inspect and refresh per-package digest files used for warm-cache short-circuits (executable). |

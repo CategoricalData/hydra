@@ -5,8 +5,8 @@
 #   assemble-distribution.sh <pkg> [--dist-root <dir>]
 #
 # Produces <dist-root>/<pkg>/ (default: ../../dist/python/<pkg>/) by:
-#   1. Calling Layer 1 transform-json-to-python.sh for main modules
-#   2. Calling Layer 1 transform-json-to-python.sh for test modules
+#   1. Calling Layer 1 run_layer1_transform python (assemble-common.sh) for main modules
+#   2. Calling Layer 1 run_layer1_transform python for test modules
 #   3. Applying package-specific post-processing:
 #      - hydra-kernel: copy test_env.py (the runtime counterpart of
 #        hydra.test.testEnv, filtered from emitted output) and the

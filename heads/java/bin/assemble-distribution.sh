@@ -5,8 +5,8 @@
 #   assemble-distribution.sh <pkg> [--dist-root <dir>]
 #
 # Produces <dist-root>/<pkg>/ (default: ../../dist/java/<pkg>/) by:
-#   1. Calling Layer 1 transform-json-to-java.sh for main modules
-#   2. Calling Layer 1 transform-json-to-java.sh for test modules
+#   1. Calling Layer 1 run_layer1_transform java (assemble-common.sh) for main modules
+#   2. Calling Layer 1 run_layer1_transform java for test modules
 #   3. Applying package-specific post-processing:
 #      - hydra-kernel: copy hand-written Java runtime (util, lib, dsl, json,
 #        tools) into the dist tree so the published Maven artifact is

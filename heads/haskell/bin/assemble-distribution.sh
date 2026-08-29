@@ -5,8 +5,8 @@
 #   assemble-distribution.sh <pkg> [--dist-root <dir>] [--json-root <dir>]
 #
 # Produces <dist-root>/<pkg>/ (default: ../../dist/haskell/<pkg>/) by:
-#   1. Calling Layer 1 transform-json-to-haskell.sh for main modules
-#   2. Calling Layer 1 transform-json-to-haskell.sh for test modules (if the
+#   1. Calling Layer 1 run_layer1_transform haskell (assemble-common.sh) for main modules
+#   2. Calling Layer 1 run_layer1_transform haskell for test modules (if the
 #      package has any)
 #   (No package-specific post-processing today; the TestGraph patch was
 #    retired in #307 — the DSL emits TestEnv refs directly.)
