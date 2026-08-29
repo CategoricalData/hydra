@@ -36,10 +36,12 @@
 # release-artifacts/ at the repo root. Logs land in verify-logs/.
 #
 # *Step 11 gate detail: the archive + checksum are a hard gate (LICENSE and
-# NOTICE must be present; the tarball must build); the GPG signature degrades
-# to a WARNING when no signing key is configured, so the script stays runnable
-# outside a real release. Set HYDRA_RELEASE_SIGNING_KEY (a gpg key id/email) to
-# sign; otherwise gpg's default key is used, and a missing key is a warning.
+# NOTICE must be present; the tarball must build). The GPG signature is a hard
+# gate WHENEVER SIGNING WAS INTENDED -- that is, whenever HYDRA_RELEASE_SIGNING_KEY
+# (a gpg key id/email) names an identity: a requested key that cannot sign is a
+# release-blocking ERROR, never a warning. With no key set, gpg's default key is
+# used and a failure degrades to a WARNING, so the script stays runnable outside
+# a real release.
 #
 # Prerequisites:
 #   - Stack, Java 11+, Python 3.12+, uv, sbt, Clojure, SBCL, Emacs, Guile,
@@ -545,10 +547,11 @@ fi
 # GPG signature.
 #
 # Gate vs. warning: a missing LICENSE/NOTICE or a failed archive/checksum is a hard
-# ERROR (Apache requires both files in every source release). The signature degrades
-# to a WARNING when no signing key is configured, so a developer can run this script
-# outside a real release without a key. Set HYDRA_RELEASE_SIGNING_KEY to a gpg key
-# id/email to choose the signing identity; otherwise gpg's default key is used.
+# ERROR (Apache requires both files in every source release). The signature is a hard
+# ERROR whenever HYDRA_RELEASE_SIGNING_KEY names an identity -- asking for a specific
+# key and silently shipping an unsigned archive is precisely the failure this gate
+# prevents. It degrades to a WARNING only when no key is configured, so a developer
+# can run this script outside a real release without one.
 step 12 $TOTAL_STEPS "Building canonical source archive (tarball + sha512 + signature)"
 echo ""
 
@@ -595,14 +598,40 @@ else
         fi
         echo "  OK: SHA-512 checksum written -> hydra-${EXPECTED}-src.tar.gz.sha512"
 
-        # Detached GPG signature over the REPRODUCIBLE .tar. Missing key / gpg => WARNING, not a gate.
+        # Detached GPG signature over the REPRODUCIBLE .tar.
+        #
+        # Gate vs. warning: signing is a hard ERROR whenever it was INTENDED --
+        # i.e. HYDRA_RELEASE_SIGNING_KEY names an identity. Asking for a specific
+        # key and silently getting an unsigned archive is the failure this gate
+        # exists to prevent: the script otherwise exits 0 and the missing
+        # signature is just one warning line in a long log. With no key set, the
+        # step still degrades to a WARNING so a developer can run this script
+        # outside a real release.
         if ! command -v gpg >/dev/null 2>&1; then
-            echo "  WARNING: gpg not found — source archive is unsigned (install gpg and re-run to sign)"
-            WARNINGS=$((WARNINGS + 1))
+            if [ -n "${HYDRA_RELEASE_SIGNING_KEY:-}" ]; then
+                echo "  ERROR: HYDRA_RELEASE_SIGNING_KEY is set but gpg is not on PATH" >&2
+                ERRORS=$((ERRORS + 1))
+            else
+                echo "  WARNING: gpg not found — source archive is unsigned (install gpg and re-run to sign)"
+                WARNINGS=$((WARNINGS + 1))
+            fi
         else
             GPG_KEY_ARGS=()
             if [ -n "${HYDRA_RELEASE_SIGNING_KEY:-}" ]; then
                 GPG_KEY_ARGS=(--local-user "$HYDRA_RELEASE_SIGNING_KEY")
+
+                # Fail fast, and diagnose. The gpg first on PATH may be a legacy
+                # install whose keyring cannot see the key at all (macOS commonly
+                # has MacGPG2 2.0.x on PATH shadowing a modern GnuPG 2.2+, which
+                # is where a recently-generated key actually lives). Probing here
+                # names the problem precisely instead of surfacing it as a generic
+                # signing failure after the archive is already built.
+                if ! gpg --list-secret-keys "$HYDRA_RELEASE_SIGNING_KEY" >/dev/null 2>>"$SRC_LOG"; then
+                    echo "  ERROR: gpg has no secret key for HYDRA_RELEASE_SIGNING_KEY=$HYDRA_RELEASE_SIGNING_KEY" >&2
+                    echo "         Using: $(command -v gpg) ($(gpg --version 2>/dev/null | head -1))" >&2
+                    echo "         If another gpg holds this key, put it first on PATH and re-run." >&2
+                    ERRORS=$((ERRORS + 1))
+                fi
             fi
             # Expand defensively: under `set -u`, "${arr[@]}" on an EMPTY array is
             # an "unbound variable" error in bash <= 4.3 (macOS ships bash 3.2),
@@ -611,6 +640,11 @@ else
             if gpg ${GPG_KEY_ARGS[@]+"${GPG_KEY_ARGS[@]}"} --armor --detach-sign --yes \
                  --output "$SRC_TAR.asc" "$SRC_TAR" 2>>"$SRC_LOG"; then
                 echo "  OK: detached signature written -> hydra-${EXPECTED}-src.tar.asc"
+            elif [ -n "${HYDRA_RELEASE_SIGNING_KEY:-}" ]; then
+                echo "  ERROR: gpg signing failed for HYDRA_RELEASE_SIGNING_KEY=$HYDRA_RELEASE_SIGNING_KEY" >&2
+                echo "         (see verify-logs/source-archive.log). A key was requested, so an" >&2
+                echo "         unsigned archive is a release-blocking failure, not a warning." >&2
+                ERRORS=$((ERRORS + 1))
             else
                 echo "  WARNING: gpg signing failed (no key configured? see verify-logs/source-archive.log)"
                 echo "           Set HYDRA_RELEASE_SIGNING_KEY or configure a gpg default key; the"

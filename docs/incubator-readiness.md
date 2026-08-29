@@ -238,7 +238,8 @@ Ordered by how blocking each is for an Apache-style release. Each is independent
    Step 12 builds `hydra-<version>-src.tar.gz` via `git archive` from `HEAD`, emits a `.sha512`
    checksum and a detached `.asc` GPG signature, and asserts `LICENSE`/`NOTICE` are present. This is
    the "release of record"; the Hackage/Maven/PyPI artifacts are convenience binaries downstream of
-   it. Signing degrades to a warning when no key is configured (set `HYDRA_RELEASE_SIGNING_KEY`).
+   it. Signing is a hard gate whenever `HYDRA_RELEASE_SIGNING_KEY` names a key; it degrades to a
+   warning only when no key is configured.
 3. **Publish a `KEYS` file** listing the release managers' public signing keys. ✅ **Done** — repo-root
    [`KEYS`](https://github.com/CategoricalData/hydra/blob/main/KEYS) carries the release manager's
    rsa4096 signing key (`FC93F19114D72013`) plus the import/verify/append procedure. The first signed

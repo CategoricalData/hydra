@@ -323,9 +323,12 @@ and produces the upload-ready artifacts in `release-artifacts/`:
    (Hackage sdists, Maven jars, PyPI wheels) are convenience binaries downstream
    of it. The step asserts `LICENSE` and `NOTICE` are present and tracked (so the
    archive contains both, as a source release must). Signing uses the key named by
-   `HYDRA_RELEASE_SIGNING_KEY` (else gpg's default); a missing key degrades to a
-   warning so the script stays runnable outside a real release, but a real release
-   must be signed. See "Verifying a release" below.
+   `HYDRA_RELEASE_SIGNING_KEY` (else gpg's default). **When that variable names a key,
+   a signing failure is a hard ERROR** — requesting a key and shipping an unsigned
+   archive is release-blocking, not a warning. With no key set, a failure degrades to
+   a warning so the script stays runnable outside a real release. Note that the `gpg`
+   first on `PATH` must be the one holding the key: on macOS a legacy MacGPG2 2.0.x
+   install commonly shadows a modern GnuPG, and cannot see keys stored by the latter. See "Verifying a release" below.
    **Run `prepare-release.sh` from an interactive terminal if you want it to sign.**
    gpg needs a TTY for pinentry; under `nohup`/a detached runner it fails with
    `gpg: cannot open '/dev/tty'` and the step degrades to the unsigned warning even
