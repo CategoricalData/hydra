@@ -14,6 +14,8 @@
 #   bin/test-stale-output-prune.sh            (guards #357, hermetic)
 #   bin/test-test-digest-freshness.sh         (guards #551, needs synced dist/json; SKIPs cleanly otherwise)
 #   bin/test-haskell-bootstrap-demo-deps-sync.sh (guards #670, hermetic)
+#   bin/test-check-oil-and-water.sh           (guards #608, hermetic — synthetic fixtures + python3)
+#   bin/test-header-idempotency.sh            (guards #540, hermetic — restores heads/haskell/*.yaml on exit)
 #
 # The first five build their own Haskell executables from current source
 # before exec'ing them, so this script does not require a pre-built stack
@@ -35,6 +37,8 @@ SCRIPTS=(
     "test-stale-output-prune.sh"
     "test-test-digest-freshness.sh"
     "test-haskell-bootstrap-demo-deps-sync.sh"
+    "test-check-oil-and-water.sh"
+    "test-header-idempotency.sh"
 )
 
 declare -a RESULTS=()
