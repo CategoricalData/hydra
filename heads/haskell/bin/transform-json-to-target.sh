@@ -77,23 +77,17 @@ rm -f "$TRANSFORM_BUILD_LOG"
 #     hydra-wasm): auto-loaded by bootstrap-from-json based on --package.
 # The --package <pkg> flag narrows modsToGenerate to that package and (for
 # non-baseline non-coder packages) auto-loads its main+DSL modules.
-case "$PACKAGE" in
-    hydra-kernel|hydra-haskell)
-        LOAD_FLAGS=""
-        ;;
-    hydra-jvm|hydra-java|hydra-python|hydra-scala|hydra-lisp|hydra-go)
-        LOAD_FLAGS="--include-coders"
-        ;;
-    hydra-pg|hydra-rdf|hydra-coq|hydra-typescript|hydra-ext|hydra-wasm|hydra-bench)
-        # --include-coders is also needed because ext modules reference
-        # coder-package types. The package itself is auto-loaded via --package.
-        LOAD_FLAGS="--include-coders"
-        ;;
-    *)
-        echo "Warning: unknown package '$PACKAGE'; using default load flags." >&2
-        LOAD_FLAGS="--include-coders"
-        ;;
-esac
+# #416: the per-package coder-load decision is promoted data
+# (hydra.build.publishsets.coderBaselineNames → coder-baseline.json); read it via the
+# shared package_requires_coders helper instead of a hardcoded case "$PACKAGE".
+# Baseline (hydra-kernel, hydra-haskell) needs nothing; every other package needs
+# --include-coders (coder packages themselves + ext/data-domain packages whose modules
+# reference coder-package types). An unknown package defaults to needing coders.
+if package_requires_coders "$PACKAGE" "$HYDRA_ROOT_DIR"; then
+    LOAD_FLAGS="--include-coders"
+else
+    LOAD_FLAGS=""
+fi
 
 # `stack exec` resolves to PATH, which can pick up a stale binary from
 # ~/.local/bin/. Invoke the stack-built binary by absolute path to

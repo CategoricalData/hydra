@@ -48,6 +48,11 @@ if [ -z "$REPO_ROOT" ]; then
 fi
 export HYDRA_ROOT_DIR="$REPO_ROOT"
 
+# #416: the per-package coder-load decision is promoted data
+# (hydra.build.publishsets.coderBaselineNames -> coder-baseline.json); read it via the
+# shared package_requires_coders helper instead of a hardcoded case "$pkg".
+source "$REPO_ROOT/bin/lib/common.sh"
+
 if [ -z "${HYDRA_HOST_VERSION:-}" ]; then
     HYDRA_HOST_VERSION="$(python3 -c "import json; print(json.load(open('$REPO_ROOT/hydra.json'))['hostVersion'])")"
 fi
@@ -61,11 +66,16 @@ echo ""
 PACKAGES="$(python3 "$REPO_ROOT/bin/lib/hydra-packages.py" list)"
 
 for pkg in $PACKAGES; do
-    # Load flags mirror the retired seeder's baseline-vs-coder-package split.
-    case "$pkg" in
-        hydra-kernel|hydra-haskell) LOAD_FLAGS="" ;;
-        *)                          LOAD_FLAGS="--include-coders" ;;
-    esac
+    # #416: the coder-load decision is promoted data (coder-baseline.json), read via
+    # the shared package_requires_coders helper — no longer a hand-copied
+    # baseline-vs-coder-package case. Cold-bootstrap safe: the helper falls back to the
+    # hardcoded 2-name baseline when the artifact is not yet generated (seeding against
+    # the published host before the local artifact exists).
+    if package_requires_coders "$pkg" "$REPO_ROOT"; then
+        LOAD_FLAGS="--include-coders"
+    else
+        LOAD_FLAGS=""
+    fi
     case "$pkg" in
         hydra-jvm|hydra-wasm|hydra-ext|hydra-build|hydra-bench) DSL_FLAG="" ;;
         *)                                                       DSL_FLAG="--include-dsls" ;;

@@ -8,7 +8,7 @@
 module Main where
 
 import Hydra.Generation (generateEncoderModules, generateDecoderModules)
-import Hydra.ManifestGeneration (writeExpectedLibrariesJson, writeLanguagesJson, writePerPackageManifestsJson)
+import Hydra.ManifestGeneration (writeCoderBaselineJson, writeExpectedLibrariesJson, writeLanguagesJson, writePerPackageManifestsJson)
 import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
@@ -95,5 +95,9 @@ main = do
   -- loaders can fail-fast (named culprit) when their native runtime is missing a
   -- library the kernel provides (Option A bridge, same as languages.json).
   writeExpectedLibrariesJson defaultDistJsonRoot
+  -- #416: emit the coder-baseline package set so the transform + cold-seed drivers
+  -- read the per-package coder-load decision as data (Option A) instead of each
+  -- hardcoding a case "$PACKAGE" name-branch.
+  writeCoderBaselineJson defaultDistJsonRoot
   putStrLn ""
   putStrLn "=== Done! ==="

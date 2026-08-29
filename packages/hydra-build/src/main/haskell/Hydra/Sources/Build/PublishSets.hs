@@ -48,11 +48,38 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Publish-set dependency-closure guard and leaves-first ordering, shared by the publish drivers")}
   where
    definitions = [
+     toDefinition coderBaselinePackages,
      toDefinition isPublishSetClosed,
      toDefinition packageDepNames,
      toDefinition publishSetTopoOrder,
+     toDefinition requiresCoders,
      toDefinition reverseDepClosure,
      toDefinition strandedDeps]
+
+-- | The plain Haskell list backing 'coderBaselinePackages'. Exposed separately (as
+-- 'expectedLibraryNames' is in @Hydra.Sources.Build.Libraries@) so the native
+-- @coder-baseline.json@ emitter in @Hydra.ManifestGeneration@ can import the names
+-- directly without deconstructing a generated 'Term'. This is the ONE place the
+-- coder-baseline package names are written down (Option-A: names in data).
+coderBaselineNames :: [String]
+coderBaselineNames = ["hydra-kernel", "hydra-haskell"]
+
+-- | The distribution packages that do NOT need coder modules loaded when their
+-- JSON is transformed to a target: the two baseline packages @hydra-kernel@ and
+-- @hydra-haskell@. Every other package (the coder packages themselves, and the
+-- ext/data-domain packages whose modules reference coder-package types) needs the
+-- coder universe loaded — see 'requiresCoders'.
+--
+-- This is the DATA (wrapping 'coderBaselineNames') behind the @case "$PACKAGE"@ that
+-- @heads/haskell/bin/transform-json-to-target.sh@ and @heads/java/bin/
+-- seed-dist-haskell.sh@ each hand-maintained (the latter's own comment noted it
+-- \"mirror[s] the retired seeder's baseline-vs-coder-package split\" — the hand-copy
+-- drift this promotion removes). The drivers read the emitted @coder-baseline.json@ /
+-- the 'requiresCoders' predicate instead of branching on name literals. (#416)
+coderBaselinePackages :: TypedTermDefinition [PackageName]
+coderBaselinePackages = define "coderBaselinePackages" $
+  doc "The packages that need no coders loaded during JSON->target transform (hydra-kernel, hydra-haskell)" $
+  list (fmap (\n -> wrap _PackageName (string n)) coderBaselineNames)
 
 -- | Whether the publish set is dependency-closed given the externally-satisfied
 -- set: true iff 'strandedDeps' is empty. The native caller fails on false and can
@@ -117,6 +144,17 @@ reverseDepClosure = define "reverseDepClosure" $
         (var "packages"))) :: TypedTerm (S.Set PackageName))) $
     Lists.sortBy ("n" ~> unwrap _PackageName @@ var "n") (Sets.toList
       (Sorting.findReachableNodes (var "dependents") (var "root" :: TypedTerm PackageName)))
+
+-- | Whether a package needs the coder universe loaded when its JSON is transformed
+-- to a target language: true for every package EXCEPT the two in
+-- 'coderBaselinePackages'. Promotes the @case "$PACKAGE"@ decision the transform and
+-- cold-seed drivers each hardcoded — the native caller maps @True -> "--include-coders"@,
+-- @False -> ""@ (the load-flags string stays native; the DECISION is the promoted data).
+-- An unknown package name is treated as needing coders (the drivers' safe default). (#416)
+requiresCoders :: TypedTermDefinition (PackageName -> Bool)
+requiresCoders = define "requiresCoders" $
+  doc "Whether a package needs coders loaded during JSON->target transform (all but the baseline packages)" $
+  "pkg" ~> Logic.not (Lists.member (var "pkg") (asTerm coderBaselinePackages))
 
 -- | The (member, missingDependency) pairs that would be stranded by publishing
 -- the given set: for each package in the set, each direct dependency whose name

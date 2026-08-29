@@ -173,6 +173,38 @@ sed_inplace_find() {
     done
 }
 
+# Whether a distribution package needs the coder universe loaded when its JSON is
+# transformed to a target language. Reads the promoted decision as DATA from the
+# generated coder-baseline.json artifact (emitted by update-json-manifest from
+# hydra.build.publishsets.coderBaselineNames — the single source of truth); the two
+# baseline packages listed there (hydra-kernel, hydra-haskell) need NO coders, every
+# other package does. #416: replaces the hand-copied `case "$PACKAGE"` that
+# transform-json-to-target.sh and cold-seed-dist-haskell.sh each maintained.
+#
+# Usage: package_requires_coders <pkg> [<repo-root>]   -> exit 0 (needs coders) / 1 (baseline)
+# The repo root defaults to $HYDRA_ROOT_DIR (set by the callers that source this).
+# Cold-bootstrap fallback: if the artifact or jq is unavailable, fall back to the
+# hardcoded 2-name baseline so a cold build (before the artifact exists) still works —
+# the artifact, when present, is authoritative.
+package_requires_coders() {
+    local pkg="$1"
+    local root="${2:-${HYDRA_ROOT_DIR:-}}"
+    local artifact="$root/dist/json/hydra-build/src/main/json/coder-baseline.json"
+    local baseline=""
+    if [ -n "$root" ] && [ -f "$artifact" ] && command -v jq >/dev/null 2>&1; then
+        baseline=$(jq -r '.coderBaseline[]' "$artifact" 2>/dev/null)
+    fi
+    if [ -z "$baseline" ]; then
+        # Cold-bootstrap fallback (artifact not yet generated): the stable 2-name baseline.
+        baseline=$'hydra-kernel\nhydra-haskell'
+    fi
+    local b
+    while IFS= read -r b; do
+        [ "$pkg" = "$b" ] && return 1   # in baseline -> no coders
+    done <<< "$baseline"
+    return 0                            # not in baseline -> needs coders
+}
+
 # Portable millisecond timestamp.
 # Prints an integer number of milliseconds since the epoch.
 now_ms() {

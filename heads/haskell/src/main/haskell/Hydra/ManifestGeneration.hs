@@ -3,6 +3,7 @@
 -- 'Hydra.Build.ManifestWriter' coupling. Used only by the update-json-manifest
 -- driver, which always runs against a local (non-cold-seed) build.
 module Hydra.ManifestGeneration (
+  writeCoderBaselineJson,
   writeExpectedLibrariesJson,
   writeLanguagesJson,
   writePerPackageManifestsJson,
@@ -15,6 +16,7 @@ import qualified Hydra.Build.ManifestWriter as GenManifestWriter
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Sources.Build.Libraries as Libraries
+import qualified Hydra.Sources.Build.PublishSets as PublishSets
 import qualified Hydra.Sources.Build.Registry as Registry
 
 import qualified Control.Monad as CM
@@ -136,5 +138,31 @@ writeExpectedLibrariesJson distJsonRoot = do
     SD.createDirectoryIfMissing True pkgDir
     writeFile filePath (jsonStr ++ "\n")
     putStrLn $ "Wrote expected-libraries: " ++ filePath
+  where
+    arr names = Json.ValueArray (Json.ValueString <$> names)
+
+-- | Write the coder-baseline package set to
+-- @dist/json/hydra-build/src/main/json/coder-baseline.json@ (#416).
+--
+-- The Option-A data bridge for the per-package coder-load decision: the two packages
+-- (@hydra-kernel@, @hydra-haskell@) that need NO coder modules loaded when their JSON
+-- is transformed to a target. Every other package needs @--include-coders@. This
+-- promotes the @case "$PACKAGE"@ that @transform-json-to-target.sh@ and
+-- @cold-seed-dist-haskell.sh@ each hand-maintained (the latter literally commented
+-- that it "mirror[s]" the former — the drift this removes). The names live once in
+-- 'Hydra.Sources.Build.PublishSets.coderBaselineNames' (wrapped by the translingual
+-- 'coderBaselinePackages' / 'requiresCoders'); the drivers read this artifact instead
+-- of branching on name literals. Emitted with the same 'Hydra.Json.Writer' the
+-- manifests use — a normal tracked generated dist/json artifact, like languages.json.
+writeCoderBaselineJson :: FilePath -> IO ()
+writeCoderBaselineJson distJsonRoot = do
+    let jsonVal = Json.ValueObject [
+          ("coderBaseline", arr PublishSets.coderBaselineNames)]
+        jsonStr = JsonWriter.printJson jsonVal
+        pkgDir  = distJsonRoot FP.</> "hydra-build" FP.</> "src" FP.</> "main" FP.</> "json"
+        filePath = pkgDir FP.</> "coder-baseline.json"
+    SD.createDirectoryIfMissing True pkgDir
+    writeFile filePath (jsonStr ++ "\n")
+    putStrLn $ "Wrote coder-baseline: " ++ filePath
   where
     arr names = Json.ValueArray (Json.ValueString <$> names)
