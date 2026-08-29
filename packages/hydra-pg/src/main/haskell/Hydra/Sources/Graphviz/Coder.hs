@@ -61,6 +61,7 @@ import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
+import qualified Hydra.Sources.Kernel.Terms.Shredding      as Shredding
 import qualified Hydra.Sources.Kernel.Terms.Print.Paths as PrintPaths
 import qualified Hydra.Sources.Kernel.Terms.Print.Core      as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Print.Graph     as PrintGraph
@@ -91,10 +92,12 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([PrintPaths.ns, Names.ns, Rewriting.ns] L.++ (DotSyntax.ns:kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([PrintPaths.ns, Names.ns, Rewriting.ns, Shredding.ns] L.++ (DotSyntax.ns:kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for converting Hydra terms to Graphviz DOT graphs")}
   where
     definitions = [
+      toDefinition graphToSubtermDotGraph,
+      toDefinition graphToSubtermDotStmts,
       toDefinition labelAttr,
       toDefinition labelAttrs,
       toDefinition nodeStyleElement,
@@ -105,8 +108,6 @@ module_ = Module {
       toDefinition termLabel,
       toDefinition termToDotGraph,
       toDefinition termToDotStmts,
-      toDefinition termToSubtermDotGraph,
-      toDefinition termToSubtermDotStmts,
       toDefinition toEdgeStmt,
       toDefinition toNodeId,
       toDefinition toNodeOrSubgraph]
@@ -114,8 +115,66 @@ module_ = Module {
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
--- NodeStyle is represented as a string constant, as there is no custom type definition in the target schema.
--- We use string tags to distinguish styles: "simple", "element", "variable", "primitive"
+-- | Convert a typed graph to a subterm-style (link-view) DOT graph
+graphToSubtermDotGraph :: TypedTermDefinition (Graph -> Dot.Graph)
+graphToSubtermDotGraph = define "graphToSubtermDotGraph" $
+  doc "Convert a typed graph to a subterm-style (link-view) DOT graph" $
+  "graph" ~>
+    record Dot._Graph [
+      Dot._Graph_strict>>: false,
+      Dot._Graph_directed>>: true,
+      Dot._Graph_id>>: nothing,
+      Dot._Graph_statements>>: graphToSubtermDotStmts @@ standardNamespaces @@ var "graph"]
+
+-- | Convert a typed graph to subterm-style (link-view) DOT statements.
+--   The graph is shredded (Hydra.Shredding.shredGraph) into path-addressed links; each node becomes a
+--   DOT node (labelled by its compacted, uniquified name) and each edge-link a DOT edge labelled by its
+--   printed path. Node labelling lives here in the coder, not in the shredder. A shredding failure
+--   (an untyped or ill-formed graph) yields no statements.
+graphToSubtermDotStmts :: TypedTermDefinition (M.Map ModuleName String -> Graph -> [Dot.Stmt])
+graphToSubtermDotStmts = define "graphToSubtermDotStmts" $
+  doc "Convert a typed graph to subterm-style (link-view) DOT statements" $
+  "namespaces" ~> "graph" ~>
+    Eithers.either
+      (constant $ list ([] :: [TypedTerm Dot.Stmt]))
+      ("sg" ~> lets [
+        "nodes">: project _SubtermGraph _SubtermGraph_nodes @@ var "sg",
+        -- Assign a unique DOT label to each node name (labelling is the coder's job).
+        "labelsVisited">: Lists.foldl
+          ("acc" ~> "node" ~> lets [
+            "labels">: ((Pairs.first $ var "acc") :: TypedTerm (M.Map Name String)),
+            "visited">: ((Pairs.second $ var "acc") :: TypedTerm (S.Set String)),
+            "name">: project _SubtermNode _SubtermNode_name @@ var "node",
+            "raw">: Names.compactName @@ var "namespaces" @@ var "name",
+            "uniq">: Names.chooseUniqueLabel @@ var "visited" @@ var "raw"]
+            $ pair
+                (Maps.insert (var "name" :: TypedTerm Name) (var "uniq") (var "labels"))
+                (Sets.insert (var "uniq" :: TypedTerm String) (var "visited")))
+          (pair (Maps.empty :: TypedTerm (M.Map Name String)) (Sets.empty :: TypedTerm (S.Set String)))
+          (var "nodes"),
+        "labels">: ((Pairs.first $ var "labelsVisited") :: TypedTerm (M.Map Name String)),
+        "labelOf">: "name" ~> Optionals.withDefault (Core.unName $ var "name") (Maps.lookup (var "name" :: TypedTerm Name) (var "labels")),
+        "nodeStmt">: "node" ~>
+          inject Dot._Stmt Dot._Stmt_node (record Dot._NodeStmt [
+            Dot._NodeStmt_id>>: toNodeId @@ wrap Dot._Id (var "labelOf" @@ (project _SubtermNode _SubtermNode_name @@ var "node")),
+            Dot._NodeStmt_attributes>>: just $ wrap Dot._AttrList (list [list [labelAttr @@ (var "labelOf" @@ (project _SubtermNode _SubtermNode_name @@ var "node"))]])]),
+        -- One DOT edge per edge-link of a node: source node -> referenced binding, labelled by path.
+        "edgeStmtsForNode">: "node" ~> lets [
+          "srcLabel">: var "labelOf" @@ (project _SubtermNode _SubtermNode_name @@ var "node"),
+          "links">: project _SubtermNode _SubtermNode_links @@ var "node"]
+          $ Optionals.mapOptional
+            ("link" ~> match _SubtermLink (var "link")
+              (Just nothing) [
+              _SubtermLink_edge>>: "e" ~> lets [
+                "tgtLabel">: var "labelOf" @@ (project _SubtermEdge _SubtermEdge_target @@ var "e"),
+                "showPath">: PrintPaths.subtermPath @@ (project _SubtermEdge _SubtermEdge_path @@ var "e")]
+                $ just $ toEdgeStmt @@ wrap Dot._Id (var "srcLabel") @@ wrap Dot._Id (var "tgtLabel") @@
+                    (just $ wrap Dot._AttrList (list [list [labelAttr @@ var "showPath"]]))])
+            (var "links")]
+        $ Lists.concat2
+            (Lists.map (var "nodeStmt") (var "nodes"))
+            (Lists.concat (Lists.map (var "edgeStmtsForNode") (var "nodes"))))
+      (Shredding.shredGraph @@ var "graph")
 
 -- | Create a label attribute equality pair
 labelAttr :: TypedTermDefinition (String -> Dot.EqualityPair)
@@ -146,6 +205,9 @@ labelAttrs = define "labelAttrs" $
               record Dot._EqualityPair [Dot._EqualityPair_left>>: wrap Dot._Id (string "style"), Dot._EqualityPair_right>>: wrap Dot._Id (string "filled")],
               record Dot._EqualityPair [Dot._EqualityPair_left>>: wrap Dot._Id (string "fillcolor"), Dot._EqualityPair_right>>: wrap Dot._Id (string "linen")]])))]
     $ wrap Dot._AttrList (list [Lists.concat2 (list [labelAttr @@ var "lab"]) (var "styleAttrs")])
+
+-- NodeStyle is represented as a string constant, as there is no custom type definition in the target schema.
+-- We use string tags to distinguish styles: "simple", "element", "variable", "primitive"
 
 nodeStyleElement :: TypedTermDefinition String
 nodeStyleElement = define "nodeStyleElement" $
@@ -291,7 +353,7 @@ termToDotStmts = define "termToDotStmts" $
       -- Edge to parent (accessor edge)
       "toAccessorEdgeStmt">: lambdas ["acc", "sty", "i1", "i2"] $
         toEdgeStmt @@ var "i1" @@ var "i2" @@
-          (Optionals.map ("s" ~> labelAttrs @@ var "sty" @@ var "s") (PrintPaths.subtermStep @@ var "acc")),
+          (just (labelAttrs @@ var "sty" @@ (PrintPaths.subtermStep @@ var "acc"))),
       "edgeAttrs">: "lab" ~>
         wrap Dot._AttrList (list [list [record Dot._EqualityPair [Dot._EqualityPair_left>>: wrap Dot._Id (string "label"), Dot._EqualityPair_right>>: wrap Dot._Id (var "lab")]]]),
       "parentStmt">: Optionals.match (var "mparent") (list ([] :: [TypedTerm Dot.Stmt])) ("parent" ~> list [var "toAccessorEdgeStmt" @@ var "accessor" @@ var "style" @@ var "parent" @@ var "selfId"]),
@@ -359,38 +421,6 @@ termToDotStmts = define "termToDotStmts" $
         @@ nothing @@ false @@ (Maps.empty :: TypedTerm (M.Map Name Dot.Id)) @@ nothing
         @@ pair (list ([] :: [TypedTerm Dot.Stmt])) (Sets.empty :: TypedTerm (S.Set String))
         @@ pair Paths.subtermStepAnnotatedBody (var "term")
-
--- | Convert a term to an subterm-style DOT graph
-termToSubtermDotGraph :: TypedTermDefinition (Term -> Dot.Graph)
-termToSubtermDotGraph = define "termToSubtermDotGraph" $
-  doc "Convert a term to an subterm-style DOT graph" $
-  "term" ~>
-    record Dot._Graph [
-      Dot._Graph_strict>>: false,
-      Dot._Graph_directed>>: true,
-      Dot._Graph_id>>: nothing,
-      Dot._Graph_statements>>: termToSubtermDotStmts @@ standardNamespaces @@ var "term"]
-
--- | Convert a term to subterm-style DOT statements
-termToSubtermDotStmts :: TypedTermDefinition (M.Map ModuleName String -> Term -> [Dot.Stmt])
-termToSubtermDotStmts = define "termToSubtermDotStmts" $
-  doc "Convert a term to subterm-style DOT statements" $
-  "namespaces" ~> "term" ~> lets [
-    "accessorGraph">: PrintPaths.termToSubtermGraph @@ var "namespaces" @@ var "term",
-    "nodes">: project _SubtermGraph _SubtermGraph_nodes @@ var "accessorGraph",
-    "edges">: project _SubtermGraph _SubtermGraph_edges @@ var "accessorGraph",
-    "nodeStmt">: "node" ~>
-      inject Dot._Stmt Dot._Stmt_node (record Dot._NodeStmt [
-        Dot._NodeStmt_id>>: toNodeId @@ wrap Dot._Id (project _SubtermNode _SubtermNode_id @@ var "node"),
-        Dot._NodeStmt_attributes>>: just $ wrap Dot._AttrList (list [list [labelAttr @@ (project _SubtermNode _SubtermNode_label @@ var "node")]])]),
-    "edgeStmt">: "edge" ~> lets [
-      "lab1">: project _SubtermNode _SubtermNode_id @@ (project _SubtermEdge _SubtermEdge_source @@ var "edge"),
-      "lab2">: project _SubtermNode _SubtermNode_id @@ (project _SubtermEdge _SubtermEdge_target @@ var "edge"),
-      "pathAccessors">: unwrap _SubtermPath @@ (project _SubtermEdge _SubtermEdge_path @@ var "edge"),
-      "showPath">: Strings.join (string "/") (Optionals.givens (Lists.map (asTerm PrintPaths.subtermStep) (var "pathAccessors")))]
-      $ toEdgeStmt @@ wrap Dot._Id (var "lab1") @@ wrap Dot._Id (var "lab2") @@
-          (just $ wrap Dot._AttrList (list [list [labelAttr @@ var "showPath"]]))]
-    $ Lists.concat2 (Lists.map (var "nodeStmt") (var "nodes")) (Lists.map (var "edgeStmt") (var "edges"))
 
 -- | Create an edge statement
 toEdgeStmt :: TypedTermDefinition (Dot.Id -> Dot.Id -> Maybe Dot.AttrList -> Dot.Stmt)
