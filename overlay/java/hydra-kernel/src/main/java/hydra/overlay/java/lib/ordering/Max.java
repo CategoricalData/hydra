@@ -33,8 +33,7 @@ public class Max extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> {
-            // Simple comparison based on term structure
-            int cmp = args.get(0).toString().compareTo(args.get(1).toString());
+            int cmp = Compare.compareTerms(args.get(0), args.get(1));
             return Either.right(cmp >= 0 ? args.get(0) : args.get(1));
         };
     }
