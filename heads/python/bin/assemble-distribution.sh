@@ -70,13 +70,19 @@ export_generation_env python
 # the pre-#357 layout.
 #
 # Generalized from the kernel-only runtime copy (#418) to any package (#511):
-# copy-overlay.sh is a no-op for packages with no overlay/python/<pkg>/ tree, and
-# copies the overlay onto the dist for those that have one (hydra-kernel runtime;
-# hydra-pg / hydra-rdf binding source folded into overlay; etc.).
+# a no-op for packages with no overlay/python/<pkg>/ tree, and copies the overlay
+# onto the dist for those that have one (hydra-kernel runtime; hydra-pg / hydra-rdf
+# binding source folded into overlay; etc.).
+#
+# #416: this used to call the per-host copy-overlay.sh. It now calls the
+# host-independent bin/apply-assembly-plan.sh — the pure native executor of the
+# promoted hydra.build.assemblyplan.deriveAssemblyPlan plan. Byte-identical to
+# copy-overlay.sh (asserted by bin/test-assembly-plan-conformance.sh); the executor is
+# pure bash (no host toolchain), collapsing the per-host overlay-copy duplication.
 KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-python.XXXXXX)"
 trap 'rm -f "$KEEP_MANIFEST"' EXIT
-echo "Step 0: Copying hand-written Python overlay source into $PACKAGE dist (if any)..."
-"$SCRIPT_DIR/copy-overlay.sh" "$PACKAGE" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
+echo "Step 0: Applying assembly plan (overlay + keep-paths) for $PACKAGE (if any)..."
+"$HYDRA_ROOT_DIR/bin/apply-assembly-plan.sh" python "$PACKAGE" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
 echo ""
 
 # Step 1: Main modules.
