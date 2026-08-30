@@ -58,8 +58,13 @@ done
 # which files are hand-written and must be preserved.
 KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-java.XXXXXX)"
 trap 'rm -f "$KEEP_MANIFEST"' EXIT
-echo "Step 0: Copying hand-written Java runtime into hydra-kernel dist..."
-"$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
+# #416: the hydra-kernel runtime overlay-copy is the same plan the general
+# copy-overlay path uses, pinned to hydra-kernel. Call the host-independent
+# bin/apply-assembly-plan.sh (pure-bash executor of the promoted assembly plan)
+# instead of the per-host copy-kernel-runtime.sh. Byte-identical (asserted by
+# bin/test-assembly-plan-conformance.sh).
+echo "Step 0: Applying hydra-kernel assembly plan (Java runtime overlay + keep-paths)..."
+"$HYDRA_ROOT_DIR/bin/apply-assembly-plan.sh" java hydra-kernel --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
 echo ""
 
 echo "Step 1: Generating main Java modules for every package..."

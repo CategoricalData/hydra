@@ -73,6 +73,51 @@ for lang in $REFERENCE_HOSTS; do
     done
 done
 
+# The hydra-kernel copy-kernel-runtime.sh family (the SECOND overlay-copy family, in
+# assemble-all.sh) — the plain-merge hosts whose kernel-runtime overlay this executor
+# also supersedes. TypeScript is EXCLUDED: its copy-kernel-runtime is a selective
+# per-file copy (runtime.ts/primitives.ts/bootstrap.ts + lib/overlay subtrees + a
+# package.json ESM write), NOT the plain whole-src merge — promoting it needs the plan's
+# richer per-file entries (P3 §1a), a separate item; it stays native for now.
+# java/python take --manifest (checked); scala/go emit no keep-manifest (dist-only check).
+KERNEL_RUNTIME_HOSTS="java python scala go"
+for lang in $KERNEL_RUNTIME_HOSTS; do
+    ckr="$HYDRA_ROOT_DIR/heads/$lang/bin/copy-kernel-runtime.sh"
+    [ -x "$ckr" ] || continue
+    [ -d "$HYDRA_ROOT_DIR/overlay/$lang/hydra-kernel/src" ] || continue
+
+    apply_root="$TMP/ckr/$lang/apply"
+    copy_root="$TMP/ckr/$lang/copy"
+    mkdir -p "$apply_root" "$copy_root"
+    apply_manifest="$TMP/ckr/$lang/apply.keep"
+    copy_manifest="$TMP/ckr/$lang/copy.keep"
+
+    "$APPLY" "$lang" hydra-kernel --dist-root "$apply_root" --manifest "$apply_manifest" >/dev/null
+    # copy-kernel-runtime takes --manifest only where it supports one (java/python); the
+    # extra flag is harmlessly ignored by the scala/go variants that don't parse it.
+    "$ckr" --dist-root "$copy_root" --manifest "$copy_manifest" >/dev/null 2>&1 || \
+        "$ckr" --dist-root "$copy_root" >/dev/null
+
+    checked=$((checked + 1))
+
+    if ! diff -r "$apply_root" "$copy_root" >/dev/null 2>&1; then
+        echo "DRIFT [$lang/hydra-kernel]: dist tree differs (apply-assembly-plan vs copy-kernel-runtime):" >&2
+        diff -r "$apply_root" "$copy_root" >&2 | head -20
+        fail=1
+    fi
+
+    # Only compare keep-manifests when copy-kernel-runtime actually emitted one.
+    if [ -s "$copy_manifest" ]; then
+        norm_apply="$(sed "s|$apply_root|DISTROOT|g" "$apply_manifest" 2>/dev/null | sort)"
+        norm_copy="$(sed "s|$copy_root|DISTROOT|g" "$copy_manifest" 2>/dev/null | sort)"
+        if [ "$norm_apply" != "$norm_copy" ]; then
+            echo "DRIFT [$lang/hydra-kernel]: keep-manifest differs (apply-assembly-plan vs copy-kernel-runtime):" >&2
+            diff <(printf '%s\n' "$norm_apply") <(printf '%s\n' "$norm_copy") >&2 | head -20
+            fail=1
+        fi
+    fi
+done
+
 if [ "$checked" -eq 0 ]; then
     echo "test-assembly-plan-conformance: no overlay trees found to check — did the repo layout change?" >&2
     exit 1
