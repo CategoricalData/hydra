@@ -484,16 +484,24 @@ Types:
   hydra.parsing.ParseResult = (∀a.union{success:(hydra.parsing.ParseSuccess @ a), failure:hydra.parsing.ParseError})
   hydra.parsing.ParseSuccess = (∀a.record{value:a, remainder:list<int32>})
   hydra.parsing.Parser = (∀a.wrap((list<int32> → (hydra.parsing.ParseResult @ a))))
-  hydra.paths.SubtermEdge = record{source:hydra.paths.SubtermNode, path:hydra.paths.SubtermPath, target:hydra.paths.SubtermNode}
-  hydra.paths.SubtermGraph = record{nodes:list<hydra.paths.SubtermNode>, edges:list<hydra.paths.SubtermEdge>}
-  hydra.paths.SubtermNode = record{name:hydra.core.Name, label:string, id:string}
+  hydra.paths.SubtermAttribute = record{path:hydra.paths.SubtermPath, target:hydra.paths.TermAttribute}
+  hydra.paths.SubtermEdge = record{path:hydra.paths.SubtermPath, target:hydra.core.Name}
+  hydra.paths.SubtermGraph = record{nodes:list<hydra.paths.SubtermNode>}
+  hydra.paths.SubtermLink = union{edge:hydra.paths.SubtermEdge, property:hydra.paths.SubtermProperty, attribute:hydra.paths.SubtermAttribute}
+  hydra.paths.SubtermNode = record{name:hydra.core.Name, type:hydra.core.TypeScheme, links:list<hydra.paths.SubtermLink>}
   hydra.paths.SubtermPath = wrap(list<hydra.paths.SubtermStep>)
-  hydra.paths.SubtermStep = union{annotatedBody:unit, applicationFunction:unit, applicationArgument:unit, lambdaBody:unit, unionCasesDefault:unit, unionCasesBranch:hydra.core.Name, letBody:unit, letBinding:hydra.core.Name, listElement:int32, mapKey:int32, mapValue:int32, optionalTerm:unit, productTerm:int32, recordField:hydra.core.Name, setElement:int32, sumTerm:unit, typeLambdaBody:unit, typeApplicationTerm:unit, injectionTerm:unit, wrappedTerm:unit}
-  hydra.paths.SubtypeEdge = record{source:hydra.paths.SubtypeNode, path:hydra.paths.SubtypePath, target:hydra.paths.SubtypeNode}
-  hydra.paths.SubtypeGraph = record{nodes:list<hydra.paths.SubtypeNode>, edges:list<hydra.paths.SubtypeEdge>}
-  hydra.paths.SubtypeNode = record{name:hydra.core.Name, label:string, id:string}
+  hydra.paths.SubtermProperty = record{path:hydra.paths.SubtermPath, target:hydra.core.Term}
+  hydra.paths.SubtermStep = union{annotatedAnnotation:unit, annotatedBody:unit, applicationArgument:unit, applicationFunction:unit, casesCase:hydra.core.Name, casesDefault:unit, eitherLeft:unit, eitherRight:unit, injectField:hydra.core.Name, lambdaBody:unit, letBinding:hydra.core.Name, letBody:unit, listElement:int32, mapKey:int32, mapValue:int32, optionalGiven:unit, pairFirst:unit, pairSecond:unit, recordField:hydra.core.Name, setElement:int32, typeApplicationBody:unit, typeLambdaBody:unit, wrapBody:unit}
+  hydra.paths.SubtypeAttribute = record{path:hydra.paths.SubtypePath, target:hydra.paths.TypeAttribute}
+  hydra.paths.SubtypeEdge = record{path:hydra.paths.SubtypePath, target:hydra.core.Name}
+  hydra.paths.SubtypeGraph = record{nodes:list<hydra.paths.SubtypeNode>}
+  hydra.paths.SubtypeLink = union{edge:hydra.paths.SubtypeEdge, property:hydra.paths.SubtypeProperty, attribute:hydra.paths.SubtypeAttribute}
+  hydra.paths.SubtypeNode = record{name:hydra.core.Name, links:list<hydra.paths.SubtypeLink>}
   hydra.paths.SubtypePath = wrap(list<hydra.paths.SubtypeStep>)
-  hydra.paths.SubtypeStep = union{annotatedBody:unit, applicationFunction:unit, applicationArgument:unit, eitherLeft:unit, eitherRight:unit, forallBody:unit, functionDomain:unit, functionCodomain:unit, listElement:unit, mapKeys:unit, mapValues:unit, optionalElement:unit, pairFirst:unit, pairSecond:unit, recordField:hydra.core.Name, setElement:unit, unionField:hydra.core.Name, wrappedType:unit}
+  hydra.paths.SubtypeProperty = record{path:hydra.paths.SubtypePath, target:hydra.core.Type}
+  hydra.paths.SubtypeStep = union{annotatedBody:unit, applicationArgument:unit, applicationFunction:unit, effectValue:unit, eitherLeft:unit, eitherRight:unit, forallBody:unit, functionCodomain:unit, functionDomain:unit, listElement:unit, mapKeys:unit, mapValues:unit, optionalElement:unit, pairFirst:unit, pairSecond:unit, recordField:hydra.core.Name, setElement:unit, unionField:hydra.core.Name, wrapBody:unit}
+  hydra.paths.TermAttribute = union{casesTypeName:hydra.core.Name, injectTypeName:hydra.core.Name, lambdaDomainGiven:hydra.core.Type, lambdaParameter:hydra.core.Name, letBindingTypeSchemeGiven:(hydra.core.Name, hydra.core.TypeScheme), projectFieldName:hydra.core.Name, projectTypeName:hydra.core.Name, recordTypeName:hydra.core.Name, typeApplicationType:hydra.core.Type, typeLambdaParameter:hydra.core.Name, wrapTypeName:hydra.core.Name}
+  hydra.paths.TypeAttribute = union{annotatedAnnotation:hydra.core.Term, forallParameter:hydra.core.Name}
   hydra.query.ComparisonConstraint = union{equal:unit, notEqual:unit, lessThan:unit, greaterThan:unit, lessThanOrEqual:unit, greaterThanOrEqual:unit}
   hydra.query.Edge = record{type:hydra.core.Name, out:optional<hydra.core.Name>, in:optional<hydra.core.Name>}
   hydra.query.GraphPattern = record{graph:hydra.core.Name, patterns:list<hydra.query.Pattern>}
@@ -913,16 +921,24 @@ Terms:
   hydra.decode.parsing.parseError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.parsing.ParseError>))
   hydra.decode.parsing.parseResult : (forall t0. ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, t0>) → hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, (hydra.parsing.ParseResult @ t0)>))
   hydra.decode.parsing.parseSuccess : (forall t0. ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, t0>) → hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, (hydra.parsing.ParseSuccess @ t0)>))
+  hydra.decode.paths.subtermAttribute : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermAttribute>))
   hydra.decode.paths.subtermEdge : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermEdge>))
   hydra.decode.paths.subtermGraph : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermGraph>))
+  hydra.decode.paths.subtermLink : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermLink>))
   hydra.decode.paths.subtermNode : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermNode>))
   hydra.decode.paths.subtermPath : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermPath>))
+  hydra.decode.paths.subtermProperty : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermProperty>))
   hydra.decode.paths.subtermStep : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermStep>))
+  hydra.decode.paths.subtypeAttribute : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypeAttribute>))
   hydra.decode.paths.subtypeEdge : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypeEdge>))
   hydra.decode.paths.subtypeGraph : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypeGraph>))
+  hydra.decode.paths.subtypeLink : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypeLink>))
   hydra.decode.paths.subtypeNode : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypeNode>))
   hydra.decode.paths.subtypePath : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypePath>))
+  hydra.decode.paths.subtypeProperty : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypeProperty>))
   hydra.decode.paths.subtypeStep : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypeStep>))
+  hydra.decode.paths.termAttribute : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TermAttribute>))
+  hydra.decode.paths.typeAttribute : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TypeAttribute>))
   hydra.decode.query.comparisonConstraint : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.query.ComparisonConstraint>))
   hydra.decode.query.edge : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.query.Edge>))
   hydra.decode.query.graphPattern : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.query.GraphPattern>))
@@ -1253,16 +1269,24 @@ Terms:
   hydra.encode.parsing.parseError : ((hydra.parsing.ParseError → hydra.core.Term))
   hydra.encode.parsing.parseResult : (forall t0. ((t0 → hydra.core.Term) → (hydra.parsing.ParseResult @ t0) → hydra.core.Term))
   hydra.encode.parsing.parseSuccess : (forall t0. ((t0 → hydra.core.Term) → (hydra.parsing.ParseSuccess @ t0) → hydra.core.Term))
+  hydra.encode.paths.subtermAttribute : ((hydra.paths.SubtermAttribute → hydra.core.Term))
   hydra.encode.paths.subtermEdge : ((hydra.paths.SubtermEdge → hydra.core.Term))
   hydra.encode.paths.subtermGraph : ((hydra.paths.SubtermGraph → hydra.core.Term))
+  hydra.encode.paths.subtermLink : ((hydra.paths.SubtermLink → hydra.core.Term))
   hydra.encode.paths.subtermNode : ((hydra.paths.SubtermNode → hydra.core.Term))
   hydra.encode.paths.subtermPath : ((hydra.paths.SubtermPath → hydra.core.Term))
+  hydra.encode.paths.subtermProperty : ((hydra.paths.SubtermProperty → hydra.core.Term))
   hydra.encode.paths.subtermStep : ((hydra.paths.SubtermStep → hydra.core.Term))
+  hydra.encode.paths.subtypeAttribute : ((hydra.paths.SubtypeAttribute → hydra.core.Term))
   hydra.encode.paths.subtypeEdge : ((hydra.paths.SubtypeEdge → hydra.core.Term))
   hydra.encode.paths.subtypeGraph : ((hydra.paths.SubtypeGraph → hydra.core.Term))
+  hydra.encode.paths.subtypeLink : ((hydra.paths.SubtypeLink → hydra.core.Term))
   hydra.encode.paths.subtypeNode : ((hydra.paths.SubtypeNode → hydra.core.Term))
   hydra.encode.paths.subtypePath : ((hydra.paths.SubtypePath → hydra.core.Term))
+  hydra.encode.paths.subtypeProperty : ((hydra.paths.SubtypeProperty → hydra.core.Term))
   hydra.encode.paths.subtypeStep : ((hydra.paths.SubtypeStep → hydra.core.Term))
+  hydra.encode.paths.termAttribute : ((hydra.paths.TermAttribute → hydra.core.Term))
+  hydra.encode.paths.typeAttribute : ((hydra.paths.TypeAttribute → hydra.core.Term))
   hydra.encode.query.comparisonConstraint : ((hydra.query.ComparisonConstraint → hydra.core.Term))
   hydra.encode.query.edge : ((hydra.query.Edge → hydra.core.Term))
   hydra.encode.query.graphPattern : ((hydra.query.GraphPattern → hydra.core.Term))
@@ -1832,8 +1856,14 @@ Terms:
   hydra.print.errors.untypedLambdaError : (forall t0. (t0 → string))
   hydra.print.errors.untypedLetBindingError : ((hydra.error.checking.UntypedLetBindingError → string))
   hydra.print.graph.graph : ((list<hydra.core.Binding> → string))
-  hydra.print.paths.subtermStep : ((hydra.paths.SubtermStep → optional<string>))
-  hydra.print.paths.termToSubtermGraph : ((map<hydra.packaging.ModuleName, string> → hydra.core.Term → hydra.paths.SubtermGraph))
+  hydra.print.paths.parseSubtermPath : ((string → optional<hydra.paths.SubtermPath>))
+  hydra.print.paths.parseSubtermStep : ((string → optional<hydra.paths.SubtermStep>))
+  hydra.print.paths.parseSubtypePath : ((string → optional<hydra.paths.SubtypePath>))
+  hydra.print.paths.parseSubtypeStep : ((string → optional<hydra.paths.SubtypeStep>))
+  hydra.print.paths.subtermPath : ((hydra.paths.SubtermPath → string))
+  hydra.print.paths.subtermStep : ((hydra.paths.SubtermStep → string))
+  hydra.print.paths.subtypePath : ((hydra.paths.SubtypePath → string))
+  hydra.print.paths.subtypeStep : ((hydra.paths.SubtypeStep → string))
   hydra.print.pcre.regex.alternation : ((list<list<hydra.regex.Quantified>> → string))
   hydra.print.pcre.regex.atom : ((hydra.regex.Atom → string))
   hydra.print.pcre.regex.characterClass : ((hydra.regex.CharacterClass → string))
@@ -1949,6 +1979,7 @@ Terms:
   hydra.rewriting.subterms : ((hydra.core.Term → list<hydra.core.Term>))
   hydra.rewriting.subtermsWithSteps : ((hydra.core.Term → list<(hydra.paths.SubtermStep, hydra.core.Term)>))
   hydra.rewriting.subtypes : ((hydra.core.Type → list<hydra.core.Type>))
+  hydra.rewriting.subtypesWithSteps : ((hydra.core.Type → list<(hydra.paths.SubtypeStep, hydra.core.Type)>))
   hydra.rewriting.wrapTermToRecord : ((hydra.core.Name → hydra.core.Term → hydra.core.Term))
   hydra.rewriting.wrapTypeToRecord : ((hydra.core.Type → hydra.core.Type))
   hydra.scoping.extendGraphForLambda : ((hydra.graph.Graph → hydra.core.Lambda → hydra.graph.Graph))
@@ -2019,6 +2050,14 @@ Terms:
   hydra.serialization.unsupportedVariant : ((string → string → hydra.ast.Expr))
   hydra.serialization.withComma : ((hydra.ast.Expr → hydra.ast.Expr))
   hydra.serialization.withSemi : ((hydra.ast.Expr → hydra.ast.Expr))
+  hydra.shredding.shredGraph : ((hydra.graph.Graph → either<hydra.errors.Error, hydra.paths.SubtermGraph>))
+  hydra.shredding.shredSchema : ((map<hydra.core.Name, hydra.core.Type> → either<hydra.errors.Error, hydra.paths.SubtypeGraph>))
+  hydra.shredding.shredTerm : ((hydra.graph.Graph → hydra.core.Name → hydra.core.TypeScheme → hydra.core.Term → either<hydra.errors.Error, hydra.paths.SubtermNode>))
+  hydra.shredding.shredTermLinks : ((hydra.graph.Graph → set<hydra.core.Name> → hydra.paths.SubtermPath → hydra.core.Term → either<hydra.errors.Error, list<hydra.paths.SubtermLink>>))
+  hydra.shredding.shredType : (forall t0. (map<hydra.core.Name, t0> → hydra.core.Name → hydra.core.Type → either<hydra.errors.Error, hydra.paths.SubtypeNode>))
+  hydra.shredding.shredTypeLinks : (forall t0. (map<hydra.core.Name, t0> → set<hydra.core.Name> → hydra.paths.SubtypePath → hydra.core.Type → either<hydra.errors.Error, list<hydra.paths.SubtypeLink>>))
+  hydra.shredding.termAttributes : ((hydra.paths.SubtermPath → hydra.core.Term → list<hydra.paths.SubtermAttribute>))
+  hydra.shredding.typeAttributes : ((hydra.paths.SubtypePath → hydra.core.Type → list<hydra.paths.SubtypeAttribute>))
   hydra.sorting.adjacencyListToMap : (forall t0,t1. (ordering t0) => (list<(t0, list<t1>)> → map<t0, list<t1>>))
   hydra.sorting.adjacencyListsToGraph : (forall t0. (ordering t0) => (list<(t0, list<t0>)> → (map<int32, list<int32>>, (int32 → optional<t0>))))
   hydra.sorting.createOrderingIsomorphism : (forall t0,t1. (ordering t0) => (list<t0> → list<t0> → (hydra.topology.OrderingIsomorphism @ t1)))
