@@ -395,6 +395,7 @@
 (load-test-file "reduction.lisp")
 (load-test-file "rewriting.lisp")
 (load-test-file "serialization.lisp")
+(load-test-file "shredding.lisp")
 (load-test-file "sorting.lisp")
 (load-test-file "strip.lisp")
 (load-test-file "substitution.lisp")

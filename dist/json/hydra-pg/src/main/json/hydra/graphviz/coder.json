@@ -158,7 +158,7 @@
                                                               "let": {
                                                                 "bindings": [
                                                                   {
-                                                                    "name": "labels",
+                                                                    "name": "accLabels",
                                                                     "term": {
                                                                       "application": {
                                                                         "function": {
@@ -174,7 +174,7 @@
                                                                       "body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": "string"}}},
                                                                       "constraints": []}},
                                                                   {
-                                                                    "name": "visited",
+                                                                    "name": "accVisited",
                                                                     "term": {
                                                                       "application": {
                                                                         "function": {
@@ -204,7 +204,7 @@
                                                                     "name": "uniq",
                                                                     "term": {
                                                                       "application": {
-                                                                        "function": {"application": {"function": {"variable": "hydra.names.chooseUniqueLabel"}, "argument": {"variable": "visited"}}},
+                                                                        "function": {"application": {"function": {"variable": "hydra.names.chooseUniqueLabel"}, "argument": {"variable": "accVisited"}}},
                                                                         "argument": {"variable": "raw"}}},
                                                                     "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
                                                                 "body": {
@@ -225,14 +225,14 @@
                                                                                             "type": {"literal": "string"}}},
                                                                                         "argument": {"variable": "name"}}},
                                                                                     "argument": {"variable": "uniq"}}},
-                                                                                "argument": {"variable": "labels"}}},
+                                                                                "argument": {"variable": "accLabels"}}},
                                                                             "second": {
                                                                               "application": {
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.insert"}, "type": {"literal": "string"}}},
                                                                                     "argument": {"variable": "uniq"}}},
-                                                                                "argument": {"variable": "visited"}}}}},
+                                                                                "argument": {"variable": "accVisited"}}}}},
                                                                         "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": "string"}}}}},
                                                                     "type": {"set": {"literal": "string"}}}}}}}}}}}},
                                                 "argument": {

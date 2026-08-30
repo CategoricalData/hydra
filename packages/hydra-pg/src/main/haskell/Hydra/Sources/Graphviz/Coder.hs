@@ -142,14 +142,14 @@ graphToSubtermDotStmts = define "graphToSubtermDotStmts" $
         -- Assign a unique DOT label to each node name (labelling is the coder's job).
         "labelsVisited">: Lists.foldl
           ("acc" ~> "node" ~> lets [
-            "labels">: ((Pairs.first $ var "acc") :: TypedTerm (M.Map Name String)),
-            "visited">: ((Pairs.second $ var "acc") :: TypedTerm (S.Set String)),
+            "accLabels">: ((Pairs.first $ var "acc") :: TypedTerm (M.Map Name String)),
+            "accVisited">: ((Pairs.second $ var "acc") :: TypedTerm (S.Set String)),
             "name">: project _SubtermNode _SubtermNode_name @@ var "node",
             "raw">: Names.compactName @@ var "namespaces" @@ var "name",
-            "uniq">: Names.chooseUniqueLabel @@ var "visited" @@ var "raw"]
+            "uniq">: Names.chooseUniqueLabel @@ var "accVisited" @@ var "raw"]
             $ pair
-                (Maps.insert (var "name" :: TypedTerm Name) (var "uniq") (var "labels"))
-                (Sets.insert (var "uniq" :: TypedTerm String) (var "visited")))
+                (Maps.insert (var "name" :: TypedTerm Name) (var "uniq") (var "accLabels"))
+                (Sets.insert (var "uniq" :: TypedTerm String) (var "accVisited")))
           (pair (Maps.empty :: TypedTerm (M.Map Name String)) (Sets.empty :: TypedTerm (S.Set String)))
           (var "nodes"),
         "labels">: ((Pairs.first $ var "labelsVisited") :: TypedTerm (M.Map Name String)),
