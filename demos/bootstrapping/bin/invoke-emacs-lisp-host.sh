@@ -69,11 +69,29 @@ fi
 # Use --eval+load instead of -l to avoid byte-compiling the bootstrap file,
 # which can overflow the bytecode compiler's C stack on deeply nested forms.
 # Prefer Emacs 30+ with native compilation when available (5-10x faster).
-EMACS_CMD="emacs"
-if [ -x "/opt/homebrew/opt/emacs-plus@30/bin/emacs-30.2" ]; then
-    EMACS_CMD="/opt/homebrew/opt/emacs-plus@30/bin/emacs-30.2"
-elif command -v emacs > /dev/null 2>&1; then
-    EMACS_CMD="emacs"
+# Probe candidates by actually RUNNING them, not merely testing -x: a Homebrew
+# binary can remain executable while its linked libraries have moved out from
+# under it (e.g. emacs-plus@30 built against the retired `jpeg` formula aborts
+# with "Library not loaded: libjpeg.10.dylib"). An -x-only check would select
+# that broken binary over a working `emacs` further down the list.
+EMACS_CMD=""
+for _candidate in \
+    "/opt/homebrew/opt/emacs-plus@30/bin/emacs-30.2" \
+    "/opt/homebrew/bin/emacs" \
+    "/Applications/Emacs.app/Contents/MacOS/Emacs" \
+    "emacs"; do
+    if command -v "$_candidate" > /dev/null 2>&1 || [ -x "$_candidate" ]; then
+        if "$_candidate" --batch --eval '(kill-emacs 0)' > /dev/null 2>&1; then
+            EMACS_CMD="$_candidate"
+            break
+        else
+            echo "  Skipping non-functional Emacs: $_candidate" >&2
+        fi
+    fi
+done
+if [ -z "$EMACS_CMD" ]; then
+    echo "  ERROR: no working Emacs found (tried emacs-plus@30, emacs, Emacs.app)" >&2
+    exit 1
 fi
 echo "  Emacs: $EMACS_CMD ($($EMACS_CMD --version 2>&1 | head -1))"
 
