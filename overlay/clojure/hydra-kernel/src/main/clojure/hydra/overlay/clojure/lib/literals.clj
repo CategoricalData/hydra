@@ -114,21 +114,29 @@
           ;; Fixed notation
           (let [s (str d)]
             (if (.contains s ".") s (str s ".0")))
-          ;; Scientific notation (Haskell style: X.YeN)
-          (let [s (String/format "%.15e" (object-array [(double d)]))
-                ;; Parse mantissa and exponent
-                [_ mant exp-str] (re-matches #"(-?\d+\.\d+)e([+-]?\d+)" s)
-                exp (Integer/parseInt exp-str)
-                ;; Normalize: keep one digit before decimal
-                mant-d (Double/parseDouble mant)
-                ;; Remove trailing zeros from mantissa
-                mant-s (loop [m (str mant-d)]
-                         (if (and (.endsWith m "0") (not (.endsWith m ".0")))
-                           (recur (subs m 0 (dec (count m))))
-                           m))
-                ;; Ensure at least one decimal place
-                mant-s (if (.contains mant-s ".") mant-s (str mant-s ".0"))]
-            (str mant-s "e" exp)))))))
+          ;; Scientific notation (Haskell style: X.YeN).
+          ;; Derive the digits from Double/toString, which is shortest-round-trip,
+          ;; rather than String/format "%.15e": a fixed 15-place format is lossy
+          ;; (1.0e-2 becomes 1.000000000000000e-02, which reparses as
+          ;; 1.0000000000000002e-2) and loses precision on subnormals.
+          (let [s (str abs-d)
+                [_ mant exp-str] (re-matches #"([\d.]+)E([+-]?\d+)" s)
+                digits (.replace ^String (or mant s) "." "")
+                pt (if mant
+                     (+ (.indexOf ^String mant ".") (Integer/parseInt exp-str))
+                     (.indexOf ^String s "."))
+                lead (or (first (keep-indexed #(when (not= %2 \0) %1) digits)) 0)
+                e (- pt lead 1)
+                sig (let [t (subs digits lead)]
+                      (loop [i (count t)]
+                        (if (and (> i 1) (= \0 (.charAt ^String t (dec i))))
+                          (recur (dec i))
+                          (subs t 0 i))))
+                sig (if (empty? sig) "0" sig)
+                out (if (= 1 (count sig))
+                      (str sig ".0")
+                      (str (subs sig 0 1) "." (subs sig 1)))]
+            (str (if neg? "-" "") out "e" e)))))))
 
 ;; Show functions
 (def hydra_overlay_clojure_lib_literals_print_bigint (fn [x] (str x)))
