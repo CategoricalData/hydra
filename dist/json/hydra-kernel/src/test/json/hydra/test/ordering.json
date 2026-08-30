@@ -4525,7 +4525,7 @@
                                       "record": {
                                         "typeName": "hydra.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "Number float vs int (variant name comparison)"}}},
+                                          {"name": "name", "term": {"literal": {"string": "Number float vs int (field-name order, not declared-variant order)"}}},
                                           {
                                             "name": "case",
                                             "term": {

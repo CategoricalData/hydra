@@ -361,11 +361,15 @@ unionComparisonTests = subgroup "Union comparison" [
     (numberFloatTerm 1.5)
     (numberFloatTerm 2.5)
     "lessThan",
-  -- Different variants (compared by variant name)
-  compareTest "Number float vs int (variant name comparison)"
+  -- Different variants: Term.Inject's runtime representation (Injection {typeName,
+  -- field :: Field {name, term}}) carries only the field NAME, not the union's declared
+  -- variant order (that lives in the Type schema, which compare/Ord never receives — see
+  -- #718's follow-up). So cross-variant injections compare by field name, not declaration
+  -- order; this is the best available term-only approximation, not full spec conformance.
+  compareTest "Number float vs int (field-name order, not declared-variant order)"
     (numberFloatTerm 100.0)
     (numberIntTerm 1)
-    "lessThan",  -- "float" < "int" alphabetically
+    "lessThan",  -- "float" < "int" by field name
   -- Equality
   equalTest "Number int equality true" 
     (numberIntTerm 42)
