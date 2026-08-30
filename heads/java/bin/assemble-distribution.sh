@@ -73,13 +73,21 @@ export_generation_env java
 # letting the prune step delete stale generated classes from removed modules.
 #
 # Generalized from the kernel-only runtime copy (#418) to any package (#511):
-# copy-overlay.sh is a no-op for packages with no overlay/java/<pkg>/ tree, and
-# copies the overlay onto the dist for those that have one (hydra-kernel runtime;
-# hydra-pg / hydra-rdf binding source folded into overlay; etc.).
+# a no-op for packages with no overlay/java/<pkg>/ tree, and copies the overlay
+# onto the dist for those that have one (hydra-kernel runtime; hydra-pg / hydra-rdf
+# binding source folded into overlay; etc.).
+#
+# #416: this used to call the per-host copy-overlay.sh (java 95L, duplicated across
+# ~11 hosts). It now calls the host-independent bin/apply-assembly-plan.sh — the pure
+# native executor of the promoted hydra.build.assemblyplan.deriveAssemblyPlan (the
+# overlay-merge + keep-paths plan). Byte-identical to copy-overlay.sh (asserted by
+# bin/test-assembly-plan-conformance.sh, wired into test-regressions.sh); the executor
+# is pure bash (no host toolchain) and derives the plan as a data-driven fold, killing
+# the per-host duplication.
 KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-java.XXXXXX)"
 trap 'rm -f "$KEEP_MANIFEST"' EXIT
-echo "Step 0: Copying hand-written Java overlay source into $PACKAGE dist (if any)..."
-"$SCRIPT_DIR/copy-overlay.sh" "$PACKAGE" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
+echo "Step 0: Applying assembly plan (overlay + keep-paths) for $PACKAGE (if any)..."
+"$HYDRA_ROOT_DIR/bin/apply-assembly-plan.sh" java "$PACKAGE" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
 echo ""
 
 # Step 1: Main modules.

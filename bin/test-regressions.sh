@@ -16,6 +16,7 @@
 #   bin/test-haskell-bootstrap-demo-deps-sync.sh (guards #670, hermetic)
 #   bin/test-check-oil-and-water.sh           (guards #608, hermetic — synthetic fixtures + python3)
 #   bin/test-header-idempotency.sh            (guards #540, hermetic — restores heads/haskell/*.yaml on exit)
+#   bin/test-assembly-plan-conformance.sh     (guards #416, hermetic — apply-assembly-plan.sh ≡ plan oracle)
 #
 # The first five build their own Haskell executables from current source
 # before exec'ing them, so this script does not require a pre-built stack
@@ -39,6 +40,7 @@ SCRIPTS=(
     "test-haskell-bootstrap-demo-deps-sync.sh"
     "test-check-oil-and-water.sh"
     "test-header-idempotency.sh"
+    "test-assembly-plan-conformance.sh"
 )
 
 declare -a RESULTS=()
