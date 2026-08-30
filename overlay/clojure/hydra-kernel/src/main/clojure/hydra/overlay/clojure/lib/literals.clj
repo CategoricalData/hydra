@@ -37,7 +37,10 @@
 (def hydra_overlay_clojure_lib_literals_uint8_to_bigint (fn [x] (long x)))
 (def hydra_overlay_clojure_lib_literals_uint16_to_bigint (fn [x] (long x)))
 (def hydra_overlay_clojure_lib_literals_uint32_to_bigint (fn [x] (long x)))
-(def hydra_overlay_clojure_lib_literals_uint64_to_bigint (fn [x] (long x)))
+;; uint64 is the one unsigned width that does NOT fit in a signed long: (long 2^64-1)
+;; narrows to -1. Pass the value through unchanged (it is already a bigint here), matching
+;; the Python/Common Lisp/Scheme overlays. The uint8/16/32 casts above are safe as-is.
+(def hydra_overlay_clojure_lib_literals_uint64_to_bigint (fn [x] (bigint x)))
 
 ;; Binary <-> String (base64)
 ;; Binary is a vector of unsigned ints 0..255 (see files/text bytes->binary), so bytes >127 must
