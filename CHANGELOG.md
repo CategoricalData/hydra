@@ -161,6 +161,10 @@ against 0.17.5 must be updated:
   batch, since the new kernel surface is by definition absent from published 0.17.5. It must be retired
   once 0.17.6 is visible in Maven Central and PyPI
   ([#508](https://github.com/CategoricalData/hydra/issues/508)).
+- **`hydra-ext` does not ship to Maven Central for Java**, as in 0.17.4 and 0.17.5: the Java coder's
+  visitor-pattern inner interface still collides with an enclosing type named `Visitor`
+  ([#643](https://github.com/CategoricalData/hydra/issues/643)), so the package does not compile for
+  that target. It publishes to Hackage and PyPI as usual.
 - The breaking batch leaves three deliberate 0.18 tails, each separately tracked:
   `effects.pure` is retained provisionally pending a name decision
   ([#688](https://github.com/CategoricalData/hydra/issues/688)); the `printable` type class that would
