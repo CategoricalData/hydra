@@ -74,8 +74,13 @@ cd "$HYDRA_ROOT_DIR"
 # part of this batch.
 case " $BATCH_PACKAGES " in
     *" hydra-kernel "*)
-        echo "Copying hand-written Scala runtime into hydra-kernel dist..."
-        "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
+        # #416: hydra-kernel runtime overlay-copy via the host-independent
+        # apply-assembly-plan.sh instead of per-host copy-kernel-runtime.sh.
+        # Byte-identical (asserted by test-assembly-plan-conformance.sh). Scala emits
+        # no keep-manifest here (its runtime is under a prune-exempt path), matching the
+        # prior behaviour — apply-assembly-plan is simply called without --manifest.
+        echo "Applying hydra-kernel assembly plan (Scala runtime overlay)..."
+        "$HYDRA_ROOT_DIR/bin/apply-assembly-plan.sh" scala hydra-kernel --dist-root "$DIST_ROOT"
         ;;
 esac
 
