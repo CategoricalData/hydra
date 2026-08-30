@@ -15,7 +15,9 @@
     ;; Round-trip a double through IEEE 754 float32 using bytevector operations.
     ;; This gives the exact float32 representation, not a decimal approximation.
     (define (snap-to-float32 x)
-      (if (= x 0.0) 0.0
-          (let ((bv (make-bytevector 4)))
-            (bytevector-ieee-single-set! bv 0 x (endianness little))
-            (bytevector-ieee-single-ref bv 0 (endianness little)))))))
+      ;; No zero short-circuit: (= -0.0 0.0) is true, so returning a literal
+      ;; 0.0 would erase the sign of negative zero. The bytevector round-trip
+      ;; already maps +/-0.0 to itself, preserving the sign bit.
+      (let ((bv (make-bytevector 4)))
+        (bytevector-ieee-single-set! bv 0 x (endianness little))
+        (bytevector-ieee-single-ref bv 0 (endianness little))))))
