@@ -15,6 +15,164 @@ they are documented here for completeness.
 
 ---
 
+## [0.17.6] - 2026-08-30
+
+Point release on the 0.17.x line, and the last backward-incompatible batch before the 1.0 surface
+freeze. Five kernel-surface changes land together as the "0.17 breaking batch":
+`null` becomes `isEmpty`, `read*`/`show*` become `parse*`/`print*`, `TypeScheme.constraints` and
+`TypeVariableConstraints.classes` change shape, and the constructor primitives are finalized.
+Alongside them, a genuine soundness gap in type inference is fixed — class constraints now propagate
+through function-domain positions — and the cold-seed path is rebuilt on the Java host so that
+breaking core-type changes are no longer structurally impossible to bootstrap.
+
+**Backward-incompatible.** All five surface changes below alter the published kernel. Code written
+against 0.17.5 must be updated:
+
+- **[#682]** `hydra.lib.{lists,sets,maps,strings}.null` -> `.isEmpty`.
+- **[#691]** the `read*`/`show*` family -> `parse*`/`print*`.
+- **[#683]** `TypeScheme.constraints`: `optional<map>` -> plain `map`.
+- **[#685]** `TypeVariableConstraints.classes`: `list` -> `set`.
+- **[#687]** constructor primitives finalized: `lists.pure` is removed; `optionals.given`,
+  `eithers.left`/`right` and `pairs.pair` are added.
+
+[#682]: https://github.com/CategoricalData/hydra/issues/682
+[#683]: https://github.com/CategoricalData/hydra/issues/683
+[#685]: https://github.com/CategoricalData/hydra/issues/685
+[#687]: https://github.com/CategoricalData/hydra/issues/687
+[#691]: https://github.com/CategoricalData/hydra/issues/691
+
+### Highlights
+
+- **Class constraints propagate through contravariant positions**
+  ([#702](https://github.com/CategoricalData/hydra/issues/702)): inference silently dropped a class
+  constraint when the constrained type variable was bound through the **domain** (input) position of a
+  higher-order function argument, while transferring it correctly in output positions — a real soundness
+  gap in the type checker. It had been papered over twice by freezing `encodeMap`/`encodeSet` to
+  monomorphic `Int`. Both freezes and the [#554](https://github.com/CategoricalData/hydra/issues/554)
+  `toPrimitive` stopgap are now removed, the definitions re-polymorphized, and a domain-position
+  regression test added. A `sets.filter` overlay lands across Java, Python, Scala, TypeScript and the
+  Lisp dialects as its first consumer.
+- **Cold-seed rebuilt on the Java host**
+  ([#703](https://github.com/CategoricalData/hydra/issues/703)): CI's cold-seed steps compiled HEAD's
+  kernel `Types` source against the *published* Hackage `hydra-kernel`, which is sound only for additive
+  changes and structurally impossible for any breaking core-type-shape change — the root of a recurring
+  red-CI class (#500, #608, #617, #417, #683). The Haskell cold-seeder (`ColdSeedMain`, `typesmods/`,
+  Check-2) is deleted and replaced by a data-driven Java-host schema-walking seed
+  (`seed-dist-haskell.sh`), which decodes `dist/json` and emits Haskell text without ever linking
+  HEAD types against a published kernel.
+- **`hydra.paths` completed** ([#716](https://github.com/CategoricalData/hydra/issues/716)):
+  the step unions are realigned with the `hydra.core` term and type grammars — missing variants
+  added (`annotatedAnnotation`, `eitherLeft`/`eitherRight`, `effect`), undirected steps given a
+  direction, and variants named after retired constructors renamed. `hydra.print.paths` is rewritten
+  as serialization-only (printers, parsers and a round-trip law), and the graph view moves to a new
+  `hydra.shredding` module (`shredGraph`/`shredTerm`/`shredSchema`), which the Graphviz coder now
+  consumes.
+- **`hydra.lib.ordering` is genuinely structural on every host**
+  ([#718](https://github.com/CategoricalData/hydra/issues/718)): the Java, Python and Scala overlay
+  implementations fell back to comparing *printed strings* for non-literal and mixed-variant terms,
+  contradicting the normative `ordering-and-equality.md` (records field-by-field in declaration
+  order, unions by declared-variant order then payload, wrappers by wrapped value, decimals by
+  numeric value then scale — with no print-based fallback anywhere). All three are now structural;
+  Java delegates to the generated `compareTo`.
+- **Bash driver-layer audit** ([#714](https://github.com/CategoricalData/hydra/issues/714)):
+  a prerequisite to the remaining #416 promotion. Six dead build scripts superseded by
+  `transform-json-to-target.sh` are deleted, and the #608 oil-and-water and #540 header-idempotency
+  regression harnesses are wired into `test-regressions.sh`.
+
+- **Backward-compatibility and deprecation policy**
+  ([#676](https://github.com/CategoricalData/hydra/issues/676)): adds the normative spec chapter defining
+  what "compatible" means after 1.0 — the additivity calculus, the deprecation/rename mechanism, and
+  enforcement. `LifecycleInfo.deprecatedSince` moves from defined-but-unused to populated on **32**
+  kernel primitives slated for 0.18 deprecation, via a new `deprecatedSince` DSL helper.
+- **Effect-sequencing contract specified and tested**
+  ([#675](https://github.com/CategoricalData/hydra/issues/675)): `hydra.lib.effects` carries a sequencing
+  contract — effects composed in a specified order, exactly once each, with `bind`'s continuation deferred
+  until the prior effect has run. On the lazy Haskell host this falls out of the evaluation model; on the
+  eight eager hosts it depended entirely on each hand-written interpreter. The obligations are now written
+  into `effects.md` and backed by ordering-observation tests for `bind`/`foldList`/`mapList`/`mapOptional`.
+- **Non-GC memory-discipline investigation**
+  ([#678](https://github.com/CategoricalData/hydra/issues/678)): Hydra's data model says nothing about
+  allocation, freeing, or ownership, which is what gates Swift, Rust, C++ and C as runtime hosts. This
+  investigation delivers per-language verdicts plus leak-free proof-of-concept implementations — Rust
+  (`Box` structural ownership), C++ (`unique_ptr` + arena) and C (arena), all ASan/LSan-clean on
+  construct-and-drop of a recursive `Term` — and an airtight analysis of Swift's class-forcing requirement.
+- **Build system promotion continues** ([#416](https://github.com/CategoricalData/hydra/issues/416)):
+  adds `hydra.build.Registry`, which models per-language build identity as data (name / coder package /
+  family) with per-script scope lists. `syncMatrix` and `langExpansion` are rewired onto it, and the
+  hardcoded language lists in the test and bench scripts are retired in favour of a generated
+  `languages.json`. Later in the cycle: `publishsets.reverseDepClosure` and
+  `publishsets.requiresCoders` promote reverse-dependency propagation and per-package coder-loading
+  into data, an `expected-libraries.json` artifact lets the Common Lisp and Emacs Lisp harnesses
+  fail fast on a missing `hydra.lib`, and a host-independent `apply-assembly-plan.sh` executor
+  (with a conformance test) takes over the Java `assemble-distribution` Step 0.
+- **Serialization specification chapter**
+  ([#674](https://github.com/CategoricalData/hydra/issues/674)): documents serializability, the
+  encode/decode contract, and the round-trip law; `isSerializable` now forbids `void`
+  ([#690](https://github.com/CategoricalData/hydra/issues/690)), and `hydra.lib.functions.absurd` is added
+  as the void eliminator ([#684](https://github.com/CategoricalData/hydra/issues/684)).
+
+### Bug fixes
+
+- **Hoisting silently produced terms with free variables**
+  ([#717](https://github.com/CategoricalData/hydra/issues/717)):
+  `augmentBindingsWithNewFreeVars` returned a binding *unchanged* when a captured variable had no
+  type in the context, yielding a top-level binding with free variables — a term valid before
+  hoisting and invalid after, produced with no error. It is now total and fails loudly, per the
+  kernel's fail-immediately rule.
+- **TypeScript `div`/`mod` used truncating semantics**
+  ([#677](https://github.com/CategoricalData/hydra/issues/677)): corrected to floor/Knuth division via
+  shared bigint helpers, with an `Optional` codomain; the dead `maybeDiv`/`maybeMod` are deleted and an
+  emitted-path test added.
+- **Overlay lag behind the `null` -> `isEmpty` rename**
+  ([#682](https://github.com/CategoricalData/hydra/issues/682)): the Java, Python, Scala, TypeScript and
+  Lisp overlays each kept a stale spelling (`isEmpty_`, a half-renamed Python `null` impl, and Lisp
+  camelCase where the coder emits snake_case), breaking generation until reconciled.
+- **`check-haskell-def-completeness` could not resolve qualified assembly references**
+  ([#683](https://github.com/CategoricalData/hydra/issues/683)), surfaced once the #703 cold-clone path
+  began reaching the check.
+- **Void-typed definitions leaked into DSL-ref generation**
+  ([#684](https://github.com/CategoricalData/hydra/issues/684)): `absurd` and friends are now excluded
+  across all hosts.
+- **Scheme bootstrap loader gaps** ([#641](https://github.com/CategoricalData/hydra/issues/641)):
+  missing `functions.scm`/`ordering.scm` in the native-lib load list, missing defaults in the def-module
+  load list, and a guile-only import allowlist.
+- **Bootstrap diff detail was swallowed** ([#671](https://github.com/CategoricalData/hydra/issues/671)):
+  now persisted to `<run>/<path>.diff`, with `compare_output`'s return value no longer discarded.
+  Separately, `compare_output` mis-derived the `src/main` vs `src/test` root per file
+  ([#706](https://github.com/CategoricalData/hydra/issues/706)).
+- **Nested duplicate output path** ([#664](https://github.com/CategoricalData/hydra/issues/664)) from
+  `hydra-kernel` being hardcoded into `defaultOutput`.
+- **Bootstrap codegen exceptions hid their stack traces**
+  ([#707](https://github.com/CategoricalData/hydra/issues/707)) in `bootstrap.ts`.
+
+### Release tooling
+
+- `bin/check-release-env.sh` ([#704](https://github.com/CategoricalData/hydra/issues/704)) adds a
+  publish-time toolchain preflight, after JDK- and twine-version problems cost real time at 0.17.5.
+- The TypeScript head's node floor is lowered to `^18.0.0 || >=20.0.0`, the true vitest constraint
+  ([#708](https://github.com/CategoricalData/hydra/issues/708)).
+- Hydra does not create GitHub Releases; the detached `.asc` signature stays in `release-artifacts/`
+  until [#441](https://github.com/CategoricalData/hydra/issues/441)
+  ([#508](https://github.com/CategoricalData/hydra/issues/508)).
+
+### Known issues
+
+- The `hostOverrides` shim is pinned to `{java: local, python: local}` for the duration of the breaking
+  batch, since the new kernel surface is by definition absent from published 0.17.5. It must be retired
+  once 0.17.6 is visible in Maven Central and PyPI
+  ([#508](https://github.com/CategoricalData/hydra/issues/508)).
+- The breaking batch leaves three deliberate 0.18 tails, each separately tracked:
+  `effects.pure` is retained provisionally pending a name decision
+  ([#688](https://github.com/CategoricalData/hydra/issues/688)); the `printable` type class that would
+  promote the print/parse convention into enforced dispatch awaits
+  [#497](https://github.com/CategoricalData/hydra/issues/497); and the literal conversion lattice is
+  gated on [#129](https://github.com/CategoricalData/hydra/issues/129) via
+  [#689](https://github.com/CategoricalData/hydra/issues/689). Anticipated `TypeClassConstraint`
+  variants remain open as [#686](https://github.com/CategoricalData/hydra/issues/686) — the `set`
+  element type must stay orderable as variants are added.
+
+---
+
 ## [0.17.5] - 2026-08-19
 
 Point release on the 0.17.x line. Two language-surface changes lead: sum-type eliminators unify on
