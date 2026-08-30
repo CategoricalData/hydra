@@ -359,6 +359,33 @@
        (or (> x most-positive-double-float)
            (< x most-negative-double-float))))
 
+(defun hydra--sci-from-native (x)
+  "Render a non-zero float in Haskell's scientific style, exactly.
+
+Derives the digits from the implementation's own printer, which is
+correctly-rounded and shortest-round-tripping, then re-normalizes the mantissa
+to [1,10). Rescaling by (expt 10 exp) instead loses precision and, for a
+subnormal such as least-positive-double-float, overflows to infinity -- which
+write-to-string renders as the reader macro #.DOUBLE-FLOAT-POSITIVE-INFINITY,
+corrupting any generated source the value lands in."
+  (let* ((s (write-to-string (abs x)))
+         (epos (position-if (lambda (c) (member c '(#\d #\D #\e #\E #\f #\F #\s #\S #\l #\L))) s))
+         (mant (if epos (subseq s 0 epos) s))
+         (ex   (if epos (parse-integer (subseq s (1+ epos))) 0))
+         (dot  (or (position #\. mant) (length mant)))
+         (intpart (subseq mant 0 dot))
+         (frac    (if (< dot (length mant)) (subseq mant (1+ dot)) ""))
+         (digits  (concatenate 'string intpart frac))
+         (lead    (or (position-if (lambda (c) (char/= c #\0)) digits) 0))
+         (pt      (+ (length intpart) ex))
+         (e       (- pt lead 1))
+         (sig     (string-right-trim "0" (subseq digits lead)))
+         (sig     (if (string= sig "") "0" sig))
+         (out     (if (= (length sig) 1)
+                      (format nil "~A.0" sig)
+                      (format nil "~A.~A" (subseq sig 0 1) (subseq sig 1)))))
+    (format nil "~A~Ae~A" (if (minusp x) "-" "") out e)))
+
 (defun haskell-show-float (x)
   "Format a double-float in Haskell's show style."
   (cond
@@ -367,16 +394,7 @@
     ((= x 0.0d0) (if (minusp (float-sign x)) "-0.0" "0.0"))
     ((and (/= x 0.0d0)
           (or (< (abs x) 0.1d0) (>= (abs x) 1.0d7)))
-     ;; Scientific notation: Haskell uses e.g. "5.0e-2"
-     (let* ((exp (floor (log (abs x) 10.0d0)))
-            (mantissa (/ x (expt 10.0d0 exp)))
-            ;; Adjust if mantissa rounds to 10
-            (adj-exp (if (>= (abs mantissa) 10.0d0) (1+ exp) exp))
-            (adj-mantissa (if (>= (abs mantissa) 10.0d0) (/ mantissa 10.0d0) mantissa)))
-       (format nil "~A~Ae~A"
-               (if (< adj-mantissa 0) "-" "")
-               (strip-float-suffix (write-to-string (abs adj-mantissa)))
-               adj-exp)))
+     (hydra--sci-from-native x))
     (t (strip-float-suffix (write-to-string x)))))
 
 (defun haskell-show-float-single (x)
@@ -384,21 +402,12 @@
   (cond
     ((hydra--float-nan-p x) "NaN")
     ((hydra--float-inf-p x) (if (> x 0) "Infinity" "-Infinity"))
-    ((= x 0.0f0) "0.0")
+    ((= x 0.0f0) (if (minusp (float-sign x)) "-0.0" "0.0"))
     ((and (/= x 0.0f0)
           (or (< (abs x) 0.1f0) (>= (abs x) 1.0f7)))
-     ;; Scientific notation
-     (let* ((dx (float x 1.0d0))
-            (exp (floor (log (abs dx) 10.0d0)))
-            (mantissa (/ dx (expt 10.0d0 exp)))
-            (adj-exp (if (>= (abs mantissa) 10.0d0) (1+ exp) exp))
-            (adj-mantissa (if (>= (abs mantissa) 10.0d0) (/ mantissa 10.0d0) mantissa))
-            ;; Round mantissa to single-float precision
-            (sf-mantissa (float (float (abs adj-mantissa) 1.0f0) 1.0d0))
-            (s (write-to-string sf-mantissa)))
-       (format nil "~A~Ae~A"
-               (if (< adj-mantissa 0) "-" "")
-               (strip-float-suffix (write-to-string sf-mantissa)) adj-exp)))
+     ;; Same native-printer derivation as the double case: rescaling by
+     ;; (expt 10 exp) loses precision and overflows on subnormals.
+     (hydra--sci-from-native x))
     (t (strip-float-suffix (write-to-string x)))))
 
 ;; print_decimal :: Decimal -> String
