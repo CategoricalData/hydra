@@ -57,8 +57,11 @@ done
 KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-python.XXXXXX)"
 trap 'rm -f "$KEEP_MANIFEST"' EXIT
 
-echo "Step 0: Copying hand-written Python runtime into hydra-kernel dist..."
-"$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
+# #416: hydra-kernel runtime overlay-copy via the host-independent apply-assembly-plan.sh
+# (pure-bash executor of the promoted assembly plan) instead of per-host
+# copy-kernel-runtime.sh. Byte-identical (asserted by test-assembly-plan-conformance.sh).
+echo "Step 0: Applying hydra-kernel assembly plan (Python runtime overlay + keep-paths)..."
+"$HYDRA_ROOT_DIR/bin/apply-assembly-plan.sh" python hydra-kernel --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
 echo ""
 
 echo "Step 1: Generating main python modules for every package..."
