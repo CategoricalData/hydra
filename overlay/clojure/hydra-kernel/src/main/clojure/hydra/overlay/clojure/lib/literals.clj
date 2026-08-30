@@ -16,7 +16,10 @@
 (def hydra_overlay_clojure_lib_literals_bigint_to_uint8 (fn [x] (int x)))
 (def hydra_overlay_clojure_lib_literals_bigint_to_uint16 (fn [x] (int x)))
 (def hydra_overlay_clojure_lib_literals_bigint_to_uint32 (fn [x] (long x)))
-(def hydra_overlay_clojure_lib_literals_bigint_to_uint64 (fn [x] (long x)))
+;; Same uint64 caveat as uint64_to_bigint below: (long 2^64-1) narrows to -1.
+;; Keep the value as a bigint so the full unsigned range survives. uint8/16/32
+;; above all fit a signed long and are left as-is.
+(def hydra_overlay_clojure_lib_literals_bigint_to_uint64 (fn [x] (bigint x)))
 
 ;; Decimal conversions
 (def hydra_overlay_clojure_lib_literals_decimal_to_bigint (fn [x] (.toBigInteger (.setScale (bigdec x) 0 java.math.RoundingMode/HALF_EVEN))))
@@ -92,7 +95,8 @@
   (fn [s] (try (let [n (BigInteger. ^String s)]
                  (if (and (>= (.signum n) 0)
                           (<= (.compareTo n (BigInteger. "18446744073709551615")) 0))
-                   (list :given (.longValue n))
+                   ;; bigint, not .longValue: the latter narrows 2^64-1 to -1
+                   (list :given (bigint n))
                    (list :none)))
                (catch Exception _ (list :none)))))
 
