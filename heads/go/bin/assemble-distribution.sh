@@ -91,8 +91,12 @@ fi
 # dist-local module path hydra.dev/hydra/lib/... (#434).
 if [ "$PACKAGE" = "hydra-kernel" ]; then
     echo ""
-    echo "Step 3: Copying hand-written Go runtime into hydra-kernel dist..."
-    "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
+    # #416: hydra-kernel runtime overlay-copy via the host-independent
+    # apply-assembly-plan.sh instead of per-host copy-kernel-runtime.sh.
+    # Byte-identical (asserted by test-assembly-plan-conformance.sh). Go emits no
+    # keep-manifest here, matching the prior behaviour (called without --manifest).
+    echo "Step 3: Applying hydra-kernel assembly plan (Go runtime overlay)..."
+    "$HYDRA_ROOT_DIR/bin/apply-assembly-plan.sh" go hydra-kernel --dist-root "$DIST_ROOT"
 fi
 
 # Step 4: emit the Go module files. The coder emits imports rooted at
