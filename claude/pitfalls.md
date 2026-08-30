@@ -118,6 +118,27 @@ Sync detects the missing tree and invokes the **#703 Java-host cold-seed** to re
 `dist/json` — the data-driven path that is immune to breaking core-type changes. Do **not** reach
 for `--local-host`; it addresses an unrelated problem and changes nothing here.
 
+**A rebase or merge that pulls in kernel-type changes invalidates the generated trees exactly
+like a fresh breaking change does.** Clear them as *part of* the rebase, not after the failure.
+This bit the 0.17.6 prep twice: once on the breaking batch, and again after rebasing onto a tip
+carrying #716's `hydra.paths` rewrite — `Hydra/Dsl/Paths.hs` in `dist/haskell` still predated the
+rewrite, so `Rewriting.hs` failed with 20+ `Not in scope: 'Paths.subtermStep*'`.
+
+**Do not survey staleness by a tree's newest mtime** — that hides one stale file inside an
+otherwise-fresh tree, which is precisely the case above. Compare each file against the point you
+rebased from:
+
+```sh
+# files older than the rebase/merge you just did
+find dist/<lang> -type f ! -path '*/build/*' ! -newermt "<rebase timestamp>" | wc -l
+```
+
+**A second trap in the same failure:** the missing names lived in a *generated* DSL module
+(`Hydra.Dsl.Paths`, emitted into `dist/haskell`), not in the same-named `packages/.../Types/Paths.hs`.
+Diffing the `packages/` file "proves" upstream is broken when it is not. Check the **import** to see
+which module actually supplies a name before concluding anything about upstream, and treat *the last
+green CI commit showing the same apparent mismatch* as proof that your reading is wrong.
+
 **Fresh release worktrees never hit this**, since they have no `dist/haskell` at all — one of the
 concrete reasons the release procedure mandates a from-scratch worktree
 ([docs/release-workflow.md](../docs/release-workflow.md)).
