@@ -299,6 +299,18 @@ publishing {{
 // is invoked only for a real Central Portal publish. Local publishes
 // (publishToMavenLocal) and tests skip the Sign task entirely — no gpg, no key
 // needed.
+// Pin the signing identity. useGpgCmd() shells out to gpg and reads
+// `signing.gnupg.keyName` -- NOT `signing.keyId`, which only applies to the
+// in-process Bouncy Castle signer. With neither set, gpg falls back to the
+// operator's DEFAULT key, which for Hydra is the maintainer's personal key
+// rather than the release key in the repo-root KEYS file. That is how 0.17.5's
+// Maven-Java artifacts came to carry the wrong signature, and re-signing the
+// .asc files out-of-band does NOT help: publishAggregationToCentralPortal
+// re-runs the Sign task and overwrites them just before upload.
+// HYDRA_PGP_KEY unset => unchanged default behaviour.
+if (System.getenv('HYDRA_PGP_KEY')) {{
+    ext['signing.gnupg.keyName'] = System.getenv('HYDRA_PGP_KEY')
+}}
 signing {{
     useGpgCmd()
     sign publishing.publications.mavenJava

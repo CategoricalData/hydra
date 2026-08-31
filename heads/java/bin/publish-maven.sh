@@ -261,64 +261,44 @@ if [ "$DO_UPLOAD" = true ]; then
         --root-aggregator "${PUBLISH_SET[@]}" --out-dir "$ROOT_AGGREGATOR_DIR"
     echo ""
 
-    # Re-sign every artifact with the intended release key, then verify.
-    #
-    # WHY: gradle's `signing` plugin silently falls back to gpg's DEFAULT key.
-    # Setting signing.keyId in ~/.gradle/gradle.properties is NOT sufficient --
-    # verified empirically: with signing.keyId=14D72013 (the release key) and no
-    # signing.password, all 77 staged artifacts were still signed by the operator's
-    # personal 2014 key. Sonatype VALIDATES such a deployment because the signature
-    # is cryptographically valid; it cannot know the key is the wrong one. That is
-    # how 0.17.5's Java artifacts came to carry the wrong signature.
-    #
-    # The .asc files are plain files under dist/java/<pkg>/build/libs and the
-    # aggregator uploads what is on disk, so re-signing here is both effective and
-    # verifiable. Mirrors the same step in heads/scala/bin/publish-sbt.sh.
-    # Skipped entirely when HYDRA_PGP_KEY is unset.
-    if [ -n "${HYDRA_PGP_KEY:-}" ]; then
-        echo "=== Re-signing Java artifacts with $HYDRA_PGP_KEY (gradle signs with gpg's default key) ==="
-        _resigned=0
-        while IFS= read -r _asc; do
-            _artifact="${_asc%.asc}"
-            [ -f "$_artifact" ] || continue
-            rm -f "$_asc"
-            if ! gpg --batch --yes --local-user "$HYDRA_PGP_KEY" \
-                     --armor --detach-sign --output "$_asc" "$_artifact" 2>/dev/null; then
-                echo "ERROR: failed to re-sign $_artifact" >&2
-                exit 1
-            fi
-            _resigned=$((_resigned + 1))
-        done < <(find "$HYDRA_ROOT/dist/java" -name '*.asc' -type f)
-        echo "  re-signed $_resigned artifact(s)"
+    # NOTE: do NOT re-sign artifacts here. publishAggregationToCentralPortal
+    # re-runs the Sign task and overwrites any .asc written beforehand (observed:
+    # signatures verified OK at this point were replaced with default-key ones
+    # ~1 min later, immediately before upload). The signing identity is instead
+    # pinned in the GENERATED build.gradle via signing.gnupg.keyName, which is
+    # the property useGpgCmd() actually reads. The post-upload verification below
+    # is what proves it worked.
 
-        echo "=== Verifying every Java signature is from $HYDRA_PGP_KEY ==="
+    echo "=== gradle $GRADLE_TASK  (aggregated: ${#PUBLISH_SET[@]} packages @ $VERSION) ==="
+    ( cd "$ROOT_AGGREGATOR_DIR" && gradle "$GRADLE_TASK" )
+    echo ""
+    # Verify what gradle ACTUALLY signed. The Sign task runs inside
+    # publishAggregationToCentralPortal, so this necessarily happens after the
+    # upload -- but with HYDRA_JAVA_PUBLISH_HOLD=1 the deployment is HELD, so a
+    # wrong-key result here means "drop the deployment", not "too late".
+    # Sonatype validating a deployment does NOT mean the key is correct: it only
+    # checks the signature is well-formed. Verify the fingerprint ourselves.
+    if [ -n "${HYDRA_PGP_KEY:-}" ]; then
+        echo ""
+        echo "=== Verifying the signatures gradle produced are from $HYDRA_PGP_KEY ==="
         _want="$(gpg --fingerprint --with-colons "$HYDRA_PGP_KEY" 2>/dev/null \
                  | awk -F: '/^fpr:/ {print $10; exit}')"
-        if [ -z "$_want" ]; then
-            echo "ERROR: could not resolve a fingerprint for $HYDRA_PGP_KEY" >&2
-            exit 1
-        fi
         _bad=0; _checked=0
         while IFS= read -r _asc; do
             _artifact="${_asc%.asc}"
             [ -f "$_artifact" ] || continue
             _checked=$((_checked + 1))
-            if ! gpg --verify "$_asc" "$_artifact" 2>&1 | grep -q "$_want"; then
-                echo "  MISMATCH: $_asc" >&2
-                _bad=$((_bad + 1))
-            fi
+            gpg --verify "$_asc" "$_artifact" 2>&1 | grep -q "$_want" || _bad=$((_bad + 1))
         done < <(find "$HYDRA_ROOT/dist/java" -name '*.asc' -type f)
         if [ "$_bad" -gt 0 ]; then
-            echo "ERROR: $_bad of $_checked signatures are not from $_want — refusing to upload." >&2
+            echo "  ERROR: $_bad of $_checked signatures are NOT from $_want." >&2
+            echo "         DROP this deployment in the Central Portal — do not release it." >&2
             exit 1
         fi
         echo "  OK: all $_checked signatures verified against $_want"
         echo ""
     fi
 
-    echo "=== gradle $GRADLE_TASK  (aggregated: ${#PUBLISH_SET[@]} packages @ $VERSION) ==="
-    ( cd "$ROOT_AGGREGATOR_DIR" && gradle "$GRADLE_TASK" )
-    echo ""
     echo "=== Uploaded ${#PUBLISH_SET[@]} package(s) at $VERSION as ONE aggregated deployment. ==="
     if [ "${HYDRA_JAVA_PUBLISH_HOLD:-}" = "1" ]; then
         echo "publishingType = USER_MANAGED: validates once (~8 min) then HOLDS at VALIDATED."
