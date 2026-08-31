@@ -96,6 +96,13 @@ ThisBuild / sonatypeCredentialHost := "central.sonatype.com"
 // submits to the Central Portal. Without this, publishSigned fails with
 // "Repository for publishing is not specified."
 ThisBuild / publishTo := sonatypePublishToBundle.value
+// Pin the PGP signing key. sbt-pgp shells out to gpg with no --local-user, so
+// without this it signs with gpg's DEFAULT key -- which is the maintainer's
+// personal key, NOT the Hydra release key that the repo-root KEYS file declares.
+// That mismatch is what shipped wrong-key signatures at 0.17.5. Scoping it here
+// (rather than via ~/.gnupg/gpg.conf default-key) keeps the override local to
+// Hydra's Scala publish instead of repointing every gpg consumer on the machine.
+ThisBuild / pgpSigningKey := sys.env.get("HYDRA_PGP_KEY")
 // Declare the version scheme so downstream eviction tooling is satisfied.
 ThisBuild / versionScheme := Some("early-semver")
 publish / skip := false
