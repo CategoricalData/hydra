@@ -725,7 +725,12 @@ if [ $ERRORS -eq 0 ]; then
         fi
     done
     echo ""
-    if [ ! -f "$ARTIFACT_DIR/hydra-${EXPECTED}-src.tar.gz.asc" ]; then
+    # The signature is over the REPRODUCIBLE .tar (see SRC_TAR above), so the
+    # detached file is <name>-src.tar.asc -- NOT .tar.gz.asc. Checking the wrong
+    # name made this NOTE fire unconditionally, telling a release engineer to
+    # re-sign an already-signed archive (and it would equally have hidden a
+    # genuinely missing signature).
+    if [ ! -f "$SRC_TAR.asc" ]; then
         echo "  NOTE: the source archive is UNSIGNED (no gpg key configured). The release of"
         echo "        record must be signed — set HYDRA_RELEASE_SIGNING_KEY and re-run before"
         echo "        a real release. Verify keys are published in the repo-root KEYS file."
