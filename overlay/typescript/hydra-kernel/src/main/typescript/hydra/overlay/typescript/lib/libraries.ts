@@ -61,7 +61,20 @@ import * as lexical from "../../../lexical.js";
 // reduction). The HOF primitives below — which call `reduceTerm` to evaluate
 // a function argument against the graph — therefore feed it this empty
 // placeholder context rather than one received from the carrier.
-const reduceCx: InferenceContext = lexical.emptyInferenceContext as InferenceContext;
+// Resolved LAZILY, not at module load. `lexical` participates in an import
+// cycle with this module, so reading `lexical.emptyInferenceContext` at the top
+// level hits the temporal dead zone in the PACKED npm artifact and throws
+// "Cannot access 'emptyInferenceContext' before initialization" on import.
+// (Caught by publish-npm.sh's smoke test; the in-tree test suite loads modules
+// in an order that hides it.) A getter defers the read to first use, by which
+// point the cycle has resolved.
+let _reduceCx: InferenceContext | undefined;
+const getReduceCx = (): InferenceContext => {
+  if (_reduceCx === undefined) {
+    _reduceCx = lexical.emptyInferenceContext as InferenceContext;
+  }
+  return _reduceCx;
+};
 
 // === Term construction helpers ===
 
@@ -269,7 +282,7 @@ const defaultFallback = (qname: string, ts: TypeScheme): Primitive => {
       for (const arg of args) {
         applied = { tag: "application", value: { function_: applied, argument: arg } } as never;
       }
-      return reduceTerm(reduceCx, g, true, applied) as Either<HydraError, Term>;
+      return reduceTerm(getReduceCx(), g, true, applied) as Either<HydraError, Term>;
     },
   };
 };
@@ -1266,7 +1279,7 @@ const listsPrimitives = (): readonly Primitive[] => {
                 let acc: Term = init;
                 for (const x of lst) {
                   const app: Term = { tag: "application", value: { function_: { tag: "application", value: { function_: fn, argument: acc } }, argument: x } } as never;
-                  const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                  const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                   if (r.tag === "left") return r as Either<HydraError, Term>;
                   acc = r.value;
                 }
@@ -1282,7 +1295,7 @@ const listsPrimitives = (): readonly Primitive[] => {
                 for (let i = lst.length - 1; i >= 0; i--) {
                   const x = lst[i]!;
                   const app: Term = { tag: "application", value: { function_: { tag: "application", value: { function_: fn, argument: x } }, argument: acc } } as never;
-                  const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                  const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                   if (r.tag === "left") return r as Either<HydraError, Term>;
                   acc = r.value;
                 }
@@ -1296,7 +1309,7 @@ const listsPrimitives = (): readonly Primitive[] => {
               const out: Term[] = [];
               for (const x of lst) {
                 const app: Term = { tag: "application", value: { function_: fn, argument: x } } as never;
-                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 out.push(r.value);
               }
@@ -1310,7 +1323,7 @@ const listsPrimitives = (): readonly Primitive[] => {
               const out: Term[] = [];
               for (const x of lst) {
                 const app: Term = { tag: "application", value: { function_: fn, argument: x } } as never;
-                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 const v = r.value as { tag: string; value?: { tag?: string; value?: boolean } };
                 // Extract boolean: either {tag:"literal", value:{tag:"boolean", value:b}} or direct.
@@ -1329,7 +1342,7 @@ const listsPrimitives = (): readonly Primitive[] => {
                 for (const fn of fnList) {
                   for (const x of xsList) {
                     const app: Term = { tag: "application", value: { function_: fn, argument: x } } as never;
-                    const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                    const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                     if (r.tag === "left") return r as Either<HydraError, Term>;
                     out.push(r.value);
                   }
@@ -1345,7 +1358,7 @@ const listsPrimitives = (): readonly Primitive[] => {
               const out: Term[] = [];
               for (const x of lst) {
                 const app: Term = { tag: "application", value: { function_: fn, argument: x } } as never;
-                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 const sublist = asList(r.value);
                 if (sublist.tag === "left") return sublist as Either<HydraError, Term>;
@@ -1364,7 +1377,7 @@ const listsPrimitives = (): readonly Primitive[] => {
                   const out: Term[] = [];
                   for (let i = 0; i < n; i++) {
                     const app: Term = { tag: "application", value: { function_: { tag: "application", value: { function_: fn, argument: xL[i]! } }, argument: yL[i]! } } as never;
-                    const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                    const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                     if (r.tag === "left") return r as Either<HydraError, Term>;
                     out.push(r.value);
                   }
@@ -1377,7 +1390,7 @@ const listsPrimitives = (): readonly Primitive[] => {
             bind(asList(xs), (lst) => {
               for (const x of lst) {
                 const app: Term = { tag: "application", value: { function_: fn, argument: x } } as never;
-                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 const v = r.value as { tag: string; value?: { tag?: string; value?: boolean } };
                 const b = v.tag === "literal" && v.value?.tag === "boolean" ? v.value.value : false;
@@ -1393,7 +1406,7 @@ const listsPrimitives = (): readonly Primitive[] => {
               let i = 0;
               while (i < lst.length) {
                 const app: Term = { tag: "application", value: { function_: fn, argument: lst[i]! } } as never;
-                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 const v = r.value as { tag: string; value?: { tag?: string; value?: boolean } };
                 const b = v.tag === "literal" && v.value?.tag === "boolean" ? v.value.value : false;
@@ -1535,7 +1548,7 @@ const listsPrimitives = (): readonly Primitive[] => {
               const keyed: Array<[Term, Term]> = [];
               for (const x of lst) {
                 const app: Term = { tag: "application", value: { function_: fn, argument: x } } as never;
-                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 keyed.push([x, r.value]);
               }
@@ -1551,7 +1564,7 @@ const listsPrimitives = (): readonly Primitive[] => {
               const no: Term[] = [];
               for (const x of lst) {
                 const app: Term = { tag: "application", value: { function_: fn, argument: x } } as never;
-                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 const v = r.value as { tag: string; value?: { tag?: string; value?: boolean } };
                 const b = v.tag === "literal" && v.value?.tag === "boolean" ? v.value.value : false;
@@ -1567,7 +1580,7 @@ const listsPrimitives = (): readonly Primitive[] => {
               let i = 0;
               while (i < lst.length) {
                 const app: Term = { tag: "application", value: { function_: fn, argument: lst[i]! } } as never;
-                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 const v = r.value as { tag: string; value?: { tag?: string; value?: boolean } };
                 const b = v.tag === "literal" && v.value?.tag === "boolean" ? v.value.value : false;
@@ -1690,7 +1703,7 @@ const setsPrimitives = (): readonly Primitive[] => {
               const out: Term[] = [];
               for (const e of libSets.toList(st)) {
                 const app: Term = { tag: "application", value: { function_: fn, argument: e } } as never;
-                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eg: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eg: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 out.push(r.value);
               }
@@ -1706,7 +1719,7 @@ const setsPrimitives = (): readonly Primitive[] => {
               const out: Term[] = [];
               for (const x of libSets.toList(st)) {
                 const app: Term = { tag: "application", value: { function_: fn, argument: x } } as never;
-                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eg: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eg: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 const v = r.value as { tag: string; value?: { tag?: string; value?: boolean } };
                 const b = v.tag === "literal" && v.value?.tag === "boolean" ? v.value.value : false;
@@ -1819,7 +1832,7 @@ const mapsPrimitives = (): readonly Primitive[] => {
                   : tOptionalNone;
                 // Apply the closure: reduceTerm( App(fn, curOptional) ).
                 const appTerm: Term = { tag: "application", value: { function_: fn, argument: curOptional } } as never;
-                const reduced = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, appTerm);
+                const reduced = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, appTerm);
                 if (reduced.tag === "left") return reduced as Either<HydraError, Term>;
                 // The result is a Hydra Optional Term. Interpret it.
                 const r = reduced.value as { tag: string; value?: { tag?: string; value?: Term } };
@@ -1841,7 +1854,7 @@ const mapsPrimitives = (): readonly Primitive[] => {
               const out = new Map();
               for (const [k, v] of libMaps.toList(mp)) {
                 const app: Term = { tag: "application", value: { function_: fn, argument: v as Term } } as never;
-                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 out.set(k, r.value);
               }
@@ -1857,7 +1870,7 @@ const mapsPrimitives = (): readonly Primitive[] => {
               const out: Array<readonly [unknown, Term]> = [];
               for (const [k, v] of libMaps.toList(mp)) {
                 const app: Term = { tag: "application", value: { function_: fn, argument: k as Term } } as never;
-                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 out.push([r.value, v as Term] as const);
               }
@@ -1873,7 +1886,7 @@ const mapsPrimitives = (): readonly Primitive[] => {
               const out: Array<readonly [unknown, Term]> = [];
               for (const [k, v] of libMaps.toList(mp)) {
                 const app: Term = { tag: "application", value: { function_: fn, argument: v as Term } } as never;
-                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+                const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 const lit = r.value as { tag: string; value?: { tag: string; value?: boolean } };
                 if (lit.tag === "literal" && lit.value?.tag === "boolean" && lit.value.value) {
@@ -1912,9 +1925,9 @@ const mapsPrimitives = (): readonly Primitive[] => {
                 for (const [k, v] of libMaps.toList(mp)) {
                   const appK: Term = { tag: "application", value: { function_: fk, argument: k as Term } } as never;
                   const appV: Term = { tag: "application", value: { function_: fv, argument: v as Term } } as never;
-                  const rk = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, appK);
+                  const rk = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, appK);
                   if (rk.tag === "left") return rk as Either<HydraError, Term>;
-                  const rv = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, appV);
+                  const rv = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, appV);
                   if (rv.tag === "left") return rv as Either<HydraError, Term>;
                   out.push([rk.value, rv.value] as const);
                 }
@@ -1930,10 +1943,10 @@ const mapsPrimitives = (): readonly Primitive[] => {
               const out: Array<readonly [unknown, Term]> = [];
               for (const [k, v] of libMaps.toList(mp)) {
                 const app1: Term = { tag: "application", value: { function_: fn, argument: k as Term } } as never;
-                const r1 = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app1);
+                const r1 = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app1);
                 if (r1.tag === "left") return r1 as Either<HydraError, Term>;
                 const app2: Term = { tag: "application", value: { function_: r1.value, argument: v as Term } } as never;
-                const r2 = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app2);
+                const r2 = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app2);
                 if (r2.tag === "left") return r2 as Either<HydraError, Term>;
                 const lit = r2.value as { tag: string; value?: { tag: string; value?: boolean } };
                 if (lit.tag === "literal" && lit.value?.tag === "boolean" && lit.value.value) {
@@ -2135,7 +2148,7 @@ const optionalsPrimitives = (): readonly Primitive[] => {
             if (!mv) return left({ tag: "other", value: "expected an optional" } as never);
             if (mv.tag === "none") return right(tOptionalNone);
             const app: Term = { tag: "application", value: { function_: fn, argument: mv.value } } as never;
-            const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+            const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
             if (r.tag === "left") return r as Either<HydraError, Term>;
             return right(tOptionalGiven(r.value));
           }))),
@@ -2147,7 +2160,7 @@ const optionalsPrimitives = (): readonly Primitive[] => {
             if (!mv) return left({ tag: "other", value: "expected an optional" } as never);
             if (mv.tag === "none") return right(tOptionalNone);
             const app: Term = { tag: "application", value: { function_: fn, argument: mv.value } } as never;
-            return (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+            return (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
           }))),
     prim("hydra.lib.optionals.given", scheme(tyFn(tyVar("a"), tyOptional(tyVar("a"))), ["a"]),
       (_g, args) =>
@@ -2180,7 +2193,7 @@ const optionalsPrimitives = (): readonly Primitive[] => {
               if (!mv) return left({ tag: "other", value: "expected an optional" } as never);
               if (mv.tag === "none") return right(def);
               const app: Term = { tag: "application", value: { function_: fn, argument: mv.value } } as never;
-              return (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+              return (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
             }))),
       [1]),
     prim("hydra.lib.optionals.mapOptional", scheme(tyFnCurried(tyFn(tyVar("a"), tyOptional(tyVar("b"))), tyList(tyVar("a")), tyList(tyVar("b"))), ["a", "b"]),
@@ -2192,7 +2205,7 @@ const optionalsPrimitives = (): readonly Primitive[] => {
             const out: Term[] = [];
             for (const x of (lst.value ?? [])) {
               const app: Term = { tag: "application", value: { function_: fn, argument: x } } as never;
-              const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+              const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
               if (r.tag === "left") return r as Either<HydraError, Term>;
               const mv = asOptional(r.value);
               if (mv?.tag === "given") out.push(mv.value);
@@ -2208,12 +2221,12 @@ const optionalsPrimitives = (): readonly Primitive[] => {
             bind(need(args, 2, "compose-x"), (x) => {
               const app1: Term = { tag: "application", value: { function_: f, argument: x } } as never;
               const reduce = reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>;
-              return bind(reduce(reduceCx, g, true, app1), (fx) => {
+              return bind(reduce(getReduceCx(), g, true, app1), (fx) => {
                 const mvfx = asOptional(fx);
                 if (!mvfx) return left({ tag: "other", value: "compose: f(x) did not return an optional" } as never);
                 if (mvfx.tag === "none") return right(tOptionalNone);
                 const app2: Term = { tag: "application", value: { function_: gf, argument: mvfx.value } } as never;
-                return reduce(reduceCx, g, true, app2);
+                return reduce(getReduceCx(), g, true, app2);
               });
             })))),
     prim("hydra.lib.optionals.apply", scheme(tyFnCurried(tyOptional(tyFn(tyVar("a"), tyVar("b"))), tyOptional(tyVar("a")), tyOptional(tyVar("b"))), ["a", "b"]),
@@ -2227,7 +2240,7 @@ const optionalsPrimitives = (): readonly Primitive[] => {
             if (!mvx) return left({ tag: "other", value: "apply: expected an optional value" } as never);
             if (mvx.tag === "none") return right(tOptionalNone);
             const app: Term = { tag: "application", value: { function_: mvf.value, argument: mvx.value } } as never;
-            const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+            const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
             if (r.tag === "left") return r as Either<HydraError, Term>;
             return right(tOptionalGiven(r.value));
           }))),
@@ -2310,7 +2323,7 @@ const eithersPrimitives = (): readonly Primitive[] => {
               if (!ev) return left({ tag: "other", value: "expected an either" } as never);
               const fn = ev.tag === "left" ? fl : fr;
               const app: Term = { tag: "application", value: { function_: fn, argument: ev.value } } as never;
-              return (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+              return (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
             })))),
     // Vars in declaration order matching body's first appearance:
     // b (fn-in), c (fn-out), a (left-side). Mirrors Haskell `[_x, _y, _z]`.
@@ -2324,7 +2337,7 @@ const eithersPrimitives = (): readonly Primitive[] => {
             if (!ev) return left({ tag: "other", value: "expected an either" } as never);
             if (ev.tag === "left") return right(e);
             const app: Term = { tag: "application", value: { function_: fn, argument: ev.value } } as never;
-            const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+            const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
             if (r.tag === "left") return r as Either<HydraError, Term>;
             return right(tRight(r.value));
           }))),
@@ -2336,7 +2349,7 @@ const eithersPrimitives = (): readonly Primitive[] => {
             if (!ev) return left({ tag: "other", value: "expected an either" } as never);
             if (ev.tag === "left") return right(e);
             const app: Term = { tag: "application", value: { function_: fn, argument: ev.value } } as never;
-            return (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(reduceCx, g, true, app);
+            return (reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
           }))),
     prim("hydra.lib.eithers.isLeft", scheme(tyFn(tyEither(tyVar("a"), tyVar("b")), tyBool), ["a", "b"]),
       (_g, args) =>
@@ -2461,8 +2474,8 @@ function pairsPrimitivesList(): readonly Primitive[] {
               const app1: Term = { tag: "application", value: { function_: f, argument: pair.value[0] } } as never;
               const app2: Term = { tag: "application", value: { function_: gf, argument: pair.value[1] } } as never;
               const reduce = reduceTerm as never as (cx: InferenceContext, g: Graph, eager: boolean, t: Term) => Either<HydraError, Term>;
-              return bind(reduce(reduceCx, g, true, app1), (first) =>
-                bind(reduce(reduceCx, g, true, app2), (second) =>
+              return bind(reduce(getReduceCx(), g, true, app1), (first) =>
+                bind(reduce(getReduceCx(), g, true, app2), (second) =>
                   right({ tag: "pair", value: [first, second] } as never)));
             })))),
     prim("hydra.lib.pairs.first", scheme(tyFn(tyPair(tyVar("a"), tyVar("b")), tyVar("a")), ["a", "b"]),
