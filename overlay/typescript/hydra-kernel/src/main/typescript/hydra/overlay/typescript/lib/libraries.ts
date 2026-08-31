@@ -53,6 +53,11 @@ import * as libStrings from "./strings.js";
 // with `apply(closure, arg)` to evaluate.
 import { reduceTerm } from "../../../reduction.js";
 import * as lexical from "../../../lexical.js";
+// Integral helpers live in a LEAF module so primitive implementations (math.ts)
+// can use them without importing this registry — importing back into libraries.ts
+// closes a cycle via hydra.lexical and breaks the packed npm artifact.
+import { INT_WIDTH_BITS, UINT_WIDTH_BITS, wrapInt, floorDivBig, floorModBig } from "./numerics.js";
+export { INT_WIDTH_BITS, UINT_WIDTH_BITS, wrapInt, floorDivBig, floorModBig };
 
 // As of issue #446 the `Primitive.implementation` carrier no longer threads
 // an `InferenceContext`; the implementation receives only `(graph, args)`.
@@ -416,23 +421,6 @@ const logicPrimitives = (): readonly Primitive[] => {
 // (mirroring Java's NumericDispatch.rewrapInteger); bigint is arbitrary precision, no narrowing.
 type NumericOp = "add" | "sub" | "mul" | "negate" | "abs" | "signum";
 
-export const INT_WIDTH_BITS: Record<string, number> = { int8: 8, int16: 16, int32: 32, int64: 64 };
-const UINT_WIDTH_BITS: Record<string, number> = { uint8: 8, uint16: 16, uint32: 32, uint64: 64 };
-
-export const wrapInt = (widthTag: string, r: bigint): number | bigint => {
-  if (widthTag === "bigint") return r;
-  const signedBits = INT_WIDTH_BITS[widthTag];
-  if (signedBits !== undefined) {
-    const m = 1n << BigInt(signedBits);
-    let w = ((r % m) + m) % m;
-    if (w >= m / 2n) w -= m;
-    return signedBits > 32 ? w : Number(w);
-  }
-  const unsignedBits = UINT_WIDTH_BITS[widthTag];
-  const m = 1n << BigInt(unsignedBits);
-  const w = ((r % m) + m) % m;
-  return unsignedBits > 32 ? w : Number(w);
-};
 
 const applyIntegerOp = (op: NumericOp, x: number | bigint, y?: number | bigint): bigint => {
   const bx = typeof x === "bigint" ? x : BigInt(x);
@@ -517,16 +505,6 @@ const numericUnary = (opName: string, op: NumericOp) =>
 // which used dAnyInt's lossy number coercion) so int64/uint64 stay exact.
 
 type IntegralOp = "div" | "mod" | "rem";
-
-export const floorDivBig = (a: bigint, b: bigint): bigint => {
-  const q = a / b;
-  return (a % b !== 0n) && ((a < 0n) !== (b < 0n)) ? q - 1n : q;
-};
-
-export const floorModBig = (a: bigint, b: bigint): bigint => {
-  const r = a % b;
-  return r !== 0n && ((r < 0n) !== (b < 0n)) ? r + b : r;
-};
 
 const integralLiteral = (opName: string, t: Term): { tag: string; value: number | bigint } => {
   const lit = (t as { tag: string; value?: { tag?: string; value?: { tag?: string; value?: unknown } } });
