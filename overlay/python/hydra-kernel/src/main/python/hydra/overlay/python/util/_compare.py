@@ -13,6 +13,7 @@ undefined.
 from __future__ import annotations
 
 import enum
+import math
 from collections.abc import Mapping, Sequence, Set
 from decimal import Decimal
 from functools import cmp_to_key
@@ -153,7 +154,27 @@ def compare(x: Any, y: Any) -> int:
     if tx is ty and getattr(tx, "__slots__", None) == ():
         return 0
 
-    # Native comparables (int, str, bool, float, bytes, and other Comparable types).
+    # Floats (float32 and float64 both surface as Python float): IEEE 754 extended
+    # totalOrder per docs/specification/ordering-and-equality.md, not native </>, whose
+    # IEEE semantics differ at NaN (unordered) and signed zero (-0.0 == 0.0). Order:
+    # -inf < negative finite < -0.0 < +0.0 < positive finite < +inf < NaN (equal to itself).
+    if isinstance(x, float) and isinstance(y, float):
+        xnan, ynan = math.isnan(x), math.isnan(y)
+        if xnan or ynan:
+            if xnan and ynan:
+                return 0
+            return 1 if xnan else -1
+        if x != y:
+            return -1 if x < y else 1
+        # x == y as floats: distinguish signed zero (-0.0 < +0.0); all other
+        # equal-valued floats (including equal infinities) are indistinguishable here.
+        if x == 0.0:
+            xneg, yneg = math.copysign(1.0, x) < 0, math.copysign(1.0, y) < 0
+            if xneg != yneg:
+                return -1 if xneg else 1
+        return 0
+
+    # Native comparables (int, str, bool, bytes, and other Comparable types).
     if x < y:
         return -1
     if x > y:
