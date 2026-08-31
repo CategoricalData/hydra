@@ -306,6 +306,65 @@ if [ "$DO_UPLOAD" = true ]; then
         echo ""
     done
 
+    # Re-sign every staged artifact with the intended release key.
+    #
+    # WHY: sbt-pgp does not honour ANY documented key-selection mechanism here.
+    # Verified empirically against real staged signatures: pgpSigningKey (short id
+    # and 0x-prefixed long id), usePgpKeyHex(<40-char fingerprint>), and
+    # Credentials("GnuPG Key ID", "gpg", <fp>, "ignored") -- the two the README
+    # documents -- all still produce signatures from gpg's DEFAULT key. A logging
+    # wrapper on gpgCommand proved the gpg binary is never exec'd at all, despite
+    # useGpg reporting true, so the plugin signs internally (bouncycastle), where
+    # the README states key selection is undocumented. See sbt/sbt-pgp#125, #47.
+    #
+    # Consequence if left alone: Maven artifacts carry the maintainer's personal
+    # key rather than the release key in the repo-root KEYS file. That is exactly
+    # what 0.17.5 shipped -- confirmed by verifying the live 0.17.5 jar on Central.
+    #
+    # The bundle is plain files on disk, so re-signing is straightforward and
+    # verifiable. Skipped entirely when HYDRA_PGP_KEY is unset.
+    if [ -n "${HYDRA_PGP_KEY:-}" ]; then
+        echo "=== Re-signing staged artifacts with $HYDRA_PGP_KEY (sbt-pgp ignores key selection) ==="
+        _resigned=0
+        while IFS= read -r _asc; do
+            _artifact="${_asc%.asc}"
+            [ -f "$_artifact" ] || continue
+            rm -f "$_asc"
+            if ! gpg --batch --yes --local-user "$HYDRA_PGP_KEY" \
+                     --armor --detach-sign --output "$_asc" "$_artifact" 2>/dev/null; then
+                echo "ERROR: failed to re-sign $_artifact" >&2
+                exit 1
+            fi
+            _resigned=$((_resigned + 1))
+        done < <(find "$BUNDLE_DIR" -name '*.asc' -type f)
+        echo "  re-signed $_resigned artifact(s)"
+
+        # Verify EVERY signature is from the intended key. A single mismatch is
+        # release-blocking: publishing a wrongly-signed artifact is irreversible.
+        echo "=== Verifying every staged signature is from $HYDRA_PGP_KEY ==="
+        _want="$(gpg --fingerprint --with-colons "$HYDRA_PGP_KEY" 2>/dev/null \
+                 | awk -F: '/^fpr:/ {print $10; exit}')"
+        if [ -z "$_want" ]; then
+            echo "ERROR: could not resolve a fingerprint for $HYDRA_PGP_KEY" >&2
+            exit 1
+        fi
+        _bad=0; _checked=0
+        while IFS= read -r _asc; do
+            _artifact="${_asc%.asc}"
+            [ -f "$_artifact" ] || continue
+            _checked=$((_checked + 1))
+            if ! gpg --verify "$_asc" "$_artifact" 2>&1 | grep -q "$_want"; then
+                echo "  MISMATCH: $_asc" >&2
+                _bad=$((_bad + 1))
+            fi
+        done < <(find "$BUNDLE_DIR" -name '*.asc' -type f)
+        if [ "$_bad" -gt 0 ]; then
+            echo "ERROR: $_bad of $_checked signatures are not from $_want — refusing to upload." >&2
+            exit 1
+        fi
+        echo "  OK: all $_checked signatures verified against $_want"
+    fi
+
     # Upload the aggregated bundle to the Central Portal DIRECTLY, not via
     # sbt-sonatype's `sonatypeBundleRelease`.
     #
