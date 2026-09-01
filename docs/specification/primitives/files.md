@@ -104,6 +104,23 @@ Effectful: writes to the file system.
 
 Since: 0.18 (split from `hydra.lib.files.createDirectory`)
 
+#### createSymlink — **Draft**
+
+`FilePath → FilePath → effect<either<FileError, unit>>`
+
+Usage: `createSymlink target linkPath`
+
+Create a symbolic link at `linkPath` that points to `target`.
+Describes an effectful computation which attempts to create a symbolic link at `linkPath`
+whose contents are the path `target`; `target` is stored verbatim and is not required to
+exist (dangling symlinks are permitted).
+A recoverable file-system failure is returned as `left` of a
+[FileError](../types/files.md#fileerror); success is returned as `right unit`.
+
+Effectful: writes to the file system.
+
+Since: 0.18
+
 #### exists — **Draft**
 
 `FilePath → effect<either<FileError, boolean>>`
@@ -156,6 +173,23 @@ A recoverable file-system failure is returned as `left` of a
 Effectful: reads from the file system.
 
 Since: 0.17
+
+#### readSymlink — **Draft**
+
+`FilePath → effect<either<FileError, FilePath>>`
+
+Usage: `readSymlink path`
+
+Read the target of a symbolic link.
+Describes an effectful computation which attempts to read the path stored in the symbolic link
+at `path`, returning it verbatim without resolving it against the link's location or checking
+that it exists.
+A recoverable file-system failure — including `path` not being a symbolic link — is returned as
+`left` of a [FileError](../types/files.md#fileerror); success is returned as `right target`.
+
+Effectful: reads from the file system.
+
+Since: 0.18
 
 #### removeDirectory — **Draft**
 

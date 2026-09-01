@@ -216,6 +216,13 @@ Deprecated since: 0.18. Use: `givens`.
 
 Deprecated since: 0.18. Use: `withDefault`.
 
+#### match — **Deprecated**
+
+`∀t1,t2. optional<t1> → t2 → (t1 → t2) → t2`
+
+Deprecated since: 0.18. Use: `cases`.
+A straight rename of the optional eliminator; the argument order is unchanged.
+
 #### mapOptional — **Deprecated**
 
 `∀t1,t2. (t1 → optional<t2>) → list<t1> → list<t2>`

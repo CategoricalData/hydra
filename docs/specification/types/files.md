@@ -55,8 +55,8 @@ A record with the following fields:
 ## FileType
 
 An enumeration of POSIX file types, following the file type macros of `<sys/stat.h>`:
-`blockSpecial` (`S_IFBLK`), `characterSpecial` (`S_IFCHR`), `directory` (`S_IFDIR`),
-`fifo` (`S_IFIFO`), `regular` (`S_IFREG`), `symbolicLink` (`S_IFLNK`), `socket` (`S_IFSOCK`).
+`block` (`S_IFBLK`), `character` (`S_IFCHR`), `directory` (`S_IFDIR`),
+`fifo` (`S_IFIFO`), `regular` (`S_IFREG`), `link` (`S_IFLNK`), `socket` (`S_IFSOCK`).
 
 ## FileExtension
 

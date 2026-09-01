@@ -131,3 +131,52 @@ success is returned as `right path`.
 Effectful: reads process state (the working directory).
 
 Since: 0.17
+
+#### readStdin — **Draft**
+
+`effect<either<SystemError, binary>>`
+
+Usage: `readStdin`
+
+Read the complete contents of standard input as raw bytes.
+Describes an effectful computation which reads the process's standard input stream to
+end-of-input and returns its contents as raw bytes, with no character decoding or newline
+translation; decode it to text with `hydra.lib.text.decodeUtf8`.
+A recoverable failure is returned as `left` of a
+[SystemError](../types/system.md#systemerror); success is returned as `right contents`.
+
+Effectful: reads from standard input.
+
+Since: 0.18
+
+#### writeStderr — **Draft**
+
+`binary → effect<either<SystemError, unit>>`
+
+Usage: `writeStderr contents`
+
+Write raw bytes to standard error.
+Describes an effectful computation which writes `contents` to the process's standard error
+stream verbatim, with no character encoding or newline translation.
+A recoverable failure is returned as `left` of a
+[SystemError](../types/system.md#systemerror); success is returned as `right unit`.
+
+Effectful: writes to standard error.
+
+Since: 0.18
+
+#### writeStdout — **Draft**
+
+`binary → effect<either<SystemError, unit>>`
+
+Usage: `writeStdout contents`
+
+Write raw bytes to standard output.
+Describes an effectful computation which writes `contents` to the process's standard output
+stream verbatim, with no character encoding or newline translation.
+A recoverable failure is returned as `left` of a
+[SystemError](../types/system.md#systemerror); success is returned as `right unit`.
+
+Effectful: writes to standard output.
+
+Since: 0.18

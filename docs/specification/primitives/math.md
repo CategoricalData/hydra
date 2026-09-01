@@ -10,18 +10,21 @@ Arithmetic and numeric functions.
 The core arithmetic operations — `add`, `sub`, `mul`, `negate` — are polymorphic over the
 `numeric` class: fixed-width integer types wrap in two's complement, `bigint` is
 arbitrary-precision, and floating-point types follow IEEE 754.
-The remaining integer operations (`div`, `mod`, `rem`, `abs`, `signum`, `even`, `odd`, `range`)
-are int32-typed for now and generalize when the class machinery lands (#566).
+The sign and magnitude operations `abs` and `signum` are likewise polymorphic over the
+`numeric` class.
+The integer-division and parity operations (`div`, `mod`, `rem`, `even`, `odd`) are polymorphic
+over the `integral` class (the fixed-width integer types plus `bigint`).
+Only `range` remains int32-typed.
 Floating-point special values (NaN, ±∞, negative zero) follow
 [Floating-point values](index.md#floating-point-values).
 
 #### abs — **Draft**
 
-`int32 → int32`
+`∀x. (numeric x) ⇒ x → x`
 
 Usage: `abs x`
 
-The absolute value of an int32.
+The absolute value of a numeric value.
 For non-negative inputs the result equals the input; for negative inputs the result is the
 arithmetic negation.
 Total but not injective at the boundary: `abs -2147483648` is `-2147483648` (the minimum
@@ -217,7 +220,7 @@ Since: 0.15
 
 #### div — **Draft**
 
-`int32 → int32 → optional<int32>`
+`∀x. (integral x) ⇒ x → x → optional<x>`
 
 Usage: `div x y`
 
@@ -265,14 +268,14 @@ Since: 0.15
 
 #### even — **Draft**
 
-`int32 → boolean`
+`∀x. (integral x) ⇒ x → boolean`
 
 Usage: `even x`
 
-Test whether an int32 is even.
+Test whether an integral value is even.
 Returns `true` if `x` is divisible by 2 (that is, `mod x 2` is `given 0`), and `false`
 otherwise.
-Total on all int32 inputs, including negative values and the minimum int32.
+Total on all inputs, including negative values and the minimum value of a fixed-width type.
 
 Since: 0.15
 
@@ -341,7 +344,7 @@ Since: 0.15
 
 #### mod — **Draft**
 
-`int32 → int32 → optional<int32>`
+`∀x. (integral x) ⇒ x → x → optional<x>`
 
 Usage: `mod x y`
 
@@ -401,14 +404,14 @@ Since: 0.18 (generalized from int32-only; the `numeric` class is #566)
 
 #### odd — **Draft**
 
-`int32 → boolean`
+`∀x. (integral x) ⇒ x → boolean`
 
 Usage: `odd x`
 
-Test whether an int32 is odd.
+Test whether an integral value is odd.
 `odd x` is `hydra.lib.logic.not (even x)`; this defining equation is the specification, and
 the default implementation.
-Total on all int32 inputs, including negative values and the minimum int32.
+Total on all inputs, including negative values and the minimum value of a fixed-width type.
 
 Since: 0.15
 
@@ -457,7 +460,7 @@ Since: 0.15
 
 #### rem — **Draft**
 
-`int32 → int32 → optional<int32>`
+`∀x. (integral x) ⇒ x → x → optional<x>`
 
 Usage: `rem x y`
 
@@ -528,11 +531,11 @@ Since: 0.15
 
 #### signum — **Draft**
 
-`int32 → int32`
+`∀x. (numeric x) ⇒ x → x`
 
 Usage: `signum x`
 
-The sign of an int32, as -1, 0, or 1.
+The sign of a numeric value, as -1, 0, or 1.
 Returns -1 if x < 0, 0 if x = 0, and 1 if x > 0.
 Satisfies the identity `mul (abs x) (signum x)` = `x` for every int32 except the minimum
 value, where the product wraps to the minimum value rather than its (unrepresentable)
