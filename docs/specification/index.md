@@ -130,7 +130,7 @@ Part I — The language:
 Part II — The type system:
 
 - Type inference and elaboration *(planned; consumes the rule enumeration of #377)*
-- [Validation](validation.md) — well-formedness constraints and profiles *(drafting)*
+- [Validation](validation.md) — conformance, the representation-generic framework, and the rule catalog
 
 Part III — The library:
 
