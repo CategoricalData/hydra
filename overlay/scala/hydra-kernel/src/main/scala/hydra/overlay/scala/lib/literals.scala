@@ -23,11 +23,16 @@ object literals:
   def decimalToFloat64(x: BigDecimal): Double = x.toDouble
   def float(ft: Any)(x: BigDecimal): Any = x // Placeholder
   // BigDecimal cannot represent NaN or Infinity; use sentinel zero (mirrors Java).
+  // Strips the cosmetic trailing ".0" Scala's toString always appends to whole values --
+  // the decimal's scale must reflect only the significant digits (2.0f is scale-0 "2",
+  // not scale-1 "2.0").
+  private def stripCosmeticZero(s: String): String =
+    if (s.endsWith(".0")) s.substring(0, s.length - 2) else s
   def float32ToDecimal(x: Float): BigDecimal =
-    if x.isNaN || x.isInfinite then BigDecimal(0) else BigDecimal(x.toString)
+    if x.isNaN || x.isInfinite then BigDecimal(0) else BigDecimal(stripCosmeticZero(x.toString))
   def float32ToFloat64(x: Float): Double = x.toDouble
   def float64ToDecimal(x: Double): BigDecimal =
-    if x.isNaN || x.isInfinite then BigDecimal(0) else BigDecimal(x.toString)
+    if x.isNaN || x.isInfinite then BigDecimal(0) else BigDecimal(stripCosmeticZero(x.toString))
   def float64ToFloat32(x: Double): Float = x.toFloat
   def int(it: Any)(x: BigInt): Any = x // Placeholder
   def int8ToBigint(x: Byte): BigInt = BigInt(x)
@@ -122,24 +127,33 @@ object literals:
 
   def printBigint(x: BigInt): String = x.toString
   def printBoolean(x: Boolean): String = if x then "true" else "false"
+  // Representation-faithful decimal printer, per docs/specification/json-format.md
+  // (Decimal formatting) and syntax.md (2.6): coefficient digits -- trailing
+  // zeros included -- are preserved exactly, and zero prints per its scale
+  // ("0", "0.0", "0.00"). Layout follows ECMAScript Number::toString / RFC 8785:
+  // positional form when the adjusted exponent a satisfies -6 <= a < 21,
+  // exponent form otherwise (one digit before the point, lowercase e,
+  // always-signed exponent, coefficient digits preserved).
   def printDecimal(x: BigDecimal): String = {
-    // Match Haskell's Data.Scientific show: "42.0", "3.14", "1.0e20", "1.0e-10".
-    val stripped = x.underlying.stripTrailingZeros
-    if (stripped.signum == 0) return "0.0"
-    val precision = stripped.precision
-    val scale = stripped.scale
-    val e = precision - scale - 1
-    val sign = if (stripped.signum < 0) "-" else ""
-    val plain = stripped.unscaledValue.abs.toString
-    // Haskell Scientific uses plain form iff -1 <= e <= 6; otherwise scientific.
-    if (e >= 7 || e < -1) {
-      val mantissa = if (plain.length == 1) plain + ".0" else plain.charAt(0).toString + "." + plain.substring(1)
-      s"$sign${mantissa}e$e"
+    val scale = x.scale
+    val digits = x.underlying.unscaledValue.abs.toString
+    val n = digits.length
+    val sign = if (x.signum < 0) "-" else ""
+    val a = n - 1 - scale
+    if (a >= -6 && a < 21) {
+      sign + printDecimalPositional(digits, scale, n)
     } else {
-      val s = stripped.toPlainString
-      if (s.contains(".")) s else s + ".0"
+      val mantissa = if (n == 1) digits + ".0" else digits.charAt(0).toString + "." + digits.substring(1)
+      s"$sign${mantissa}e${if (a >= 0) "+" else ""}$a"
     }
   }
+
+  // Places the decimal point `scale` digits from the right, padding with
+  // zeros on either side as needed.
+  private def printDecimalPositional(digits: String, scale: Int, n: Int): String =
+    if (scale <= 0) digits + "0" * (-scale)
+    else if (scale < n) digits.substring(0, n - scale) + "." + digits.substring(n - scale)
+    else "0." + "0" * (scale - n) + digits
   def showFloat(x: Any)(ft: Any): String = x.toString
   def printFloat32(x: Float): String = showHaskellFloat32(x)
   def printFloat64(x: Double): String = showHaskellDouble(x)
