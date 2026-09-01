@@ -120,8 +120,9 @@ round-trippable printing, totalized partiality, and functorial-last parameter or
 
 Part I — The language:
 
-- [The core data model](core.md) — every `hydra.core` type: the grammar of terms and
-  types *(drafting)*
+- [The core data model](data-model.md) — terms, types, names, graphs, and the construct families; the
+  conformance surface for the core representation *(early draft)*. The exhaustive per-`hydra.core`-type
+  catalog is the generated module page (#723).
 - [Textual syntax](syntax.md) — the notation for terms, types, and their dependencies
 - [Constraint classes](classes.md) — the five classes and their semantics
 - [Ordering and equality](ordering-and-equality.md) — the canonical total order and
