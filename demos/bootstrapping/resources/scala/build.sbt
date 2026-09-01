@@ -8,7 +8,7 @@ lazy val root = project
   .in(file("."))
   .settings(
     name := "Hydra-Scala-Bootstrap",
-    version := "0.17.6",
+    version := "0.17.7",
 
     scalaVersion := scala3Version,
 
