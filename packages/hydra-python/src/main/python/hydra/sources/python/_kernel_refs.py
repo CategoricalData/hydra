@@ -74,6 +74,7 @@ utils_py_class_definition_to_py_statement = _utils.py_class_definition_to_py_sta
 utils_py_expression_to_py_statement = _utils.py_expression_to_py_statement
 utils_triple_quoted_string = _utils.triple_quoted_string
 utils_unit_variant_methods = _utils.unit_variant_methods
+utils_decimal_variant_methods = _utils.decimal_variant_methods
 utils_annotated_statement = _utils.annotated_statement
 utils_dotted_assignment_statement = _utils.dotted_assignment_statement
 utils_comment_statement = _utils.comment_statement

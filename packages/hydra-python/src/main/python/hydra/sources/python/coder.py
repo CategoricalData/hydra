@@ -4956,6 +4956,13 @@ def _encode_union_field():
                                 ),
                             ),
                             (
+                                "isDecimal",
+                                Equality.equal(
+                                    hydra.dsl.strip.deannotate_type(var("ftype")),
+                                    Core.type_literal(Core.literal_type_decimal),
+                                ),
+                            ),
+                            (
                                 "varName",
                                 _local("deconflictVariantName")(false(), var("env"), var("unionName"), var("fname"), _env("graph", "env")),
                             ),
@@ -4986,7 +4993,15 @@ def _encode_union_field():
                                                 _kref.utils_unit_variant_methods(var("varName"))
                                             ]
                                         )),
-                                    _kref.utils_indented_block(var("fcomment"), list_([])),
+                                    Logic.if_else(
+                                        var("isDecimal"),
+                                        _kref.utils_indented_block(var("fcomment"), list_(
+                                                [
+                                                    _kref.utils_decimal_variant_methods
+                                                ]
+                                            )),
+                                        _kref.utils_indented_block(var("fcomment"), list_([])),
+                                    ),
                                 ),
                             ),
                         ],
@@ -7317,6 +7332,15 @@ def _module_standard_imports():
                     _local("condImportSymbol")(string("Lazy"), boolean(True)),
                     cond("PersistentMap", "usesFrozenDict"),
                     cond("PersistentSet", "usesFrozenSet"),
+                ]
+            ),
+        ),
+        pair(
+            string("hydra.overlay.python.util._decimal"),
+            list_(
+                [
+                    cond("decimal_node_eq", "usesDecimal"),
+                    cond("decimal_node_hash", "usesDecimal"),
                 ]
             ),
         ),

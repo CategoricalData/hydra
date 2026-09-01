@@ -164,6 +164,78 @@ def _short_circuit_to_nothing(predicates_and_else):
     return out
 
 
+def _decimal_variant_methods():
+    eq_body_def = _local("pySimpleStatementToPyStatement")(PySyn.simple_statement_return(
+            PySyn.return_statement(list_([
+                PySyn.star_expression_simple(
+                    _local("functionCall")(PyDsl.py_name_to_py_primary(_py_name("decimal_node_eq")), list_([
+                            PyDsl.py_name_to_py_expression(_py_name("self")),
+                            PyDsl.py_name_to_py_expression(_py_name("other")),
+                        ])),
+                ),
+            ])),
+        ))
+    eq_method_def = PySyn.statement_compound(
+        PySyn.compound_statement_function(
+            PySyn.function_definition(
+                nothing(),
+                PySyn.function_def_raw(
+                    false(),
+                    _py_name("__eq__"),
+                    list_([]),
+                    just(_local("selfOtherParams")),
+                    nothing(),
+                    nothing(),
+                    _local("indentedBlock")(nothing(), list_([list_([var("eqBody")])])),
+                ),
+            ),
+        ),
+    )
+    hash_body_def = _local("pySimpleStatementToPyStatement")(PySyn.simple_statement_return(
+            PySyn.return_statement(list_([
+                PySyn.star_expression_simple(
+                    _local("functionCall")(PyDsl.py_name_to_py_primary(_py_name("decimal_node_hash")), list_([
+                            PyDsl.py_name_to_py_expression(_py_name("self")),
+                        ])),
+                ),
+            ])),
+        ))
+    hash_method_def = PySyn.statement_compound(
+        PySyn.compound_statement_function(
+            PySyn.function_definition(
+                nothing(),
+                PySyn.function_def_raw(
+                    false(),
+                    _py_name("__hash__"),
+                    list_([]),
+                    just(_local("selfOnlyParams")),
+                    nothing(),
+                    nothing(),
+                    _local("indentedBlock")(nothing(), list_([list_([var("hashBody")])])),
+                ),
+            ),
+        ),
+    )
+    body = let_chain(
+        [
+            ("eqBody", eq_body_def),
+            ("eqMethod", eq_method_def),
+            ("hashBody", hash_body_def),
+            ("hashMethod", hash_method_def),
+        ],
+        list_([
+            var("eqMethod"),
+            var("hashMethod"),
+        ]),
+    )
+    return (_def("decimalVariantMethods")
+        .doc("Generate __eq__ and __hash__ methods for the Decimal-typed union variant, "
+             "delegating to hydra.overlay.python.util._decimal (scale-aware per "
+             "docs/specification/ordering-and-equality.md; Node's generic derivation "
+             "delegates to Decimal's own scale-blind equality/hash)")
+        .to(body))
+
+
 def _decode_py_comparison_to_py_await_primary():
     body = lets(
         [
@@ -1176,6 +1248,7 @@ def _build_module() -> Module:
             to_definition(_assignment_statement()),
             to_definition(_cast_to()),
             to_definition(_comment_statement()),
+            to_definition(_decimal_variant_methods()),
             to_definition(_decode_py_comparison_to_py_await_primary()),
             to_definition(_decode_py_conjunction_to_py_primary()),
             to_definition(_decode_py_expression_to_py_primary()),

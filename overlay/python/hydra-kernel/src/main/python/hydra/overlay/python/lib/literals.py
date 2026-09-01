@@ -166,8 +166,13 @@ def decimal_to_float64(x: Decimal) -> float:
 
 
 def float32_to_decimal(x: float) -> Decimal:
-    """Convert a float32 (Float) to a decimal."""
-    return Decimal(str(x))
+    """Convert a float32 (Float) to a decimal. Strips the cosmetic trailing ".0"
+    Python's str() always appends to whole values -- the decimal's scale must
+    reflect only the significant digits (2.0 is scale-0 "2", not scale-1 "2.0")."""
+    s = str(x)
+    if s.endswith(".0"):
+        s = s[:-2]
+    return Decimal(s)
 
 
 def float32_to_float64(x: float) -> float:
@@ -176,8 +181,13 @@ def float32_to_float64(x: float) -> float:
 
 
 def float64_to_decimal(x: float) -> Decimal:
-    """Convert a float64 (Double) to a decimal."""
-    return Decimal(str(x))
+    """Convert a float64 (Double) to a decimal. Strips the cosmetic trailing ".0"
+    Python's str() always appends to whole values -- the decimal's scale must
+    reflect only the significant digits (2.0 is scale-0 "2", not scale-1 "2.0")."""
+    s = str(x)
+    if s.endswith(".0"):
+        s = s[:-2]
+    return Decimal(s)
 
 
 def float64_to_float32(x: float) -> float:
@@ -375,37 +385,36 @@ def print_boolean(b: bool) -> str:
 
 
 def print_decimal(x: Decimal) -> str:
-    """Convert a decimal to its string, matching Haskell's Data.Scientific show."""
-    # Normalize: strip trailing zeros, then format as decimal or scientific.
-    normalized = x.normalize() if x != 0 else Decimal(0)
-    # decimal.Decimal.as_tuple() gives (sign, digits, exponent)
-    sign, digits, exp = normalized.as_tuple()
+    """Convert a decimal to its representation-faithful string, per
+    docs/specification/json-format.md (Decimal formatting) and syntax.md (2.6):
+    coefficient digits -- trailing zeros included -- are preserved exactly, and
+    zero prints per its scale ("0", "0.0", "0.00"). Layout follows ECMAScript
+    Number::toString / RFC 8785: positional form when the adjusted exponent a
+    satisfies -6 <= a < 21, exponent form otherwise (one digit before the
+    point, lowercase e, always-signed exponent, coefficient digits preserved).
+    """
+    sign, digit_tuple, exp = x.as_tuple()
     if not isinstance(exp, int):
         return str(x)
-    coefficient = ''.join(str(d) for d in digits) or '0'
-    # Haskell Scientific e = precision - scale - 1 where precision = len(digits),
-    # scale = -exp. So e = len(digits) + exp - 1.
-    if x == 0:
-        return "0.0"
-    e = len(digits) + exp - 1
+    digits = ''.join(str(d) for d in digit_tuple) or '0'
+    scale = -exp
+    n = len(digits)
     sign_str = "-" if sign else ""
-    # Haskell Scientific uses plain form iff -1 <= e <= 6; otherwise scientific.
-    if e >= 7 or e < -1:
-        if len(coefficient) == 1:
-            mantissa = coefficient + ".0"
+    # Adjusted exponent: position of the leading significant digit.
+    a = n - 1 - scale
+    if -6 <= a < 21:
+        if scale <= 0:
+            body = digits + "0" * (-scale)
+        elif scale < n:
+            idx = n - scale
+            body = digits[:idx] + "." + digits[idx:]
         else:
-            mantissa = coefficient[0] + "." + coefficient[1:]
-        return f"{sign_str}{mantissa}e{e}"
+            body = "0." + "0" * (scale - n) + digits
+        return f"{sign_str}{body}"
     else:
-        # Decimal notation with at least one digit after the dot
-        if exp >= 0:
-            plain = coefficient + "0" * exp + ".0"
-        elif -exp < len(coefficient):
-            idx = len(coefficient) + exp
-            plain = coefficient[:idx] + "." + coefficient[idx:]
-        else:
-            plain = "0." + "0" * (-exp - len(coefficient)) + coefficient
-        return f"{sign_str}{plain}"
+        mantissa = digits + ".0" if n == 1 else digits[0] + "." + digits[1:]
+        exp_str = f"+{a}" if a >= 0 else str(a)
+        return f"{sign_str}{mantissa}e{exp_str}"
 
 
 def print_float32(x: float) -> str:
