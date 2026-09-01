@@ -264,6 +264,545 @@
                   "value": {"literal": {"string": "Create a comment statement (triple-quoted string)"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.python.utils.decimalVariantMethods",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"list": {"variable": "hydra.python.syntax.Statement"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "let": {
+                "bindings": [
+                  {
+                    "name": "eqBody",
+                    "term": {
+                      "application": {
+                        "function": {"variable": "hydra.python.utils.pySimpleStatementToPyStatement"},
+                        "argument": {
+                          "inject": {
+                            "typeName": "hydra.python.syntax.SimpleStatement",
+                            "field": {
+                              "name": "return",
+                              "term": {
+                                "wrap": {
+                                  "typeName": "hydra.python.syntax.ReturnStatement",
+                                  "body": {
+                                    "list": [
+                                      {
+                                        "inject": {
+                                          "typeName": "hydra.python.syntax.StarExpression",
+                                          "field": {
+                                            "name": "simple",
+                                            "term": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"variable": "hydra.python.utils.functionCall"},
+                                                    "argument": {
+                                                      "inject": {
+                                                        "typeName": "hydra.python.syntax.Primary",
+                                                        "field": {
+                                                          "name": "simple",
+                                                          "term": {
+                                                            "inject": {
+                                                              "typeName": "hydra.python.syntax.Atom",
+                                                              "field": {
+                                                                "name": "name",
+                                                                "term": {"wrap": {"typeName": "hydra.python.syntax.Name", "body": {"literal": {"string": "decimal_node_eq"}}}}}}}}}}}},
+                                                "argument": {
+                                                  "list": [
+                                                    {
+                                                      "inject": {
+                                                        "typeName": "hydra.python.syntax.Expression",
+                                                        "field": {
+                                                          "name": "simple",
+                                                          "term": {
+                                                            "wrap": {
+                                                              "typeName": "hydra.python.syntax.Disjunction",
+                                                              "body": {
+                                                                "list": [
+                                                                  {
+                                                                    "wrap": {
+                                                                      "typeName": "hydra.python.syntax.Conjunction",
+                                                                      "body": {
+                                                                        "list": [
+                                                                          {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.python.syntax.Inversion",
+                                                                              "field": {
+                                                                                "name": "simple",
+                                                                                "term": {
+                                                                                  "record": {
+                                                                                    "typeName": "hydra.python.syntax.Comparison",
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "lhs",
+                                                                                        "term": {
+                                                                                          "record": {
+                                                                                            "typeName": "hydra.python.syntax.BitwiseOr",
+                                                                                            "fields": [
+                                                                                              {
+                                                                                                "name": "lhs",
+                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
+                                                                                              {
+                                                                                                "name": "rhs",
+                                                                                                "term": {
+                                                                                                  "record": {
+                                                                                                    "typeName": "hydra.python.syntax.BitwiseXor",
+                                                                                                    "fields": [
+                                                                                                      {
+                                                                                                        "name": "lhs",
+                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
+                                                                                                      {
+                                                                                                        "name": "rhs",
+                                                                                                        "term": {
+                                                                                                          "record": {
+                                                                                                            "typeName": "hydra.python.syntax.BitwiseAnd",
+                                                                                                            "fields": [
+                                                                                                              {
+                                                                                                                "name": "lhs",
+                                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
+                                                                                                              {
+                                                                                                                "name": "rhs",
+                                                                                                                "term": {
+                                                                                                                  "record": {
+                                                                                                                    "typeName": "hydra.python.syntax.ShiftExpression",
+                                                                                                                    "fields": [
+                                                                                                                      {
+                                                                                                                        "name": "lhs",
+                                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
+                                                                                                                      {
+                                                                                                                        "name": "rhs",
+                                                                                                                        "term": {
+                                                                                                                          "record": {
+                                                                                                                            "typeName": "hydra.python.syntax.Sum",
+                                                                                                                            "fields": [
+                                                                                                                              {
+                                                                                                                                "name": "lhs",
+                                                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
+                                                                                                                              {
+                                                                                                                                "name": "rhs",
+                                                                                                                                "term": {
+                                                                                                                                  "record": {
+                                                                                                                                    "typeName": "hydra.python.syntax.Term",
+                                                                                                                                    "fields": [
+                                                                                                                                      {
+                                                                                                                                        "name": "lhs",
+                                                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
+                                                                                                                                      {
+                                                                                                                                        "name": "rhs",
+                                                                                                                                        "term": {
+                                                                                                                                          "inject": {
+                                                                                                                                            "typeName": "hydra.python.syntax.Factor",
+                                                                                                                                            "field": {
+                                                                                                                                              "name": "simple",
+                                                                                                                                              "term": {
+                                                                                                                                                "record": {
+                                                                                                                                                  "typeName": "hydra.python.syntax.Power",
+                                                                                                                                                  "fields": [
+                                                                                                                                                    {
+                                                                                                                                                      "name": "lhs",
+                                                                                                                                                      "term": {
+                                                                                                                                                        "record": {
+                                                                                                                                                          "typeName": "hydra.python.syntax.AwaitPrimary",
+                                                                                                                                                          "fields": [
+                                                                                                                                                            {"name": "await", "term": {"literal": {"boolean": false}}},
+                                                                                                                                                            {
+                                                                                                                                                              "name": "primary",
+                                                                                                                                                              "term": {
+                                                                                                                                                                "inject": {
+                                                                                                                                                                  "typeName": "hydra.python.syntax.Primary",
+                                                                                                                                                                  "field": {
+                                                                                                                                                                    "name": "simple",
+                                                                                                                                                                    "term": {
+                                                                                                                                                                      "inject": {
+                                                                                                                                                                        "typeName": "hydra.python.syntax.Atom",
+                                                                                                                                                                        "field": {"name": "name", "term": {"wrap": {"typeName": "hydra.python.syntax.Name", "body": {"literal": {"string": "self"}}}}}}}}}}}]}}},
+                                                                                                                                                    {
+                                                                                                                                                      "name": "rhs",
+                                                                                                                                                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}]}}}}}}]}}}]}}}]}}}]}}}]}}}]}}},
+                                                                                      {
+                                                                                        "name": "rhs",
+                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}}}]}}}}}]}}}]}}}}}},
+                                                    {
+                                                      "inject": {
+                                                        "typeName": "hydra.python.syntax.Expression",
+                                                        "field": {
+                                                          "name": "simple",
+                                                          "term": {
+                                                            "wrap": {
+                                                              "typeName": "hydra.python.syntax.Disjunction",
+                                                              "body": {
+                                                                "list": [
+                                                                  {
+                                                                    "wrap": {
+                                                                      "typeName": "hydra.python.syntax.Conjunction",
+                                                                      "body": {
+                                                                        "list": [
+                                                                          {
+                                                                            "inject": {
+                                                                              "typeName": "hydra.python.syntax.Inversion",
+                                                                              "field": {
+                                                                                "name": "simple",
+                                                                                "term": {
+                                                                                  "record": {
+                                                                                    "typeName": "hydra.python.syntax.Comparison",
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "lhs",
+                                                                                        "term": {
+                                                                                          "record": {
+                                                                                            "typeName": "hydra.python.syntax.BitwiseOr",
+                                                                                            "fields": [
+                                                                                              {
+                                                                                                "name": "lhs",
+                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
+                                                                                              {
+                                                                                                "name": "rhs",
+                                                                                                "term": {
+                                                                                                  "record": {
+                                                                                                    "typeName": "hydra.python.syntax.BitwiseXor",
+                                                                                                    "fields": [
+                                                                                                      {
+                                                                                                        "name": "lhs",
+                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
+                                                                                                      {
+                                                                                                        "name": "rhs",
+                                                                                                        "term": {
+                                                                                                          "record": {
+                                                                                                            "typeName": "hydra.python.syntax.BitwiseAnd",
+                                                                                                            "fields": [
+                                                                                                              {
+                                                                                                                "name": "lhs",
+                                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
+                                                                                                              {
+                                                                                                                "name": "rhs",
+                                                                                                                "term": {
+                                                                                                                  "record": {
+                                                                                                                    "typeName": "hydra.python.syntax.ShiftExpression",
+                                                                                                                    "fields": [
+                                                                                                                      {
+                                                                                                                        "name": "lhs",
+                                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
+                                                                                                                      {
+                                                                                                                        "name": "rhs",
+                                                                                                                        "term": {
+                                                                                                                          "record": {
+                                                                                                                            "typeName": "hydra.python.syntax.Sum",
+                                                                                                                            "fields": [
+                                                                                                                              {
+                                                                                                                                "name": "lhs",
+                                                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
+                                                                                                                              {
+                                                                                                                                "name": "rhs",
+                                                                                                                                "term": {
+                                                                                                                                  "record": {
+                                                                                                                                    "typeName": "hydra.python.syntax.Term",
+                                                                                                                                    "fields": [
+                                                                                                                                      {
+                                                                                                                                        "name": "lhs",
+                                                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
+                                                                                                                                      {
+                                                                                                                                        "name": "rhs",
+                                                                                                                                        "term": {
+                                                                                                                                          "inject": {
+                                                                                                                                            "typeName": "hydra.python.syntax.Factor",
+                                                                                                                                            "field": {
+                                                                                                                                              "name": "simple",
+                                                                                                                                              "term": {
+                                                                                                                                                "record": {
+                                                                                                                                                  "typeName": "hydra.python.syntax.Power",
+                                                                                                                                                  "fields": [
+                                                                                                                                                    {
+                                                                                                                                                      "name": "lhs",
+                                                                                                                                                      "term": {
+                                                                                                                                                        "record": {
+                                                                                                                                                          "typeName": "hydra.python.syntax.AwaitPrimary",
+                                                                                                                                                          "fields": [
+                                                                                                                                                            {"name": "await", "term": {"literal": {"boolean": false}}},
+                                                                                                                                                            {
+                                                                                                                                                              "name": "primary",
+                                                                                                                                                              "term": {
+                                                                                                                                                                "inject": {
+                                                                                                                                                                  "typeName": "hydra.python.syntax.Primary",
+                                                                                                                                                                  "field": {
+                                                                                                                                                                    "name": "simple",
+                                                                                                                                                                    "term": {
+                                                                                                                                                                      "inject": {
+                                                                                                                                                                        "typeName": "hydra.python.syntax.Atom",
+                                                                                                                                                                        "field": {"name": "name", "term": {"wrap": {"typeName": "hydra.python.syntax.Name", "body": {"literal": {"string": "other"}}}}}}}}}}}]}}},
+                                                                                                                                                    {
+                                                                                                                                                      "name": "rhs",
+                                                                                                                                                      "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}]}}}}}}]}}}]}}}]}}}]}}}]}}}]}}},
+                                                                                      {
+                                                                                        "name": "rhs",
+                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}}}]}}}}}]}}}]}}}}}}]}}}}}}]}}}}}}}},
+                    "typeScheme": {"variables": [], "body": {"variable": "hydra.python.syntax.Statement"}, "constraints": []}}],
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "eqMethod",
+                        "term": {
+                          "inject": {
+                            "typeName": "hydra.python.syntax.Statement",
+                            "field": {
+                              "name": "compound",
+                              "term": {
+                                "inject": {
+                                  "typeName": "hydra.python.syntax.CompoundStatement",
+                                  "field": {
+                                    "name": "function",
+                                    "term": {
+                                      "record": {
+                                        "typeName": "hydra.python.syntax.FunctionDefinition",
+                                        "fields": [
+                                          {
+                                            "name": "decorators",
+                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Decorators"}}}},
+                                          {
+                                            "name": "raw",
+                                            "term": {
+                                              "record": {
+                                                "typeName": "hydra.python.syntax.FunctionDefRaw",
+                                                "fields": [
+                                                  {"name": "async", "term": {"literal": {"boolean": false}}},
+                                                  {"name": "name", "term": {"wrap": {"typeName": "hydra.python.syntax.Name", "body": {"literal": {"string": "__eq__"}}}}},
+                                                  {
+                                                    "name": "typeParams",
+                                                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.TypeParameter"}}}},
+                                                  {"name": "params", "term": {"optional": {"variable": "hydra.python.utils.selfOtherParams"}}},
+                                                  {
+                                                    "name": "returnType",
+                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}},
+                                                  {
+                                                    "name": "funcTypeComment",
+                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.FuncTypeComment"}}}},
+                                                  {
+                                                    "name": "block",
+                                                    "term": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"variable": "hydra.python.utils.indentedBlock"},
+                                                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}},
+                                                        "argument": {"list": [{"list": [{"variable": "eqBody"}]}]}}}}]}}}]}}}}}}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.python.syntax.Statement"}, "constraints": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "hashBody",
+                            "term": {
+                              "application": {
+                                "function": {"variable": "hydra.python.utils.pySimpleStatementToPyStatement"},
+                                "argument": {
+                                  "inject": {
+                                    "typeName": "hydra.python.syntax.SimpleStatement",
+                                    "field": {
+                                      "name": "return",
+                                      "term": {
+                                        "wrap": {
+                                          "typeName": "hydra.python.syntax.ReturnStatement",
+                                          "body": {
+                                            "list": [
+                                              {
+                                                "inject": {
+                                                  "typeName": "hydra.python.syntax.StarExpression",
+                                                  "field": {
+                                                    "name": "simple",
+                                                    "term": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {"variable": "hydra.python.utils.functionCall"},
+                                                            "argument": {
+                                                              "inject": {
+                                                                "typeName": "hydra.python.syntax.Primary",
+                                                                "field": {
+                                                                  "name": "simple",
+                                                                  "term": {
+                                                                    "inject": {
+                                                                      "typeName": "hydra.python.syntax.Atom",
+                                                                      "field": {
+                                                                        "name": "name",
+                                                                        "term": {"wrap": {"typeName": "hydra.python.syntax.Name", "body": {"literal": {"string": "decimal_node_hash"}}}}}}}}}}}},
+                                                        "argument": {
+                                                          "list": [
+                                                            {
+                                                              "inject": {
+                                                                "typeName": "hydra.python.syntax.Expression",
+                                                                "field": {
+                                                                  "name": "simple",
+                                                                  "term": {
+                                                                    "wrap": {
+                                                                      "typeName": "hydra.python.syntax.Disjunction",
+                                                                      "body": {
+                                                                        "list": [
+                                                                          {
+                                                                            "wrap": {
+                                                                              "typeName": "hydra.python.syntax.Conjunction",
+                                                                              "body": {
+                                                                                "list": [
+                                                                                  {
+                                                                                    "inject": {
+                                                                                      "typeName": "hydra.python.syntax.Inversion",
+                                                                                      "field": {
+                                                                                        "name": "simple",
+                                                                                        "term": {
+                                                                                          "record": {
+                                                                                            "typeName": "hydra.python.syntax.Comparison",
+                                                                                            "fields": [
+                                                                                              {
+                                                                                                "name": "lhs",
+                                                                                                "term": {
+                                                                                                  "record": {
+                                                                                                    "typeName": "hydra.python.syntax.BitwiseOr",
+                                                                                                    "fields": [
+                                                                                                      {
+                                                                                                        "name": "lhs",
+                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseOr"}}}},
+                                                                                                      {
+                                                                                                        "name": "rhs",
+                                                                                                        "term": {
+                                                                                                          "record": {
+                                                                                                            "typeName": "hydra.python.syntax.BitwiseXor",
+                                                                                                            "fields": [
+                                                                                                              {
+                                                                                                                "name": "lhs",
+                                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseXor"}}}},
+                                                                                                              {
+                                                                                                                "name": "rhs",
+                                                                                                                "term": {
+                                                                                                                  "record": {
+                                                                                                                    "typeName": "hydra.python.syntax.BitwiseAnd",
+                                                                                                                    "fields": [
+                                                                                                                      {
+                                                                                                                        "name": "lhs",
+                                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.BitwiseAnd"}}}},
+                                                                                                                      {
+                                                                                                                        "name": "rhs",
+                                                                                                                        "term": {
+                                                                                                                          "record": {
+                                                                                                                            "typeName": "hydra.python.syntax.ShiftExpression",
+                                                                                                                            "fields": [
+                                                                                                                              {
+                                                                                                                                "name": "lhs",
+                                                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.ShiftLhs"}}}},
+                                                                                                                              {
+                                                                                                                                "name": "rhs",
+                                                                                                                                "term": {
+                                                                                                                                  "record": {
+                                                                                                                                    "typeName": "hydra.python.syntax.Sum",
+                                                                                                                                    "fields": [
+                                                                                                                                      {
+                                                                                                                                        "name": "lhs",
+                                                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.SumLhs"}}}},
+                                                                                                                                      {
+                                                                                                                                        "name": "rhs",
+                                                                                                                                        "term": {
+                                                                                                                                          "record": {
+                                                                                                                                            "typeName": "hydra.python.syntax.Term",
+                                                                                                                                            "fields": [
+                                                                                                                                              {
+                                                                                                                                                "name": "lhs",
+                                                                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.TermLhs"}}}},
+                                                                                                                                              {
+                                                                                                                                                "name": "rhs",
+                                                                                                                                                "term": {
+                                                                                                                                                  "inject": {
+                                                                                                                                                    "typeName": "hydra.python.syntax.Factor",
+                                                                                                                                                    "field": {
+                                                                                                                                                      "name": "simple",
+                                                                                                                                                      "term": {
+                                                                                                                                                        "record": {
+                                                                                                                                                          "typeName": "hydra.python.syntax.Power",
+                                                                                                                                                          "fields": [
+                                                                                                                                                            {
+                                                                                                                                                              "name": "lhs",
+                                                                                                                                                              "term": {
+                                                                                                                                                                "record": {
+                                                                                                                                                                  "typeName": "hydra.python.syntax.AwaitPrimary",
+                                                                                                                                                                  "fields": [
+                                                                                                                                                                    {"name": "await", "term": {"literal": {"boolean": false}}},
+                                                                                                                                                                    {
+                                                                                                                                                                      "name": "primary",
+                                                                                                                                                                      "term": {
+                                                                                                                                                                        "inject": {
+                                                                                                                                                                          "typeName": "hydra.python.syntax.Primary",
+                                                                                                                                                                          "field": {
+                                                                                                                                                                            "name": "simple",
+                                                                                                                                                                            "term": {
+                                                                                                                                                                              "inject": {
+                                                                                                                                                                                "typeName": "hydra.python.syntax.Atom",
+                                                                                                                                                                                "field": {"name": "name", "term": {"wrap": {"typeName": "hydra.python.syntax.Name", "body": {"literal": {"string": "self"}}}}}}}}}}}]}}},
+                                                                                                                                                            {
+                                                                                                                                                              "name": "rhs",
+                                                                                                                                                              "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Factor"}}}}]}}}}}}]}}}]}}}]}}}]}}}]}}}]}}},
+                                                                                              {
+                                                                                                "name": "rhs",
+                                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}}}]}}}}}]}}}]}}}}}}]}}}}}}]}}}}}}}},
+                            "typeScheme": {"variables": [], "body": {"variable": "hydra.python.syntax.Statement"}, "constraints": []}}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "hashMethod",
+                                "term": {
+                                  "inject": {
+                                    "typeName": "hydra.python.syntax.Statement",
+                                    "field": {
+                                      "name": "compound",
+                                      "term": {
+                                        "inject": {
+                                          "typeName": "hydra.python.syntax.CompoundStatement",
+                                          "field": {
+                                            "name": "function",
+                                            "term": {
+                                              "record": {
+                                                "typeName": "hydra.python.syntax.FunctionDefinition",
+                                                "fields": [
+                                                  {
+                                                    "name": "decorators",
+                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Decorators"}}}},
+                                                  {
+                                                    "name": "raw",
+                                                    "term": {
+                                                      "record": {
+                                                        "typeName": "hydra.python.syntax.FunctionDefRaw",
+                                                        "fields": [
+                                                          {"name": "async", "term": {"literal": {"boolean": false}}},
+                                                          {
+                                                            "name": "name",
+                                                            "term": {"wrap": {"typeName": "hydra.python.syntax.Name", "body": {"literal": {"string": "__hash__"}}}}},
+                                                          {
+                                                            "name": "typeParams",
+                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.python.syntax.TypeParameter"}}}},
+                                                          {"name": "params", "term": {"optional": {"variable": "hydra.python.utils.selfOnlyParams"}}},
+                                                          {
+                                                            "name": "returnType",
+                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Expression"}}}},
+                                                          {
+                                                            "name": "funcTypeComment",
+                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.FuncTypeComment"}}}},
+                                                          {
+                                                            "name": "block",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {"variable": "hydra.python.utils.indentedBlock"},
+                                                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}},
+                                                                "argument": {"list": [{"list": [{"variable": "hashBody"}]}]}}}}]}}}]}}}}}}}},
+                                "typeScheme": {"variables": [], "body": {"variable": "hydra.python.syntax.Statement"}, "constraints": []}}],
+                            "body": {"list": [{"variable": "eqMethod"}, {"variable": "hashMethod"}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Generate __eq__ and __hash__ methods for the Decimal-typed union variant, delegating to hydra.overlay.python.util._decimal (scale-aware per docs/specification/ordering-and-equality.md; Node's generic derivation delegates to Decimal's own scale-blind equality/hash)"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.python.utils.decodePyComparisonToPyAwaitPrimary",
         "signature": {
           "typeParameters": [],

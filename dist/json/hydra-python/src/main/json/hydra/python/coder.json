@@ -17212,185 +17212,215 @@
                                                       "let": {
                                                         "bindings": [
                                                           {
-                                                            "name": "varName",
+                                                            "name": "isDecimal",
                                                             "term": {
                                                               "application": {
                                                                 "function": {
+                                                                  "application": {
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"variable": "hydra.core.Type"}}},
+                                                                    "argument": {"application": {"function": {"variable": "hydra.strip.deannotateType"}, "argument": {"variable": "ftype"}}}}},
+                                                                "argument": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.Type",
+                                                                    "field": {
+                                                                      "name": "literal",
+                                                                      "term": {"inject": {"typeName": "hydra.core.LiteralType", "field": {"name": "decimal", "term": "unit"}}}}}}}},
+                                                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "varName",
+                                                                "term": {
                                                                   "application": {
                                                                     "function": {
                                                                       "application": {
                                                                         "function": {
                                                                           "application": {
                                                                             "function": {
-                                                                              "application": {"function": {"variable": "hydra.python.coder.deconflictVariantName"}, "argument": {"literal": {"boolean": false}}}},
-                                                                            "argument": {"variable": "env"}}},
-                                                                        "argument": {"variable": "unionName"}}},
-                                                                    "argument": {"variable": "fname"}}},
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "function": {"project": {"typeName": "hydra.python.environment.PythonEnvironment", "fieldName": "graph"}},
-                                                                    "argument": {"variable": "env"}}}}},
-                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.python.syntax.Name"}, "constraints": []}}],
-                                                        "body": {
-                                                          "let": {
-                                                            "bindings": [
-                                                              {
-                                                                "name": "tparamNames",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "function": {"application": {"function": {"variable": "hydra.python.coder.findTypeParams"}, "argument": {"variable": "env"}}},
-                                                                    "argument": {"variable": "ftype"}}},
-                                                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}, "constraints": []}}],
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {"function": {"variable": "hydra.python.coder.deconflictVariantName"}, "argument": {"literal": {"boolean": false}}}},
+                                                                                "argument": {"variable": "env"}}},
+                                                                            "argument": {"variable": "unionName"}}},
+                                                                        "argument": {"variable": "fname"}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {"project": {"typeName": "hydra.python.environment.PythonEnvironment", "fieldName": "graph"}},
+                                                                        "argument": {"variable": "env"}}}}},
+                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.python.syntax.Name"}, "constraints": []}}],
                                                             "body": {
                                                               "let": {
                                                                 "bindings": [
                                                                   {
-                                                                    "name": "tparamPyNames",
+                                                                    "name": "tparamNames",
                                                                     "term": {
                                                                       "application": {
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                "type": {"variable": "hydra.python.syntax.Name"}}},
-                                                                            "argument": {"variable": "hydra.python.names.encodeTypeVariable"}}},
-                                                                        "argument": {"variable": "tparamNames"}}},
-                                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.python.syntax.Name"}}, "constraints": []}}],
+                                                                        "function": {"application": {"function": {"variable": "hydra.python.coder.findTypeParams"}, "argument": {"variable": "env"}}},
+                                                                        "argument": {"variable": "ftype"}}},
+                                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}, "constraints": []}}],
                                                                 "body": {
                                                                   "let": {
                                                                     "bindings": [
                                                                       {
-                                                                        "name": "fieldParams",
+                                                                        "name": "tparamPyNames",
                                                                         "term": {
                                                                           "application": {
                                                                             "function": {
                                                                               "application": {
                                                                                 "function": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.python.syntax.Name"}}},
-                                                                                    "type": {"variable": "hydra.python.syntax.TypeParameter"}}},
-                                                                                "argument": {"variable": "hydra.python.utils.pyNameToPyTypeParameter"}}},
-                                                                            "argument": {"variable": "tparamPyNames"}}},
-                                                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.python.syntax.TypeParameter"}}, "constraints": []}}],
+                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                    "type": {"variable": "hydra.python.syntax.Name"}}},
+                                                                                "argument": {"variable": "hydra.python.names.encodeTypeVariable"}}},
+                                                                            "argument": {"variable": "tparamNames"}}},
+                                                                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.python.syntax.Name"}}, "constraints": []}}],
                                                                     "body": {
                                                                       "let": {
                                                                         "bindings": [
                                                                           {
-                                                                            "name": "body",
+                                                                            "name": "fieldParams",
                                                                             "term": {
                                                                               "application": {
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "function": {
-                                                                                      "application": {
-                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.python.syntax.Block"}}},
-                                                                                        "argument": {"variable": "isUnit"}}},
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "function": {"application": {"function": {"variable": "hydra.python.utils.indentedBlock"}, "argument": {"variable": "fcomment"}}},
-                                                                                        "argument": {
-                                                                                          "list": [
-                                                                                            {
-                                                                                              "application": {"function": {"variable": "hydra.python.utils.unitVariantMethods"}, "argument": {"variable": "varName"}}}]}}}}},
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "function": {"application": {"function": {"variable": "hydra.python.utils.indentedBlock"}, "argument": {"variable": "fcomment"}}},
-                                                                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"list": {"variable": "hydra.python.syntax.Statement"}}}}}}}},
-                                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.python.syntax.Block"}, "constraints": []}}],
-                                                                        "body": {
-                                                                          "application": {
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                                        "type": {"optional": {"variable": "hydra.python.syntax.Args"}}}},
-                                                                                    "type": {"variable": "hydra.python.syntax.Statement"}}},
-                                                                                "argument": {
+                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.python.syntax.Name"}}},
+                                                                                        "type": {"variable": "hydra.python.syntax.TypeParameter"}}},
+                                                                                    "argument": {"variable": "hydra.python.utils.pyNameToPyTypeParameter"}}},
+                                                                                "argument": {"variable": "tparamPyNames"}}},
+                                                                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.python.syntax.TypeParameter"}}, "constraints": []}}],
+                                                                        "body": {
+                                                                          "let": {
+                                                                            "bindings": [
+                                                                              {
+                                                                                "name": "body",
+                                                                                "term": {
                                                                                   "application": {
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "function": {
                                                                                           "application": {
-                                                                                            "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                                                "type": {
-                                                                                                  "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"optional": {"variable": "hydra.python.syntax.Args"}}}}}},
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.python.syntax.Block"}}},
                                                                                             "argument": {"variable": "isUnit"}}},
                                                                                         "argument": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {
-                                                                                                  "either": {"right": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Args"}}}}},
-                                                                                                "type": {"variable": "hydra.errors.Error"}}},
-                                                                                            "type": {"optional": {"variable": "hydra.python.syntax.Args"}}}}}},
+                                                                                          "application": {
+                                                                                            "function": {"application": {"function": {"variable": "hydra.python.utils.indentedBlock"}, "argument": {"variable": "fcomment"}}},
+                                                                                            "argument": {
+                                                                                              "list": [
+                                                                                                {
+                                                                                                  "application": {"function": {"variable": "hydra.python.utils.unitVariantMethods"}, "argument": {"variable": "varName"}}}]}}}}},
                                                                                     "argument": {
                                                                                       "application": {
                                                                                         "function": {
                                                                                           "application": {
                                                                                             "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                                                    "type": {"variable": "hydra.python.syntax.Expression"}}},
-                                                                                                "type": {"optional": {"variable": "hydra.python.syntax.Args"}}}},
+                                                                                              "application": {
+                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.python.syntax.Block"}}},
+                                                                                                "argument": {"variable": "isDecimal"}}},
                                                                                             "argument": {
                                                                                               "application": {
-                                                                                                "function": {
-                                                                                                  "application": {
-                                                                                                    "function": {
-                                                                                                      "typeApplication": {"body": {"variable": "hydra.python.coder.encodeTypeQuoted"}, "type": {"variable": "hydra.errors.Error"}}},
-                                                                                                    "argument": {"variable": "env"}}},
-                                                                                                "argument": {"variable": "ftype"}}}}},
+                                                                                                "function": {"application": {"function": {"variable": "hydra.python.utils.indentedBlock"}, "argument": {"variable": "fcomment"}}},
+                                                                                                "argument": {"list": [{"variable": "hydra.python.utils.decimalVariantMethods"}]}}}}},
                                                                                         "argument": {
-                                                                                          "lambda": {
-                                                                                            "parameter": "quotedType",
-                                                                                            "domain": {"variable": "hydra.python.syntax.Expression"},
-                                                                                            "body": {
+                                                                                          "application": {
+                                                                                            "function": {"application": {"function": {"variable": "hydra.python.utils.indentedBlock"}, "argument": {"variable": "fcomment"}}},
+                                                                                            "argument": {"typeApplication": {"body": {"list": []}, "type": {"list": {"variable": "hydra.python.syntax.Statement"}}}}}}}}}},
+                                                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.python.syntax.Block"}, "constraints": []}}],
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                            "type": {"optional": {"variable": "hydra.python.syntax.Args"}}}},
+                                                                                        "type": {"variable": "hydra.python.syntax.Statement"}}},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                                    "type": {
+                                                                                                      "either": {"left": {"variable": "hydra.errors.Error"}, "right": {"optional": {"variable": "hydra.python.syntax.Args"}}}}}},
+                                                                                                "argument": {"variable": "isUnit"}}},
+                                                                                            "argument": {
                                                                                               "typeApplication": {
                                                                                                 "body": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
-                                                                                                      "either": {
-                                                                                                        "right": {
-                                                                                                          "optional": {
-                                                                                                            "application": {
-                                                                                                              "function": {"application": {"function": {"variable": "hydra.python.coder.variantArgs"}, "argument": {"variable": "quotedType"}}},
-                                                                                                              "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}},
+                                                                                                      "either": {"right": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Args"}}}}},
                                                                                                     "type": {"variable": "hydra.errors.Error"}}},
-                                                                                                "type": {"optional": {"variable": "hydra.python.syntax.Args"}}}}}}}}}}}},
-                                                                            "argument": {
-                                                                              "lambda": {
-                                                                                "parameter": "margs",
-                                                                                "domain": {"optional": {"variable": "hydra.python.syntax.Args"}},
-                                                                                "body": {
-                                                                                  "typeApplication": {
+                                                                                                "type": {"optional": {"variable": "hydra.python.syntax.Args"}}}}}},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                        "type": {"variable": "hydra.python.syntax.Expression"}}},
+                                                                                                    "type": {"optional": {"variable": "hydra.python.syntax.Args"}}}},
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "function": {
+                                                                                                          "typeApplication": {"body": {"variable": "hydra.python.coder.encodeTypeQuoted"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                        "argument": {"variable": "env"}}},
+                                                                                                    "argument": {"variable": "ftype"}}}}},
+                                                                                            "argument": {
+                                                                                              "lambda": {
+                                                                                                "parameter": "quotedType",
+                                                                                                "domain": {"variable": "hydra.python.syntax.Expression"},
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "either": {
+                                                                                                            "right": {
+                                                                                                              "optional": {
+                                                                                                                "application": {
+                                                                                                                  "function": {"application": {"function": {"variable": "hydra.python.coder.variantArgs"}, "argument": {"variable": "quotedType"}}},
+                                                                                                                  "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}}}}},
+                                                                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                                                                    "type": {"optional": {"variable": "hydra.python.syntax.Args"}}}}}}}}}}}},
+                                                                                "argument": {
+                                                                                  "lambda": {
+                                                                                    "parameter": "margs",
+                                                                                    "domain": {"optional": {"variable": "hydra.python.syntax.Args"}},
                                                                                     "body": {
                                                                                       "typeApplication": {
                                                                                         "body": {
-                                                                                          "either": {
-                                                                                            "right": {
-                                                                                              "application": {
-                                                                                                "function": {"variable": "hydra.python.utils.pyClassDefinitionToPyStatement"},
-                                                                                                "argument": {
-                                                                                                  "record": {
-                                                                                                    "typeName": "hydra.python.syntax.ClassDefinition",
-                                                                                                    "fields": [
-                                                                                                      {
-                                                                                                        "name": "decorators",
-                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Decorators"}}}},
-                                                                                                      {"name": "name", "term": {"variable": "varName"}},
-                                                                                                      {"name": "typeParams", "term": {"variable": "fieldParams"}},
-                                                                                                      {"name": "arguments", "term": {"variable": "margs"}},
-                                                                                                      {"name": "body", "term": {"variable": "body"}}]}}}}}},
-                                                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                                                    "type": {"variable": "hydra.python.syntax.Statement"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "either": {
+                                                                                                "right": {
+                                                                                                  "application": {
+                                                                                                    "function": {"variable": "hydra.python.utils.pyClassDefinitionToPyStatement"},
+                                                                                                    "argument": {
+                                                                                                      "record": {
+                                                                                                        "typeName": "hydra.python.syntax.ClassDefinition",
+                                                                                                        "fields": [
+                                                                                                          {
+                                                                                                            "name": "decorators",
+                                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Decorators"}}}},
+                                                                                                          {"name": "name", "term": {"variable": "varName"}},
+                                                                                                          {"name": "typeParams", "term": {"variable": "fieldParams"}},
+                                                                                                          {"name": "arguments", "term": {"variable": "margs"}},
+                                                                                                          {"name": "body", "term": {"variable": "body"}}]}}}}}},
+                                                                                            "type": {"variable": "hydra.errors.Error"}}},
+                                                                                        "type": {"variable": "hydra.python.syntax.Statement"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
                 "annotation": {
                   "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a union field as a variant class"}}}]}}}}}}},
     {
@@ -22873,6 +22903,37 @@
                                                 "argument": {
                                                   "application": {
                                                     "function": {"project": {"typeName": "hydra.python.environment.PythonModuleMetadata", "fieldName": "usesFrozenSet"}},
+                                                    "argument": {"variable": "meta"}}}}}]}}},
+                                    "type": {"literal": "string"}}},
+                                "type": {"list": {"optional": {"literal": "string"}}}}},
+                            {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "pair": {
+                                        "first": {"literal": {"string": "hydra.overlay.python.util._decimal"}},
+                                        "second": {
+                                          "list": [
+                                            {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.python.coder.condImportSymbol"}, "type": {"literal": "string"}}},
+                                                    "argument": {"literal": {"string": "decimal_node_eq"}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"project": {"typeName": "hydra.python.environment.PythonModuleMetadata", "fieldName": "usesDecimal"}},
+                                                    "argument": {"variable": "meta"}}}}},
+                                            {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.python.coder.condImportSymbol"}, "type": {"literal": "string"}}},
+                                                    "argument": {"literal": {"string": "decimal_node_hash"}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"project": {"typeName": "hydra.python.environment.PythonModuleMetadata", "fieldName": "usesDecimal"}},
                                                     "argument": {"variable": "meta"}}}}}]}}},
                                     "type": {"literal": "string"}}},
                                 "type": {"list": {"optional": {"literal": "string"}}}}},

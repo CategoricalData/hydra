@@ -469,6 +469,31 @@
                   "value": {"literal": {"string": "DSL reference to hydra.python.utils.commentStatement"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.python.utils.decimalVariantMethods",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"list": {"variable": "hydra.python.syntax.Statement"}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.python.utils.decimalVariantMethods"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.python.utils.decimalVariantMethods"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.python.utils.decodePyComparisonToPyAwaitPrimary",
         "signature": {
           "typeParameters": [],
