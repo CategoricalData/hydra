@@ -54,6 +54,44 @@ where and why parsing failed. Helper parsers that do not follow this shape (pars
 combinators, doc-string parsers, and other bespoke `hydra.parse.*` modules) are documented as
 such in their own module description and are exempt from the convention.
 
+### Provisions
+
+A **provision** is a named normative statement: a single, falsifiable condition a conforming
+implementation is measured against. Provisions come in two **kinds**:
+
+- a **requirement** — no deviation is permitted if conformance is to be claimed (the MUST class);
+- a **recommendation** — Hydra observes it strictly in its own kernel and codebase, but a downstream
+  project may opt out (the SHOULD class).
+
+(The word *rule* is not used for these; it is reserved for *inference rules* and *validation rules*,
+which are distinct, narrower concepts.)
+
+Every provision has a **name**, which is an ordinary Hydra name (`hydra.core.Name`): the name of the
+definition it concerns, extended by one further segment for the provision. So a provision `emptyLists`
+concerning `hydra.lib.lists.concat` has the name `hydra.lib.lists.concat.emptyLists`. This mirrors how
+a definition's name extends its enclosing module's name — the containment hierarchy is
+module ⊃ definition ⊃ provision, each named by extending its container. A provision authored directly
+in a specification chapter, rather than concerning a definition, is named under the chapter's namespace
+by the same convention.
+
+Provision names are written in prose in **UPPER-DASHED** form: `hydra.lib.lists.concat.emptyLists` is
+written **HYDRA-LIB-LISTS-CONCAT-EMPTY-LISTS**, shown in bold at the head of the provision. This is a
+rendering of the canonical Hydra name, not a separate identifier — the name-part dots become dashes and
+each part is upper-cased (a compound part like `emptyLists` renders `EMPTY-LISTS`). The leading segment
+(`HYDRA`) is the issuing authority, taken from the module name; a definition in an external module
+`ourapp.lib.geo` yields provisions such as **OURAPP-LIB-GEO-DISTANCE-GREAT-CIRCLE** with no
+coordination, so extensions to Hydra and Hydra-based applications define provisions in their own
+namespace.
+
+A definition does not store its own qualified name; the provision name is composed from the enclosing
+definition's name in context, exactly as a definition's name is composed from its module's. Moving or
+renaming a definition therefore changes the names of its provisions — a breaking change for citations
+and for tests, and an intended one.
+
+Tests reference the provisions they confirm; a provision is authoritative independent of any test.
+Facts that are mechanically derivable from a definition (its signature, arity, or the members of a
+union) are stated in the specification without a provision name — naming them would add nothing.
+
 ## 3. Conformance
 
 **A conforming Hydra implementation passes the hydra-kernel test suite**

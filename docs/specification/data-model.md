@@ -23,14 +23,13 @@ repeat that exposition. The exhaustive per-variant reference lives in the genera
 [`hydra.core`](modules/hydra.core.md) and [`hydra.graph`](modules/hydra.graph.md) module pages, whose
 variant sets this chapter closes over.
 
-**Named requirements.** Non-derivable requirements — behavioral or semantic conditions that cannot
-simply be read off a definition's signature or variant set — are given mnemonic identifiers of the
-form `DM-<MNEMONIC>` (`DM` = data model), shown in bold at the head of the requirement. A test confirms
-a requirement by referencing its identifier; the requirement is authoritative independent of any test.
-Facts that *are* mechanically derivable from the source (a signature, an arity, the members of a union)
-are stated without an identifier — naming them would add nothing to readability or to testing.
-("Requirement" is the spec-wide term for these named conformance conditions; "rule" is reserved for a
-*validation* rule — an enforced check, which may enforce a requirement — see [validation.md](validation.md).)
+**Provisions.** Non-derivable conditions — behavioral or semantic claims that cannot simply be read off
+a definition's signature or variant set — are stated as named **provisions**, shown in bold at the head
+of the claim (e.g. **[HYDRA-DM-VOID-BOTTOM-ONLY]**). Each is a **requirement** (MUST) or a
+**recommendation** (SHOULD); see the provisions convention in [index.md](index.md#provisions) for the
+naming and rendering scheme. Chapter provisions here use the `HYDRA-DM-…` namespace. Facts that *are*
+mechanically derivable from the source (a signature, an arity, the members of a union) are stated
+without a provision name.
 
 ## 1. Terms and types
 
@@ -53,7 +52,7 @@ a term. Inference is total up to well-typedness: for every well-typed term in a 
 a type scheme and elaborates the term into a fully-typed System-F term (§9); a term for which no type
 can be inferred is ill-typed and non-conforming.
 
-**[DM-TERM-UNIVERSAL] Every type has a term encoding, including `Type` and `Term` themselves.**
+**[HYDRA-DM-TERM-UNIVERSAL] Every type has a term encoding, including `Type` and `Term` themselves.**
 Consequently any Hydra artifact — term, type, schema, or graph — is representable as a term, hence
 serializable by the term wire format ([json-format.md](json-format.md)) with no residue. An
 implementation that cannot encode its own types and terms as terms does not conform.
@@ -76,7 +75,7 @@ definitions and the schema), `primitives` (built-in functions, `hydra.graph.Prim
 `metadata`. Every free `variable` in a bound term resolves to another `boundTerm`, a `lambdaVariable`,
 or a `primitive`; a graph with a dangling reference is non-conforming.
 
-**[DM-GRAPH-FROM-TERM] A term determines a graph.** Each binding is a node; a reference from one
+**[HYDRA-DM-GRAPH-FROM-TERM] A term determines a graph.** Each binding is a node; a reference from one
 binding's body to another binding's name is a link between nodes; a term's other constituents are the
 node's remaining structure. The graph does **not** preserve the original `let` nesting: building it
 flattens nested bindings into a single namespace, so two terms that differ only in how their bindings
@@ -113,7 +112,7 @@ are exactly: the integer types (`int8`, `int16`, `int32`, `int64`, `uint8`, `uin
 `uint64`, `bigint`), the floating-point types (`float32`, `float64`, `bigfloat`), and arbitrary-scale
 `decimal`. A literal's value MUST inhabit its stated literal type (e.g. an `int8` literal outside
 [-128, 127] is non-conforming). Integer types other than `bigint` wrap in two's complement; `bigint`
-and `decimal` are unbounded. **[DM-DECIMAL-SCALE-DISTINCT]** Two `decimal` values with equal numeric
+and `decimal` are unbounded. **[HYDRA-DM-DECIMAL-SCALE-DISTINCT]** Two `decimal` values with equal numeric
 value but different scale are distinct and unequal
 ([ordering-and-equality.md](ordering-and-equality.md)). The literal grammar and the IEEE-754
 special-value encoding are in [syntax.md](syntax.md) / [json-format.md](json-format.md).
@@ -131,7 +130,7 @@ The homogeneous containers, each with a matching type variant:
 - `optional<t>` — zero or one element of type `t` (`none`, or one present value).
 
 Distinctness of set elements and map keys is by structural equality.
-**[DM-COLLECTION-CANONICAL-ORDER]** Sets and maps iterate in the canonical total order defined in
+**[HYDRA-DM-COLLECTION-CANONICAL-ORDER]** Sets and maps iterate in the canonical total order defined in
 [ordering-and-equality.md](ordering-and-equality.md); an implementation that iterates in any other
 order does not conform.
 
@@ -144,8 +143,8 @@ The anonymous (structural) products and sums — anonymous because, unlike §8, 
   never neither.
 - `unit` — the **nullary product**: a single value with no components; its type has exactly one
   inhabitant.
-- `void` — the **nullary sum**: the uninhabited bottom type. **[DM-VOID-UNINHABITED]** No term has
-  type `void`; it has no term variant, since it cannot be constructed. **[DM-VOID-BOTTOM-ONLY]** `void`
+- `void` — the **nullary sum**: the uninhabited bottom type. **[HYDRA-DM-VOID-UNINHABITED]** No term has
+  type `void`; it has no term variant, since it cannot be constructed. **[HYDRA-DM-VOID-BOTTOM-ONLY]** `void`
   may appear only in bottom position — not inside a function codomain's constituents, nor inside a
   list/set/map/pair/either/optional element, nor as a record field or union variant type
   ([validation.md](validation.md)).
@@ -157,24 +156,24 @@ variants (§8).
 
 Records, unions, and wrappers are **nominal**: the term itself carries the **name** of the type it
 introduces or eliminates, and is well-formed only against the structure the graph binds to that name.
-**[DM-NOMINAL-NAME-REQUIRED]** A `record`, `inject`, `project`, `cases`, `wrap`, or `unwrap` term
+**[HYDRA-DM-NOMINAL-NAME-REQUIRED]** A `record`, `inject`, `project`, `cases`, `wrap`, or `unwrap` term
 carries its type name as a *required* constituent: the grammar does not permit omitting it, and it is
 present even in untyped terms. This is not the same as the *optional type annotations* any term may
 carry (§9): annotations are syntactically omittable, whereas a nominal type name is never omittable. A
 coder or serialization that drops a nominal term's type name does not conform.
 
 - **Records** — type `record` (a named product of fields, each a name and a type); terms `record` and
-  `project`. **[DM-RECORD-FIELDS-EXACT]** A `record` term names its type and supplies a term for
+  `project`. **[HYDRA-DM-RECORD-FIELDS-EXACT]** A `record` term names its type and supplies a term for
   exactly the type's fields — a missing or extra field is non-conforming. A `project` names the type
   and a field that must be declared in it.
 - **Unions** — type `union` (a named sum of variants, each a name and a type); terms `inject` and
-  `cases`. An `inject` names the type and one declared variant. **[DM-CASES-EXHAUSTIVE]** A `cases`
+  `cases`. An `inject` names the type and one declared variant. **[HYDRA-DM-CASES-EXHAUSTIVE]** A `cases`
   term names the type and provides handlers; it must cover every variant of the named union unless it
   carries a default. A handler or injection naming an undeclared variant is non-conforming.
 - **Wrappers** — type `wrap` (a name over a single underlying type, a distinct nominal identity);
   terms `wrap` and `unwrap`, which name the wrapper and add/remove the layer.
 
-**[DM-NOMINAL-KIND-MATCH]** A nominal term whose named type resolves to the wrong kind (e.g. a `record`
+**[HYDRA-DM-NOMINAL-KIND-MATCH]** A nominal term whose named type resolves to the wrong kind (e.g. a `record`
 term over a name bound to a `union`) is non-conforming ([validation.md](validation.md)).
 
 ## 9. Functions and polymorphism
@@ -190,12 +189,12 @@ term over a name bound to a `union`) is non-conforming ([validation.md](validati
 Inference is Hindley-Milner over System F: it computes a type scheme — a `forall` over the free type
 variables together with their class constraints ([classes.md](classes.md)) — and inserts the
 `typeLambda` / `typeApplication` operators (§4) so the elaborated term carries its full System-F
-structure. **[DM-INFERENCE-DETERMINISTIC]** Two inferences of the same term in the same graph yield the
+structure. **[HYDRA-DM-INFERENCE-DETERMINISTIC]** Two inferences of the same term in the same graph yield the
 same type scheme, up to renaming of bound type variables.
 
-**[DM-ONE-GRAMMAR]** Hydra's untyped and typed lambda calculi share a single term grammar; the only
+**[HYDRA-DM-ONE-GRAMMAR]** Hydra's untyped and typed lambda calculi share a single term grammar; the only
 difference is the presence of type annotations, which are syntactically optional. (Nominal type names
-are not annotations and are never optional — DM-NOMINAL-NAME-REQUIRED.) **[DM-TYPED-WHERE-EXPECTED]**
+are not annotations and are never optional — DM-NOMINAL-NAME-REQUIRED.) **[HYDRA-DM-TYPED-WHERE-EXPECTED]**
 Some operations expect fully-typed, post-inference terms. Because the operational pipeline does not by
 itself guarantee that a term is fully typed, this expectation is a conformance condition enforced by
 validation ([validation.md](validation.md)) in the contexts that require it — not by the grammar,
@@ -206,12 +205,12 @@ which permits annotations to be absent.
 An `annotated` term or type (`hydra.core.AnnotatedTerm`) pairs a value with a metadata map from names
 to terms. The falsifiable content:
 
-- **[DM-ANNOTATION-TRANSPARENT]** Annotations are transparent to meaning: a value and its annotated
+- **[HYDRA-DM-ANNOTATION-TRANSPARENT]** Annotations are transparent to meaning: a value and its annotated
   form have the same type, the same reduction behavior, and compare equal under structural equality
   and the total order. An implementation for which an annotation changes any of these does not conform.
-- **[DM-ANNOTATION-PRESERVED]** Annotations are preserved across the wire and across transformations
+- **[HYDRA-DM-ANNOTATION-PRESERVED]** Annotations are preserved across the wire and across transformations
   that do not deliberately rewrite them: documentation and provenance survive code generation.
-- **[DM-ANNOTATION-ROUNDTRIP]** Annotations round-trip through the textual syntax, including when
+- **[HYDRA-DM-ANNOTATION-ROUNDTRIP]** Annotations round-trip through the textual syntax, including when
   stacked ([syntax.md](syntax.md)). Nested annotations are permitted; the kernel discourages an
   annotation directly wrapping another, but that is a SHOULD-class convention
   ([validation.md](validation.md) §4.2), not a well-formedness rule — an externally-authored nested
