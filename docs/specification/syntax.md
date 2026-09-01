@@ -128,7 +128,7 @@ The same kernel code SHOULD serve JSON and textual printing and parsing of strin
   Layout follows the ECMAScript `Number::toString` (§6.1.6.1.20) / RFC 8785 (JCS)
   thresholds and spellings:
   with `a` the adjusted exponent (decimal position of the leading significant digit),
-  positional form when `−7 ≤ a < 21`,
+  positional form when `−6 ≤ a < 21`,
   and exponent form otherwise (one digit before the point, lowercase `e`, always-signed
   exponent, coefficient digits preserved: `1.10e+30`, `6.02e-23`).
   `parseDecimal` is scale-preserving (`"1.10"` and `"1.1"` parse to distinct values) and
