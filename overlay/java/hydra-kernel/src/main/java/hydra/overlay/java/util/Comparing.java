@@ -1,5 +1,6 @@
 package hydra.overlay.java.util;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,13 @@ public class Comparing {
         if (a == null) return -1;
         if (b == null) return 1;
 
+        // Decimals: numeric value first, then scale as tiebreak (docs/specification/
+        // ordering-and-equality.md: 1.1 < 1.10, distinct unequal values).
+        // BigDecimal.compareTo ignores scale, so it cannot be used alone here.
+        if (a instanceof BigDecimal && b instanceof BigDecimal) {
+            return compareDecimals((BigDecimal) a, (BigDecimal) b);
+        }
+
         // List comparison: element-by-element
         if (a instanceof List && b instanceof List) {
             return compareLists((List<?>) a, (List<?>) b);
@@ -39,6 +47,14 @@ public class Comparing {
 
         // Default: use Comparable
         return ((Comparable<Object>) a).compareTo(b);
+    }
+
+    /**
+     * Compares two decimals by numeric value first, then scale as tiebreak.
+     */
+    public static int compareDecimals(BigDecimal a, BigDecimal b) {
+        int cmp = a.compareTo(b);
+        return cmp != 0 ? cmp : Integer.compare(a.scale(), b.scale());
     }
 
     @SuppressWarnings("unchecked")

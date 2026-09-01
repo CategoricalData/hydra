@@ -9525,7 +9525,7 @@ public class Coder {
                         apply(ref(Coder.isBinaryType), var("ftype")),
                         apply(ref(Coder.arraysEqualsClause), var("tmpName"), var("fname")),
                         Logic.ifElse(
-                            apply(ref(Coder.isBigNumericType), var("ftype")),
+                            apply(ref(Coder.isBigIntegerType), var("ftype")),
                             apply(ref(Coder.compareToZeroClause), var("tmpName"), var("fname")),
                             apply(ref(Coder.equalsClause), var("tmpName"), var("fname"))))));
 
@@ -10599,7 +10599,7 @@ public class Coder {
                         list(var("javaSerializableType"), var("javaComparableType")),
                         list())));
 
-    public static final Def isBigNumericType = def("isBigNumericType")
+    public static final Def isBigIntegerType = def("isBigIntegerType")
         .lam("typ")
         .to(() ->
                 matchWithDefault(Type.TYPE_,
@@ -10611,7 +10611,6 @@ public class Coder {
                             matchWithDefault(LiteralType.TYPE_,
                                 var("lt"),
                                 bool(false),
-                                field(LiteralType.DECIMAL, constant(bool(true))),
                                 field(
                                     LiteralType.INTEGER,
                                     lambda("it",
@@ -14050,7 +14049,7 @@ public class Coder {
             innerClassRef,
             insertBranchVar,
             interfaceTypes,
-            isBigNumericType,
+            isBigIntegerType,
             isBinaryType,
             isFieldUnitType,
             isLambdaBoundIn,

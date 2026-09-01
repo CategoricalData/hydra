@@ -19,7 +19,9 @@ import hydra.overlay.java.util.Either;
 
 /**
  * Primitive function which converts a float32 (IEEE 754 single) to a decimal (arbitrary-precision exact decimal).
- * Uses Float.toString so the decimal matches the float's canonical textual form.
+ * Uses Float.toString for the shortest round-trip digits, stripping the cosmetic trailing
+ * ".0" Java always appends to whole values -- the decimal's scale must reflect only the
+ * significant digits, not that convention (2.0f is scale-0 "2", not scale-1 "2.0").
  */
 public class Float32ToDecimal extends PrimitiveFunction {
     public Name name() {
@@ -37,6 +39,10 @@ public class Float32ToDecimal extends PrimitiveFunction {
     }
 
     public static BigDecimal apply(Float value) {
-        return new BigDecimal(Float.toString(value));
+        String s = Float.toString(value);
+        if (s.endsWith(".0")) {
+            s = s.substring(0, s.length() - 2);
+        }
+        return new BigDecimal(s);
     }
 }

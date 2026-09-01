@@ -50,42 +50,44 @@ public class PrintDecimal extends PrimitiveFunction {
     }
 
     /**
-     * Converts a BigDecimal value to its string representation, matching Haskell's
-     * Data.Scientific show format (e.g. "42.0", "3.14", "1.0e20", "1.0e-10").
+     * Converts a BigDecimal value to its representation-faithful string, per
+     * docs/specification/json-format.md (Decimal formatting) and syntax.md (2.6):
+     * coefficient digits -- trailing zeros included -- are preserved exactly, and
+     * zero prints per its scale ("0", "0.0", "0.00"). Layout follows ECMAScript
+     * Number::toString / RFC 8785: positional form when the adjusted exponent a
+     * satisfies -6 &lt;= a &lt; 21, exponent form otherwise (one digit before the
+     * point, lowercase e, always-signed exponent, coefficient digits preserved).
      * @param value the BigDecimal value to convert
      * @return the string representation of the value
      */
     public static String apply(BigDecimal value) {
-        // Canonicalize to Scientific-style representation.
-        // Strip trailing zeros and then format either in decimal or scientific notation
-        // depending on the exponent, matching Haskell's Data.Scientific show.
-        BigDecimal stripped = value.stripTrailingZeros();
-        int scale = stripped.scale();
-        int precision = stripped.precision();
-        // coefficient-exponent form: stripped = coefficient * 10^(-scale)
-        // Haskell Scientific "e" = precision - scale - 1 for the canonical
-        // single-digit-before-decimal representation.
-        // Haskell's threshold for plain form is -1 <= e <= 6 (values like 0.1, 1.0,
-        // 10.0, ..., 1000000.0). Outside that range, use scientific notation.
-        int e = precision - scale - 1;
-        if (e >= 7 || e < -1) {
-            // Scientific notation: "c.dddeE"
-            String plain = stripped.unscaledValue().abs().toString();
-            String sign = stripped.signum() < 0 ? "-" : "";
-            String mantissa;
-            if (plain.length() == 1) {
-                mantissa = plain + ".0";
-            } else {
-                mantissa = plain.charAt(0) + "." + plain.substring(1);
-            }
-            return sign + mantissa + "e" + e;
+        int scale = value.scale();
+        String digits = value.unscaledValue().abs().toString();
+        int n = digits.length();
+        String sign = value.signum() < 0 ? "-" : "";
+        // Adjusted exponent: position of the leading significant digit.
+        int a = n - 1 - scale;
+        if (a >= -6 && a < 21) {
+            return sign + positional(digits, scale, n);
         } else {
-            // Decimal notation: force at least one digit after the decimal point
-            String plain = stripped.toPlainString();
-            if (!plain.contains(".")) {
-                plain = plain + ".0";
-            }
-            return plain;
+            String mantissa = n == 1
+                ? digits + ".0"
+                : digits.charAt(0) + "." + digits.substring(1);
+            return sign + mantissa + "e" + (a >= 0 ? "+" : "") + a;
+        }
+    }
+
+    /**
+     * Places the decimal point {@code scale} digits from the right, padding
+     * with zeros on either side as needed.
+     */
+    private static String positional(String digits, int scale, int n) {
+        if (scale <= 0) {
+            return digits + "0".repeat(-scale);
+        } else if (scale < n) {
+            return digits.substring(0, n - scale) + "." + digits.substring(n - scale);
+        } else {
+            return "0." + "0".repeat(scale - n) + digits;
         }
     }
 }

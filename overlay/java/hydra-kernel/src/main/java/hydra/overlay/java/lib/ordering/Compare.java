@@ -72,9 +72,8 @@ public class Compare extends PrimitiveFunction {
      * @param right the second value
      * @return the comparison result
      */
-    @SuppressWarnings("unchecked")
     public static <A> Comparison apply(A left, A right) {
-        int cmp = ((Comparable) left).compareTo(right);
+        int cmp = hydra.overlay.java.util.Comparing.compare(left, right);
         if (cmp < 0) {
             return new Comparison.LessThan();
         } else if (cmp > 0) {
