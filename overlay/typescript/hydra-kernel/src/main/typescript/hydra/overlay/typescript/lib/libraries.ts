@@ -66,6 +66,13 @@ export { INT_WIDTH_BITS, UINT_WIDTH_BITS, wrapInt, floorDivBig, floorModBig };
 // reduction). The HOF primitives below — which call `reduceTerm` to evaluate
 // a function argument against the graph — therefore feed it this empty
 // placeholder context rather than one received from the carrier.
+// NOTE: the lazy resolution below is now REDUNDANT — the libraries->lexical->
+// math->libraries cycle was removed structurally by moving the integral helpers
+// into ./numerics.js (a leaf). It is retained because 0.17.6 shipped with it and
+// removing it would mean republishing; it is harmless (one extra indirection).
+// Safe to inline back to `const reduceCx = lexical.emptyInferenceContext` in a
+// future release.
+//
 // Resolved LAZILY, not at module load. `lexical` participates in an import
 // cycle with this module, so reading `lexical.emptyInferenceContext` at the top
 // level hits the temporal dead zone in the PACKED npm artifact and throws
