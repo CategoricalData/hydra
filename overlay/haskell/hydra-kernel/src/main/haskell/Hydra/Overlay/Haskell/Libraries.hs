@@ -11,7 +11,6 @@ import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
 
 import qualified Hydra.Overlay.Haskell.Lib.Chars as Chars
 import qualified Hydra.Overlay.Haskell.Lib.Eithers as Eithers
-import qualified Hydra.Overlay.Haskell.Lib.Equality as Equality
 import qualified Hydra.Overlay.Haskell.Lib.Functions as Functions
 import qualified Hydra.Overlay.Haskell.Lib.Hashing as Hashing
 import qualified Hydra.Overlay.Haskell.Lib.Lists as Lists
@@ -20,7 +19,6 @@ import qualified Hydra.Overlay.Haskell.Lib.Logic as Logic
 import qualified Hydra.Overlay.Haskell.Lib.Maps as Maps
 import qualified Hydra.Overlay.Haskell.Lib.Math as Math
 import qualified Hydra.Overlay.Haskell.Lib.Optionals as Optionals
-import qualified Hydra.Overlay.Haskell.Lib.Ordering as Ordering
 import qualified Hydra.Overlay.Haskell.Lib.Pairs as Pairs
 import qualified Hydra.Overlay.Haskell.Lib.Regex as Regex
 import qualified Hydra.Overlay.Haskell.Lib.Sets as Sets
@@ -48,6 +46,7 @@ import qualified Hydra.Lib.System as DefSystem
 import qualified Hydra.Lib.Text as DefText
 
 import qualified Data.List as L
+import qualified Data.Scientific as Sci
 
 
 -- Term coders for type variables (used in primitive implementations)
@@ -146,20 +145,96 @@ hydraLibEithers = standardLibrary [
     prim1       DefEithers.right            Eithers.right            y_ (Prims.either_ x_ y_),
     prim1       DefEithers.rights           Eithers.rights           (list $ Prims.either_ x_ y_) (list y_)]
 
+-- hydra.lib.equality.equal / hydra.lib.ordering.compare (+gt/gte/lt/lte/max/min) are
+-- registered below at Term (x_ is the identity TermCoder), so termEqual/termCompare
+-- special-case Literal.Decimal for scale-aware comparison per docs/specification/
+-- ordering-and-equality.md, instead of using the generic Equality.equal/Ordering.compare
+-- (which stay polymorphic Eq/Ord-constrained -- they're also called directly, at
+-- non-Term types, by Haskell-generated-Haskell code elsewhere in the kernel, so they
+-- must not be narrowed to Term).
+--
+-- Kernel-type DSL constructors (Hydra.Dsl.Core / Hydra.Overlay.Haskell.Dsl.Typed.Terms)
+-- build hydra.core.Term/Literal values via the generic, reflective TermInject/Injection
+-- encoding rather than the native Term/Literal ADT constructors directly -- e.g. a
+-- decimal literal built via the DSL is
+-- TermInject(Injection{"hydra.core.Term", Field{"literal",
+--   TermInject(Injection{"hydra.core.Literal", Field{"decimal", <native TermLiteral
+--     (LiteralDecimal sci)>}})}}).
+-- No reduction/normalization step collapses this to the native shape before a primitive
+-- runs (confirmed: Reduction.hs only beta-reduces/deannotates), so decimalPayload below
+-- unwraps nested injections to find it.
+decimalPayload :: Term -> Maybe Sci.Scientific
+decimalPayload (TermLiteral (LiteralDecimal a)) = Just a
+decimalPayload (TermInject (Injection _ (Field _ t))) = decimalPayload t
+decimalPayload _ = Nothing
+
+termEqual :: Term -> Term -> Bool
+termEqual x y = case (decimalPayload x, decimalPayload y) of
+  (Just a, Just b) ->
+    (Sci.coefficient a, Sci.base10Exponent a) == (Sci.coefficient b, Sci.base10Exponent b)
+  _ -> x == y
+
+termNotEqual :: Term -> Term -> Bool
+termNotEqual x y = not (termEqual x y)
+
+termCompare :: Term -> Term -> Comparison
+termCompare x y = case (decimalPayload x, decimalPayload y) of
+  (Just a, Just b)
+    | a < b -> ComparisonLessThan
+    | a > b -> ComparisonGreaterThan
+    -- Equal value; scale is -base10Exponent, so smaller scale is the larger
+    -- (less negative) exponent.
+    | ea > eb -> ComparisonLessThan
+    | ea < eb -> ComparisonGreaterThan
+    | otherwise -> ComparisonEqualTo
+    where
+      ea = Sci.base10Exponent a
+      eb = Sci.base10Exponent b
+  _
+    | x < y     -> ComparisonLessThan
+    | x > y     -> ComparisonGreaterThan
+    | otherwise -> ComparisonEqualTo
+
+termGt :: Term -> Term -> Bool
+termGt x y = case termCompare x y of
+  ComparisonGreaterThan -> True
+  _ -> False
+
+termGte :: Term -> Term -> Bool
+termGte x y = case termCompare x y of
+  ComparisonLessThan -> False
+  _ -> True
+
+termLt :: Term -> Term -> Bool
+termLt x y = case termCompare x y of
+  ComparisonLessThan -> True
+  _ -> False
+
+termLte :: Term -> Term -> Bool
+termLte x y = case termCompare x y of
+  ComparisonGreaterThan -> False
+  _ -> True
+
+termMax :: Term -> Term -> Term
+termMax x y = if termGte x y then x else y
+
+termMin :: Term -> Term -> Term
+termMin x y = if termLte x y then x else y
+
 hydraLibEquality :: Library
 hydraLibEquality = standardLibrary [
-    prim2 DefEquality.equal    Equality.equal    x_ x_ boolean,
-    prim2 DefEquality.notEqual Equality.notEqual x_ x_ boolean]
+    prim2 DefEquality.equal    termEqual    x_ x_ boolean,
+    prim2 DefEquality.notEqual termNotEqual x_ x_ boolean]
 
 hydraLibOrdering :: Library
 hydraLibOrdering = standardLibrary [
-    prim2 DefOrdering.compare  Ordering.compare  x_ x_ comparison,
-    prim2 DefOrdering.gt       Ordering.gt       x_ x_ boolean,
-    prim2 DefOrdering.gte      Ordering.gte      x_ x_ boolean,
-    prim2 DefOrdering.lt       Ordering.lt       x_ x_ boolean,
-    prim2 DefOrdering.lte      Ordering.lte      x_ x_ boolean,
-    prim2 DefOrdering.max      Ordering.max      x_ x_ x_,
-    prim2 DefOrdering.min      Ordering.min      x_ x_ x_]
+    prim2 DefOrdering.compare  termCompare  x_ x_ comparison,
+    prim2 DefOrdering.gt       termGt       x_ x_ boolean,
+    prim2 DefOrdering.gte      termGte      x_ x_ boolean,
+    prim2 DefOrdering.lt       termLt       x_ x_ boolean,
+    prim2 DefOrdering.lte      termLte      x_ x_ boolean,
+    prim2 DefOrdering.max      termMax      x_ x_ x_,
+    prim2 DefOrdering.min      termMin      x_ x_ x_]
 
 hydraLibFunctions :: Library
 hydraLibFunctions = standardLibrary [

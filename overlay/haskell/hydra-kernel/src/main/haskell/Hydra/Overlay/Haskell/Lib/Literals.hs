@@ -195,11 +195,43 @@ printBoolean b = case b of
   True -> "true"
   False -> "false"
 
--- | Convert a decimal (Scientific) to string. Uses Scientific's default format
---   (regular notation for small-magnitude values; scientific notation for very
---   large or very small).
+-- | Convert a decimal (Scientific) to its representation-faithful string, per
+--   docs/specification/json-format.md (Decimal formatting) and syntax.md (§2.6):
+--   coefficient digits -- trailing zeros included -- are preserved exactly, and
+--   zero prints per its scale ("0", "0.0", "0.00"). Scientific's own Show
+--   instance normalizes away trailing zeros (e.g. 1.10 and 1.1 both show as
+--   "1.1"), which violates this, so the digit string is built directly from
+--   the coefficient and scale instead.
+--   Layout follows ECMAScript Number::toString / RFC 8785: positional form
+--   when the adjusted exponent a satisfies -6 <= a < 21, exponent form
+--   otherwise (one digit before the point, lowercase e, always-signed
+--   exponent, coefficient digits preserved).
 printDecimal :: Scientific -> String
-printDecimal = show
+printDecimal x = sign ++ body
+  where
+    coeff = Sci.coefficient x
+    scale = negate (Sci.base10Exponent x)
+    sign = if coeff < 0 then "-" else ""
+    digits = show (abs coeff)
+    n = length digits
+    -- Adjusted exponent: position of the leading significant digit.
+    a = n - 1 - scale
+    body
+      | a >= (-6) && a < 21 = positional
+      | otherwise = exponential
+    -- Positional form: place the decimal point `scale` digits from the right,
+    -- padding with zeros on either side as needed.
+    positional
+      | scale <= 0 = digits ++ replicate (negate scale) '0'
+      | scale < n = let (intPart, fracPart) = splitAt (n - scale) digits in intPart ++ "." ++ fracPart
+      | otherwise = "0." ++ replicate (scale - n) '0' ++ digits
+    -- Exponent form: one digit before the point, remaining digits after,
+    -- coefficient digits preserved (a trailing ".0" if there's only one digit).
+    exponential = mantissa ++ "e" ++ (if a >= 0 then "+" else "") ++ show a
+      where
+        mantissa
+          | n == 1 = digits ++ ".0"
+          | otherwise = take 1 digits ++ "." ++ drop 1 digits
 
 -- | Convert a float32 (Float) to string.
 printFloat32 :: Float -> String
