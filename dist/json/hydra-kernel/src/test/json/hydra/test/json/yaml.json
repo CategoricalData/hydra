@@ -478,7 +478,9 @@
                                                                         "application": {
                                                                           "function": {"variable": "hydra.json.yaml.encode.jsonToYaml"},
                                                                           "argument": {
-                                                                            "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "number", "term": {"literal": {"decimal": 1.0e20}}}}}}}}}}}}}},
+                                                                            "inject": {
+                                                                              "typeName": "hydra.json.model.Value",
+                                                                              "field": {"name": "number", "term": {"literal": {"decimal": 100000000000000000000}}}}}}}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -489,7 +491,9 @@
                                                                 "application": {
                                                                   "function": {"variable": "hydra.json.writer.printJson"},
                                                                   "argument": {
-                                                                    "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "number", "term": {"literal": {"decimal": 1.0e20}}}}}}}}}}]}}}}}},
+                                                                    "inject": {
+                                                                      "typeName": "hydra.json.model.Value",
+                                                                      "field": {"name": "number", "term": {"literal": {"decimal": 100000000000000000000}}}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                     {

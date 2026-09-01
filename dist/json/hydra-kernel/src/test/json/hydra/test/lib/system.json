@@ -1337,7 +1337,7 @@
                                                                                             "application": {
                                                                                               "function": {"project": {"typeName": "hydra.time.Timespec", "fieldName": "nanoseconds"}},
                                                                                               "argument": {"variable": "t"}}}}},
-                                                                                      "argument": {"literal": {"integer": {"uint32": 1.0e9}}}}}}}}}}}}},
+                                                                                      "argument": {"literal": {"integer": {"uint32": 1000000000}}}}}}}}}}}}},
                                                                   "argument": {"variable": "hydra.lib.system.getTime"}}}}}},
                                                         {"name": "expected", "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "true"}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},

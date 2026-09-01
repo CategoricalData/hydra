@@ -7229,7 +7229,7 @@
                                                                               "term": {
                                                                                 "inject": {
                                                                                   "typeName": "hydra.core.FloatValue",
-                                                                                  "field": {"name": "float64", "term": {"literal": {"float": {"float64": 7.7004e-2}}}}}}}}}}}}}}}}}]}}}}}},
+                                                                                  "field": {"name": "float64", "term": {"literal": {"float": {"float64": 0.077004}}}}}}}}}}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                         {

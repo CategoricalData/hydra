@@ -9994,7 +9994,7 @@
                                                                                                               "term": {
                                                                                                                 "inject": {
                                                                                                                   "typeName": "hydra.core.FloatValue",
-                                                                                                                  "field": {"name": "float64", "term": {"literal": {"float": {"float64": 1.7976931348623157e308}}}}}}}}}}}}}]}}}}}},
+                                                                                                                  "field": {"name": "float64", "term": {"literal": {"float": {"float64": 1.7976931348623157e+308}}}}}}}}}}}}}]}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -10010,7 +10010,7 @@
                                                                                                 "term": {
                                                                                                   "inject": {
                                                                                                     "typeName": "hydra.core.FloatValue",
-                                                                                                    "field": {"name": "float64", "term": {"literal": {"float": {"float64": 1.7976931348623157e308}}}}}}}}}}}}}]}}}}}}}}}}}},
+                                                                                                    "field": {"name": "float64", "term": {"literal": {"float": {"float64": 1.7976931348623157e+308}}}}}}}}}}}}}]}}}}}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -11218,7 +11218,7 @@
                                                                                                               "term": {
                                                                                                                 "inject": {
                                                                                                                   "typeName": "hydra.core.FloatValue",
-                                                                                                                  "field": {"name": "float32", "term": {"literal": {"float": {"float32": 3.4028235e38}}}}}}}}}}}}}]}}}}}},
+                                                                                                                  "field": {"name": "float32", "term": {"literal": {"float": {"float32": 3.4028235e+38}}}}}}}}}}}}}]}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -11234,7 +11234,7 @@
                                                                                                 "term": {
                                                                                                   "inject": {
                                                                                                     "typeName": "hydra.core.FloatValue",
-                                                                                                    "field": {"name": "float32", "term": {"literal": {"float": {"float32": 3.4028235e38}}}}}}}}}}}}}]}}}}}}}}}}}},
+                                                                                                    "field": {"name": "float32", "term": {"literal": {"float": {"float32": 3.4028235e+38}}}}}}}}}}}}}]}}}}}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -32884,7 +32884,7 @@
                                                                               "term": {
                                                                                 "inject": {
                                                                                   "typeName": "hydra.core.FloatValue",
-                                                                                  "field": {"name": "float64", "term": {"literal": {"float": {"float64": 1.0000000000000002e-2}}}}}}}}}}}}}}}}}]}}}}}},
+                                                                                  "field": {"name": "float64", "term": {"literal": {"float": {"float64": 0.010000000000000002}}}}}}}}}}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                     {
@@ -32985,7 +32985,7 @@
                                                                                                               "term": {
                                                                                                                 "inject": {
                                                                                                                   "typeName": "hydra.core.FloatValue",
-                                                                                                                  "field": {"name": "float64", "term": {"literal": {"float": {"float64": 1.0e200}}}}}}}}}}}}}]}}}}}},
+                                                                                                                  "field": {"name": "float64", "term": {"literal": {"float": {"float64": 1.0e+200}}}}}}}}}}}}}]}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -33001,7 +33001,7 @@
                                                                                                 "term": {
                                                                                                   "inject": {
                                                                                                     "typeName": "hydra.core.FloatValue",
-                                                                                                    "field": {"name": "float64", "term": {"literal": {"float": {"float64": 1.0e200}}}}}}}}}}}}}]}}}}}}}}}}}},
+                                                                                                    "field": {"name": "float64", "term": {"literal": {"float": {"float64": 1.0e+200}}}}}}}}}}}}}]}}}}}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -33978,7 +33978,7 @@
                                                                               "term": {
                                                                                 "inject": {
                                                                                   "typeName": "hydra.core.FloatValue",
-                                                                                  "field": {"name": "float32", "term": {"literal": {"float": {"float32": 2.8147494e14}}}}}}}}}}}}}}}}}]}}}}}},
+                                                                                  "field": {"name": "float32", "term": {"literal": {"float": {"float32": 281474940000000}}}}}}}}}}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                     {
@@ -34077,7 +34077,9 @@
                                                                                                             "field": {
                                                                                                               "name": "float",
                                                                                                               "term": {
-                                                                                                                "inject": {"typeName": "hydra.core.FloatValue", "field": {"name": "float32", "term": {"literal": {"float": {"float32": 1.0e20}}}}}}}}}}}}}]}}}}}},
+                                                                                                                "inject": {
+                                                                                                                  "typeName": "hydra.core.FloatValue",
+                                                                                                                  "field": {"name": "float32", "term": {"literal": {"float": {"float32": 100000000000000000000}}}}}}}}}}}}}]}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -34091,7 +34093,9 @@
                                                                                               "field": {
                                                                                                 "name": "float",
                                                                                                 "term": {
-                                                                                                  "inject": {"typeName": "hydra.core.FloatValue", "field": {"name": "float32", "term": {"literal": {"float": {"float32": 1.0e20}}}}}}}}}}}}}]}}}}}}}}}}}},
+                                                                                                  "inject": {
+                                                                                                    "typeName": "hydra.core.FloatValue",
+                                                                                                    "field": {"name": "float32", "term": {"literal": {"float": {"float32": 100000000000000000000}}}}}}}}}}}}}]}}}}}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -73461,7 +73465,7 @@
                                                                                                               "term": {
                                                                                                                 "inject": {
                                                                                                                   "typeName": "hydra.core.FloatValue",
-                                                                                                                  "field": {"name": "float64", "term": {"literal": {"float": {"float64": 1.0e308}}}}}}}}}}}}}]}}}}}},
+                                                                                                                  "field": {"name": "float64", "term": {"literal": {"float": {"float64": 1.0e+308}}}}}}}}}}}}}]}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -74961,7 +74965,7 @@
                                                                                                               "term": {
                                                                                                                 "inject": {
                                                                                                                   "typeName": "hydra.core.FloatValue",
-                                                                                                                  "field": {"name": "float32", "term": {"literal": {"float": {"float32": 3.4028235e38}}}}}}}}}}}}}]}}}}}},
+                                                                                                                  "field": {"name": "float32", "term": {"literal": {"float": {"float32": 3.4028235e+38}}}}}}}}}}}}}]}}}}}},
                                                                                   {
                                                                                     "name": "argument",
                                                                                     "term": {
@@ -90247,7 +90251,7 @@
                                                                                                 "term": {
                                                                                                   "inject": {
                                                                                                     "typeName": "hydra.core.FloatValue",
-                                                                                                    "field": {"name": "float64", "term": {"literal": {"float": {"float64": 1.234e-3}}}}}}}}}}}}}]}}}}}}}}}}}},
+                                                                                                    "field": {"name": "float64", "term": {"literal": {"float": {"float64": 0.001234}}}}}}}}}}}}}]}}}}}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -90268,7 +90272,7 @@
                                                                             "field": {
                                                                               "name": "float",
                                                                               "term": {
-                                                                                "inject": {"typeName": "hydra.core.FloatValue", "field": {"name": "float64", "term": {"literal": {"float": {"float64": 1.2e-3}}}}}}}}}}}}}}}}}]}}}}}},
+                                                                                "inject": {"typeName": "hydra.core.FloatValue", "field": {"name": "float64", "term": {"literal": {"float": {"float64": 0.0012}}}}}}}}}}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                     {

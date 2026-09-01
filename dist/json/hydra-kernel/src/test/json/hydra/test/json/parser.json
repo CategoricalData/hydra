@@ -2388,8 +2388,7 @@
                                                                                     "fields": [
                                                                                       {
                                                                                         "name": "value",
-                                                                                        "term": {
-                                                                                          "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "number", "term": {"literal": {"decimal": 1.0e-2}}}}}},
+                                                                                        "term": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "number", "term": {"literal": {"decimal": 0.01}}}}}},
                                                                                       {"name": "remainder", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": "int32"}}}}}]}},
                                                                                 "type": {"variable": "hydra.json.model.Value"}}}}}},
                                                                       "type": {"variable": "hydra.json.model.Value"}}}}}}}}]}}}}}},
@@ -2792,7 +2791,9 @@
                                                                                       {
                                                                                         "name": "value",
                                                                                         "term": {
-                                                                                          "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "number", "term": {"literal": {"decimal": 1.0e20}}}}}},
+                                                                                          "inject": {
+                                                                                            "typeName": "hydra.json.model.Value",
+                                                                                            "field": {"name": "number", "term": {"literal": {"decimal": 100000000000000000000}}}}}},
                                                                                       {"name": "remainder", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": {"integer": "int32"}}}}}]}},
                                                                                 "type": {"variable": "hydra.json.model.Value"}}}}}},
                                                                       "type": {"variable": "hydra.json.model.Value"}}}}}}}}]}}}}}},

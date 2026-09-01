@@ -1362,7 +1362,7 @@
                                                                                   "term": {
                                                                                     "inject": {
                                                                                       "typeName": "hydra.core.IntegerValue",
-                                                                                      "field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": 4.0e9}}}}}}}}}}}}}}}}}}},
+                                                                                      "field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": 4000000000}}}}}}}}}}}}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -1385,7 +1385,7 @@
                                                                               "term": {
                                                                                 "inject": {
                                                                                   "typeName": "hydra.core.IntegerValue",
-                                                                                  "field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": 4.0e9}}}}}}}}}}}}}}}}}]}}}}}},
+                                                                                  "field": {"name": "uint32", "term": {"literal": {"integer": {"uint32": 4000000000}}}}}}}}}}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
                                     {
@@ -4360,7 +4360,10 @@
                                                                           "typeName": "hydra.core.Term",
                                                                           "field": {
                                                                             "name": "literal",
-                                                                            "term": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "decimal", "term": {"literal": {"decimal": 1.0e20}}}}}}}}}}}}}}},
+                                                                            "term": {
+                                                                              "inject": {
+                                                                                "typeName": "hydra.core.Literal",
+                                                                                "field": {"name": "decimal", "term": {"literal": {"decimal": 100000000000000000000}}}}}}}}}}}}}}},
                                                         {
                                                           "name": "expected",
                                                           "term": {
@@ -4375,7 +4378,10 @@
                                                                       "typeName": "hydra.core.Term",
                                                                       "field": {
                                                                         "name": "literal",
-                                                                        "term": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "decimal", "term": {"literal": {"decimal": 1.0e20}}}}}}}}}}}}}]}}}}}},
+                                                                        "term": {
+                                                                          "inject": {
+                                                                            "typeName": "hydra.core.Literal",
+                                                                            "field": {"name": "decimal", "term": {"literal": {"decimal": 100000000000000000000}}}}}}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                                           {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
                         {

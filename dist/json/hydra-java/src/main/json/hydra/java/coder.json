@@ -28834,7 +28834,7 @@
                                   "application": {
                                     "function": {
                                       "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.java.syntax.InclusiveOrExpression"}}},
-                                    "argument": {"application": {"function": {"variable": "hydra.java.coder.isBigNumericType"}, "argument": {"variable": "ftype"}}}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.java.coder.isBigIntegerType"}, "argument": {"variable": "ftype"}}}}},
                                 "argument": {
                                   "application": {
                                     "function": {"application": {"function": {"variable": "hydra.java.coder.compareToZeroClause"}, "argument": {"variable": "tmpName"}}},
@@ -32084,7 +32084,7 @@
                                 "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.InterfaceType"}}}}}}}}}}}}}}}}},
     {
       "term": {
-        "name": "hydra.java.coder.isBigNumericType",
+        "name": "hydra.java.coder.isBigIntegerType",
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.Type"}, "isLazy": false}],
@@ -32113,7 +32113,6 @@
                                     "typeName": "hydra.core.LiteralType",
                                     "default": {"literal": {"boolean": false}},
                                     "cases": [
-                                      {"name": "decimal", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"boolean": true}}}}},
                                       {
                                         "name": "integer",
                                         "handler": {
