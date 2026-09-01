@@ -49,6 +49,48 @@ on:
 # and running target-language tests.
 
 jobs:
+  # Change detection for the expensive cold-clone-haskell gate. cold-clone-haskell
+  # re-verifies the fresh-checkout cold-seed path (the #703 Java-host seeder) and
+  # costs ~2.5h. It only needs to run when something on the cold-seed surface
+  # changed: the committed JSON the seeder reads, the DSL/kernel sources that feed
+  # JSON, the seeder + sync drivers themselves, the package manifests, or the
+  # host-version/override config that selects which published coder is seeded
+  # against. Docs- or downstream-only pushes skip it. FAIL-OPEN: on a release tag,
+  # a non-PR push where the diff base is unavailable, or any diff error, run the
+  # job (better a needless 2.5h than a silently-skipped release gate).
+  changes:
+    name: Detect cold-seed-path changes
+    runs-on: ubuntu-latest
+    outputs:
+      cold_seed: ${{ steps.filter.outputs.cold_seed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: filter
+        run: |
+          set -euo pipefail
+          # Paths whose change can affect the cold-seed / fresh-checkout build path.
+          PATTERNS='^(dist/json/|packages/|heads/haskell/|heads/java/|bin/|hydra.json|.github/workflows/ci.yml)'
+          run_it() { echo "cold_seed=true" >> "$GITHUB_OUTPUT"; echo "cold-clone gate: RUN ($1)"; }
+          skip_it() { echo "cold_seed=false" >> "$GITHUB_OUTPUT"; echo "cold-clone gate: SKIP ($1)"; }
+          # Fail-open triggers: release tag, or no usable diff base.
+          if [ "${GITHUB_REF_TYPE:-}" = "tag" ]; then run_it "release tag"; exit 0; fi
+          if [ "${GITHUB_EVENT_NAME:-}" = "pull_request" ]; then
+            BASE="origin/${GITHUB_BASE_REF}"
+          else
+            BASE="${{ github.event.before }}"
+          fi
+          if [ -z "${BASE:-}" ] || [ "$BASE" = "0000000000000000000000000000000000000000" ] \
+             || ! git rev-parse --verify -q "$BASE^{commit}" >/dev/null; then
+            run_it "no usable diff base — fail open"; exit 0
+          fi
+          if git diff --name-only "$BASE"...HEAD | grep -qE "$PATTERNS"; then
+            run_it "cold-seed surface changed"
+          else
+            skip_it "no cold-seed-path changes"
+          fi
+
   haskell:
     name: Haskell tests (JSON build + consistency check)
     runs-on: ubuntu-latest
@@ -367,6 +409,12 @@ jobs:
   cold-clone-haskell:
     name: Cold-clone Haskell sync (no committed dist/haskell)
     runs-on: ubuntu-latest
+    # Gated (#703 follow-up): only run when the cold-seed surface changed. The
+    # `changes` job fails open on release tags and when the diff base is missing,
+    # so this release gate is never silently skipped. Docs/downstream-only pushes
+    # skip the ~2.5h cost.
+    needs: changes
+    if: ${{ needs.changes.outputs.cold_seed == 'true' }}
     # This job cold-seeds dist/haskell then runs a FULL bin/sync.sh + stack test
     # from scratch with no warm .stack-work — the same ~2.5h workload as the
     # `haskell` job (which budgets 300min), plus the seeder build, and it pays
