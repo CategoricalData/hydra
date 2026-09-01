@@ -75,7 +75,8 @@ caseConvention = define "caseConvention" $
     _CaseConvention_lowerSnake>>: constant (string "lower_snake_case"),
     _CaseConvention_upperSnake>>: constant (string "UPPER_SNAKE_CASE"),
     _CaseConvention_camel>>: constant (string "camelCase"),
-    _CaseConvention_pascal>>: constant (string "PascalCase")]
+    _CaseConvention_pascal>>: constant (string "PascalCase"),
+    _CaseConvention_upperDashed>>: constant (string "UPPER-DASHED-CASE")]
 
 comparison :: TypedTermDefinition (Comparison -> String)
 comparison = define "comparison" $

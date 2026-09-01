@@ -186,6 +186,45 @@
                   "value": {"literal": {"string": "DSL injection for the upperSnake variant of hydra.util.CaseConvention"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.util.caseConventionUpperDashed",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.util.CaseConvention"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.util.CaseConvention"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "upperDashed"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the upperDashed variant of hydra.util.CaseConvention"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.util.comparisonComparison",
         "signature": {
           "typeParameters": [],

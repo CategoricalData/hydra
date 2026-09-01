@@ -111,17 +111,20 @@ convertCase = define "convertCase" $
               (Lists.uncons $ var "acc"))]
         $ Lists.map (primitive DefStrings.fromList) $ Lists.foldl (var "splitOnUppercase") emptyParts
           $ Lists.reverse $ Strings.toList (decapitalize @@ var "original"),
-      "byUnderscores">: Strings.splitOn (string "_") $ var "original"]
+      "byUnderscores">: Strings.splitOn (string "_") $ var "original",
+      "byDashes">: Strings.splitOn (string "-") $ var "original"]
       $ (cases _CaseConvention Nothing [
         _CaseConvention_camel>>: constant $ var "byCaps",
         _CaseConvention_pascal>>: constant $ var "byCaps",
         _CaseConvention_lowerSnake>>: constant $ var "byUnderscores",
-        _CaseConvention_upperSnake>>: constant $ var "byUnderscores"]) @@ var "from"]
+        _CaseConvention_upperSnake>>: constant $ var "byUnderscores",
+        _CaseConvention_upperDashed>>: constant $ var "byDashes"]) @@ var "from"]
     $ (cases _CaseConvention Nothing [
       _CaseConvention_camel>>: constant $ decapitalize @@ (Strings.concat (Lists.map (capitalize <.> primitive DefStrings.toLower) $ var "parts")),
       _CaseConvention_pascal>>: constant $ Strings.concat (Lists.map (capitalize <.> primitive DefStrings.toLower) $ var "parts"),
       _CaseConvention_lowerSnake>>: constant $ Strings.join (string "_") (Lists.map (primitive DefStrings.toLower) $ var "parts"),
-      _CaseConvention_upperSnake>>: constant $ Strings.join (string "_") (Lists.map (primitive DefStrings.toUpper) $ var "parts")
+      _CaseConvention_upperSnake>>: constant $ Strings.join (string "_") (Lists.map (primitive DefStrings.toUpper) $ var "parts"),
+      _CaseConvention_upperDashed>>: constant $ Strings.join (string "-") (Lists.map (primitive DefStrings.toUpper) $ var "parts")
       ]) @@ var "to"
   where
     emptyParts = list [list ([] :: [TypedTerm Char])]

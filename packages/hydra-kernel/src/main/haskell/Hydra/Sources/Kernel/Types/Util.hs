@@ -34,7 +34,7 @@ module_ = Module {
 caseConvention :: TypeDefinition
 caseConvention = define "CaseConvention" $
   doc "A naming convention for symbols, such as camelCase or snake_case" $
-  T.enum ["camel", "pascal", "lowerSnake", "upperSnake"]
+  T.enum ["camel", "pascal", "lowerSnake", "upperSnake", "upperDashed"]
 
 comparison :: TypeDefinition
 comparison = define "Comparison" $

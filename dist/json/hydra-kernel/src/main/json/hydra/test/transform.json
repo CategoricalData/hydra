@@ -429,7 +429,14 @@
                                                     "lambda": {
                                                       "parameter": "_",
                                                       "domain": "unit",
-                                                      "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "pascal"}}}}}}}]}},
+                                                      "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "pascal"}}}}}}},
+                                                {
+                                                  "name": "upperDashed",
+                                                  "handler": {
+                                                    "lambda": {
+                                                      "parameter": "_",
+                                                      "domain": "unit",
+                                                      "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "upperDashed"}}}}}}}]}},
                                           "argument": {"variable": "conv"}}}},
                                     {"name": "term", "term": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
             "annotation": {

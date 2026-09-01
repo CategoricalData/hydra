@@ -15,7 +15,8 @@
                   {"name": "camel", "type": "unit"},
                   {"name": "pascal", "type": "unit"},
                   {"name": "lowerSnake", "type": "unit"},
-                  {"name": "upperSnake", "type": "unit"}]},
+                  {"name": "upperSnake", "type": "unit"},
+                  {"name": "upperDashed", "type": "unit"}]},
               "annotation": {
                 "map": [
                   {

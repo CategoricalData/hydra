@@ -62,7 +62,10 @@
                             "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "camelCase"}}}}},
                           {
                             "name": "pascal",
-                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "PascalCase"}}}}}]}},
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "PascalCase"}}}}},
+                          {
+                            "name": "upperDashed",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "UPPER-DASHED-CASE"}}}}}]}},
                     "argument": {"variable": "c"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a case convention as a string"}}}]}}}}},
     {

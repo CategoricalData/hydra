@@ -1067,6 +1067,53 @@
                       "string": "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.names.nameToUpperDashed",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.Name"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "name",
+                "domain": {"variable": "hydra.core.Name"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "parts",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": "string"}}},
+                                    "type": {"literal": "string"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"variable": "hydra.formatting.convertCase"},
+                                        "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "camel", "term": "unit"}}}}},
+                                    "argument": {"inject": {"typeName": "hydra.util.CaseConvention", "field": {"name": "upperDashed", "term": "unit"}}}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
+                                "argument": {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "name"}}}}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
+                    "body": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "-"}}}},
+                        "argument": {"variable": "parts"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Convert a name to UPPER-DASHED display form, splitting on '.' and joining with '-'"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.names.normalTypeVariable",
         "signature": {
           "typeParameters": [],

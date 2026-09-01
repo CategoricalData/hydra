@@ -164,7 +164,8 @@ encodeCaseConvention = define "encodeCaseConvention" $
           _CaseConvention_lowerSnake>>: constant (Core.nameLift _CaseConvention_lowerSnake),
           _CaseConvention_upperSnake>>: constant (Core.nameLift _CaseConvention_upperSnake),
           _CaseConvention_camel>>: constant (Core.nameLift _CaseConvention_camel),
-          _CaseConvention_pascal>>: constant (Core.nameLift _CaseConvention_pascal)])
+          _CaseConvention_pascal>>: constant (Core.nameLift _CaseConvention_pascal),
+          _CaseConvention_upperDashed>>: constant (Core.nameLift _CaseConvention_upperDashed)])
         Core.termUnit)
 
 

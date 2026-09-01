@@ -5,7 +5,8 @@ module Hydra.Sources.Kernel.Terms.Names where
 import Hydra.Kernel hiding (
   chooseUniqueLabel, compactName, derivedBindingName, derivedDefinitionName, derivedModuleName,
   freshName, freshNames, localNameOf, moduleNameOf, moduleNameToFilePath, nameToFilePath,
-  normalTypeVariable, pushSubtermStep, qname, qualifyName, restoreTrace, unqualifyName)
+  nameToUpperDashed, normalTypeVariable, pushSubtermStep, qname, qualifyName, restoreTrace,
+  unqualifyName)
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
@@ -82,6 +83,7 @@ module_ = Module {
      toDefinition moduleNameOf,
      toDefinition moduleNameToFilePath,
      toDefinition nameToFilePath,
+     toDefinition nameToUpperDashed,
      toDefinition normalTypeVariable,
      toDefinition pushSubtermStep,
      toDefinition qname,
@@ -236,6 +238,15 @@ nameToFilePath = define "nameToFilePath" $
   "prefix" <~ Optionals.match (var "ns") (string "") ("n" ~> Strings.concat2 (var "nsToFilePath" @@ var "n") (string "/")) $
   "suffix" <~ Formatting.convertCase @@ Util.caseConventionPascal @@ var "localConv" @@ var "local" $
   Strings.concat (list [var "prefix", var "suffix", string ".", DslFile.unFileExtension (var "ext")])
+
+nameToUpperDashed :: TypedTermDefinition (Name -> String)
+nameToUpperDashed = define "nameToUpperDashed" $
+  doc "Convert a name to UPPER-DASHED display form, splitting on '.' and joining with '-'" $
+  lambda "name" $ lets [
+    "parts">: Lists.map
+      (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionUpperDashed)
+      (Strings.splitOn (string ".") (Core.unName $ var "name"))]
+    $ Strings.join (string "-") $ var "parts"
 
 normalTypeVariable :: TypedTermDefinition (Int -> Name)
 normalTypeVariable = define "normalTypeVariable" $

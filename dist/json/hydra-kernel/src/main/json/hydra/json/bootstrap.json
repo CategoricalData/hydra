@@ -20576,6 +20576,12 @@
                                                   "typeName": "hydra.core.FieldType",
                                                   "fields": [
                                                     {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "upperSnake"}}}}},
+                                                    {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}}]}},
+                                              {
+                                                "record": {
+                                                  "typeName": "hydra.core.FieldType",
+                                                  "fields": [
+                                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "upperDashed"}}}}},
                                                     {"name": "type", "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "unit", "term": "unit"}}}}]}}]}}}}},
                                   {
                                     "name": "annotation",

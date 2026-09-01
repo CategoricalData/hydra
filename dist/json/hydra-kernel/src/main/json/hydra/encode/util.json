@@ -155,6 +155,41 @@
                                                       "parameter": "_",
                                                       "domain": "unit",
                                                       "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}},
+                                                  "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
+                  {
+                    "name": "upperDashed",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "y",
+                        "domain": "unit",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.Term",
+                            "field": {
+                              "name": "inject",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Injection",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.util.CaseConvention"}}}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "upperDashed"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "parameter": "_",
+                                                      "domain": "unit",
+                                                      "body": {"inject": {"typeName": "hydra.core.Term", "field": {"name": "unit", "term": "unit"}}}}},
                                                   "argument": {"variable": "y"}}}}]}}}]}}}}}}}}]}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.util.CaseConvention"}}}]}}}}},

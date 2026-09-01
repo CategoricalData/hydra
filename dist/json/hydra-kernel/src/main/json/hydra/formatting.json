@@ -209,6 +209,13 @@
                                           "application": {
                                             "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "_"}}}},
                                             "argument": {"variable": "original"}}},
+                                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
+                                      {
+                                        "name": "byDashes",
+                                        "term": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "-"}}}},
+                                            "argument": {"variable": "original"}}},
                                         "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                                     "body": {
                                       "application": {
@@ -223,7 +230,8 @@
                                                 "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"variable": "byUnderscores"}}}},
                                               {
                                                 "name": "upperSnake",
-                                                "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"variable": "byUnderscores"}}}}]}},
+                                                "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"variable": "byUnderscores"}}}},
+                                              {"name": "upperDashed", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"variable": "byDashes"}}}}]}},
                                         "argument": {"variable": "from"}}}}},
                                 "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
                             "body": {
@@ -315,6 +323,25 @@
                                             "body": {
                                               "application": {
                                                 "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "_"}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": "string"}}},
+                                                            "type": {"literal": "string"}}},
+                                                        "argument": {"variable": "hydra.lib.strings.toUpper"}}},
+                                                    "argument": {"variable": "parts"}}}}}}}},
+                                      {
+                                        "name": "upperDashed",
+                                        "handler": {
+                                          "lambda": {
+                                            "parameter": "_",
+                                            "domain": "unit",
+                                            "body": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "-"}}}},
                                                 "argument": {
                                                   "application": {
                                                     "function": {
