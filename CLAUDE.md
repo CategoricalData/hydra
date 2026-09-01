@@ -406,15 +406,16 @@ Current commands:
 
 - `/bootstrap` — cross-host bootstrap demo (default: triad; modes
   include `all`, `others`, and arbitrary scoped lang lists)
-- `/compact-plan` — trim the branch plan to durable state, then `/compact`
-  and re-read it (space-saving context switch between major tasks)
 - `/improve-docs` — end-of-session documentation pass
 - `/inference-bench` — cross-host inference benchmark
 - `/issues` — drain the pending issue-proposal queue with the user: present
   drafts, discuss, then file (+ usually spawn) or discard, per-item user-gated
 - `/lexicon` — regenerate `docs/hydra-lexicon.txt`
 - `/maintenance` — full maintenance pass
-- `/save` — save state to the branch plan document
+- `/save` — record session state in the branch plan, pruning history that is
+  no longer relevant so the plan stays a lean, complete handoff
+- `/save-and-compact` — `/save`, then `/compact` the conversation and re-read
+  the trimmed plan (context switch between major tasks)
 - `/squash` — squash WIP commits to focused topic commits
 - `/sync` — full host × target sync (default: all × all; opposite
   of `/bootstrap`'s default — note the asymmetry)
