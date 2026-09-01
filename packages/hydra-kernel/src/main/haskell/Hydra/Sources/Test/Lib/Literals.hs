@@ -242,9 +242,9 @@ literalsParseDecimal = subgroup "parseDecimal" [
 
 literalsPrintDecimal :: TypedTerm TestGroup
 literalsPrintDecimal = subgroup "printDecimal" [
-  test "zero" 0 "0.0",
-  test "positive whole" 42 "42.0",
-  test "negative whole" (-42) "-42.0",
+  test "zero" 0 "0",
+  test "positive whole" 42 "42",
+  test "negative whole" (-42) "-42",
   test "positive fraction" 3.14 "3.14",
   test "negative fraction" (-2.5) "-2.5"]
   where

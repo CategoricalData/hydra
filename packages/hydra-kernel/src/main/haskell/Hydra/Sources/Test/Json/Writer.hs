@@ -87,14 +87,14 @@ arraysGroup = subgroup "arrays" [
 -- type coder, which goes through BigDecimal/Scientific without the lossy emission step.
 decimalPrecisionGroup :: TypedTerm TestGroup
 decimalPrecisionGroup = subgroup "decimal precision" [
-    -- Tiny and huge exponents stay in scientific notation (plain would be 20+ digits
-    -- of zeroes, which no human can parse reliably).
+    -- Tiny exponents (adjusted exponent a < -6) stay in scientific notation; huge
+    -- exponents (a < 21) still print positionally (ECMAScript Number::toString / RFC 8785).
     writerCase "tiny exponent"
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 (-20)))
       "1.0e-20",
     writerCase "huge exponent"
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 20))
-      "1.0e20"]
+      "100000000000000000000"]
 
 nestedGroup :: TypedTerm TestGroup
 nestedGroup = subgroup "nested structures" [
@@ -153,13 +153,13 @@ primitivesGroup = subgroup "primitives" [
     writerCase "negative integer" (Json.valueNumber $ Phantoms.decimal (-17.0)) "-17",
     writerCase "large integer" (Json.valueNumber $ Phantoms.decimal 1000000.0) "1000000",
 
-    -- Numbers - fractions. printDecimal (Scientific's Show) stays plain only in the
-    -- narrow [0.1, 1) ∪ whole-ish band; values like 0.01 and 0.001 come out in
-    -- scientific form. This is imperfect but uniform across all Hydra hosts.
+    -- Numbers - fractions. printDecimal is representation-faithful and uses positional
+    -- form for adjusted exponent -6 <= a < 21 (ECMAScript Number::toString / RFC 8785),
+    -- so 0.01 and 0.001 print plainly, not in scientific form.
     writerCase "decimal" (Json.valueNumber $ Phantoms.decimal 3.14) "3.14",
     writerCase "negative decimal" (Json.valueNumber $ Phantoms.decimal (-2.5)) "-2.5",
-    writerCase "hundredth" (Json.valueNumber $ Phantoms.decimal 0.01) "1.0e-2",
-    writerCase "small decimal" (Json.valueNumber $ Phantoms.decimal 0.001) "1.0e-3"]
+    writerCase "hundredth" (Json.valueNumber $ Phantoms.decimal 0.01) "0.01",
+    writerCase "small decimal" (Json.valueNumber $ Phantoms.decimal 0.001) "0.001"]
 
 stringsGroup :: TypedTerm TestGroup
 stringsGroup = subgroup "strings" [

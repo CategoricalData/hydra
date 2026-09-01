@@ -17,6 +17,7 @@ import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
+import qualified Data.Scientific              as Sci
 
 import Hydra.Testing
 import qualified Hydra.Dsl.Lib.Equality as Equality
@@ -43,6 +44,7 @@ allTests = definitionInModule module_ "allTests" $
     supergroup "ordering" [
       nameComparisonTests,
       literalComparisonTests,
+      decimalComparisonTests,
       -- Note: typeComparisonTests and termComparisonTests are excluded because
       -- comparing Type and Term values (meta-level structures) causes issues
       -- with the kernel test generator's schema type inference
@@ -118,6 +120,39 @@ literalComparisonTests = subgroup "Literal comparison" [
     (Core.termLiteral $ Core.literalBoolean Phantoms.true)
     (Core.termLiteral $ Core.literalBoolean Phantoms.true)
     "equalTo"]
+
+-- ============================================================
+-- Decimal comparison tests (#719): value first, scale as tiebreak;
+-- numerically equal decimals of different scale are distinct, unequal values.
+--
+-- NOTE: scale-tiebreak cases (e.g. 1.1 vs 1.10) are deliberately NOT tested here.
+-- compareTest/equalTest compile down to a direct native call on Term's derived,
+-- scale-blind Ord/Eq instance (via Hydra.Dsl.Lib.Ordering/Equality), not through
+-- primitive dispatch -- so they can't exercise termCompare/termEqual's scale
+-- awareness. The scale-tiebreak cases are covered instead by
+-- Sources/Test/Lib/Ordering.hs's orderingCompareDecimals and
+-- Sources/Test/Lib/Equality.hs's equalityEqualDecimals, which use the primCase
+-- helper to build real primitive-application terms evaluated via the reducer.
+-- ============================================================
+
+-- Helper to build a decimal literal term with an explicit coefficient and scale.
+decimalTerm :: Integer -> Int -> TypedTerm Term
+decimalTerm coefficient scale = Terms.decimal (Sci.scientific coefficient (negate scale))
+
+decimalComparisonTests :: TypedTerm TestGroup
+decimalComparisonTests = subgroup "Decimal comparison" [
+  compareTest "1.1 < 1.2 (different value)"
+    (decimalTerm 11 1)
+    (decimalTerm 12 1)
+    "lessThan",
+  compareTest "1.1 == 1.1 (same value, same scale)"
+    (decimalTerm 11 1)
+    (decimalTerm 11 1)
+    "equalTo",
+  equalTest "1.1 == 1.1 (same value, same scale)"
+    (decimalTerm 11 1)
+    (decimalTerm 11 1)
+    True]
 
 -- ============================================================
 -- Type comparison tests

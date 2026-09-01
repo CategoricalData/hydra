@@ -19,6 +19,7 @@ import qualified Data.Map                     as M
 import Hydra.Testing
 import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Lib.Equality as DefEquality
+import qualified Data.Scientific as Sci
 
 
 ns :: ModuleName
@@ -39,7 +40,8 @@ allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.equality primitives" $
     supergroup "hydra.lib.equality primitives" [
-      equalityEqual]
+      equalityEqual,
+      equalityEqualDecimals]
 
 equalityEqual :: TypedTerm TestGroup
 equalityEqual = subgroup "equal" [
@@ -47,3 +49,14 @@ equalityEqual = subgroup "equal" [
   test "unequal integers" 5 3 false]
   where
     test name x y result = primCase name DefEquality.equal [int32 x, int32 y] result
+
+-- Decimal equality (#719): numerically equal decimals of different scale are
+-- distinct, unequal values.
+equalityEqualDecimals :: TypedTerm TestGroup
+equalityEqualDecimals = subgroup "equal decimals" [
+  test "same value, same scale" (decimalOf 11 1) (decimalOf 11 1) true,
+  test "same value, different scale" (decimalOf 11 1) (decimalOf 110 2) false,
+  test "different value, same scale" (decimalOf 11 1) (decimalOf 12 1) false]
+  where
+    test name x y result = primCase name DefEquality.equal [x, y] result
+    decimalOf coefficient scale = decimal (Sci.scientific coefficient (negate scale))

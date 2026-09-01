@@ -16,6 +16,7 @@ import qualified Data.Map                     as M
 import Hydra.Testing
 import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Lib.Ordering as DefOrdering
+import qualified Data.Scientific as Sci
 
 
 ns :: ModuleName
@@ -53,7 +54,9 @@ allTests = definitionInModule module_ "allTests" $
       -- Float tests
       orderingCompareFloats,
       orderingLtFloats,
-      orderingGtFloats]
+      orderingGtFloats,
+      -- Decimal tests (#719): value first, scale as tiebreak
+      orderingCompareDecimals]
 
 orderingCompare :: TypedTerm TestGroup
 orderingCompare = subgroup "compare" [
@@ -72,6 +75,19 @@ orderingCompareFloats = subgroup "compare floats" [
   test "negative vs positive" (-1.0) 1.0 "lessThan"]
   where
     test testName x y resultField = primCase testName DefOrdering.compare [float64 x, float64 y] (injectUnit (name "hydra.util.Comparison") resultField)
+
+-- Tests for ordering with decimal values: value first, then scale as tiebreak
+-- (numerically equal decimals of different scale are distinct, smaller scale first).
+orderingCompareDecimals :: TypedTerm TestGroup
+orderingCompareDecimals = subgroup "compare decimals" [
+  test "different value" (decimalOf 11 1) (decimalOf 12 1) "lessThan",
+  test "same value, same scale" (decimalOf 11 1) (decimalOf 11 1) "equalTo",
+  test "same value, scale tiebreak" (decimalOf 11 1) (decimalOf 110 2) "lessThan",
+  test "same value, scale tiebreak (larger scale)" (decimalOf 110 2) (decimalOf 1100 3) "lessThan",
+  test "same value, scale tiebreak (transitively)" (decimalOf 11 1) (decimalOf 1100 3) "lessThan"]
+  where
+    test testName x y resultField = primCase testName DefOrdering.compare [x, y] (injectUnit (name "hydra.util.Comparison") resultField)
+    decimalOf coefficient scale = decimal (Sci.scientific coefficient (negate scale))
 
 -- Tests for ordering with string values
 orderingCompareStrings :: TypedTerm TestGroup
