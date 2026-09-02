@@ -3,6 +3,7 @@
   "metadata": {"description": "Validation functions for core terms and types", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.annotations"},
+    {"module": "hydra.names"},
     {"module": "hydra.reflect"},
     {"module": "hydra.rewriting"},
     {"module": "hydra.scoping"},
@@ -4742,123 +4743,340 @@
                                                 "parameter": "varName",
                                                 "domain": {"variable": "hydra.core.Name"},
                                                 "body": {
-                                                  "application": {
-                                                    "function": {
-                                                      "application": {
-                                                        "function": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "looksQualified",
+                                                        "term": {
                                                           "application": {
                                                             "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                "type": {
-                                                                  "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTermError"}}}}}},
-                                                            "argument": {
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.isGiven"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
+                                                            "argument": {"application": {"function": {"variable": "hydra.names.moduleNameOf"}, "argument": {"variable": "varName"}}}}},
+                                                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
+                                                    "body": {
+                                                      "let": {
+                                                        "bindings": [
+                                                          {
+                                                            "name": "isBoundTerm",
+                                                            "term": {
                                                               "application": {
-                                                                "function": {"application": {"function": {"variable": "hydra.validate.core.enabled"}, "argument": {"variable": "p"}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.isGiven"}, "type": {"variable": "hydra.core.Term"}}},
                                                                 "argument": {
-                                                                  "wrap": {
-                                                                    "typeName": "hydra.core.Name",
-                                                                    "body": {"literal": {"string": "hydra.error.core.InvalidTermError.undefinedTermVariable"}}}}}}}},
-                                                        "argument": {
-                                                          "application": {
-                                                            "function": {
-                                                              "application": {
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
-                                                                    "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTermError"}}}}},
-                                                                "argument": {
-                                                                  "lambda": {
-                                                                    "parameter": "f",
-                                                                    "domain": {"variable": "hydra.error.core.InvalidTermError"},
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "pair": {
-                                                                                "first": {
-                                                                                  "wrap": {
-                                                                                    "typeName": "hydra.core.Name",
-                                                                                    "body": {"literal": {"string": "hydra.error.core.InvalidTermError.undefinedTermVariable"}}}},
-                                                                                "second": {"variable": "f"}}},
-                                                                            "type": {"variable": "hydra.core.Name"}}},
-                                                                        "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}},
-                                                            "argument": {
-                                                              "application": {
-                                                                "function": {
                                                                   "application": {
                                                                     "function": {
                                                                       "application": {
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {"variable": "hydra.lib.logic.ifElse"},
-                                                                            "type": {"optional": {"variable": "hydra.error.core.InvalidTermError"}}}},
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                            "type": {"variable": "hydra.core.Term"}}},
+                                                                        "argument": {"variable": "varName"}}},
+                                                                    "argument": {
+                                                                      "application": {"function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "boundTerms"}}, "argument": {"variable": "cx"}}}}}}},
+                                                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "isPrimitive",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.isGiven"}, "type": {"variable": "hydra.graph.Primitive"}}},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                "type": {"variable": "hydra.graph.Primitive"}}},
+                                                                            "argument": {"variable": "varName"}}},
                                                                         "argument": {
+                                                                          "application": {"function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "primitives"}}, "argument": {"variable": "cx"}}}}}}},
+                                                                "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.validate.core.firstFinding"},
+                                                                    "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTermError"}}}}},
+                                                                "argument": {
+                                                                  "list": [
+                                                                    {
+                                                                      "application": {
+                                                                        "function": {
                                                                           "application": {
                                                                             "function": {
                                                                               "application": {
-                                                                                "function": {"variable": "hydra.lib.logic.or"},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                    "type": {
+                                                                                      "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTermError"}}}}}},
                                                                                 "argument": {
                                                                                   "application": {
-                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.isGiven"}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                    "function": {"application": {"function": {"variable": "hydra.validate.core.enabled"}, "argument": {"variable": "p"}}},
                                                                                     "argument": {
-                                                                                      "application": {
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                "type": {"variable": "hydra.core.Term"}}},
-                                                                                            "argument": {"variable": "varName"}}},
-                                                                                        "argument": {
-                                                                                          "application": {"function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "boundTerms"}}, "argument": {"variable": "cx"}}}}}}}}},
+                                                                                      "wrap": {
+                                                                                        "typeName": "hydra.core.Name",
+                                                                                        "body": {"literal": {"string": "hydra.error.core.InvalidTermError.undefinedTermVariable"}}}}}}}},
                                                                             "argument": {
                                                                               "application": {
                                                                                 "function": {
                                                                                   "application": {
-                                                                                    "function": {"variable": "hydra.lib.logic.or"},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
+                                                                                        "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTermError"}}}}},
                                                                                     "argument": {
-                                                                                      "application": {
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                            "argument": {"variable": "varName"}}},
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "lambdaVariables"}},
-                                                                                            "argument": {"variable": "cx"}}}}}}},
+                                                                                      "lambda": {
+                                                                                        "parameter": "f",
+                                                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "pair": {
+                                                                                                    "first": {
+                                                                                                      "wrap": {
+                                                                                                        "typeName": "hydra.core.Name",
+                                                                                                        "body": {"literal": {"string": "hydra.error.core.InvalidTermError.undefinedTermVariable"}}}},
+                                                                                                    "second": {"variable": "f"}}},
+                                                                                                "type": {"variable": "hydra.core.Name"}}},
+                                                                                            "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}},
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "function": {
-                                                                                      "typeApplication": {"body": {"variable": "hydra.lib.optionals.isGiven"}, "type": {"variable": "hydra.graph.Primitive"}}},
-                                                                                    "argument": {
                                                                                       "application": {
                                                                                         "function": {
                                                                                           "application": {
                                                                                             "function": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
-                                                                                                "type": {"variable": "hydra.graph.Primitive"}}},
-                                                                                            "argument": {"variable": "varName"}}},
+                                                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                                "type": {"optional": {"variable": "hydra.error.core.InvalidTermError"}}}},
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "function": {"application": {"function": {"variable": "hydra.lib.logic.or"}, "argument": {"variable": "looksQualified"}}},
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "function": {"application": {"function": {"variable": "hydra.lib.logic.or"}, "argument": {"variable": "isBoundTerm"}}},
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "function": {"variable": "hydra.lib.logic.or"},
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                    "argument": {"variable": "varName"}}},
+                                                                                                                "argument": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "lambdaVariables"}},
+                                                                                                                    "argument": {"variable": "cx"}}}}}}},
+                                                                                                        "argument": {"variable": "isPrimitive"}}}}}}}}},
+                                                                                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}},
+                                                                                    "argument": {
+                                                                                      "optional": {
+                                                                                        "inject": {
+                                                                                          "typeName": "hydra.error.core.InvalidTermError",
+                                                                                          "field": {
+                                                                                            "name": "undefinedTermVariable",
+                                                                                            "term": {
+                                                                                              "record": {
+                                                                                                "typeName": "hydra.error.core.UndefinedTermVariableError",
+                                                                                                "fields": [{"name": "location", "term": {"variable": "path"}}, {"name": "name", "term": {"variable": "varName"}}]}}}}}}}}}}}},
+                                                                        "argument": {
+                                                                          "typeApplication": {
+                                                                            "body": {"optional": null},
+                                                                            "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTermError"}}}}}}},
+                                                                    {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                    "type": {
+                                                                                      "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTermError"}}}}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {"application": {"function": {"variable": "hydra.validate.core.enabled"}, "argument": {"variable": "p"}}},
+                                                                                    "argument": {
+                                                                                      "wrap": {
+                                                                                        "typeName": "hydra.core.Name",
+                                                                                        "body": {"literal": {"string": "hydra.error.core.InvalidTermError.unknownPrimitiveName"}}}}}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
+                                                                                        "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTermError"}}}}},
+                                                                                    "argument": {
+                                                                                      "lambda": {
+                                                                                        "parameter": "f",
+                                                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "pair": {
+                                                                                                    "first": {
+                                                                                                      "wrap": {
+                                                                                                        "typeName": "hydra.core.Name",
+                                                                                                        "body": {"literal": {"string": "hydra.error.core.InvalidTermError.unknownPrimitiveName"}}}},
+                                                                                                    "second": {"variable": "f"}}},
+                                                                                                "type": {"variable": "hydra.core.Name"}}},
+                                                                                            "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                                "type": {"optional": {"variable": "hydra.error.core.InvalidTermError"}}}},
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "function": {"application": {"function": {"variable": "hydra.lib.logic.and"}, "argument": {"variable": "looksQualified"}}},
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "function": {"variable": "hydra.lib.logic.and"},
+                                                                                                        "argument": {"application": {"function": {"variable": "hydra.lib.logic.not"}, "argument": {"variable": "isPrimitive"}}}}},
+                                                                                                    "argument": {"application": {"function": {"variable": "hydra.lib.logic.not"}, "argument": {"variable": "isBoundTerm"}}}}}}}}},
                                                                                         "argument": {
-                                                                                          "application": {"function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "primitives"}}, "argument": {"variable": "cx"}}}}}}}}}}}}},
-                                                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}},
-                                                                "argument": {
-                                                                  "optional": {
-                                                                    "inject": {
-                                                                      "typeName": "hydra.error.core.InvalidTermError",
-                                                                      "field": {
-                                                                        "name": "undefinedTermVariable",
-                                                                        "term": {
-                                                                          "record": {
-                                                                            "typeName": "hydra.error.core.UndefinedTermVariableError",
-                                                                            "fields": [{"name": "location", "term": {"variable": "path"}}, {"name": "name", "term": {"variable": "varName"}}]}}}}}}}}}}}},
-                                                    "argument": {
-                                                      "typeApplication": {
-                                                        "body": {"optional": null},
-                                                        "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}}},
+                                                                                          "optional": {
+                                                                                            "inject": {
+                                                                                              "typeName": "hydra.error.core.InvalidTermError",
+                                                                                              "field": {
+                                                                                                "name": "unknownPrimitiveName",
+                                                                                                "term": {
+                                                                                                  "record": {
+                                                                                                    "typeName": "hydra.error.core.UnknownPrimitiveNameError",
+                                                                                                    "fields": [{"name": "location", "term": {"variable": "path"}}, {"name": "name", "term": {"variable": "varName"}}]}}}}}}}},
+                                                                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}},
+                                                                        "argument": {
+                                                                          "typeApplication": {
+                                                                            "body": {"optional": null},
+                                                                            "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTermError"}}}}}}},
+                                                                    {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                    "type": {
+                                                                                      "optional": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTermError"}}}}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {"application": {"function": {"variable": "hydra.validate.core.enabled"}, "argument": {"variable": "p"}}},
+                                                                                    "argument": {
+                                                                                      "wrap": {
+                                                                                        "typeName": "hydra.core.Name",
+                                                                                        "body": {"literal": {"string": "hydra.error.core.InvalidTermError.untypedTermVariable"}}}}}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
+                                                                                        "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTermError"}}}}},
+                                                                                    "argument": {
+                                                                                      "lambda": {
+                                                                                        "parameter": "f",
+                                                                                        "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "pair": {
+                                                                                                    "first": {
+                                                                                                      "wrap": {
+                                                                                                        "typeName": "hydra.core.Name",
+                                                                                                        "body": {"literal": {"string": "hydra.error.core.InvalidTermError.untypedTermVariable"}}}},
+                                                                                                    "second": {"variable": "f"}}},
+                                                                                                "type": {"variable": "hydra.core.Name"}}},
+                                                                                            "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                                                "type": {"optional": {"variable": "hydra.error.core.InvalidTermError"}}}},
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "function": {"application": {"function": {"variable": "hydra.lib.logic.and"}, "argument": {"variable": "typed"}}},
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "function": {"variable": "hydra.lib.logic.and"},
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.member"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                "argument": {"variable": "varName"}}},
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "lambdaVariables"}},
+                                                                                                                "argument": {"variable": "cx"}}}}}}},
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "function": {"variable": "hydra.lib.logic.not"},
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {"body": {"variable": "hydra.lib.optionals.isGiven"}, "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.lookup"}, "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                        "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                                                    "argument": {"variable": "varName"}}},
+                                                                                                                "argument": {
+                                                                                                                  "application": {"function": {"project": {"typeName": "hydra.graph.Graph", "fieldName": "boundTypes"}}, "argument": {"variable": "cx"}}}}}}}}}}}}}}},
+                                                                                        "argument": {
+                                                                                          "optional": {
+                                                                                            "inject": {
+                                                                                              "typeName": "hydra.error.core.InvalidTermError",
+                                                                                              "field": {
+                                                                                                "name": "untypedTermVariable",
+                                                                                                "term": {
+                                                                                                  "record": {
+                                                                                                    "typeName": "hydra.error.core.UntypedTermVariableError",
+                                                                                                    "fields": [{"name": "location", "term": {"variable": "path"}}, {"name": "name", "term": {"variable": "varName"}}]}}}}}}}},
+                                                                                    "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}}},
+                                                                        "argument": {
+                                                                          "typeApplication": {
+                                                                            "body": {"optional": null},
+                                                                            "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.error.core.InvalidTermError"}}}}}}}]}}}}}}}}}}}},
                                           {
                                             "name": "wrap",
                                             "handler": {
