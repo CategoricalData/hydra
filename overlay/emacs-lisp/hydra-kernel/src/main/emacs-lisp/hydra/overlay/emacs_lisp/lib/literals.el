@@ -272,11 +272,60 @@
         s
         (concat s ".0"))))
 
+(defun hydra--decimal-digits-and-exponent (x)
+  "Derive (significant-digit-string . adjusted-exponent) for a non-zero
+float X, using the implementation's own correctly-rounded printer (avoids
+the ulp error a log/exp derivation can introduce). The adjusted exponent
+is the power of 10 of the leading significant digit (e.g. 3 for 1234.0,
+-2 for 0.01), matching printDecimal's own `a` (Literals.hs)."
+  (let* ((s (format "%s" (abs x)))
+         (epos (cl-position ?e s))
+         (mtext (if epos (substring s 0 epos) s))
+         (base-exp (if epos (string-to-number (substring s (1+ epos))) 0))
+         (dot (or (cl-position ?. mtext) (length mtext)))
+         (digits-before (substring mtext 0 dot))
+         (digits-after (if (< dot (length mtext)) (substring mtext (1+ dot)) ""))
+         (all-digits (concat digits-before digits-after))
+         (point-pos (length digits-before))
+         (first-nz (or (cl-position-if (lambda (c) (/= c ?0)) all-digits) 0))
+         (last-nz (let ((i (1- (length all-digits))))
+                     (while (and (> i first-nz) (= (aref all-digits i) ?0))
+                       (setq i (1- i)))
+                     i))
+         (sig (substring all-digits first-nz (1+ last-nz)))
+         (e (+ base-exp (- point-pos first-nz 1))))
+    (cons sig e)))
+
 ;; print_decimal :: Decimal -> String
-;; Emacs Lisp has no native decimal; formatted as float.
+;; Emacs Lisp has no native decimal; formatted as float. Unlike a float
+;; literal -- which reuses Double's own show threshold (scientific below
+;; 0.1 or at/above 1e7) -- printDecimal has its own, wider positional range
+;; (adjusted exponent -6 <= a < 21; overlay/haskell/.../Literals.hs), so
+;; 0.01/0.001 print plainly ("0.01") rather than in scientific form. A
+;; whole value also prints without a trailing ".0" (e.g. "42", not "42.0"),
+;; since decimals track scale and a float coerced from an integral source
+;; has scale 0.
 (defvar hydra_overlay_emacs_lisp_lib_literals_print_decimal
   (lambda (x)
-    (haskell-show-float (float x))))
+    (let ((d (float x)))
+      (cond
+        ((isnan d) "NaN")
+        ((hydra--literals-infinitep d) (if (> d 0) "Infinity" "-Infinity"))
+        ((= d 0.0) "0")
+        ((and (= d (ftruncate d)) (< (abs d) 1.0e18))
+         (format "%d" (truncate d)))
+        (t
+         (let* ((digex (hydra--decimal-digits-and-exponent d))
+                (sig (car digex))
+                (e (cdr digex))
+                (sign (if (< d 0) "-" "")))
+           (if (and (>= e -6) (< e 21))
+               (if (>= e 0)
+                   (if (< e (1- (length sig)))
+                       (format "%s%s.%s" sign (substring sig 0 (1+ e)) (substring sig (1+ e)))
+                       (format "%s%s%s" sign sig (make-string (- (1+ e) (length sig)) ?0)))
+                   (format "%s0.%s%s" sign (make-string (- -1 e) ?0) sig))
+               (haskell-show-float d))))))))
 
 ;; print_bigint :: BigInteger -> String
 (defvar hydra_overlay_emacs_lisp_lib_literals_print_bigint
