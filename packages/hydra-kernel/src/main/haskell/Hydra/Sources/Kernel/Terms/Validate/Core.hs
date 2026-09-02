@@ -74,6 +74,7 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
+import qualified Hydra.Sources.Kernel.Terms.Names     as Names
 import qualified Hydra.Sources.Kernel.Terms.Reflect   as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Scoping   as Scoping
@@ -88,7 +89,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([KernelAnnotations.ns, Reflect.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([KernelAnnotations.ns, Names.ns, Reflect.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Validation functions for core terms and types")}
   where
    definitions = [
@@ -705,20 +706,67 @@ checkTerm = define "checkTerm" $
                 _InvalidTypeLambdaParameterNameError_location>>: var "path",
                 _InvalidTypeLambdaParameterNameError_name>>: var "tvName"]))],
 
-    -- T7. UndefinedTermVariableError — check boundTerms, lambdaVariables, and primitives
+    -- T7/T22/UntypedTermVariableError: TermVariable has no distinct
+    -- constructor for primitive references (both are 'TermVariable Name'),
+    -- so a primitive reference is recognized by its fully-qualified, dot-
+    -- separated shape (Names.moduleNameOf returns Just iff the name has a
+    -- dotted module prefix) -- the naming convention every hydra.lib.*
+    -- primitive name follows, and the only signal available to a
+    -- structural (non-inference) check like this one. NOT
+    -- Constants.regexNamespace: its module-prefix group is optional, so it
+    -- also matches a bare unqualified name like "x", which would wrongly
+    -- flag every lambda/let-bound variable as primitive-shaped.
+    -- Module-level term definitions are also dot-qualified and resolve via
+    -- graphBoundTerms (not graphPrimitives), so T22 must exclude
+    -- graphBoundTerms hits too, or it would misfire on a legitimate
+    -- qualified reference to an ordinary (non-primitive) kernel term.
     _Term_variable>>: "varName" ~>
-      guardedTermRule (var "p") _InvalidTermError _InvalidTermError_undefinedTermVariable
-        (Logic.ifElse
-          (Logic.or
-            (Optionals.isGiven $ Maps.lookup (var "varName") (Graph.graphBoundTerms $ var "cx"))
-            (Logic.or
-              (Sets.member (var "varName") (Graph.graphLambdaVariables $ var "cx"))
-              (Optionals.isGiven $ Maps.lookup (var "varName") (Graph.graphPrimitives $ var "cx"))))
-          noError
-          (mkJust $ inject _InvalidTermError _InvalidTermError_undefinedTermVariable $
-            record _UndefinedTermVariableError [
-              _UndefinedTermVariableError_location>>: var "path",
-              _UndefinedTermVariableError_name>>: var "varName"])),
+      "looksQualified" <~ (Optionals.isGiven $ Names.moduleNameOf @@ var "varName") $
+      "isBoundTerm" <~ (Optionals.isGiven $ Maps.lookup (var "varName") (Graph.graphBoundTerms $ var "cx")) $
+      "isPrimitive" <~ (Optionals.isGiven $ Maps.lookup (var "varName") (Graph.graphPrimitives $ var "cx")) $
+      firstFinding @@ list [
+        -- T7. UndefinedTermVariableError — an unqualified name absent from
+        -- boundTerms, lambdaVariables, and primitives
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_undefinedTermVariable
+          (Logic.ifElse
+            (Logic.or (var "looksQualified")
+              (Logic.or (var "isBoundTerm")
+                (Logic.or (Sets.member (var "varName") (Graph.graphLambdaVariables $ var "cx")) (var "isPrimitive"))))
+            noError
+            (mkJust $ inject _InvalidTermError _InvalidTermError_undefinedTermVariable $
+              record _UndefinedTermVariableError [
+                _UndefinedTermVariableError_location>>: var "path",
+                _UndefinedTermVariableError_name>>: var "varName"])),
+        -- T22. UnknownPrimitiveNameError — a qualified (primitive-shaped)
+        -- name absent from both the known primitive registry and
+        -- graphBoundTerms (excluding legitimate qualified kernel-term refs)
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_unknownPrimitiveName
+          (Logic.ifElse
+            (Logic.and (var "looksQualified")
+              (Logic.and (Logic.not $ var "isPrimitive") (Logic.not $ var "isBoundTerm")))
+            (mkJust $ inject _InvalidTermError _InvalidTermError_unknownPrimitiveName $
+              record _UnknownPrimitiveNameError [
+                _UnknownPrimitiveNameError_location>>: var "path",
+                _UnknownPrimitiveNameError_name>>: var "varName"])
+            noError),
+        -- UntypedTermVariableError (typed mode only): a validly-bound lambda
+        -- variable (so T7 does not fire) with no entry in graphBoundTypes --
+        -- the typed analogue of graphBoundTerms consulted by the
+        -- inference-side untypedTermVariable check in Terms/Checking.hs's
+        -- typeOfVariable. An unannotated lambda parameter is exactly this
+        -- case: extendGraphForLambda adds it to graphLambdaVariables but
+        -- only adds it to graphBoundTypes when the lambda carries a domain
+        -- annotation (Scoping.hs).
+        guardedTermRule (var "p") _InvalidTermError _InvalidTermError_untypedTermVariable
+          (Logic.ifElse
+            (Logic.and (var "typed")
+              (Logic.and (Sets.member (var "varName") (Graph.graphLambdaVariables $ var "cx"))
+                (Logic.not $ Optionals.isGiven $ Maps.lookup (var "varName") (Graph.graphBoundTypes $ var "cx"))))
+            (mkJust $ inject _InvalidTermError _InvalidTermError_untypedTermVariable $
+              record _UntypedTermVariableError [
+                _UntypedTermVariableError_location>>: var "path",
+                _UntypedTermVariableError_name>>: var "varName"])
+            noError)],
 
     -- T5/#610: TermWrap — empty type name and nominal reference validity
     -- (Layer 1 only; there is no Layer 2 for wrap -- see checkTerm's #610

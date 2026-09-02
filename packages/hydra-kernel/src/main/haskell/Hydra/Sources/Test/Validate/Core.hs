@@ -40,10 +40,12 @@ module_ = Module {
       Phantoms.toDefinition emptyLetBindingsTests,
       Phantoms.toDefinition identityApplicationTests,
       Phantoms.toDefinition profileBehaviourTests,
+      Phantoms.toDefinition unknownPrimitiveTests,
+      Phantoms.toDefinition untypedTermVariableTests,
       Phantoms.toDefinition variableShadowingTests]
       -- Commented out pending test gen fixes (raw constructors / unresolvable names / case-statement fixtures):
       -- annotationTests, selfApplicationTests, emptyCaseStatementTests,
-      -- emptyTypeNameTests, namingConventionTests
+      -- emptyTypeNameTests, namingConventionTests (Defect B reverted -- see #722)
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -67,6 +69,10 @@ nm s = Core.name $ Phantoms.string s
 -- No error expected
 noError :: TypedTerm (Maybe InvalidTermError)
 noError = TypedTerm $ TermOptional Nothing
+
+-- Shorthand for typed term test case
+typedCase :: String -> TypedTerm Term -> TypedTerm (Maybe InvalidTermError) -> TypedTerm TestCaseWithMetadata
+typedCase name = validateCoreTermCase name (Phantoms.boolean True)
 
 -- Shorthand for untyped term test case
 untypedCase :: String -> TypedTerm Term -> TypedTerm (Maybe InvalidTermError) -> TypedTerm TestCaseWithMetadata
@@ -193,6 +199,13 @@ unknownPrimErr name = justError $
       unName _UnknownPrimitiveNameError_location Phantoms.>: emptyPath,
       unName _UnknownPrimitiveNameError_name Phantoms.>: nm name]
 
+untypedVarErr :: String -> TypedTerm (Maybe InvalidTermError)
+untypedVarErr name = justError $
+  Phantoms.inject _InvalidTermError _InvalidTermError_untypedTermVariable $
+    Phantoms.record _UntypedTermVariableError [
+      unName _UntypedTermVariableError_location Phantoms.>: emptyPath,
+      unName _UntypedTermVariableError_name Phantoms.>: nm name]
+
 -- Term construction helpers
 
 -- DSL-based term construction helpers (raw Haskell constructors break test generation)
@@ -205,16 +218,16 @@ allTests = define "allTests" $
     duplicateFieldsTests,
     emptyLetBindingsTests,
     -- annotationTests,            -- needs raw TermAnnotated constructor (no DSL equivalent for empty annotations)
-    -- unknownPrimitiveTests,      -- primitive refs cause type unification with Term
     -- selfApplicationTests,       -- needs unbound variables
     -- caseCompletenessTests,      -- TermCases fixtures cause type unification with Term (see comment above its definition)
     identityApplicationTests,
     profileBehaviourTests,
     -- redundantWrapUnwrapTests,   -- uses unresolvable type names TypeA/TypeB/MyType
+    unknownPrimitiveTests,
+    untypedTermVariableTests,
     variableShadowingTests]
     -- emptyCaseStatementTests,    -- needs unresolvable type name "MyUnion"
     -- emptyTypeNameTests,         -- needs empty string type names
-    -- namingConventionTests       -- needs raw Lambda constructor for empty name
 
 -- ============================================================================
 -- T2: Duplicate bindings
@@ -560,12 +573,37 @@ toTermTerm (TypedTerm t) = TypedTerm t
 unknownPrimitiveTests :: TypedTermDefinition TestGroup
 unknownPrimitiveTests = define "unknownPrimitiveTests" $
   subgroup "unknown primitive" [
-    untypedCase "known primitive is valid"
-      (primRef "hydra.lib.math.add")
+    -- A qualified reference to an ordinary (non-primitive) kernel term
+    -- definition resolves via graphBoundTerms, not graphPrimitives -- must
+    -- not be misclassified as an unknown primitive.
+    untypedCase "qualified reference to a bound (non-primitive) kernel term is valid"
+      (toTermTerm $ var "hydra.constants.regexCamelCase")
       noError,
-    untypedCase "unknown primitive"
-      (primRef "hydra.lib.nonexistent.foo")
+    -- A qualified (primitive-shaped) name that resolves to neither a known
+    -- primitive nor a bound term is the actual unknownPrimitiveName case.
+    -- Uses 'var' rather than 'primRef' (both construct a bare
+    -- TermVariable, but primRef's ToPrimName machinery fails DSL-authoring-
+    -- time resolution for a name that isn't a real primitive).
+    untypedCase "unresolvable qualified name is an unknown primitive"
+      (toTermTerm $ var "hydra.lib.nonexistent.foo")
       (unknownPrimErr "hydra.lib.nonexistent.foo")]
+
+-- ============================================================================
+-- UntypedTermVariableError (hydra.error.core, term layer)
+-- ============================================================================
+
+untypedTermVariableTests :: TypedTermDefinition TestGroup
+untypedTermVariableTests = define "untypedTermVariableTests" $
+  subgroup "untyped term variable" [
+    -- An unannotated lambda parameter is added to graphLambdaVariables but
+    -- not graphBoundTypes (Scoping.extendGraphForLambda), so referencing it
+    -- in typed mode is untyped, not undefined.
+    typedCase "unannotated lambda parameter is untyped in typed mode"
+      (lambda "x" (var "x"))
+      (untypedVarErr "x"),
+    untypedCase "unannotated lambda parameter is valid in untyped mode"
+      (lambda "x" (var "x"))
+      noError]
 
 -- ============================================================================
 -- T15: Self-application
@@ -606,21 +644,21 @@ variableShadowingTests = define "variableShadowingTests" $
       noError]
 
 -- ============================================================================
--- T17/T18: Naming conventions
+-- T17/T18: Naming conventions -- empty-name cases
+--
+-- isValidName currently rejects only the empty string (see its doc comment
+-- in Validate/Core.hs for the #722 investigation into why a stricter
+-- camelCase convention was not adopted). These raw-constructor-only cases
+-- are still blocked on the DSL's inability to construct an empty Name via
+-- 'lambda'/'lets' string params; kept here for whenever that's fixed.
 -- ============================================================================
 
-{- namingConventionTests :: TypedTermDefinition TestGroup
-namingConventionTests = define "namingConventionTests" $
-  subgroup "naming conventions" [
-    untypedCase "lambda with valid name"
-      (lambda "x" (var "x"))
-      noError,
+{- emptyNameConventionTests :: TypedTermDefinition TestGroup
+emptyNameConventionTests = define "emptyNameConventionTests" $
+  subgroup "naming conventions: empty name" [
     untypedCase "lambda with empty name"
       (TypedTerm $ TermLambda $ Lambda (Name "") Nothing (TermVariable $ Name "x"))
       (invalidNameErr ""),
-    untypedCase "let binding with valid name"
-      (lets [(nm "x", int32 1)] (var "x"))
-      noError,
     untypedCase "let binding with empty name"
       (TypedTerm $ TermLet $ Let [Binding (Name "") (TermLiteral $ LiteralInteger $ IntegerValueInt32 1) Nothing] (TermVariable $ Name "x"))
       (invalidLetNameErr "")]
