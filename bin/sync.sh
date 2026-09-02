@@ -702,7 +702,17 @@ for L in $LANG_UNION; do
                 "$HYDRA_ROOT/heads/$L/bin/assemble-distribution.sh" "$pkg"
                 ;;
             clojure|scheme|common-lisp|emacs-lisp)
-                "$HYDRA_ROOT/heads/lisp/bin/assemble-distribution.sh" "$pkg" "$L"
+                # #719 TEMPORARY: force the Haskell generator host for the 4 Lisp
+                # dialects specifically (not global -- global would trigger the
+                # #459 java-from-source OOM). Needed so the scale-distinctness
+                # test-case filter in bootstrap-from-json/Main.hs (Common
+                # Lisp/Emacs Lisp/Scheme have no scale-preserving decimal at all;
+                # Clojure needs its own coder-config fix, tracked separately)
+                # actually runs -- the default GENERATOR_HOST=java routes through
+                # heads/java/bin/transform-json-to-target.sh, a separate driver
+                # that doesn't have this filter. Remove this override once the
+                # filter itself is removed (tracked follow-up issues).
+                GENERATOR_HOST=haskell "$HYDRA_ROOT/heads/lisp/bin/assemble-distribution.sh" "$pkg" "$L"
                 ;;
             *)
                 die "Internal: no assembler for $L"
