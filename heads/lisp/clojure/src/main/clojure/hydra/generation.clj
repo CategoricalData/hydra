@@ -56,12 +56,13 @@
     :else (throw (RuntimeException. (str "Unexpected result type: " result)))))
 
 (defn- clojure-to-hydra-json
-  "Convert a Clojure value (from clojure.data.json) to a Hydra JSON value."
+  "Convert a Clojure value (from clojure.data.json, read with :bigdec true) to
+  a Hydra JSON value."
   [obj]
   (cond
     (nil? obj) (list :null nil)
     (boolean? obj) (list :boolean obj)
-    (number? obj) (list :number (double obj))
+    (number? obj) (list :number obj)
     (string? obj) (list :string obj)
     (vector? obj) (list :array (mapv clojure-to-hydra-json obj))
     (sequential? obj) (list :array (vec (map clojure-to-hydra-json obj)))
@@ -69,9 +70,12 @@
     :else (throw (IllegalArgumentException. (str "Unexpected JSON type: " (type obj))))))
 
 (defn parse-json-file
-  "Read a JSON file, parse to Hydra JSON value."
+  "Read a JSON file, parse to Hydra JSON value.
+  :bigdec true preserves the source's coefficient and scale exactly (e.g.
+  \"1.10\" stays distinct from \"1.1\"); routing a JSON number through a
+  native double first would collapse that distinction irrecoverably."
   [path]
-  (let [obj (json/read-str (slurp path))]
+  (let [obj (json/read-str (slurp path) :bigdec true)]
     (clojure-to-hydra-json obj)))
 
 (defn decode-module

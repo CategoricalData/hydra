@@ -152,13 +152,16 @@ def unwrap_either(result):
 
 
 def _python_to_hydra_json(obj):
-    """Convert a Python JSON object (from json.loads) to a Hydra JSON value."""
+    """Convert a Python JSON object (from json.loads/json.load with
+    parse_float=Decimal) to a Hydra JSON value."""
     if obj is None:
         return JsonModel.ValueNull()
     elif isinstance(obj, bool):
         return JsonModel.ValueBoolean(obj)
-    elif isinstance(obj, (int, float)):
-        return JsonModel.ValueNumber(Decimal(str(obj)))
+    elif isinstance(obj, Decimal):
+        return JsonModel.ValueNumber(obj)
+    elif isinstance(obj, int):
+        return JsonModel.ValueNumber(Decimal(obj))
     elif isinstance(obj, str):
         return JsonModel.ValueString(obj)
     elif isinstance(obj, list):
@@ -175,9 +178,13 @@ def parse_json_file(path):
 
     Uses Python's built-in json module for performance and to avoid
     recursion depth issues with the generated parser on large files.
+    parse_float=Decimal preserves the source's coefficient and scale
+    exactly (e.g. "1.10" stays distinct from "1.1"); routing a JSON
+    number through Python's native float first would collapse that
+    distinction irrecoverably before a Decimal could be reconstructed.
     """
     with open(path, "r", encoding="utf-8") as f:
-        obj = json.load(f)
+        obj = json.load(f, parse_float=Decimal)
     return _python_to_hydra_json(obj)
 
 
