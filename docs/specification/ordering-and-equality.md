@@ -9,12 +9,14 @@ This page defines both: it is the value-level semantics behind the `equality` an
 constraint classes ([classes.md](classes.md)) and the primitives of `hydra.lib.equality` and
 `hydra.lib.ordering`, and it is the order in which Hydra's maps and sets store and iterate
 their keys and elements.
+Named **provisions** (`HYDRA-ORD-…`, in bold at the head of a claim) follow the provisions convention
+in [index.md](index.md#provisions).
 
 ## Structural comparison
 
-Equality is structural: two values are equal exactly when they are built from the same
-constructors applied to equal components, and the order is the corresponding structural
-order.
+**[HYDRA-ORD-EQUALITY-STRUCTURAL]** Equality is structural: two values are equal exactly when they are
+built from the same constructors applied to equal components, and the order is the corresponding
+structural order.
 Concretely, when the type of the values being compared is a record type, comparison proceeds
 field by field, in declaration order.
 When it is a union type, injections compare by variant first, with a variant declared
@@ -40,8 +42,8 @@ Three global principles:
 - Comparison agrees with equality: `compare x y` returns the `Comparison` value `equalTo` —
   `Comparison` is the enum `lessThan` / `equalTo` / `greaterThan`, not a primitive — exactly
   when `equal x y` is `true`, for every type.
-  For each type, `compare` is a total order — total, transitive, and antisymmetric — and
-  `equal` is the induced equivalence.
+  **[HYDRA-ORD-TOTAL-ORDER]** For each type, `compare` is a total order — total, transitive, and
+  antisymmetric — and `equal` is the induced equivalence.
 - Comparisons are defined only between values of the same type; a Hydra program is typed, so
   cross-type comparison does not arise.
 - Annotations are transparent: equality never consults metadata, and two values differing
@@ -76,7 +78,8 @@ including the inverted `isNaN`-idiom warning.
 
 **Decimals.** A decimal value is an integer coefficient with a scale — the count of digits
 after the decimal point — and two decimals are equal exactly when both agree: `1.10` (scale
-2) and `1.1` (scale 1) denote the same number but are distinct, unequal values.
+2) and `1.1` (scale 1) denote the same number but are distinct, unequal values
+(the scale-distinctness provision [HYDRA-DM-DECIMAL-SCALE-DISTINCT](data-model.md)).
 The order is by numeric value first; numerically equal decimals of different scale are
 ordered by scale, smaller scale first, so `1.1` < `1.10` < `1.100`.
 There are no non-finite or signed-zero decimal values.
