@@ -10,6 +10,9 @@ A constraint appears in a type scheme before the arrow body, as in
 This page specifies each class: its member operations, its instances, and its laws.
 Class membership is curated, not open: new classes and new instances are added by
 specification change, not by user code.
+The class *laws* below are named **provisions** (`HYDRA-CLS-…`, in bold; see the provisions convention
+in [index.md](index.md#provisions)); per-class membership and member signatures are derived from the
+kernel class definitions and carry their provisions in the generated module pages, not here.
 
 ## The classes
 
@@ -66,14 +69,14 @@ The normative contract for each member operation, per representation class:
 
 Cross-cutting laws:
 
-- Ring laws (associativity, commutativity, distributivity) hold exactly for B, and mod 2^n
-  for S(n) and U(n).
-- `x = div x y · y + mod x y` and `x = quot · y + rem x y` for every integral instance and
-  every nonzero `y`.
-- `abs x · signum x = x`, except at S(n) minBound.
-- For F(n), no algebraic laws hold beyond IEEE 754 itself; in particular addition and
-  multiplication are not associative, and specifications must not claim ring laws for
-  floating-point instances.
+- **[HYDRA-CLS-RING-LAWS]** Ring laws (associativity, commutativity, distributivity) hold exactly for
+  B, and mod 2^n for S(n) and U(n).
+- **[HYDRA-CLS-DIVISION-IDENTITY]** `x = div x y · y + mod x y` and `x = quot · y + rem x y` for every
+  integral instance and every nonzero `y`.
+- **[HYDRA-CLS-ABS-SIGNUM]** `abs x · signum x = x`, except at S(n) minBound.
+- **[HYDRA-CLS-FLOAT-NO-RING-LAWS]** For F(n), no algebraic laws hold beyond IEEE 754 itself; in
+  particular addition and multiplication are not associative, and specifications must not claim ring
+  laws for floating-point instances.
 
 Design notes, briefly: wrap (rather than trap or saturate) is the only fixed-width choice
 that is total and preserves ring structure mod 2^n; floor division with divisor-sign `mod`
