@@ -20,7 +20,9 @@ This document describes **`moduleFormatVersion: 1`**.
 
 The encoding is implemented by the JSON coder in
 `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/{Encode,Decode}.hs`.
-Every implementation that reads or writes Hydra JSON modules must conform to the rules below.
+Every implementation that reads or writes Hydra JSON modules must conform to the rules below. Named
+**provisions** (`HYDRA-JSON-…`, in bold at the head of a claim) follow the provisions convention in
+[index.md](index.md#provisions).
 
 ## Why JSON?
 
@@ -99,7 +101,7 @@ single-key JSON objects:
 ```
 
 The key is the variant name; the value is the variant's payload, encoded by the same rules.
-Each tagged-union object has exactly one key.
+**[HYDRA-JSON-TAGGED-UNION-ONE-KEY]** Each tagged-union object has exactly one key.
 This applies recursively at every level of the AST.
 
 **Compact string form for unit-valued variants.**
@@ -147,7 +149,7 @@ objects, in the field order declared in the DSL source:
   {"name": "second", "type": {...}}]}
 ```
 
-**Field order is significant and stable.**
+**[HYDRA-JSON-FIELD-ORDER-STABLE] Field order is significant and stable.**
 The order matches the field order in the DSL source.
 Generators in any host language must preserve declaration order when emitting record types.
 Consumers may rely on this order (e.g., for stable digests, for deterministic codegen).
@@ -195,8 +197,9 @@ A consumer that reproduces the encoding for a digest must emit record-term keys 
    - `none` → field is **omitted entirely** from the record-term object
    - `given v` → `<field-name>: <encoded v>` (no wrapper)
 
-`null` only ever encodes an `Optional.none`. It is never used as a generic sentinel,
-never used to mean "missing value" in any other context, and never appears for a non-`Optional` type.
+**[HYDRA-JSON-NULL-IS-NONE]** `null` only ever encodes an `Optional.none`. It is never used as a
+generic sentinel, never used to mean "missing value" in any other context, and never appears for a
+non-`Optional` type.
 
 Each rule exists to eliminate an ambiguity the previous one would create if
 extended naively. Rule 1 works because no Hydra value other than `Optional.none`
@@ -290,7 +293,7 @@ the special field names `first` and `second`.
 ```
 
 Decoders treat presence of `left` and absence of `right` (or vice versa) as the discriminator.
-A well-formed `Either` value never carries both keys.
+**[HYDRA-JSON-EITHER-ONE-SIDE]** A well-formed `Either` value never carries both keys.
 
 At the JSON layer, the encoding follows the [tagged-union rule](#tagged-unions),
 with `left` and `right` as the variant names.
