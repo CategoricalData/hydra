@@ -973,8 +973,6 @@ findDuplicate = define "findDuplicate" $
     (var "names") $
   Pairs.second (var "result")
 
--- | Validate a name at an introduction site.
--- Currently only rejects empty strings; may be extended with additional naming conventions.
 -- | Find the first duplicate in a list of names (for field types)
 findDuplicateFieldType :: TypedTermDefinition ([Name] -> Maybe Name)
 findDuplicateFieldType = define "findDuplicateFieldType" $
@@ -1048,7 +1046,15 @@ firstTypeError = define "firstTypeError" $
 -- | Validate a type, returning the first error found or nothing if valid.
 -- Recursively traverses the type, tracking bound type variables through forall binders.
 -- | Validate a name at an introduction site.
--- Currently only rejects empty strings; may be extended with additional naming conventions.
+-- Currently only rejects empty strings. Reconciling this with
+-- Constants.regexCamelCase (the packaging layer's term-definition
+-- convention) was investigated for #722 and found to reject ~800 existing
+-- kernel binder names across ~170 distinct patterns -- '_' alone (the
+-- ignored-parameter idiom, the majority of hits), leading/trailing
+-- underscores (_x, ns_, field_location), and trailing primes (cx', term')
+-- are all pervasive, intentional conventions, not naming mistakes. Applying
+-- strict camelCase here would be a breaking, invasive rename campaign well
+-- outside this issue's scope; see #722 for the escalated scope decision.
 isValidName :: TypedTermDefinition (Name -> Bool)
 isValidName = define "isValidName" $
   doc "Check whether a name is valid at an introduction site. Currently rejects empty strings." $
