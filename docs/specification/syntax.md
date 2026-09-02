@@ -12,18 +12,19 @@ a conforming printer MUST emit text matching the canonical form (§4),
 and a conforming parser MUST accept every production of the grammar (§3).
 
 The key words MUST, MUST NOT, SHOULD, and MAY are to be interpreted as described in RFC 2119.
+Named **provisions** (`HYDRA-SYN-…`, shown in bold at the head of a claim) follow the provisions
+convention in [index.md](index.md#provisions).
 
 ## 1. The round-trip contract
 
-Every expression MUST round-trip:
-parsing printed text recovers the original term or type exactly,
-with everything semantically significant intact — including annotations.
-Only non-significant surface may change on a round trip: whitespace, parenthesization, and comments.
+**[HYDRA-SYN-ROUND-TRIP]** Every expression round-trips: parsing printed text recovers the original
+term or type exactly, with everything semantically significant intact — including annotations. Only
+non-significant surface may change on a round trip: whitespace, parenthesization, and comments.
 
 Consequences:
 
-- The printer is always faithful.
-  If a term has annotations, the printed text shows them, and parsing recovers them.
+- **[HYDRA-SYN-PRINTER-FAITHFUL]** The printer is always faithful: there is no lossy printer mode. If a
+  term has annotations, the printed text shows them, and parsing recovers them.
   Display-oriented simplification (for example, stripping annotations for readability)
   is performed by transforming the term *before* printing — never by a lossy printer mode.
 - Stacked annotations are structure: they print as nested and parse back as nested.
@@ -290,7 +291,7 @@ Notes:
 
 The exact output of `hydra.print.core` is the canonical rendering:
 spacing, parenthesization, separators, escaping, and element order.
-Canonical rendering MUST be byte-identical across implementations;
+**[HYDRA-SYN-CANONICAL-BYTE-IDENTICAL]** Canonical rendering is byte-identical across implementations;
 this is guaranteed by translingual generation (one printer, generated into every host)
 and confirmed by the cross-host formatting tests.
 
@@ -301,13 +302,14 @@ and confirmed by the cross-host formatting tests.
   or inside brackets.
 - The canonical printer backtick-escapes a name if and only if
   one of the three interference cases of §2.4 holds.
-- Sets and maps print their elements and entries in **canonical order**:
-  ascending by the canonical total order on terms — the `ordering` class's order,
+- **[HYDRA-SYN-CANONICAL-COLLECTION-ORDER]** Sets and maps print their elements and entries in
+  canonical order: ascending by the canonical total order on terms — the `ordering` class's order,
   specified in [ordering-and-equality.md](ordering-and-equality.md)
   (one structural rule over records/unions/wrappers, per-type rules for literals and
   built-in constructors; note the decimal tiebreak: numerically equal decimals order
   by scale, smaller first, `1.1 < 1.10`).
-- Record and union fields print in declaration order (field order is meaningful).
+- **[HYDRA-SYN-FIELD-DECLARATION-ORDER]** Record and union fields print in declaration order (field
+  order is meaningful).
 
 ## 5. Sibling notations (non-normative)
 
