@@ -410,11 +410,58 @@ corrupting any generated source the value lands in."
      (hydra--sci-from-native x))
     (t (strip-float-suffix (write-to-string x)))))
 
+(defun hydra--decimal-digits-and-exponent (x)
+  "Derive (significant-digit-string . adjusted-exponent) for a non-zero
+double X, using the implementation's own correctly-rounded printer (see
+hydra--sci-from-native for the rationale). The adjusted exponent is the
+power of 10 of the leading significant digit -- e.g. 3 for 1234.0, -2 for
+0.01 -- matching printDecimal's own 'a' (Literals.hs)."
+  (let* ((s (write-to-string (abs x)))
+         (epos (position-if (lambda (c) (member c '(#\d #\D #\e #\E #\f #\F #\s #\S #\l #\L))) s))
+         (mant (if epos (subseq s 0 epos) s))
+         (ex   (if epos (parse-integer (subseq s (1+ epos))) 0))
+         (dot  (or (position #\. mant) (length mant)))
+         (intpart (subseq mant 0 dot))
+         (frac    (if (< dot (length mant)) (subseq mant (1+ dot)) ""))
+         (digits  (concatenate 'string intpart frac))
+         (lead    (or (position-if (lambda (c) (char/= c #\0)) digits) 0))
+         (pt      (+ (length intpart) ex))
+         (e       (- pt lead 1))
+         (sig     (string-right-trim "0" (subseq digits lead)))
+         (sig     (if (string= sig "") "0" sig)))
+    (cons sig e)))
+
 ;; print_decimal :: Decimal -> String
-;; No native decimal; formatted as double-float.
+;; No native decimal; formatted as double-float. Unlike a float literal --
+;; which reuses Haskell Double's own show threshold (scientific below 0.1 or
+;; at/above 1e7) -- printDecimal has its own, wider positional range (adjusted
+;; exponent -6 <= a < 21; overlay/haskell/.../Literals.hs), so 0.01/0.001
+;; print plainly ("0.01") rather than in scientific form. A whole value also
+;; prints without a trailing ".0" (e.g. "42", not "42.0"), since decimals
+;; track scale and a double coerced from an integral source has scale 0.
 (defvar hydra_overlay_common_lisp_lib_literals_print_decimal
   (lambda (x)
-    (haskell-show-float (float x 1.0d0))))
+    (let ((d (float x 1.0d0)))
+      (cond
+        ((hydra--float-nan-p d) "NaN")
+        ((hydra--float-inf-p d) (if (> d 0) "Infinity" "-Infinity"))
+        ((= d 0.0d0) "0")
+        ((and (= d (ftruncate d)) (< (abs d) 1.0d18))
+         (write-to-string (truncate d)))
+        (t
+         (let* ((digex (hydra--decimal-digits-and-exponent d))
+                (sig (car digex))
+                (e (cdr digex))
+                (sign (if (minusp d) "-" "")))
+           (if (and (>= e -6) (< e 21))
+               ;; Positional: place the decimal point (e+1) digits from the left,
+               ;; padding with zeros as needed on either side.
+               (if (>= e 0)
+                   (if (< e (1- (length sig)))
+                       (format nil "~A~A.~A" sign (subseq sig 0 (1+ e)) (subseq sig (1+ e)))
+                       (format nil "~A~A~A" sign sig (make-string (- (1+ e) (length sig)) :initial-element #\0)))
+                   (format nil "~A0.~A~A" sign (make-string (- -1 e) :initial-element #\0) sig))
+               (haskell-show-float d))))))))
 
 ;; print_bigint :: BigInteger -> String
 ;; Convert a bigint (Integer) to string.
