@@ -211,25 +211,29 @@
                (catch Exception _ (list :none)))))
 
 ;; print_decimal :: Decimal -> String
-;; Match Haskell's Data.Scientific show: "42.0", "3.14", "1.0e20", "1.0e-10".
+;; Unlike a float literal (which would show "42.0", "1.0e20", "1.0e-10"),
+;; printDecimal never adds a trailing ".0" to a whole value -- decimals
+;; track scale, not float-style presentation -- and its positional range is
+;; wider (adjusted exponent -6 <= a < 21; overlay/haskell/.../Literals.hs)
+;; than Double's own show threshold, so e.g. "0.01"/"0.001" print plainly
+;; rather than in scientific form.
 (def hydra_overlay_clojure_lib_literals_print_decimal
   (fn [x]
     (let [bd (.stripTrailingZeros (bigdec x))]
       (if (zero? (.signum bd))
-        "0.0"
+        "0"
         (let [precision (.precision bd)
               scale (.scale bd)
               e (- precision scale 1)
               sign (if (neg? (.signum bd)) "-" "")
               plain (.toString (.abs (.unscaledValue bd)))]
-          ;; Haskell Scientific uses plain form iff -1 <= e <= 6; otherwise scientific.
-          (if (or (>= e 7) (< e -1))
+          (if (or (>= e 21) (< e -6))
             (let [mantissa (if (= (count plain) 1)
                              (str plain ".0")
                              (str (subs plain 0 1) "." (subs plain 1)))]
               (str sign mantissa "e" e))
             (let [s (.toPlainString bd)]
-              (if (.contains s ".") s (str s ".0")))))))))
+              s)))))))
 
 ;; parse_float64 :: String -> Maybe Float64
 (def hydra_overlay_clojure_lib_literals_parse_float64
