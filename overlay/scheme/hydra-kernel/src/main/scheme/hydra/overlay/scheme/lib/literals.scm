@@ -314,6 +314,43 @@
     ;; Haskell-compatible float formatting helper
     ;; Format a float matching Haskell's Show instance: scientific notation for
     ;; |x| < 0.1 or |x| >= 1e7, decimal notation otherwise. Full precision.
+    ;; Derive (significant-digit-string . adjusted-exponent) for a non-zero
+    ;; real X, using the implementation's own correctly-rounded printer. The
+    ;; adjusted exponent is the power of 10 of the leading significant digit
+    ;; (e.g. 3 for 1234.0, -2 for 0.01), matching printDecimal's own 'a'
+    ;; (Literals.hs).
+    (define (hydra--decimal-digits-and-exponent x)
+      (let* ((s (number->string (safe-abs x)))
+             (e-idx (let loop ((i 0))
+                      (cond ((>= i (string-length s)) #f)
+                            ((char=? (string-ref s i) #\e) i)
+                            (else (loop (+ i 1))))))
+             (mtext (if e-idx (substring s 0 e-idx) s))
+             (base-exp (if e-idx
+                           (string->number (substring s (+ e-idx 1) (string-length s)))
+                           0))
+             (dot-idx (let loop ((i 0))
+                        (cond ((>= i (string-length mtext)) (string-length mtext))
+                              ((char=? (string-ref mtext i) #\.) i)
+                              (else (loop (+ i 1))))))
+             (digits-before (substring mtext 0 dot-idx))
+             (digits-after (if (< dot-idx (string-length mtext))
+                               (substring mtext (+ dot-idx 1) (string-length mtext))
+                               ""))
+             (all-digits (string-append digits-before digits-after))
+             (point-pos (string-length digits-before))
+             (first-nz (let loop ((i 0))
+                         (cond ((>= i (string-length all-digits)) 0)
+                               ((char=? (string-ref all-digits i) #\0) (loop (+ i 1)))
+                               (else i))))
+             (last-nz (let loop ((i (- (string-length all-digits) 1)))
+                        (cond ((<= i first-nz) first-nz)
+                              ((char=? (string-ref all-digits i) #\0) (loop (- i 1)))
+                              (else i))))
+             (sig (substring all-digits first-nz (+ last-nz 1)))
+             (exp (+ base-exp (- point-pos first-nz 1))))
+        (cons sig exp)))
+
     (define (haskell-show-float x)
       (cond
         ((not (real? x)) "NaN")  ;; complex results from out-of-domain trig
@@ -418,9 +455,35 @@
           (else (try-digits 1)))))))
 
     ;; print_decimal :: Decimal -> String
+    ;; No native decimal; formatted as a double. Unlike a float literal --
+    ;; which reuses Double's own show threshold (scientific below 0.1 or at/
+    ;; above 1e7) -- printDecimal has its own, wider positional range
+    ;; (adjusted exponent -6 <= a < 21; overlay/haskell/.../Literals.hs), so
+    ;; 0.01/0.001 print plainly ("0.01") rather than in scientific form. A
+    ;; whole value also prints without a trailing ".0" (e.g. "42", not
+    ;; "42.0"), since decimals track scale and a double coerced from an
+    ;; integral source has scale 0.
     (define hydra_overlay_scheme_lib_literals_print_decimal
       (lambda (x)
-        (haskell-show-float x)))
+        (cond
+          ((not (real? x)) "NaN")
+          ((not (= x x)) "NaN")
+          ((or (= x +inf.0) (= x -inf.0)) (if (> x 0) "Infinity" "-Infinity"))
+          ((= x 0.0) "0")
+          ((and (= x (truncate x)) (< (safe-abs x) 1e18))
+           (number->string (exact (truncate x))))
+          (else
+           (let* ((digex (hydra--decimal-digits-and-exponent x))
+                  (sig (car digex))
+                  (e (cdr digex))
+                  (sign (if (< x 0) "-" "")))
+             (if (and (>= e -6) (< e 21))
+                 (if (>= e 0)
+                     (if (< e (- (string-length sig) 1))
+                         (string-append sign (substring sig 0 (+ e 1)) "." (substring sig (+ e 1) (string-length sig)))
+                         (string-append sign sig (make-string (- (+ e 1) (string-length sig)) #\0)))
+                     (string-append sign "0." (make-string (- -1 e) #\0) sig))
+                 (haskell-show-float x)))))))
 
     ;; print_bigint :: BigInteger -> String
     (define hydra_overlay_scheme_lib_literals_print_bigint
