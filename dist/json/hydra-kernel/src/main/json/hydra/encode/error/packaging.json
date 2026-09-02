@@ -947,6 +947,35 @@
                                               "term": {
                                                 "application": {"function": {"variable": "hydra.encode.error.packaging.moduleInMultiplePackagesError"}, "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
                   {
+                    "name": "nestedModuleName",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "y",
+                        "domain": {"variable": "hydra.error.packaging.NestedModuleNameError"},
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.Term",
+                            "field": {
+                              "name": "inject",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Injection",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.packaging.InvalidPackageError"}}}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "nestedModuleName"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {"function": {"variable": "hydra.encode.error.packaging.nestedModuleNameError"}, "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
+                  {
                     "name": "undeclaredDependency",
                     "handler": {
                       "lambda": {
@@ -1171,6 +1200,69 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Encoder for hydra.error.packaging.ModuleInMultiplePackagesError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.encode.error.packaging.nestedModuleNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.NestedModuleNameError"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {"variable": "hydra.error.packaging.NestedModuleNameError"},
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "record",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.Record",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {
+                                "wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.error.packaging.NestedModuleNameError"}}}}},
+                            {
+                              "name": "fields",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "outer"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "function": {"variable": "hydra.encode.packaging.moduleName"},
+                                              "argument": {
+                                                "application": {
+                                                  "function": {"project": {"typeName": "hydra.error.packaging.NestedModuleNameError", "fieldName": "outer"}},
+                                                  "argument": {"variable": "x"}}}}}}]}},
+                                  {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "inner"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "function": {"variable": "hydra.encode.packaging.moduleName"},
+                                              "argument": {
+                                                "application": {
+                                                  "function": {"project": {"typeName": "hydra.error.packaging.NestedModuleNameError", "fieldName": "inner"}},
+                                                  "argument": {"variable": "x"}}}}}}]}}]}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Encoder for hydra.error.packaging.NestedModuleNameError"}}}]}}}}},
     {
       "term": {
         "name": "hydra.encode.error.packaging.undeclaredDependencyError",

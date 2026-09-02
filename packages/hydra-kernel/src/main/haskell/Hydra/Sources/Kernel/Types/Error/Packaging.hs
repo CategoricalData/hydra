@@ -37,6 +37,7 @@ module_ = Module {
       invalidPackageNameError,
       missingDocumentationError,
       moduleInMultiplePackagesError,
+      nestedModuleNameError,
       undeclaredDependencyError]
 
 conflictingModuleNameError :: TypeDefinition
@@ -178,6 +179,9 @@ invalidPackageError = define "InvalidPackageError" $
     "moduleInMultiplePackages">:
       doc "A module namespace declared by more than one package" $
       moduleInMultiplePackagesError,
+    "nestedModuleName">:
+      doc "A module namespace that is a strict dotted-prefix of another module namespace in the same package" $
+      nestedModuleNameError,
     "undeclaredDependency">:
       doc "A module references a name owned by another module that is not among its declared dependencies" $
       undeclaredDependencyError]
@@ -214,6 +218,17 @@ moduleInMultiplePackagesError = define "ModuleInMultiplePackagesError" $
     "secondPackage">:
       doc "The name of the second package declaring the module" $
       Packaging.packageName]
+
+nestedModuleNameError :: TypeDefinition
+nestedModuleNameError = define "NestedModuleNameError" $
+  doc "A module namespace which is a strict dotted-prefix of another module namespace in the same package, e.g. hydra.codegen and hydra.codegen.docs. When two such namespaces coexist, a definition name that is prefix-valid for both modules cannot be unambiguously assigned to one." $
+  T.record [
+    "outer">:
+      doc "The shorter namespace, a strict dotted-prefix of the inner namespace" $
+      Packaging.moduleNameDef,
+    "inner">:
+      doc "The longer namespace, which has the outer namespace as a strict dotted-prefix" $
+      Packaging.moduleNameDef]
 
 undeclaredDependencyError :: TypeDefinition
 undeclaredDependencyError = define "UndeclaredDependencyError" $

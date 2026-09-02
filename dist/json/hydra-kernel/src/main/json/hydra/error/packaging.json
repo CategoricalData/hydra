@@ -429,6 +429,17 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "A module namespace declared by more than one package"}}}]}}}},
                   {
+                    "name": "nestedModuleName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.packaging.NestedModuleNameError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "A module namespace that is a strict dotted-prefix of another module namespace in the same package"}}}]}}}},
+                  {
                     "name": "undeclaredDependency",
                     "type": {
                       "annotated": {
@@ -548,6 +559,43 @@
                     "value": {
                       "literal": {
                         "string": "A module namespace declared by more than one package. Module-to-package routing requires each package's declared module set to partition the module universe; a namespace declared by two packages would otherwise be routed to one of them arbitrarily, with the other declaration silently ignored."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.error.packaging.NestedModuleNameError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "outer",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.ModuleName"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The shorter namespace, a strict dotted-prefix of the inner namespace"}}}]}}}},
+                  {
+                    "name": "inner",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.ModuleName"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The longer namespace, which has the outer namespace as a strict dotted-prefix"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A module namespace which is a strict dotted-prefix of another module namespace in the same package, e.g. hydra.codegen and hydra.codegen.docs. When two such namespaces coexist, a definition name that is prefix-valid for both modules cannot be unambiguously assigned to one."}}}]}}},
           "constraints": []}}},
     {
       "type": {

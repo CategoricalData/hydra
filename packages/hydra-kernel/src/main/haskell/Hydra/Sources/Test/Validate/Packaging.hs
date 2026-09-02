@@ -49,6 +49,7 @@ module_ = Module {
       Phantoms.toDefinition checkDuplicateModuleNamesTests,
       Phantoms.toDefinition checkModuleNameConventionTests,
       Phantoms.toDefinition checkModulePartitionTests,
+      Phantoms.toDefinition checkNestedModuleNamesTests,
       Phantoms.toDefinition checkPackageNameConventionTests,
       Phantoms.toDefinition checkUndeclaredDependenciesTests,
       Phantoms.toDefinition kernelModuleTests,
@@ -76,6 +77,7 @@ allTests = define "allTests" $
     checkDuplicateModuleNamesTests,
     checkModuleNameConventionTests,
     checkModulePartitionTests,
+    checkNestedModuleNamesTests,
     checkPackageNameConventionTests,
     checkUndeclaredDependenciesTests,
     kernelModuleTests,
@@ -290,6 +292,43 @@ checkModulePartitionTests = define "checkModulePartitionTests" $
        ("hydra-java", ["hydra.foo"]),
        ("hydra-python", ["hydra.bar"])]
       [moduleInMultiplePackagesErr "hydra.foo" "hydra-kernel" "hydra-java"]]
+
+-- | Regression coverage for #721: module namespaces that nest via a dotted
+-- prefix must be rejected, but a mere string prefix that is not
+-- dot-delimited (hydra.foo vs hydra.foobar) must not be flagged -- that
+-- near-miss shape is common in the kernel (e.g. hydra.build.assembly and
+-- hydra.build.modules coexist without hydra.build itself).
+checkNestedModuleNamesTests :: TypedTermDefinition TestGroup
+checkNestedModuleNamesTests = define "checkNestedModuleNamesTests" $
+  subgroup "checkNestedModuleNames" [
+    pc "empty package: no error"
+      checkNestedModuleNamesRef
+      (mkPackage "test-pkg" [])
+      noPackageError,
+    pc "single module: no error"
+      checkNestedModuleNamesRef
+      (mkPackage "test-pkg" [mkModule "hydra.foo" []])
+      noPackageError,
+    pc "unrelated namespaces: no error"
+      checkNestedModuleNamesRef
+      (mkPackage "test-pkg" [mkModule "hydra.foo" [], mkModule "hydra.bar" []])
+      noPackageError,
+    pc "sibling namespaces sharing a common (non-module) prefix, no nesting: no error"
+      checkNestedModuleNamesRef
+      (mkPackage "test-pkg" [mkModule "hydra.build.assembly" [], mkModule "hydra.build.modules" []])
+      noPackageError,
+    pc "string-prefix but not dotted: no error (hydra.foo is not a prefix of hydra.foobar)"
+      checkNestedModuleNamesRef
+      (mkPackage "test-pkg" [mkModule "hydra.foo" [], mkModule "hydra.foobar" []])
+      noPackageError,
+    pc "dotted-prefix nesting: error (outer defined before inner)"
+      checkNestedModuleNamesRef
+      (mkPackage "test-pkg" [mkModule "hydra.codegen" [], mkModule "hydra.codegen.docs" []])
+      (nestedModuleNameErr "hydra.codegen" "hydra.codegen.docs"),
+    pc "dotted-prefix nesting: error (inner defined before outer)"
+      checkNestedModuleNamesRef
+      (mkPackage "test-pkg" [mkModule "hydra.codegen.docs" [], mkModule "hydra.codegen" []])
+      (nestedModuleNameErr "hydra.codegen" "hydra.codegen.docs")]
 
 checkPackageNameConventionTests :: TypedTermDefinition TestGroup
 checkPackageNameConventionTests = define "checkPackageNameConventionTests" $
@@ -508,7 +547,14 @@ kernelPackageTests = define "kernelPackageTests" $
     pc "conflicting module namespace surfaces"
       kernelPackageRef
       (mkPackage "test-pkg" [mkModule "hydra.foo" [], mkModule "hydra.foo" []])
-      (conflictingModuleNameErr "hydra.foo" "hydra.foo")]
+      (conflictingModuleNameErr "hydra.foo" "hydra.foo"),
+    -- Confirms nestedModuleName is wired into kernelDefaultPackagingProfile
+    -- (via kernelPackagingRuleNames), not just callable as a standalone
+    -- check -- i.e. it fires through the real kernel-strict entry point.
+    pc "nested module namespace surfaces"
+      kernelPackageRef
+      (mkPackage "test-pkg" [mkModule "hydra.codegen" [], mkModule "hydra.codegen.docs" []])
+      (nestedModuleNameErr "hydra.codegen" "hydra.codegen.docs")]
 
 -- ============================================================================
 -- Profile-aware behaviour tests
@@ -633,6 +679,13 @@ mkUndocumentedTermDef fullName = Packaging.definitionTerm $ Packaging.termDefini
 -- ============================================================================
 -- Expected-value helpers
 -- ============================================================================
+
+nestedModuleNameErr :: String -> String -> TypedTerm (Maybe InvalidPackageError)
+nestedModuleNameErr outerNs innerNs = justPackageError $
+  Phantoms.inject _InvalidPackageError _InvalidPackageError_nestedModuleName $
+    Phantoms.record _NestedModuleNameError [
+      unName _NestedModuleNameError_outer Phantoms.>: nsLit outerNs,
+      unName _NestedModuleNameError_inner Phantoms.>: nsLit innerNs]
 
 -- | Build a Name from a String literal.
 nm :: String -> TypedTerm Name

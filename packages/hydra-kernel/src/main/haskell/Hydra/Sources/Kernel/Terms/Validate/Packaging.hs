@@ -20,6 +20,7 @@ import Hydra.Error.Packaging (
   _InvalidPackageError_duplicateModuleName,
   _InvalidPackageError_invalidPackageName,
   _InvalidPackageError_moduleInMultiplePackages,
+  _InvalidPackageError_nestedModuleName,
   _InvalidPackageError_undeclaredDependency)
 import Hydra.Packaging (Package)
 import qualified Hydra.Dsl.Error.Packaging       as ErrorPackaging
@@ -76,6 +77,7 @@ module_ = Module {
       toDefinition checkDuplicateModuleNames,
       toDefinition checkModuleNameConvention,
       toDefinition checkModulePartition,
+      toDefinition checkNestedModuleNames,
       toDefinition checkPackageNameConvention,
       toDefinition checkUndeclaredDependencies,
       toDefinition definitionName,
@@ -495,6 +497,62 @@ checkModuleNameConvention = define "checkModuleNameConvention" $
     (just $ ErrorPackaging.invalidModuleErrorInvalidModuleNameConvention $
       ErrorPackaging.invalidModuleNameConventionError (var "ns"))
 
+-- | Check for module namespaces that nest: no module namespace may be a strict
+-- dotted-prefix of another module namespace in the same package, e.g.
+-- hydra.codegen and hydra.codegen.docs must not coexist. A dotted prefix means
+-- the shorter namespace followed by "." is a literal prefix of the longer one
+-- -- hydra.foo is NOT a dotted prefix of hydra.foobar, only of hydra.foo.bar.
+-- When both exist, a definition like hydra.codegen.docs.foo is prefix-valid
+-- for both modules, so checkDefinitionModuleNames cannot unambiguously assign
+-- ownership. Fails on the first nesting pair found (namespaces compared in
+-- package module-list order).
+checkNestedModuleNames :: TypedTermDefinition (Package -> Maybe InvalidPackageError)
+checkNestedModuleNames = define "checkNestedModuleNames" $
+  doc "Check for module namespaces that are a strict dotted-prefix of another module namespace in the same package" $
+  "pkg" ~>
+  -- isDottedPrefixOf a b: true iff a followed by "." is a literal prefix of b.
+  "isDottedPrefixOf" <~ ("a" ~> "b" ~>
+    "prefix" <~ Strings.concat2 (var "a" :: TypedTerm String) (string ".") $
+    "prefixLen" <~ Strings.length (var "prefix") $
+    Logic.and
+      (Ordering.lte (var "prefixLen") (Strings.length (var "b" :: TypedTerm String)))
+      (Equality.equal
+        (Strings.fromList $ Lists.take (var "prefixLen") (Strings.toList $ var "b"))
+        (var "prefix"))) $
+  -- For a candidate namespace against the list of namespaces seen so far,
+  -- find the first that nests with it in either direction.
+  "findNesting" <~ ("candidate" ~> "seen" ~>
+    Lists.foldl
+      ("acc" ~> "other" ~>
+        Optionals.match (var "acc")
+          (Logic.ifElse (var "isDottedPrefixOf" @@ var "other" @@ var "candidate")
+            (just $ pair (var "other" :: TypedTerm String) (var "candidate" :: TypedTerm String))
+            (Logic.ifElse (var "isDottedPrefixOf" @@ var "candidate" @@ var "other")
+              (just $ pair (var "candidate" :: TypedTerm String) (var "other" :: TypedTerm String))
+              nothing))
+          (constant $ var "acc"))
+      nothing
+      (var "seen" :: TypedTerm [String])) $
+  "result" <~ Lists.foldl
+    ("acc" ~> "mod" ~>
+      "seen" <~ Pairs.first (var "acc") $
+      "err" <~ Pairs.second (var "acc") $
+      Optionals.match (var "err")
+        ("nsStr" <~ Packaging.unModuleName (Packaging.moduleName $ var "mod") $
+          "nesting" <~ (var "findNesting" @@ var "nsStr" @@ var "seen") $
+          Optionals.match (var "nesting")
+            (pair (Lists.concat2 (var "seen" :: TypedTerm [String]) (Lists.singleton $ var "nsStr")) nothing)
+            ("op" ~>
+              pair (var "seen") (just $
+                ErrorPackaging.invalidPackageErrorNestedModuleName $
+                  ErrorPackaging.nestedModuleNameError
+                    (Packaging.moduleName2 $ Pairs.first (var "op"))
+                    (Packaging.moduleName2 $ Pairs.second (var "op")))))
+        (constant $ var "acc"))
+    (pair (list ([] :: [TypedTerm String])) nothing)
+    (Packaging.packageModules $ var "pkg") $
+  Pairs.second (var "result")
+
 -- | Check that the package's name matches the hyphen-separated lowercase package-name regex
 -- (hyphen-separated lowercase segments, each starting with a letter).
 checkPackageNameConvention :: TypedTermDefinition (Package -> Maybe InvalidPackageError)
@@ -783,7 +841,8 @@ kernelPackagingRuleNames = L.concat
   , fmap (qualifiedRule _InvalidPackageError)
       [ _InvalidPackageError_conflictingModuleName
       , _InvalidPackageError_duplicateModuleName
-      , _InvalidPackageError_invalidPackageName]]
+      , _InvalidPackageError_invalidPackageName
+      , _InvalidPackageError_nestedModuleName]]
 
 -- | Validate a module against the given ValidationProfile, threading a
 -- 'ValidationResult InvalidModuleError' accumulator. Each per-rule check
@@ -859,7 +918,9 @@ package = define "package" $
       guardedPackageRule (var "p") _InvalidPackageError _InvalidPackageError_duplicateModuleName
         (checkDuplicateModuleNames @@ var "pkg"),
       guardedPackageRule (var "p") _InvalidPackageError _InvalidPackageError_invalidPackageName
-        (checkPackageNameConvention @@ var "pkg")]) $
+        (checkPackageNameConvention @@ var "pkg"),
+      guardedPackageRule (var "p") _InvalidPackageError _InvalidPackageError_nestedModuleName
+        (checkNestedModuleNames @@ var "pkg")]) $
   -- Second: walk each module, lifting module-level findings into
   -- package-level findings via invalidModule. Each step produces a fresh
   -- ValidationResult InvalidModuleError starting from emptyResult,

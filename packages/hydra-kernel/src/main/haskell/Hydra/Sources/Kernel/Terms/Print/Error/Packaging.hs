@@ -78,6 +78,7 @@ module_ = Module {
      toDefinition invalidPackageNameError,
      toDefinition missingDocumentationError,
      toDefinition moduleInMultiplePackagesError,
+     toDefinition nestedModuleNameError,
      toDefinition undeclaredDependencyError]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
@@ -184,6 +185,7 @@ invalidPackageError = define "invalidPackageError" $
       _InvalidPackageError_invalidModule>>: invalidModuleError,
       _InvalidPackageError_invalidPackageName>>: invalidPackageNameError,
       _InvalidPackageError_moduleInMultiplePackages>>: moduleInMultiplePackagesError,
+      _InvalidPackageError_nestedModuleName>>: nestedModuleNameError,
       _InvalidPackageError_undeclaredDependency>>: undeclaredDependencyError]
 
 invalidPackageNameError :: TypedTermDefinition (InvalidPackageNameError -> String)
@@ -214,6 +216,15 @@ moduleInMultiplePackagesError = define "moduleInMultiplePackagesError" $
     Packaging.unPackageName $ project _ModuleInMultiplePackagesError _ModuleInMultiplePackagesError_firstPackage @@ var "e",
     string " vs ",
     Packaging.unPackageName $ project _ModuleInMultiplePackagesError _ModuleInMultiplePackagesError_secondPackage @@ var "e"]
+
+nestedModuleNameError :: TypedTermDefinition (NestedModuleNameError -> String)
+nestedModuleNameError = define "nestedModuleNameError" $
+  doc "Show a nested module name error as a string" $
+  "e" ~> Strings.concat $ list [
+    string "module namespace ",
+    Packaging.unModuleName $ project _NestedModuleNameError _NestedModuleNameError_outer @@ var "e",
+    string " is a strict dotted-prefix of module namespace ",
+    Packaging.unModuleName $ project _NestedModuleNameError _NestedModuleNameError_inner @@ var "e"]
 
 undeclaredDependencyError :: TypedTermDefinition (UndeclaredDependencyError -> String)
 undeclaredDependencyError = define "undeclaredDependencyError" $

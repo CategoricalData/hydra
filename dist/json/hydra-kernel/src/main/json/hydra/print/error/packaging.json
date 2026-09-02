@@ -434,6 +434,7 @@
                               {
                                 "name": "moduleInMultiplePackages",
                                 "handler": {"variable": "hydra.print.error.packaging.moduleInMultiplePackagesError"}},
+                              {"name": "nestedModuleName", "handler": {"variable": "hydra.print.error.packaging.nestedModuleNameError"}},
                               {"name": "undeclaredDependency", "handler": {"variable": "hydra.print.error.packaging.undeclaredDependencyError"}}]}},
                         "argument": {"variable": "e"}}}}}}},
             "annotation": {
@@ -553,6 +554,42 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Show a module-in-multiple-packages error as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.error.packaging.nestedModuleNameError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.error.packaging.NestedModuleNameError"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "e",
+                "domain": {"variable": "hydra.error.packaging.NestedModuleNameError"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.concat"},
+                    "argument": {
+                      "list": [
+                        {"literal": {"string": "module namespace "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.NestedModuleNameError", "fieldName": "outer"}},
+                                "argument": {"variable": "e"}}}}},
+                        {"literal": {"string": " is a strict dotted-prefix of module namespace "}},
+                        {
+                          "application": {
+                            "function": {"unwrap": "hydra.packaging.ModuleName"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.error.packaging.NestedModuleNameError", "fieldName": "inner"}},
+                                "argument": {"variable": "e"}}}}}]}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a nested module name error as a string"}}}]}}}}},
     {
       "term": {
         "name": "hydra.print.error.packaging.undeclaredDependencyError",

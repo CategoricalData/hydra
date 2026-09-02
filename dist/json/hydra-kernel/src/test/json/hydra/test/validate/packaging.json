@@ -60,6 +60,7 @@
                         {"variable": "hydra.test.validate.packaging.checkDuplicateModuleNamesTests"},
                         {"variable": "hydra.test.validate.packaging.checkModuleNameConventionTests"},
                         {"variable": "hydra.test.validate.packaging.checkModulePartitionTests"},
+                        {"variable": "hydra.test.validate.packaging.checkNestedModuleNamesTests"},
                         {"variable": "hydra.test.validate.packaging.checkPackageNameConventionTests"},
                         {"variable": "hydra.test.validate.packaging.checkUndeclaredDependenciesTests"},
                         {"variable": "hydra.test.validate.packaging.kernelModuleTests"},
@@ -5832,6 +5833,1116 @@
                           {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
     {
       "term": {
+        "name": "hydra.test.validate.packaging.checkNestedModuleNamesTests",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}},
+        "body": {
+          "record": {
+            "typeName": "hydra.testing.TestGroup",
+            "fields": [
+              {"name": "name", "term": {"literal": {"string": "checkNestedModuleNames"}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+              {
+                "name": "subgroups",
+                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
+              {
+                "name": "cases",
+                "term": {
+                  "list": [
+                    {
+                      "record": {
+                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                        "fields": [
+                          {"name": "name", "term": {"literal": {"string": "empty package: no error"}}},
+                          {
+                            "name": "case",
+                            "term": {
+                              "inject": {
+                                "typeName": "hydra.testing.TestCase",
+                                "field": {
+                                  "name": "universal",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.testing.UniversalTestCase",
+                                      "fields": [
+                                        {
+                                          "name": "actual",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {
+                                                            "application": {
+                                                              "function": {"variable": "hydra.validate.packaging.checkNestedModuleNames"},
+                                                              "argument": {
+                                                                "record": {
+                                                                  "typeName": "hydra.packaging.Package",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "name",
+                                                                      "term": {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "test-pkg"}}}}},
+                                                                    {
+                                                                      "name": "metadata",
+                                                                      "term": {
+                                                                        "optional": {
+                                                                          "record": {
+                                                                            "typeName": "hydra.packaging.EntityMetadata",
+                                                                            "fields": [
+                                                                              {"name": "description", "term": {"optional": {"literal": {"string": "Test package test-pkg"}}}},
+                                                                              {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                              {
+                                                                                "name": "seeAlso",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                              {
+                                                                                "name": "lifecycle",
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                    {
+                                                                      "name": "dependencies",
+                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
+                                                                    {"name": "modules", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Module"}}}}]}}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}},
+                                        {
+                                          "name": "expected",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
+                    {
+                      "record": {
+                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                        "fields": [
+                          {"name": "name", "term": {"literal": {"string": "single module: no error"}}},
+                          {
+                            "name": "case",
+                            "term": {
+                              "inject": {
+                                "typeName": "hydra.testing.TestCase",
+                                "field": {
+                                  "name": "universal",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.testing.UniversalTestCase",
+                                      "fields": [
+                                        {
+                                          "name": "actual",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {
+                                                            "application": {
+                                                              "function": {"variable": "hydra.validate.packaging.checkNestedModuleNames"},
+                                                              "argument": {
+                                                                "record": {
+                                                                  "typeName": "hydra.packaging.Package",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "name",
+                                                                      "term": {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "test-pkg"}}}}},
+                                                                    {
+                                                                      "name": "metadata",
+                                                                      "term": {
+                                                                        "optional": {
+                                                                          "record": {
+                                                                            "typeName": "hydra.packaging.EntityMetadata",
+                                                                            "fields": [
+                                                                              {"name": "description", "term": {"optional": {"literal": {"string": "Test package test-pkg"}}}},
+                                                                              {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                              {
+                                                                                "name": "seeAlso",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                              {
+                                                                                "name": "lifecycle",
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                    {
+                                                                      "name": "dependencies",
+                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
+                                                                    {
+                                                                      "name": "modules",
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.packaging.Module",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.foo"}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {
+                                                                                    "optional": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.packaging.EntityMetadata",
+                                                                                        "fields": [
+                                                                                          {"name": "description", "term": {"optional": {"literal": {"string": "Test module hydra.foo"}}}},
+                                                                                          {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                                          {
+                                                                                            "name": "seeAlso",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                                          {
+                                                                                            "name": "lifecycle",
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                                {
+                                                                                  "name": "dependencies",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
+                                                                                {
+                                                                                  "name": "definitions",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}]}}]}}]}}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}},
+                                        {
+                                          "name": "expected",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
+                    {
+                      "record": {
+                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                        "fields": [
+                          {"name": "name", "term": {"literal": {"string": "unrelated namespaces: no error"}}},
+                          {
+                            "name": "case",
+                            "term": {
+                              "inject": {
+                                "typeName": "hydra.testing.TestCase",
+                                "field": {
+                                  "name": "universal",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.testing.UniversalTestCase",
+                                      "fields": [
+                                        {
+                                          "name": "actual",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {
+                                                            "application": {
+                                                              "function": {"variable": "hydra.validate.packaging.checkNestedModuleNames"},
+                                                              "argument": {
+                                                                "record": {
+                                                                  "typeName": "hydra.packaging.Package",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "name",
+                                                                      "term": {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "test-pkg"}}}}},
+                                                                    {
+                                                                      "name": "metadata",
+                                                                      "term": {
+                                                                        "optional": {
+                                                                          "record": {
+                                                                            "typeName": "hydra.packaging.EntityMetadata",
+                                                                            "fields": [
+                                                                              {"name": "description", "term": {"optional": {"literal": {"string": "Test package test-pkg"}}}},
+                                                                              {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                              {
+                                                                                "name": "seeAlso",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                              {
+                                                                                "name": "lifecycle",
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                    {
+                                                                      "name": "dependencies",
+                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
+                                                                    {
+                                                                      "name": "modules",
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.packaging.Module",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.foo"}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {
+                                                                                    "optional": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.packaging.EntityMetadata",
+                                                                                        "fields": [
+                                                                                          {"name": "description", "term": {"optional": {"literal": {"string": "Test module hydra.foo"}}}},
+                                                                                          {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                                          {
+                                                                                            "name": "seeAlso",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                                          {
+                                                                                            "name": "lifecycle",
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                                {
+                                                                                  "name": "dependencies",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
+                                                                                {
+                                                                                  "name": "definitions",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}]}},
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.packaging.Module",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.bar"}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {
+                                                                                    "optional": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.packaging.EntityMetadata",
+                                                                                        "fields": [
+                                                                                          {"name": "description", "term": {"optional": {"literal": {"string": "Test module hydra.bar"}}}},
+                                                                                          {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                                          {
+                                                                                            "name": "seeAlso",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                                          {
+                                                                                            "name": "lifecycle",
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                                {
+                                                                                  "name": "dependencies",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
+                                                                                {
+                                                                                  "name": "definitions",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}]}}]}}]}}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}},
+                                        {
+                                          "name": "expected",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
+                    {
+                      "record": {
+                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {"literal": {"string": "sibling namespaces sharing a common (non-module) prefix, no nesting: no error"}}},
+                          {
+                            "name": "case",
+                            "term": {
+                              "inject": {
+                                "typeName": "hydra.testing.TestCase",
+                                "field": {
+                                  "name": "universal",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.testing.UniversalTestCase",
+                                      "fields": [
+                                        {
+                                          "name": "actual",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {
+                                                            "application": {
+                                                              "function": {"variable": "hydra.validate.packaging.checkNestedModuleNames"},
+                                                              "argument": {
+                                                                "record": {
+                                                                  "typeName": "hydra.packaging.Package",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "name",
+                                                                      "term": {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "test-pkg"}}}}},
+                                                                    {
+                                                                      "name": "metadata",
+                                                                      "term": {
+                                                                        "optional": {
+                                                                          "record": {
+                                                                            "typeName": "hydra.packaging.EntityMetadata",
+                                                                            "fields": [
+                                                                              {"name": "description", "term": {"optional": {"literal": {"string": "Test package test-pkg"}}}},
+                                                                              {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                              {
+                                                                                "name": "seeAlso",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                              {
+                                                                                "name": "lifecycle",
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                    {
+                                                                      "name": "dependencies",
+                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
+                                                                    {
+                                                                      "name": "modules",
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.packaging.Module",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.build.assembly"}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {
+                                                                                    "optional": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.packaging.EntityMetadata",
+                                                                                        "fields": [
+                                                                                          {"name": "description", "term": {"optional": {"literal": {"string": "Test module hydra.build.assembly"}}}},
+                                                                                          {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                                          {
+                                                                                            "name": "seeAlso",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                                          {
+                                                                                            "name": "lifecycle",
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                                {
+                                                                                  "name": "dependencies",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
+                                                                                {
+                                                                                  "name": "definitions",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}]}},
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.packaging.Module",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.build.modules"}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {
+                                                                                    "optional": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.packaging.EntityMetadata",
+                                                                                        "fields": [
+                                                                                          {"name": "description", "term": {"optional": {"literal": {"string": "Test module hydra.build.modules"}}}},
+                                                                                          {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                                          {
+                                                                                            "name": "seeAlso",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                                          {
+                                                                                            "name": "lifecycle",
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                                {
+                                                                                  "name": "dependencies",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
+                                                                                {
+                                                                                  "name": "definitions",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}]}}]}}]}}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}},
+                                        {
+                                          "name": "expected",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
+                    {
+                      "record": {
+                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {"literal": {"string": "string-prefix but not dotted: no error (hydra.foo is not a prefix of hydra.foobar)"}}},
+                          {
+                            "name": "case",
+                            "term": {
+                              "inject": {
+                                "typeName": "hydra.testing.TestCase",
+                                "field": {
+                                  "name": "universal",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.testing.UniversalTestCase",
+                                      "fields": [
+                                        {
+                                          "name": "actual",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {
+                                                            "application": {
+                                                              "function": {"variable": "hydra.validate.packaging.checkNestedModuleNames"},
+                                                              "argument": {
+                                                                "record": {
+                                                                  "typeName": "hydra.packaging.Package",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "name",
+                                                                      "term": {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "test-pkg"}}}}},
+                                                                    {
+                                                                      "name": "metadata",
+                                                                      "term": {
+                                                                        "optional": {
+                                                                          "record": {
+                                                                            "typeName": "hydra.packaging.EntityMetadata",
+                                                                            "fields": [
+                                                                              {"name": "description", "term": {"optional": {"literal": {"string": "Test package test-pkg"}}}},
+                                                                              {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                              {
+                                                                                "name": "seeAlso",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                              {
+                                                                                "name": "lifecycle",
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                    {
+                                                                      "name": "dependencies",
+                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
+                                                                    {
+                                                                      "name": "modules",
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.packaging.Module",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.foo"}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {
+                                                                                    "optional": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.packaging.EntityMetadata",
+                                                                                        "fields": [
+                                                                                          {"name": "description", "term": {"optional": {"literal": {"string": "Test module hydra.foo"}}}},
+                                                                                          {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                                          {
+                                                                                            "name": "seeAlso",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                                          {
+                                                                                            "name": "lifecycle",
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                                {
+                                                                                  "name": "dependencies",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
+                                                                                {
+                                                                                  "name": "definitions",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}]}},
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.packaging.Module",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.foobar"}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {
+                                                                                    "optional": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.packaging.EntityMetadata",
+                                                                                        "fields": [
+                                                                                          {"name": "description", "term": {"optional": {"literal": {"string": "Test module hydra.foobar"}}}},
+                                                                                          {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                                          {
+                                                                                            "name": "seeAlso",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                                          {
+                                                                                            "name": "lifecycle",
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                                {
+                                                                                  "name": "dependencies",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
+                                                                                {
+                                                                                  "name": "definitions",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}]}}]}}]}}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}},
+                                        {
+                                          "name": "expected",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
+                    {
+                      "record": {
+                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                        "fields": [
+                          {"name": "name", "term": {"literal": {"string": "dotted-prefix nesting: error (outer defined before inner)"}}},
+                          {
+                            "name": "case",
+                            "term": {
+                              "inject": {
+                                "typeName": "hydra.testing.TestCase",
+                                "field": {
+                                  "name": "universal",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.testing.UniversalTestCase",
+                                      "fields": [
+                                        {
+                                          "name": "actual",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {
+                                                            "application": {
+                                                              "function": {"variable": "hydra.validate.packaging.checkNestedModuleNames"},
+                                                              "argument": {
+                                                                "record": {
+                                                                  "typeName": "hydra.packaging.Package",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "name",
+                                                                      "term": {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "test-pkg"}}}}},
+                                                                    {
+                                                                      "name": "metadata",
+                                                                      "term": {
+                                                                        "optional": {
+                                                                          "record": {
+                                                                            "typeName": "hydra.packaging.EntityMetadata",
+                                                                            "fields": [
+                                                                              {"name": "description", "term": {"optional": {"literal": {"string": "Test package test-pkg"}}}},
+                                                                              {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                              {
+                                                                                "name": "seeAlso",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                              {
+                                                                                "name": "lifecycle",
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                    {
+                                                                      "name": "dependencies",
+                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
+                                                                    {
+                                                                      "name": "modules",
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.packaging.Module",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.codegen"}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {
+                                                                                    "optional": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.packaging.EntityMetadata",
+                                                                                        "fields": [
+                                                                                          {"name": "description", "term": {"optional": {"literal": {"string": "Test module hydra.codegen"}}}},
+                                                                                          {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                                          {
+                                                                                            "name": "seeAlso",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                                          {
+                                                                                            "name": "lifecycle",
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                                {
+                                                                                  "name": "dependencies",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
+                                                                                {
+                                                                                  "name": "definitions",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}]}},
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.packaging.Module",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.codegen.docs"}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {
+                                                                                    "optional": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.packaging.EntityMetadata",
+                                                                                        "fields": [
+                                                                                          {"name": "description", "term": {"optional": {"literal": {"string": "Test module hydra.codegen.docs"}}}},
+                                                                                          {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                                          {
+                                                                                            "name": "seeAlso",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                                          {
+                                                                                            "name": "lifecycle",
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                                {
+                                                                                  "name": "dependencies",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
+                                                                                {
+                                                                                  "name": "definitions",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}]}}]}}]}}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}},
+                                        {
+                                          "name": "expected",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {
+                                                            "optional": {
+                                                              "inject": {
+                                                                "typeName": "hydra.error.packaging.InvalidPackageError",
+                                                                "field": {
+                                                                  "name": "nestedModuleName",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "typeName": "hydra.error.packaging.NestedModuleNameError",
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "outer",
+                                                                          "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.codegen"}}}}},
+                                                                        {
+                                                                          "name": "inner",
+                                                                          "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.codegen.docs"}}}}}]}}}}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
+                    {
+                      "record": {
+                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                        "fields": [
+                          {"name": "name", "term": {"literal": {"string": "dotted-prefix nesting: error (inner defined before outer)"}}},
+                          {
+                            "name": "case",
+                            "term": {
+                              "inject": {
+                                "typeName": "hydra.testing.TestCase",
+                                "field": {
+                                  "name": "universal",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.testing.UniversalTestCase",
+                                      "fields": [
+                                        {
+                                          "name": "actual",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {
+                                                            "application": {
+                                                              "function": {"variable": "hydra.validate.packaging.checkNestedModuleNames"},
+                                                              "argument": {
+                                                                "record": {
+                                                                  "typeName": "hydra.packaging.Package",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "name",
+                                                                      "term": {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "test-pkg"}}}}},
+                                                                    {
+                                                                      "name": "metadata",
+                                                                      "term": {
+                                                                        "optional": {
+                                                                          "record": {
+                                                                            "typeName": "hydra.packaging.EntityMetadata",
+                                                                            "fields": [
+                                                                              {"name": "description", "term": {"optional": {"literal": {"string": "Test package test-pkg"}}}},
+                                                                              {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                              {
+                                                                                "name": "seeAlso",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                              {
+                                                                                "name": "lifecycle",
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                    {
+                                                                      "name": "dependencies",
+                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
+                                                                    {
+                                                                      "name": "modules",
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.packaging.Module",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.codegen.docs"}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {
+                                                                                    "optional": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.packaging.EntityMetadata",
+                                                                                        "fields": [
+                                                                                          {"name": "description", "term": {"optional": {"literal": {"string": "Test module hydra.codegen.docs"}}}},
+                                                                                          {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                                          {
+                                                                                            "name": "seeAlso",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                                          {
+                                                                                            "name": "lifecycle",
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                                {
+                                                                                  "name": "dependencies",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
+                                                                                {
+                                                                                  "name": "definitions",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}]}},
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.packaging.Module",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.codegen"}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {
+                                                                                    "optional": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.packaging.EntityMetadata",
+                                                                                        "fields": [
+                                                                                          {"name": "description", "term": {"optional": {"literal": {"string": "Test module hydra.codegen"}}}},
+                                                                                          {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                                          {
+                                                                                            "name": "seeAlso",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                                          {
+                                                                                            "name": "lifecycle",
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                                {
+                                                                                  "name": "dependencies",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
+                                                                                {
+                                                                                  "name": "definitions",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}]}}]}}]}}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}},
+                                        {
+                                          "name": "expected",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {
+                                                            "optional": {
+                                                              "inject": {
+                                                                "typeName": "hydra.error.packaging.InvalidPackageError",
+                                                                "field": {
+                                                                  "name": "nestedModuleName",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "typeName": "hydra.error.packaging.NestedModuleNameError",
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "outer",
+                                                                          "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.codegen"}}}}},
+                                                                        {
+                                                                          "name": "inner",
+                                                                          "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.codegen.docs"}}}}}]}}}}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
+    {
+      "term": {
         "name": "hydra.test.validate.packaging.checkPackageNameConventionTests",
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}},
         "body": {
@@ -9829,6 +10940,186 @@
                                                                         {
                                                                           "name": "second",
                                                                           "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.foo"}}}}}]}}}}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
+                    {
+                      "record": {
+                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                        "fields": [
+                          {"name": "name", "term": {"literal": {"string": "nested module namespace surfaces"}}},
+                          {
+                            "name": "case",
+                            "term": {
+                              "inject": {
+                                "typeName": "hydra.testing.TestCase",
+                                "field": {
+                                  "name": "universal",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.testing.UniversalTestCase",
+                                      "fields": [
+                                        {
+                                          "name": "actual",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {
+                                                            "application": {
+                                                              "function": {"variable": "hydra.validate.packaging.kernelPackage"},
+                                                              "argument": {
+                                                                "record": {
+                                                                  "typeName": "hydra.packaging.Package",
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "name",
+                                                                      "term": {"wrap": {"typeName": "hydra.packaging.PackageName", "body": {"literal": {"string": "test-pkg"}}}}},
+                                                                    {
+                                                                      "name": "metadata",
+                                                                      "term": {
+                                                                        "optional": {
+                                                                          "record": {
+                                                                            "typeName": "hydra.packaging.EntityMetadata",
+                                                                            "fields": [
+                                                                              {"name": "description", "term": {"optional": {"literal": {"string": "Test package test-pkg"}}}},
+                                                                              {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                              {
+                                                                                "name": "seeAlso",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                              {
+                                                                                "name": "lifecycle",
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                    {
+                                                                      "name": "dependencies",
+                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
+                                                                    {
+                                                                      "name": "modules",
+                                                                      "term": {
+                                                                        "list": [
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.packaging.Module",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.codegen"}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {
+                                                                                    "optional": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.packaging.EntityMetadata",
+                                                                                        "fields": [
+                                                                                          {"name": "description", "term": {"optional": {"literal": {"string": "Test module hydra.codegen"}}}},
+                                                                                          {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                                          {
+                                                                                            "name": "seeAlso",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                                          {
+                                                                                            "name": "lifecycle",
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                                {
+                                                                                  "name": "dependencies",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
+                                                                                {
+                                                                                  "name": "definitions",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}]}},
+                                                                          {
+                                                                            "record": {
+                                                                              "typeName": "hydra.packaging.Module",
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.codegen.docs"}}}}},
+                                                                                {
+                                                                                  "name": "metadata",
+                                                                                  "term": {
+                                                                                    "optional": {
+                                                                                      "record": {
+                                                                                        "typeName": "hydra.packaging.EntityMetadata",
+                                                                                        "fields": [
+                                                                                          {"name": "description", "term": {"optional": {"literal": {"string": "Test module hydra.codegen.docs"}}}},
+                                                                                          {"name": "comments", "term": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}},
+                                                                                          {
+                                                                                            "name": "seeAlso",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
+                                                                                          {
+                                                                                            "name": "lifecycle",
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
+                                                                                {
+                                                                                  "name": "dependencies",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
+                                                                                {
+                                                                                  "name": "definitions",
+                                                                                  "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}]}}]}}]}}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.packaging.InvalidPackageError"},
+                                                      "body": {
+                                                        "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}},
+                                        {
+                                          "name": "expected",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {
+                                                            "optional": {
+                                                              "inject": {
+                                                                "typeName": "hydra.error.packaging.InvalidPackageError",
+                                                                "field": {
+                                                                  "name": "nestedModuleName",
+                                                                  "term": {
+                                                                    "record": {
+                                                                      "typeName": "hydra.error.packaging.NestedModuleNameError",
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "outer",
+                                                                          "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.codegen"}}}}},
+                                                                        {
+                                                                          "name": "inner",
+                                                                          "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.codegen.docs"}}}}}]}}}}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
                                                     "lambda": {
