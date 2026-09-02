@@ -126,7 +126,10 @@ has its module namespace as a dotted prefix) · undeclaredDependencies (one hop,
 
 ### 4.2 SHOULD-class (kernel-strict, opt-in elsewhere)
 
-module no-prefix (no module namespace is a strict dotted-prefix of another; unenforced today —
+module no-prefix (no module namespace is a strict dotted-prefix of another within a package — `A` is a
+strict dotted-prefix of `B` when `B` begins with `A` followed by a `.`, so `hydra.codegen` conflicts
+with `hydra.codegen.docs` but `hydra.foo` does not conflict with `hydra.foobar`; a requirement for
+Hydra's own packages, MAY be relaxed for external application packages; the check is landing via
 [#721](https://github.com/CategoricalData/hydra/issues/721)) · definition alphabetical ordering ·
 definition documentation required · naming conventions (camelCase / PascalCase / dotted-lowercase /
 hyphenated; regexes in `hydra.constants`; see
@@ -159,8 +162,12 @@ annotations through a validation check is the concrete first step in that arc.
 
 ## 6. Open items
 
-- `unknownPrimitiveName` and `untypedTermVariable` appear in the kernel default profile but are not
-  yet wired to a check; term-layer name validation is narrower than the naming-convention regexes
-  imply. Both are tracked in [#722](https://github.com/CategoricalData/hydra/issues/722) and will be
-  reconciled before this page is considered Canonical.
+- Term-layer name validation is narrower than the naming-convention regexes imply: the introduced-name
+  checks (lambda parameters, `let` bindings, type-lambda parameters, type-scheme variables) currently
+  reject only the empty string, not the full camelCase/PascalCase convention. Whether to enforce the
+  full convention at the term layer is [#722](https://github.com/CategoricalData/hydra/issues/722)'s
+  Defect-B scope question (pending); this section will be made precise once that is decided.
+- `unknownPrimitiveName` and `untypedTermVariable` appear in the kernel default profile's error-rule
+  set but are not yet wired to checks that emit them; [#722](https://github.com/CategoricalData/hydra/issues/722)'s
+  Defect-A wires them. Until it lands, these two rule ids are inert.
 
