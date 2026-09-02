@@ -11,6 +11,9 @@ Validation is Hydra's mechanism for checking that a value **conforms** to a type
 representation-generic framework: the same machinery validates core terms against core types,
 property-graph data against property-graph types, and — as Hydra grows target representations — the
 data of any target against that target's types.
+Named **provisions** (`HYDRA-VAL-…`, in bold at the head of a claim) follow the provisions convention
+in [index.md](index.md#provisions); the per-check rules of §4 are properties of specific
+`hydra.validate.*` definitions and carry their own provisions in the generated module pages, not here.
 
 ## 0. Conformance and its preservation
 
@@ -37,11 +40,12 @@ Hydra's central correctness law is that a transformation `F` from one representa
 That is, a coder maps a type `t` and an instance `a` such that the mapped instance conforms to the
 mapped type *under the target's own conformance relation*. "Semantics-preserving" means exactly this.
 
-**Validation is the checkable specification of conformance, and therefore the instrument for verifying
-preservation.** Because conformance is decidable in each representation, a coder `F` can be checked by
-validating `a : t` on the source side and `F(a) : F(t)` on the target side; a transformation that
-takes a conformant value to a non-conformant one has a bug, and validation is how it is caught — in
-the kernel and in the hydra-kernel test suite.
+**[HYDRA-VAL-PRESERVATION] Validation is the checkable specification of conformance, and therefore the
+instrument for verifying preservation.** A transformation `F` between representations preserves
+conformance: if `a : t` then `F(a) : F(t)`. Because conformance is decidable in each representation, a
+coder `F` can be checked by validating `a : t` on the source side and `F(a) : F(t)` on the target side;
+a transformation that takes a conformant value to a non-conformant one has a bug, and validation is how
+it is caught — in the kernel and in the hydra-kernel test suite.
 
 ## 1. The three roles of validation
 
@@ -77,9 +81,10 @@ Each instance is a set of *checks* selected and classified by a **validation pro
 | `maxErrors` | Hard bound: the pass terminates once this many errors are collected. `1` reproduces "first error wins". |
 | `maxWarnings` | Soft bound: further warnings are dropped once reached, but the pass continues. |
 
-A rule whose name is in **neither** set is never evaluated — this is how a project opts out of a
-rule. A pass produces a `hydra.validation.ValidationResult` (ordered error and warning findings); it
-**succeeds** iff the error list is empty. Hydra ships strict reference profiles
+**[HYDRA-VAL-PROFILE-OPT-OUT]** A rule whose name is in **neither** the `errorRules` nor the
+`warningRules` set is never evaluated — this is how a project opts out of a rule. A pass produces a
+`hydra.validation.ValidationResult` (ordered error and warning findings); **[HYDRA-VAL-SUCCESS-NO-ERRORS]**
+it **succeeds** iff the error list is empty. Hydra ships strict reference profiles
 (`kernelDefaultCoreProfile`, `kernelDefaultPackagingProfile`, `defaultPgProfile`) that enable the
 full rule set for the corresponding representation.
 
