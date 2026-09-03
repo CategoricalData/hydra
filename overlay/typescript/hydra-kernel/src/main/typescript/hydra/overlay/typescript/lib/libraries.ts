@@ -839,11 +839,27 @@ const literalsPrimitives = (): readonly Primitive[] => [
         const lit = (a0 as { tag: string; value?: { tag?: string; value?: number } });
         const v = lit.value?.value;
         const showD = (f: number): string => {
-          // Decimal always renders with a fractional part, matching the
-          // kernel's test fixtures.
-          const s = libLiterals.printFloat64(f);
-          if (s.includes(".") || s.includes("e") || s.includes("Infinity") || s.includes("NaN")) return s;
-          return s + ".0";
+          // Representation-faithful decimal rendering, matching the kernel's
+          // printDecimal (docs/specification/syntax.md §2.6, json-format.md):
+          // whole values print WITHOUT a decimal component ("42", "0"); the
+          // positional/exponent split follows ECMAScript Number::toString /
+          // RFC 8785 (positional for -6 <= adjustedExp < 21). Use the native
+          // Number->string ("42", "0.01", "100000000000000000000") rather than
+          // the FLOAT printer (printFloat64), which forces exponential/".0"
+          // forms appropriate for floats but not decimals. NOTE: this host
+          // still carries decimal as a float64, so it cannot preserve scale
+          // (1.10 vs 1.1) -- the scale-distinct kernel tests are host-skipped
+          // for TypeScript until it gains a real (coefficient, scale) decimal.
+          if (Number.isNaN(f)) return "NaN";
+          if (f === Infinity) return "Infinity";
+          if (f === -Infinity) return "-Infinity";
+          if (Object.is(f, -0)) return "0";
+          // String(f) uses positional form for 1e-6 <= |f| < 1e21 and lowercase
+          // "e+"/"e-" exponent form outside that -- normalize to the kernel's
+          // always-signed lowercase exponent (no leading zeros), matching
+          // printDecimal's exponential branch.
+          const s = String(f);
+          return s.replace(/e\+?(-?)0*(\d)/, "e$1$2");
         };
         if (lit.tag === "literal" && lit.value?.tag === "decimal" && typeof v === "number") {
           return right(tString(showD(v)));

@@ -200,9 +200,29 @@ valueToExpr = jsonSerdeDefinition "valueToExpr" $
       --   scientific : printDecimal(n), always valid
       -- Pick whichever is shorter. This keeps 42 → "42" (plain) and 1e20 → "1.0e20"
       -- (scientific), avoiding both the trailing-".0" noise and the 21-digit integer.
+      -- "whole-valued" must be tested by VALUE, not scale: a decimal like 42.0 or 0.00
+      -- (nonzero scale, integral value) is whole and should serialize as "42"/"0". Since
+      -- hydra.lib.equality is scale-DISTINCT for decimals (1.1 ≠ 1.10, #719), comparing n
+      -- to bigintToDecimal(round n) with `equal` wrongly rejects any nonzero-scale integer.
+      -- Instead read wholeness off the representation-faithful string `shown`: it is whole
+      -- iff it is in plain (non-exponential) form AND either has no fractional part or its
+      -- fractional digits are all zero. The exponential guard is essential: a value like
+      -- "1e-20" has NO "." (so its fracParts length is 1), which would otherwise be mis-read
+      -- as whole and collapsed to "0" via round(n) — but 1e-20 is a tiny non-integer. Any
+      -- "shown" containing "e" must serialize via `shown`, never via the rounded-bigint plain
+      -- form. (A whole decimal in exponent form -- e.g. 1e20 -- is likewise left as `shown`;
+      -- the shorter-string tie-break below still prefers plain when plain is genuinely shorter,
+      -- but only when isWhole holds, which now requires non-exponential form.)
       "rounded" <~ Literals.decimalToBigint (var "n") $
       "shown" <~ (Literals.printDecimal $ var "n") $
-      "isWhole" <~ (Equality.equal (var "n") (Literals.bigintToDecimal $ var "rounded")) $
+      "notExponential" <~ (Ordering.lte (Lists.length (Strings.splitOn (string "e") (var "shown"))) (int32 1)) $
+      "fracParts" <~ (Strings.splitOn (string ".") (var "shown")) $
+      "frac" <~ (Optionals.withDefault (string "") (Lists.at (int32 1) (var "fracParts"))) $
+      "isWhole" <~ (Logic.and
+        (var "notExponential")
+        (Logic.or
+          (Ordering.lte (Lists.length (var "fracParts")) (int32 1))
+          (Strings.isEmpty (Strings.concat (Strings.splitOn (string "0") (var "frac")))))) $
       "plain" <~ (Literals.printBigint $ var "rounded") $
       Serialization.cst @@ (Logic.ifElse
         (Logic.and (var "isWhole")

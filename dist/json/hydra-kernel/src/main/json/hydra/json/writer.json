@@ -539,44 +539,113 @@
                                           "let": {
                                             "bindings": [
                                               {
-                                                "name": "isWhole",
+                                                "name": "notExponential",
                                                 "term": {
                                                   "application": {
                                                     "function": {
                                                       "application": {
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "decimal"}}},
-                                                        "argument": {"variable": "n"}}},
-                                                    "argument": {"application": {"function": {"variable": "hydra.lib.literals.bigintToDecimal"}, "argument": {"variable": "rounded"}}}}},
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"literal": "string"}}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "e"}}}},
+                                                                "argument": {"variable": "shown"}}}}}}},
+                                                    "argument": {"literal": {"integer": {"int32": 1}}}}},
                                                 "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
                                             "body": {
                                               "let": {
                                                 "bindings": [
                                                   {
-                                                    "name": "plain",
-                                                    "term": {"application": {"function": {"variable": "hydra.lib.literals.printBigint"}, "argument": {"variable": "rounded"}}},
-                                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
-                                                "body": {
-                                                  "application": {
-                                                    "function": {"variable": "hydra.serialization.cst"},
-                                                    "argument": {
+                                                    "name": "fracParts",
+                                                    "term": {
                                                       "application": {
-                                                        "function": {
+                                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "."}}}},
+                                                        "argument": {"variable": "shown"}}},
+                                                    "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
+                                                "body": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "frac",
+                                                        "term": {
                                                           "application": {
                                                             "function": {
                                                               "application": {
-                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "string"}}},
+                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"literal": "string"}}},
+                                                                "argument": {"literal": {"string": ""}}}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.at"}, "type": {"literal": "string"}}},
+                                                                    "argument": {"literal": {"integer": {"int32": 1}}}}},
+                                                                "argument": {"variable": "fracParts"}}}}},
+                                                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                                                    "body": {
+                                                      "let": {
+                                                        "bindings": [
+                                                          {
+                                                            "name": "isWhole",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {"application": {"function": {"variable": "hydra.lib.logic.and"}, "argument": {"variable": "notExponential"}}},
                                                                 "argument": {
                                                                   "application": {
-                                                                    "function": {"application": {"function": {"variable": "hydra.lib.logic.and"}, "argument": {"variable": "isWhole"}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {"variable": "hydra.lib.logic.or"},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"literal": "string"}}},
+                                                                                    "argument": {"variable": "fracParts"}}}}},
+                                                                            "argument": {"literal": {"integer": {"int32": 1}}}}}}},
                                                                     "argument": {
+                                                                      "application": {
+                                                                        "function": {"variable": "hydra.lib.strings.isEmpty"},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {"variable": "hydra.lib.strings.concat"},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {"application": {"function": {"variable": "hydra.lib.strings.splitOn"}, "argument": {"literal": {"string": "0"}}}},
+                                                                                "argument": {"variable": "frac"}}}}}}}}}}},
+                                                            "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "plain",
+                                                                "term": {"application": {"function": {"variable": "hydra.lib.literals.printBigint"}, "argument": {"variable": "rounded"}}},
+                                                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {"variable": "hydra.serialization.cst"},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {
                                                                       "application": {
                                                                         "function": {
                                                                           "application": {
-                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
-                                                                            "argument": {"application": {"function": {"variable": "hydra.lib.strings.length"}, "argument": {"variable": "plain"}}}}},
-                                                                        "argument": {"application": {"function": {"variable": "hydra.lib.strings.length"}, "argument": {"variable": "shown"}}}}}}}}},
-                                                            "argument": {"variable": "plain"}}},
-                                                        "argument": {"variable": "shown"}}}}}}}}}}}}}}}},
+                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "string"}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {"application": {"function": {"variable": "hydra.lib.logic.and"}, "argument": {"variable": "isWhole"}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                        "argument": {"application": {"function": {"variable": "hydra.lib.strings.length"}, "argument": {"variable": "plain"}}}}},
+                                                                                    "argument": {"application": {"function": {"variable": "hydra.lib.strings.length"}, "argument": {"variable": "shown"}}}}}}}}},
+                                                                        "argument": {"variable": "plain"}}},
+                                                                    "argument": {"variable": "shown"}}}}}}}}}}}}}}}}}}}}}},
                           {
                             "name": "object",
                             "handler": {

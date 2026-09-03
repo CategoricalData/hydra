@@ -145,11 +145,11 @@ decimalComparisonTests = subgroup "Decimal comparison" [
     (decimalTerm 11 1)
     (decimalTerm 12 1)
     "lessThan",
-  compareTest "1.1 == 1.1 (same value, same scale)"
+  compareTest "1.1 compareTo 1.1 (same value, same scale)"
     (decimalTerm 11 1)
     (decimalTerm 11 1)
     "equalTo",
-  equalTest "1.1 == 1.1 (same value, same scale)"
+  equalTest "1.1 equals 1.1 (same value, same scale)"
     (decimalTerm 11 1)
     (decimalTerm 11 1)
     True]

@@ -59,42 +59,27 @@ export const printBigint = (v: IntegerValue | bigint): string =>
 type FloatValue = { tag: string; value: number };
 export const showFloat = (v: FloatValue): string => `${v.value}:${v.tag}`;
 
-// Match Haskell's `show` for Double:
-//   - exponent in [-1, 7) → fixed-point form, with mandatory `.0` for ints (e.g. "1.0", "0.1")
-//   - otherwise → scientific form `<mantissa>e<exp>` (e.g. "1.0e-2", "1.0e20")
-// JavaScript's `Number.prototype.toString` differs from Haskell in:
-//   - 0.01 → "0.01" vs Haskell "1.0e-2"
-//   - 1.0 → "1" vs Haskell "1.0"
+// Representation-faithful DECIMAL rendering (NOT float `show`): per the kernel
+// printDecimal (docs/specification/syntax.md §2.6, json-format.md), a decimal
+// prints in positional form when the adjusted exponent is in [-6, 21) and in
+// exponent form otherwise, with NO mandatory trailing ".0" on whole values
+// ("42" not "42.0", "0" not "0.0", "0.01" not "1.0e-2", "100000000000000000000"
+// not "1.0e20"). This matches ECMAScript Number::toString / RFC 8785, which is
+// exactly what `String(f)` produces for a finite double, so we build from that
+// rather than the FLOAT printers (printFloat64/printFloat32), which use the
+// Haskell-Double `show` convention (forced ".0", sci at exp<-1 or >=7) that is
+// correct for floats but wrong for decimals. NOTE: this host carries decimal as
+// a float64 with no scale field, so it cannot preserve scale (1.10 vs 1.1); the
+// scale-distinct kernel tests are host-skipped for TypeScript until it gains a
+// real (coefficient, scale) decimal (tracked separately).
 export const printDecimal = (f: number): string => {
-  if (!Number.isFinite(f)) {
-    if (Number.isNaN(f)) return "NaN";
-    return f > 0 ? "Infinity" : "-Infinity";
-  }
-  if (f === 0) return Object.is(f, -0) ? "-0.0" : "0.0";
-  const abs = Math.abs(f);
-  const exp = Math.floor(Math.log10(abs));
-  // Haskell uses scientific notation when exponent < -1 OR exponent >= 7.
-  const useSci = exp < -1 || exp >= 7;
-  if (useSci) {
-    // Use JS's built-in toExponential for accuracy, then reformat to
-    // Haskell's `mantissa e exp` convention (no `+` on positive exp).
-    // toExponential() picks the shortest representation that round-trips.
-    const ex = f.toExponential();
-    const m = ex.match(/^(-?)(\d+)(?:\.(\d+))?[eE]([+-]?\d+)$/);
-    if (!m) return ex;
-    const [, sign, intP, fracP, expP] = m;
-    let mantissa = `${sign}${intP}.${fracP || "0"}`;
-    if ((fracP ?? "") === "") mantissa = `${sign}${intP}.0`;
-    return `${mantissa}e${parseInt(expP!, 10)}`;
-  }
-  // Fixed-point form
-  let s = f.toString();
-  if (s.includes("e") || s.includes("E")) {
-    // Number already in scientific - convert to fixed
-    s = f.toFixed(Math.max(0, -exp + 1));
-  }
-  if (!s.includes(".")) s += ".0";
-  return s;
+  if (Number.isNaN(f)) return "NaN";
+  if (f === Infinity) return "Infinity";
+  if (f === -Infinity) return "-Infinity";
+  if (Object.is(f, -0)) return "0";
+  // String(f): positional for 1e-6 <= |f| < 1e21, lowercase "e+"/"e-" outside.
+  // Normalize to the kernel's always-signed lowercase exponent (no leading zeros).
+  return String(f).replace(/e\+?(-?)0*(\d)/, "e$1$2");
 };
 
 // === read family ===

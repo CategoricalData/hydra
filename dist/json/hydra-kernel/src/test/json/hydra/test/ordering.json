@@ -1037,7 +1037,7 @@
                                       "record": {
                                         "typeName": "hydra.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "1.1 == 1.1 (same value, same scale)"}}},
+                                          {"name": "name", "term": {"literal": {"string": "1.1 compareTo 1.1 (same value, same scale)"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -1091,7 +1091,7 @@
                                       "record": {
                                         "typeName": "hydra.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "1.1 == 1.1 (same value, same scale)"}}},
+                                          {"name": "name", "term": {"literal": {"string": "1.1 equals 1.1 (same value, same scale)"}}},
                                           {
                                             "name": "case",
                                             "term": {
