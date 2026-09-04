@@ -37,7 +37,7 @@ import Hydra.TypeScript.Language (typeScriptLanguage)
 import Hydra.Wasm.Coder (moduleToWasm)
 import Hydra.Wasm.Language (wasmLanguage)
 import Hydra.Lisp.Coder (moduleToLisp)
-import Hydra.Lisp.Language (lispLanguage)
+import Hydra.Lisp.Language (clojureLanguage, lispLanguage)
 import Hydra.Lisp.Serde (programToExpr)
 import qualified Hydra.Lisp.Syntax as LispSyntax
 import qualified Hydra.Serialization as Serialization
@@ -254,7 +254,7 @@ emacsLispOverlayLibDir =
 writeClojure :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
 writeClojure basePath universeModules modulesToGenerate = do
   knownSubs <- overlayLibSubs clojureOverlayLibDir
-  generateSources (moduleToLispDialect LispSyntax.DialectClojure "clj" knownSubs) lispLanguage True basePath universeModules modulesToGenerate
+  generateSources (moduleToLispDialect LispSyntax.DialectClojure "clj" knownSubs) clojureLanguage True basePath universeModules modulesToGenerate
 
 writeScheme :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
 writeScheme basePath universeModules modulesToGenerate = do

@@ -7,6 +7,13 @@
     (identical? a b) 0
     (nil? a) (if (nil? b) 0 -1)
     (nil? b) 1
+    ;; Hydra decimal ordering is by numeric value first, with numerically-equal decimals of
+    ;; different scale tiebroken by scale ascending (docs/specification/ordering-and-equality.md:
+    ;; 1.1 < 1.10 < 1.100). Clojure's `compare` on BigDecimal is numeric-value-only (scale-blind),
+    ;; so add the scale tiebreak explicitly, mirroring Java's Comparing.compareDecimals.
+    (and (instance? java.math.BigDecimal a) (instance? java.math.BigDecimal b))
+    (let [c (compare a b)]
+      (if (not= c 0) c (compare (.scale ^java.math.BigDecimal a) (.scale ^java.math.BigDecimal b))))
     (and (number? a) (number? b)) (compare a b)
     (and (string? a) (string? b)) (compare a b)
     (and (keyword? a) (keyword? b)) (compare a b)

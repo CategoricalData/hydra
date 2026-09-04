@@ -52,7 +52,7 @@ import Hydra.Scala.Coder (moduleToScala)
 import Hydra.Scala.Language (scalaLanguage)
 import Hydra.TypeScript.Coder (moduleToTypeScript)
 import Hydra.TypeScript.Language (typeScriptLanguage)
-import Hydra.Lisp.Language (lispLanguage)
+import Hydra.Lisp.Language (clojureLanguage, lispLanguage)
 import qualified Hydra.Lisp.Syntax as LispSyntax
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import Hydra.Sources.Test.All (testSkipEmitModuleNames)
@@ -704,6 +704,14 @@ main = do
         Just (dialect, lispExt) -> Just (moduleToLispDialect dialect lispExt lispKnownLibSubs)
         Nothing -> Nothing
 
+  -- #727: Clojure has a native BigDecimal and gets its own Language value (clojureLanguage)
+  -- with decimal in literalVariants, so adaptTerm no longer downgrades it to float64. The
+  -- other 3 dialects have no arbitrary-precision decimal representation yet and stay on the
+  -- shared lispLanguage.
+  let lispLanguageForTarget = case target of
+        "clojure" -> clojureLanguage
+        _         -> lispLanguage
+
   -- 'mods' is the set this scoped package wants written. The full
   -- universe is passed for typing context only; generateSourceFiles
   -- emits files only for the modsToGenerate argument (per the existing
@@ -873,7 +881,7 @@ main = do
         "go"         -> generateSourcesWithTransform xform moduleToGo  goLanguage         False dir universe mods
         "typescript" -> generateSourcesWithTransform xform (moduleToTypeScript typeScriptKnownLibSubs) typeScriptLanguage False dir universe mods
         _ | Just g <- lispGenerator ->
-              generateSourcesWithTransform xform g lispLanguage False dir universe mods
+              generateSourcesWithTransform xform g lispLanguageForTarget False dir universe mods
         _ -> do
           putStrLn $ "Unknown target: " ++ target
           exitFailure
@@ -1067,22 +1075,16 @@ main = do
             -- decimal (#727).
             "tiny exponent",
             "huge exponent"]
-      -- Clojure is included here too, TEMPORARILY: it has a native BigDecimal
-      -- and could carry a real decimal through, but the shared Lisp
-      -- LanguageConstraints (packages/hydra-lisp/.../Language.hs's
-      -- lispLanguage, used by all 4 dialects) omits `decimal` from
-      -- literalVariants, so adaptTerm downgrades it to float64 for Clojure
-      -- too. That's a narrower, separate coder-config fix (tracked as a
-      -- follow-up issue) -- remove Clojure from this list once it lands;
-      -- CL/EL/Scheme stay on this list until the bigger arbitrary-precision
-      -- representation issue lands (they have no representation to fix).
+      -- #727: Clojure now has its own clojureLanguage (literalVariants includes decimal),
+      -- so adaptTerm carries a real, scale-preserving java.math.BigDecimal through instead
+      -- of downgrading to float64. Removed from this skip list accordingly.
       -- TypeScript is included here too, TEMPORARILY: it represents
       -- Literal.decimal as a native JS number (float64) with no scale field,
       -- so like CL/EL/Scheme it cannot distinguish "1.10" from "1.1". Remove
       -- typescript from this list once TS carries a real (coefficient, scale)
-      -- decimal (tracked with the CL/EL/Scheme/Clojure fix -- all lossy-double
+      -- decimal (tracked with the CL/EL/Scheme fix -- all lossy-double
       -- hosts, and delete this whole filter, in the same follow-up).
-      let dropsScaleDistinctTests = target `elem` ["clojure", "common-lisp", "emacs-lisp", "scheme", "typescript"]
+      let dropsScaleDistinctTests = target `elem` ["common-lisp", "emacs-lisp", "scheme", "typescript"]
       let isScaleDistinctCase t = case t of
             TermRecord (Record tname fields)
               | tname == _TestCaseWithMetadata ->

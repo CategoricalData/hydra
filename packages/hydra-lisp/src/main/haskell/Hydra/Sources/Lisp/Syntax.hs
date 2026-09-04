@@ -52,6 +52,7 @@ module_ = Module {
       consExpression,
       constantDefinition,
       constructorPattern,
+      decimalLiteral,
       destructuringBinding,
       destructuringPattern,
       dialect,
@@ -260,6 +261,16 @@ constructorPattern = define "ConstructorPattern" $
     "arguments">:
       doc "The sub-patterns for constructor arguments" $
       T.list (lisp "Pattern")]
+
+decimalLiteral :: TypeDefinition
+decimalLiteral = define "DecimalLiteral" $
+  doc ("An arbitrary-precision, scale-preserving decimal literal, pre-rendered as a plain"
+    ++ " (non-scientific) decimal digit string with the exact scale to preserve (e.g. \"1.10\","
+    ++ " not \"1.1\"). Serializes as 1.10M in Clojure.") $
+  T.record [
+    "digits">:
+      doc "The decimal value as a plain (non-scientific) digit string, e.g. \"1.10\" or \"-0.5\"" $
+      T.string]
 
 destructuringBinding :: TypeDefinition
 destructuringBinding = define "DestructuringBinding" $
@@ -637,6 +648,11 @@ literal = define "Literal" $
     "float">:
       doc "A floating-point literal" $
       lisp "FloatLiteral",
+    "decimal">:
+      doc ("An arbitrary-precision, scale-preserving decimal literal (java.math.BigDecimal in"
+        ++ " Clojure, e.g. 1.10M). Dialects without a native decimal type have no use for this"
+        ++ " variant.") $
+      lisp "DecimalLiteral",
     "string">:
       doc "A string literal" $
       T.string,

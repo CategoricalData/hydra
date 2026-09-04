@@ -374,13 +374,16 @@ encodeLiteral = def "encodeLiteral" $
       inject L._Expression L._Expression_literal $
         inject L._Literal L._Literal_boolean (var "b"),
     _Literal_decimal>>: lambda "d" $
-      -- Lisp dialects have no native decimal; this case is only hit if adaptation
-      -- is skipped. Fall back to emitting the decimal as a float literal.
+      -- #727: only Clojure's Language (clojureLanguage) admits decimal through adaptTerm,
+      -- so this branch is only reached for Clojure in practice; the other 3 dialects have no
+      -- native arbitrary-precision decimal and stay on lispLanguage (adaptTerm downgrades
+      -- their decimals to float64 before this coder ever sees them). printDecimal renders the
+      -- exact scale-preserving digit string (e.g. "1.10", not "1.1"); literalToExpr appends
+      -- the dialect-specific BigDecimal suffix (M in Clojure).
       inject L._Expression L._Expression_literal $
-        inject L._Literal L._Literal_float $
-          record L._FloatLiteral [
-            L._FloatLiteral_value>>: Literals.decimalToFloat64 (var "d"),
-            L._FloatLiteral_precision>>: nothing],
+        inject L._Literal L._Literal_decimal $
+          record L._DecimalLiteral [
+            L._DecimalLiteral_digits>>: Literals.printDecimal (var "d")],
     _Literal_string>>: lambda "s" $
       inject L._Expression L._Expression_literal $
         inject L._Literal L._Literal_string (var "s"),

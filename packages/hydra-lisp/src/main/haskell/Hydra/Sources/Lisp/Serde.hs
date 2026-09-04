@@ -726,6 +726,11 @@ literalToExpr = define "literalToExpr" $
         Serialization.cst @@ (Literals.printBigint (project L._IntegerLiteral L._IntegerLiteral_value @@ var "i")),
       L._Literal_float>>: lambda "f" $
         Serialization.cst @@ (formatLispFloat @@ var "d" @@ (project L._FloatLiteral L._FloatLiteral_value @@ var "f")),
+      L._Literal_decimal>>: lambda "dec" $
+        -- Only Clojure's Language (clojureLanguage) admits decimal through adaptTerm, so this
+        -- case is only ever reached for L._Dialect_clojure in practice; the M suffix marks a
+        -- BigDecimal literal (e.g. 1.10M), preserving the exact scale of the pre-rendered digits.
+        Serialization.cst @@ (Strings.concat2 (project L._DecimalLiteral L._DecimalLiteral_digits @@ var "dec") (string "M")),
       L._Literal_string>>: lambda "s" $
         -- Escape backslashes first, then control characters and double-quotes.
         -- Common Lisp does not support \n, \t, \r escape sequences in strings,
