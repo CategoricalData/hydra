@@ -26,6 +26,20 @@
 # already uses for the DSL->JSON path (bin/update-java-json.sh --local-host). Unlike that
 # script, no explicit flag is needed here: sync.sh callers don't know or care which mode
 # is active, so detection is automatic and the fallback is logged to stderr.
+#
+# hostOverrides["java"] = "local" (#727/#719 un-red): target-driver's PUBLISHED-artifact
+# classpath can resolve FINE yet still be semantically stale (not merely absent). This
+# tool's own generic transcription logic -- including hydra.print.Core.term's rendering
+# of a Literal.decimal, used when baking `expected`-value fixtures into EVERY target's
+# generated test file -- comes from the published hydra-kernel/hydra-java 0.17.6 jars,
+# which predate #719's printDecimal scale-fidelity fix (BigDecimal("42.0") instead of
+# "42" for a scale-0 decimal). This bug shows on EVERY --target (java/python/scala/ts),
+# regardless of that target's own hostOverrides entry, because it lives in the JVM
+# RUNTIME CLASSES target-driver links against (hydra-kernel/hydra-java), not in any
+# per-target coder artifact. So the override key checked here is "java" (this tool's
+# own host), not $TARGET -- an explicit hostOverrides["java"]="local" must force the
+# local classpath the same way an unresolvable artifact would, so target-driver's own
+# runtime dependencies stay in sync with local source instead of a stale publish.
 
 set -euo pipefail
 
@@ -81,8 +95,33 @@ if [ -n "${HYDRA_HOST_VERSION:-}" ]; then
     GRADLE_HOST_PROP=(-PhostVersion="$HYDRA_HOST_VERSION")
 fi
 
+# hostOverrides["java"] forces the local classpath even when the published artifact
+# resolves fine (it may be resolvable yet semantically stale — #727/#719). Checked
+# against "java", not $TARGET: this tool's runtime classes (hydra.print.Core etc.) come
+# from published hydra-kernel/hydra-java regardless of which --target is requested.
+FORCE_LOCAL=0
+if [ -z "${HYDRA_HOST_VERSION:-}" ]; then
+    OVERRIDE_RAW=$(python3 -c "
+import json
+try:
+    with open('$HYDRA_ROOT_DIR/hydra.json') as f:
+        cfg = json.load(f)
+    print(cfg.get('hostOverrides', {}).get('java', ''))
+except Exception:
+    pass
+" 2>/dev/null || true)
+    if [ "$OVERRIDE_RAW" = "local" ]; then
+        FORCE_LOCAL=1
+    fi
+fi
+
 JAVA_CP=""
-if ./gradlew --quiet "${GRADLE_HOST_PROP[@]}" -p target-driver classes >/dev/null 2>&1; then
+if [ "$FORCE_LOCAL" = "1" ]; then
+    echo "transform-json-to-target.sh: hostOverrides[java]=local;" \
+         "using local headsExtras build (published artifact may be stale, not just absent)." >&2
+    ./gradlew --quiet :hydra-java:compileHeadsExtrasJava >&2
+    JAVA_CP=$(./gradlew --quiet :hydra-java:printHeadsExtrasRuntimeClasspath | tail -1)
+elif ./gradlew --quiet "${GRADLE_HOST_PROP[@]}" -p target-driver classes >/dev/null 2>&1; then
     JAVA_CP=$(./gradlew --quiet "${GRADLE_HOST_PROP[@]}" -p target-driver printRuntimeClasspath | tail -1)
 else
     echo "transform-json-to-target.sh: published-host classpath unresolvable" \
