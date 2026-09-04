@@ -127,13 +127,13 @@ bottom position; see [syntax.md](syntax.md)) · nonComparableMapKeyType / nonCom
 
 **Packages and modules.** duplicate module names · duplicate definition names · conflictingModuleNames
 (no lowercased collision) · conflictingVariantNames · definition-name prefixing (every definition name
-has its module namespace as a dotted prefix). (Dependency resolution is transitive; the stricter
+has its module name as a dotted prefix). (Dependency resolution is transitive; the stricter
 "declare every referenced module directly" check is a kernel-authoring convention — SHOULD-class, §4.2 —
 not a conformance rule.)
 
 ### 4.2 SHOULD-class (kernel-strict, opt-in elsewhere)
 
-module no-prefix (no module namespace is a strict dotted-prefix of another within a package — `A` is a
+module no-prefix (no module name is a strict dotted-prefix of another within a package — `A` is a
 strict dotted-prefix of `B` when `B` begins with `A` followed by a `.`, so `hydra.codegen` conflicts
 with `hydra.codegen.docs` but `hydra.foo` does not conflict with `hydra.foobar`; a requirement for
 Hydra's own packages, MAY be relaxed for external application packages; the check is landing via
