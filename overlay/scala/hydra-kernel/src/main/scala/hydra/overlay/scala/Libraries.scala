@@ -504,9 +504,18 @@ object Libraries:
     val xEq = Seq(("x", Seq("equality")))
     Map(
       // equal only here (moved: compare/gt/gte/lt/lte/max/min -> ordering; identity -> functions).
-      // These work on Term values directly since they are polymorphic.
+      // These work on Term values directly since they are polymorphic. Plain Term structural
+      // equality (a == b) is scale-BLIND for decimals: Literal.decimal wraps a
+      // scala.math.BigDecimal, whose own equals/hashCode delegate to compareTo (unlike
+      // java.math.BigDecimal), so "1.1" == "1.10" would wrongly be true (#727/#719 --
+      // hydra.lib.equality is scale-DISTINCT for decimals). Special-case decimal Terms to
+      // compare via the scale-sensitive java.math.BigDecimal.equals, matching the overlay's
+      // equality.equal (which does the same at the unwrapped-BigDecimal level).
       hydra.lib.equality.equal.name -> mkPrimImpl(hydra.lib.equality.equal.name, tSchemeConstrained(xEq, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(a == b))),
+        impl2((a, b) => mkBool((a, b) match
+          case (Term.literal(Literal.decimal(da)), Term.literal(Literal.decimal(db))) =>
+            da.bigDecimal.equals(db.bigDecimal)
+          case _ => a == b))),
     )
 
   // ===== Ordering primitives (moved from equality — R20) =====
