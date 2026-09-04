@@ -1,8 +1,10 @@
 package hydra;
 
 import hydra.overlay.java.build.Generation;
+import hydra.packaging.Definition;
 import hydra.packaging.Module;
 import hydra.packaging.ModuleName;
+import hydra.packaging.TermDefinition;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,10 +12,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * #459 Layer 1 transform: JSON -&gt; target language, scoped to a single (package, source-set)
@@ -215,6 +219,31 @@ public class TransformJsonToTarget {
                 }
             }
             modsToGenerate = testModsFiltered;
+            // #719/#727: strip scale-distinct decimal test CASES (not whole modules) for the
+            // 4 lossy-double hosts that cannot pass them yet (Literal.decimal has no scale
+            // field on these targets). Mirrors heads/haskell/src/exec/bootstrap-from-json/
+            // Main.hs's scaleDistinctTestNames/dropsScaleDistinctTests/stripScaleDistinctCases
+            // -- that Haskell-side filter never ran for targets generated via THIS transcriber
+            // (java/python/scala/typescript go through TransformJsonToTarget, not
+            // bootstrap-from-json), so it was silently a no-op for them. Remove this whole
+            // block (and the Haskell-side one) once all lossy-double hosts carry a real
+            // (coefficient, scale) decimal (#727).
+            if (dropsScaleDistinctTests(target)) {
+                List<Module> scaleFiltered = new ArrayList<>();
+                for (Module m : modsToGenerate) {
+                    List<Definition> defs = new ArrayList<>();
+                    for (Definition d : m.definitions) {
+                        if (d instanceof Definition.Term) {
+                            TermDefinition td = ((Definition.Term) d).value;
+                            defs.add(new Definition.Term(td.withBody(stripScaleDistinctCases(td.body))));
+                        } else {
+                            defs.add(d);
+                        }
+                    }
+                    scaleFiltered.add(m.withDefinitions(defs));
+                }
+                modsToGenerate = scaleFiltered;
+            }
         } else if (includeDsls) {
             // mainDslModules lists the SOURCE type-module names (e.g. hydra.jvm.serde), not the
             // derived DSL wrapper module names — the wrapper's own JSON lives at the name
@@ -392,5 +421,62 @@ public class TransformJsonToTarget {
             }
         }
         System.out.println("Pruning stale outputs (#459 H1)... pruned " + pruned + " file(s).");
+    }
+
+    // #719/#727: the 4 hosts whose Literal.decimal has no scale field yet. Mirrors
+    // Main.hs's dropsScaleDistinctTests; keep the two lists in sync until #727 lands.
+    private static final Set<String> SCALE_DISTINCT_DROP_TARGETS = new HashSet<>(
+            Arrays.asList("common-lisp", "emacs-lisp", "scheme", "typescript"));
+
+    private static boolean dropsScaleDistinctTests(String target) {
+        return SCALE_DISTINCT_DROP_TARGETS.contains(target);
+    }
+
+    // Test-case names that assert scale-distinctness (1.1 != 1.10) or exact-exponent
+    // rendering beyond what a float64-backed decimal can represent. Mirrors Main.hs's
+    // scaleDistinctTestNames.
+    private static final Set<String> SCALE_DISTINCT_TEST_NAMES = new HashSet<>(Arrays.asList(
+            "same value, different scale",
+            "same value, scale tiebreak",
+            "same value, scale tiebreak (larger scale)",
+            "same value, scale tiebreak (transitively)",
+            "tiny exponent",
+            "huge exponent"));
+
+    private static boolean isScaleDistinctCase(hydra.core.Term t) {
+        if (!(t instanceof hydra.core.Term.Record)) return false;
+        hydra.core.Record r = ((hydra.core.Term.Record) t).value;
+        if (!r.typeName.value.equals("hydra.testing.TestCaseWithMetadata")) return false;
+        for (hydra.core.Field f : r.fields) {
+            if (f.name.value.equals("name") && f.term instanceof hydra.core.Term.Literal) {
+                hydra.core.Literal lit = ((hydra.core.Term.Literal) f.term).value;
+                if (lit instanceof hydra.core.Literal.String_) {
+                    return SCALE_DISTINCT_TEST_NAMES.contains(((hydra.core.Literal.String_) lit).value);
+                }
+            }
+        }
+        return false;
+    }
+
+    // Mirrors Main.hs's stripScaleDistinctCases = rewriteTerm (\recurse t -> case recurse t of
+    // TermList els -> TermList (filter (not . isScaleDistinctCase) els); t' -> t'). rewriteTerm's
+    // callback receives `recurse`, the function that descends into and rebuilds every subterm one
+    // level down (via fsub); calling recurse.apply(t) first (bottom-up) then inspecting the result
+    // is the exact contract, matching the Haskell `recurse t` application.
+    private static hydra.core.Term stripScaleDistinctCases(hydra.core.Term term0) {
+        return hydra.Rewriting.rewriteTerm(
+                recurse -> t -> {
+                    hydra.core.Term recursedT = recurse.apply(t);
+                    if (recursedT instanceof hydra.core.Term.List) {
+                        List<hydra.core.Term> els = ((hydra.core.Term.List) recursedT).value;
+                        List<hydra.core.Term> filtered = new ArrayList<>();
+                        for (hydra.core.Term e : els) {
+                            if (!isScaleDistinctCase(e)) filtered.add(e);
+                        }
+                        return new hydra.core.Term.List(filtered);
+                    }
+                    return recursedT;
+                },
+                term0);
     }
 }
