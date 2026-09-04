@@ -334,6 +334,33 @@
           "constraints": []}}},
     {
       "type": {
+        "name": "hydra.lisp.syntax.DecimalLiteral",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "digits",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The decimal value as a plain (non-scientific) digit string, e.g. \"1.10\" or \"-0.5\""}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "An arbitrary-precision, scale-preserving decimal literal, pre-rendered as a plain (non-scientific) decimal digit string with the exact scale to preserve (e.g. \"1.10\", not \"1.1\"). Serializes as 1.10M in Clojure."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
         "name": "hydra.lisp.syntax.DestructuringBinding",
         "body": {
           "variables": [],
@@ -1151,6 +1178,18 @@
                       "annotated": {
                         "body": {"variable": "hydra.lisp.syntax.FloatLiteral"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A floating-point literal"}}}]}}}},
+                  {
+                    "name": "decimal",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.lisp.syntax.DecimalLiteral"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "An arbitrary-precision, scale-preserving decimal literal (java.math.BigDecimal in Clojure, e.g. 1.10M). Dialects without a native decimal type have no use for this variant."}}}]}}}},
                   {
                     "name": "string",
                     "type": {

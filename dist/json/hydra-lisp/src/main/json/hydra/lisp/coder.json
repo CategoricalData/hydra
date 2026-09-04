@@ -1951,15 +1951,14 @@
                                         "inject": {
                                           "typeName": "hydra.lisp.syntax.Literal",
                                           "field": {
-                                            "name": "float",
+                                            "name": "decimal",
                                             "term": {
                                               "record": {
-                                                "typeName": "hydra.lisp.syntax.FloatLiteral",
+                                                "typeName": "hydra.lisp.syntax.DecimalLiteral",
                                                 "fields": [
                                                   {
-                                                    "name": "value",
-                                                    "term": {"application": {"function": {"variable": "hydra.lib.literals.decimalToFloat64"}, "argument": {"variable": "d"}}}},
-                                                  {"name": "precision", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}]}}}}}}}}}}},
+                                                    "name": "digits",
+                                                    "term": {"application": {"function": {"variable": "hydra.lib.literals.printDecimal"}, "argument": {"variable": "d"}}}}]}}}}}}}}}}},
                           {
                             "name": "string",
                             "handler": {

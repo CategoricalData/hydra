@@ -5570,6 +5570,243 @@
                   "value": {"literal": {"string": "DSL updater for the arguments field of hydra.lisp.syntax.ConstructorPattern"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.dsl.lisp.syntax.decimalLiteralDecimalLiteral",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedName"}, "argument": {"variable": "hydra.lisp.syntax.DecimalLiteral"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lisp.syntax.DecimalLiteral"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.lisp.syntax.DecimalLiteral"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.lisp.syntax.decimalLiteral",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": "string"},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The decimal value as a plain (non-scientific) digit string, e.g. \"1.10\" or \"-0.5\""}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.lisp.syntax.DecimalLiteral"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "digits",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The decimal value as a plain (non-scientific) digit string, e.g. \"1.10\" or \"-0.5\""}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Record",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lisp.syntax.DecimalLiteral"}}}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "digits"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "digits"}}}}]}}]}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.lisp.syntax.DecimalLiteral"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.lisp.syntax.decimalLiteralDigits",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.lisp.syntax.DecimalLiteral"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.typed.TypedTerm"},
+                "argument": {
+                  "annotated": {
+                    "body": {"literal": "string"},
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {"literal": {"string": "The decimal value as a plain (non-scientific) digit string, e.g. \"1.10\" or \"-0.5\""}}}]}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.lisp.syntax.DecimalLiteral"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.Term",
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "typeName": "hydra.core.Projection",
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lisp.syntax.DecimalLiteral"}}}}},
+                                              {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "digits"}}}}}]}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the digits field of hydra.lisp.syntax.DecimalLiteral"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.lisp.syntax.decimalLiteralWithDigits",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.lisp.syntax.DecimalLiteral"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": "string"},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The decimal value as a plain (non-scientific) digit string, e.g. \"1.10\" or \"-0.5\""}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.lisp.syntax.DecimalLiteral"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "original",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.lisp.syntax.DecimalLiteral"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "newVal",
+                    "domain": {
+                      "application": {
+                        "function": {"variable": "hydra.typed.TypedTerm"},
+                        "argument": {
+                          "annotated": {
+                            "body": {"literal": "string"},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The decimal value as a plain (non-scientific) digit string, e.g. \"1.10\" or \"-0.5\""}}}]}}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.Term",
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.Record",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lisp.syntax.DecimalLiteral"}}}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "digits"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}}]}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the digits field of hydra.lisp.syntax.DecimalLiteral"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.dsl.lisp.syntax.destructuringBindingDestructuringBinding",
         "signature": {
           "typeParameters": [],
@@ -17926,6 +18163,79 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the float variant of hydra.lisp.syntax.Literal"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.dsl.lisp.syntax.literalDecimal",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"variable": "hydra.lisp.syntax.DecimalLiteral"},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "An arbitrary-precision, scale-preserving decimal literal (java.math.BigDecimal in Clojure, e.g. 1.10M). Dialects without a native decimal type have no use for this variant."}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "hydra.lisp.syntax.Literal"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"variable": "hydra.lisp.syntax.DecimalLiteral"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "An arbitrary-precision, scale-preserving decimal literal (java.math.BigDecimal in Clojure, e.g. 1.10M). Dialects without a native decimal type have no use for this variant."}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.lisp.syntax.Literal"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "decimal"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the decimal variant of hydra.lisp.syntax.Literal"}}}]}}}}},
     {
       "term": {
         "name": "hydra.dsl.lisp.syntax.literalString",
