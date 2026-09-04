@@ -127,9 +127,9 @@ bottom position; see [syntax.md](syntax.md)) · nonComparableMapKeyType / nonCom
 
 **Packages and modules.** duplicate module names · duplicate definition names · conflictingModuleNames
 (no lowercased collision) · conflictingVariantNames · definition-name prefixing (every definition name
-has its module namespace as a dotted prefix) · undeclaredDependencies (every referenced module must be
-*directly declared*, even if also transitively reachable — a declaration-hygiene rule stricter than
-transitive resolution, not a claim that resolution is non-transitive).
+has its module namespace as a dotted prefix). (Dependency resolution is transitive; the stricter
+"declare every referenced module directly" check is a kernel-authoring convention — SHOULD-class, §4.2 —
+not a conformance rule.)
 
 ### 4.2 SHOULD-class (kernel-strict, opt-in elsewhere)
 
@@ -137,8 +137,11 @@ module no-prefix (no module namespace is a strict dotted-prefix of another withi
 strict dotted-prefix of `B` when `B` begins with `A` followed by a `.`, so `hydra.codegen` conflicts
 with `hydra.codegen.docs` but `hydra.foo` does not conflict with `hydra.foobar`; a requirement for
 Hydra's own packages, MAY be relaxed for external application packages; the check is landing via
-[#721](https://github.com/CategoricalData/hydra/issues/721)) · definition alphabetical ordering ·
-definition documentation required · naming conventions (camelCase / PascalCase / dotted-lowercase /
+[#721](https://github.com/CategoricalData/hydra/issues/721)) · undeclaredDependencies (a module directly
+declares every module it references, even one also transitively reachable — stricter than the transitive
+resolution the language uses, applied to Hydra's own kernel modules; akin to some target build systems)
+· definition alphabetical ordering · definition documentation required · naming conventions
+(camelCase / PascalCase / dotted-lowercase /
 hyphenated; regexes in `hydra.constants`; see
 [#722](https://github.com/CategoricalData/hydra/issues/722)) · the redundancy/suspicion lints
 (constantCondition, redundantWrapUnwrap, selfApplication, unnecessaryIdentityApplication — all
