@@ -127,7 +127,9 @@ bottom position; see [syntax.md](syntax.md)) · nonComparableMapKeyType / nonCom
 
 **Packages and modules.** duplicate module names · duplicate definition names · conflictingModuleNames
 (no lowercased collision) · conflictingVariantNames · definition-name prefixing (every definition name
-has its module namespace as a dotted prefix) · undeclaredDependencies (one hop, not transitive).
+has its module namespace as a dotted prefix) · undeclaredDependencies (every referenced module must be
+*directly declared*, even if also transitively reachable — a declaration-hygiene rule stricter than
+transitive resolution, not a claim that resolution is non-transitive).
 
 ### 4.2 SHOULD-class (kernel-strict, opt-in elsewhere)
 
