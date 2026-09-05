@@ -37,7 +37,7 @@ import Hydra.TypeScript.Language (typeScriptLanguage)
 import Hydra.Wasm.Coder (moduleToWasm)
 import Hydra.Wasm.Language (wasmLanguage)
 import Hydra.Lisp.Coder (moduleToLisp)
-import Hydra.Lisp.Language (clojureLanguage, commonLispLanguage, lispLanguage)
+import Hydra.Lisp.Language (clojureLanguage, commonLispLanguage, lispLanguage, schemeLanguage)
 import Hydra.Lisp.Serde (programToExpr)
 import qualified Hydra.Lisp.Syntax as LispSyntax
 import qualified Hydra.Serialization as Serialization
@@ -259,7 +259,7 @@ writeClojure basePath universeModules modulesToGenerate = do
 writeScheme :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
 writeScheme basePath universeModules modulesToGenerate = do
   knownSubs <- overlayLibSubs schemeOverlayLibDir
-  generateSources (moduleToLispDialect LispSyntax.DialectScheme "scm" knownSubs) lispLanguage True basePath universeModules modulesToGenerate
+  generateSources (moduleToLispDialect LispSyntax.DialectScheme "scm" knownSubs) schemeLanguage True basePath universeModules modulesToGenerate
 
 writeCommonLisp :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
 writeCommonLisp basePath universeModules modulesToGenerate = do

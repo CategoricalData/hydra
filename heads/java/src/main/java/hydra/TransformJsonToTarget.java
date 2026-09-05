@@ -426,7 +426,7 @@ public class TransformJsonToTarget {
     // #719/#727: the hosts whose Literal.decimal has no scale field yet. Mirrors
     // Main.hs's dropsScaleDistinctTests; keep the two lists in sync until #727 lands.
     private static final Set<String> SCALE_DISTINCT_DROP_TARGETS = new HashSet<>(
-            Arrays.asList("emacs-lisp", "scheme"));
+            Arrays.asList("emacs-lisp"));
 
     private static boolean dropsScaleDistinctTests(String target) {
         return SCALE_DISTINCT_DROP_TARGETS.contains(target);

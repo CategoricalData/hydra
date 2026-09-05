@@ -52,7 +52,7 @@ import Hydra.Scala.Coder (moduleToScala)
 import Hydra.Scala.Language (scalaLanguage)
 import Hydra.TypeScript.Coder (moduleToTypeScript)
 import Hydra.TypeScript.Language (typeScriptLanguage)
-import Hydra.Lisp.Language (clojureLanguage, commonLispLanguage, lispLanguage)
+import Hydra.Lisp.Language (clojureLanguage, commonLispLanguage, lispLanguage, schemeLanguage)
 import qualified Hydra.Lisp.Syntax as LispSyntax
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import Hydra.Sources.Test.All (testSkipEmitModuleNames)
@@ -704,14 +704,15 @@ main = do
         Just (dialect, lispExt) -> Just (moduleToLispDialect dialect lispExt lispKnownLibSubs)
         Nothing -> Nothing
 
-  -- #727: Clojure has a native BigDecimal, and Common Lisp has native bignums usable as a
-  -- (coefficient . scale) cons pair, so both get their own Language value with decimal in
-  -- literalVariants, so adaptTerm no longer downgrades their decimals to float64. Emacs Lisp
-  -- and Scheme have no arbitrary-precision decimal representation yet and stay on the shared
+  -- #727: Clojure has a native BigDecimal, and Common Lisp/Scheme have native bignums usable
+  -- as a (coefficient . scale) cons pair, so all three get their own Language value with
+  -- decimal in literalVariants, so adaptTerm no longer downgrades their decimals to float64.
+  -- Emacs Lisp has no arbitrary-precision decimal representation yet and stays on the shared
   -- lispLanguage.
   let lispLanguageForTarget = case target of
         "clojure"     -> clojureLanguage
         "common-lisp" -> commonLispLanguage
+        "scheme"      -> schemeLanguage
         _             -> lispLanguage
 
   -- 'mods' is the set this scoped package wants written. The full
@@ -1082,11 +1083,11 @@ main = do
             "decimal tiny exponent",
             "decimal huge exponent"]
       -- #727: Clojure has its own clojureLanguage (literalVariants includes decimal), and
-      -- TypeScript's and Common Lisp's Languages now include literalVariantDecimal too, each
-      -- with a real scale-preserving runtime representation -- all three removed from this
-      -- skip list accordingly. Emacs Lisp and Scheme still represent Literal.decimal as a
-      -- native float64 with no scale field, so they remain here until they get the same fix.
-      let dropsScaleDistinctTests = target `elem` ["emacs-lisp", "scheme"]
+      -- TypeScript's, Common Lisp's, and Scheme's Languages now include literalVariantDecimal
+      -- too, each with a real scale-preserving runtime representation -- all four removed
+      -- from this skip list accordingly. Emacs Lisp still represents Literal.decimal as a
+      -- native float64 with no scale field, so it remains here until it gets the same fix.
+      let dropsScaleDistinctTests = target `elem` ["emacs-lisp"]
       let isScaleDistinctCase t = case t of
             TermRecord (Record tname fields)
               | tname == _TestCaseWithMetadata ->

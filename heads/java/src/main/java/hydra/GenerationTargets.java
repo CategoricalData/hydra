@@ -177,11 +177,11 @@ public class GenerationTargets {
         hydra.lisp.syntax.Dialect dialect;
         hydra.util.CaseConvention caseConv;
         String libSubsTarget;
-        // #727: Clojure (native BigDecimal) and Common Lisp (native bignums, usable as a
-        // (coefficient . scale) cons pair) each get their own Language value with decimal in
-        // literalVariants, so adaptTerm no longer downgrades their decimals to float64. Scheme
-        // and Emacs Lisp have no arbitrary-precision decimal representation yet and stay on
-        // the shared lispLanguage.
+        // #727: Clojure (native BigDecimal) and Common Lisp/Scheme (native bignums, usable as
+        // a (coefficient . scale) cons pair) each get their own Language value with decimal in
+        // literalVariants, so adaptTerm no longer downgrades their decimals to float64. Emacs
+        // Lisp has no arbitrary-precision decimal representation yet and stays on the shared
+        // lispLanguage.
         hydra.coders.Language language;
         switch (dialectName) {
             case "clojure":
@@ -194,7 +194,7 @@ public class GenerationTargets {
                 dialect = new hydra.lisp.syntax.Dialect.Scheme();
                 caseConv = new hydra.util.CaseConvention.LowerSnake();
                 libSubsTarget = "scheme";
-                language = hydra.lisp.Language.lispLanguage();
+                language = hydra.lisp.Language.schemeLanguage();
                 break;
             case "commonLisp":
                 dialect = new hydra.lisp.syntax.Dialect.CommonLisp();
