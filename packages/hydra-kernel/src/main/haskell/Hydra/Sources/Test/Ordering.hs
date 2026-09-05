@@ -396,15 +396,22 @@ unionComparisonTests = subgroup "Union comparison" [
     (numberFloatTerm 1.5)
     (numberFloatTerm 2.5)
     "lessThan",
-  -- Different variants: Term.Inject's runtime representation (Injection {typeName,
-  -- field :: Field {name, term}}) carries only the field NAME, not the union's declared
-  -- variant order (that lives in the Type schema, which compare/Ord never receives — see
-  -- #718's follow-up). So cross-variant injections compare by field name, not declaration
-  -- order; this is the best available term-only approximation, not full spec conformance.
-  compareTest "Number float vs int (field-name order, not declared-variant order)"
+  -- Different variants: Term.inject compares by variant NAME (lexicographic). This is the
+  -- ACCEPTED, conformant behavior (Josh's ruling, #718/#327) -- NOT a mere term-only limitation:
+  -- Injection carries only the variant name (no ordinal), and compare/Ord never receive the
+  -- union Type, so name order is the correct, schema-free semantics for hydra.core.Term
+  -- injections (spec: ordering-and-equality.md, "Injections and variant order"). The Number
+  -- union declares its variants ["int", "float"] -- declared order is int < float, the OPPOSITE
+  -- of name order (float < int) -- so these two cases pin name order over declared order in
+  -- BOTH directions, on every host.
+  compareTest "Number float vs int -- by variant NAME not declared order (float < int)"
     (numberFloatTerm 100.0)
     (numberIntTerm 1)
-    "lessThan",  -- "float" < "int" by field name
+    "lessThan",  -- "float" < "int" alphabetically, though "float" is declared SECOND
+  compareTest "Number int vs float -- by variant NAME not declared order (int > float)"
+    (numberIntTerm 1)
+    (numberFloatTerm 100.0)
+    "greaterThan",  -- "int" > "float" alphabetically, though "int" is declared FIRST
   -- Equality
   equalTest "Number int equality true" 
     (numberIntTerm 42)
