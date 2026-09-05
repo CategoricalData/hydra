@@ -175,9 +175,12 @@
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :boolean v)))))))
 
 (defun tc-decimal ()
+  ;; #727: v arrives as a (coefficient . scale) cons pair (the real, scale-preserving Decimal
+  ;; representation -- see overlay/common_lisp/lib/literals.lisp), so it's passed through
+  ;; unchanged, not coerced to a lossy double.
   (make-term_coder (list :literal (list :decimal nil))
     (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_decimal g) t_))))
-    (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :decimal (float v 1.0d0))))))))
+    (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :decimal v)))))))
 
 (defun tc-float32 ()
   (make-term_coder (list :literal (list :float (list :float32 nil)))

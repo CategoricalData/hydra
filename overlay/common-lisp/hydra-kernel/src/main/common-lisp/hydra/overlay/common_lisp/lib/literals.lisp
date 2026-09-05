@@ -1,11 +1,21 @@
 (in-package :cl-user)
 
+;; A scale-preserving arbitrary-precision decimal: the numeric value is
+;; (coefficient * 10^-scale), represented as a (coefficient . scale) cons pair of native CL
+;; bignums. Mirrors java.math.BigDecimal's (unscaledValue, scale) convention, so "1.10" is
+;; (110 . 2) and "1.1" is (11 . 1) -- distinct values per the kernel spec
+;; (docs/specification/ordering-and-equality.md: 1.1 != 1.10). scale is always >= 0.
+(defun hydra-make-decimal (coefficient scale)
+  (cons coefficient scale))
+
+(defun hydra-decimal-coefficient (d) (car d))
+(defun hydra-decimal-scale (d) (cdr d))
+
 ;; bigint_to_decimal :: BigInteger -> Decimal
-;; Convert a bigint to a decimal. Common Lisp has no native decimal type;
-;; values represented as double-float (adapter fallback policy).
+;; Exact: a bigint is a decimal with scale 0.
 (defvar hydra_overlay_common_lisp_lib_literals_bigint_to_decimal
   (lambda (x)
-    (float x 1.0d0)))
+    (hydra-make-decimal x 0)))
 
 ;; bigint_to_int :: BigInteger -> Int  (identity)
 ;; Convert a bigint (Integer) to an int.
@@ -64,20 +74,37 @@
     (map 'list (lambda (b) (logand b #xFF)) bs)))
 
 ;; decimal_to_bigint :: Decimal -> BigInteger
-;; Common Lisp has no native decimal; values are double-float.
+;; Rounds to the nearest integer, ties to even (banker's rounding) -- matches the
+;; Python/Java reference hosts' behavior (e.g. 42.7 rounds to 43, 2.5 rounds to 2).
+;; CL's own ROUND already implements round-half-to-even on exact rationals.
 (defvar hydra_overlay_common_lisp_lib_literals_decimal_to_bigint
   (lambda (x)
-    (round x)))
+    (let ((coefficient (hydra-decimal-coefficient x))
+          (scale (hydra-decimal-scale x)))
+      (if (<= scale 0)
+          (* coefficient (expt 10 (- scale)))
+          (round coefficient (expt 10 scale))))))
 
 ;; decimal_to_float32 :: Decimal -> Float
+;; Exact rational -> single-float, rounding to the nearest representable value.
 (defvar hydra_overlay_common_lisp_lib_literals_decimal_to_float32
   (lambda (x)
-    (float (float x 1.0f0) 1.0d0)))
+    (float (float (hydra-decimal-rational x) 1.0f0) 1.0d0)))
 
 ;; decimal_to_float64 :: Decimal -> Double
+;; Exact rational -> double-float, rounding to the nearest representable value.
 (defvar hydra_overlay_common_lisp_lib_literals_decimal_to_float64
   (lambda (x)
-    (float x 1.0d0)))
+    (float (hydra-decimal-rational x) 1.0d0)))
+
+;; Convert a Decimal to an exact CL RATIONAL (coefficient / 10^scale), for use as an
+;; intermediate in float conversions (CL's FLOAT coerces any RATIONAL exactly-then-rounds).
+(defun hydra-decimal-rational (x)
+  (let ((coefficient (hydra-decimal-coefficient x))
+        (scale (hydra-decimal-scale x)))
+    (if (<= scale 0)
+        (* coefficient (expt 10 (- scale)))
+        (/ coefficient (expt 10 scale)))))
 
 ;; binary_to_base64 :: ByteString -> String (base64 encoding)
 ;; Convert binary to string by base64 encoding.
@@ -110,10 +137,35 @@
     (lambda (x)
       (float x 1.0d0))))
 
+;; Build a Decimal from a float's shortest round-tripping significant-digit string and
+;; adjusted exponent (as derived by hydra--decimal-digits-and-exponent, defined further down
+;; in this file; forward reference is fine since these are all top-level defun/defvar forms
+;; loaded together). E.g. digits "314" and adjusted-exponent 0 -> the value 3.14, represented
+;; as coefficient 314, scale (length digits - 1 - adjusted-exponent) = 2.
+(defun hydra-decimal-from-float (x)
+  (cond
+    ((hydra--float-nan-p x) (hydra-make-decimal 0 0))
+    ((hydra--float-inf-p x) (hydra-make-decimal 0 0))
+    ((= x 0.0d0) (hydra-make-decimal 0 0))
+    (t (let* ((digex (hydra--decimal-digits-and-exponent x))
+               (sig (car digex))
+               (adjusted-exp (cdr digex))
+               (coefficient (parse-integer sig))
+               (coefficient (if (minusp x) (- coefficient) coefficient))
+               (scale (- (length sig) 1 adjusted-exp)))
+          (if (< scale 0)
+              (hydra-make-decimal (* coefficient (expt 10 (- scale))) 0)
+              (hydra-make-decimal coefficient scale))))))
+
 ;; float32_to_decimal :: Float -> Decimal
+;; Exact: every IEEE 754 float has a finite decimal expansion. Derived from the shortest
+;; round-tripping digit string, matching printFloat32's own shortest-round-trip convention.
+;; Crucially, this must run on the single-float value itself (not widened to double first) --
+;; write-to-string on a double-float expansion of a single-float exposes the imprecise binary
+;; representation as ~15-17 spurious decimal digits instead of the ~7 that actually round-trip.
 (defvar hydra_overlay_common_lisp_lib_literals_float32_to_decimal
   (lambda (x)
-    (float x 1.0d0)))
+    (hydra-decimal-from-float (float x 1.0f0))))
 
 ;; float32_to_float64 :: Float -> Double
 ;; Lossless widening from single-float to double-float.
@@ -122,9 +174,11 @@
     (float x 1.0d0)))
 
 ;; float64_to_decimal :: Double -> Decimal
+;; Exact: every IEEE 754 float has a finite decimal expansion. Derived from the shortest
+;; round-tripping digit string, matching printFloat64's own shortest-round-trip convention.
 (defvar hydra_overlay_common_lisp_lib_literals_float64_to_decimal
   (lambda (x)
-    (float x 1.0d0)))
+    (hydra-decimal-from-float x)))
 
 ;; float64_to_float32 :: Double -> Float
 ;; Lossy narrowing from double-float to single-float.
@@ -159,15 +213,54 @@
 (defvar hydra_overlay_common_lisp_lib_literals_int64_to_bigint
   (lambda (x) x))
 
+;; Parse the JSON number grammar (docs/specification/syntax.md #2.6) into a scale-preserving
+;; Decimal: an optional sign, integer digits, an optional fraction part, and an optional
+;; exponent part. Scale-preserving means "1.10" and "1.1" parse to distinct values (scale 2
+;; vs scale 1). Returns NIL on parse failure.
+(defun hydra-parse-decimal-1 (s)
+  (let* ((len (length s))
+         (i 0)
+         (neg nil))
+    (when (and (< i len) (char= (char s i) #\-))
+      (setf neg t)
+      (incf i))
+    (let ((int-start i))
+      (loop while (and (< i len) (digit-char-p (char s i))) do (incf i))
+      (when (= i int-start) (return-from hydra-parse-decimal-1 nil))
+      (let* ((int-digits (subseq s int-start i))
+             (frac-digits ""))
+        (when (and (< i len) (char= (char s i) #\.))
+          (incf i)
+          (let ((frac-start i))
+            (loop while (and (< i len) (digit-char-p (char s i))) do (incf i))
+            (when (= i frac-start) (return-from hydra-parse-decimal-1 nil))
+            (setf frac-digits (subseq s frac-start i))))
+        (let ((exp-value 0))
+          (when (and (< i len) (member (char s i) '(#\e #\E)))
+            (incf i)
+            (let ((exp-neg nil) (exp-start i))
+              (when (and (< i len) (member (char s i) '(#\+ #\-)))
+                (setf exp-neg (char= (char s i) #\-))
+                (incf i)
+                (setf exp-start i))
+              (loop while (and (< i len) (digit-char-p (char s i))) do (incf i))
+              (when (= i exp-start) (return-from hydra-parse-decimal-1 nil))
+              (setf exp-value (let ((v (parse-integer s :start exp-start :end i)))
+                                 (if exp-neg (- v) v)))))
+          (unless (= i len) (return-from hydra-parse-decimal-1 nil))
+          (let* ((digits (concatenate 'string int-digits frac-digits))
+                 (coefficient (if (string= digits "") 0 (parse-integer digits)))
+                 (coefficient (if neg (- coefficient) coefficient))
+                 (scale (- (length frac-digits) exp-value)))
+            (if (< scale 0)
+                (hydra-make-decimal (* coefficient (expt 10 (- scale))) 0)
+                (hydra-make-decimal coefficient scale))))))))
+
 ;; parse_decimal :: String -> Maybe Decimal
-;; No native decimal; parse as double-float.
 (defvar hydra_overlay_common_lisp_lib_literals_parse_decimal
   (lambda (s)
-    (let* ((*read-default-float-format* 'double-float)
-           (n (ignore-errors (read-from-string s))))
-      (if (and n (numberp n))
-          (list :given (float n 1.0d0))
-          (list :none)))))
+    (let ((d (hydra-parse-decimal-1 s)))
+      (if d (list :given d) (list :none)))))
 
 ;; parse_bigint :: String -> Maybe BigInteger
 ;; Parse a string to a bigint (Integer).
@@ -432,36 +525,38 @@ power of 10 of the leading significant digit -- e.g. 3 for 1234.0, -2 for
     (cons sig e)))
 
 ;; print_decimal :: Decimal -> String
-;; No native decimal; formatted as double-float. Unlike a float literal --
-;; which reuses Haskell Double's own show threshold (scientific below 0.1 or
-;; at/above 1e7) -- printDecimal has its own, wider positional range (adjusted
-;; exponent -6 <= a < 21; overlay/haskell/.../Literals.hs), so 0.01/0.001
-;; print plainly ("0.01") rather than in scientific form. A whole value also
-;; prints without a trailing ".0" (e.g. "42", not "42.0"), since decimals
-;; track scale and a double coerced from an integral source has scale 0.
+;; Representation-faithful decimal rendering: per docs/specification/syntax.md #2.6, prints
+;; in positional form when the adjusted exponent is in [-6, 21) and in exponent form
+;; otherwise, with NO mandatory trailing ".0" on whole positional values ("42" not "42.0",
+;; "0" not "0.0", printed per scale for zero: "0", "0.0", "0.00"), coefficient digits
+;; (including trailing zeros) preserved exactly, and exponent form always has one digit
+;; before the point PLUS a fractional part (a single-digit coefficient prints "1.0e-20", not
+;; "1e-20" -- the point is a structural part of exponent form, not a coefficient digit).
 (defvar hydra_overlay_common_lisp_lib_literals_print_decimal
   (lambda (x)
-    (let ((d (float x 1.0d0)))
-      (cond
-        ((hydra--float-nan-p d) "NaN")
-        ((hydra--float-inf-p d) (if (> d 0) "Infinity" "-Infinity"))
-        ((= d 0.0d0) "0")
-        ((and (= d (ftruncate d)) (< (abs d) 1.0d18))
-         (write-to-string (truncate d)))
-        (t
-         (let* ((digex (hydra--decimal-digits-and-exponent d))
-                (sig (car digex))
-                (e (cdr digex))
-                (sign (if (minusp d) "-" "")))
-           (if (and (>= e -6) (< e 21))
-               ;; Positional: place the decimal point (e+1) digits from the left,
-               ;; padding with zeros as needed on either side.
-               (if (>= e 0)
-                   (if (< e (1- (length sig)))
-                       (format nil "~A~A.~A" sign (subseq sig 0 (1+ e)) (subseq sig (1+ e)))
-                       (format nil "~A~A~A" sign sig (make-string (- (1+ e) (length sig)) :initial-element #\0)))
-                   (format nil "~A0.~A~A" sign (make-string (- -1 e) :initial-element #\0) sig))
-               (haskell-show-float d))))))))
+    (let* ((coefficient (hydra-decimal-coefficient x))
+           (scale (hydra-decimal-scale x))
+           (neg (minusp coefficient))
+           (digits (write-to-string (abs coefficient)))
+           (sign (if neg "-" ""))
+           (adjusted-exp (- (+ (length digits) -1) scale)))
+      (if (and (>= adjusted-exp -6) (< adjusted-exp 21))
+          ;; Positional form.
+          (cond
+            ((<= scale 0)
+             ;; Whole value: pad with trailing zeros (no fraction, no ".0").
+             (concatenate 'string sign digits (make-string (- scale) :initial-element #\0)))
+            ((< scale (length digits))
+             (format nil "~A~A.~A" sign (subseq digits 0 (- (length digits) scale)) (subseq digits (- (length digits) scale))))
+            (t (format nil "~A0.~A~A" sign (make-string (- scale (length digits)) :initial-element #\0) digits)))
+          ;; Exponent form: always one digit before the point AND a fractional part.
+          (let* ((lead-digit (char digits 0))
+                 (rest (subseq digits 1))
+                 (mantissa (if (> (length rest) 0)
+                               (format nil "~A.~A" lead-digit rest)
+                               (format nil "~A.0" lead-digit)))
+                 (exp-sign (if (< adjusted-exp 0) "-" "+")))
+            (format nil "~A~Ae~A~A" sign mantissa exp-sign (abs adjusted-exp)))))))
 
 ;; print_bigint :: BigInteger -> String
 ;; Convert a bigint (Integer) to string.
