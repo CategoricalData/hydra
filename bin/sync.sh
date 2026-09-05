@@ -564,11 +564,10 @@ heal_java_python_native() {
 if [ ! -f "$HYDRA_ROOT/dist/json/hydra-scala/build/main/digest.json" ] && \
    [ -d "$HYDRA_ROOT/dist/json/hydra-scala/src/main/json" ]; then
     echo "Seeding hydra-scala input digest for assembly gate (#509)..."
-    (cd "$HYDRA_HASKELL_DIR" && \
-     stack build hydra:exe:digest-check >/dev/null && \
-     stack exec digest-check -- refresh-input \
+    # #416: promoted pure-bash executor (was `stack exec digest-check -- refresh-input`).
+    "$HYDRA_ROOT/bin/digest.sh" refresh-input \
        --package hydra-scala \
-       --dist-json-root "$HYDRA_ROOT/dist/json") || exit 1
+       --dist-json-root "$HYDRA_ROOT/dist/json" || exit 1
     echo ""
 fi
 

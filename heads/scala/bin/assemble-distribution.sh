@@ -94,8 +94,13 @@ fi
 # drivers (Bootstrap/Generation), so there is no duplicate-class clash.
 if [ "$PACKAGE" = "hydra-kernel" ]; then
     echo ""
-    echo "Step 3: Copying hand-written Scala runtime into hydra-kernel dist..."
-    "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
+    # #416: hydra-kernel runtime overlay-copy via the host-independent
+    # apply-assembly-plan.sh instead of per-host copy-kernel-runtime.sh.
+    # Byte-identical (asserted by test-assembly-plan-conformance.sh). Scala emits
+    # no keep-manifest here (its runtime is under a prune-exempt path), matching
+    # the assemble-all.sh path — apply-assembly-plan is called without --manifest.
+    echo "Step 3: Applying hydra-kernel assembly plan (Scala runtime overlay)..."
+    "$HYDRA_ROOT_DIR/bin/apply-assembly-plan.sh" scala hydra-kernel --dist-root "$DIST_ROOT"
 fi
 
 # Step 4: Generate per-package build.sbt + project/ so each

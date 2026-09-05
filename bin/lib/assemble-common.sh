@@ -292,18 +292,20 @@ runtime_identity() {
 # fresh — do the rebuild). Always called as an `if` condition, never bare,
 # so returning non-zero here does not trip the caller's `set -e`.
 #
-# `digest-check fresh` already handles a missing input or output digest
-# itself, printing a "cache miss" line and exiting 1, so the shell-side
-# `[ -f ]` pre-checks are an optimization (skip the stack invocation when
-# there is provably nothing to compare), not the source of truth. The old
-# implementation appended `2>/dev/null` to the stack call; that silenced
-# digest-check's own diagnostic ("input digest absent", "generator stamp
-# mismatch", etc.), which is exactly the kind of cause-naming output #414
-# wants preserved. Drop the suppression so a miss explains itself.
+# `digest.sh fresh` already handles a missing input or output digest itself,
+# printing a "cache miss" line and exiting 1, so the shell-side `[ -f ]`
+# pre-checks are an optimization (skip the invocation when there is provably
+# nothing to compare), not the source of truth. No `2>/dev/null` suppression:
+# digest.sh's own diagnostic ("input digest unreadable", "generator stamp
+# mismatch", etc.) is exactly the cause-naming output #414 wants preserved.
 #
-# Note: digest-check fresh emits only 0 (hit) or 1 (miss); a crash in the
-# Haskell runtime also exits non-zero, so a fault is conservatively treated
-# as a miss (rebuild) rather than swallowed as a hit — the safe direction.
+# #416 host-independence: this is the promoted pure-bash executor (bin/digest.sh),
+# replacing `stack exec digest-check -- fresh`. The freshness gate no longer drags
+# a Haskell toolchain. bin/test-digest-conformance.sh asserts bash ≡ digest-check.
+#
+# Note: `digest.sh fresh` emits only 0 (hit) or 1 (miss); any fault also exits
+# non-zero, so it is conservatively treated as a miss (rebuild) rather than
+# swallowed as a hit — the safe direction.
 assemble_check_fresh() {
     local input_digest="$1" output_dir="$2" output_digest="$3" keep_manifest="${4:-}"
     # First-build / missing-artifact fast path: provably not fresh.
@@ -323,12 +325,11 @@ assemble_check_fresh() {
     if [ -n "$keep_manifest" ] && [ -f "$keep_manifest" ]; then
         keep_args=(--keep-paths-from "$keep_manifest")
     fi
-    (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
-     stack exec digest-check -- fresh \
+    "$HYDRA_ROOT_DIR/bin/digest.sh" fresh \
         --inputs "$input_digest" \
         --output-dir "$output_dir" \
         --output-digest "$output_digest" \
-        ${keep_args[@]+"${keep_args[@]}"})
+        ${keep_args[@]+"${keep_args[@]}"}
 }
 
 # Write the per-source-set output digest after a (re)generation. Called in
@@ -348,11 +349,13 @@ assemble_refresh_digest() {
         echo "       regenerate the per-package JSON / input digest before assembling." >&2
         return 1
     fi
-    (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
-     stack exec digest-check -- refresh \
+    # #416 host-independence: promoted pure-bash executor (bin/digest.sh),
+    # replacing `stack exec digest-check -- refresh`. Recording the output
+    # digest no longer needs a Haskell toolchain.
+    "$HYDRA_ROOT_DIR/bin/digest.sh" refresh \
         --inputs "$input_digest" \
         --output-dir "$output_dir" \
-        --output-digest "$output_digest")
+        --output-digest "$output_digest"
 }
 
 # #459: dispatch a single-package Layer 1 JSON->target transform to either the Haskell or

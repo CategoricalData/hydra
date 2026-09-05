@@ -159,12 +159,11 @@ if [ "$ACTUAL_OUT_ROOT" = "$CANON_ROOT" ]; then
     # run (a no-post-generation-patches violation).
     echo ""
     echo "=== Refreshing per-package input digests for hydra-jvm and hydra-java (#469/#505) ==="
-    (cd "$HYDRA_ROOT/heads/haskell" && \
-     stack build hydra:exe:digest-check >/dev/null && \
-     stack exec digest-check -- refresh-input \
+    # #416: promoted pure-bash executor (was `stack exec digest-check -- refresh-input`).
+    "$HYDRA_ROOT/bin/digest.sh" refresh-input \
        --package hydra-jvm \
-       --dist-json-root "$HYDRA_ROOT/dist/json" && \
-     stack exec digest-check -- refresh-input \
+       --dist-json-root "$HYDRA_ROOT/dist/json"
+    "$HYDRA_ROOT/bin/digest.sh" refresh-input \
        --package hydra-java \
-       --dist-json-root "$HYDRA_ROOT/dist/json")
+       --dist-json-root "$HYDRA_ROOT/dist/json"
 fi

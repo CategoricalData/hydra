@@ -202,9 +202,8 @@ fi
 if [ "$ACTUAL_OUT_ROOT" = "$HYDRA_ROOT/dist/json" ]; then
     echo ""
     echo "=== Refreshing per-package input digest for hydra-python (#469) ==="
-    (cd "$HYDRA_ROOT/heads/haskell" && \
-     stack build hydra:exe:digest-check >/dev/null && \
-     stack exec digest-check -- refresh-input \
+    # #416: promoted pure-bash executor (was `stack exec digest-check -- refresh-input`).
+    "$HYDRA_ROOT/bin/digest.sh" refresh-input \
        --package hydra-python \
-       --dist-json-root "$HYDRA_ROOT/dist/json")
+       --dist-json-root "$HYDRA_ROOT/dist/json"
 fi

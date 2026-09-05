@@ -36,7 +36,8 @@ BATCH_PACKAGES=$(batch_emit_packages)
 
 # Stale-file pruning is handled by bootstrap-from-json --prune-stale (#357).
 cd "$HYDRA_ROOT_DIR/heads/haskell"
-stack build hydra:exe:bootstrap-from-json hydra:exe:digest-check >/dev/null 2>&1
+# #416: digest-check no longer needed here (refresh promoted to bin/digest.sh); only bootstrap-from-json is built.
+stack build hydra:exe:bootstrap-from-json >/dev/null 2>&1
 
 # Invalidate per-target digests so Stage 7 can't trust stale records.
 # Scoped to $BATCH_PACKAGES — packages outside the batch emit set
@@ -93,11 +94,11 @@ for pkg in $BATCH_PACKAGES; do
         echo "ERROR: missing generated output for $pkg main: $out_set_dir" >&2
         exit 1
     fi
-    (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
-     stack exec digest-check -- refresh \
+    # #416: promoted pure-bash digest executor (was `stack exec digest-check -- refresh`).
+    "$HYDRA_ROOT_DIR/bin/digest.sh" refresh \
         --inputs "$input_digest" \
         --output-dir "$out_set_dir" \
-        --output-digest "$out_digest")
+        --output-digest "$out_digest"
     # Test set: optional, gated on input test digest presence.
     test_input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/build/test/digest.json"
     if [ -f "$test_input_digest" ]; then
@@ -107,11 +108,11 @@ for pkg in $BATCH_PACKAGES; do
             echo "ERROR: missing generated test output for $pkg: $test_out_set_dir" >&2
             exit 1
         fi
-        (cd "$HYDRA_ROOT_DIR/heads/haskell" && \
-         stack exec digest-check -- refresh \
+        # #416: promoted pure-bash digest executor (was `stack exec digest-check -- refresh`).
+        "$HYDRA_ROOT_DIR/bin/digest.sh" refresh \
             --inputs "$test_input_digest" \
             --output-dir "$test_out_set_dir" \
-            --output-digest "$test_out_digest")
+            --output-digest "$test_out_digest"
     fi
 done
 
