@@ -125,10 +125,13 @@
     (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_boolean g) t_))))
     (lambda (cx) (ignore cx) (lambda (v) (list :right (list :literal (list :boolean v)))))))
 
+;; #727: v arrives as a (coefficient . scale) cons pair (the real, scale-preserving Decimal
+;; representation -- see overlay/emacs_lisp/lib/literals.el), so it's passed through
+;; unchanged, not coerced to a lossy float.
 (defun tc-decimal ()
   (make-hydra_graph_term_coder (list :literal (list :decimal nil))
     (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_decimal g) t_))))
-    (lambda (cx) (ignore cx) (lambda (v) (list :right (list :literal (list :decimal (float v))))))))
+    (lambda (cx) (ignore cx) (lambda (v) (list :right (list :literal (list :decimal v)))))))
 
 (defun tc-float32 ()
   (make-hydra_graph_term_coder (list :literal (list :float (list :float32 nil)))
