@@ -135,11 +135,14 @@
         (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_boolean g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'boolean v)))))))
 
+    ;; #727: v arrives as a (coefficient . scale) cons pair (the real, scale-preserving
+    ;; Decimal representation -- see overlay/scheme/.../lib/literals.scm), so it's passed
+    ;; through unchanged, not coerced to a lossy inexact double.
     (define (tc-decimal)
       (make-hydra_graph_term_coder
        (list 'literal (list 'decimal '()))
         (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_decimal g) t))))
-        (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'decimal (inexact v))))))))
+        (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'decimal v)))))))
 
     (define (tc-float32)
       (make-hydra_graph_term_coder

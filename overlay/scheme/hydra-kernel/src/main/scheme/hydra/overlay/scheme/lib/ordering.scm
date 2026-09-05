@@ -15,6 +15,28 @@
         (write x p)
         (get-output-string p)))
 
+    ;; A Literal.decimal wrapped as a Hydra term, as `equal`/`compare`'s generic x/x TermCoder
+    ;; (which just passes terms through unchanged -- see prims.scm's tc-variable) actually
+    ;; receives it: (literal (decimal (coefficient . scale))), not a bare cons.
+    (define (hydra-decimal-term-p term)
+      (and (pair? term) (eq? (car term) 'literal)
+           (let ((lit (cadr term)))
+             (and (pair? lit) (eq? (car lit) 'decimal)))))
+
+    (define (hydra-decimal-term-value term) (cadr (cadr term)))
+
+    ;; Ordered comparison of two decimals: numeric value first, then scale ascending as a
+    ;; tiebreak (1.1 < 1.10 < 1.100), per docs/specification/ordering-and-equality.md. Cross-
+    ;; multiplies to compare a.coefficient/10^a.scale against b.coefficient/10^b.scale exactly
+    ;; (native Scheme bignum arithmetic), mirroring the TypeScript/Clojure/Common Lisp
+    ;; equivalents.
+    (define (hydra-compare-decimals a b)
+      (let* ((ca (car a)) (sa (cdr a)) (cb (car b)) (sb (cdr b))
+             (max-scale (max sa sb))
+             (na (* ca (expt 10 (- max-scale sa))))
+             (nb (* cb (expt 10 (- max-scale sb)))))
+        (cond ((< na nb) -1) ((> na nb) 1) (else (- sa sb)))))
+
     (define (generic-compare a b)
       (cond
         ((equal? a b) 0)
@@ -29,6 +51,8 @@
            (cond ((string<? sa sb) -1) ((string=? sa sb) 0) (else 1))))
         ((and (boolean? a) (boolean? b))
          (cond ((and (not a) b) -1) ((eq? a b) 0) (else 1)))
+        ((and (hydra-decimal-term-p a) (hydra-decimal-term-p b))
+         (hydra-compare-decimals (hydra-decimal-term-value a) (hydra-decimal-term-value b)))
         ((and (pair? a) (pair? b))
          (let ((c (generic-compare (car a) (car b))))
            (if (= c 0)
