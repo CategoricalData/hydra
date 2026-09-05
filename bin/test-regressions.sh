@@ -17,6 +17,10 @@
 #   bin/test-check-oil-and-water.sh           (guards #608, hermetic — synthetic fixtures + python3)
 #   bin/test-header-idempotency.sh            (guards #540, hermetic — restores heads/haskell/*.yaml on exit)
 #   bin/test-assembly-plan-conformance.sh     (guards #416, hermetic — apply-assembly-plan.sh ≡ plan oracle)
+#   bin/test-digest-conformance.sh            (guards #416, hermetic — bin/digest.sh ≡ digest-check oracle;
+#                                              oracle opt-in via HYDRA_DIGEST_ORACLE=1 + stack slot)
+#   bin/test-build-host-independence.sh       (guards #416 Phase-A, hermetic — no production digest-check
+#                                              invocation creeps back into the downstream build path)
 #
 # The first five build their own Haskell executables from current source
 # before exec'ing them, so this script does not require a pre-built stack
@@ -41,6 +45,8 @@ SCRIPTS=(
     "test-check-oil-and-water.sh"
     "test-header-idempotency.sh"
     "test-assembly-plan-conformance.sh"
+    "test-digest-conformance.sh"
+    "test-build-host-independence.sh"
 )
 
 declare -a RESULTS=()
