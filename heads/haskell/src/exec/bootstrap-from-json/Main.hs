@@ -52,7 +52,7 @@ import Hydra.Scala.Coder (moduleToScala)
 import Hydra.Scala.Language (scalaLanguage)
 import Hydra.TypeScript.Coder (moduleToTypeScript)
 import Hydra.TypeScript.Language (typeScriptLanguage)
-import Hydra.Lisp.Language (clojureLanguage, lispLanguage)
+import Hydra.Lisp.Language (clojureLanguage, commonLispLanguage, lispLanguage)
 import qualified Hydra.Lisp.Syntax as LispSyntax
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import Hydra.Sources.Test.All (testSkipEmitModuleNames)
@@ -704,13 +704,15 @@ main = do
         Just (dialect, lispExt) -> Just (moduleToLispDialect dialect lispExt lispKnownLibSubs)
         Nothing -> Nothing
 
-  -- #727: Clojure has a native BigDecimal and gets its own Language value (clojureLanguage)
-  -- with decimal in literalVariants, so adaptTerm no longer downgrades it to float64. The
-  -- other 3 dialects have no arbitrary-precision decimal representation yet and stay on the
-  -- shared lispLanguage.
+  -- #727: Clojure has a native BigDecimal, and Common Lisp has native bignums usable as a
+  -- (coefficient . scale) cons pair, so both get their own Language value with decimal in
+  -- literalVariants, so adaptTerm no longer downgrades their decimals to float64. Emacs Lisp
+  -- and Scheme have no arbitrary-precision decimal representation yet and stay on the shared
+  -- lispLanguage.
   let lispLanguageForTarget = case target of
-        "clojure" -> clojureLanguage
-        _         -> lispLanguage
+        "clojure"     -> clojureLanguage
+        "common-lisp" -> commonLispLanguage
+        _             -> lispLanguage
 
   -- 'mods' is the set this scoped package wants written. The full
   -- universe is passed for typing context only; generateSourceFiles
@@ -1072,15 +1074,19 @@ main = do
             -- casualty class as the scale-distinct cases above (JSON
             -- serialization / parser / yaml-bridge "decimal precision"
             -- groups). Removed once these hosts carry a real (coeff,scale)
-            -- decimal (#727).
-            "tiny exponent",
-            "huge exponent"]
+            -- decimal (#727). Names carry the "decimal " prefix used by
+            -- Sources/Test/Json/Roundtrip.hs's decimalRoundtripGroup
+            -- ("decimal tiny exponent"/"decimal huge exponent") -- until
+            -- #727, this filter used the un-prefixed short names and never
+            -- actually matched these two roundtrip cases on any host.
+            "decimal tiny exponent",
+            "decimal huge exponent"]
       -- #727: Clojure has its own clojureLanguage (literalVariants includes decimal), and
-      -- TypeScript's typeScriptLanguage now includes literalVariantDecimal too, with a real
-      -- {coefficient, scale} runtime representation -- both removed from this skip list
-      -- accordingly. Common Lisp, Emacs Lisp, and Scheme still represent Literal.decimal as a
+      -- TypeScript's and Common Lisp's Languages now include literalVariantDecimal too, each
+      -- with a real scale-preserving runtime representation -- all three removed from this
+      -- skip list accordingly. Emacs Lisp and Scheme still represent Literal.decimal as a
       -- native float64 with no scale field, so they remain here until they get the same fix.
-      let dropsScaleDistinctTests = target `elem` ["common-lisp", "emacs-lisp", "scheme"]
+      let dropsScaleDistinctTests = target `elem` ["emacs-lisp", "scheme"]
       let isScaleDistinctCase t = case t of
             TermRecord (Record tname fields)
               | tname == _TestCaseWithMetadata ->

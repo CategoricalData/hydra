@@ -426,7 +426,7 @@ public class TransformJsonToTarget {
     // #719/#727: the hosts whose Literal.decimal has no scale field yet. Mirrors
     // Main.hs's dropsScaleDistinctTests; keep the two lists in sync until #727 lands.
     private static final Set<String> SCALE_DISTINCT_DROP_TARGETS = new HashSet<>(
-            Arrays.asList("common-lisp", "emacs-lisp", "scheme"));
+            Arrays.asList("emacs-lisp", "scheme"));
 
     private static boolean dropsScaleDistinctTests(String target) {
         return SCALE_DISTINCT_DROP_TARGETS.contains(target);
@@ -434,14 +434,17 @@ public class TransformJsonToTarget {
 
     // Test-case names that assert scale-distinctness (1.1 != 1.10) or exact-exponent
     // rendering beyond what a float64-backed decimal can represent. Mirrors Main.hs's
-    // scaleDistinctTestNames.
+    // scaleDistinctTestNames. The "decimal " prefix matches Sources/Test/Json/Roundtrip.hs's
+    // decimalRoundtripGroup case names ("decimal tiny exponent"/"decimal huge exponent") --
+    // until #727, this used the un-prefixed short names and never actually matched those two
+    // roundtrip cases on any host.
     private static final Set<String> SCALE_DISTINCT_TEST_NAMES = new HashSet<>(Arrays.asList(
             "same value, different scale",
             "same value, scale tiebreak",
             "same value, scale tiebreak (larger scale)",
             "same value, scale tiebreak (transitively)",
-            "tiny exponent",
-            "huge exponent"));
+            "decimal tiny exponent",
+            "decimal huge exponent"));
 
     private static boolean isScaleDistinctCase(hydra.core.Term t) {
         if (!(t instanceof hydra.core.Term.Record)) return false;
