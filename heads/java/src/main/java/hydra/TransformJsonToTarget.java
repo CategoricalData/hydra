@@ -423,10 +423,10 @@ public class TransformJsonToTarget {
         System.out.println("Pruning stale outputs (#459 H1)... pruned " + pruned + " file(s).");
     }
 
-    // #719/#727: the 4 hosts whose Literal.decimal has no scale field yet. Mirrors
+    // #719/#727: the hosts whose Literal.decimal has no scale field yet. Mirrors
     // Main.hs's dropsScaleDistinctTests; keep the two lists in sync until #727 lands.
     private static final Set<String> SCALE_DISTINCT_DROP_TARGETS = new HashSet<>(
-            Arrays.asList("common-lisp", "emacs-lisp", "scheme", "typescript"));
+            Arrays.asList("common-lisp", "emacs-lisp", "scheme"));
 
     private static boolean dropsScaleDistinctTests(String target) {
         return SCALE_DISTINCT_DROP_TARGETS.contains(target);

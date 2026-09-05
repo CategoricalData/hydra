@@ -1075,16 +1075,12 @@ main = do
             -- decimal (#727).
             "tiny exponent",
             "huge exponent"]
-      -- #727: Clojure now has its own clojureLanguage (literalVariants includes decimal),
-      -- so adaptTerm carries a real, scale-preserving java.math.BigDecimal through instead
-      -- of downgrading to float64. Removed from this skip list accordingly.
-      -- TypeScript is included here too, TEMPORARILY: it represents
-      -- Literal.decimal as a native JS number (float64) with no scale field,
-      -- so like CL/EL/Scheme it cannot distinguish "1.10" from "1.1". Remove
-      -- typescript from this list once TS carries a real (coefficient, scale)
-      -- decimal (tracked with the CL/EL/Scheme fix -- all lossy-double
-      -- hosts, and delete this whole filter, in the same follow-up).
-      let dropsScaleDistinctTests = target `elem` ["common-lisp", "emacs-lisp", "scheme", "typescript"]
+      -- #727: Clojure has its own clojureLanguage (literalVariants includes decimal), and
+      -- TypeScript's typeScriptLanguage now includes literalVariantDecimal too, with a real
+      -- {coefficient, scale} runtime representation -- both removed from this skip list
+      -- accordingly. Common Lisp, Emacs Lisp, and Scheme still represent Literal.decimal as a
+      -- native float64 with no scale field, so they remain here until they get the same fix.
+      let dropsScaleDistinctTests = target `elem` ["common-lisp", "emacs-lisp", "scheme"]
       let isScaleDistinctCase t = case t of
             TermRecord (Record tname fields)
               | tname == _TestCaseWithMetadata ->
