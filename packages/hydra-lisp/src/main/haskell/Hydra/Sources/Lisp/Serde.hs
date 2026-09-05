@@ -20,6 +20,8 @@ import qualified Hydra.Dsl.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Math                   as Math
+import qualified Hydra.Dsl.Lib.Ordering               as Ordering
 import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
@@ -58,6 +60,7 @@ module_ = Module {
       toDefinition commentToExpr,
       toDefinition condExpressionToExpr,
       toDefinition constantDefinitionToExpr,
+      toDefinition decimalDigitsAndScale,
       toDefinition defKeyword,
       toDefinition defconstKeyword,
       toDefinition defnKeyword,
@@ -212,6 +215,42 @@ constantDefinitionToExpr = define "constantDefinitionToExpr" $
       Serialization.cst @@ (defconstKeyword @@ var "d"),
       var "name",
       var "value"])
+
+-- | Decode a canonical decimal digit string (as produced by `printDecimal`; see
+-- docs/specification/syntax.md §2.6) into a `((sign, digits), scale)` nested pair suitable
+-- for building a `(coefficient . scale)` cons-pair literal. `sign` is `"-"` or `""`; `digits`
+-- is the unsigned coefficient digit string; `scale` is always >= 0 (any negative scale
+-- implied by a positive exponent is folded into `digits` via trailing zeros).
+decimalDigitsAndScale :: TypedTermDefinition (String -> ((String, String), Int))
+decimalDigitsAndScale = define "decimalDigitsAndScale" $
+  doc "Decode a canonical decimal digit string into a ((sign, digits), scale) nested pair" $
+  lambda "s" $
+    "eParts" <~ Strings.splitOn (string "e") (var "s") $
+    "mantissa" <~ Optionals.withDefault (string "") (Lists.head (var "eParts")) $
+    "expText" <~ Optionals.withDefault (string "") (Lists.head (Lists.drop (int32 1) (var "eParts"))) $
+    -- printDecimal's exponent is always-signed ("e+30", "e-23"); parseInt32
+    -- doesn't accept a leading '+', so strip it before parsing.
+    "expTextUnplussed" <~ Logic.ifElse
+      (Equality.equal (Optionals.withDefault (int32 0) (Strings.charAt (int32 0) (var "expText"))) (int32 43))
+      (Strings.fromList (Lists.drop (int32 1) (Strings.toList (var "expText"))))
+      (var "expText") $
+    "expPart" <~ Optionals.withDefault (int32 0) (Literals.parseInt32 (var "expTextUnplussed")) $
+    "isNeg" <~ Equality.equal (Optionals.withDefault (int32 0) (Strings.charAt (int32 0) (var "mantissa"))) (int32 45) $
+    "unsigned" <~ Logic.ifElse (var "isNeg")
+      (Strings.fromList (Lists.drop (int32 1) (Strings.toList (var "mantissa"))))
+      (var "mantissa") $
+    "dotParts" <~ Strings.splitOn (string ".") (var "unsigned") $
+    "intPart" <~ Optionals.withDefault (string "") (Lists.head (var "dotParts")) $
+    "fracPart" <~ Optionals.withDefault (string "") (Lists.head (Lists.drop (int32 1) (var "dotParts"))) $
+    "rawDigits" <~ Strings.concat2 (var "intPart") (var "fracPart") $
+    "rawScale" <~ Math.sub (Strings.length (var "fracPart")) (var "expPart") $
+    "sign" <~ Logic.ifElse (var "isNeg") (string "-") (string "") $
+    Logic.ifElse (Ordering.lt (var "rawScale") (int32 0))
+      (pair (pair (var "sign")
+        (Strings.concat2 (var "rawDigits")
+          (Strings.fromList (Lists.replicate (Math.negate (var "rawScale")) (int32 48)))))
+        (int32 0))
+      (pair (pair (var "sign") (var "rawDigits")) (var "rawScale"))
 
 -- | The keyword for variable definitions
 defKeyword :: TypedTermDefinition (L.Dialect -> String)
@@ -727,10 +766,29 @@ literalToExpr = define "literalToExpr" $
       L._Literal_float>>: lambda "f" $
         Serialization.cst @@ (formatLispFloat @@ var "d" @@ (project L._FloatLiteral L._FloatLiteral_value @@ var "f")),
       L._Literal_decimal>>: lambda "dec" $
-        -- Only Clojure's Language (clojureLanguage) admits decimal through adaptTerm, so this
-        -- case is only ever reached for L._Dialect_clojure in practice; the M suffix marks a
-        -- BigDecimal literal (e.g. 1.10M), preserving the exact scale of the pre-rendered digits.
-        Serialization.cst @@ (Strings.concat2 (project L._DecimalLiteral L._DecimalLiteral_digits @@ var "dec") (string "M")),
+        "digits" <~ (project L._DecimalLiteral L._DecimalLiteral_digits @@ var "dec") $
+        -- Emacs Lisp and Scheme have no arbitrary-precision decimal representation and stay
+        -- on the shared lispLanguage (adaptTerm downgrades their decimals to float64 before
+        -- this coder ever sees them), so this branch is unreachable for those two dialects;
+        -- the Clojure-style M-suffix default is arbitrary dead code, kept only to satisfy
+        -- match exhaustiveness.
+        match L._Dialect (var "d") (Just $ Serialization.cst @@ (Strings.concat2 (var "digits") (string "M"))) [
+          -- Clojure has a native BigDecimal reader literal; the M suffix marks it (e.g.
+          -- 1.10M), preserving the exact scale of the pre-rendered digits string.
+          L._Dialect_clojure>>: constant $
+            Serialization.cst @@ (Strings.concat2 (var "digits") (string "M")),
+          -- Common Lisp has no BigDecimal; represent as a quoted (coefficient . scale) cons
+          -- pair of native bignums, matching the overlay runtime's Decimal representation
+          -- (overlay/common-lisp/.../lib/literals.lisp). coefficient*10^-scale = the value.
+          -- The leading quote is required: an unquoted (110 . 2) in an expression position
+          -- is read as a function call (head 110), not a literal cons datum.
+          L._Dialect_commonLisp>>: constant $
+            "parts" <~ (decimalDigitsAndScale @@ var "digits") $
+            "signDigits" <~ Pairs.first (var "parts") $
+            "scale" <~ Pairs.second (var "parts") $
+            "coefficientText" <~ Strings.concat2 (Pairs.first (var "signDigits")) (Pairs.second (var "signDigits")) $
+            Serialization.cst @@ (Strings.concat (list [
+              string "'(", var "coefficientText", string " . ", Literals.printInt32 (var "scale"), string ")"]))],
       L._Literal_string>>: lambda "s" $
         -- Escape backslashes first, then control characters and double-quotes.
         -- Common Lisp does not support \n, \t, \r escape sequences in strings,

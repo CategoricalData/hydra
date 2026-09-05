@@ -24,6 +24,7 @@ import qualified Hydra.Dsl.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
 import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Dsl.Lib.Math                   as Math
 import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Coders                          as Coders
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
@@ -374,12 +375,13 @@ encodeLiteral = def "encodeLiteral" $
       inject L._Expression L._Expression_literal $
         inject L._Literal L._Literal_boolean (var "b"),
     _Literal_decimal>>: lambda "d" $
-      -- #727: only Clojure's Language (clojureLanguage) admits decimal through adaptTerm,
-      -- so this branch is only reached for Clojure in practice; the other 3 dialects have no
-      -- native arbitrary-precision decimal and stay on lispLanguage (adaptTerm downgrades
-      -- their decimals to float64 before this coder ever sees them). printDecimal renders the
-      -- exact scale-preserving digit string (e.g. "1.10", not "1.1"); literalToExpr appends
-      -- the dialect-specific BigDecimal suffix (M in Clojure).
+      -- #727: only dialects whose Language (clojureLanguage, commonLispLanguage) admits
+      -- decimal through adaptTerm reach this branch; Emacs Lisp and Scheme have no native
+      -- arbitrary-precision decimal yet and stay on lispLanguage (adaptTerm downgrades their
+      -- decimals to float64 before this coder ever sees them). printDecimal renders the exact
+      -- scale-preserving digit string (e.g. "1.10", not "1.1"); literalToExpr dispatches the
+      -- dialect-specific syntax (a BigDecimal suffix M in Clojure, a (coefficient . scale)
+      -- cons pair in Common Lisp).
       inject L._Expression L._Expression_literal $
         inject L._Literal L._Literal_decimal $
           record L._DecimalLiteral [
