@@ -82,7 +82,7 @@ define = definitionInModule module_
 module_ :: Module
 module_ = Module {
             moduleName = (ModuleName "hydra.lisp.language"),
-            moduleDefinitions = [toDefinition clojureLanguage, toDefinition commonLispLanguage, toDefinition lispLanguage, toDefinition lispReservedWords],
+            moduleDefinitions = [toDefinition clojureLanguage, toDefinition commonLispLanguage, toDefinition lispLanguage, toDefinition lispReservedWords, toDefinition schemeLanguage],
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Language constraints and reserved words for Lisp (covering Clojure, Emacs Lisp, Common Lisp, and Scheme)")}
 -- | Language constraints for Lisp.
@@ -132,8 +132,8 @@ module_ = Module {
 -- | Language constraints for Clojure specifically (#727). Clojure, unlike the other three
 -- Lisp dialects, has a native arbitrary-precision BigDecimal, so it can represent
 -- hydra.core.Literal.decimal faithfully (including scale) instead of being downgraded to
--- float64 by adaptTerm. Emacs Lisp and Scheme have no such representation yet and remain on
--- the shared lispLanguage below until they gain one.
+-- float64 by adaptTerm. Emacs Lisp has no such representation yet and remains on the shared
+-- lispLanguage below until it gains one.
 clojureLanguage :: TypedTermDefinition Language
 clojureLanguage = define "clojureLanguage" $
     doc "Language constraints for Clojure" $ lets [
@@ -220,8 +220,8 @@ clojureLanguage = define "clojureLanguage" $
 -- | Language constraints for Common Lisp specifically (#727). Common Lisp has native
 -- arbitrary-precision integers (bignums), so a decimal can be represented exactly as a
 -- (coefficient . scale) cons pair of a bignum and a non-negative scale, without downgrading
--- to float64. Emacs Lisp and Scheme have no such representation yet and remain on the shared
--- lispLanguage below until they gain one.
+-- to float64. Emacs Lisp has no such representation yet and remains on the shared
+-- lispLanguage below until it gains one.
 commonLispLanguage :: TypedTermDefinition Language
 commonLispLanguage = define "commonLispLanguage" $
     doc "Language constraints for Common Lisp" $ lets [
@@ -463,3 +463,92 @@ lispReservedWords = define "lispReservedWords" $
       var "commonLispKeywords",
       var "schemeKeywords",
       var "hydraLispKeywords"]
+
+-- | Language constraints for Scheme (R7RS) specifically (#727). Like Common Lisp, Scheme has
+-- native arbitrary-precision integers (bignums), so a decimal can be represented exactly as a
+-- (coefficient . scale) cons pair of a bignum and a non-negative scale, without downgrading to
+-- float64. (Scheme also has native exact rationals, but they auto-reduce -- e.g. 110/100
+-- normalizes to 11/10 -- which would destroy the scale information decimal must preserve, so
+-- they're not used here.) Emacs Lisp has no such representation yet and remains on the shared
+-- lispLanguage above until it gains one.
+schemeLanguage :: TypedTermDefinition Language
+schemeLanguage = define "schemeLanguage" $
+    doc "Language constraints for Scheme (R7RS)" $ lets [
+    "literalVariants">: Sets.fromList $ list [
+      Variants.literalVariantBinary, -- byte arrays / byte strings
+      Variants.literalVariantBoolean, -- true/false, t/nil, #t/#f
+      Variants.literalVariantDecimal, -- arbitrary-precision, scale-preserving (coefficient . scale)
+      Variants.literalVariantFloat, -- floating-point numbers
+      Variants.literalVariantInteger, -- integers (all dialects have arbitrary-precision)
+      Variants.literalVariantString], -- strings
+    "floatTypes">: Sets.fromList $ list [
+      Core.floatTypeFloat64], -- double-precision float (native in all dialects)
+    "integerTypes">: Sets.fromList $ list [
+      Core.integerTypeBigint], -- all four dialects have arbitrary-precision integers
+    "termVariants">: Sets.fromList $ list [
+      Variants.termVariantAnnotated,
+      Variants.termVariantApplication,
+      Variants.termVariantEither,
+
+      Variants.termVariantCases,
+
+      Variants.termVariantLambda,
+
+      Variants.termVariantProject,
+
+      Variants.termVariantUnwrap,
+
+      Variants.termVariantTypeApplication,
+
+      Variants.termVariantTypeLambda,
+      Variants.termVariantLet,
+      Variants.termVariantList,
+      Variants.termVariantLiteral,
+      Variants.termVariantMap,
+      Variants.termVariantOptional,
+      Variants.termVariantPair,
+      Variants.termVariantRecord,
+      Variants.termVariantSet,
+      Variants.termVariantInject,
+      Variants.termVariantUnit,
+      Variants.termVariantVariable,
+      Variants.termVariantWrap],
+    "typeVariants">: Sets.fromList $ list [
+      Variants.typeVariantAnnotated,
+      Variants.typeVariantApplication,
+      Variants.typeVariantEither,
+      Variants.typeVariantEffect,
+      Variants.typeVariantFunction,
+      Variants.typeVariantForall,
+      Variants.typeVariantList,
+      Variants.typeVariantLiteral,
+      Variants.typeVariantMap,
+      Variants.typeVariantOptional,
+      Variants.typeVariantPair,
+      Variants.typeVariantRecord,
+      Variants.typeVariantSet,
+      Variants.typeVariantUnion,
+      Variants.typeVariantUnit,
+      Variants.typeVariantVariable,
+      Variants.typeVariantVoid,
+      Variants.typeVariantWrap],
+    "typePredicate">: constant true] $
+    Coders.language
+      (Coders.languageName2 $ string "hydra.lisp")
+      (Coders.languageConstraints2
+        (var "literalVariants")
+        (var "floatTypes")
+        (var "integerTypes")
+        (var "termVariants")
+        (var "typeVariants")
+        (var "typePredicate"))
+      (Sets.fromList $ list [
+        Coders.languageFeaturePartialApplication,
+        Coders.languageFeatureNestedCaseStatements,
+        Coders.languageFeatureNestedPolymorphicLetBindings])
+      (Coders.caseConventions
+        Util.caseConventionUpperSnake Util.caseConventionLowerSnake Util.caseConventionLowerSnake
+        Util.caseConventionLowerSnake Util.caseConventionLowerSnake Util.caseConventionLowerSnake
+        Util.caseConventionLowerSnake Util.caseConventionLowerSnake Util.caseConventionLowerSnake
+        Util.caseConventionLowerSnake)
+      (wrap _FileExtension (string "scm"))
