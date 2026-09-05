@@ -66,26 +66,26 @@ testGroupForCollectionTerms = define "testGroupForCollectionTerms" $
     -- Set literals with polymorphic elements
     subgroup "Set literals" [
       -- \x -> set{x}  =>  forall t0. Ord t0 => t0 -> Set t0
-      expectPolyConstrained 1 [tag_disabledForMinimalInference]
+      expectPolyConstrained 1 []
         (lambda "x" $ set [var "x"])
         ["t0"] [("t0", ["ordering"])] (T.function (T.var "t0") (T.set $ T.var "t0")),
       -- \x -> \y -> set{x, y}  =>  forall t0. Ord t0 => t0 -> t0 -> Set t0
-      expectPolyConstrained 2 [tag_disabledForMinimalInference]
+      expectPolyConstrained 2 []
         (lambda "x" $ lambda "y" $ set [var "x", var "y"])
         ["t0"] [("t0", ["ordering"])] (T.functionMany [T.var "t0", T.var "t0", T.set $ T.var "t0"]),
       -- set{1, 2}  =>  Set Int32  (monomorphic: constraint vanishes)
-      expectMono 3 [tag_disabledForMinimalInference]
+      expectMono 3 []
         (set [int32 1, int32 2])
         (T.set T.int32)],
 
     -- Map literals with polymorphic keys
     subgroup "Map literals" [
       -- \k -> \v -> map{k: v}  =>  forall t0 t1. Ord t0 => t0 -> t1 -> Map t0 t1
-      expectPolyConstrained 1 [tag_disabledForMinimalInference]
+      expectPolyConstrained 1 []
         (lambda "k" $ lambda "v" $ mapTerm [(var "k", var "v")])
         ["t0", "t1"] [("t0", ["ordering"])] (T.functionMany [T.var "t0", T.var "t1", T.map (T.var "t0") (T.var "t1")]),
       -- map{"a": 1}  =>  Map String Int32  (monomorphic: constraint vanishes)
-      expectMono 2 [tag_disabledForMinimalInference]
+      expectMono 2 []
         (mapTerm [(string "a", int32 1)])
         (T.map T.string T.int32)],
 
@@ -93,13 +93,13 @@ testGroupForCollectionTerms = define "testGroupForCollectionTerms" $
     subgroup "Collection terms with primitives" [
       -- \x -> set{x, math.negate x}  =>  forall t. (Numeric t, Ord t) => t -> Set t
       -- negate now carries a 'numeric' constraint; the set literal adds 'ordering' on the same variable.
-      expectPolyConstrained 1 [tag_disabledForMinimalInference]
+      expectPolyConstrained 1 []
         (lambda "x" $ set [var "x", primitive DefMath.negate @@ var "x"])
         ["t0"] [("t0", ["ordering", "numeric"])]
         (T.function (T.var "t0") (T.set $ T.var "t0")),
       -- \k -> map{k: lists.sort (list [k])}
       -- Key needs Ord (from map literal), value needs Ord (from lists.sort) — same variable
-      expectPolyConstrained 2 [tag_disabledForMinimalInference]
+      expectPolyConstrained 2 []
         (lambda "k" $ mapTerm [(var "k", primitive DefLists.sort @@ list [var "k"])])
         ["t0"] [("t0", ["ordering"])] (T.function (T.var "t0") (T.map (T.var "t0") (T.list $ T.var "t0")))],
 
@@ -109,23 +109,23 @@ testGroupForCollectionTerms = define "testGroupForCollectionTerms" $
       -- \xs -> map{lists.length xs: sets.fromList xs}
       -- Key is Int32 (concrete), value is Set t0 (Ord t0 from sets.fromList)
       -- Tests: map value inference propagates constraints through inferMany
-      expectPolyConstrained 1 [tag_disabledForMinimalInference]
+      expectPolyConstrained 1 []
         (lambda "xs" $ mapTerm [(primitive DefLists.length @@ var "xs", primitive DefSets.fromList @@ var "xs")])
         ["t0"] [("t0", ["ordering"])] (T.function (T.list $ T.var "t0") (T.map T.int32 (T.set $ T.var "t0"))),
       -- [lists.sort]  =>  forall t0. Ord t0 => [t0 -> t0]
       -- Tests: list element inference propagates constraints through inferMany
-      expectPolyConstrained 2 [tag_disabledForMinimalInference]
+      expectPolyConstrained 2 []
         (list [primitive DefLists.sort])
         ["t0"] [("t0", ["ordering"])] (T.list $ T.function (T.list $ T.var "t0") (T.list $ T.var "t0")),
       -- pair (sets.fromList) 42  =>  forall t0. Ord t0 => pair<([t0] -> Set t0), Int32>
       -- Tests: pair inference propagates constraints through inferMany
-      expectPolyConstrained 3 [tag_disabledForMinimalInference]
+      expectPolyConstrained 3 []
         (pair (primitive DefSets.fromList) (int32 42))
         ["t0"] [("t0", ["ordering"])] (T.pair (T.function (T.list $ T.var "t0") (T.set $ T.var "t0")) T.int32),
       -- \xs -> set{sets.fromList xs}
       -- Outer set needs Ord on set<t0>, inner sets.fromList needs Ord on t0
       -- Tests: set element inference propagates constraints through inferMany
-      expectPolyConstrained 4 [tag_disabledForMinimalInference]
+      expectPolyConstrained 4 []
         (lambda "xs" $ set [primitive DefSets.fromList @@ var "xs"])
         ["t0"] [("t0", ["ordering"])] (T.function (T.list $ T.var "t0") (T.set $ T.set $ T.var "t0"))]]
 

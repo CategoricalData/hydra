@@ -242,8 +242,6 @@ Runners should also honor a couple of tag conventions on
 `TestCaseWithMetadata.tags`:
 
 - `{value: "disabled"}` — skip; exercises an unresolved upstream limitation.
-- `{value: "disabledForMinimalInference"}` — only skip in heads running the
-  minimal-inference variant; full-inference heads should still run these.
 
 ### Benchmark JSON
 

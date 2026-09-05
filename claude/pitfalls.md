@@ -815,8 +815,7 @@ The Hydra test fixtures include several inference tests intentionally tagged
 (let-polymorphism over-generalization, Y-combinator typing, etc.). A naive
 test runner reports these as failures, masking real regressions. The Python
 runner skips them via `is_disabled(tcase)`; new heads should mirror that
-behavior. The related `disabledForMinimalInference` tag is *not* a universal
-skip — it only applies to heads using the minimal inference variant.
+behavior.
 
 ### Adapter `cases` over a removed variant: keep remaining cases concrete
 

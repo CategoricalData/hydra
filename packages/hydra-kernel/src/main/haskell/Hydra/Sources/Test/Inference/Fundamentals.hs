@@ -215,14 +215,14 @@ testGroupForLet = define "testGroupForLet" $
       --     "g">: lambda "x" $ lambda "y" $ var "f" @@ int32 42 @@ var "y"]
       --     $ var "f")
       --   ["t0"] (T.functionMany [T.int32, T.var "t0", T.list $ T.pair (T.list T.int32) (T.list $ T.var "t0")]),
-      expectMono 9 [tag_disabledForMinimalInference]
+      expectMono 9 []
         (lets [
           "id">: lambda "x" $ var "x",
           "fortytwo">: var "id" @@ int32 42,
           "foo">: var "id" @@ string "foo"]
           $ pair (var "fortytwo") (var "foo"))
         (T.pair T.int32 T.string),
-      expectMono 10 [tag_disabledForMinimalInference]
+      expectMono 10 []
         (lets [
           "fortytwo">: var "id" @@ int32 42,
           "id">: lambda "x" $ var "x",
@@ -295,14 +295,14 @@ testGroupForLet = define "testGroupForLet" $
           "g">: primitive DefStrings.fromList @@ list [var "f"]]
           $ pair (var "f") (var "g"))
         (T.pair T.int32 T.string),
-      expectMono 2 [tag_disabledForMinimalInference]
+      expectMono 2 []
         (lets [
           "id">: lambda "x" $ var "x",
           "f">: var "id" @@ (primitive DefStrings.length @@ var "g"),
           "g">: var "id" @@ (primitive DefStrings.fromList @@ list [var "f"])]
           $ pair (var "f") (var "g"))
         (T.pair T.int32 T.string),
-      expectMono 3 [tag_disabledForMinimalInference]
+      expectMono 3 []
         (lets [
           "f">: var "id" @@ (primitive DefStrings.length @@ var "g"),
           "id">: lambda "x" $ var "x",
@@ -319,19 +319,19 @@ testGroupForLet = define "testGroupForLet" $
         ["t0"] (T.functionMany [T.boolean, T.var "t0", T.list $ T.list $ T.var "t0"]),
 
       -- The recursive pattern of hydra.rewriting.foldOverType is similar to this example.
-      expectPoly 2 [tag_disabledForMinimalInference]
+      expectPoly 2 []
         (lets [
           "inst">: var "rec" @@ (lambda "x" false) @@ false,
           "rec">: lambda "f" $ lambda "b0" $ var "f" @@ (var "rec" @@ var "f" @@ var "b0")] $
           pair (var "inst") (var "rec"))
         ["t0", "t1"] (T.pair T.boolean (T.functionMany [T.function (T.var "t0") (T.var "t0"), T.var "t1", T.var "t0"])),
-      expectPoly 3 [tag_disabledForMinimalInference] -- Try with GHC:    :t let inst = rec (\x -> False); rec = \f -> f (rec f) in (inst, rec)
+      expectPoly 3 [] -- Try with GHC:    :t let inst = rec (\x -> False); rec = \f -> f (rec f) in (inst, rec)
         (lets [
           "inst">: var "rec" @@ (lambda "x" false),
           "rec">: lambda "f" $ var "f" @@ (var "rec" @@ var "f")] $
           pair (var "inst") (var "rec"))
         ["t0"] (T.pair T.boolean (T.functionMany [T.function (T.var "t0") (T.var "t0"), T.var "t0"])),
-      expectPoly 4 [tag_disabledForMinimalInference]
+      expectPoly 4 []
         (lets [
           "inst1">: var "rec" @@ (lambda "x" false),
           "inst2">: var "rec" @@ (lambda "x" $ int32 42),
@@ -340,7 +340,7 @@ testGroupForLet = define "testGroupForLet" $
         ["t0"] (T.product [T.boolean, T.int32, T.functionMany [T.function (T.var "t0") (T.var "t0"), T.var "t0"]]),
 
       -- Try: :t let foo = bar; bar = foo in (foo, bar)
-      expectPoly 5 [tag_disabledForMinimalInference]
+      expectPoly 5 []
         (lets [
           "foo">: var "bar",
           "bar">: var "foo"] $
@@ -495,7 +495,7 @@ testGroupForPathologicalTerms = define "testGroupForPathologicalTerms" $
           "x">: var "x"]
           $ var "x")
         ["t0"] (T.var "t0"),
-      expectPoly 2 [tag_disabledForMinimalInference]
+      expectPoly 2 []
         (lets ["id">: lambda "x" $ var "x",
                "weird">: var "id" @@ var "id" @@ var "id"] $
                var "weird")
@@ -551,10 +551,10 @@ testGroupForPolymorphism = define "testGroupForPolymorphism" $
       expectPoly 1 []
         (list [])
         ["t0"] (T.list (T.var "t0")),
-      expectPoly 2 [tag_disabledForMinimalInference]
+      expectPoly 2 []
         (optional nothing)
         ["t0"] (T.optional (T.var "t0")),
-      expectMono 3 [tag_disabledForMinimalInference]
+      expectMono 3 []
         (optional $ just $ int32 42)
         (T.optional T.int32)],
 

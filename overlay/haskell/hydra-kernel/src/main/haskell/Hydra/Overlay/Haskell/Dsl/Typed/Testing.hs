@@ -39,7 +39,6 @@ type Int32 = I.Int32
 
 
 tag_disabled = Tag "disabled"
-tag_disabledForMinimalInference = Tag "disabledForMinimalInference"
 tag_disabledForScala = Tag "disabledForScala"
 
 alphaConvertRef :: TypedTerm (Name -> Name -> Term -> Term)
@@ -179,7 +178,6 @@ infTest name tags term ts = testCaseWithMetadata (Phantoms.string name)
     retype (TypedTerm t) = TypedTerm t
 
 isDisabled tcase = tag_disabled `L.elem` Testing.testCaseWithMetadataTags tcase
-isDisabledForMinimalInference tcase = tag_disabledForMinimalInference `L.elem` Testing.testCaseWithMetadataTags tcase
 
 inferTypeOfRef :: TypedTerm (InferenceContext -> Graph -> Term -> Either Error ((Term, TypeScheme), InferenceContext))
 inferTypeOfRef = TypedTerm $ TermVariable $ Name "hydra.inference.inferTypeOf"

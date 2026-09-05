@@ -65,9 +65,7 @@ interface TestCaseWithMetadata {
 }
 
 // Tags that signal the test should be skipped on this head. Matches
-// Python's `is_disabled` semantics. `disabledForMinimalInference` is
-// tested in passing because the kernel here is the full inference, not
-// the minimal variant.
+// Python's `is_disabled` semantics.
 const SKIP_TAGS = new Set(["disabled"]);
 
 const shouldSkip = (c: TestCaseWithMetadata): boolean => {

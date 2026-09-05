@@ -52,7 +52,7 @@ testGroupForNestedLet :: TypedTermDefinition TestGroup
 testGroupForNestedLet = define "testGroupForNestedLet" $
   supergroup "Nested let" [
     subgroup "hydra.formatting.mapFirstLetter" [
-      expectMono 1 [tag_disabledForMinimalInference]
+      expectMono 1 []
         (lambda "mapping" $ lambda "s" $ lets [
           "list">: primitive DefStrings.toList @@ var "s",
           "firstLetter">: var "mapping" @@ (primitive DefStrings.fromList @@ (primitive DefOptionals.givens @@ list [primitive DefLists.head @@ var "list"]))] $
@@ -66,7 +66,7 @@ testGroupForNestedLet = define "testGroupForNestedLet" $
     -- Tests that inference gives go a monomorphic type when all types are constrained
     -- by primitive calls (Maps.insert, Math.add).
     subgroup "Recursive let with pair return (ifElse)" [
-      expectMono 2 [tag_disabledForMinimalInference]
+      expectMono 2 []
         (lambda "input" $ lets [
           "go">:
             lambda "depth" $ lambda "subst" $ lambda "s" $
@@ -92,7 +92,7 @@ testGroupForNestedLet = define "testGroupForNestedLet" $
     -- This tests whether union elimination with a default case causes
     -- inference to over-generalize the pair-first type variable.
     subgroup "Recursive let with pair return (case on Type)" [
-      expectMono 3 [tag_disabledForMinimalInference]
+      expectMono 3 []
         (lambda "typ" $ lets [
           "go">:
             lambda "depth" $ lambda "subst" $ lambda "t" $

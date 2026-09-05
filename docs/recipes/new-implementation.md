@@ -595,9 +595,7 @@ object with `language`, `commit`, `branch`, `timestamp`, and `commitMessage`.
 
 Test cases tagged `{value: "disabled"}` exercise unresolved upstream inference limitations
 (let-polymorphism over-generalization, Y-combinator typing, etc.) and should be skipped rather than
-counted as failures, matching Python's `is_disabled(tcase)` behavior. The related
-`disabledForMinimalInference` tag is *not* a universal skip — it only applies to heads using the
-minimal inference variant.
+counted as failures, matching Python's `is_disabled(tcase)` behavior.
 
 **Passing all test cases in the hydra-kernel test suite (both kernel and generation evaluation) is the
 criterion for a complete Hydra implementation.**

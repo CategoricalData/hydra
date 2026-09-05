@@ -67,15 +67,15 @@ testGroupForCollectionPrimitives = define "testGroupForCollectionPrimitives" $
     subgroup "maps.map applied to a function" [
       -- maps.map (partially applied): maps.map negate => map<k, v> -> map<k, v>
       -- Type changed: negate is now numeric-polymorphic (#566), so the value type is a numeric var.
-      expectPolyConstrained 1 [tag_disabledForMinimalInference]
+      expectPolyConstrained 1 []
         (primitive DefMaps.map @@ primitive DefMath.negate)
         ["t0", "t1"] [("t0", ["ordering"]), ("t1", ["numeric"])] (T.function (T.map (T.var "t0") (T.var "t1")) (T.map (T.var "t0") (T.var "t1"))),
       -- maps.map with a lambda
-      expectPolyConstrained 2 [tag_disabledForMinimalInference]
+      expectPolyConstrained 2 []
         (primitive DefMaps.map @@ lambda "x" (list [var "x"]))
         ["t0", "t1"] [("t0", ["ordering"])] (T.function (T.map (T.var "t0") (T.var "t1")) (T.map (T.var "t0") (T.list $ T.var "t1"))),
       -- maps.map with sets.fromList: transforms map values from lists to sets
-      expectPolyConstrained 3 [tag_disabledForMinimalInference]
+      expectPolyConstrained 3 []
         (primitive DefMaps.map @@ primitive DefSets.fromList)
         ["t0", "t1"] [("t0", ["ordering"]), ("t1", ["ordering"])] (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") (T.set $ T.var "t1")))],
 
@@ -83,24 +83,24 @@ testGroupForCollectionPrimitives = define "testGroupForCollectionPrimitives" $
     subgroup "sets.map applied to a function" [
       -- sets.map negate => set<t> -> set<t>
       -- Type changed: negate is now numeric-polymorphic (#566); set element is ordered + numeric.
-      expectPolyConstrained 1 [tag_disabledForMinimalInference]
+      expectPolyConstrained 1 []
         (primitive DefSets.map @@ primitive DefMath.negate)
         ["t0"] [("t0", ["ordering", "numeric"])] (T.function (T.set (T.var "t0")) (T.set (T.var "t0"))),
       -- sets.map with lists.length: set<list<t>> -> set<int32>
-      expectPolyConstrained 2 [tag_disabledForMinimalInference]
+      expectPolyConstrained 2 []
         (primitive DefSets.map @@ primitive DefLists.length)
         ["t0"] [("t0", ["ordering"])] (T.function (T.set $ T.list $ T.var "t0") (T.set T.int32))],
 
     -- Composing collection primitives in let bindings
     subgroup "Composing collection primitives in let" [
       -- let f = maps.map sets.fromList in f
-      expectPolyConstrained 1 [tag_disabledForMinimalInference]
+      expectPolyConstrained 1 []
         (lets [
           "f">: primitive DefMaps.map @@ primitive DefSets.fromList]
           $ var "f")
         ["t0", "t1"] [("t0", ["ordering"]), ("t1", ["ordering"])] (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") (T.set $ T.var "t1"))),
       -- let f = maps.map sets.fromList; g = f (map literal) in g
-      expectMono 2 [tag_disabledForMinimalInference]
+      expectMono 2 []
         (lets [
           "f">: primitive DefMaps.map @@ primitive DefSets.fromList,
           "g">: var "f" @@ mapTerm [(string "a", list [int32 1, int32 2])]]
@@ -110,26 +110,26 @@ testGroupForCollectionPrimitives = define "testGroupForCollectionPrimitives" $
     -- Composing map operations in lambdas
     subgroup "Map operations in lambdas" [
       -- \m. maps.map lists.length m  =>  map<k, list<t>> -> map<k, int32>
-      expectPolyConstrained 1 [tag_disabledForMinimalInference]
+      expectPolyConstrained 1 []
         (lambda "m" $ primitive DefMaps.map @@ primitive DefLists.length @@ var "m")
         ["t0", "t1"] [("t0", ["ordering"])] (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") T.int32)),
       -- \f. \m. maps.map f m  =>  (v1 -> v2) -> map<k, v1> -> map<k, v2>
-      expectPolyConstrained 2 [tag_disabledForMinimalInference]
+      expectPolyConstrained 2 []
         (lambda "f" $ lambda "m" $ primitive DefMaps.map @@ var "f" @@ var "m")
         ["t0", "t1", "t2"] [("t2", ["ordering"])] (T.functionMany [T.function (T.var "t0") (T.var "t1"), T.map (T.var "t2") (T.var "t0"), T.map (T.var "t2") (T.var "t1")])],
 
     -- Fully applied collection conversions
     subgroup "Fully applied collection conversions" [
       -- sets.fromList [1, 2, 3]  =>  set<int32>
-      expectMono 1 [tag_disabledForMinimalInference]
+      expectMono 1 []
         (primitive DefSets.fromList @@ list (int32 <$> [1, 2, 3]))
         (T.set T.int32),
       -- maps.map negate (maps.fromList [(1, 2)])  =>  map<int32, int32>
-      expectMono 2 [tag_disabledForMinimalInference]
+      expectMono 2 []
         (primitive DefMaps.map @@ primitive DefMath.negate @@ (primitive DefMaps.fromList @@ list [pair (int32 1) (int32 2)]))
         (T.map T.int32 T.int32),
       -- maps.map sets.fromList (maps.fromList [("a", [1, 2])])  =>  map<string, set<int32>>
-      expectMono 3 [tag_disabledForMinimalInference]
+      expectMono 3 []
         (primitive DefMaps.map @@ primitive DefSets.fromList @@ (primitive DefMaps.fromList @@ list [pair (string "a") (list [int32 1, int32 2])]))
         (T.map T.string (T.set T.int32))]]
 
@@ -189,13 +189,13 @@ testGroupForFolds = define "testGroupForFolds" $
   supergroup "Eliminations" [
     subgroup "List eliminations (folds)" [
       -- Type changed: add is now numeric-polymorphic (#566), so the fold accumulator is a numeric var.
-      expectPolyConstrained 1 [tag_disabledForMinimalInference]
+      expectPolyConstrained 1 []
         foldAdd
         ["t0"] [("t0", ["numeric"])] (T.functionMany [T.var "t0", T.list (T.var "t0"), T.var "t0"]),
-      expectMono 2 [tag_disabledForMinimalInference]
+      expectMono 2 []
         (foldAdd @@ int32 0)
         (T.function (T.list T.int32) T.int32),
-      expectMono 3 [tag_disabledForMinimalInference]
+      expectMono 3 []
         (foldAdd @@ int32 0 @@ (list (int32 <$> [1, 2, 3, 4, 5])))
         T.int32],
 
@@ -203,19 +203,19 @@ testGroupForFolds = define "testGroupForFolds" $
       -- match : Maybe a -> b -> (a -> b) -> b (scrutinee-first). Cases 1 and 5 wrap the
       -- eliminator in a lambda over the optional, since match takes the scrutinee first and
       -- cannot be partially applied to (def, f) while leaving the optional open.
-      expectMono 1 [tag_disabledForMinimalInference]
+      expectMono 1 []
         (lambda "m" $ primitive DefOptionals.match @@ (var "m") @@ (int32 42) @@ (primitive DefMath.negate))
         (T.function (T.optional T.int32) T.int32),
-      expectMono 2 [tag_disabledForMinimalInference]
+      expectMono 2 []
         (primitive DefOptionals.match @@ (optional (just $ int32 137)) @@ (int32 42) @@ (primitive DefMath.negate))
         T.int32,
-      expectMono 3 [tag_disabledForMinimalInference]
+      expectMono 3 []
         (primitive DefOptionals.match @@ optional nothing @@ (int32 42) @@ (primitive DefMath.negate))
         T.int32,
-      expectPoly 4 [tag_disabledForMinimalInference]
+      expectPoly 4 []
         (lambda "x" $ primitive DefOptionals.match @@ (var "x") @@ (var "x") @@ (primitive DefOptionals.given))
         ["t0"] (T.function (T.optional $ T.var "t0") (T.optional $ T.var "t0")),
-      expectPoly 5 [tag_disabledForMinimalInference]
+      expectPoly 5 []
         (lambda "m" $ primitive DefOptionals.match @@ (var "m") @@ (list []) @@ (lambda "x" $ list [var "x"]))
         ["t0"] (T.function (T.optional $ T.var "t0") (T.list $ T.var "t0"))]]
   where
@@ -256,15 +256,15 @@ testGroupForLists = define "testGroupForLists" $
 testGroupForMaps :: TypedTermDefinition TestGroup
 testGroupForMaps = define "testGroupForMaps" $
   subgroup "Map terms" [
-    expectMono 1 [tag_disabledForMinimalInference]
+    expectMono 1 []
       (mapTerm [
         (string "firstName", string "Arthur"),
         (string "lastName", string "Dent")])
       (T.map T.string T.string),
-    expectPolyConstrained 2 [tag_disabledForMinimalInference]
+    expectPolyConstrained 2 []
       (mapTerm [])
       ["t0", "t1"] [("t0", ["ordering"])] (T.map (T.var "t0") (T.var "t1")),
-    expectPolyConstrained 3 [tag_disabledForMinimalInference]
+    expectPolyConstrained 3 []
       (lambdas ["x", "y"] $ mapTerm
         [(var "x", float64 0.1), (var "y", float64 0.2)])
       ["t0"] [("t0", ["ordering"])] (T.function (T.var "t0") (T.function (T.var "t0") (T.map (T.var "t0") T.float64)))]
@@ -272,10 +272,10 @@ testGroupForMaps = define "testGroupForMaps" $
 testGroupForOptionals :: TypedTermDefinition TestGroup
 testGroupForOptionals = define "testGroupForOptionals" $
   subgroup "Optional terms" [
-    expectMono 1 [tag_disabledForMinimalInference]
+    expectMono 1 []
       (optional $ just $ int32 42)
       (T.optional T.int32),
-    expectPoly 2 [tag_disabledForMinimalInference]
+    expectPoly 2 []
       (optional nothing)
       ["t0"] (T.optional $ T.var "t0")]
 
@@ -283,62 +283,62 @@ testGroupForPairs :: TypedTermDefinition TestGroup
 testGroupForPairs = define "testGroupForPairs" $
   supergroup "Pair terms" [
     subgroup "Monotyped pairs" [
-      expectMono 1 [tag_disabledForMinimalInference]
+      expectMono 1 []
         (pair (string "foo") (int32 42))
         (T.pair T.string T.int32),
-      expectMono 2 [tag_disabledForMinimalInference]
+      expectMono 2 []
         (pair (string "foo") (list [float32 42.0, float32 137.0]))
         (T.pair T.string (T.list T.float32))],
 
     subgroup "Polytyped pairs" [
-      expectPoly 1 [tag_disabledForMinimalInference]
+      expectPoly 1 []
         (pair (list []) (string "foo"))
         ["t0"] (T.pair (T.list $ T.var "t0") T.string),
-      expectPoly 2 [tag_disabledForMinimalInference]
+      expectPoly 2 []
         (pair (list []) (list []))
         ["t0", "t1"] (T.pair (T.list $ T.var "t0") (T.list $ T.var "t1"))],
 
     subgroup "Nested pairs" [
-      expectMono 1 [tag_disabledForMinimalInference]
+      expectMono 1 []
         (pair (pair (int32 1) (string "nested")) true)
         (T.pair (T.pair T.int32 T.string) T.boolean),
-      expectMono 2 [tag_disabledForMinimalInference]
+      expectMono 2 []
         (pair (string "foo") (pair (int32 42) (list [float32 42.0])))
         (T.pair T.string (T.pair T.int32 (T.list T.float32)))],
 
     subgroup "Pairs in lambda" [
-      expectPoly 1 [tag_disabledForMinimalInference]
+      expectPoly 1 []
         (lambda "x" (pair (var "x") (string "constant")))
         ["t0"] (T.function (T.var "t0") (T.pair (T.var "t0") T.string)),
-      expectPoly 2 [tag_disabledForMinimalInference]
+      expectPoly 2 []
         (lambda "p" (pair (var "p") (var "p")))
         ["t0"] (T.function (T.var "t0") (T.pair (T.var "t0") (T.var "t0")))],
 
     subgroup "Pairs in data structures" [
-      expectMono 1 [tag_disabledForMinimalInference]
+      expectMono 1 []
         (list [pair (string "a") (int32 1), pair (string "b") (int32 2)])
         (T.list $ T.pair T.string T.int32),
-      expectPoly 2 [tag_disabledForMinimalInference]
+      expectPoly 2 []
         (list [pair (list []) (string "foo")])
         ["t0"] (T.list $ T.pair (T.list $ T.var "t0") T.string)],
 
     subgroup "Additional cases" [
-      expectMono 1 [tag_disabledForMinimalInference]
+      expectMono 1 []
         (pair (int32 42) (string "foo"))
         (T.pair T.int32 T.string),
-      expectPoly 2 [tag_disabledForMinimalInference]
+      expectPoly 2 []
         (pair (list []) (string "foo"))
         ["t0"] (T.pair (T.list $ T.var "t0") T.string),
-      expectPoly 3 [tag_disabledForMinimalInference]
+      expectPoly 3 []
         (pair (list []) (list []))
         ["t0", "t1"] (T.pair (T.list $ T.var "t0") (T.list $ T.var "t1"))]]
 
 testGroupForSets :: TypedTermDefinition TestGroup
 testGroupForSets = define "testGroupForSets" $
   subgroup "Set terms" [
-    expectMono 1 [tag_disabledForMinimalInference]
+    expectMono 1 []
       (set [true])
       (T.set T.boolean),
-    expectPolyConstrained 2 [tag_disabledForMinimalInference]
+    expectPolyConstrained 2 []
       (set [set []])
       ["t0"] [("t0", ["ordering"])] (T.set $ T.set $ T.var "t0")]
