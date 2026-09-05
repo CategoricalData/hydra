@@ -188,59 +188,71 @@ generation_json() {
 do_refresh() {
   local input_digest="$1" output_dir="$2" output_digest="$3"
 
-  local gen generation self deps_json inputs_json outputs_json
+  local gen generation self
   gen="$(generator_stamp)"
   generation="$(generation_json)"
+
+  # LARGE arrays (deps/inputs/outputs) are written to TEMP FILES and read back
+  # with jq --slurpfile, NEVER passed via --argjson. A big package (e.g.
+  # dist/java/hydra-kernel = 800+ output files) produces a JSON array far larger
+  # than ARG_MAX; passing it on the jq command line fails with "Argument list too
+  # long" (#416 CI regression, run 33978457591). --slurpfile reads from a file, so
+  # it has no argv-size limit. Only the tiny scalars stay as --arg/--argjson.
+  local tmpd; tmpd="$(mktemp -d)"
+  # shellcheck disable=SC2064
+  trap "rm -rf '$tmpd'" RETURN
 
   # Input side (tolerant: absent/legacy -> empty). selfHash + deps carry into
   # the recorded-* slots for #347 transitive invalidation; moduleHashes become
   # the `inputs` map with kind:other (matching doRefresh's DigestEntry KindOther).
   self="$(read_scalar "$input_digest" selfHash "")"
-  deps_json="$(read_kv_map "$input_digest" dependencyHashes | jq -R -s '
+  read_kv_map "$input_digest" dependencyHashes | jq -R -s '
     split("\n") | map(select(length>0) | split("\t") | {key:.[0], value:.[1]})
-  ')"
-  inputs_json="$(read_kv_map "$input_digest" moduleHashes | jq -R -s '
+  ' > "$tmpd/deps.json"
+  read_kv_map "$input_digest" moduleHashes | jq -R -s '
     split("\n") | map(select(length>0) | split("\t")
       | {key:.[0], value:{kind:"other", hash:.[1]}})
-  ')"
+  ' > "$tmpd/inputs.json"
 
   # Output side: walk output-dir, hash each file, store relative paths, EXCLUDE
   # the output digest file itself (normalised compare, matching doRefresh).
   local digest_norm; digest_norm="$(normalise "$output_digest")"
-  local tsv=""
   local f rel h fn
+  : > "$tmpd/outputs.tsv"
   while IFS= read -r f; do
     [ -n "$f" ] || continue
     fn="$(normalise "$f")"
     [ "$fn" = "$digest_norm" ] && continue
     rel="$(make_relative_to "$output_dir" "$f")"
     h="$(hash_file "$f")"
-    tsv+="${rel}"$'\t'"${h}"$'\n'
+    printf '%s\t%s\n' "$rel" "$h" >> "$tmpd/outputs.tsv"
   done < <(list_files_recursive "$output_dir")
-  outputs_json="$(printf '%s' "$tsv" | jq -R -s '
+  jq -R -s '
     split("\n") | map(select(length>0) | split("\t")
       | {key:.[0], value:{kind:"targetFile", hash:.[1]}})
-  ')"
+  ' "$tmpd/outputs.tsv" > "$tmpd/outputs.json"
 
   mkdir -p "$(dirname "$output_digest")"
+  # --slurpfile binds each file's (single) JSON value as the [0] element of an
+  # array, hence the `[0]` indexing below.
   jq -n \
     --argjson dfv "$DIGEST_FORMAT_VERSION" \
     --argjson mfv "$MODULE_FORMAT_VERSION" \
     --arg gen "$gen" \
     --argjson generation "$generation" \
     --arg self "$self" \
-    --argjson deps "$deps_json" \
-    --argjson inputs "$inputs_json" \
-    --argjson outputs "$outputs_json" '
+    --slurpfile deps "$tmpd/deps.json" \
+    --slurpfile inputs "$tmpd/inputs.json" \
+    --slurpfile outputs "$tmpd/outputs.json" '
     {digestFormatVersion:$dfv, moduleFormatVersion:$mfv, generator:$gen, generation:$generation}
     + (if $self != "" then {selfHash:$self} else {} end)
-    + {dependencyHashes:$deps, inputs:$inputs, outputs:$outputs}
+    + {dependencyHashes:$deps[0], inputs:$inputs[0], outputs:$outputs[0]}
   ' > "$output_digest"
 
   local ninputs noutputs ndeps
-  ninputs="$(printf '%s' "$inputs_json" | jq 'length')"
-  noutputs="$(printf '%s' "$outputs_json" | jq 'length')"
-  ndeps="$(printf '%s' "$deps_json" | jq 'length')"
+  ninputs="$(jq 'length' "$tmpd/inputs.json")"
+  noutputs="$(jq 'length' "$tmpd/outputs.json")"
+  ndeps="$(jq 'length' "$tmpd/deps.json")"
   echo "  digest.sh: wrote $output_digest ($ninputs inputs, $noutputs outputs, $ndeps deps)"
 }
 
@@ -584,30 +596,38 @@ do_refresh_input() {
   # handle the empty stream (yields the empty-input sha, matching the oracle).
   local self_hash; self_hash="$(printf '%s' "$all_tsv" | compute_self_hash)"
 
+  # Large arrays via TEMP FILES + jq --slurpfile, never --argjson (ARG_MAX;
+  # same fix as do_refresh — a big package's moduleHashes would blow the jq
+  # command line). refresh-input's real call set is small, but keep the pattern
+  # consistent + robust.
+  local tmpd; tmpd="$(mktemp -d)"
+  # shellcheck disable=SC2064
+  trap "rm -rf '$tmpd'" RETURN
+
   # Preserve existing dependencyHashes from the current digest (a single-package
   # input refresh does not change cross-package deps).
-  local deps_json="[]"
   if [ -f "$dpath" ]; then
-    deps_json="$(jq -c '.dependencyHashes // []' "$dpath" 2>/dev/null || echo '[]')"
-    [ -n "$deps_json" ] || deps_json="[]"
+    jq -c '.dependencyHashes // []' "$dpath" 2>/dev/null > "$tmpd/deps.json" || echo '[]' > "$tmpd/deps.json"
+    [ -s "$tmpd/deps.json" ] || echo '[]' > "$tmpd/deps.json"
+  else
+    echo '[]' > "$tmpd/deps.json"
   fi
 
   # moduleHashes array from the full TSV.
-  local module_hashes_json
-  module_hashes_json="$(printf '%s' "$all_tsv" | jq -R -s '
+  printf '%s' "$all_tsv" | jq -R -s '
     split("\n") | map(select(length>0) | split("\t") | {key:.[0], value:.[1]})
-  ')"
+  ' > "$tmpd/modules.json"
 
   mkdir -p "$(dirname "$dpath")"
   jq -n \
     --argjson dfv "$DIGEST_FORMAT_VERSION" \
     --argjson mfv "$MODULE_FORMAT_VERSION" \
     --arg self "$self_hash" \
-    --argjson deps "$deps_json" \
-    --argjson modules "$module_hashes_json" '
+    --slurpfile deps "$tmpd/deps.json" \
+    --slurpfile modules "$tmpd/modules.json" '
     {digestFormatVersion:$dfv, moduleFormatVersion:$mfv}
     + (if $self != "" then {selfHash:$self} else {} end)
-    + {dependencyHashes:$deps, moduleHashes:$modules}
+    + {dependencyHashes:$deps[0], moduleHashes:$modules[0]}
   ' > "$dpath"
 
   local nsrc njson
