@@ -55,6 +55,7 @@
                           "list": [
                             {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "binary", "term": "unit"}}},
                             {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "boolean", "term": "unit"}}},
+                            {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "decimal", "term": "unit"}}},
                             {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "float", "term": "unit"}}},
                             {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "integer", "term": "unit"}}},
                             {"inject": {"typeName": "hydra.variants.LiteralVariant", "field": {"name": "string", "term": "unit"}}}]}}},
