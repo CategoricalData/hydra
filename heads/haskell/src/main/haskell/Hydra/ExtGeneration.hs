@@ -37,7 +37,7 @@ import Hydra.TypeScript.Language (typeScriptLanguage)
 import Hydra.Wasm.Coder (moduleToWasm)
 import Hydra.Wasm.Language (wasmLanguage)
 import Hydra.Lisp.Coder (moduleToLisp)
-import Hydra.Lisp.Language (clojureLanguage, commonLispLanguage, lispLanguage, schemeLanguage)
+import Hydra.Lisp.Language (clojureLanguage, commonLispLanguage, emacsLispLanguage, lispLanguage, schemeLanguage)
 import Hydra.Lisp.Serde (programToExpr)
 import qualified Hydra.Lisp.Syntax as LispSyntax
 import qualified Hydra.Serialization as Serialization
@@ -269,7 +269,7 @@ writeCommonLisp basePath universeModules modulesToGenerate = do
 writeEmacsLisp :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
 writeEmacsLisp basePath universeModules modulesToGenerate = do
   knownSubs <- overlayLibSubs emacsLispOverlayLibDir
-  generateSources (moduleToLispDialect LispSyntax.DialectEmacsLisp "el" knownSubs) lispLanguage True basePath universeModules modulesToGenerate
+  generateSources (moduleToLispDialect LispSyntax.DialectEmacsLisp "el" knownSubs) emacsLispLanguage True basePath universeModules modulesToGenerate
 
 -- | Generate Scala source files from modules.
 -- First argument: output directory

@@ -423,10 +423,10 @@ public class TransformJsonToTarget {
         System.out.println("Pruning stale outputs (#459 H1)... pruned " + pruned + " file(s).");
     }
 
-    // #719/#727: the hosts whose Literal.decimal has no scale field yet. Mirrors
-    // Main.hs's dropsScaleDistinctTests; keep the two lists in sync until #727 lands.
-    private static final Set<String> SCALE_DISTINCT_DROP_TARGETS = new HashSet<>(
-            Arrays.asList("emacs-lisp"));
+    // #719/#727: all five lossy-double hosts now have real scale-preserving decimal
+    // representations, so this is empty. Mirrors Main.hs's dropsScaleDistinctTests; kept as a
+    // mechanism (rather than deleted outright) until Emacs Lisp's fix is validated end-to-end.
+    private static final Set<String> SCALE_DISTINCT_DROP_TARGETS = new HashSet<>();
 
     private static boolean dropsScaleDistinctTests(String target) {
         return SCALE_DISTINCT_DROP_TARGETS.contains(target);
