@@ -767,10 +767,9 @@ literalToExpr = define "literalToExpr" $
         Serialization.cst @@ (formatLispFloat @@ var "d" @@ (project L._FloatLiteral L._FloatLiteral_value @@ var "f")),
       L._Literal_decimal>>: lambda "dec" $
         "digits" <~ (project L._DecimalLiteral L._DecimalLiteral_digits @@ var "dec") $
-        -- Emacs Lisp has no arbitrary-precision decimal representation and stays on the
-        -- shared lispLanguage (adaptTerm downgrades its decimals to float64 before this coder
-        -- ever sees them), so this branch is unreachable for that dialect; the Clojure-style
-        -- M-suffix default is arbitrary dead code, kept only to satisfy match exhaustiveness.
+        -- All four Lisp dialects now have a real decimal representation, so every arm below
+        -- is genuinely reachable; the Just-default is unreachable dead code, kept only to
+        -- satisfy match exhaustiveness (a 5th dialect would fall through to it).
         match L._Dialect (var "d") (Just $ Serialization.cst @@ (Strings.concat2 (var "digits") (string "M"))) [
           -- Clojure has a native BigDecimal reader literal; the M suffix marks it (e.g.
           -- 1.10M), preserving the exact scale of the pre-rendered digits string.
@@ -782,6 +781,17 @@ literalToExpr = define "literalToExpr" $
           -- The leading quote is required: an unquoted (110 . 2) in an expression position
           -- is read as a function call (head 110), not a literal cons datum.
           L._Dialect_commonLisp>>: constant $
+            "parts" <~ (decimalDigitsAndScale @@ var "digits") $
+            "signDigits" <~ Pairs.first (var "parts") $
+            "scale" <~ Pairs.second (var "parts") $
+            "coefficientText" <~ Strings.concat2 (Pairs.first (var "signDigits")) (Pairs.second (var "signDigits")) $
+            Serialization.cst @@ (Strings.concat (list [
+              string "'(", var "coefficientText", string " . ", Literals.printInt32 (var "scale"), string ")"])),
+          -- Emacs Lisp (27+) has native bignums, same quoted (coefficient . scale) cons pair
+          -- representation as Common Lisp and Scheme (verified: Emacs Lisp's reader also
+          -- treats an unquoted dotted pair in expression position as a malformed function
+          -- call, for the same code-vs-data reason).
+          L._Dialect_emacsLisp>>: constant $
             "parts" <~ (decimalDigitsAndScale @@ var "digits") $
             "signDigits" <~ Pairs.first (var "parts") $
             "scale" <~ Pairs.second (var "parts") $
