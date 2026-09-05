@@ -94,6 +94,7 @@ typeScriptLanguage = define "typeScriptLanguage" $
     "literalVariants">: Sets.fromList $ list [
       Variants.literalVariantBinary, -- Uint8Array
       Variants.literalVariantBoolean, -- boolean
+      Variants.literalVariantDecimal, -- arbitrary-precision, scale-preserving ({coefficient: bigint, scale: number})
       Variants.literalVariantFloat, -- number (see float types)
       Variants.literalVariantInteger, -- number/BigInt (see integer types)
       Variants.literalVariantString], -- string

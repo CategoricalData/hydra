@@ -28,6 +28,7 @@ import qualified Hydra.Dsl.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Lib.Math                   as Math
 import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Dsl.Lib.Ordering                  as Ordering
 import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
@@ -86,6 +87,7 @@ module_ = Module {
       toDefinition collectImports,
       toDefinition collectInnerTypeImports,
       toDefinition collectTermImports,
+      toDefinition decimalDigitsAndScale,
       toDefinition eagerFreeVariablesInTerm,
       toDefinition encodeBindingAsStatement,
       toDefinition encodeLazyCall,
@@ -442,6 +444,43 @@ lazyFlagsForPrimitive = def "lazyFlagsForPrimitive" $
             (Packaging.primitiveDefinitionSignature
               (Graph.primitiveDefinition (var "prim")))))
 
+-- | Decode a canonical decimal digit string (as produced by `printDecimal`;
+-- see docs/specification/syntax.md §2.6) into a `((sign, digits), scale)`
+-- nested pair suitable for building a `{ coefficient, scale }` object
+-- literal. `sign` is `"-"` or `""`; `digits` is the unsigned coefficient
+-- digit string; `scale` is always >= 0 (any negative scale implied by a
+-- positive exponent is folded into `digits` via trailing zeros).
+decimalDigitsAndScale :: TypedTermDefinition (String -> ((String, String), Int))
+decimalDigitsAndScale = def "decimalDigitsAndScale" $
+  doc "Decode a canonical decimal digit string into a ((sign, digits), scale) nested pair" $
+  lambda "s" $
+    "eParts" <~ Strings.splitOn (string "e") (var "s") $
+    "mantissa" <~ Optionals.withDefault (string "") (Lists.head (var "eParts")) $
+    "expText" <~ Optionals.withDefault (string "") (Lists.head (Lists.drop (int32 1) (var "eParts"))) $
+    -- printDecimal's exponent is always-signed ("e+30", "e-23"); parseInt32
+    -- doesn't accept a leading '+', so strip it before parsing.
+    "expTextUnplussed" <~ Logic.ifElse
+      (Equality.equal (Optionals.withDefault (int32 0) (Strings.charAt (int32 0) (var "expText"))) (int32 43))
+      (Strings.fromList (Lists.drop (int32 1) (Strings.toList (var "expText"))))
+      (var "expText") $
+    "expPart" <~ Optionals.withDefault (int32 0) (Literals.parseInt32 (var "expTextUnplussed")) $
+    "isNeg" <~ Equality.equal (Optionals.withDefault (int32 0) (Strings.charAt (int32 0) (var "mantissa"))) (int32 45) $
+    "unsigned" <~ Logic.ifElse (var "isNeg")
+      (Strings.fromList (Lists.drop (int32 1) (Strings.toList (var "mantissa"))))
+      (var "mantissa") $
+    "dotParts" <~ Strings.splitOn (string ".") (var "unsigned") $
+    "intPart" <~ Optionals.withDefault (string "") (Lists.head (var "dotParts")) $
+    "fracPart" <~ Optionals.withDefault (string "") (Lists.head (Lists.drop (int32 1) (var "dotParts"))) $
+    "rawDigits" <~ Strings.concat2 (var "intPart") (var "fracPart") $
+    "rawScale" <~ Math.sub (Strings.length (var "fracPart")) (var "expPart") $
+    "sign" <~ Logic.ifElse (var "isNeg") (string "-") (string "") $
+    Logic.ifElse (Ordering.lt (var "rawScale") (int32 0))
+      (pair (pair (var "sign")
+        (Strings.concat2 (var "rawDigits")
+          (Strings.fromList (Lists.replicate (Math.negate (var "rawScale")) (int32 48)))))
+        (int32 0))
+      (pair (pair (var "sign") (var "rawDigits")) (var "rawScale"))
+
 -- | Render a Hydra Literal as a TypeScript Expression.
 --
 -- Notes on numeric encoding gaps in the current AST:
@@ -449,8 +488,8 @@ lazyFlagsForPrimitive = def "lazyFlagsForPrimitive" $
 --     and float32/64 but not bigint or u/int64. For those, emit `BigInt("n")`
 --     as a call expression. (TS has a `123n` literal syntax but the AST
 --     doesn't represent it yet.)
---   * Decimals carry no exact representation in TS; emit as a Double via
---     `Literals.parseDecimal` since the runtime treats them as `number`.
+--   * Decimals are scale-preserving: emitted as a `{ coefficient, scale }`
+--     object literal matching the runtime's `Decimal` representation.
 --   * Binary literals encode as base64-tagged string literals; the runtime
 --     decoder (extractCore.binary) accepts either Uint8Array or base64.
 encodeLiteral :: TypedTermDefinition (Literal -> TS.Expression)
@@ -480,10 +519,17 @@ encodeLiteral = def "encodeLiteral" $
     _Literal_boolean>>: lambda "b" $
       var "boolLit" @@ var "b",
     _Literal_decimal>>: lambda "d" $
-      -- Decimals carry no exact representation in TS; convert through bigint
-      -- to keep the value but drop fractional precision. (Hydra's `Decimal`
-      -- is rarely fractional in generated kernel code.)
-      var "numLit" @@ (Literals.bigintToInt64 (Literals.decimalToBigint (var "d"))),
+      -- Emit a `{ coefficient: BigInt("..."), scale: N }` object literal,
+      -- matching the runtime's scale-preserving Decimal representation
+      -- (overlay/typescript/.../lib/literals.ts). The exact digit string
+      -- comes from printDecimal, decoded into (sign, digits, scale) here.
+      "parts" <~ (decimalDigitsAndScale @@ (Literals.printDecimal (var "d"))) $
+      "signDigits" <~ Pairs.first (var "parts") $
+      "scale" <~ Pairs.second (var "parts") $
+      "coefficientText" <~ Strings.concat2 (Pairs.first (var "signDigits")) (Pairs.second (var "signDigits")) $
+      tsObject @@ list [
+        pair (string "coefficient") (var "bigIntCall" @@ var "coefficientText"),
+        pair (string "scale") (var "numLit" @@ (Literals.bigintToInt64 (Literals.int32ToBigint (var "scale"))))],
     _Literal_string>>: lambda "s" $
       var "strLit" @@ var "s",
     _Literal_integer>>: lambda "iv" $
@@ -521,7 +567,11 @@ encodeLiteralType = def "encodeLiteralType" $
     _LiteralType_boolean>>: constant $
       tsNamedType @@ string "boolean",
     _LiteralType_decimal>>: constant $
-      tsNamedType @@ string "number",
+      -- Arbitrary-precision, scale-preserving: value = coefficient * 10^-scale
+      -- (mirrors java.math.BigDecimal's (unscaledValue, scale) convention).
+      inject TS._TypeExpression TS._TypeExpression_object $ list [
+        tsPropSig @@ string "coefficient" @@ boolean False @@ (tsNamedType @@ string "bigint"),
+        tsPropSig @@ string "scale" @@ boolean False @@ (tsNamedType @@ string "number")],
     _LiteralType_float>>: lambda "ft" $
       match _FloatType (var "ft") Nothing [
         _FloatType_float32>>: constant $ tsNamedType @@ string "number",
