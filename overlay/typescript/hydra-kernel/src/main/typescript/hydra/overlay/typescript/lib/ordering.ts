@@ -5,6 +5,25 @@
 // unwrap Term literals to their underlying values before comparing.
 
 import { equal, stableStringify } from "./equality.js";
+import type { Decimal } from "./literals.js";
+
+const isDecimal = (x: unknown): x is Decimal =>
+  typeof x === "object" && x !== null && typeof (x as Decimal).coefficient === "bigint" &&
+  typeof (x as Decimal).scale === "number";
+
+// Ordered comparison of two decimals: numeric value first, then scale
+// ascending as a tiebreak (1.1 < 1.10 < 1.100), per
+// docs/specification/ordering-and-equality.md.
+const compareDecimals = (a: Decimal, b: Decimal): number => {
+  // Cross-multiply to compare a.coefficient/10^a.scale against
+  // b.coefficient/10^b.scale without floating-point error.
+  const maxScale = Math.max(a.scale, b.scale);
+  const na = a.coefficient * (10n ** BigInt(maxScale - a.scale));
+  const nb = b.coefficient * (10n ** BigInt(maxScale - b.scale));
+  if (na < nb) return -1;
+  if (na > nb) return 1;
+  return a.scale - b.scale;
+};
 
 // Unwrap a Hydra Term value to its underlying scalar for ordered
 // comparison. The kernel test primitives often compare Term-encoded
@@ -33,6 +52,7 @@ const unwrapForOrdering = (x: unknown): unknown => {
 export const lt = <A>(a: A, b: A): boolean => {
   const ua = unwrapForOrdering(a);
   const ub = unwrapForOrdering(b);
+  if (isDecimal(ua) && isDecimal(ub)) return compareDecimals(ua, ub) < 0;
   if (typeof ua === "number" && typeof ub === "number") return ua < ub;
   if (typeof ua === "string" && typeof ub === "string") return ua < ub;
   if (typeof ua === "bigint" && typeof ub === "bigint") return ua < ub;

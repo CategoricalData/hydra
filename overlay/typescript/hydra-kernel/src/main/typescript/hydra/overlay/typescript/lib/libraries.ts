@@ -111,8 +111,8 @@ const tString = (s: string): Term =>
 // runtime-correct without requiring a heap-allocation here.
 const tBinary = (b: Uint8Array | string): Term =>
   litTerm({ tag: "binary", value: b });
-const tDecimal = (f: number): Term =>
-  litTerm({ tag: "decimal", value: f });
+const tDecimal = (d: libLiterals.Decimal): Term =>
+  litTerm({ tag: "decimal", value: d });
 
 const tInject = (typeName: string, fieldName: string, body: Term): Term =>
   ({ tag: "inject", value: {
@@ -146,6 +146,7 @@ const tyUint64: Type = { tag: "literal", value: { tag: "integer", value: { tag: 
 const tyBigint: Type = { tag: "literal", value: { tag: "integer", value: { tag: "bigint" } as never } as never } as never;
 const tyFloat32: Type = { tag: "literal", value: { tag: "float", value: { tag: "float32" } as never } as never } as never;
 const tyFloat64: Type = { tag: "literal", value: { tag: "float", value: { tag: "float64" } as never } as never } as never;
+const tyDecimal: Type = { tag: "literal", value: { tag: "decimal" } as never } as never;
 
 // Lookup by string name — convenient inside loop-based registration.
 const intTypeOf = (w: string): Type => {
@@ -379,6 +380,15 @@ const dAnyFloat = (_g: Graph, t: Term): Either<HydraError, number> => {
   const v = lit.value.value;
   if (typeof v?.value === "number") return right(v.value);
   return left({ tag: "other", value: "unrecognized float shape" } as never);
+};
+
+// Decode a Decimal literal: { tag: "literal", value: { tag: "decimal", value: Decimal } }.
+const dDecimal = (_g: Graph, t: Term): Either<HydraError, libLiterals.Decimal> => {
+  const lit = (t as { tag: string; value?: { tag?: string; value?: libLiterals.Decimal } });
+  if (lit.tag !== "literal" || lit.value?.tag !== "decimal" || lit.value.value === undefined) {
+    return left({ tag: "other", value: "expected a decimal literal" } as never);
+  }
+  return right(lit.value.value);
 };
 
 // === lib.chars ===
@@ -759,7 +769,7 @@ const literalsPrimitives = (): readonly Primitive[] => [
     libLiterals.parseBigint, (m) => tOptional(m, tBigint)),
   u1("hydra.lib.literals.readFloat", tyString, tyOptional(tyFloat64), dString,
     libLiterals.readFloat, (m) => tOptional(m, (f) => tFloat(f))),
-  u1("hydra.lib.literals.parseDecimal", tyString, tyOptional(tyFloat64), dString,
+  u1("hydra.lib.literals.parseDecimal", tyString, tyOptional(tyDecimal), dString,
     libLiterals.parseDecimal, (m) => tOptional(m, tDecimal)),
   // showInt / showUint / printBigint / showFloat / printDecimal all accept
   // an integer/float value and return its string form. Decode any width.
@@ -832,40 +842,10 @@ const literalsPrimitives = (): readonly Primitive[] => [
         }
         return bind(dAnyFloat(g, a0), (f) => right(tString(libLiterals.printFloat64(f))));
       })),
-  prim("hydra.lib.literals.printDecimal", scheme(tyFn(tyFloat64, tyString)),
+  prim("hydra.lib.literals.printDecimal", scheme(tyFn(tyDecimal, tyString)),
     (g, args) =>
-      bind(need(args, 0, "printDecimal"), (a0) => {
-        // Decode a Decimal literal: extract via decimal-literal helper.
-        const lit = (a0 as { tag: string; value?: { tag?: string; value?: number } });
-        const v = lit.value?.value;
-        const showD = (f: number): string => {
-          // Representation-faithful decimal rendering, matching the kernel's
-          // printDecimal (docs/specification/syntax.md §2.6, json-format.md):
-          // whole values print WITHOUT a decimal component ("42", "0"); the
-          // positional/exponent split follows ECMAScript Number::toString /
-          // RFC 8785 (positional for -6 <= adjustedExp < 21). Use the native
-          // Number->string ("42", "0.01", "100000000000000000000") rather than
-          // the FLOAT printer (printFloat64), which forces exponential/".0"
-          // forms appropriate for floats but not decimals. NOTE: this host
-          // still carries decimal as a float64, so it cannot preserve scale
-          // (1.10 vs 1.1) -- the scale-distinct kernel tests are host-skipped
-          // for TypeScript until it gains a real (coefficient, scale) decimal.
-          if (Number.isNaN(f)) return "NaN";
-          if (f === Infinity) return "Infinity";
-          if (f === -Infinity) return "-Infinity";
-          if (Object.is(f, -0)) return "0";
-          // String(f) uses positional form for 1e-6 <= |f| < 1e21 and lowercase
-          // "e+"/"e-" exponent form outside that -- normalize to the kernel's
-          // always-signed lowercase exponent (no leading zeros), matching
-          // printDecimal's exponential branch.
-          const s = String(f);
-          return s.replace(/e\+?(-?)0*(\d)/, "e$1$2");
-        };
-        if (lit.tag === "literal" && lit.value?.tag === "decimal" && typeof v === "number") {
-          return right(tString(showD(v)));
-        }
-        return bind(dAnyFloat(g, a0), (f) => right(tString(showD(f))));
-      })),
+      bind(need(args, 0, "printDecimal"), (a0) =>
+        bind(dDecimal(g, a0), (d) => right(tString(libLiterals.printDecimal(d)))))),
   // Int conversions
   prim("hydra.lib.literals.int", scheme(tyFn(tyInt32, tyInt32)),
     (g, args) =>
@@ -887,33 +867,18 @@ const literalsPrimitives = (): readonly Primitive[] => [
     (g, args) =>
       bind(need(args, 0, "bigintToUint"), (a0) =>
         bind(dBigint(g, a0), (n) => right(tInt(Number(n)))))),
-  prim("hydra.lib.literals.bigintToDecimal", scheme(tyFn(tyBigint, tyFloat64)),
+  prim("hydra.lib.literals.bigintToDecimal", scheme(tyFn(tyBigint, tyDecimal)),
     (g, args) =>
       bind(need(args, 0, "bigintToDecimal"), (a0) =>
-        bind(dBigint(g, a0), (n) => right(tDecimal(Number(n)))))),
-  prim("hydra.lib.literals.decimalToBigint", scheme(tyFn(tyFloat64, tyBigint)),
+        bind(dBigint(g, a0), (n) => right(tDecimal(libLiterals.bigintToDecimal(n)))))),
+  prim("hydra.lib.literals.decimalToBigint", scheme(tyFn(tyDecimal, tyBigint)),
     (g, args) =>
-      bind(need(args, 0, "decimalToBigint"), (a0) => {
-        // Decode Decimal literal directly. Match Haskell's `round`
-        // (nearest-integer, ties away from zero — close enough for the
-        // test fixtures, which avoid exact half values).
-        const lit = (a0 as { tag: string; value?: { tag?: string; value?: number } });
-        const v = lit.value?.value;
-        if (lit.tag === "literal" && lit.value?.tag === "decimal" && typeof v === "number") {
-          return right(tBigint(libLiterals.decimalToBigint(v)));
-        }
-        return bind(dAnyFloat(g, a0), (f) => right(tBigint(libLiterals.decimalToBigint(f))));
-      })),
-  prim("hydra.lib.literals.decimalToFloat", scheme(tyFn(tyFloat64, tyFloat64)),
+      bind(need(args, 0, "decimalToBigint"), (a0) =>
+        bind(dDecimal(g, a0), (d) => right(tBigint(libLiterals.decimalToBigint(d)))))),
+  prim("hydra.lib.literals.decimalToFloat", scheme(tyFn(tyDecimal, tyFloat64)),
     (g, args) =>
-      bind(need(args, 0, "decimalToFloat"), (a0) => {
-        const lit = (a0 as { tag: string; value?: { tag?: string; value?: number } });
-        const v = lit.value?.value;
-        if (lit.tag === "literal" && lit.value?.tag === "decimal" && typeof v === "number") {
-          return right(tFloat(v));
-        }
-        return bind(dAnyFloat(g, a0), (f) => right(tFloat(f)));
-      })),
+      bind(need(args, 0, "decimalToFloat"), (a0) =>
+        bind(dDecimal(g, a0), (d) => right(tFloat(libLiterals.decimalToFloat(d)))))),
   prim("hydra.lib.literals.binaryToBase64", scheme(tyFn(tyBinary, tyString)),
     (g, args) =>
       bind(need(args, 0, "binaryToBase64"), (a0) =>
@@ -1000,20 +965,16 @@ const literalsPrimitives = (): readonly Primitive[] => [
             const r = libLiterals.readFloat(s);
             return right(tOptional(r, (f) => tFloat(f, w)));
           }))),
-    prim(`hydra.lib.literals.decimalTo${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(tyFloat64, w === "float32" ? tyFloat32 : tyFloat64)),
+    prim(`hydra.lib.literals.decimalTo${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(tyDecimal, w === "float32" ? tyFloat32 : tyFloat64)),
       (g, args) =>
-        bind(need(args, 0, `decimalTo${w}`), (a0) => {
-          const lit = (a0 as { tag: string; value?: { tag?: string; value?: number } });
-          const v = lit.value?.value;
-          if (lit.tag === "literal" && lit.value?.tag === "decimal" && typeof v === "number") {
-            return right(tFloat(w === "float32" ? Math.fround(v) : v, w));
-          }
-          return bind(dAnyFloat(g, a0), (f) => right(tFloat(w === "float32" ? Math.fround(f) : f, w)));
-        })),
-    prim(`hydra.lib.literals.${w}ToDecimal`, scheme(tyFn(w === "float32" ? tyFloat32 : tyFloat64, tyFloat64)),
+        bind(need(args, 0, `decimalTo${w}`), (a0) =>
+          bind(dDecimal(g, a0), (d) =>
+            right(tFloat(w === "float32" ? libLiterals.decimalToFloat32(d) : libLiterals.decimalToFloat64(d), w))))),
+    prim(`hydra.lib.literals.${w}ToDecimal`, scheme(tyFn(w === "float32" ? tyFloat32 : tyFloat64, tyDecimal)),
       (g, args) =>
         bind(need(args, 0, `${w}ToDecimal`), (a0) =>
-          bind(dAnyFloat(g, a0), (f) => right(tDecimal(f))))),
+          bind(dAnyFloat(g, a0), (f) =>
+            right(tDecimal(w === "float32" ? libLiterals.float32ToDecimal(f) : libLiterals.float64ToDecimal(f)))))),
   ]),
   prim("hydra.lib.literals.float32ToFloat64", scheme(tyFn(tyFloat32, tyFloat64)),
     (g, args) =>

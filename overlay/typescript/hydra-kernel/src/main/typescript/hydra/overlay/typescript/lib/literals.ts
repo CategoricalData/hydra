@@ -59,27 +59,59 @@ export const printBigint = (v: IntegerValue | bigint): string =>
 type FloatValue = { tag: string; value: number };
 export const showFloat = (v: FloatValue): string => `${v.value}:${v.tag}`;
 
+// A scale-preserving arbitrary-precision decimal: the numeric value is
+// `coefficient * 10^-scale`. Mirrors java.math.BigDecimal's (unscaledValue,
+// scale) convention, so "1.10" is { coefficient: 110n, scale: 2 } and "1.1"
+// is { coefficient: 11n, scale: 1 } -- distinct values per the kernel spec
+// (docs/specification/ordering-and-equality.md: 1.1 != 1.10).
+export type Decimal = { readonly coefficient: bigint; readonly scale: number };
+
+export const mkDecimal = (coefficient: bigint, scale: number): Decimal => ({ coefficient, scale });
+
 // Representation-faithful DECIMAL rendering (NOT float `show`): per the kernel
 // printDecimal (docs/specification/syntax.md §2.6, json-format.md), a decimal
 // prints in positional form when the adjusted exponent is in [-6, 21) and in
 // exponent form otherwise, with NO mandatory trailing ".0" on whole values
 // ("42" not "42.0", "0" not "0.0", "0.01" not "1.0e-2", "100000000000000000000"
-// not "1.0e20"). This matches ECMAScript Number::toString / RFC 8785, which is
-// exactly what `String(f)` produces for a finite double, so we build from that
-// rather than the FLOAT printers (printFloat64/printFloat32), which use the
-// Haskell-Double `show` convention (forced ".0", sci at exp<-1 or >=7) that is
-// correct for floats but wrong for decimals. NOTE: this host carries decimal as
-// a float64 with no scale field, so it cannot preserve scale (1.10 vs 1.1); the
-// scale-distinct kernel tests are host-skipped for TypeScript until it gains a
-// real (coefficient, scale) decimal (tracked separately).
-export const printDecimal = (f: number): string => {
-  if (Number.isNaN(f)) return "NaN";
-  if (f === Infinity) return "Infinity";
-  if (f === -Infinity) return "-Infinity";
-  if (Object.is(f, -0)) return "0";
-  // String(f): positional for 1e-6 <= |f| < 1e21, lowercase "e+"/"e-" outside.
-  // Normalize to the kernel's always-signed lowercase exponent (no leading zeros).
-  return String(f).replace(/e\+?(-?)0*(\d)/, "e$1$2");
+// not "1.0e20"), coefficient digits (including trailing zeros) preserved
+// exactly, and zero printed per its scale ("0", "0.0", "0.00").
+//
+// Parameter typed `unknown` (not `Decimal`) because the generated
+// hydra.adapt module's hoisted decimal-conversion helpers (adapt.ts) type
+// their captured value as `unknown` -- an artifact of the TS coder's
+// hoisting logic, which cannot express a concrete domain type for these
+// inner helper functions. Narrowed internally via `asDecimal`.
+const asDecimal = (v: unknown): Decimal => v as Decimal;
+export const printDecimal = (d0: unknown): string => {
+  const d = asDecimal(d0);
+  const neg = d.coefficient < 0n;
+  const digits = (neg ? -d.coefficient : d.coefficient).toString();
+  const sign = neg ? "-" : "";
+  // Adjusted exponent: decimal position of the leading significant digit,
+  // i.e. exponent of digits[0] when the value is written as d.ddd... * 10^a.
+  const adjustedExp = digits.length - 1 - d.scale;
+  if (adjustedExp >= -6 && adjustedExp < 21) {
+    // Positional form.
+    if (d.scale <= 0) {
+      // Whole value: pad with trailing zeros (no fraction, no ".0").
+      return sign + digits + "0".repeat(-d.scale);
+    }
+    if (d.scale < digits.length) {
+      const intPart = digits.slice(0, digits.length - d.scale);
+      const fracPart = digits.slice(digits.length - d.scale);
+      return `${sign}${intPart}.${fracPart}`;
+    }
+    return sign + "0." + "0".repeat(d.scale - digits.length) + digits;
+  }
+  // Exponent form: always one digit before the point AND a fractional part
+  // (spec: "one digit before the point"), so a single-digit coefficient
+  // still prints with a synthetic ".0" ("1.0e-20", not "1e-20") -- otherwise
+  // coefficient digits are preserved exactly.
+  const leadDigit = digits[0];
+  const rest = digits.slice(1);
+  const mantissa = rest.length > 0 ? `${leadDigit}.${rest}` : `${leadDigit}.0`;
+  const expSign = adjustedExp < 0 ? "-" : "+";
+  return `${sign}${mantissa}e${expSign}${Math.abs(adjustedExp)}`;
 };
 
 // === read family ===
@@ -111,7 +143,38 @@ export const readFloat = (s: string): Optional<number> => {
   return Number.isNaN(n) ? None : Given(n);
 };
 
-export const parseDecimal = readFloat;
+// Parse the JSON number grammar (docs/specification/syntax.md §2.6) into a
+// scale-preserving Decimal: an optional sign, integer digits, an optional
+// fraction part, and an optional exponent part. Scale-preserving means
+// "1.10" and "1.1" parse to distinct values (scale 2 vs scale 1).
+const DECIMAL_PATTERN = /^(-?)(\d+)(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/;
+export const parseDecimal = (s: string): Optional<Decimal> => {
+  const m = DECIMAL_PATTERN.exec(s.trim());
+  if (!m) return None;
+  const [, sign, intDigits, fracDigits, expPart] = m;
+  const digits = intDigits + (fracDigits ?? "");
+  const scale = (fracDigits?.length ?? 0) - (expPart ? parseInt(expPart, 10) : 0);
+  let coefficient = BigInt((sign === "-" ? "-" : "") + digits);
+  let normScale = scale;
+  // A negative scale means trailing zeros beyond the decimal point implied by
+  // the exponent; fold them into the coefficient so `scale` is never negative
+  // (matches BigDecimal's normalized (unscaledValue, scale) representation).
+  if (normScale < 0) {
+    coefficient = coefficient * (10n ** BigInt(-normScale));
+    normScale = 0;
+  }
+  return Given(mkDecimal(coefficient, normScale));
+};
+
+// Parse a known-good canonical decimal digit string (e.g. one produced by
+// printDecimal) into a Decimal. Used by the TypeScript coder to embed decimal
+// literals in generated source (mirrors how the Python coder emits
+// `Decimal('<printDecimal string>')`).
+export const decimalFromString = (s: string): Decimal => {
+  const m = parseDecimal(s);
+  if (m.tag !== "given") throw new Error(`decimalFromString: not a valid decimal literal: ${s}`);
+  return m.value;
+};
 
 export const parseBoolean = (s: string): Optional<boolean> =>
   s === "true" ? Given(true) : s === "false" ? Given(false) : None;
@@ -121,14 +184,30 @@ export const parseBoolean = (s: string): Optional<boolean> =>
 // "bigint" here means Hydra's BigInteger value — represented as JS bigint.
 export const bigintToInt = (n: bigint): number => Number(n);
 export const bigintToUint = (n: bigint): number => Number(n);
-export const bigintToDecimal = (n: bigint): number => Number(n);
+export const bigintToDecimal = (n: bigint): Decimal => mkDecimal(n, 0);
 
-// `decimalToBigint` matches Haskell's `round` (banker's rounding to nearest,
-// ties-to-even). For symmetry with the kernel test fixtures, use Math.round
-// which rounds halves *away from zero*. Tests use values like 42.7 where this
-// agrees with banker's rounding.
-export const decimalToBigint = (f: number): bigint => BigInt(Math.round(f));
-export const decimalToFloat = (f: number): number => f;
+// `decimalToBigint` rounds to the nearest integer, ties to even (banker's
+// rounding) -- matches the Python/Java reference hosts' behavior, despite
+// the kernel primitive's doc comment saying "truncating" (stale relative to
+// the actual cross-host test suite, e.g. 42.7 rounds to 43, not 42).
+export const decimalToBigint = (d: Decimal): bigint => {
+  if (d.scale <= 0) return d.coefficient * (10n ** BigInt(-d.scale));
+  const divisor = 10n ** BigInt(d.scale);
+  const neg = d.coefficient < 0n;
+  const abs = neg ? -d.coefficient : d.coefficient;
+  const quotient = abs / divisor;
+  const remainder = abs % divisor;
+  const twiceRemainder = remainder * 2n;
+  let rounded = quotient;
+  if (twiceRemainder > divisor || (twiceRemainder === divisor && quotient % 2n === 1n)) {
+    rounded = quotient + 1n;
+  }
+  return neg ? -rounded : rounded;
+};
+
+// Exact conversion to a JS double (float64), rounding to the nearest
+// representable value (ties-to-even, via Number(string)).
+export const decimalToFloat = (d: unknown): number => Number(printDecimal(d));
 
 // === wrappers for primitive constructors ===
 // These return the canonical IntegerValue / FloatValue shape so that
@@ -283,8 +362,23 @@ const _showFloatPreciseSig = (f: number, sig: number): string => {
 // generic show* family.)
 export const bigintToInt32 = (n: bigint): number => Number(n);
 export const int32ToBigint = (n: number): bigint => BigInt(n);
-export const float64ToDecimal = (f: number): number => f;
-export const decimalToFloat64 = (f: number): number => f;
+
+// float64/float32 -> Decimal is exact: every IEEE 754 double has a finite
+// decimal expansion. Use the shortest round-tripping decimal string
+// (String(f)) and parse that back, rather than expanding the full binary
+// fraction, matching printFloat64's own shortest-round-trip convention.
+export const float64ToDecimal = (f: number): Decimal => {
+  const parsed = parseDecimal(floatDigitString(f));
+  return parsed.tag === "given" ? parsed.value : mkDecimal(0n, 0);
+};
+export const decimalToFloat64 = decimalToFloat;
+
+// Render a finite float as a plain decimal digit string (no "NaN"/"Infinity"
+// sentinels -- callers only reach here for finite values) suitable for
+// parseDecimal, normalizing String(f)'s exponent spelling to the JSON
+// number grammar ("e+"/"e-", no leading zeros).
+const floatDigitString = (f: number): string =>
+  String(f).replace(/e\+?(-?)0*(\d)/, "e$1$2");
 
 // === Width-specialized parse aliases ===
 //
@@ -333,7 +427,7 @@ export const uint8ToBigint = (n: number): bigint => BigInt(n);
 export const uint16ToBigint = (n: number): bigint => BigInt(n);
 export const uint32ToBigint = (n: number): bigint => BigInt(n);
 export const uint64ToBigint = (n: bigint): bigint => n;
-export const decimalToFloat32 = (f: number): number => Math.fround(f);
-export const float32ToDecimal = (f: number): number => f;
+export const decimalToFloat32 = (d: Decimal): number => Math.fround(decimalToFloat(d));
+export const float32ToDecimal = (f: number): Decimal => float64ToDecimal(Math.fround(f));
 export const float32ToFloat64 = (f: number): number => f;
 export const float64ToFloat32 = (f: number): number => Math.fround(f);
