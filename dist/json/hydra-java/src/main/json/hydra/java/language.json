@@ -237,7 +237,7 @@
                     "name": "specialNames",
                     "term": {
                       "annotated": {
-                        "body": {"list": [{"literal": {"string": "Elements"}}]},
+                        "body": {"list": [{"literal": {"string": "Elements"}}, {"literal": {"string": "PartialVisitor"}}, {"literal": {"string": "Visitor"}}]},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Special names reserved for use by Hydra"}}}]}}},
                     "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
