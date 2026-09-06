@@ -29,7 +29,8 @@ module_ = Module {
                 \ Data.Char functions of the same names. Hosts are expected to reproduce these categories rather than\
                 \ a locale- or ASCII-only notion of letter, digit, or whitespace." ]
               []
-              Nothing)}
+              Nothing
+              [])}
   where
     definitions = [isAlpha, isAlphaNum, isDigit, isLower, isSpace, isUpper, toLower, toUpper]
 

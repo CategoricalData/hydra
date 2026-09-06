@@ -37,6 +37,8 @@ module_ = Module {
       packageDependency,
       packageName,
       primitiveDefinition,
+      provision,
+      provisionKindType,
       termDefinition,
       typeDefinition,
       version,
@@ -95,9 +97,9 @@ dependencyScope = define "DependencyScope" $
 
 entityMetadata :: TypeDefinition
 entityMetadata = define "EntityMetadata" $
-  doc ("Documentation and lifecycle metadata attachable to a packaging entity (package, module, or definition)."
-    ++ " Bundling these fields in one type lets future metadata be added without changing the field shape of"
-    ++ " the entities that carry it.") $
+  doc ("Documentation, lifecycle, and normative metadata attachable to a packaging entity (package,"
+    ++ " module, or definition). Bundling these fields in one type lets future metadata be added"
+    ++ " without changing the field shape of the entities that carry it.") $
   T.record [
     "description">:
       doc "An optional, concise one-line human-readable summary of the entity." $
@@ -111,7 +113,11 @@ entityMetadata = define "EntityMetadata" $
       T.list entityReference,
     "lifecycle">:
       doc "Optional version-lifecycle milestones for the entity." $
-      T.optional lifecycleInfo]
+      T.optional lifecycleInfo,
+    "provisions">:
+      doc ("Named normative provisions (requirements and recommendations) concerning this entity."
+        ++ " Empty when the entity states none.") $
+      T.list provision]
 
 entityReference :: TypeDefinition
 entityReference = define "EntityReference" $
@@ -247,6 +253,37 @@ primitiveDefinition = define "PrimitiveDefinition" $
     "defaultImplementation">:
       doc "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation." $
       T.optional Core.term]
+
+provision :: TypeDefinition
+provision = define "Provision" $
+  doc ("A named normative statement concerning an entity: a single falsifiable condition a conforming"
+    ++ " implementation is measured against. Tests reference provisions by name.") $
+  T.record [
+    "name">:
+      doc ("The fully-qualified name of the provision: the enclosing entity's name extended by one"
+        ++ " segment (e.g. hydra.lib.lists.concat.emptyLists). Composed at definition time by a helper"
+        ++ " that prefixes the entity's name, exactly as a definition's name is composed from its"
+        ++ " module's name -- so the author writes only the final segment, but the stored value is the"
+        ++ " full name.")
+      Core.name,
+    "kind">:
+      doc "Whether this provision is a requirement or a recommendation."
+      provisionKindType,
+    "statement">:
+      doc "The normative statement itself, as markdown prose: the falsifiable claim." $
+      T.string]
+
+provisionKindType :: TypeDefinition
+provisionKindType = define "ProvisionKind" $
+  doc ("Whether a provision is a requirement (a MUST: no deviation permitted for conformance) or a"
+    ++ " recommendation (a SHOULD: observed by the Hydra kernel, but a downstream project may opt out).") $
+  T.union [
+    "requirement">:
+      doc "A requirement: no deviation is permitted if conformance is to be claimed (MUST)." $
+      T.unit,
+    "recommendation">:
+      doc "A recommendation: observed strictly by the Hydra kernel and codebase, but a downstream project may opt out (SHOULD)." $
+      T.unit]
 
 termDefinition :: TypeDefinition
 termDefinition = define "TermDefinition" $

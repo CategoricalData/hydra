@@ -451,7 +451,7 @@ deprecatedSince ver useReplacement pd =
       Just m -> m {
         entityMetadataComments = L.concat [entityMetadataComments m, [useComment]],
         entityMetadataLifecycle = Just lifecycle}
-      Nothing -> EntityMetadata Nothing [useComment] [] (Just lifecycle)
+      Nothing -> EntityMetadata Nothing [useComment] [] (Just lifecycle) []
 
 -- | Define an impure primitive (no default implementation) within a module.
 -- Example: defineImpure = impurePrimitiveInModule module_
@@ -504,7 +504,7 @@ sigWithParams pairs ts =
 -- long-form comments. Each comments element is one logical observation, kept distinct rather than concatenated.
 primitiveMetadata :: String -> [String] -> Maybe EntityMetadata
 primitiveMetadata description comments =
-  Just (EntityMetadata (Just description) comments [] Nothing)
+  Just (EntityMetadata (Just description) comments [] Nothing [])
 
 -- | Convert a phantom-typed term definition to a primitive Definition, using the term body as the
 -- declarative default implementation.

@@ -73,4 +73,4 @@ unqualifiedDep ns = ModuleDependency ns Nothing
 -- without data loss; a Nothing description yields no metadata.
 descriptionMetadata :: Maybe String -> Maybe EntityMetadata
 descriptionMetadata Nothing = Nothing
-descriptionMetadata desc = Just (EntityMetadata desc [] [] Nothing)
+descriptionMetadata desc = Just (EntityMetadata desc [] [] Nothing [])
