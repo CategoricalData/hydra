@@ -3275,7 +3275,8 @@ public class Utils {
             Optional.given("Java utilities for constructing Java syntax trees"),
             java.util.List.of(),
             java.util.List.of(),
-            Optional.none())),
+            Optional.none(),
+            java.util.List.of())),
         DEPENDENCIES,
         DEFINITIONS);
 }

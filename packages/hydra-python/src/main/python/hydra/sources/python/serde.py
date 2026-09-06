@@ -55,7 +55,8 @@ _PLACEHOLDER = Module(
         Given("Python serializer: converts Python AST to concrete syntax"),
         (),
         (),
-        None_())),
+        None_(),
+        ())),
     DEPENDENCIES,
     (),
 )

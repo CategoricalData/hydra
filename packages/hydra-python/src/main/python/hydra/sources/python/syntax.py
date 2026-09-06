@@ -811,7 +811,8 @@ module_ = Module(
         Given(DESCRIPTION),
         (),
         (),
-        None_())),
+        None_(),
+        ())),
     DEPENDENCIES,
     tuple(_constructs + _terminals + _nonterminals),
 )

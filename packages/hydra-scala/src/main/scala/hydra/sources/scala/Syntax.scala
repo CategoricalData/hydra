@@ -1033,7 +1033,8 @@ object Syntax:
         "(xml literals, quasiquote/macro forms) are omitted."),
       comments = Seq.empty,
       seeAlso = Seq.empty,
-      lifecycle = None)),
+      lifecycle = None,
+      provisions = Seq.empty)),
     dependencies = Helpers.unqualifiedDeps(CORE_NS),
     definitions = DEFINITIONS)
 

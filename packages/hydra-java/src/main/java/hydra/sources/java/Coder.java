@@ -14193,7 +14193,8 @@ public class Coder {
             Optional.given("Java code generator: converts Hydra modules to Java source code"),
             List.of(),
             List.of(),
-            Optional.none())),
+            Optional.none(),
+            List.of())),
         DEPENDENCIES,
         DEFINITIONS);
 }

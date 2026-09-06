@@ -2670,7 +2670,8 @@ object Coder:
       description = Some("Scala code generator: converts Hydra modules to Scala source code"),
       comments = Seq.empty,
       seeAlso = Seq.empty,
-      lifecycle = None)),
+      lifecycle = None,
+      provisions = Seq.empty)),
     dependencies = DEPS.map(Helpers.unqualifiedDep),
     definitions = DEFINITIONS)
 

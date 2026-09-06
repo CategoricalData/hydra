@@ -56,7 +56,8 @@ _PLACEHOLDER = Module(
         Given("Python test code generation codec for pytest-based generation tests"),
         (),
         (),
-        None_())),
+        None_(),
+        ())),
     DEPENDENCIES,
     (),
 )

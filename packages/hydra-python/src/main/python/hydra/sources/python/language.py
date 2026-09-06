@@ -187,7 +187,8 @@ def _build_module() -> Module:
             Given("Language constraints and reserved words for Python 3"),
             (),
             (),
-            None_())),
+            None_(),
+            ())),
         [unqualified_dep(LEXICAL_NS)] + KERNEL_TYPES_NAMESPACES,
         (),  # filled in below
     )

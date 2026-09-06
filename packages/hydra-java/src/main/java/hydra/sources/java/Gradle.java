@@ -111,7 +111,8 @@ public class Gradle {
             Optional.given("Build configuration for Gradle-built distribution packages."),
             java.util.List.of(),
             java.util.List.of(),
-            Optional.none())),
+            Optional.none(),
+            java.util.List.of())),
         DEPENDENCIES,
         DEFINITIONS);
 }

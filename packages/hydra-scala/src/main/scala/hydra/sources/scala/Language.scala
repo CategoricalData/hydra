@@ -143,7 +143,8 @@ object Language:
       description = Some("Language constraints and reserved words for Scala"),
       comments = Seq.empty,
       seeAlso = Seq.empty,
-      lifecycle = None)),
+      lifecycle = None,
+      provisions = Seq.empty)),
     dependencies = KERNEL_DEPS.map(Helpers.unqualifiedDep),
     definitions = DEFINITIONS)
 

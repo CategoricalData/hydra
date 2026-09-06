@@ -833,7 +833,8 @@ object Serde:
       description = Some("Serialization functions for converting Scala AST to abstract expressions"),
       comments = Seq.empty,
       seeAlso = Seq.empty,
-      lifecycle = None)),
+      lifecycle = None,
+      provisions = Seq.empty)),
     dependencies = DEPS.map(Helpers.unqualifiedDep),
     definitions = DEFINITIONS)
 

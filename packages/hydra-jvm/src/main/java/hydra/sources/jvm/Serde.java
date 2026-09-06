@@ -174,7 +174,8 @@ public class Serde {
             Optional.given("Common JVM serialization helpers: Java/Scala string and character escaping"),
             java.util.List.of(),
             java.util.List.of(),
-            Optional.none())),
+            Optional.none(),
+            java.util.List.of())),
         DEPENDENCIES,
         DEFINITIONS);
 }

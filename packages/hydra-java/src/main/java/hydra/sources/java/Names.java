@@ -230,7 +230,8 @@ public class Names {
             Optional.given("Java naming constants and package name utilities"),
             java.util.List.of(),
             java.util.List.of(),
-            Optional.none())),
+            Optional.none(),
+            java.util.List.of())),
         DEPENDENCIES,
         DEFINITIONS);
 }

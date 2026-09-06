@@ -373,7 +373,8 @@ object Utils:
       description = Some("Utility functions for constructing Scala AST nodes"),
       comments = Seq.empty,
       seeAlso = Seq.empty,
-      lifecycle = None)),
+      lifecycle = None,
+      provisions = Seq.empty)),
     dependencies = DEPS.map(Helpers.unqualifiedDep),
     definitions = DEFINITIONS)
 

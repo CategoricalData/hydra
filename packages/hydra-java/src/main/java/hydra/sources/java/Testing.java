@@ -417,7 +417,8 @@ public class Testing {
             Optional.given("Java test code generation codec for JUnit-based generation tests"),
             java.util.List.of(),
             java.util.List.of(),
-            Optional.none())),
+            Optional.none(),
+            java.util.List.of())),
         DEPENDENCIES,
         DEFINITIONS);
 }

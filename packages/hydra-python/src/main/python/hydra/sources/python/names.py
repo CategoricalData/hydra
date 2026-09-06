@@ -75,7 +75,8 @@ _PLACEHOLDER = Module(
         Given("Python naming utilities: encoding Hydra names as Python names"),
         (),
         (),
-        None_())),
+        None_(),
+        ())),
     DEPENDENCIES,
     (),
 )

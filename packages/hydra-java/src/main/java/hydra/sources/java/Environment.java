@@ -115,7 +115,8 @@ public class Environment {
             Optional.given("Environment types for Java code generation"),
             java.util.List.of(),
             java.util.List.of(),
-            Optional.none())),
+            Optional.none(),
+            java.util.List.of())),
         DEPENDENCIES,
         DEFINITIONS);
 }

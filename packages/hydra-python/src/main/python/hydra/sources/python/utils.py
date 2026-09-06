@@ -60,7 +60,8 @@ _PLACEHOLDER = Module(
         Given("Python utilities for constructing Python syntax trees"),
         (),
         (),
-        None_())),
+        None_(),
+        ())),
     DEPENDENCIES,
     (),
 )
