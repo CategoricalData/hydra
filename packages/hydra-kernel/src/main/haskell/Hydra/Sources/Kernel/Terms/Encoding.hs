@@ -384,7 +384,8 @@ encodeModule = define "encodeModule" $
             (just (Strings.concat $ list [
               string "Term encoders for ",
               Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
-            (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing))
+            (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing
+            (list ([] :: [TypedTerm Provision]))))
           (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.distinct (Lists.concat2
             (primitive DefLists.map @@ encodeModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))
             (list [Packaging.moduleName (var "mod")]))))

@@ -722,7 +722,8 @@ moduleToSourceModule = define "moduleToSourceModule" $
     (var "sourceNs")
     (just (Packaging.entityMetadata
       (just $ (string "Source module for ") ++ Packaging.unModuleName (Packaging.moduleName $ var "m"))
-      (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing))
+      (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing
+      (list ([] :: [TypedTerm Provision]))))
     (list [Packaging.moduleDependency (var "modTypeNs") nothing])
     (list [var "moduleDef"])
 

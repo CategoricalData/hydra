@@ -245,7 +245,8 @@ dslModule = define "dslModule" $
           (just (Strings.concat $ list [
             string "DSL functions for ",
             Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
-          (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing))
+          (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing
+          (list ([] :: [TypedTerm Provision]))))
         -- DSL modules depend on:
         -- (1) the original module + its source dependencies + hydra.typed (for TypedTerm),
         -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions), and

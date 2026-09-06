@@ -539,7 +539,8 @@ mkModuleWithDeps nsStr depNsStrs defs = Packaging.module_
   (nsLit nsStr)
   (Phantoms.just (Packaging.entityMetadata
     (Phantoms.just $ Phantoms.string ("Test module " <> nsStr))
-    (Phantoms.list ([] :: [TypedTerm String])) (Phantoms.list ([] :: [TypedTerm EntityReference])) Phantoms.nothing))
+    (Phantoms.list ([] :: [TypedTerm String])) (Phantoms.list ([] :: [TypedTerm EntityReference])) Phantoms.nothing
+    (Phantoms.list ([] :: [TypedTerm Provision]))))
   (Phantoms.list (mkModuleDependency <$> depNsStrs))
   (Phantoms.list defs)
 
@@ -553,7 +554,8 @@ mkPackage nameStr mods = Packaging.package
   (pn nameStr)
   (Phantoms.just (Packaging.entityMetadata
     (Phantoms.just $ Phantoms.string ("Test package " <> nameStr))
-    (Phantoms.list ([] :: [TypedTerm String])) (Phantoms.list ([] :: [TypedTerm EntityReference])) Phantoms.nothing))
+    (Phantoms.list ([] :: [TypedTerm String])) (Phantoms.list ([] :: [TypedTerm EntityReference])) Phantoms.nothing
+    (Phantoms.list ([] :: [TypedTerm Provision]))))
   (Phantoms.list ([] :: [TypedTerm PackageDependency]))
   (Phantoms.list mods)
 

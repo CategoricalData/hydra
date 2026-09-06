@@ -573,7 +573,8 @@ decodeModule = define "decodeModule" $
             (just (Strings.concat $ list [
               string "Term decoders for ",
               Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
-            (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing))
+            (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing
+            (list ([] :: [TypedTerm Provision]))))
           (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.concat2
             (list [
               (Packaging.moduleName2 $ string "hydra.extract.core"),
