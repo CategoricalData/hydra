@@ -98,9 +98,7 @@ VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 # coder limitation) was traced to #475 (Java/Python eta-expansion + re-inference gap
 # on polymorphic/recursive/Set-typed encoder/decoder shapes), which was fixed
 # 2026-06-13 but never re-validated against hydra-ext until #636 confirmed a clean
-# generation (1105 files, no failures) with the fix in place. It was temporarily
-# excluded again for the 0.17.4 release (#643: a Java-coder visitor-pattern name
-# collision) and restored here once #643 fixed the collision (0.17.5-track).
+# generation (1105 files, no failures) with the fix in place.
 PUBLISH_SET=(
     hydra-kernel
     hydra-build
@@ -113,7 +111,11 @@ PUBLISH_SET=(
     hydra-typescript
     hydra-rdf
     hydra-pg
-    hydra-ext
+    # hydra-ext: TEMPORARILY EXCLUDED as of 0.17.4 — does not compile for Java
+    # (#643: the visitor-pattern inner interface collides with the enclosing
+    # `Visitor` type in hydra.cpp.syntax). ext still ships to Hackage and PyPI
+    # at 0.17.4. Restore this entry once #643 lands; see #636 for the intent to
+    # publish ext to Hackage + Maven-Java + PyPI.
 )
 
 GRADLE_TASK="publishAggregationToCentralPortal"
