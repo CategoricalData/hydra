@@ -187,25 +187,25 @@ public class GenerationTargets {
                 dialect = new hydra.lisp.syntax.Dialect.Clojure();
                 caseConv = new hydra.util.CaseConvention.Camel();
                 libSubsTarget = "clojure";
-                language = hydra.lisp.Language.clojureLanguage();
+                language = lispDialectLanguage("clojureLanguage");
                 break;
             case "scheme":
                 dialect = new hydra.lisp.syntax.Dialect.Scheme();
                 caseConv = new hydra.util.CaseConvention.LowerSnake();
                 libSubsTarget = "scheme";
-                language = hydra.lisp.Language.schemeLanguage();
+                language = lispDialectLanguage("schemeLanguage");
                 break;
             case "commonLisp":
                 dialect = new hydra.lisp.syntax.Dialect.CommonLisp();
                 caseConv = new hydra.util.CaseConvention.LowerSnake();
                 libSubsTarget = "common-lisp";
-                language = hydra.lisp.Language.commonLispLanguage();
+                language = lispDialectLanguage("commonLispLanguage");
                 break;
             case "emacsLisp":
                 dialect = new hydra.lisp.syntax.Dialect.EmacsLisp();
                 caseConv = new hydra.util.CaseConvention.LowerSnake();
                 libSubsTarget = "emacs-lisp";
-                language = hydra.lisp.Language.emacsLispLanguage();
+                language = lispDialectLanguage("emacsLispLanguage");
                 break;
             default:
                 throw new IllegalArgumentException("Unknown Lisp dialect: " + dialectName);
@@ -233,5 +233,27 @@ public class GenerationTargets {
                 language,
                 false,
                 basePath, universe, mods);
+    }
+
+    // #727 cold-clone fix: target-driver (heads/java/target-driver/build.gradle) compiles this
+    // whole file as one unit against the PUBLISHED hydra-lisp jar, so a compile-time reference to
+    // a brand-new hydra.lisp.Language factory method (added alongside a kernel/coder change, not
+    // yet in any published release) breaks target-driver's build even though writeLispDialect is
+    // dead code on that path (cold-seed only ever drives --target haskell). Reflection defers the
+    // symbol lookup to runtime: it resolves against whatever hydra.lisp.Language is actually on
+    // the classpath (fresh local dist/java when run via the headsExtras build; a possibly-stale
+    // published jar when run via target-driver), falling back to the always-published
+    // lispLanguage() so target-driver keeps compiling either way. Safe because target-driver never
+    // calls writeLispDialect at runtime; local builds always have the fresh method.
+    private static hydra.coders.Language lispDialectLanguage(String factoryMethodName) {
+        try {
+            return (hydra.coders.Language) hydra.lisp.Language.class
+                    .getMethod(factoryMethodName)
+                    .invoke(null);
+        } catch (NoSuchMethodException e) {
+            return hydra.lisp.Language.lispLanguage();
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("Failed to invoke hydra.lisp.Language." + factoryMethodName + "()", e);
+        }
     }
 }
