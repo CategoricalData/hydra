@@ -55,7 +55,7 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
         H.shouldBe result (expected ())
 
 runTestCase :: String -> TestRunner -> TestCaseWithMetadata -> H.SpecWith ()
-runTestCase pdesc runner tcase@(TestCaseWithMetadata name _ mdesc _) =
+runTestCase pdesc runner tcase@(TestCaseWithMetadata name _ mdesc _ _) =
   case runner cdesc tcase of
     Nothing -> return ()
     Just spec -> H.describe desc spec
