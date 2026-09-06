@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A Python syntax model, tracking the Python 3.14 PEG grammar:\n  https://docs.python.org/3.14/reference/grammar.html",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

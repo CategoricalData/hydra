@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.topology",
-  "metadata": {"description": "DSL functions for hydra.topology", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.topology", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.topology"},
     {"module": "hydra.typed"},

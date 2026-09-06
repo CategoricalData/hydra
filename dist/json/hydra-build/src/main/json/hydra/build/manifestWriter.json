@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Per-package manifest.json field-assembly and serialization logic shared by the code-generation drivers",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.json.model"},
     {"module": "hydra.paths"},

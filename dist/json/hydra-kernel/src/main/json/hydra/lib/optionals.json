@@ -1,6 +1,6 @@
 {
   "name": "hydra.lib.optionals",
-  "metadata": {"description": "Primitives in the hydra.lib.optionals module.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Primitives in the hydra.lib.optionals module.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -41,7 +41,8 @@
             "apply(mf, mx) returns given(f x) when mf is given(f) and mx is given(x), and none if either is none.",
             "The applicative apply for optionals; threads a function-in-context with a value-in-context.",
             "Total. Corresponds to Haskell's (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -82,7 +83,8 @@
             "bind(m, f) returns f(x) when m is given(x), and none when m is none.",
             "The monadic bind for optionals; used to chain computations that may be absent.",
             "Total. Corresponds to Haskell's (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -117,7 +119,8 @@
             "compose(f, g, x) returns the Kleisli composition of f and g applied to x: bind(f(x), g).",
             "If either f or the second stage produces none, the result is none.",
             "Total. Corresponds to Haskell's Kleisli composition for Maybe, (>=>) :: (a -> Maybe b) -> (b -> Maybe c) -> a -> Maybe c."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
@@ -160,7 +163,8 @@
             "foldList(f, acc, xs) folds f over xs from the left, iterating while each application yields given, and returns none as soon as any step yields none. If every element is processed, the result is given of the final accumulator.",
             "foldList(f, acc, xs) is lists.foldl(\\m y -> bind(m, \\x -> f(x, y)), given(acc), xs); this defining equation is the specification, and the default implementation.",
             "Total. Corresponds to a short-circuiting foldM specialised to Maybe."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -220,7 +224,8 @@
             "given(x) is the optional value containing x.",
             "The constructor for the present case of an optional value.",
             "Total. Corresponds to Haskell's Just :: a -> Maybe a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "x", "description": "the value to wrap in given", "type": {"variable": "x"}, "isLazy": false}],
@@ -235,7 +240,8 @@
           "comments": [
             "givens(xs) returns the list of contained values from given elements of xs, in original order; none elements are discarded.",
             "Total. Corresponds to Haskell's Data.Maybe.catMaybes :: [Maybe a] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -286,7 +292,8 @@
           "comments": [
             "isGiven(m) returns true iff m is a given variant.",
             "Total. Corresponds to Haskell's Data.Maybe.isJust :: Maybe a -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "m", "description": "the optional to test", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
@@ -311,7 +318,8 @@
           "comments": [
             "isNone(m) returns true iff m is the none variant.",
             "Total. Corresponds to Haskell's Data.Maybe.isNothing :: Maybe a -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "m", "description": "the optional to test", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
@@ -337,7 +345,8 @@
             "map(f, m) returns given(f x) when m is given(x), and none when m is none.",
             "The functor instance for optionals.",
             "Total. Corresponds to Haskell's fmap :: (a -> b) -> Maybe a -> Maybe b."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -374,7 +383,8 @@
           "comments": [
             "mapList(f, xs) applies f to each element of xs. If every application yields given, the result is given of the list of contained values, in their original order. The result is none as soon as any application yields none.",
             "Total. Corresponds to Haskell's traverse :: (a -> Maybe b) -> [a] -> Maybe [b]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -440,7 +450,8 @@
             "Total. Corresponds to Haskell's Data.Maybe.mapMaybe :: (a -> Maybe b) -> [a] -> [b].",
             "Deprecated since 0.18. Use: hydra.lib.lists.mapGivens."],
           "seeAlso": [],
-          "lifecycle": {"deprecatedSince": "0.18"}},
+          "lifecycle": {"deprecatedSince": "0.18"},
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -475,7 +486,8 @@
             "mapSet(f, s) applies f to each element of s. If every application yields given, the result is given of the set of contained values, deduplicated by the result type's ordering. The result is none as soon as any application yields none.",
             "Requires 'ordering' constraints on both element types (the set type contract).",
             "Total. Corresponds to a traverse-style operation specialised to Set in the Maybe monad."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -549,7 +561,8 @@
             "match(m, def, f) returns f(x) when m is given(x), and def when m is none.",
             "The fundamental eliminator for the optional type; every other primitive in this namespace can be derived from it. The optional value is the first argument, matching the convention for case-statement-like elimination.",
             "Total. Argument order is (m, def, f) rather than Haskell's maybe :: (def, f, m)."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -579,7 +592,8 @@
           "comments": [
             "toList(m) returns [x] when m is given(x), and the empty list when m is none.",
             "Total. Corresponds to Haskell's Data.Maybe.maybeToList :: Maybe a -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "m", "description": "the optional to convert", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
@@ -604,7 +618,8 @@
           "comments": [
             "withDefault(def, m) returns x when m is given(x), and def when m is none.",
             "Total. Corresponds to Haskell's Data.Maybe.fromMaybe :: a -> Maybe a -> a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [

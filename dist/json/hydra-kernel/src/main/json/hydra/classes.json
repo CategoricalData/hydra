@@ -1,6 +1,6 @@
 {
   "name": "hydra.classes",
-  "metadata": {"description": "Registry of Hydra's built-in type classes.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Registry of Hydra's built-in type classes.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.strip"},
     {"module": "hydra.paths"},

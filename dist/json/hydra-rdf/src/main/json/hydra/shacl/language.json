@@ -1,6 +1,6 @@
 {
   "name": "hydra.shacl.language",
-  "metadata": {"description": "Language constraints for W3C SHACL", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Language constraints for W3C SHACL", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},

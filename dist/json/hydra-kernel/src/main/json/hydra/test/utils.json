@@ -1,6 +1,10 @@
 {
   "name": "hydra.test.utils",
-  "metadata": {"description": "Shared utility functions for test code generation codecs", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Shared utility functions for test code generation codecs",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.inference"},
     {"module": "hydra.print.errors"},
@@ -149,7 +153,14 @@
                                       "application": {
                                         "function": {"project": {"typeName": "hydra.testing.TestCaseWithMetadata", "fieldName": "tags"}},
                                         "argument": {"variable": "tcm"}}},
-                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.Tag"}}, "constraints": []}}],
+                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.testing.Tag"}}, "constraints": []}},
+                                  {
+                                    "name": "provisions_",
+                                    "term": {
+                                      "application": {
+                                        "function": {"project": {"typeName": "hydra.testing.TestCaseWithMetadata", "fieldName": "provisions"}},
+                                        "argument": {"variable": "tcm"}}},
+                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.Name"}}, "constraints": []}}],
                                 "body": {
                                   "application": {
                                     "function": {
@@ -172,7 +183,8 @@
                                                   {"name": "name", "term": {"variable": "name_"}},
                                                   {"name": "case", "term": {"variable": "inferredCase"}},
                                                   {"name": "description", "term": {"variable": "desc"}},
-                                                  {"name": "tags", "term": {"variable": "tags_"}}]}}}}}},
+                                                  {"name": "tags", "term": {"variable": "tags_"}},
+                                                  {"name": "provisions", "term": {"variable": "provisions_"}}]}}}}}},
                                     "argument": {
                                       "typeApplication": {
                                         "body": {"typeApplication": {"body": {"either": {"right": {"variable": "tcase"}}}, "type": {"variable": "t1"}}},

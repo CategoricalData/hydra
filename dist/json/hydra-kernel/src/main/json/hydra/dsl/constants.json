@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.constants",
-  "metadata": {"description": "DSL functions for hydra.constants", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.constants", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.typed"},

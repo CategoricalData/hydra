@@ -1,6 +1,6 @@
 {
   "name": "hydra.lib.logic",
-  "metadata": {"description": "Primitives in the hydra.lib.logic module.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Primitives in the hydra.lib.logic module.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -41,7 +41,8 @@
             "and(p, q) returns true iff both p and q are true.",
             "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.",
             "Total. Corresponds to Haskell's (&&) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -72,7 +73,8 @@
             "ifElse(p, t, f) returns t if p is true, or f if p is false.",
             "The unselected branch is not necessarily evaluated; ifElse is the standard way to express short-circuiting boolean logic and branching in Hydra.",
             "Total. Corresponds to Haskell's if/then/else."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -88,7 +90,8 @@
         "metadata": {
           "description": "Compute the logical NOT of a boolean value.",
           "comments": ["not(p) returns false if p is true, or true if p is false.", "Total. Corresponds to Haskell's not :: Bool -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "p", "description": "the boolean value to negate", "type": {"literal": "boolean"}, "isLazy": false}],
@@ -114,7 +117,8 @@
             "or(p, q) returns true iff at least one of p and q is true.",
             "Evaluation is strict in both arguments at the primitive level; for short-circuiting behavior, use ifElse.",
             "Total. Corresponds to Haskell's (||) :: Bool -> Bool -> Bool (but without short-circuit evaluation)."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [

@@ -1,6 +1,10 @@
 {
   "name": "hydra.graphviz.coder",
-  "metadata": {"description": "Functions for converting Hydra terms to Graphviz DOT graphs", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Functions for converting Hydra terms to Graphviz DOT graphs",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.print.paths"},
     {"module": "hydra.names"},

@@ -1,6 +1,10 @@
 {
   "name": "hydra.paths",
-  "metadata": {"description": "Subterm and subtype access, and the link view of a graph", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Subterm and subtype access, and the link view of a graph",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

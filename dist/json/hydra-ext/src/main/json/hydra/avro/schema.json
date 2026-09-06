@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A model for Avro schemas. Based on the Avro 1.11.1 specification:\n  https://avro.apache.org/docs/1.11.1/specification",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.json.model"}, {"module": "hydra.core"}],
   "definitions": [
     {

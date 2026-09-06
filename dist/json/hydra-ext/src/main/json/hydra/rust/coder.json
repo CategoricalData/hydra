@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Rust code generator: converts Hydra type and term modules to Rust source code",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.rust.serde"},
     {"module": "hydra.rust.language"},

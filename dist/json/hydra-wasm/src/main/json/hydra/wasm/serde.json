@@ -1,6 +1,10 @@
 {
   "name": "hydra.wasm.serde",
-  "metadata": {"description": "WebAssembly serializer: converts WAT AST to concrete WAT text format", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "WebAssembly serializer: converts WAT AST to concrete WAT text format",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.serialization"},

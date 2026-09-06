@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.lib.defaults",
-  "metadata": {"description": "DSL functions for hydra.lib.defaults", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.lib.defaults", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.lib.defaults"},
     {"module": "hydra.typed"},

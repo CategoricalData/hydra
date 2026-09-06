@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.haskell.environment",
-  "metadata": {"description": "DSL functions for hydra.haskell.environment", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.haskell.environment", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.haskell.environment"},
     {"module": "hydra.typed"},

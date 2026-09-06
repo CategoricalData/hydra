@@ -3,7 +3,8 @@
   "metadata": {
     "description": "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.names"},
     {"module": "hydra.strip"},

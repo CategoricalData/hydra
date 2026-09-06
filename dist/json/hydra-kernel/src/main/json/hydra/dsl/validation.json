@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.validation",
-  "metadata": {"description": "DSL functions for hydra.validation", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.validation", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.validation"},
     {"module": "hydra.typed"},

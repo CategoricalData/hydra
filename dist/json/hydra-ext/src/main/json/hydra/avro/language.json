@@ -1,6 +1,6 @@
 {
   "name": "hydra.avro.language",
-  "metadata": {"description": "Language constraints for Apache Avro", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Language constraints for Apache Avro", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.strip"},

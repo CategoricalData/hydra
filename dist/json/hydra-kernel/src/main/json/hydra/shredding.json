@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Shredding: the total, injective decomposition of a typed graph's bindings into flat, path-addressed links (edges, properties, attributes) — the link view of a graph.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.rewriting"},
     {"module": "hydra.paths"},

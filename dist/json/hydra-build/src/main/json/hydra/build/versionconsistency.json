@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Version-consistency pure logic (file/format manifest + per-format version extraction) shared by the release/bump drivers",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.strip"},
     {"module": "hydra.paths"},

@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Pure sync-matrix (package, target) planning core shared by the sync driver",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.build.langexpansion"},
     {"module": "hydra.build.registry"},

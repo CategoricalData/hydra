@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.reduction",
-  "metadata": {"description": "DSL functions for hydra.reduction", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.reduction", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.reduction"},
     {"module": "hydra.typed"},

@@ -1,6 +1,6 @@
 {
   "name": "hydra.parsing",
-  "metadata": {"description": "Parser combinator types for text parsing", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Parser combinator types for text parsing", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

@@ -1,6 +1,6 @@
 {
   "name": "hydra.workflow",
-  "metadata": {"description": "A model for Hydra transformation workflows", "comments": [], "seeAlso": []},
+  "metadata": {"description": "A model for Hydra transformation workflows", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.graph"}, {"module": "hydra.packaging"}, {"module": "hydra.core"}],
   "definitions": [
     {

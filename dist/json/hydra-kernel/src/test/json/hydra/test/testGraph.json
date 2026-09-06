@@ -1,6 +1,6 @@
 {
   "name": "hydra.test.testGraph",
-  "metadata": {"description": "A module defining the graph used in the test suite.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "A module defining the graph used in the test suite.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.test.testTerms"},
     {"module": "hydra.test.testTypes"},

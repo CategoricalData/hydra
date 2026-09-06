@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Hydra-to-Avro encoder: converts Hydra types and terms to Avro schemas and JSON values",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.strip"},

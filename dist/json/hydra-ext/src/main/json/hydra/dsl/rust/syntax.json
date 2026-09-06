@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.rust.syntax",
-  "metadata": {"description": "DSL functions for hydra.rust.syntax", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.rust.syntax", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.rust.syntax"},
     {"module": "hydra.typed"},

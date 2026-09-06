@@ -1,6 +1,10 @@
 {
   "name": "hydra.templates",
-  "metadata": {"description": "A utility which instantiates a nonrecursive type with default values", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "A utility which instantiates a nonrecursive type with default values",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.decode.core"},

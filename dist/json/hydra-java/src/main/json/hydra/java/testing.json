@@ -1,6 +1,10 @@
 {
   "name": "hydra.java.testing",
-  "metadata": {"description": "Java test code generation codec for JUnit-based generation tests", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Java test code generation codec for JUnit-based generation tests",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.test.utils"},

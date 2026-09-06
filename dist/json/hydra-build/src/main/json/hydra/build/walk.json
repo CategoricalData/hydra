@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Pure directory-traversal decision helpers: deterministic ordering and basename matching over observed paths",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

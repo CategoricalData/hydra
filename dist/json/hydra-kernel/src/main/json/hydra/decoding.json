@@ -1,6 +1,10 @@
 {
   "name": "hydra.decoding",
-  "metadata": {"description": "Functions for generating term decoders from type modules", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Functions for generating term decoders from type modules",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.annotations"},
     {"module": "hydra.constants"},
@@ -12323,7 +12327,10 @@
                                                                                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                   {
                                                                                     "name": "lifecycle",
-                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                  {
+                                                                                    "name": "provisions",
+                                                                                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                         {
                                                                           "name": "dependencies",
                                                                           "term": {

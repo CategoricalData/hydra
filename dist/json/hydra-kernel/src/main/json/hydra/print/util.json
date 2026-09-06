@@ -1,6 +1,6 @@
 {
   "name": "hydra.print.util",
-  "metadata": {"description": "String representations of hydra.util types", "comments": [], "seeAlso": []},
+  "metadata": {"description": "String representations of hydra.util types", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

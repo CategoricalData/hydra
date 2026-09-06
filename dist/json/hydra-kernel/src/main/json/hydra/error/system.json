@@ -1,6 +1,6 @@
 {
   "name": "hydra.error.system",
-  "metadata": {"description": "System-call error types", "comments": [], "seeAlso": []},
+  "metadata": {"description": "System-call error types", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.file"}],
   "definitions": [
     {

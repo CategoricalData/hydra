@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.typing",
-  "metadata": {"description": "Term encoders for hydra.typing", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.typing", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.encode.paths"}, {"module": "hydra.typing"}],
   "definitions": [
     {

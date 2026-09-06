@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.cpp.environment",
-  "metadata": {"description": "DSL functions for hydra.cpp.environment", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.cpp.environment", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.cpp.environment"},
     {"module": "hydra.typed"},

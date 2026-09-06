@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Mappings from property graph schemas to SHACL shapes graphs, and from property graph data to RDF graphs",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.rdf.utils"},
     {"module": "hydra.paths"},

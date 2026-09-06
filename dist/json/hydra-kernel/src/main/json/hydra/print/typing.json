@@ -1,6 +1,6 @@
 {
   "name": "hydra.print.typing",
-  "metadata": {"description": "String representations of hydra.typing types", "comments": [], "seeAlso": []},
+  "metadata": {"description": "String representations of hydra.typing types", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.print.core"},
     {"module": "hydra.paths"},

@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.regex",
-  "metadata": {"description": "Term encoders for hydra.regex", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.regex", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.regex"}],
   "definitions": [
     {

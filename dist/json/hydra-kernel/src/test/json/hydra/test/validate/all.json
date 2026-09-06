@@ -1,6 +1,6 @@
 {
   "name": "hydra.test.validate.all",
-  "metadata": {"description": "Hydra's validation test suite", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Hydra's validation test suite", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.test.validate.core"},
     {"module": "hydra.test.validate.packaging"},

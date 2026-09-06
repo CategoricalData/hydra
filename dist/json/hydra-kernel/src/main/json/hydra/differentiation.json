@@ -1,6 +1,10 @@
 {
   "name": "hydra.differentiation",
-  "metadata": {"description": "Source-to-source automatic differentiation for Float64 terms.", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Source-to-source automatic differentiation for Float64 terms.",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.strip"},
     {"module": "hydra.variables"},

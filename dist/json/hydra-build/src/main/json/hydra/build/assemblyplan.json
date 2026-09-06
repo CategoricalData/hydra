@@ -3,7 +3,8 @@
   "metadata": {
     "description": "The pure assembly-plan derivation: the ordered overlay-copy entries and keep-paths for a distribution package",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

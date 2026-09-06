@@ -1,6 +1,6 @@
 {
   "name": "hydra.lib.lists",
-  "metadata": {"description": "Primitives in the hydra.lib.lists module.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Primitives in the hydra.lib.lists module.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -41,7 +41,8 @@
             "apply(fs, xs) returns the list of all f x for f in fs and x in xs, in order: for each f in fs (outer loop), for each x in xs (inner loop).",
             "Equivalent to the applicative list instance.",
             "Total. Corresponds to Haskell's (<*>) :: [a -> b] -> [a] -> [b]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -66,7 +67,8 @@
           "comments": [
             "at(i, xs) returns Just(xs[i]) if 0 <= i < length(xs), or Nothing otherwise.",
             "Total. Wraps the Haskell (!!) operator, which is partial, in maybe to make out-of-bounds total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -83,7 +85,8 @@
           "comments": [
             "bind(xs, f) applies f to each element of xs and concatenates the resulting lists in order. Equivalent to concatMap.",
             "Total. Corresponds to Haskell's (>>=) :: [a] -> (a -> [b]) -> [b]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -132,7 +135,8 @@
           "comments": [
             "compose(f, g, x) is bind(f(x), g); this defining equation is the specification. The results of applying g to each element of f(x) are concatenated in order.",
             "Total. Corresponds to Kleisli composition (>=>) in the list monad."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
@@ -158,7 +162,8 @@
           "comments": [
             "concat(xss) returns the list obtained by appending all the lists in xss in order.",
             "Total. Corresponds to Haskell's concat :: [[a]] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -176,7 +181,8 @@
         "metadata": {
           "description": "Concatenate two lists.",
           "comments": ["concat2(xs, ys) returns xs with ys appended.", "Total. Corresponds to Haskell's (++) :: [a] -> [a] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -193,7 +199,8 @@
           "comments": [
             "cons(x, xs) returns a list whose head is x and whose tail is xs.",
             "Total. Corresponds to Haskell's (:) :: a -> [a] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -211,7 +218,8 @@
             "distinct(xs) returns the list of distinct elements of xs, in the order of their first occurrence.",
             "Requires an 'equality' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.List.nub :: Eq a => [a] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
           "parameters": [{"name": "xs", "description": "the list to deduplicate", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -226,7 +234,8 @@
           "comments": [
             "drop(n, xs) returns the suffix of xs after dropping the first n elements; if n is greater than or equal to length(xs) the result is the empty list; if n is non-positive the result is xs unchanged.",
             "Total. Corresponds to Haskell's drop :: Int -> [a] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -247,7 +256,8 @@
           "comments": [
             "dropWhile(p, xs) returns the suffix of xs starting at the first element for which p returns false. If p is true for every element, the result is the empty list.",
             "Total. Corresponds to Haskell's dropWhile :: (a -> Bool) -> [a] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -281,7 +291,8 @@
           "comments": [
             "filter(p, xs) returns the list of elements x in xs for which p(x) is true, in original order.",
             "Total. Corresponds to Haskell's filter :: (a -> Bool) -> [a] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -336,7 +347,8 @@
           "comments": [
             "find(p, xs) returns Just(x) where x is the first element of xs for which p(x) is true, or Nothing if no such element exists.",
             "Total. Corresponds to Haskell's find :: (a -> Bool) -> [a] -> Maybe a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -389,7 +401,8 @@
             "foldList(f, acc0, xs) folds xs from the left, branching the accumulator over every result of the step function at each element: after each element the set of accumulators is replaced by all results of applying f to each current accumulator and that element.",
             "foldList(f, acc0, xs) is foldl(\\macc el -> bind(macc, \\acc -> f(acc, el)), singleton(acc0), xs); this defining equation is the specification. For the empty list the result is singleton(acc0).",
             "Total on finite inputs. The list-monad instance of the monadic left fold."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -415,7 +428,8 @@
             "foldl(f, acc0, xs) reduces xs left-associatively: foldl(f, acc0, [x1, x2, ..., xn]) = f(f(f(acc0, x1), x2), ..., xn). For the empty list the result is acc0.",
             "Strict in the accumulator on hosts where laziness would otherwise leak space.",
             "Total on finite inputs. Corresponds to Haskell's foldl' :: (b -> a -> b) -> b -> [a] -> b."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "y", "constraints": []}, {"name": "x", "constraints": []}],
           "parameters": [
@@ -438,7 +452,8 @@
           "comments": [
             "foldr(f, acc0, xs) reduces xs right-associatively: foldr(f, acc0, [x1, ..., xn]) = f(x1, f(x2, ..., f(xn, acc0))). For the empty list the result is acc0.",
             "Total on finite inputs. Corresponds to Haskell's foldr :: (a -> b -> b) -> b -> [a] -> b."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -462,7 +477,8 @@
             "group(xs) returns a list of lists obtained by grouping consecutive equal elements of xs together. Each inner list is non-empty and contains equal elements; the concatenation of the result equals xs.",
             "Equality is determined by the element type's 'equality' constraint.",
             "Total. Corresponds to Haskell's Data.List.group :: Eq a => [a] -> [[a]]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
           "parameters": [{"name": "xs", "description": "the list to group", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -477,7 +493,8 @@
           "comments": [
             "head(xs) returns Just(x) where x is the first element of xs, or Nothing if xs is empty.",
             "Total. Wraps Haskell's partial head in maybe."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "xs", "description": "the list to take the head of", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -492,7 +509,8 @@
           "comments": [
             "init(xs) returns Just(ys) where ys is xs with its last element removed, or Nothing if xs is empty.",
             "Total. Wraps Haskell's partial init in maybe."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -512,7 +530,8 @@
           "comments": [
             "intersperse(sep, xs) returns xs with sep inserted between each pair of adjacent elements; for lists of length 0 or 1 the input is returned unchanged.",
             "Total. Corresponds to Haskell's intersperse :: a -> [a] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -527,7 +546,8 @@
         "metadata": {
           "description": "Test whether a list is empty.",
           "comments": ["isEmpty(xs) returns true iff xs is the empty list.", "Total. Corresponds to Haskell's null :: [a] -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "xs", "description": "the list to test", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -542,7 +562,8 @@
           "comments": [
             "join(sep, xss) returns the concatenation of xss with sep inserted between consecutive lists. Equivalent to concat(intersperse(sep, xss)).",
             "Total. Corresponds to Haskell's intercalate :: [a] -> [[a]] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -563,7 +584,8 @@
           "comments": [
             "last(xs) returns Just(x) where x is the last element of xs, or Nothing if xs is empty.",
             "Total. Wraps Haskell's partial last in maybe."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -584,7 +606,8 @@
             "length(xs) returns the number of elements in xs as an int32. Returns 0 for the empty list.",
             "Total on finite inputs; the int32 result overflows for lists longer than 2^31-1 elements.",
             "Corresponds to Haskell's length :: [a] -> Int (with narrowing to Int32)."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "xs", "description": "the list to measure", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -599,7 +622,8 @@
           "comments": [
             "map(f, xs) returns the list of f(x) for each x in xs, in original order.",
             "Total. Corresponds to Haskell's map :: (a -> b) -> [a] -> [b] / fmap on lists."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -621,7 +645,8 @@
             "mapList(f, xs) returns all combinations obtainable by choosing one element from f(x) for each x in xs: each result list has the same length as xs, with its element at each position drawn from the corresponding f(x).",
             "Results appear in the lexicographic order of the choices, with the choice for the first element varying slowest. The number of results is the product of the lengths of the lists f(x); if f(x) is empty for any element, the result is the empty list; mapList(f, []) is singleton([]).",
             "Total on finite inputs. The list-monad instance of the traversal family."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -642,7 +667,8 @@
           "comments": [
             "mapOptional(f, m) returns the single-element list containing none when m is none; for given(x) it returns given(y) for each element y of f(x), in order.",
             "Total on finite inputs. The list-monad instance of the traversal family, applied to the optional container."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -664,7 +690,8 @@
             "mapSet(f, s) returns all sets obtainable by choosing one element from f(x) for each element x of s. Elements of s are traversed in ascending order, and results appear in the lexicographic order of the choices, with the choice for the least element varying slowest.",
             "A result set may have fewer elements than s when distinct choices coincide. If f(x) is empty for any element, the result is the empty list; for the empty set the result is the single-element list containing the empty set.",
             "Requires 'ordering' constraints on both element types (the set type contract)."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -686,7 +713,8 @@
             "member(x, xs) returns true iff some element of xs is equal to x.",
             "Requires an 'equality' constraint on the element type.",
             "Total. Corresponds to Haskell's elem :: Eq a => a -> [a] -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
           "parameters": [
@@ -703,7 +731,8 @@
           "comments": [
             "partition(p, xs) returns a pair (yes, no) where yes is the list of elements of xs for which p is true and no is the list of elements for which p is false, each preserving original order.",
             "Total. Corresponds to Haskell's partition :: (a -> Bool) -> [a] -> ([a], [a])."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -767,7 +796,8 @@
           "comments": [
             "replicate(n, x) returns a list of n copies of x; for n <= 0 the result is the empty list.",
             "Total. Corresponds to Haskell's replicate :: Int -> a -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -782,7 +812,8 @@
         "metadata": {
           "description": "Reverse a list.",
           "comments": ["reverse(xs) returns the elements of xs in reverse order.", "Total. Corresponds to Haskell's reverse :: [a] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "xs", "description": "the list to reverse", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -798,7 +829,8 @@
             "singleton(x) = [x].",
             "The constructor for a single-element list; useful point-free (e.g. map singleton xs).",
             "Total. Corresponds to Haskell's singleton :: a -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "x", "description": "the value to wrap in a single-element list", "type": {"variable": "x"}, "isLazy": false}],
@@ -814,7 +846,8 @@
             "sort(xs) returns xs sorted in ascending order under the element type's ordering. Sort is stable: equal elements preserve their original relative order.",
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.List.sort :: Ord a => [a] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [{"name": "xs", "description": "the list to sort", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -830,7 +863,8 @@
             "sortBy(f, xs) returns xs sorted in ascending order by f(x) for each element x. Sort is stable: elements with equal keys preserve their original relative order.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.List.sortOn :: Ord b => (a -> b) -> [a] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -851,7 +885,8 @@
           "comments": [
             "span(p, xs) returns a pair (ys, zs) where ys is the longest prefix of xs whose elements all satisfy p, and zs is the remainder of xs starting at the first element that fails p (or zs is empty if all elements satisfy p).",
             "Total. Corresponds to Haskell's span :: (a -> Bool) -> [a] -> ([a], [a])."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -930,7 +965,8 @@
           "comments": [
             "tail(xs) returns Just(ys) where ys is xs with its first element removed, or Nothing if xs is empty.",
             "Total. Wraps Haskell's partial tail in maybe."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "xs", "description": "the list to take the tail of", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -945,7 +981,8 @@
           "comments": [
             "take(n, xs) returns the prefix of xs of length min(n, length(xs)); if n is non-positive the result is the empty list.",
             "Total. Corresponds to Haskell's take :: Int -> [a] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -967,7 +1004,8 @@
             "takeWhile(p, xs) returns the longest prefix of xs whose elements all satisfy p. If p fails for the first element the result is the empty list; if p holds for every element the result is xs unchanged.",
             "dropWhile returns the complementary suffix, and span(p, xs) returns the pair of takeWhile(p, xs) and dropWhile(p, xs).",
             "Total. Corresponds to Haskell's takeWhile :: (a -> Bool) -> [a] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -1001,7 +1039,8 @@
           "comments": [
             "transpose(xss) returns a list of lists where the i-th inner list contains the i-th element of every inner list of xss that has at least i+1 elements. Inner lists of differing lengths produce a ragged result rather than an error.",
             "Total. Corresponds to Haskell's Data.List.transpose :: [[a]] -> [[a]]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [
@@ -1021,7 +1060,8 @@
           "comments": [
             "uncons(xs) returns Just(head, tail) where head is the first element of xs and tail is the remaining list, or Nothing if xs is empty.",
             "Total. Corresponds to Haskell's Data.List.uncons :: [a] -> Maybe (a, [a])."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "xs", "description": "the list to decompose", "type": {"list": {"variable": "x"}}, "isLazy": false}],
@@ -1036,7 +1076,8 @@
           "comments": [
             "zip(xs, ys) returns the list of pairs (xs[i], ys[i]) for i from 0 to min(length(xs), length(ys))-1. The result has length equal to the shorter of the two inputs.",
             "Total. Corresponds to Haskell's zip :: [a] -> [b] -> [(a, b)]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -1053,7 +1094,8 @@
           "comments": [
             "zipWith(f, xs, ys) returns the list of f(xs[i], ys[i]) for i from 0 to min(length(xs), length(ys))-1. The result has length equal to the shorter of the two inputs.",
             "Total. Corresponds to Haskell's zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [

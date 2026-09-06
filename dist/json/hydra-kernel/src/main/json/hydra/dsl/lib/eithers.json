@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.lib.eithers",
-  "metadata": {"description": "DSL functions for hydra.lib.eithers", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.lib.eithers", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.lib.eithers"},
     {"module": "hydra.typed"},

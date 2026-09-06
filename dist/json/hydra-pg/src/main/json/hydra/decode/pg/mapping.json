@@ -1,6 +1,6 @@
 {
   "name": "hydra.decode.pg.mapping",
-  "metadata": {"description": "Term decoders for hydra.pg.mapping", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term decoders for hydra.pg.mapping", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

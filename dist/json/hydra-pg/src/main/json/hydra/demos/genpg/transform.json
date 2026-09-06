@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Functions for transforming property graph mappings into property graph elements.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.reduction"},
     {"module": "hydra.rewriting"},

@@ -1,6 +1,10 @@
 {
   "name": "hydra.haskell.testing",
-  "metadata": {"description": "Haskell test code generation for HSpec-based generation tests", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Haskell test code generation for HSpec-based generation tests",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.haskell.utils"},
     {"module": "hydra.formatting"},

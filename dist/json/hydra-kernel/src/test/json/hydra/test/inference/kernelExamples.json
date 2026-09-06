@@ -1,6 +1,6 @@
 {
   "name": "hydra.test.inference.kernelExamples",
-  "metadata": {"description": "Inference tests for examples from the Hydra kernel", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Inference tests for examples from the Hydra kernel", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.formatting"},
@@ -590,7 +590,8 @@
                                                                           "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
                                                                           "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
+                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                                      {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestGroup",
@@ -1269,7 +1270,8 @@
                                                                           "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
                                                                           "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}},
+                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                                      {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestGroup",
@@ -2027,7 +2029,8 @@
                                                                           "body": {"typeApplication": {"body": {"map": []}, "type": {"variable": "hydra.core.Name"}}},
                                                                           "type": {"variable": "hydra.core.TypeVariableConstraints"}}}}]}}}}}}}]}}}}}},
                                       {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}]}},
+                                      {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                                      {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}]}},
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}]}}}}]}

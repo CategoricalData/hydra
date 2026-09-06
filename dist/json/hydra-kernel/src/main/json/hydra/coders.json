@@ -1,6 +1,10 @@
 {
   "name": "hydra.coders",
-  "metadata": {"description": "Abstractions for paired transformations between languages", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Abstractions for paired transformations between languages",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.errors"},
     {"module": "hydra.file"},

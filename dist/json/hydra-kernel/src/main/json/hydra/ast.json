@@ -1,6 +1,10 @@
 {
   "name": "hydra.ast",
-  "metadata": {"description": "A model which provides a common syntax tree for Hydra serializers", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "A model which provides a common syntax tree for Hydra serializers",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

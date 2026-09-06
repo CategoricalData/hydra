@@ -1,6 +1,6 @@
 {
   "name": "hydra.lib.sets",
-  "metadata": {"description": "Primitives in the hydra.lib.sets module.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Primitives in the hydra.lib.sets module.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -41,7 +41,8 @@
             "delete(x, s) returns s with x removed; if x is not in s, s is returned unchanged.",
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.delete :: Ord a => a -> Set a -> Set a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -59,7 +60,8 @@
             "difference(s1, s2) returns the set of elements that are in s1 but not in s2.",
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.difference :: Ord a => Set a -> Set a -> Set a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -114,7 +116,8 @@
             "empty is the set with no elements.",
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.empty :: Set a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [],
@@ -130,7 +133,8 @@
             "filter(p, s) returns the subset of s containing exactly the elements x for which p(x) is true.",
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.filter :: (a -> Bool) -> Set a -> Set a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -165,7 +169,8 @@
             "fromList(xs) returns the set containing exactly the distinct elements of xs; duplicates are discarded.",
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.fromList :: Ord a => [a] -> Set a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -186,7 +191,8 @@
             "insert(x, s) returns s with x added; if x is already in s, s is returned unchanged.",
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.insert :: Ord a => a -> Set a -> Set a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -204,7 +210,8 @@
             "intersection(s1, s2) returns the set of elements present in both s1 and s2.",
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.intersection :: Ord a => Set a -> Set a -> Set a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -259,7 +266,8 @@
             "isEmpty(s) returns true iff s has no elements.",
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.null :: Set a -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [{"name": "s", "description": "the set to test for emptiness", "type": {"set": {"variable": "x"}}, "isLazy": false}],
@@ -275,7 +283,8 @@
             "map(f, s) returns the set of f(x) for each x in s. Elements that f maps to the same image are deduplicated by the result type's ordering.",
             "Requires 'ordering' constraints on both the input and output element types.",
             "Total. Corresponds to Haskell's Data.Set.map :: (Ord a, Ord b) => (a -> b) -> Set a -> Set b."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -310,7 +319,8 @@
             "member(x, s) returns true iff x is an element of s.",
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.member :: Ord a => a -> Set a -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -328,7 +338,8 @@
             "singleton(x) returns the set containing exactly the element x.",
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.singleton :: a -> Set a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [{"name": "x", "description": "the single element of the set", "type": {"variable": "x"}, "isLazy": false}],
@@ -344,7 +355,8 @@
             "size(s) returns the number of elements in s as an int32.",
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.size :: Set a -> Int (with narrowing to int32)."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [{"name": "s", "description": "the set whose size is returned", "type": {"set": {"variable": "x"}}, "isLazy": false}],
@@ -360,7 +372,8 @@
             "toList(s) returns the elements of s as a list, in ascending order under the element type's ordering.",
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.toAscList :: Set a -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [{"name": "s", "description": "the set to convert to a list", "type": {"set": {"variable": "x"}}, "isLazy": false}],
@@ -376,7 +389,8 @@
             "union(s1, s2) returns the set of elements that are in s1 or in s2 (or both).",
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.union :: Ord a => Set a -> Set a -> Set a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -419,7 +433,8 @@
             "unions(ss) returns the union of every set in ss. Equivalent to folding union over ss starting from empty.",
             "Requires an 'ordering' constraint on the element type.",
             "Total. Corresponds to Haskell's Data.Set.unions :: Ord a => [Set a] -> Set a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [

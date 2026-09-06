@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.protobuf.serde"},
     {"module": "hydra.protobuf.language"},

@@ -3,7 +3,8 @@
   "metadata": {
     "description": "JSON Schema code generator: converts Hydra modules to JSON Schema documents",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.annotations"},
     {"module": "hydra.constants"},

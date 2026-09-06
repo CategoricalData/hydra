@@ -1,6 +1,10 @@
 {
   "name": "hydra.cpp.names",
-  "metadata": {"description": "C++ naming utilities: encoding Hydra names as C++ names", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "C++ naming utilities: encoding Hydra names as C++ names",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.names"},
     {"module": "hydra.formatting"},

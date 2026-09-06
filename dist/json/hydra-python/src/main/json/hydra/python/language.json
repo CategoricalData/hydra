@@ -1,6 +1,6 @@
 {
   "name": "hydra.python.language",
-  "metadata": {"description": "Language constraints and reserved words for Python 3", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Language constraints and reserved words for Python 3", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},

@@ -3,7 +3,8 @@
   "metadata": {
     "description": "JSON-to-YAML encoding. Converts JSON Values to YAML Nodes (always succeeds), and Hydra Terms to YAML Nodes via JSON.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.json.encode"},
     {"module": "hydra.yaml.model"},

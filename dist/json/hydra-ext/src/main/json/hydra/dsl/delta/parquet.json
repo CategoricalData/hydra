@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.delta.parquet",
-  "metadata": {"description": "DSL functions for hydra.delta.parquet", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.delta.parquet", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.delta.parquet"},
     {"module": "hydra.typed"},

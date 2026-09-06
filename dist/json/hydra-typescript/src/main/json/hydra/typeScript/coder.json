@@ -3,7 +3,8 @@
   "metadata": {
     "description": "TypeScript code generator: emits TypeScript type declarations from Hydra modules",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.typeScript.language"},
     {"module": "hydra.typeScript.serde"},

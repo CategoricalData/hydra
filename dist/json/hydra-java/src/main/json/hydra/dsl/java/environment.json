@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.java.environment",
-  "metadata": {"description": "DSL functions for hydra.java.environment", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.java.environment", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.java.environment"},
     {"module": "hydra.typed"},

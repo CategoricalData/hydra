@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Pure snapshot-compare decision helpers: per-module status/diff-count and the whole-report tally, over content both sides already read",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.build.walk"},
     {"module": "hydra.paths"},

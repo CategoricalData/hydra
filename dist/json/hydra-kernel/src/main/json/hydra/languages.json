@@ -1,6 +1,6 @@
 {
   "name": "hydra.languages",
-  "metadata": {"description": "Language constraints for Hydra Core", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Language constraints for Hydra Core", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.reflect"},
     {"module": "hydra.paths"},

@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n  https://opencypher.org/resources/",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

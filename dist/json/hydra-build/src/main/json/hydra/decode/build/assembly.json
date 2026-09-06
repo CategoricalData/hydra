@@ -1,6 +1,6 @@
 {
   "name": "hydra.decode.build.assembly",
-  "metadata": {"description": "Term decoders for hydra.build.assembly", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term decoders for hydra.build.assembly", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Type-level model of a distribution package's assembly plan: the ordered copy/symlink entries and keep-paths that a host-native executor realizes on disk when merging overlay source onto a generated distribution package. Factors the copy(overlay/<lang>/<pkg>/) half of the governing equation into data, so the per-host copy scripts share one translingual description. See https://github.com/CategoricalData/hydra/issues/416",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [],
   "definitions": [
     {

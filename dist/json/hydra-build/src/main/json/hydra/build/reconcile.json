@@ -1,6 +1,10 @@
 {
   "name": "hydra.build.reconcile",
-  "metadata": {"description": "The pure orphan-reconcile decision: which generated files to delete", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "The pure orphan-reconcile decision: which generated files to delete",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.codegen"},
     {"module": "hydra.paths"},

@@ -1,6 +1,6 @@
 {
   "name": "hydra.predicates",
-  "metadata": {"description": "Type and term classification predicates", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Type and term classification predicates", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.arity"},
     {"module": "hydra.dependencies"},

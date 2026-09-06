@@ -1,6 +1,10 @@
 {
   "name": "hydra.python.utils",
-  "metadata": {"description": "Python utilities for constructing Python syntax trees", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Python utilities for constructing Python syntax trees",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.python.names"},
     {"module": "hydra.python.serde"},

@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.avro.testing",
-  "metadata": {"description": "DSL functions for hydra.avro.testing", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.avro.testing", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.avro.testing"},
     {"module": "hydra.typed"},

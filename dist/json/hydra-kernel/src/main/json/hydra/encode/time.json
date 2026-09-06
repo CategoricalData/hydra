@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.time",
-  "metadata": {"description": "Term encoders for hydra.time", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.time", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.time"}],
   "definitions": [
     {

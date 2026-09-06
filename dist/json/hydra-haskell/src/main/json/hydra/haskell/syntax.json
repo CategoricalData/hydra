@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A Haskell syntax model for Hydra. Originally inspired by Language.Haskell.Tools.AST, but now diverges freely to suit Hydra's needs.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

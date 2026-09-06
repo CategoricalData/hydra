@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.yaml.model",
-  "metadata": {"description": "Term encoders for hydra.yaml.model", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.yaml.model", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.yaml.model"}],
   "definitions": [
     {

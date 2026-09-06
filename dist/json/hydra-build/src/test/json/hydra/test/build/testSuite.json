@@ -1,6 +1,10 @@
 {
   "name": "hydra.test.build.testSuite",
-  "metadata": {"description": "The test suite for hydra-build, combining its test groups.", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "The test suite for hydra-build, combining its test groups.",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.test.build.libraries"},
     {"module": "hydra.test.build.modules"},

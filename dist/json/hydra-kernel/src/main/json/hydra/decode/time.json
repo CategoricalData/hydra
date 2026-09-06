@@ -1,6 +1,6 @@
 {
   "name": "hydra.decode.time",
-  "metadata": {"description": "Term decoders for hydra.time", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term decoders for hydra.time", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

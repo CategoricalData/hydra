@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A partial KQL (Kusto Query Language) model, based on examples from the documentation. Not normative.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

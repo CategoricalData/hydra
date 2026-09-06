@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Parser for Hydra documentation strings, producing DocSegment lists. A bespoke helper parser, not a parse<T> convention function (see docs/specification/index.md, Conventions).",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Typed references to derived encode/decode/show functions, and structural coder builders",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.names"},
     {"module": "hydra.typed"},

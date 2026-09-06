@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Pure code generation pipeline for bootstrapping Hydra across languages.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.adapt"},
     {"module": "hydra.annotations"},
@@ -5351,7 +5352,10 @@
                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                             {
                                               "name": "lifecycle",
-                                              "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                              "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                            {
+                                              "name": "provisions",
+                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                   {
                                     "name": "dependencies",
                                     "term": {

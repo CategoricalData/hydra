@@ -1,6 +1,10 @@
 {
   "name": "hydra.pg.graphson.coder",
-  "metadata": {"description": "Encoding functions for converting GraphSON syntax to JSON.", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Encoding functions for converting GraphSON syntax to JSON.",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

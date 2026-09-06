@@ -1,6 +1,6 @@
 {
   "name": "hydra.decode.paths",
-  "metadata": {"description": "Term decoders for hydra.paths", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term decoders for hydra.paths", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

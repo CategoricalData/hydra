@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.typing",
-  "metadata": {"description": "DSL functions for hydra.typing", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.typing", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.typing"},
     {"module": "hydra.typed"},

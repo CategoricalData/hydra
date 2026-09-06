@@ -1,6 +1,6 @@
 {
   "name": "hydra.print.error.pg",
-  "metadata": {"description": "String representations of hydra.error.pg types", "comments": [], "seeAlso": []},
+  "metadata": {"description": "String representations of hydra.error.pg types", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.error.pg"},
     {"module": "hydra.pg.model"},

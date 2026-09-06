@@ -1,6 +1,10 @@
 {
   "name": "hydra.print.error.packaging",
-  "metadata": {"description": "String representations of hydra.error.packaging types", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "String representations of hydra.error.packaging types",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.print.util"},
     {"module": "hydra.paths"},

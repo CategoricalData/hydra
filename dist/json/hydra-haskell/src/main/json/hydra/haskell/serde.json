@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Haskell operator precendence and associativity are drawn from:\nhttps://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html\nOther operators were investigated using GHCi, e.g. \":info (->)\"\nOperator names are drawn (loosely) from:\nhttps://stackoverflow.com/questions/7746894/are-there-pronounceable-names-for-common-haskell-operators",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.formatting"},

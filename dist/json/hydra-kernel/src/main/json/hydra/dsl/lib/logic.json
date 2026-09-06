@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.lib.logic",
-  "metadata": {"description": "DSL functions for hydra.lib.logic", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.lib.logic", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.lib.logic"},
     {"module": "hydra.typed"},

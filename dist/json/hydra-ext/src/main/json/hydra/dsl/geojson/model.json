@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.geojson.model",
-  "metadata": {"description": "DSL functions for hydra.geojson.model", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.geojson.model", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.geojson.model"},
     {"module": "hydra.typed"},

@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Per-dialect printer rendering the hydra.regex AST into the PCRE / java.util.regex / ECMA family syntax (Java, Scala, Clojure, Python, Common Lisp, TypeScript). Differs from the canonical hydra.print.regex in exactly one place: Hydra's . (any character INCLUDING newline) renders as [\\s\\S] rather than a bare . (whose native meaning excludes newline in these engines). All other productions match the canonical form. See docs/specification/regex.md and issue #567.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

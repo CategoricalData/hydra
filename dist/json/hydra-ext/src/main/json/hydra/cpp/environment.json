@@ -1,6 +1,6 @@
 {
   "name": "hydra.cpp.environment",
-  "metadata": {"description": "Type definitions for C++ code generation environment", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Type definitions for C++ code generation environment", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.packaging"}, {"module": "hydra.util"}],
   "definitions": [
     {

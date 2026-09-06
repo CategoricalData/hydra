@@ -3,7 +3,8 @@
   "metadata": {
     "description": "The TinkerPop \"Modern\" property graph (schema and data), encoded as Hydra terms. The canonical example graph used throughout Apache TinkerPop documentation.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.pg.model"}],
   "definitions": [
     {

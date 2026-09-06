@@ -1,6 +1,10 @@
 {
   "name": "hydra.variables",
-  "metadata": {"description": "Free variable analysis, term-level substitution, and unshadowing", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Free variable analysis, term-level substitution, and unshadowing",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.names"},
     {"module": "hydra.rewriting"},

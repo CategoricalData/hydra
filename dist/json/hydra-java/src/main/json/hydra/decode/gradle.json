@@ -1,6 +1,6 @@
 {
   "name": "hydra.decode.gradle",
-  "metadata": {"description": "Term decoders for hydra.gradle", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term decoders for hydra.gradle", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

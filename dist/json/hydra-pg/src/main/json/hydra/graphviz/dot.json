@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A model from the Graphviz DOT graph description language. Based on the grammar at https://graphviz.org/doc/info/lang.html",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

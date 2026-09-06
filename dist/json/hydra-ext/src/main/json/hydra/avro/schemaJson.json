@@ -1,6 +1,10 @@
 {
   "name": "hydra.avro.schemaJson",
-  "metadata": {"description": "JSON serialization and deserialization for Avro schemas", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "JSON serialization and deserialization for Avro schemas",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.json.writer"},
     {"module": "hydra.json.parser"},

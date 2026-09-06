@@ -1,6 +1,6 @@
 {
   "name": "hydra.pg.printing",
-  "metadata": {"description": "Printing functions for property graph elements", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Printing functions for property graph elements", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.pg.model"},
     {"module": "hydra.paths"},

@@ -1,6 +1,6 @@
 {
   "name": "hydra.cpp.utils",
-  "metadata": {"description": "C++ utilities for constructing C++ syntax trees", "comments": [], "seeAlso": []},
+  "metadata": {"description": "C++ utilities for constructing C++ syntax trees", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.cpp.syntax"},
     {"module": "hydra.paths"},

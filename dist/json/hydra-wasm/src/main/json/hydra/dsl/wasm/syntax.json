@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.wasm.syntax",
-  "metadata": {"description": "DSL functions for hydra.wasm.syntax", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.wasm.syntax", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.wasm.syntax"},
     {"module": "hydra.typed"},

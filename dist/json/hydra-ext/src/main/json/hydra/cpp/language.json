@@ -1,6 +1,6 @@
 {
   "name": "hydra.cpp.language",
-  "metadata": {"description": "Language constraints and reserved words for C++", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Language constraints and reserved words for C++", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},

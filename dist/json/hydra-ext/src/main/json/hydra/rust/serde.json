@@ -1,6 +1,10 @@
 {
   "name": "hydra.rust.serde",
-  "metadata": {"description": "Rust serializer: converts Rust AST to concrete syntax", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Rust serializer: converts Rust AST to concrete syntax",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.formatting"},

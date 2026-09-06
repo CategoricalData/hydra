@@ -1,6 +1,6 @@
 {
   "name": "hydra.pg.rdf.environment",
-  "metadata": {"description": "Environment types for property graph to RDF mapping", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Environment types for property graph to RDF mapping", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.rdf.syntax"}, {"module": "hydra.pg.model"}, {"module": "hydra.core"}],
   "definitions": [
     {

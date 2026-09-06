@@ -1,6 +1,6 @@
 {
   "name": "hydra.lib.equality",
-  "metadata": {"description": "Primitives in the hydra.lib.equality module.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Primitives in the hydra.lib.equality module.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -42,7 +42,8 @@
             "Requires an 'equality' type-class constraint on the argument type, which is the closest Hydra equivalent to Haskell's Eq instance.",
             "Equality is reflexive, symmetric, and transitive (no NaN-style exception on floating-point: floating-point equality is provided per the underlying host's IEEE 754 comparison rules, so NaN /= NaN at the level of float64/float32).",
             "Total. Corresponds to Haskell's (==) :: Eq a => a -> a -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
           "parameters": [
@@ -60,7 +61,8 @@
             "notEqual(x, y) = logic.not(equal(x, y)); this defining equation is the specification, and the default implementation.",
             "Requires an 'equality' type-class constraint on the argument type.",
             "Total. Corresponds to Haskell's (/=) :: Eq a => a -> a -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
           "parameters": [

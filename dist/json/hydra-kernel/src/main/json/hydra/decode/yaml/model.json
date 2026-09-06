@@ -1,6 +1,6 @@
 {
   "name": "hydra.decode.yaml.model",
-  "metadata": {"description": "Term decoders for hydra.yaml.model", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term decoders for hydra.yaml.model", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

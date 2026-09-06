@@ -1,6 +1,6 @@
 {
   "name": "hydra.test.validate.packaging",
-  "metadata": {"description": "Test cases for module and package validation", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Test cases for module and package validation", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.validate.packaging"},
     {"module": "hydra.print.error.packaging"},
@@ -143,7 +143,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
@@ -181,7 +184,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -239,7 +243,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
@@ -268,7 +275,10 @@
                                                                                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                           {
                                                                                             "name": "lifecycle",
-                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -308,7 +318,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -366,7 +377,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
@@ -395,7 +409,10 @@
                                                                                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                           {
                                                                                             "name": "lifecycle",
-                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -423,7 +440,10 @@
                                                                                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                           {
                                                                                             "name": "lifecycle",
-                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -463,7 +483,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -521,7 +542,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
@@ -550,7 +574,10 @@
                                                                                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                           {
                                                                                             "name": "lifecycle",
-                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -578,7 +605,10 @@
                                                                                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                           {
                                                                                             "name": "lifecycle",
-                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -633,7 +663,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkConflictingVariantNamesTests",
@@ -708,7 +739,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -748,7 +782,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkDefinitionDocumentationTests",
@@ -823,7 +858,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -863,7 +901,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -921,7 +960,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -1026,7 +1068,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -1084,7 +1127,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -1162,7 +1208,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkDefinitionNameConventionTests",
@@ -1237,7 +1284,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -1277,7 +1327,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -1335,7 +1386,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -1442,7 +1496,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -1500,7 +1555,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -1605,7 +1663,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -1663,7 +1722,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -1788,7 +1850,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -1846,7 +1909,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -1971,7 +2037,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkDefinitionModuleNamesTests",
@@ -2046,7 +2113,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -2086,7 +2156,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -2144,7 +2215,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -2249,7 +2323,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -2307,7 +2382,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -2425,7 +2503,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkDefinitionOrderingTests",
@@ -2500,7 +2579,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -2540,7 +2622,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -2598,7 +2681,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -2703,7 +2789,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -2761,7 +2848,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -2930,7 +3020,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -2988,7 +3079,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -3175,7 +3269,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -3233,7 +3328,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -3424,7 +3522,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkDuplicateDefinitionNamesTests",
@@ -3499,7 +3598,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -3539,7 +3641,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -3597,7 +3700,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -3766,7 +3872,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -3824,7 +3931,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -4006,7 +4116,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkDuplicateModuleNamesTests",
@@ -4081,7 +4192,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
@@ -4119,7 +4233,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -4177,7 +4292,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
@@ -4206,7 +4324,10 @@
                                                                                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                           {
                                                                                             "name": "lifecycle",
-                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -4234,7 +4355,10 @@
                                                                                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                           {
                                                                                             "name": "lifecycle",
-                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -4274,7 +4398,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -4332,7 +4457,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
@@ -4361,7 +4489,10 @@
                                                                                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                           {
                                                                                             "name": "lifecycle",
-                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -4389,7 +4520,10 @@
                                                                                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                           {
                                                                                             "name": "lifecycle",
-                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -4441,7 +4575,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkModuleNameConventionTests",
@@ -4514,7 +4649,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -4554,7 +4692,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -4612,7 +4751,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -4652,7 +4794,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -4710,7 +4853,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -4750,7 +4896,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -4808,7 +4955,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -4860,7 +5010,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -4918,7 +5069,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -4970,7 +5124,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkPackageNameConventionTests",
@@ -5045,7 +5200,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
@@ -5083,7 +5241,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -5141,7 +5300,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
@@ -5179,7 +5341,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -5237,7 +5400,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
@@ -5287,7 +5453,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -5345,7 +5512,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
@@ -5395,7 +5565,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -5453,7 +5624,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
@@ -5503,7 +5677,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.checkUndeclaredDependenciesTests",
@@ -5602,7 +5777,10 @@
                                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                       {
                                                                                                         "name": "lifecycle",
-                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                      {
+                                                                                                        "name": "provisions",
+                                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                             {
                                                                                               "name": "dependencies",
                                                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -5696,7 +5874,10 @@
                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                       {
                                                                                         "name": "lifecycle",
-                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                      {
+                                                                                        "name": "provisions",
+                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                             {
                                                                               "name": "dependencies",
                                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -5804,7 +5985,8 @@
                                                                   "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}},
                                                       "argument": {"literal": {"string": "]"}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -5886,7 +6068,10 @@
                                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                       {
                                                                                                         "name": "lifecycle",
-                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                      {
+                                                                                                        "name": "provisions",
+                                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                             {
                                                                                               "name": "dependencies",
                                                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -5979,7 +6164,10 @@
                                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                       {
                                                                                                         "name": "lifecycle",
-                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                      {
+                                                                                                        "name": "provisions",
+                                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                             {
                                                                                               "name": "dependencies",
                                                                                               "term": {
@@ -6042,7 +6230,10 @@
                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                       {
                                                                                         "name": "lifecycle",
-                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                      {
+                                                                                        "name": "provisions",
+                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                             {
                                                                               "name": "dependencies",
                                                                               "term": {
@@ -6119,7 +6310,8 @@
                                                                   "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}},
                                                       "argument": {"literal": {"string": "]"}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -6203,7 +6395,10 @@
                                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                       {
                                                                                                         "name": "lifecycle",
-                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                      {
+                                                                                                        "name": "provisions",
+                                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                             {
                                                                                               "name": "dependencies",
                                                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -6298,7 +6493,10 @@
                                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                       {
                                                                                                         "name": "lifecycle",
-                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                      {
+                                                                                                        "name": "provisions",
+                                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                             {
                                                                                               "name": "dependencies",
                                                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -6354,7 +6552,10 @@
                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                       {
                                                                                         "name": "lifecycle",
-                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                      {
+                                                                                        "name": "provisions",
+                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                             {
                                                                               "name": "dependencies",
                                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -6443,7 +6644,8 @@
                                                                                     "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.dsls"}}}}}]}}}}}]}}}}}}},
                                                       "argument": {"literal": {"string": "]"}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -6525,7 +6727,10 @@
                                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                       {
                                                                                                         "name": "lifecycle",
-                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                      {
+                                                                                                        "name": "provisions",
+                                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                             {
                                                                                               "name": "dependencies",
                                                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -6618,7 +6823,10 @@
                                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                       {
                                                                                                         "name": "lifecycle",
-                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                      {
+                                                                                                        "name": "provisions",
+                                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                             {
                                                                                               "name": "dependencies",
                                                                                               "term": {
@@ -6722,7 +6930,10 @@
                                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                       {
                                                                                                         "name": "lifecycle",
-                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                      {
+                                                                                                        "name": "provisions",
+                                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                             {
                                                                                               "name": "dependencies",
                                                                                               "term": {
@@ -6785,7 +6996,10 @@
                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                       {
                                                                                         "name": "lifecycle",
-                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                      {
+                                                                                        "name": "provisions",
+                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                             {
                                                                               "name": "dependencies",
                                                                               "term": {
@@ -6881,7 +7095,8 @@
                                                                                     "term": {"wrap": {"typeName": "hydra.packaging.ModuleName", "body": {"literal": {"string": "hydra.baz"}}}}}]}}}}}]}}}}}}},
                                                       "argument": {"literal": {"string": "]"}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -6963,7 +7178,10 @@
                                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                       {
                                                                                                         "name": "lifecycle",
-                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                      {
+                                                                                                        "name": "provisions",
+                                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                             {
                                                                                               "name": "dependencies",
                                                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -7017,7 +7235,10 @@
                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                       {
                                                                                         "name": "lifecycle",
-                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                      {
+                                                                                        "name": "provisions",
+                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                             {
                                                                               "name": "dependencies",
                                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -7085,7 +7306,8 @@
                                                                   "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}},
                                                       "argument": {"literal": {"string": "]"}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -7167,7 +7389,10 @@
                                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                       {
                                                                                                         "name": "lifecycle",
-                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                      {
+                                                                                                        "name": "provisions",
+                                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                             {
                                                                                               "name": "dependencies",
                                                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -7262,7 +7487,10 @@
                                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                       {
                                                                                                         "name": "lifecycle",
-                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                      {
+                                                                                                        "name": "provisions",
+                                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                             {
                                                                                               "name": "dependencies",
                                                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -7319,7 +7547,10 @@
                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                       {
                                                                                         "name": "lifecycle",
-                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                      {
+                                                                                        "name": "provisions",
+                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                             {
                                                                               "name": "dependencies",
                                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -7387,7 +7618,8 @@
                                                                   "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}},
                                                       "argument": {"literal": {"string": "]"}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -7469,7 +7701,10 @@
                                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                       {
                                                                                                         "name": "lifecycle",
-                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                      {
+                                                                                                        "name": "provisions",
+                                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                             {
                                                                                               "name": "dependencies",
                                                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -7585,7 +7820,10 @@
                                                                                         "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                       {
                                                                                         "name": "lifecycle",
-                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                        "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                      {
+                                                                                        "name": "provisions",
+                                                                                        "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                             {
                                                                               "name": "dependencies",
                                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -7715,7 +7953,8 @@
                                                                   "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}}}},
                                                       "argument": {"literal": {"string": "]"}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.kernelModuleTests",
@@ -7790,7 +8029,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -7895,7 +8137,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -7953,7 +8196,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -8031,7 +8277,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -8089,7 +8336,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -8276,7 +8526,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidModuleError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.kernelPackageTests",
@@ -8351,7 +8602,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
@@ -8380,7 +8634,10 @@
                                                                                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                           {
                                                                                             "name": "lifecycle",
-                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -8485,7 +8742,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -8543,7 +8801,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
@@ -8572,7 +8833,10 @@
                                                                                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                           {
                                                                                             "name": "lifecycle",
-                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -8689,7 +8953,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -8747,7 +9012,10 @@
                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                               {
                                                                                 "name": "lifecycle",
-                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                              {
+                                                                                "name": "provisions",
+                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                     {
                                                                       "name": "dependencies",
                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
@@ -8776,7 +9044,10 @@
                                                                                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                           {
                                                                                             "name": "lifecycle",
-                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -8804,7 +9075,10 @@
                                                                                             "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                           {
                                                                                             "name": "lifecycle",
-                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                            "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                          {
+                                                                                            "name": "provisions",
+                                                                                            "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -8859,7 +9133,8 @@
                                                       "body": {
                                                         "application": {"function": {"variable": "hydra.print.error.packaging.invalidPackageError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
     {
       "term": {
         "name": "hydra.test.validate.packaging.profileBehaviourTests",
@@ -9005,7 +9280,10 @@
                                                                                                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                   {
                                                                                                     "name": "lifecycle",
-                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                  {
+                                                                                                    "name": "provisions",
+                                                                                                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                         {
                                                                                           "name": "dependencies",
                                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -9163,7 +9441,10 @@
                                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                               {
                                                                                                 "name": "lifecycle",
-                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                              {
+                                                                                                "name": "provisions",
+                                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -9380,7 +9661,8 @@
                                                                               "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}},
                                                           "argument": {"literal": {"string": "]"}}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -9509,7 +9791,10 @@
                                                                                                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                   {
                                                                                                     "name": "lifecycle",
-                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                  {
+                                                                                                    "name": "provisions",
+                                                                                                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                         {
                                                                                           "name": "dependencies",
                                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -9667,7 +9952,10 @@
                                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                               {
                                                                                                 "name": "lifecycle",
-                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                              {
+                                                                                                "name": "provisions",
+                                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -9884,7 +10172,8 @@
                                                                               "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}},
                                                           "argument": {"literal": {"string": "]"}}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -10009,7 +10298,10 @@
                                                                                                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                   {
                                                                                                     "name": "lifecycle",
-                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                  {
+                                                                                                    "name": "provisions",
+                                                                                                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                         {
                                                                                           "name": "dependencies",
                                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -10163,7 +10455,10 @@
                                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                               {
                                                                                                 "name": "lifecycle",
-                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                              {
+                                                                                                "name": "provisions",
+                                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -10354,7 +10649,8 @@
                                                                               "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}},
                                                           "argument": {"literal": {"string": "]"}}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                     {
                       "record": {
                         "typeName": "hydra.testing.TestCaseWithMetadata",
@@ -10483,7 +10779,10 @@
                                                                                                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                                   {
                                                                                                     "name": "lifecycle",
-                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                    "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                                  {
+                                                                                                    "name": "provisions",
+                                                                                                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                         {
                                                                                           "name": "dependencies",
                                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -10641,7 +10940,10 @@
                                                                                                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.EntityReference"}}}},
                                                                                               {
                                                                                                 "name": "lifecycle",
-                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}}]}}}},
+                                                                                                "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.packaging.LifecycleInfo"}}}},
+                                                                                              {
+                                                                                                "name": "provisions",
+                                                                                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Provision"}}}}]}}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -10832,4 +11134,5 @@
                                                                               "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}}}}}}}},
                                                           "argument": {"literal": {"string": "]"}}}}}}}}}}}]}}}}}},
                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}]}}]}}]}}}}]}
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}}]}

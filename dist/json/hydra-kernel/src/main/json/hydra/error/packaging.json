@@ -1,6 +1,6 @@
 {
   "name": "hydra.error.packaging",
-  "metadata": {"description": "Error types for module and package validation", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Error types for module and package validation", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.packaging"}, {"module": "hydra.util"}],
   "definitions": [
     {

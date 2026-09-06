@@ -1,6 +1,10 @@
 {
   "name": "hydra.tabular",
-  "metadata": {"description": "A simple, untyped tabular data model, suitable for CSVs and TSVs", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "A simple, untyped tabular data model, suitable for CSVs and TSVs",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.relational"}],
   "definitions": [
     {

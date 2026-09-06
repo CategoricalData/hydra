@@ -1,6 +1,10 @@
 {
   "name": "hydra.typeScript.syntax",
-  "metadata": {"description": "A TypeScript 5.x syntax model for Hydra code generation", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "A TypeScript 5.x syntax model for Hydra code generation",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

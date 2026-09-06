@@ -3,7 +3,8 @@
   "metadata": {
     "description": "WebAssembly code generator: converts Hydra type and term modules to WAT source code",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.wasm.serde"},
     {"module": "hydra.wasm.language"},

@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.build.format",
-  "metadata": {"description": "DSL functions for hydra.build.format", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.build.format", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.build.format"},
     {"module": "hydra.typed"},

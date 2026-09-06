@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.build.comparereport",
-  "metadata": {"description": "DSL functions for hydra.build.comparereport", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.build.comparereport", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.build.comparereport"},
     {"module": "hydra.typed"},

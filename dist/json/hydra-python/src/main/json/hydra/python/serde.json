@@ -1,6 +1,10 @@
 {
   "name": "hydra.python.serde",
-  "metadata": {"description": "Python serializer: converts Python AST to concrete syntax", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Python serializer: converts Python AST to concrete syntax",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.formatting"},

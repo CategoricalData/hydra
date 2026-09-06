@@ -1,6 +1,10 @@
 {
   "name": "hydra.build.modules",
-  "metadata": {"description": "Pure module-list utilities shared by the code-generation drivers", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Pure module-list utilities shared by the code-generation drivers",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.strip"},
     {"module": "hydra.paths"},

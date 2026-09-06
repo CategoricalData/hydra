@@ -1,6 +1,10 @@
 {
   "name": "hydra.coq.coder",
-  "metadata": {"description": "Coq code generator: converts Hydra modules to Coq source", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Coq code generator: converts Hydra modules to Coq source",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.formatting"},
     {"module": "hydra.coq.language"},

@@ -1,6 +1,6 @@
 {
   "name": "hydra.haskell.environment",
-  "metadata": {"description": "Environment types for Haskell code generation", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Environment types for Haskell code generation", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [],
   "definitions": [
     {

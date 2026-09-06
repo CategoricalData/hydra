@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Type inference for Hydra: Hindley-Milner with elaboration to System F. Extends textbook Algorithm W with nominal types, explicit type abstraction and application, and class constraints. See the Inference wiki page for the full picture.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.annotations"},
     {"module": "hydra.checking"},

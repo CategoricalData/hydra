@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.graphql.syntax",
-  "metadata": {"description": "DSL functions for hydra.graphql.syntax", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.graphql.syntax", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.graphql.syntax"},
     {"module": "hydra.typed"},

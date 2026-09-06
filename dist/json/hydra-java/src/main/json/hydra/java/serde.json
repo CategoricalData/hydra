@@ -1,6 +1,10 @@
 {
   "name": "hydra.java.serde",
-  "metadata": {"description": "Java serializer: converts Java AST to concrete syntax", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Java serializer: converts Java AST to concrete syntax",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.jvm.serde"},
     {"module": "hydra.constants"},

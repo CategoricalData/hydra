@@ -1,6 +1,6 @@
 {
   "name": "hydra.substitution",
-  "metadata": {"description": "Variable substitution in type and term expressions.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Variable substitution in type and term expressions.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.classes"},
     {"module": "hydra.rewriting"},

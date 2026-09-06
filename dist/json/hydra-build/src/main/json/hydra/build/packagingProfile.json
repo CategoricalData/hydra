@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Per-package packaging-validation policy: strict vs. doc-relaxed profile selection and native-owned exclusion",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.validate.packaging"},
     {"module": "hydra.paths"},

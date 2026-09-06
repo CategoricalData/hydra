@@ -1,6 +1,10 @@
 {
   "name": "hydra.cpp.serde",
-  "metadata": {"description": "Serialization functions for converting C++ AST to abstract expressions", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Serialization functions for converting C++ AST to abstract expressions",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.cpp.syntax"},

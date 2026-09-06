@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Coq code generation driver — pre-passes, sentence producers, and per-module pipeline",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.coq.utils"},
     {"module": "hydra.coq.coder"},

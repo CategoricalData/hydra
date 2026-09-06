@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.iana.linkrelations",
-  "metadata": {"description": "DSL functions for hydra.iana.linkrelations", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.iana.linkrelations", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.iana.linkrelations"},
     {"module": "hydra.typed"},

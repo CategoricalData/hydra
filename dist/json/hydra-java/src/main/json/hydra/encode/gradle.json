@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.gradle",
-  "metadata": {"description": "Term encoders for hydra.gradle", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.gradle", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.packaging"}, {"module": "hydra.encode.file"}, {"module": "hydra.gradle"}],
   "definitions": [
     {

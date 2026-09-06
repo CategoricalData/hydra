@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.datalog.syntax",
-  "metadata": {"description": "DSL functions for hydra.datalog.syntax", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.datalog.syntax", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.datalog.syntax"},
     {"module": "hydra.typed"},

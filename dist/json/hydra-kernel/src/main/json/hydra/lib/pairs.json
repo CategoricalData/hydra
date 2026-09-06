@@ -1,6 +1,6 @@
 {
   "name": "hydra.lib.pairs",
-  "metadata": {"description": "Primitives in the hydra.lib.pairs module.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Primitives in the hydra.lib.pairs module.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -40,7 +40,8 @@
           "comments": [
             "bimap(f, g, p) returns a new pair (f(first(p)), g(second(p))). The bifunctor map for pairs.",
             "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> (a, b) -> (c, d)."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [
             {"name": "a", "constraints": []},
@@ -91,7 +92,8 @@
         "metadata": {
           "description": "Get the first element of a pair.",
           "comments": ["first(p) returns the first component of the pair p.", "Total. Corresponds to Haskell's fst :: (a, b) -> a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "a", "constraints": []}, {"name": "b", "constraints": []}],
           "parameters": [
@@ -112,7 +114,8 @@
             "pair(x, y) returns the pair (x, y).",
             "The type-free pair constructor, useful point-free (e.g. zipWith(pair, xs, ys)).",
             "Total. Corresponds to Haskell's (,) :: a -> b -> (a, b)."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "a", "constraints": []}, {"name": "b", "constraints": []}],
           "parameters": [
@@ -127,7 +130,8 @@
         "metadata": {
           "description": "Get the second element of a pair.",
           "comments": ["second(p) returns the second component of the pair p.", "Total. Corresponds to Haskell's snd :: (a, b) -> b."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "a", "constraints": []}, {"name": "b", "constraints": []}],
           "parameters": [

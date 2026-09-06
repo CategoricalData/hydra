@@ -1,6 +1,6 @@
 {
   "name": "hydra.topology",
-  "metadata": {"description": "A model for simple graphs as adjacency lists", "comments": [], "seeAlso": []},
+  "metadata": {"description": "A model for simple graphs as adjacency lists", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

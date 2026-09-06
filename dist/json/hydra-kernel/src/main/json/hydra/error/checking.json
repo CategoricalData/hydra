@@ -1,6 +1,6 @@
 {
   "name": "hydra.error.checking",
-  "metadata": {"description": "Error types for type checking", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Error types for type checking", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.paths"}, {"module": "hydra.typing"}, {"module": "hydra.variants"}],
   "definitions": [
     {

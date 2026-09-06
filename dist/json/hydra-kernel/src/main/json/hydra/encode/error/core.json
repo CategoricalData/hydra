@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.error.core",
-  "metadata": {"description": "Term encoders for hydra.error.core", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.error.core", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.encode.paths"},
     {"module": "hydra.encode.core"},

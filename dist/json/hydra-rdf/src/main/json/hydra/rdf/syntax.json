@@ -1,6 +1,6 @@
 {
   "name": "hydra.rdf.syntax",
-  "metadata": {"description": "An RDF 1.1 syntax model", "comments": [], "seeAlso": []},
+  "metadata": {"description": "An RDF 1.1 syntax model", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.parsing",
-  "metadata": {"description": "Term encoders for hydra.parsing", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.parsing", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.parsing"}],
   "definitions": [
     {

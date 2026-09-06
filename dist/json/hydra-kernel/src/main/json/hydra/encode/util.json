@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.util",
-  "metadata": {"description": "Term encoders for hydra.util", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.util", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.encode.packaging"}, {"module": "hydra.util"}],
   "definitions": [
     {

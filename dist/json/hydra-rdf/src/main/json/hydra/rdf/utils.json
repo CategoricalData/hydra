@@ -1,6 +1,10 @@
 {
   "name": "hydra.rdf.utils",
-  "metadata": {"description": "Utility functions for working with RDF graphs and descriptions", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Utility functions for working with RDF graphs and descriptions",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.formatting"},
     {"module": "hydra.names"},

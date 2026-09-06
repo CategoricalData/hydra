@@ -1,6 +1,6 @@
 {
   "name": "hydra.avro.testing",
-  "metadata": {"description": "Test case types for the bidirectional Avro coder", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Test case types for the bidirectional Avro coder", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.avro.schema"}, {"module": "hydra.json.model"}],
   "definitions": [
     {

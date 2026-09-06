@@ -1,6 +1,10 @@
 {
   "name": "hydra.python.coder",
-  "metadata": {"description": "Python code generator: converts Hydra modules to Python source code", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Python code generator: converts Hydra modules to Python source code",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.python.utils"},
     {"module": "hydra.python.names"},

@@ -1,6 +1,6 @@
 {
   "name": "hydra.print.core",
-  "metadata": {"description": "String representations of hydra.core types", "comments": [], "seeAlso": []},
+  "metadata": {"description": "String representations of hydra.core types", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

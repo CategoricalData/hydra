@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Type-level model for benchmark result JSON: a typed result model whose generated codec replaces the hand-rolled JSON assembly in the bench drivers. See https://github.com/CategoricalData/hydra/issues/416",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [],
   "definitions": [
     {

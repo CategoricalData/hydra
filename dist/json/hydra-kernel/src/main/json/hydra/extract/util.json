@@ -1,6 +1,6 @@
 {
   "name": "hydra.extract.util",
-  "metadata": {"description": "Extraction and validation for hydra.util types", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Extraction and validation for hydra.util types", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.print.errors"},

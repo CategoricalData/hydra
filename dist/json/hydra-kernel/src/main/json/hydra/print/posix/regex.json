@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Per-dialect printer rendering the hydra.regex AST into POSIX ERE syntax (Haskell Text.Regex.TDFA, Scheme Guile (ice-9 regex)). Differs from the canonical hydra.print.regex in one place: Hydra's . (any character INCLUDING newline) renders as the explicit full-code-point-range class [<U+0000>-<U+10FFFF>], because POSIX ERE's native . excludes newline and POSIX ERE does not support the \\s / \\S shorthands (confirmed by TDFA probe). All other productions are native POSIX ERE. See docs/specification/regex.md and issue #567.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

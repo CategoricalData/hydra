@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.annotations",
-  "metadata": {"description": "DSL functions for hydra.annotations", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.annotations", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.annotations"},
     {"module": "hydra.typed"},

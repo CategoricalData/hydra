@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A data model for Neo4j-flavored property graphs, aligned with the types of the Neo4j Java driver (org.neo4j.driver) at the instance level and with Neo4j's constraints and graph types at the schema level.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

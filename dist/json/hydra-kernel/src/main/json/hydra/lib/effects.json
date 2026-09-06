@@ -1,6 +1,6 @@
 {
   "name": "hydra.lib.effects",
-  "metadata": {"description": "Primitives in the hydra.lib.effects module.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Primitives in the hydra.lib.effects module.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -39,7 +39,8 @@
           "description": "Applicative apply for effects.",
           "comments": [
             "apply(ef, ex) describes an effectful computation which first interprets ef to produce a function, then interprets ex to produce an argument, and returns the result of applying the function to the argument."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -64,7 +65,8 @@
           "comments": [
             "bind(e, f) describes an effectful computation which first interprets e, then passes its result to f to obtain the next effect.",
             "Host interpreters provide the operational meaning; Hydra uses the type effect<t> to keep the effect boundary explicit."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -83,7 +85,8 @@
         "metadata": {
           "description": "Kleisli composition for effects.",
           "comments": ["compose(f, g, x) describes an effectful computation equivalent to bind(f(x), g)."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
@@ -107,7 +110,8 @@
         "metadata": {
           "description": "Left-fold over a list with an effect-returning function.",
           "comments": ["foldList(f, acc0, xs) describes an effectful left fold over xs, sequencing applications of f from left to right."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -132,7 +136,8 @@
           "comments": [
             "map(f, e) describes an effectful computation which interprets e and applies f to its result.",
             "Equivalent to bind(e, \\x -> pure(f x))."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -152,7 +157,8 @@
           "description": "Map an effect-returning function over a list.",
           "comments": [
             "mapList(f, xs) describes an effectful computation which applies f to each element of xs from left to right and collects the results."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -172,7 +178,8 @@
           "description": "Map an effect-returning function over an optional.",
           "comments": [
             "mapOptional(f, m) describes an effectful computation which returns none when m is none, or applies f to the contained value and wraps the result in given."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -193,7 +200,8 @@
           "comments": [
             "mapSet(f, s) describes an effectful computation which applies f to each element of s, sequencing the effects in ascending element order (the order is normative, since the effects are observable), and collects the results as a set, deduplicated by the result type's ordering.",
             "Requires 'ordering' constraints on both element types (the set type contract)."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -212,7 +220,8 @@
         "metadata": {
           "description": "Lift a pure value into an effect.",
           "comments": ["pure(x) describes an effectful computation which succeeds with x without requiring host interaction."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}],
           "parameters": [{"name": "x", "description": "the pure value to lift into an effect", "type": {"variable": "x"}, "isLazy": false}],

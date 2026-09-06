@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.lib.strings",
-  "metadata": {"description": "DSL functions for hydra.lib.strings", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.lib.strings", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.lib.strings"},
     {"module": "hydra.typed"},

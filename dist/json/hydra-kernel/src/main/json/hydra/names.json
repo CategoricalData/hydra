@@ -1,6 +1,6 @@
 {
   "name": "hydra.names",
-  "metadata": {"description": "Functions for working with qualified names.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Functions for working with qualified names.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.annotations"},
     {"module": "hydra.constants"},
@@ -219,6 +219,42 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Given a mapping of namespaces to prefixes, convert a name to a compact string representation"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.names.composeProvisionName",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.core.Name"}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Name"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "entityName",
+                "domain": {"variable": "hydra.core.Name"},
+                "body": {
+                  "lambda": {
+                    "parameter": "localName",
+                    "domain": {"literal": "string"},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.core.Name",
+                        "body": {
+                          "application": {
+                            "function": {"variable": "hydra.lib.strings.concat"},
+                            "argument": {
+                              "list": [
+                                {"application": {"function": {"unwrap": "hydra.core.Name"}, "argument": {"variable": "entityName"}}},
+                                {"literal": {"string": "."}},
+                                {"variable": "localName"}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Compose a provision's fully-qualified name from its enclosing entity's name and its local segment"}}}]}}}}},
     {
       "term": {
         "name": "hydra.names.derivedBindingName",

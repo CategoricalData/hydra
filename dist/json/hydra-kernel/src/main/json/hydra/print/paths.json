@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Serialization (printing and parsing) of subterm and subtype steps and paths.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.names"},
     {"module": "hydra.paths"},

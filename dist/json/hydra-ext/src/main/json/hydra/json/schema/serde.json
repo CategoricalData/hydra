@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Serialization functions for converting JSON Schema documents to JSON values",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.json.writer"},
     {"module": "hydra.json.schema.model"},

@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.pegasus.pdl",
-  "metadata": {"description": "DSL functions for hydra.pegasus.pdl", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.pegasus.pdl", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.pegasus.pdl"},
     {"module": "hydra.typed"},

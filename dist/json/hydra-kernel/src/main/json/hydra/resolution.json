@@ -1,6 +1,10 @@
 {
   "name": "hydra.resolution",
-  "metadata": {"description": "Type dereference, lookup, requirements, and instantiation", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Type dereference, lookup, requirements, and instantiation",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.names"},

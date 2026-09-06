@@ -1,6 +1,6 @@
 {
   "name": "hydra.decode.build.comparereport",
-  "metadata": {"description": "Term decoders for hydra.build.comparereport", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term decoders for hydra.build.comparereport", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

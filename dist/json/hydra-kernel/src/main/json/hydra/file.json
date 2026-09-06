@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A model for file-system paths and metadata. Several types here are drawn from the POSIX <sys/stat.h> specification; see https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/sys_stat.h.html",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.time"}],
   "definitions": [
     {

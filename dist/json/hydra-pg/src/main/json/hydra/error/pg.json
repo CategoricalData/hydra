@@ -1,6 +1,6 @@
 {
   "name": "hydra.error.pg",
-  "metadata": {"description": "Error types for property graph validation", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Error types for property graph validation", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.pg.model"}],
   "definitions": [
     {

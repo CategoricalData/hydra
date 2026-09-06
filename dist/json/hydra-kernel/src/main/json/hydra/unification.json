@@ -1,6 +1,6 @@
 {
   "name": "hydra.unification",
-  "metadata": {"description": "Utilities for type unification.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Utilities for type unification.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.rewriting"},
     {"module": "hydra.print.core"},

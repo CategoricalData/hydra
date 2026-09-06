@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.build.format",
-  "metadata": {"description": "Term encoders for hydra.build.format", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.build.format", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.packaging"}, {"module": "hydra.build.format"}],
   "definitions": [
     {

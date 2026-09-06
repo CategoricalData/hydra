@@ -1,6 +1,6 @@
 {
   "name": "hydra.error.file",
-  "metadata": {"description": "File-system error types", "comments": [], "seeAlso": []},
+  "metadata": {"description": "File-system error types", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.file"}],
   "definitions": [
     {

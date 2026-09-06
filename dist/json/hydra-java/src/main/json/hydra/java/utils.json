@@ -1,6 +1,6 @@
 {
   "name": "hydra.java.utils",
-  "metadata": {"description": "Java utilities for constructing Java syntax trees", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Java utilities for constructing Java syntax trees", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.java.language"},
     {"module": "hydra.java.names"},

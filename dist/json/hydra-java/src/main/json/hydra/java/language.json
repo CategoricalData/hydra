@@ -1,6 +1,6 @@
 {
   "name": "hydra.java.language",
-  "metadata": {"description": "Language constraints and reserved words for Java", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Language constraints and reserved words for Java", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},
@@ -237,7 +237,8 @@
                     "name": "specialNames",
                     "term": {
                       "annotated": {
-                        "body": {"list": [{"literal": {"string": "Elements"}}]},
+                        "body": {
+                          "list": [{"literal": {"string": "Elements"}}, {"literal": {"string": "PartialVisitor"}}, {"literal": {"string": "Visitor"}}]},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Special names reserved for use by Hydra"}}}]}}},
                     "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},

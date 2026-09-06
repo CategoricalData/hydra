@@ -1,6 +1,6 @@
 {
   "name": "hydra.test.checking.all",
-  "metadata": {"description": "Hydra's type checking test suite", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Hydra's type checking test suite", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.test.checking.advanced"},
     {"module": "hydra.test.checking.algebraicTypes"},

@@ -1,6 +1,6 @@
 {
   "name": "hydra.decode.error.checking",
-  "metadata": {"description": "Term decoders for hydra.error.checking", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term decoders for hydra.error.checking", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

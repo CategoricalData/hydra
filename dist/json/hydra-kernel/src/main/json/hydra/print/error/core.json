@@ -1,6 +1,6 @@
 {
   "name": "hydra.print.error.core",
-  "metadata": {"description": "String representations of hydra.error.core types", "comments": [], "seeAlso": []},
+  "metadata": {"description": "String representations of hydra.error.core types", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.print.core"},
     {"module": "hydra.print.variants"},

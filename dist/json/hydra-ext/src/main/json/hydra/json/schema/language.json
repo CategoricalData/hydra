@@ -1,6 +1,6 @@
 {
   "name": "hydra.json.schema.language",
-  "metadata": {"description": "Language constraints for JSON Schema", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Language constraints for JSON Schema", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.reflect"},
     {"module": "hydra.paths"},

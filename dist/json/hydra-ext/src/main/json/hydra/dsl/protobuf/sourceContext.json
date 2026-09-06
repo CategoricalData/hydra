@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.protobuf.sourceContext",
-  "metadata": {"description": "DSL functions for hydra.protobuf.sourceContext", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.protobuf.sourceContext", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.protobuf.sourceContext"},
     {"module": "hydra.typed"},

@@ -3,7 +3,8 @@
   "metadata": {
     "description": "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.resolution"},
     {"module": "hydra.strip"},

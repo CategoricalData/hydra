@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.java.language",
-  "metadata": {"description": "DSL functions for hydra.java.language", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.java.language", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.java.language"},
     {"module": "hydra.typed"},

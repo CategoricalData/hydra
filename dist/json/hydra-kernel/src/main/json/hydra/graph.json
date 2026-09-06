@@ -1,6 +1,10 @@
 {
   "name": "hydra.graph",
-  "metadata": {"description": "The extension to graphs of Hydra's core type system (hydra.core)", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "The extension to graphs of Hydra's core type system (hydra.core)",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.errors"}, {"module": "hydra.packaging"}, {"module": "hydra.typing"}],
   "definitions": [
     {

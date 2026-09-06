@@ -1,6 +1,6 @@
 {
   "name": "hydra.lib.strings",
-  "metadata": {"description": "Primitives in the hydra.lib.strings module.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Primitives in the hydra.lib.strings module.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -40,7 +40,8 @@
           "comments": [
             "charAt(i, s) returns Just(c) where c is the Unicode code point at position i in s, or Nothing if i is negative or i >= length(s).",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -61,7 +62,8 @@
           "comments": [
             "concat(xs) returns the string formed by concatenating every string in xs in order.",
             "Total. Corresponds to Haskell's concat :: [String] -> String."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -81,7 +83,8 @@
           "comments": [
             "concat2(s, t) returns the concatenation of s and t.",
             "Total. Corresponds to Haskell's (++) :: String -> String -> String."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -99,7 +102,8 @@
             "fromList(cs) returns the string whose characters are the Unicode code points in cs, in order.",
             "Code points outside the valid Unicode range [0, 0x10FFFF] yield a host-defined result (typically substitution with U+FFFD or truncation of the bits).",
             "Total. The inverse of toList."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -117,7 +121,8 @@
         "metadata": {
           "description": "Check whether a string is empty.",
           "comments": ["isEmpty(s) returns true iff s is the empty string.", "Total. Corresponds to Haskell's null :: String -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to test for emptiness", "type": {"literal": "string"}, "isLazy": false}],
@@ -132,7 +137,8 @@
           "comments": [
             "join(sep, xs) returns the strings in xs concatenated with sep inserted between each pair of adjacent strings; for the empty list the result is the empty string, and for a singleton list the result is the single string.",
             "Total. Corresponds to Haskell's Data.List.intercalate :: String -> [String] -> String."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -154,7 +160,8 @@
             "length(s) returns the number of Unicode code points in s as an int32.",
             "Note: this is the code-point count, not the byte count or the grapheme-cluster count, so a four-byte UTF-8 character counts as one and an emoji built from multiple code points counts as the number of code points it uses.",
             "Total on strings shorter than 2^31-1 code points."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to measure", "type": {"literal": "string"}, "isLazy": false}],
@@ -170,7 +177,8 @@
             "splitOn(sep, s) returns the list of substrings of s obtained by splitting on every occurrence of the non-empty delimiter sep. Adjacent or boundary delimiters produce empty-string elements in the result.",
             "Behavior when sep is empty is host-defined and should not be relied upon.",
             "Total. Corresponds to Haskell's Data.List.Split.splitOn :: String -> String -> [String]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -187,7 +195,8 @@
           "comments": [
             "toList(s) returns the list of Unicode code points making up s, in order. Each code point is represented as an int32.",
             "Total. The inverse of fromList."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to convert", "type": {"literal": "string"}, "isLazy": false}],
@@ -204,7 +213,8 @@
             "This is a code-point-by-code-point operation, so it does not handle the string-changing match of full Unicode case folding (e.g. U+00DF \"ß\" does not lowercase to \"ss\"; it returns itself).",
             "For text intended for human-readable display in locales with non-trivial case mappings, prefer a host-specific full case-folding API.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to convert to lowercase", "type": {"literal": "string"}, "isLazy": false}],
@@ -221,7 +231,8 @@
             "This is a code-point-by-code-point operation, so it does not handle the string-changing match of full Unicode case folding (e.g. U+00DF \"ß\" does not uppercase to \"SS\"; it returns itself).",
             "For text intended for human-readable display in locales with non-trivial case mappings, prefer a host-specific full case-folding API.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to convert to uppercase", "type": {"literal": "string"}, "isLazy": false}],

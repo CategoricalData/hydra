@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.error.checking",
-  "metadata": {"description": "Term encoders for hydra.error.checking", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.error.checking", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.encode.core"},
     {"module": "hydra.encode.paths"},

@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A model for SpatioTemporal Asset Catalog (STAC) Items. See https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.geojson.model"}, {"module": "hydra.iana.linkrelations"}, {"module": "hydra.core"}],
   "definitions": [
     {

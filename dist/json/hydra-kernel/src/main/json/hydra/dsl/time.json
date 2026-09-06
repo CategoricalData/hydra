@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.time",
-  "metadata": {"description": "DSL functions for hydra.time", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.time", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.time"},
     {"module": "hydra.typed"},

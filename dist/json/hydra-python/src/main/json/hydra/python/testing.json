@@ -1,6 +1,10 @@
 {
   "name": "hydra.python.testing",
-  "metadata": {"description": "Python test code generation codec for pytest-based generation tests", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Python test code generation codec for pytest-based generation tests",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.formatting"},

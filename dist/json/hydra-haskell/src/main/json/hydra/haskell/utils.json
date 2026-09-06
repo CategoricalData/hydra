@@ -1,6 +1,6 @@
 {
   "name": "hydra.haskell.utils",
-  "metadata": {"description": "Utilities for working with Haskell syntax trees", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Utilities for working with Haskell syntax trees", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.analysis"},
     {"module": "hydra.formatting"},

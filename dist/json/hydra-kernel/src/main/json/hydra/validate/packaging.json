@@ -1,6 +1,6 @@
 {
   "name": "hydra.validate.packaging",
-  "metadata": {"description": "Validation functions for modules and packages", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Validation functions for modules and packages", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.annotations"},
     {"module": "hydra.constants"},

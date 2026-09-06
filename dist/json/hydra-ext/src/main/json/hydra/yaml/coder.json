@@ -1,6 +1,6 @@
 {
   "name": "hydra.yaml.coder",
-  "metadata": {"description": "YAML encoding and decoding for Hydra terms", "comments": [], "seeAlso": []},
+  "metadata": {"description": "YAML encoding and decoding for Hydra terms", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.adapt"},
     {"module": "hydra.extract.core"},

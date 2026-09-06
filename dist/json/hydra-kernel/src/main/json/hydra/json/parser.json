@@ -1,6 +1,6 @@
 {
   "name": "hydra.json.parser",
-  "metadata": {"description": "JSON parser using Hydra parser combinators", "comments": [], "seeAlso": []},
+  "metadata": {"description": "JSON parser using Hydra parser combinators", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.parsers"},
     {"module": "hydra.paths"},

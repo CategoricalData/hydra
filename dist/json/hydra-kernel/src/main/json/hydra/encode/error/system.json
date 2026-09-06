@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.error.system",
-  "metadata": {"description": "Term encoders for hydra.error.system", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.error.system", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.file"}, {"module": "hydra.error.system"}],
   "definitions": [
     {

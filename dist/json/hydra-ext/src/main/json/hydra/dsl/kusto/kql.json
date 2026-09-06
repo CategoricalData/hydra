@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.kusto.kql",
-  "metadata": {"description": "DSL functions for hydra.kusto.kql", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.kusto.kql", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.kusto.kql"},
     {"module": "hydra.typed"},

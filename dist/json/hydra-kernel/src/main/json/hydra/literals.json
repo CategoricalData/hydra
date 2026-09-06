@@ -1,6 +1,6 @@
 {
   "name": "hydra.literals",
-  "metadata": {"description": "Conversion functions for literal values.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Conversion functions for literal values.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

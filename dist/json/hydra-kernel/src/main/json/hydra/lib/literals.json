@@ -1,6 +1,6 @@
 {
   "name": "hydra.lib.literals",
-  "metadata": {"description": "Primitives in the hydra.lib.literals module.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Primitives in the hydra.lib.literals module.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -40,7 +40,8 @@
           "comments": [
             "base64ToBinary(s) decodes the standard base64 (RFC 4648) ASCII string s and returns the resulting bytes as binary data.",
             "Inverse of binaryToBase64: base64ToBinary(binaryToBase64(b)) is b for every binary value. Behavior on strings which are not valid base64 is host-defined."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the base64 string to decode", "type": {"literal": "string"}, "isLazy": false}],
@@ -55,7 +56,8 @@
           "comments": [
             "bigintToDecimal(x) returns the exact decimal representation of x. Since decimal is arbitrary-precision and bigint is also arbitrary-precision, the conversion is lossless.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
@@ -70,7 +72,8 @@
           "comments": [
             "bigintToInt16(x) returns x reduced modulo 2^16 and reinterpreted as a signed two's-complement int16. Values outside [-2^15, 2^15-1] wrap silently with no exception.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
@@ -85,7 +88,8 @@
           "comments": [
             "bigintToInt32(x) returns x reduced modulo 2^32 and reinterpreted as a signed two's-complement int32. Values outside [-2^31, 2^31-1] wrap silently with no exception.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
@@ -100,7 +104,8 @@
           "comments": [
             "bigintToInt64(x) returns x reduced modulo 2^64 and reinterpreted as a signed two's-complement int64. Values outside [-2^63, 2^63-1] wrap silently with no exception.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
@@ -115,7 +120,8 @@
           "comments": [
             "bigintToInt8(x) returns x reduced modulo 2^8 and reinterpreted as a signed two's-complement int8. Values outside [-128, 127] wrap silently with no exception.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
@@ -130,7 +136,8 @@
           "comments": [
             "bigintToUint16(x) returns x reduced modulo 2^16 as an unsigned uint16. Values outside [0, 2^16-1] wrap silently with no exception.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
@@ -145,7 +152,8 @@
           "comments": [
             "bigintToUint32(x) returns x reduced modulo 2^32 as an unsigned uint32. Values outside [0, 2^32-1] wrap silently with no exception.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
@@ -160,7 +168,8 @@
           "comments": [
             "bigintToUint64(x) returns x reduced modulo 2^64 as an unsigned uint64. Values outside [0, 2^64-1] wrap silently with no exception.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
@@ -175,7 +184,8 @@
           "comments": [
             "bigintToUint8(x) returns x reduced modulo 2^8 as an unsigned uint8. Values outside [0, 255] wrap silently with no exception.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the bigint to convert", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
@@ -190,7 +200,8 @@
           "comments": [
             "binaryToBase64(b) encodes the bytes of b using standard base64 (RFC 4648) and returns the result as an ASCII string.",
             "Total and round-trippable: base64ToBinary(binaryToBase64(b)) is b for every binary value. Use this to embed arbitrary binary data in a string context (e.g. a JSON value). For interpreting bytes as text, use hydra.lib.text.decodeUtf8 instead."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "b", "description": "the binary data to encode", "type": {"literal": "binary"}, "isLazy": false}],
@@ -206,7 +217,8 @@
             "binaryToBytes(b) returns the bytes of b as an int32 list with values in [0, 255], preserving byte order.",
             "The result list element type is int32 rather than uint8 because Hydra's primitive collections work most naturally with int32 indices.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "b", "description": "the binary data to convert", "type": {"literal": "binary"}, "isLazy": false}],
@@ -219,7 +231,8 @@
         "metadata": {
           "description": "Convert a decimal to a bigint (truncating).",
           "comments": ["decimalToBigint(x) returns x truncated toward zero. Fractional parts are discarded.", "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the decimal to convert", "type": {"literal": "decimal"}, "isLazy": false}],
@@ -234,7 +247,8 @@
           "comments": [
             "decimalToFloat32(x) returns the IEEE 754 binary32 value closest to x under roundTiesToEven. Values outside the float32 representable range overflow to ±∞. Subnormal precision loss is silent.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the decimal to convert", "type": {"literal": "decimal"}, "isLazy": false}],
@@ -249,7 +263,8 @@
           "comments": [
             "decimalToFloat64(x) returns the IEEE 754 binary64 value closest to x under roundTiesToEven. Values outside the float64 representable range overflow to ±∞. Subnormal precision loss is silent.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the decimal to convert", "type": {"literal": "decimal"}, "isLazy": false}],
@@ -264,7 +279,8 @@
           "comments": [
             "float32ToDecimal(x) returns the exact decimal representation of the binary32 value x. Special float32 values (±∞, NaN) have a host-defined decimal representation; finite values convert exactly since binary32 values are dyadic rationals.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the float32 to convert", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
@@ -279,7 +295,8 @@
           "comments": [
             "float32ToFloat64(x) returns the binary64 value with the same numeric value as x; ±∞ and NaN pass through. The conversion is exact and lossless.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the float32 to convert", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
@@ -294,7 +311,8 @@
           "comments": [
             "float64ToDecimal(x) returns the exact decimal representation of the binary64 value x. Special float64 values (±∞, NaN) have a host-defined decimal representation; finite values convert exactly since binary64 values are dyadic rationals.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the float64 to convert", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
@@ -309,7 +327,8 @@
           "comments": [
             "float64ToFloat32(x) returns the binary32 value closest to x under roundTiesToEven. Values outside the binary32 range overflow to ±∞; subnormal precision loss is silent; NaN payload may be canonicalized by the host.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the float64 to convert", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
@@ -324,7 +343,8 @@
           "comments": [
             "int16ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the int16 to convert", "type": {"literal": {"integer": "int16"}}, "isLazy": false}],
@@ -339,7 +359,8 @@
           "comments": [
             "int32ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the int32 to convert", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
@@ -354,7 +375,8 @@
           "comments": [
             "int64ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the int64 to convert", "type": {"literal": {"integer": "int64"}}, "isLazy": false}],
@@ -367,7 +389,8 @@
         "metadata": {
           "description": "Convert an int8 to a bigint.",
           "comments": ["int8ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.", "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the int8 to convert", "type": {"literal": {"integer": "int8"}}, "isLazy": false}],
@@ -383,7 +406,8 @@
             "parseBigint(s) returns Just(x) where x is the bigint parsed from s, or Nothing if s is not a valid bigint literal.",
             "Accepted syntax follows the Haskell Show/Read convention: an optional leading minus sign followed by a sequence of decimal digits. Whitespace is not stripped; leading or trailing whitespace causes parse failure.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -398,7 +422,8 @@
           "comments": [
             "parseBoolean(s) returns Just(true) for \"true\", Just(false) for \"false\", and Nothing for any other input (including \"True\"/\"False\" with capital initial letter on some hosts; behavior on capitalized forms is host-defined and should not be relied upon).",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -414,7 +439,8 @@
             "parseDecimal(s) returns Just(x) where x is the decimal parsed from s, or Nothing on parse failure.",
             "Accepted syntax is the standard decimal literal: an optional sign, an integer part, an optional fractional part, and an optional exponent (e.g. -1.5, 2e10, 0.0).",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -430,7 +456,8 @@
             "parseFloat32(s) returns Just(x) where x is the IEEE 754 binary32 value closest to the number parsed from s under roundTiesToEven, or Nothing on parse failure.",
             "Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their capitalization are host-defined.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -446,7 +473,8 @@
             "parseFloat64(s) returns Just(x) where x is the IEEE 754 binary64 value closest to the number parsed from s under roundTiesToEven, or Nothing on parse failure.",
             "Accepted special-value literals (\"NaN\", \"Infinity\", \"-Infinity\", etc.) and their capitalization are host-defined.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -461,7 +489,8 @@
           "comments": [
             "parseInt16(s) returns Just(x) where x is the int16 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^15, 2^15-1].",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -476,7 +505,8 @@
           "comments": [
             "parseInt32(s) returns Just(x) where x is the int32 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^31, 2^31-1].",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -491,7 +521,8 @@
           "comments": [
             "parseInt64(s) returns Just(x) where x is the int64 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-2^63, 2^63-1].",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -506,7 +537,8 @@
           "comments": [
             "parseInt8(s) returns Just(x) where x is the int8 parsed from s, or Nothing if s is not a valid integer literal or the parsed value is outside [-128, 127].",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -521,7 +553,8 @@
           "comments": [
             "parseString(s) parses s as a Haskell-syntax string literal token: an opening double-quote, escaped characters per the Haskell lexical grammar (backslash escapes for special characters and Unicode code points), and a closing double-quote. Returns Just of the decoded payload on success or Nothing on malformed input.",
             "Total. The inverse of printString."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string-literal token to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -536,7 +569,8 @@
           "comments": [
             "parseUint16(s) returns Just(x) where x is the uint16 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^16-1].",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -551,7 +585,8 @@
           "comments": [
             "parseUint32(s) returns Just(x) where x is the uint32 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^32-1].",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -566,7 +601,8 @@
           "comments": [
             "parseUint64(s) returns Just(x) where x is the uint64 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 2^64-1].",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -581,7 +617,8 @@
           "comments": [
             "parseUint8(s) returns Just(x) where x is the uint8 parsed from s, or Nothing if s is not a valid non-negative integer literal or the parsed value is outside [0, 255].",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to parse", "type": {"literal": "string"}, "isLazy": false}],
@@ -596,7 +633,8 @@
           "comments": [
             "printBigint(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits. No leading zeros are produced (except for the value 0 itself, which renders as \"0\").",
             "Total. The inverse of parseBigint."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the bigint to render", "type": {"literal": {"integer": "bigint"}}, "isLazy": false}],
@@ -609,7 +647,8 @@
         "metadata": {
           "description": "Render a boolean as a string.",
           "comments": ["printBoolean(true) = \"true\"; printBoolean(false) = \"false\".", "Total. The inverse of parseBoolean."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "b", "description": "the boolean to render", "type": {"literal": "boolean"}, "isLazy": false}],
@@ -624,7 +663,8 @@
           "comments": [
             "printDecimal(x) returns the canonical decimal representation of x as a string. The exact form (use of scientific notation, trailing zeros, etc.) is host-defined but always round-trips with parseDecimal.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the decimal to render", "type": {"literal": "decimal"}, "isLazy": false}],
@@ -639,7 +679,8 @@
           "comments": [
             "printFloat32(x) returns a string representation of x. Finite values use the shortest decimal that round-trips through parseFloat32 back to x. Special values render as \"NaN\", \"Infinity\", or \"-Infinity\" (capitalization is host-defined).",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the float32 to render", "type": {"literal": {"float": "float32"}}, "isLazy": false}],
@@ -654,7 +695,8 @@
           "comments": [
             "printFloat64(x) returns a string representation of x. Finite values use the shortest decimal that round-trips through parseFloat64 back to x. Special values render as \"NaN\", \"Infinity\", or \"-Infinity\" (capitalization is host-defined).",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the float64 to render", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
@@ -669,7 +711,8 @@
           "comments": [
             "printInt16(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
             "Total. The inverse of parseInt16."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the int16 to render", "type": {"literal": {"integer": "int16"}}, "isLazy": false}],
@@ -684,7 +727,8 @@
           "comments": [
             "printInt32(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
             "Total. The inverse of parseInt32."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the int32 to render", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
@@ -699,7 +743,8 @@
           "comments": [
             "printInt64(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
             "Total. The inverse of parseInt64."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the int64 to render", "type": {"literal": {"integer": "int64"}}, "isLazy": false}],
@@ -714,7 +759,8 @@
           "comments": [
             "printInt8(x) returns the canonical decimal representation of x: an optional leading minus sign followed by decimal digits.",
             "Total. The inverse of parseInt8."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the int8 to render", "type": {"literal": {"integer": "int8"}}, "isLazy": false}],
@@ -729,7 +775,8 @@
           "comments": [
             "printString(s) returns a Haskell-syntax string literal token representing s: an opening double-quote, the characters of s with special characters escaped (backslash sequences for control characters, quotes, and non-printable Unicode code points), and a closing double-quote.",
             "Total. The inverse of parseString."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "s", "description": "the string to render", "type": {"literal": "string"}, "isLazy": false}],
@@ -742,7 +789,8 @@
         "metadata": {
           "description": "Render a uint16 as a string.",
           "comments": ["printUint16(x) returns the canonical decimal representation of x.", "Total. The inverse of parseUint16."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the uint16 to render", "type": {"literal": {"integer": "uint16"}}, "isLazy": false}],
@@ -755,7 +803,8 @@
         "metadata": {
           "description": "Render a uint32 as a string.",
           "comments": ["printUint32(x) returns the canonical decimal representation of x.", "Total. The inverse of parseUint32."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the uint32 to render", "type": {"literal": {"integer": "uint32"}}, "isLazy": false}],
@@ -768,7 +817,8 @@
         "metadata": {
           "description": "Render a uint64 as a string.",
           "comments": ["printUint64(x) returns the canonical decimal representation of x.", "Total. The inverse of parseUint64."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the uint64 to render", "type": {"literal": {"integer": "uint64"}}, "isLazy": false}],
@@ -781,7 +831,8 @@
         "metadata": {
           "description": "Render a uint8 as a string.",
           "comments": ["printUint8(x) returns the canonical decimal representation of x.", "Total. The inverse of parseUint8."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the uint8 to render", "type": {"literal": {"integer": "uint8"}}, "isLazy": false}],
@@ -796,7 +847,8 @@
           "comments": [
             "uint16ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the uint16 to convert", "type": {"literal": {"integer": "uint16"}}, "isLazy": false}],
@@ -811,7 +863,8 @@
           "comments": [
             "uint32ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the uint32 to convert", "type": {"literal": {"integer": "uint32"}}, "isLazy": false}],
@@ -826,7 +879,8 @@
           "comments": [
             "uint64ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the uint64 to convert", "type": {"literal": {"integer": "uint64"}}, "isLazy": false}],
@@ -841,7 +895,8 @@
           "comments": [
             "uint8ToBigint(x) returns the bigint with the same numeric value as x. The conversion is exact and lossless.",
             "Total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the uint8 to convert", "type": {"literal": {"integer": "uint8"}}, "isLazy": false}],

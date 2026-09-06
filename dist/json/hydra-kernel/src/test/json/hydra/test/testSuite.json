@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.test.lib.chars"},
     {"module": "hydra.test.lib.effects"},
@@ -38,6 +39,7 @@
     {"module": "hydra.test.json.roundtrip"},
     {"module": "hydra.test.json.writer"},
     {"module": "hydra.test.json.yaml"},
+    {"module": "hydra.test.names"},
     {"module": "hydra.test.ordering"},
     {"module": "hydra.test.reduction"},
     {"module": "hydra.test.rewriting"},
@@ -128,6 +130,7 @@
                         {"variable": "hydra.test.json.roundtrip.allTests"},
                         {"variable": "hydra.test.json.writer.allTests"},
                         {"variable": "hydra.test.json.yaml.allTests"},
+                        {"variable": "hydra.test.names.allTests"},
                         {"variable": "hydra.test.ordering.allTests"},
                         {"variable": "hydra.test.reduction.allTests"},
                         {"variable": "hydra.test.rewriting.allTests"},

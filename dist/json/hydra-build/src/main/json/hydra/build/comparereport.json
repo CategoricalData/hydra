@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Type-level model for the JSON snapshot compare-report: the per-module comparison record and the whole-report summary shared by the native generator drivers. See https://github.com/CategoricalData/hydra/issues/416",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [],
   "definitions": [
     {

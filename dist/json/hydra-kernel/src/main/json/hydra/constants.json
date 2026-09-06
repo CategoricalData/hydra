@@ -1,6 +1,6 @@
 {
   "name": "hydra.constants",
-  "metadata": {"description": "A module for tier-0 constants.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "A module for tier-0 constants.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

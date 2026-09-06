@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.query",
-  "metadata": {"description": "Term encoders for hydra.query", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.query", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.query"}],
   "definitions": [
     {

@@ -1,6 +1,6 @@
 {
   "name": "hydra.extract.json",
-  "metadata": {"description": "Utilities for extracting values from JSON objects", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Utilities for extracting values from JSON objects", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.json.writer"},
     {"module": "hydra.paths"},

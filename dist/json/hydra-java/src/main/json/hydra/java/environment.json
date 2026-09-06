@@ -1,6 +1,6 @@
 {
   "name": "hydra.java.environment",
-  "metadata": {"description": "Environment types for Java code generation", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Environment types for Java code generation", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.java.syntax"},
     {"module": "hydra.core"},

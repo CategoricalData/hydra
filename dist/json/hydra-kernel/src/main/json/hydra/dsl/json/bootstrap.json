@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.json.bootstrap",
-  "metadata": {"description": "DSL functions for hydra.json.bootstrap", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.json.bootstrap", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.json.bootstrap"},
     {"module": "hydra.typed"},

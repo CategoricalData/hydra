@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.tabular",
-  "metadata": {"description": "Term encoders for hydra.tabular", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.tabular", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.encode.relational"}, {"module": "hydra.tabular"}],
   "definitions": [
     {

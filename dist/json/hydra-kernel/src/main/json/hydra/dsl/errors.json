@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.errors",
-  "metadata": {"description": "DSL functions for hydra.errors", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.errors", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.errors"},
     {"module": "hydra.typed"},

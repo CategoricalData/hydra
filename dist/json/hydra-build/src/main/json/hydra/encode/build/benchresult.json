@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.build.benchresult",
-  "metadata": {"description": "Term encoders for hydra.build.benchresult", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.build.benchresult", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.build.benchresult"}],
   "definitions": [
     {

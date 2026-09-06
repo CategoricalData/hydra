@@ -1,6 +1,6 @@
 {
   "name": "hydra.osv.schema",
-  "metadata": {"description": "See https://ossf.github.io/osv-schema", "comments": [], "seeAlso": []},
+  "metadata": {"description": "See https://ossf.github.io/osv-schema", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [],
   "definitions": [
     {

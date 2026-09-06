@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.json.schema.model",
-  "metadata": {"description": "DSL functions for hydra.json.schema.model", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.json.schema.model", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.json.schema.model"},
     {"module": "hydra.typed"},

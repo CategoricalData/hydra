@@ -1,6 +1,10 @@
 {
   "name": "hydra.packaging",
-  "metadata": {"description": "A model for Hydra module names, modules, and packages", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "A model for Hydra module names, modules, and packages",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.typing"}],
   "definitions": [
     {
@@ -184,14 +188,26 @@
                           "map": [
                             {
                               "key": {"variable": "description"},
-                              "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}]}}}}]},
+                              "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}]}}}},
+                  {
+                    "name": "provisions",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.packaging.Provision"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Named normative provisions (requirements and recommendations) concerning this entity. Empty when the entity states none."}}}]}}}}]},
               "annotation": {
                 "map": [
                   {
                     "key": {"variable": "description"},
                     "value": {
                       "literal": {
-                        "string": "Documentation and lifecycle metadata attachable to a packaging entity (package, module, or definition). Bundling these fields in one type lets future metadata be added without changing the field shape of the entities that carry it."}}}]}}},
+                        "string": "Documentation, lifecycle, and normative metadata attachable to a packaging entity (package, module, or definition). Bundling these fields in one type lets future metadata be added without changing the field shape of the entities that carry it."}}}]}}},
           "constraints": []}}},
     {
       "type": {
@@ -569,6 +585,94 @@
                     "value": {
                       "literal": {
                         "string": "A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, documentation and lifecycle metadata, totality and purity flags, and an optional default implementation expressed as a Hydra term."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.packaging.Provision",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.Name"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The fully-qualified name of the provision: the enclosing entity's name extended by one segment (e.g. hydra.lib.lists.concat.emptyLists). Composed at definition time by a helper that prefixes the entity's name, exactly as a definition's name is composed from its module's name -- so the author writes only the final segment, but the stored value is the full name."}}}]}}}},
+                  {
+                    "name": "kind",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.ProvisionKind"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether this provision is a requirement or a recommendation."}}}]}}}},
+                  {
+                    "name": "statement",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The normative statement itself, as markdown prose: the falsifiable claim."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A named normative statement concerning an entity: a single falsifiable condition a conforming implementation is measured against. Tests reference provisions by name."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.packaging.ProvisionKind",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "requirement",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A requirement: no deviation is permitted if conformance is to be claimed (MUST)."}}}]}}}},
+                  {
+                    "name": "recommendation",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A recommendation: observed strictly by the Hydra kernel and codebase, but a downstream project may opt out (SHOULD)."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "Whether a provision is a requirement (a MUST: no deviation permitted for conformance) or a recommendation (a SHOULD: observed by the Hydra kernel, but a downstream project may opt out)."}}}]}}},
           "constraints": []}}},
     {
       "type": {

@@ -1,6 +1,10 @@
 {
   "name": "hydra.gradle",
-  "metadata": {"description": "Build configuration for Gradle-built distribution packages.", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Build configuration for Gradle-built distribution packages.",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.packaging"}, {"module": "hydra.file"}],
   "definitions": [
     {

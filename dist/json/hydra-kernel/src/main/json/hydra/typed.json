@@ -1,6 +1,6 @@
 {
   "name": "hydra.typed",
-  "metadata": {"description": "Typed (phantom) wrappers for use with Hydra DSLs", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Typed (phantom) wrappers for use with Hydra DSLs", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

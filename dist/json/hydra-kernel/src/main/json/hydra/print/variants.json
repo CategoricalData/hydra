@@ -1,6 +1,6 @@
 {
   "name": "hydra.print.variants",
-  "metadata": {"description": "String representations of hydra.variants types", "comments": [], "seeAlso": []},
+  "metadata": {"description": "String representations of hydra.variants types", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

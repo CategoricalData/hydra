@@ -1,6 +1,6 @@
 {
   "name": "hydra.decode.testing",
-  "metadata": {"description": "Term decoders for hydra.testing", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term decoders for hydra.testing", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

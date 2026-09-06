@@ -1,6 +1,10 @@
 {
   "name": "hydra.pegasus.coder",
-  "metadata": {"description": "Pegasus PDL code generator: converts Hydra modules to PDL schema files", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Pegasus PDL code generator: converts Hydra modules to PDL schema files",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.pegasus.serde"},
     {"module": "hydra.pegasus.language"},

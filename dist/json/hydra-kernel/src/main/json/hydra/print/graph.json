@@ -1,6 +1,6 @@
 {
   "name": "hydra.print.graph",
-  "metadata": {"description": "String representations of hydra.graph types", "comments": [], "seeAlso": []},
+  "metadata": {"description": "String representations of hydra.graph types", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.print.core"},
     {"module": "hydra.paths"},

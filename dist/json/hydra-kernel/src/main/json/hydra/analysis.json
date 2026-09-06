@@ -1,6 +1,6 @@
 {
   "name": "hydra.analysis",
-  "metadata": {"description": "Module dependency module name analysis", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Module dependency module name analysis", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.annotations"},
     {"module": "hydra.arity"},

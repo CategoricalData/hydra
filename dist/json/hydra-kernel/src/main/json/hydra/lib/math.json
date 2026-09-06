@@ -1,6 +1,6 @@
 {
   "name": "hydra.lib.math",
-  "metadata": {"description": "Primitives in the hydra.lib.math module.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Primitives in the hydra.lib.math module.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -41,7 +41,8 @@
             "Constraint-polymorphic absolute value over any type with a 'numeric' instance. The per-type semantics live in the instance: for fixed-width signed integers the result is total but not injective at the boundary (abs(minBound) = minBound, e.g. abs(-2147483648) = -2147483648 for int32, because +2147483648 is not representable); for unsigned integers and bigint the result is the input itself or its arithmetic negation, whichever is non-negative; for floating-point it clears the sign bit per IEEE 754 ੵ.5.1 (abs(ଐ) = +0, abs(NaN) is NaN).",
             "Requires a 'numeric' type-class constraint on the argument type.",
             "Corresponds to Haskell's abs :: Num a => a -> a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
           "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
@@ -57,7 +58,8 @@
             "Principal value of the inverse cosine, in radians. The result is in [0, π].",
             "For arguments outside the domain [-1, +1] (including ±∞), the result is NaN. acos(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 acos operation and to Haskell's acos :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -78,7 +80,8 @@
             "Principal value of the inverse hyperbolic cosine. The result is in [0, +∞).",
             "For arguments less than 1 the result is NaN; acosh(1) = +0; acosh(+∞) = +∞; acosh(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 acosh operation and to Haskell's acosh :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -99,7 +102,8 @@
             "Constraint-polymorphic addition over any type with a 'numeric' instance. The per-type semantics live in the instance: two's-complement wraparound for fixed-width integers (e.g. int32 addition reduces x + y modulo 2^32 and reinterprets as signed, wrapping silently on overflow), IEEE 754 round-to-nearest for floating-point, and arbitrary precision for bigint.",
             "Requires a 'numeric' type-class constraint on the argument type, which is the closest Hydra equivalent to Haskell's Num instance.",
             "The operation is total. Corresponds to Haskell's (+) :: Num a => a -> a -> a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
           "parameters": [
@@ -119,7 +123,8 @@
             "The operation is total: it never raises, but it may produce NaN. Corresponds to the IEEE 754 ੵ.4.1 addition operation and to Haskell's (+) :: Double -> Double -> Double.",
             "Deprecated since 0.18. Use: hydra.lib.math.add."],
           "seeAlso": [],
-          "lifecycle": {"deprecatedSince": "0.18"}},
+          "lifecycle": {"deprecatedSince": "0.18"},
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -137,7 +142,8 @@
             "Principal value of the inverse sine, in radians. The result is in [-π/2, +π/2].",
             "For arguments outside the domain [-1, +1] (including ±∞), the result is NaN; asin(ଐ) = ଐ; asin(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 asin operation and to Haskell's asin :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -157,7 +163,8 @@
           "comments": [
             "Principal value of the inverse hyperbolic sine. Defined for all finite reals; asinh(ଐ) = ଐ; asinh(±∞) = ±∞; asinh(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 asinh operation and to Haskell's asinh :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -177,7 +184,8 @@
           "comments": [
             "Principal value of the inverse tangent, in radians. The result is in (-π/2, +π/2); atan(ଐ) = ଐ; atan(±∞) = ±π/2; atan(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 atan operation and to Haskell's atan :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -198,7 +206,8 @@
             "atan2(y, x) returns the angle in radians, in (-π, +π], from the positive x-axis to the point (x, y), using the signs of both arguments to determine the quadrant.",
             "Special match follow IEEE 754 ੹.2: atan2(ଐ, +x>0) = ଐ; atan2(ଐ, -x<0) = ±π; atan2(±y>0, 0) = ±π/2; atan2(±y, +∞) = ଐ; atan2(±y, -∞) = ±π; atan2(±∞, finite) = ±π/2; atan2(±∞, +∞) = ±π/4; atan2(±∞, -∞) = ଓπ/4; atan2 of any NaN argument is NaN.",
             "Corresponds to Haskell's atan2 :: Double -> Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -215,7 +224,8 @@
           "comments": [
             "Principal value of the inverse hyperbolic tangent. Defined for arguments in (-1, +1); atanh(଑) = ±∞ (with division-by-zero exception in IEEE 754); arguments outside [-1, +1] produce NaN; atanh(ଐ) = ଐ; atanh(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 atanh operation and to Haskell's atanh :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -236,7 +246,8 @@
             "The smallest integer value not less than the argument, returned as a float64. Equivalent to IEEE 754 ੵ.3.1 roundToIntegralTowardPositive: ceiling(ଐ) = ଐ; ceiling(±∞) = ±∞; ceiling(NaN) is NaN; the sign of a negative result is preserved when rounding to zero (e.g. ceiling(-0.5) = -0).",
             "Note that the return type is float64, not an integer type, so the result can exceed the integer range.",
             "Corresponds to Haskell's fromIntegral . ceiling :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -256,7 +267,8 @@
           "comments": [
             "Cosine of an angle in radians, correctly rounded for finite arguments. The result is in [-1, +1]; cos(ଐ) = 1; cos(±∞) is NaN (with invalid-operation exception in IEEE 754); cos(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 cos operation and to Haskell's cos :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the angle in radians", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
@@ -271,7 +283,8 @@
           "comments": [
             "Hyperbolic cosine. The result is in [1, +∞]; cosh(ଐ) = 1; cosh(±∞) = +∞; cosh(NaN) is NaN. Large-magnitude arguments overflow to +∞.",
             "Corresponds to the IEEE 754 ੹.2 cosh operation and to Haskell's cosh :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -294,7 +307,8 @@
             "For fixed-width signed integers, the boundary case div(minBound, -1) wraps to minBound (the two's-complement overflow), since the mathematical result is not representable at that width.",
             "Requires an 'integral' type-class constraint on the argument type.",
             "Corresponds to Haskell's div :: Integral a => a -> a -> a, wrapped in maybe to make the zero-divisor case total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "integral"}]}],
           "parameters": [
@@ -313,7 +327,8 @@
             "The operation is total via IEEE sentinels rather than an optional codomain: for finite nonzero x, x / ଐ = ±∞ (sign = XOR of the operand signs); ଐ / ଐ and ±∞ / ±∞ are NaN; ±∞ / finite = ±∞ (sign XOR); finite / ±∞ = ଐ (sign XOR); NaN propagates unconditionally.",
             "Requires a 'fractional' type-class constraint on the argument type.",
             "Corresponds to Haskell's (/) :: Fractional a => a -> a -> a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "fractional"}]}],
           "parameters": [
@@ -330,7 +345,8 @@
           "comments": [
             "The mathematical constant e ≈ 2.718281828459045, the base of the natural logarithm, as the nearest representable float64. Equal to exp(1).",
             "Corresponds to Haskell's exp 1 :: Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -344,7 +360,8 @@
             "Total on all integral inputs including negative numbers and signed minBound (parity is preserved by two's-complement wraparound).",
             "Requires an 'integral' type-class constraint on the argument type.",
             "Corresponds to Haskell's even :: Integral a => a -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "integral"}]}],
           "parameters": [{"name": "x", "description": "the value to test for evenness", "type": {"variable": "x"}, "isLazy": false}],
@@ -359,7 +376,8 @@
           "comments": [
             "The exponential function: exp(x) = e^x. exp(ଐ) = 1; exp(-∞) = +0; exp(+∞) = +∞; exp(NaN) is NaN. Large positive arguments overflow to +∞; large negative arguments underflow to +0.",
             "Corresponds to the IEEE 754 ੹.2 exp operation and to Haskell's exp :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the exponent", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
@@ -375,7 +393,8 @@
             "The largest integer value not greater than the argument, returned as a float64. Equivalent to IEEE 754 ੵ.3.1 roundToIntegralTowardNegative: floor(ଐ) = ଐ; floor(±∞) = ±∞; floor(NaN) is NaN.",
             "Note that the return type is float64, not an integer type, so the result can exceed the integer range.",
             "Corresponds to Haskell's fromIntegral . floor :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -395,7 +414,8 @@
           "comments": [
             "The natural (base-e) logarithm. log(1) = +0; log(+0) = log(-0) = -∞ (with division-by-zero exception in IEEE 754); log(x) for x < 0 is NaN (with invalid-operation exception); log(+∞) = +∞; log(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 log operation and to Haskell's log :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -416,7 +436,8 @@
             "logBase(b, x) computes the logarithm of x in base b, equivalent to log(x) / log(b).",
             "Inherits the special-case behavior of log for each argument (NaN propagation, sign of zeros, division by zero on log of a zero, NaN on negative arguments).",
             "Corresponds to Haskell's logBase :: Double -> Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -439,7 +460,8 @@
             "The result satisfies the identity x = (div(x, y) result) * y + (mod(x, y) result), so the sign of the result matches the sign of y (Knuth-style floor division). For example mod(-7, 2) = Just(1).",
             "Requires an 'integral' type-class constraint on the argument type.",
             "Corresponds to Haskell's mod :: Integral a => a -> a -> a, wrapped in maybe to make the zero-divisor case total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "integral"}]}],
           "parameters": [
@@ -457,7 +479,8 @@
             "Constraint-polymorphic multiplication over any type with a 'numeric' instance. The per-type semantics live in the instance: two's-complement wraparound for fixed-width integers (e.g. int32 multiplication reduces x * y modulo 2^32 and reinterprets as signed, wrapping silently on overflow), IEEE 754 round-to-nearest for floating-point, and arbitrary precision for bigint.",
             "Requires a 'numeric' type-class constraint on the argument type.",
             "The operation is total. Corresponds to Haskell's (*) :: Num a => a -> a -> a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
           "parameters": [
@@ -477,7 +500,8 @@
             "The operation is total: it never raises, but it may produce NaN or ±∞. Corresponds to the IEEE 754 ੵ.4.1 multiplication operation and to Haskell's (*) :: Double -> Double -> Double.",
             "Deprecated since 0.18. Use: hydra.lib.math.mul."],
           "seeAlso": [],
-          "lifecycle": {"deprecatedSince": "0.18"}},
+          "lifecycle": {"deprecatedSince": "0.18"},
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -495,7 +519,8 @@
             "Constraint-polymorphic arithmetic negation over any type with a 'numeric' instance. The per-type semantics live in the instance: for fixed-width integers the result is 0 - x reduced modulo 2^32 and reinterpreted as signed (total but not injective at the boundary: negate(minBound) = minBound, because +2147483648 is not representable in int32); for floating-point it flips the sign bit per IEEE 754 ੵ.5.1.",
             "Requires a 'numeric' type-class constraint on the argument type.",
             "Corresponds to Haskell's negate :: Num a => a -> a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
           "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
@@ -512,7 +537,8 @@
             "This is a bit-level operation that does not raise any floating-point exception. Corresponds to Haskell's negate :: Double -> Double.",
             "Deprecated since 0.18. Use: hydra.lib.math.negate."],
           "seeAlso": [],
-          "lifecycle": {"deprecatedSince": "0.18"}},
+          "lifecycle": {"deprecatedSince": "0.18"},
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the value to negate", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
@@ -528,7 +554,8 @@
             "Constraint-polymorphic parity test over any type with an 'integral' instance: true if the argument is not divisible by 2 (i.e. x mod 2 ≠ 0), false otherwise.",
             "Total on all integral inputs including negative numbers and signed minBound. Requires an 'integral' type-class constraint on the argument type.",
             "Corresponds to Haskell's odd :: Integral a => a -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "integral"}]}],
           "parameters": [{"name": "x", "description": "the value to test for oddness", "type": {"variable": "x"}, "isLazy": false}],
@@ -550,7 +577,8 @@
           "comments": [
             "The mathematical constant π ≈ 3.141592653589793, the ratio of a circle's circumference to its diameter, as the nearest representable float64.",
             "Corresponds to Haskell's pi :: Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": {"float": "float64"}}}},
         "isPure": true,
         "isTotal": true}},
@@ -563,7 +591,8 @@
             "pow(x, y) = x^y.",
             "Follows the IEEE 754 ੹.2 pow operation: pow(ଐ, y) for y < 0 is ±∞ (with division-by-zero exception); pow(ଐ, y) for y > 0 is ଐ if y is an odd integer, else +0; pow(1, y) = 1 for any y including NaN; pow(x, ଐ) = 1 for any x including NaN; pow(x, y) for negative x and non-integer y is NaN (with invalid-operation exception); pow(±∞, y) follows the limits in the usual way. Otherwise the result is x^y rounded to the nearest representable float64.",
             "Corresponds to Haskell's (**) :: Double -> Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -580,7 +609,8 @@
           "comments": [
             "range(a, b) returns the list [a, a+1, ..., b-1]. The range is inclusive of the lower bound and exclusive of the upper bound; if a >= b the result is the empty list (i.e. the range does not count downward, and an empty range is the natural result of equal bounds). The length of the result is max(0, b - a).",
             "Does not directly correspond to Haskell's enumFromTo :: Int32 -> Int32 -> [Int32] (which is inclusive of both bounds, i.e. [a..b]); range(a, b) is equivalent to [a .. b-1]. This matches the half-open convention of Python's range, Rust's a..b, Go, and Java's IntStream.range."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -608,7 +638,8 @@
             "For fixed-width signed integers, the boundary case rem(minBound, -1) is 0 (no overflow, since the quotient overflow is absorbed by div, not rem).",
             "Requires an 'integral' type-class constraint on the argument type.",
             "Corresponds to Haskell's rem :: Integral a => a -> a -> a, wrapped in maybe to make the zero-divisor case total."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "integral"}]}],
           "parameters": [
@@ -626,7 +657,8 @@
             "Round to the nearest integer value, returned as a float64, with ties rounded to the nearest even integer (banker's rounding). Equivalent to IEEE 754 ੵ.3.1 roundToIntegralTiesToEven: round(ଐ) = ଐ; round(±∞) = ±∞; round(NaN) is NaN.",
             "Note that the return type is float64, not an integer type, so the result can exceed the integer range.",
             "Corresponds to Haskell's fromIntegral . round :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -647,7 +679,8 @@
             "roundFloat32(n, x) rounds the float32 value x to n decimal places using round-half-to-even. The result is the nearest float32 representation of x rounded to that decimal precision; if the exact decimal-rounded value is not representable in float32 (the usual case), the closest float32 is returned.",
             "Special values pass through: roundFloat32(n, ଐ) = ଐ; roundFloat32(n, ±∞) = ±∞; roundFloat32(n, NaN) is NaN.",
             "Negative n is supported in principle (rounding to powers of ten above 1); host implementations may differ on out-of-range n."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -669,7 +702,8 @@
             "roundFloat64(n, x) rounds the float64 value x to n decimal places using round-half-to-even. The result is the nearest float64 representation of x rounded to that decimal precision; if the exact decimal-rounded value is not representable in float64 (the usual case), the closest float64 is returned.",
             "Special values pass through: roundFloat64(n, ଐ) = ଐ; roundFloat64(n, ±∞) = ±∞; roundFloat64(n, NaN) is NaN.",
             "Negative n is supported in principle (rounding to powers of ten above 1); host implementations may differ on out-of-range n."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -692,7 +726,8 @@
             "For floating-point, signum(x) returns ଑.0 for nonzero finite or infinite x (per IEEE 754 ੵ.5.1); signum(ଐ) = ଐ (the sign of the input zero is preserved, not collapsed to a single zero); signum(NaN) is NaN. A naive three-branch implementation (positive/negative/else- zero) gets both of these float match wrong and must not be used.",
             "Requires a 'numeric' type-class constraint on the argument type.",
             "Corresponds to Haskell's signum :: Num a => a -> a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
           "parameters": [{"name": "arg0", "type": {"variable": "x"}, "isLazy": false}],
@@ -707,7 +742,8 @@
           "comments": [
             "Sine of an angle in radians, correctly rounded for finite arguments. The result is in [-1, +1]; sin(ଐ) = ଐ; sin(±∞) is NaN (with invalid-operation exception in IEEE 754); sin(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 sin operation and to Haskell's sin :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the angle in radians", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
@@ -722,7 +758,8 @@
           "comments": [
             "Hyperbolic sine. sinh(ଐ) = ଐ; sinh(±∞) = ±∞; sinh(NaN) is NaN. Large-magnitude arguments overflow to ±∞.",
             "Corresponds to the IEEE 754 ੹.2 sinh operation and to Haskell's sinh :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -743,7 +780,8 @@
             "IEEE 754 binary64 square root. The result is the value of √x correctly rounded to the nearest representable float64 under roundTiesToEven.",
             "sqrt(+0) = +0; sqrt(-0) = -0 (sign preserved); sqrt(x) for x < 0 (including -∞) is NaN (with invalid-operation exception); sqrt(+∞) = +∞; sqrt(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੵ.4.1 squareRoot operation and to Haskell's sqrt :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -764,7 +802,8 @@
             "Constraint-polymorphic subtraction over any type with a 'numeric' instance. The per-type semantics live in the instance: two's-complement wraparound for fixed-width integers (e.g. int32 subtraction reduces x - y modulo 2^32 and reinterprets as signed, wrapping silently on overflow), IEEE 754 round-to-nearest for floating-point, and arbitrary precision for bigint.",
             "Requires a 'numeric' type-class constraint on the argument type.",
             "The operation is total. Corresponds to Haskell's (-) :: Num a => a -> a -> a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "numeric"}]}],
           "parameters": [
@@ -784,7 +823,8 @@
             "The operation is total: it never raises, but it may produce NaN. Corresponds to the IEEE 754 ੵ.4.1 subtraction operation and to Haskell's (-) :: Double -> Double -> Double.",
             "Deprecated since 0.18. Use: hydra.lib.math.sub."],
           "seeAlso": [],
-          "lifecycle": {"deprecatedSince": "0.18"}},
+          "lifecycle": {"deprecatedSince": "0.18"},
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -801,7 +841,8 @@
           "comments": [
             "Tangent of an angle in radians, correctly rounded for finite arguments. tan(ଐ) = ଐ; near odd multiples of π/2 the result has large magnitude but remains finite (no exception is raised); tan(±∞) is NaN (with invalid-operation exception in IEEE 754); tan(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 tan operation and to Haskell's tan :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "x", "description": "the angle in radians", "type": {"literal": {"float": "float64"}}, "isLazy": false}],
@@ -816,7 +857,8 @@
           "comments": [
             "Hyperbolic tangent. The result is in [-1, +1]; tanh(ଐ) = ଐ; tanh(±∞) = ଑; tanh(NaN) is NaN.",
             "Corresponds to the IEEE 754 ੹.2 tanh operation and to Haskell's tanh :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -837,7 +879,8 @@
             "Round toward zero (truncate the fractional part), returned as a float64. Equivalent to IEEE 754 ੵ.3.1 roundToIntegralTowardZero: truncate(ଐ) = ଐ; truncate(±∞) = ±∞; truncate(NaN) is NaN; sign of the result matches the sign of the argument (so truncate(-0.7) = -0, truncate(+0.7) = +0).",
             "Note that the return type is float64, not an integer type, so the result can exceed the integer range.",
             "Corresponds to Haskell's fromIntegral . truncate :: Double -> Double."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [

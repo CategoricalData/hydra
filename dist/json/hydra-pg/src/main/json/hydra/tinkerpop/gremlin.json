@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A Gremlin model, based on the Apache TinkerPop Gremlin ANTLR grammar (version 3.8.1). This is a streamlined model: it preserves the semantics of the grammar (steps, predicates, arguments, literals) while collapsing pure parser-production artifacts (single-use 'XAndY'/'XOrY' glue types and left-recursion 'rest' continuations) so that the representation maps cleanly onto TinkerPop's native traversal model.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

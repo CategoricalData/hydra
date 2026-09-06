@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Serialization functions for converting GraphQL AST to abstract expressions",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.graphql.syntax"},

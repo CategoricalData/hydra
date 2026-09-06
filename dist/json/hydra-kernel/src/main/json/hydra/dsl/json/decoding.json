@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.json.decoding",
-  "metadata": {"description": "DSL functions for hydra.json.decoding", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.json.decoding", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.json.decoding"},
     {"module": "hydra.typed"},

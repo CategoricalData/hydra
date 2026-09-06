@@ -1,6 +1,6 @@
 {
   "name": "hydra.graphql.language",
-  "metadata": {"description": "Language constraints and reserved words for GraphQL", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Language constraints and reserved words for GraphQL", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.strip"},

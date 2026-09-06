@@ -1,6 +1,6 @@
 {
   "name": "hydra.haskell.language",
-  "metadata": {"description": "Language constraints and reserved words for Haskell", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Language constraints and reserved words for Haskell", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

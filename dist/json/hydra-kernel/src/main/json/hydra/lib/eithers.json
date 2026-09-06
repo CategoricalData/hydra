@@ -1,6 +1,6 @@
 {
   "name": "hydra.lib.eithers",
-  "metadata": {"description": "Primitives in the hydra.lib.eithers module.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Primitives in the hydra.lib.eithers module.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -42,7 +42,8 @@
             "If either argument is a left, the result is that left; when both arguments are left, the first (function-side) left is returned — first error wins, and ex is not consulted once ef is known to be a left.",
             "apply(ef, ex) is bind(ef, \\f -> map(f, ex)); this defining equation is the specification, and the default implementation.",
             "Total. Corresponds to Haskell's (<*>) :: Either a (b -> c) -> Either a b -> Either a c."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
@@ -84,7 +85,8 @@
           "comments": [
             "bimap(f, g, e) applies f to the contained value if e is a Left, or g if e is a Right; the result retains the same Left/Right variant.",
             "Total. Corresponds to Haskell's Data.Bifunctor.bimap :: (a -> c) -> (b -> d) -> Either a b -> Either c d."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [
             {"name": "x", "constraints": []},
@@ -144,7 +146,8 @@
             "bind(e, f) is the monadic bind for either with a fixed Left type: if e is Right v, the result is f(v); if e is Left x, the result is Left x with the Left type preserved.",
             "Used to chain computations that may fail with a common error type.",
             "Total. Corresponds to Haskell's (>>=) :: Either a b -> (b -> Either a c) -> Either a c."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
@@ -187,7 +190,8 @@
             "compose(f, g, x) is bind(f(x), g); this defining equation is the specification, and the default implementation.",
             "If either f(x) or the second stage produces a left, the result is that left.",
             "Total. Corresponds to Kleisli composition (>=>) specialised to Either with a fixed Left type."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [
             {"name": "x", "constraints": []},
@@ -238,7 +242,8 @@
             "Total. Corresponds to Haskell's either :: (a -> c) -> (b -> c) -> Either a b -> c.",
             "Deprecated since 0.18. Use: cases."],
           "seeAlso": [],
-          "lifecycle": {"deprecatedSince": "0.18"}},
+          "lifecycle": {"deprecatedSince": "0.18"},
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
@@ -268,7 +273,8 @@
           "comments": [
             "foldList(f, acc0, xs) folds f over xs from the left, threading an accumulator of type a, where each application may fail with Left e: it iterates while f returns Right, propagates Left on the first failure, and returns Right (final accumulator) if all elements were processed.",
             "Corresponds to a short-circuiting variant of Haskell's foldM specialised to Either."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
@@ -328,7 +334,8 @@
           "comments": [
             "True if the argument is a Left variant, false if a Right.",
             "Total. Corresponds to Haskell's Data.Either.isLeft :: Either a b -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -361,7 +368,8 @@
           "comments": [
             "True if the argument is a Right variant, false if a Left.",
             "Total. Corresponds to Haskell's Data.Either.isRight :: Either a b -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -394,7 +402,8 @@
           "comments": [
             "left(x) is Left x. The dual constructor to right, injecting into the Left (error/exceptional) side of an either.",
             "Total. Corresponds to Haskell's Left :: a -> Either a b."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [{"name": "x", "description": "the value to wrap as a Left", "type": {"variable": "x"}, "isLazy": false}],
@@ -409,7 +418,8 @@
           "comments": [
             "lefts(xs) returns a list containing every Left value in xs, in original order, with Right values discarded.",
             "Total. Corresponds to Haskell's Data.Either.lefts :: [Either a b] -> [a]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -464,7 +474,8 @@
             "map(f, e) returns Right (f y) if e is Right y, or Left x unchanged if e is Left x.",
             "The functor instance for either; treats the Right variant as the focus and leaves the Left variant alone.",
             "Total. Corresponds to Haskell's fmap :: (a -> b) -> Either e a -> Either e b."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
@@ -508,7 +519,8 @@
           "comments": [
             "mapList(f, xs) applies f to each element of xs. If every application returns Right, the result is Right of the list of contained values, in original order. The first application that returns Left short-circuits the whole result to that Left.",
             "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> [a] -> Either e [b]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
@@ -573,7 +585,8 @@
           "comments": [
             "mapOptional(f, m) returns Right none if m is none; otherwise applies f to the contained value and returns the result with Right wrapped around given.",
             "Total. Corresponds to Haskell's traverse :: (a -> Either e b) -> Maybe a -> Either e (Maybe b)."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
           "parameters": [
@@ -618,7 +631,8 @@
             "mapSet(f, s) applies f to each element of s in unspecified order. If every application returns Right, the result is Right of the set of contained values (deduplicated by the result type's ordering); the first application returning Left short-circuits the whole result to that Left.",
             "Requires an 'ordering' constraint on the input and output element types.",
             "Total. Corresponds to Haskell's traverse-style operation specialised to Set."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [
             {"name": "x", "constraints": [{"simple": "ordering"}]},
@@ -695,7 +709,8 @@
           "comments": [
             "partition(xs) returns a pair (lefts, rights) where lefts contains every Left value from xs in original order and rights contains every Right value from xs in original order.",
             "Total. Corresponds to Haskell's Data.Either.partitionEithers :: [Either a b] -> ([a], [b])."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [
@@ -761,7 +776,8 @@
           "comments": [
             "right(x) is Right x. The dual constructor to left, injecting into the Right (success/normal) side of an either.",
             "Total. Corresponds to Haskell's Right :: b -> Either a b."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [{"name": "x", "description": "the value to wrap as a Right", "type": {"variable": "y"}, "isLazy": false}],
@@ -776,7 +792,8 @@
           "comments": [
             "rights(xs) returns a list containing every Right value in xs, in original order, with Left values discarded.",
             "Total. Corresponds to Haskell's Data.Either.rights :: [Either a b] -> [b]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
           "parameters": [

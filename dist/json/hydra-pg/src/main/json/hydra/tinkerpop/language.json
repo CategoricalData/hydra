@@ -1,6 +1,10 @@
 {
   "name": "hydra.tinkerpop.language",
-  "metadata": {"description": "Language constraints based on TinkerPop Graph.Features", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Language constraints based on TinkerPop Graph.Features",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.strip"},
     {"module": "hydra.tinkerpop.features"},

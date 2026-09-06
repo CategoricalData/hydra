@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.extract.json",
-  "metadata": {"description": "DSL functions for hydra.extract.json", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.extract.json", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.json"},
     {"module": "hydra.typed"},

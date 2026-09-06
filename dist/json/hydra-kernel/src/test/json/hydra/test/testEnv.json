@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Type-level declarations for the hand-written Hydra.Test.TestEnv module.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},

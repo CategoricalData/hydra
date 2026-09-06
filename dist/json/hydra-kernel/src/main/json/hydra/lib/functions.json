@@ -1,6 +1,6 @@
 {
   "name": "hydra.lib.functions",
-  "metadata": {"description": "Primitives in the hydra.lib.functions module.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Primitives in the hydra.lib.functions module.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -42,7 +42,8 @@
             "Its purpose is to discharge an impossible branch in otherwise-total code, such as the left case of an either<void, a> that can never occur.",
             "The eliminator dual to the (nonexistent) introducer for void.",
             "Total, vacuously: there is no well-typed argument on which absurd could be called. Corresponds to Haskell's Data.Void.absurd :: Void -> a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "t1", "constraints": []}],
           "parameters": [
@@ -64,7 +65,8 @@
             "The outer function comes first: f is applied to x, and g is applied to the result.",
             "This is ordinary function composition, distinct from the Kleisli compose primitives of the monad modules.",
             "Total. Corresponds to Haskell's (.) :: (b -> c) -> (a -> b) -> a -> c."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "t1", "constraints": []}, {"name": "t2", "constraints": []}, {"name": "t3", "constraints": []}],
           "parameters": [
@@ -104,7 +106,8 @@
             "const(x, y) = x; this defining equation is the specification.",
             "Partially applied, const(x) is the constant function which returns x on every input.",
             "Total. Corresponds to Haskell's const :: a -> b -> a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "t1", "constraints": []}, {"name": "t2", "constraints": []}],
           "parameters": [
@@ -122,7 +125,8 @@
           "comments": [
             "flip(f, x, y) = f(y, x); this defining equation is the specification.",
             "Total. Corresponds to Haskell's flip :: (a -> b -> c) -> b -> a -> c."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "t1", "constraints": []}, {"name": "t2", "constraints": []}, {"name": "t3", "constraints": []}],
           "parameters": [
@@ -159,7 +163,8 @@
             "identity(x) = x; this defining equation is the specification. The polymorphic identity function.",
             "identity is the unit of compose: compose(identity, f) and compose(f, identity) are both f.",
             "Total. Corresponds to Haskell's id :: a -> a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "t1", "constraints": []}],
           "parameters": [{"name": "x", "description": "the value to return unchanged", "type": {"variable": "t1"}, "isLazy": false}],

@@ -1,6 +1,6 @@
 {
   "name": "hydra.testing",
-  "metadata": {"description": "A model for unit testing", "comments": [], "seeAlso": []},
+  "metadata": {"description": "A model for unit testing", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {
@@ -118,7 +118,19 @@
                     "type": {
                       "annotated": {
                         "body": {"list": {"variable": "hydra.testing.Tag"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Zero or more tags for the test case"}}}]}}}}]},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Zero or more tags for the test case"}}}]}}}},
+                  {
+                    "name": "provisions",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.Name"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The fully-qualified names of zero or more provisions (hydra.packaging.Provision) which this test case confirms. A provision is authoritative with zero, one, or many confirming tests."}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A test case together with metadata"}}}]}}},
           "constraints": []}}},
     {

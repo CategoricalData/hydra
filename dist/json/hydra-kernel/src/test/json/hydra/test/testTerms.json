@@ -1,6 +1,6 @@
 {
   "name": "hydra.test.testTerms",
-  "metadata": {"description": "Term definitions for the test suite", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term definitions for the test suite", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.test.testTypes"}, {"module": "hydra.core"}],
   "definitions": [
     {

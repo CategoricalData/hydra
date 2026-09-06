@@ -1,6 +1,6 @@
 {
   "name": "hydra.query",
-  "metadata": {"description": "A model for language-agnostic graph pattern queries", "comments": [], "seeAlso": []},
+  "metadata": {"description": "A model for language-agnostic graph pattern queries", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

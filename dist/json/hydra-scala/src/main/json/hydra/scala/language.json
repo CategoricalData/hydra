@@ -1,6 +1,6 @@
 {
   "name": "hydra.scala.language",
-  "metadata": {"description": "Language constraints and reserved words for Scala", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Language constraints and reserved words for Scala", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.paths"},

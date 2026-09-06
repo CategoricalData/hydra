@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.atlas",
-  "metadata": {"description": "DSL functions for hydra.atlas", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.atlas", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.atlas"},
     {"module": "hydra.typed"},

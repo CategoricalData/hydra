@@ -1,6 +1,6 @@
 {
   "name": "hydra.json.writer",
-  "metadata": {"description": "JSON serialization functions using the Hydra AST", "comments": [], "seeAlso": []},
+  "metadata": {"description": "JSON serialization functions using the Hydra AST", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.paths"},

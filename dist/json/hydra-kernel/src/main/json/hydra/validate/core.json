@@ -1,6 +1,6 @@
 {
   "name": "hydra.validate.core",
-  "metadata": {"description": "Validation functions for core terms and types", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Validation functions for core terms and types", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.annotations"},
     {"module": "hydra.reflect"},

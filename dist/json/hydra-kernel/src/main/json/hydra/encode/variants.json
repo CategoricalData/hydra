@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.variants",
-  "metadata": {"description": "Term encoders for hydra.variants", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.variants", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.variants"}],
   "definitions": [
     {

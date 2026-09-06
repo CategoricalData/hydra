@@ -1,6 +1,6 @@
 {
   "name": "hydra.haskell.operators",
-  "metadata": {"description": "AST operators for Haskell", "comments": [], "seeAlso": []},
+  "metadata": {"description": "AST operators for Haskell", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.paths"},

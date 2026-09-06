@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A module which provides a single map from primitive names to their default, cross-compilable reference implementations, for primitives which declare one.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.core"},
     {"module": "hydra.lib.eithers"},

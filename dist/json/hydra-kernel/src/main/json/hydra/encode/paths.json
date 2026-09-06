@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.paths",
-  "metadata": {"description": "Term encoders for hydra.paths", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.paths", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.paths"}],
   "definitions": [
     {

@@ -1,6 +1,6 @@
 {
   "name": "hydra.decode.neo4j.model",
-  "metadata": {"description": "Term decoders for hydra.neo4j.model", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term decoders for hydra.neo4j.model", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

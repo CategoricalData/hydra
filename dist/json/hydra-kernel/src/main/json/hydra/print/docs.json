@@ -1,6 +1,6 @@
 {
   "name": "hydra.print.docs",
-  "metadata": {"description": "String representations of hydra.docs types", "comments": [], "seeAlso": []},
+  "metadata": {"description": "String representations of hydra.docs types", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.parse.docs"},
     {"module": "hydra.paths"},

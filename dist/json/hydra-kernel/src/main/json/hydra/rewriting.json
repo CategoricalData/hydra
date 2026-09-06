@@ -1,6 +1,10 @@
 {
   "name": "hydra.rewriting",
-  "metadata": {"description": "Core rewrite and fold combinators for terms and types", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Core rewrite and fold combinators for terms and types",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.scoping"},

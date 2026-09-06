@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.json.model"}, {"module": "hydra.core"}],
   "definitions": [
     {

@@ -1,6 +1,6 @@
 {
   "name": "hydra.test.checking.failures",
-  "metadata": {"description": "Type checking failure test cases", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Type checking failure test cases", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.rewriting"},

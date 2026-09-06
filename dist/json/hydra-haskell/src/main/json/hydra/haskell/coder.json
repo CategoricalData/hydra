@@ -1,6 +1,10 @@
 {
   "name": "hydra.haskell.coder",
-  "metadata": {"description": "Functions for encoding Hydra modules as Haskell modules", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Functions for encoding Hydra modules as Haskell modules",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.haskell.serde"},
     {"module": "hydra.haskell.utils"},

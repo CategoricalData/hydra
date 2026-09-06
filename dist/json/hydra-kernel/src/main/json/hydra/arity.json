@@ -1,6 +1,6 @@
 {
   "name": "hydra.arity",
-  "metadata": {"description": "Functions dealing with arguments and arity.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Functions dealing with arguments and arity.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

@@ -1,6 +1,6 @@
 {
   "name": "hydra.pg.utils",
-  "metadata": {"description": "Utility functions for property graph operations", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Utility functions for property graph operations", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.pg.coder"},

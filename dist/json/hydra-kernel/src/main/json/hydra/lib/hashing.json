@@ -1,6 +1,6 @@
 {
   "name": "hydra.lib.hashing",
-  "metadata": {"description": "Primitives in the hydra.lib.hashing module.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Primitives in the hydra.lib.hashing module.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -40,7 +40,8 @@
           "comments": [
             "sha256(bytes) returns the 32-byte SHA-256 digest of bytes. Total: hashing is pure and never fails.",
             "Pairs with hydra.lib.files.readFile, which returns raw bytes, to hash file contents."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "bytes", "description": "the sequence of bytes to hash", "type": {"literal": "binary"}, "isLazy": false}],
@@ -55,7 +56,8 @@
           "comments": [
             "sha256Hex(bytes) returns the SHA-256 digest of bytes as a 64-character lowercase hexadecimal string. Equivalent to hex-encoding the output of sha256. Total: hashing is pure and never fails.",
             "Pairs with hydra.lib.files.readFile, which returns raw bytes, to hash file contents."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "bytes", "description": "the sequence of bytes to hash", "type": {"literal": "binary"}, "isLazy": false}],

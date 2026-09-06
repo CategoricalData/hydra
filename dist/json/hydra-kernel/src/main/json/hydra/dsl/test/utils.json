@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.test.utils",
-  "metadata": {"description": "DSL functions for hydra.test.utils", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.test.utils", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.test.utils"},
     {"module": "hydra.typed"},

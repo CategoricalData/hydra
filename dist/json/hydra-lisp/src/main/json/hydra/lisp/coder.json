@@ -1,6 +1,10 @@
 {
   "name": "hydra.lisp.coder",
-  "metadata": {"description": "Lisp code generator: converts Hydra type and term modules to Lisp AST", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Lisp code generator: converts Hydra type and term modules to Lisp AST",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.lisp.language"},
     {"module": "hydra.formatting"},

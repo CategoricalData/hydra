@@ -1,6 +1,6 @@
 {
   "name": "hydra.rust.operators",
-  "metadata": {"description": "AST operators for Rust serialization", "comments": [], "seeAlso": []},
+  "metadata": {"description": "AST operators for Rust serialization", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.paths"},

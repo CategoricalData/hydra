@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.pg.model",
-  "metadata": {"description": "DSL functions for hydra.pg.model", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.pg.model", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.pg.model"},
     {"module": "hydra.typed"},

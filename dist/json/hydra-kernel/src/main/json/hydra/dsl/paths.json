@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.paths",
-  "metadata": {"description": "DSL functions for hydra.paths", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.paths", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.typed"},

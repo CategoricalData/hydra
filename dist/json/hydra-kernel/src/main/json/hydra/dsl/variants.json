@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.variants",
-  "metadata": {"description": "DSL functions for hydra.variants", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.variants", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.variants"},
     {"module": "hydra.typed"},

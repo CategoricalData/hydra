@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Per-dialect printer rendering the hydra.regex AST into GNU Emacs regexp syntax. Emacs inverts several escaping conventions relative to POSIX ERE (probe-verified, Emacs 28.2): alternation is \\| (bare | is literal), grouping is \\( \\) (bare ( ) are literal), and bounded quantifiers are \\{n,m\\} (bare braces are literal). The quantifiers * + ? are bare as usual, and character classes are POSIX-like. Hydra's . (any incl. newline) renders as [^z-a] — an empty negated range that matches every character including newline (Emacs . excludes newline). See docs/specification/regex.md and issue #567.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

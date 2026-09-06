@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.formatting",
-  "metadata": {"description": "DSL functions for hydra.formatting", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.formatting", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.formatting"},
     {"module": "hydra.typed"},

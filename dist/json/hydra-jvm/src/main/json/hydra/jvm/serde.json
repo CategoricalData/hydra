@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Common JVM serialization helpers: Java/Scala string and character escaping",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

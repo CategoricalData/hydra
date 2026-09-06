@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Build configuration for PEP 621 (pyproject.toml) Python distribution packages.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.packaging"}],
   "definitions": [
     {

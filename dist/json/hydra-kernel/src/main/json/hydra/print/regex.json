@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Canonical printer for Hydra's translingual regular-expression syntax (docs/specification/regex.md): hydra.regex AST -> canonical text. Escapes minimally (a character is escaped only where it is special in its context), so that print.regex . parse.regex is idempotent on well-formed input. Per-dialect renderers (hydra.print.<dialect>.regex) build on this. See issue #567.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

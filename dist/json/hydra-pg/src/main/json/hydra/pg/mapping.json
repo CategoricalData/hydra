@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.pg.model"}, {"module": "hydra.coders"}, {"module": "hydra.core"}],
   "definitions": [
     {

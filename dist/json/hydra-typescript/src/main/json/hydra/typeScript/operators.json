@@ -1,6 +1,10 @@
 {
   "name": "hydra.typeScript.operators",
-  "metadata": {"description": "AST operators for TypeScript with precedence and associativity", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "AST operators for TypeScript with precedence and associativity",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.serialization"},
     {"module": "hydra.paths"},

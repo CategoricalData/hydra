@@ -1,6 +1,10 @@
 {
   "name": "hydra.dependencies",
-  "metadata": {"description": "Dependency extraction, binding sort, and let normalization", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Dependency extraction, binding sort, and let normalization",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.annotations"},
     {"module": "hydra.constants"},

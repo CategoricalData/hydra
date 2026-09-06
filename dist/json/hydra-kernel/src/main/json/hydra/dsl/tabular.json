@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.tabular",
-  "metadata": {"description": "DSL functions for hydra.tabular", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.tabular", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.tabular"},
     {"module": "hydra.typed"},

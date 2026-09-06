@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.lexical"},
     {"module": "hydra.rewriting"},

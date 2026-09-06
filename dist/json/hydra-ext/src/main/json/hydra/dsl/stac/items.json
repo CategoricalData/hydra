@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.stac.items",
-  "metadata": {"description": "DSL functions for hydra.stac.items", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.stac.items", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.stac.items"},
     {"module": "hydra.typed"},

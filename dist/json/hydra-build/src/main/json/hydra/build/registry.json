@@ -3,7 +3,8 @@
   "metadata": {
     "description": "The translingual language registry: per-language build identity (name, coder package, family) as data, so the build drivers read language properties instead of hardcoding name literals. See https://github.com/CategoricalData/hydra/issues/416",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.strip"},
     {"module": "hydra.paths"},

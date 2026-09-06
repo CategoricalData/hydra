@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.system",
-  "metadata": {"description": "DSL functions for hydra.system", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.system", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.system"},
     {"module": "hydra.typed"},

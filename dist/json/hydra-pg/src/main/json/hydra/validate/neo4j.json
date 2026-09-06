@@ -1,6 +1,6 @@
 {
   "name": "hydra.validate.neo4j",
-  "metadata": {"description": "Validation functions for Neo4j property graphs", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Validation functions for Neo4j property graphs", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.neo4j.model"},
     {"module": "hydra.error.neo4j"},

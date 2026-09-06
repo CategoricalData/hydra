@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.refs",
-  "metadata": {"description": "DSL functions for hydra.refs", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.refs", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.refs"},
     {"module": "hydra.typed"},

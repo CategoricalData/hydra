@@ -1,6 +1,6 @@
 {
   "name": "hydra.yaml.language",
-  "metadata": {"description": "Language constraints for YAML", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Language constraints for YAML", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.strip"},
     {"module": "hydra.paths"},

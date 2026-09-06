@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.variables",
-  "metadata": {"description": "DSL functions for hydra.variables", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.variables", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.variables"},
     {"module": "hydra.typed"},

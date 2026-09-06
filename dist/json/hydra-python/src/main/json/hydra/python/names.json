@@ -1,6 +1,10 @@
 {
   "name": "hydra.python.names",
-  "metadata": {"description": "Python naming utilities: encoding Hydra names as Python names", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Python naming utilities: encoding Hydra names as Python names",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.names"},
     {"module": "hydra.formatting"},

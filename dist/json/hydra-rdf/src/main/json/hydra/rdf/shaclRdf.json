@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Serialize a SHACL ShapesGraph to RDF triples using the SHACL vocabulary",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.rdf.serde"},
     {"module": "hydra.rdf.utils"},

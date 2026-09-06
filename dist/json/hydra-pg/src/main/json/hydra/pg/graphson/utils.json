@@ -1,6 +1,10 @@
 {
   "name": "hydra.pg.graphson.utils",
-  "metadata": {"description": "Utility functions for GraphSON encoding and property graph conversion.", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Utility functions for GraphSON encoding and property graph conversion.",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.pg.graphson.construct"},
     {"module": "hydra.strip"},

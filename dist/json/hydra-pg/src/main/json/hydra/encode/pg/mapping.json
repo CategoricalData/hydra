@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.pg.mapping",
-  "metadata": {"description": "Term encoders for hydra.pg.mapping", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.pg.mapping", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.encode.pg.model"},
     {"module": "hydra.encode.coders"},

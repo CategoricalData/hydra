@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Algebraic expression trees for the path algebra by Angles et al., extended for GQL support",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

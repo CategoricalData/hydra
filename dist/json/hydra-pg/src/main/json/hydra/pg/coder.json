@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Property graph element coders for mapping Hydra terms to property graph elements",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.annotations"},
     {"module": "hydra.extract.core"},

@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.protobuf.proto3",
-  "metadata": {"description": "DSL functions for hydra.protobuf.proto3", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.protobuf.proto3", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.protobuf.proto3"},
     {"module": "hydra.typed"},

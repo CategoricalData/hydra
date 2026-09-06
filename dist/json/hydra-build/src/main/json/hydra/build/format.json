@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Type-level specifications of the JSON formats used by Hydra's build system: the repository descriptor (hydra.json), per-package descriptors (package.json), per-source-set input and output digests (digest.json), generated-source manifests (manifest.json), and per-package validation configuration. Each on-disk file is the canonical JSON encoding of the corresponding type. Overlay build configuration (overlay/<lang>/<pkg>/build.json) is specified separately, by hydra.gradle and hydra.python.pyproject. See https://github.com/CategoricalData/hydra/issues/512",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.packaging"}],
   "definitions": [
     {

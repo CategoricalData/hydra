@@ -1,6 +1,10 @@
 {
   "name": "hydra.pg.query",
-  "metadata": {"description": "A common model for pattern-matching queries over property graphs", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "A common model for pattern-matching queries over property graphs",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.pg.model"}, {"module": "hydra.core"}],
   "definitions": [
     {

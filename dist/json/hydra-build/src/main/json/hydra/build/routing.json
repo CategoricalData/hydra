@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Manifest-derived, fail-loud routing of modules to their owning packages",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.dsls"},
     {"module": "hydra.names"},

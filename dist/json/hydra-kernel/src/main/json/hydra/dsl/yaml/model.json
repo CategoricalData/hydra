@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.yaml.model",
-  "metadata": {"description": "DSL functions for hydra.yaml.model", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.yaml.model", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.yaml.model"},
     {"module": "hydra.typed"},

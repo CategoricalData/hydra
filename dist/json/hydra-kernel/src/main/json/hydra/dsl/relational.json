@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.relational",
-  "metadata": {"description": "DSL functions for hydra.relational", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.relational", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.relational"},
     {"module": "hydra.typed"},

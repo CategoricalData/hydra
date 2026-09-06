@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.osv.schema",
-  "metadata": {"description": "DSL functions for hydra.osv.schema", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.osv.schema", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.osv.schema"},
     {"module": "hydra.typed"},

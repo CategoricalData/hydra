@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.test.transform",
-  "metadata": {"description": "DSL functions for hydra.test.transform", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.test.transform", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.test.transform"},
     {"module": "hydra.typed"},

@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.print.docs",
-  "metadata": {"description": "DSL functions for hydra.print.docs", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.print.docs", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.print.docs"},
     {"module": "hydra.typed"},

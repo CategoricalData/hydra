@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Pure language/host list-expansion utilities shared by the sync/test/bench drivers",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.strip"},
     {"module": "hydra.build.registry"},

@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.predicates",
-  "metadata": {"description": "DSL functions for hydra.predicates", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.predicates", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.predicates"},
     {"module": "hydra.typed"},

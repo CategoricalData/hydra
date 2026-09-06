@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.dependencies"},

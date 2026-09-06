@@ -1,6 +1,6 @@
 {
   "name": "hydra.scala.utils",
-  "metadata": {"description": "Utility functions for constructing Scala AST nodes", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Utility functions for constructing Scala AST nodes", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.scala.language"},
     {"module": "hydra.names"},

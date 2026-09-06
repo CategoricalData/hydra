@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Functions for constructing GraphSON vertices from property graph vertices.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.pg.graphson.coder"},
     {"module": "hydra.paths"},

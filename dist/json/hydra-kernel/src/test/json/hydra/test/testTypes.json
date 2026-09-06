@@ -1,6 +1,6 @@
 {
   "name": "hydra.test.testTypes",
-  "metadata": {"description": "Type definitions for the test suite", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Type definitions for the test suite", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

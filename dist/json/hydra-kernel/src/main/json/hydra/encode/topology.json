@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.topology",
-  "metadata": {"description": "Term encoders for hydra.topology", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.topology", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.topology"}],
   "definitions": [
     {

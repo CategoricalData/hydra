@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Variant types which describe the structure of Hydra core types and terms.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

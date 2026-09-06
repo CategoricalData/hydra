@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.build.assembly",
-  "metadata": {"description": "DSL functions for hydra.build.assembly", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.build.assembly", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.build.assembly"},
     {"module": "hydra.typed"},

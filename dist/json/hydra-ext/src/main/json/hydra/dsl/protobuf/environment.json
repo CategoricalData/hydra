@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.protobuf.environment",
-  "metadata": {"description": "DSL functions for hydra.protobuf.environment", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.protobuf.environment", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.protobuf.environment"},
     {"module": "hydra.typed"},

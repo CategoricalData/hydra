@@ -1,6 +1,6 @@
 {
   "name": "hydra.validate.pg",
-  "metadata": {"description": "Validation functions for property graphs", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Validation functions for property graphs", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.pg.model"}, {"module": "hydra.error.pg"}, {"module": "hydra.validation"}, {"module": "hydra.core"}],
   "definitions": [
     {

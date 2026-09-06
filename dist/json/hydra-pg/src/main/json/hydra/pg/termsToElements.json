@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Functions for mapping Hydra terms to property graph elements using mapping specifications",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.annotations"},
     {"module": "hydra.extract.core"},

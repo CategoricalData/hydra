@@ -1,6 +1,10 @@
 {
   "name": "hydra.java.coder",
-  "metadata": {"description": "Java code generator: converts Hydra modules to Java source code", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Java code generator: converts Hydra modules to Java source code",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.java.utils"},
     {"module": "hydra.java.names"},

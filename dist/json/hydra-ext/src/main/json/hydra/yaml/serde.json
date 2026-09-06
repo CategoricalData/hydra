@@ -1,6 +1,6 @@
 {
   "name": "hydra.yaml.serde",
-  "metadata": {"description": "Native YAML serialization: YAML Node to String", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Native YAML serialization: YAML Node to String", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

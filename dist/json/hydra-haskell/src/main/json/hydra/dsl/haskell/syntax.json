@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.haskell.syntax",
-  "metadata": {"description": "DSL functions for hydra.haskell.syntax", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.haskell.syntax", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.haskell.syntax"},
     {"module": "hydra.typed"},

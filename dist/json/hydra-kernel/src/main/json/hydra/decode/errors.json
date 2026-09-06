@@ -1,6 +1,6 @@
 {
   "name": "hydra.decode.errors",
-  "metadata": {"description": "Term decoders for hydra.errors", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term decoders for hydra.errors", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

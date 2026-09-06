@@ -3,7 +3,8 @@
   "metadata": {
     "description": "General-purpose parser combinators, operating on a Parser type. A helper library, not a set of parse<T> convention functions (see docs/specification/index.md, Conventions).",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

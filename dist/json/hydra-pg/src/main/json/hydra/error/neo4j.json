@@ -1,6 +1,6 @@
 {
   "name": "hydra.error.neo4j",
-  "metadata": {"description": "Error types for Neo4j property graph validation", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Error types for Neo4j property graph validation", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.neo4j.model"}],
   "definitions": [
     {

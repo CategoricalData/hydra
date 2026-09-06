@@ -1,6 +1,6 @@
 {
   "name": "hydra.lib.maps",
-  "metadata": {"description": "Primitives in the hydra.lib.maps module.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Primitives in the hydra.lib.maps module.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -42,7 +42,8 @@
             "A single primitive that subsumes insert, delete, and adjust.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.alter :: Ord k => (Maybe v -> Maybe v) -> k -> Map k v -> Map k v."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "v", "constraints": []}, {"name": "k", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -107,7 +108,8 @@
             "Key collisions after applying fk are resolved by keeping the last binding encountered (host may differ on collision policy if fk is not injective).",
             "Requires 'ordering' constraints on both the input and output key types.",
             "Total. Corresponds to a key-and-value lift of Haskell's Data.Map.fromList . map (\\(k,v) -> (fk k, fv v)) . toList."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [
             {"name": "k1", "constraints": [{"simple": "ordering"}]},
@@ -173,7 +175,8 @@
             "delete(k, m) returns m with the binding for k removed; if k is not present, m is returned unchanged.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.delete :: Ord k => k -> Map k v -> Map k v."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -196,7 +199,8 @@
             "The key-set analogue is hydra.lib.sets.difference.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.difference :: Ord k => Map k v -> Map k v -> Map k v."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -222,7 +226,8 @@
             "elems(m) returns the values of m as a list, ordered by their keys' ascending order.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.elems :: Map k v -> [v]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -243,7 +248,8 @@
             "empty is the map with no bindings.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.empty :: Map k v."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [],
@@ -259,7 +265,8 @@
             "filter(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(v) is true.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.filter :: (v -> Bool) -> Map k v -> Map k v."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "v", "constraints": []}, {"name": "k", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -307,7 +314,8 @@
             "filterWithKey(p, m) returns the submap of m containing exactly the bindings (k, v) for which p(k, v) is true.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.filterWithKey :: (k -> v -> Bool) -> Map k v -> Map k v."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -361,7 +369,8 @@
             "findWithDefault(def, k, m) returns the value bound to k in m if k is present, or def otherwise. Equivalent to maybe(def, identity, lookup(k, m)).",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.findWithDefault :: Ord k => v -> k -> Map k v -> v."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "v", "constraints": []}, {"name": "k", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -404,7 +413,8 @@
             "fromList(xs) returns the map containing exactly the bindings in xs. If xs contains multiple entries for the same key, the last one wins (matching Haskell's fromList behavior).",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.fromList :: Ord k => [(k, v)] -> Map k v."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -425,7 +435,8 @@
             "insert(k, v, m) returns m with the binding (k, v) added or updated. If k is already present, its value is overwritten.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.insert :: Ord k => k -> v -> Map k v -> Map k v."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -449,7 +460,8 @@
             "The key-set analogue is hydra.lib.sets.intersection.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.intersection :: Ord k => Map k v -> Map k v -> Map k v."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -475,7 +487,8 @@
             "isEmpty(m) returns true iff m has no bindings.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.null :: Map k v -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -496,7 +509,8 @@
             "keys(m) returns the keys of m as a list, in ascending order.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.keys :: Map k v -> [k]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -517,7 +531,8 @@
             "lookup(k, m) returns Just(v) where v is the value bound to k in m, or Nothing if k is not present.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.lookup :: Ord k => k -> Map k v -> Maybe v."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -539,7 +554,8 @@
             "map(f, m) returns a map with the same keys as m and value f(v) for each binding (k, v).",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.map :: (v -> w) -> Map k v -> Map k w / fmap on Map."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [
             {"name": "v1", "constraints": []},
@@ -593,7 +609,8 @@
             "mapKeys(f, m) returns a map where each binding (k, v) becomes (f(k), v). If f maps multiple keys to the same image, key collisions are resolved by keeping the binding with the greater original key (matching Haskell's mapKeys behavior).",
             "Requires 'ordering' constraints on both the input and output key types.",
             "Total. Corresponds to Haskell's Data.Map.mapKeys :: (Ord k1, Ord k2) => (k1 -> k2) -> Map k1 v -> Map k2 v."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [
             {"name": "k1", "constraints": [{"simple": "ordering"}]},
@@ -647,7 +664,8 @@
             "member(k, m) returns true iff k is a key in m.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.member :: Ord k => k -> Map k v -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -669,7 +687,8 @@
             "singleton(k, v) returns the map containing exactly the binding (k, v).",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.singleton :: k -> v -> Map k v."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -687,7 +706,8 @@
             "size(m) returns the number of bindings in m as an int32.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.size :: Map k v -> Int (with narrowing to int32)."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -708,7 +728,8 @@
             "toList(m) returns the bindings of m as a list of (key, value) pairs, in ascending key order.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.toList :: Map k v -> [(k, v)]."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -729,7 +750,8 @@
             "union(m1, m2) returns the map containing all bindings from m1 plus the bindings of m2 whose keys are not in m1. On key collision, the binding from m1 is preferred.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.union :: Ord k => Map k v -> Map k v -> Map k v."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [
@@ -756,7 +778,8 @@
             "unions(ms) is equivalent to folding union over ms from the left, starting from empty; unions([]) is empty, and the bias matches union and hydra.lib.sets.unions.",
             "Requires an 'ordering' constraint on the key type.",
             "Total. Corresponds to Haskell's Data.Map.unions :: Ord k => [Map k v] -> Map k v."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "k", "constraints": [{"simple": "ordering"}]}, {"name": "v", "constraints": []}],
           "parameters": [

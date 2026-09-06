@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A model for Hydra documentation strings, including inline annotations and entity references",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.packaging"}],
   "definitions": [
     {

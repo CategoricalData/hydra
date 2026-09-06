@@ -1,6 +1,6 @@
 {
   "name": "hydra.python.environment",
-  "metadata": {"description": "Environment types for Python code generation", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Environment types for Python code generation", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.python.syntax"},
     {"module": "hydra.util"},

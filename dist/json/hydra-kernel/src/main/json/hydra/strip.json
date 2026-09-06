@@ -1,6 +1,6 @@
 {
   "name": "hydra.strip",
-  "metadata": {"description": "Annotation and type stripping and normalization", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Annotation and type stripping and normalization", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.rewriting"},
     {"module": "hydra.paths"},

@@ -1,6 +1,10 @@
 {
   "name": "hydra.shacl.model",
-  "metadata": {"description": "A SHACL syntax model. See https://www.w3.org/TR/shacl", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "A SHACL syntax model. See https://www.w3.org/TR/shacl",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.rdf.syntax"}, {"module": "hydra.core"}],
   "definitions": [
     {

@@ -1,6 +1,6 @@
 {
   "name": "hydra.scoping",
-  "metadata": {"description": "Graph context extension and type scheme conversion", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Graph context extension and type scheme conversion", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

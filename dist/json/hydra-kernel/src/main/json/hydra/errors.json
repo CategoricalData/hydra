@@ -1,6 +1,6 @@
 {
   "name": "hydra.errors",
-  "metadata": {"description": "Top-level error types for the Hydra kernel", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Top-level error types for the Hydra kernel", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.core"},
     {"module": "hydra.error.checking"},

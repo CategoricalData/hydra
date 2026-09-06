@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.regex",
-  "metadata": {"description": "DSL functions for hydra.regex", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.regex", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.regex"},
     {"module": "hydra.typed"},

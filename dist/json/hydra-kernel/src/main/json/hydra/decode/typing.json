@@ -1,6 +1,6 @@
 {
   "name": "hydra.decode.typing",
-  "metadata": {"description": "Term decoders for hydra.typing", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term decoders for hydra.typing", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

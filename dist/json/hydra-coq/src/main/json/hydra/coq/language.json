@@ -1,6 +1,6 @@
 {
   "name": "hydra.coq.language",
-  "metadata": {"description": "Language constraints for Coq code generation", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Language constraints for Coq code generation", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.formatting"},

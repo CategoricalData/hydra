@@ -3,7 +3,8 @@
   "metadata": {
     "description": "The translingual expected-libraries registry: every hydra.lib.<sub> module name every self-hosting host must register, load, and test. See https://github.com/CategoricalData/hydra/issues/533",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

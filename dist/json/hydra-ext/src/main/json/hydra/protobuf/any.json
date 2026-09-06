@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

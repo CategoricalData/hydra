@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.checking",
-  "metadata": {"description": "DSL functions for hydra.checking", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.checking", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.checking"},
     {"module": "hydra.typed"},

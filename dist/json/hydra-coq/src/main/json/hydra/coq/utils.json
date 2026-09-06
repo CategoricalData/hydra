@@ -1,6 +1,6 @@
 {
   "name": "hydra.coq.utils",
-  "metadata": {"description": "Pure helpers for the Coq code generator", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Pure helpers for the Coq code generator", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.formatting"},
     {"module": "hydra.rewriting"},

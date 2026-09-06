@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.python.names",
-  "metadata": {"description": "DSL functions for hydra.python.names", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.python.names", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.python.names"},
     {"module": "hydra.typed"},

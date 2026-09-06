@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.avro.schema",
-  "metadata": {"description": "DSL functions for hydra.avro.schema", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.avro.schema", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.avro.schema"},
     {"module": "hydra.typed"},

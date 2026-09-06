@@ -1,6 +1,10 @@
 {
   "name": "hydra.annotations",
-  "metadata": {"description": "Utilities for reading and writing type and term annotations", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Utilities for reading and writing type and term annotations",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.decode.core"},

@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Publish-set dependency-closure guard and leaves-first ordering, shared by the publish drivers",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.sorting"},
     {"module": "hydra.strip"},

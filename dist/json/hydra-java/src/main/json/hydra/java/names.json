@@ -1,6 +1,6 @@
 {
   "name": "hydra.java.names",
-  "metadata": {"description": "Java naming constants and package name utilities", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Java naming constants and package name utilities", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.java.syntax"},
     {"module": "hydra.paths"},

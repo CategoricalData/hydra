@@ -1,6 +1,10 @@
 {
   "name": "hydra.cpp.coder",
-  "metadata": {"description": "C++ code generator: converts Hydra modules to C++ header files", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "C++ code generator: converts Hydra modules to C++ header files",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.cpp.language"},
     {"module": "hydra.cpp.serde"},

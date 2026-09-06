@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.lib.literals",
-  "metadata": {"description": "DSL functions for hydra.lib.literals", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.lib.literals", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.lib.literals"},
     {"module": "hydra.typed"},

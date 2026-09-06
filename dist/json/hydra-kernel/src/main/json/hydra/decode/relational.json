@@ -1,6 +1,6 @@
 {
   "name": "hydra.decode.relational",
-  "metadata": {"description": "Term decoders for hydra.relational", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term decoders for hydra.relational", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.extract.core"},
     {"module": "hydra.lexical"},

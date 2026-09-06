@@ -3,7 +3,8 @@
   "metadata": {
     "description": "Transform test cases for code generation, filtering to tests that can be compiled to target languages",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.formatting"},
     {"module": "hydra.sorting"},

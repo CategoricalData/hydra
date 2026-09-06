@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A GraphQL model. Based on the (extended) BNF at:\n  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [],
   "definitions": [
     {

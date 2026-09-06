@@ -1,6 +1,10 @@
 {
   "name": "hydra.protobuf.environment",
-  "metadata": {"description": "Type definitions for the Protobuf code generation environment", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Type definitions for the Protobuf code generation environment",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.typing"}],
   "definitions": [
     {

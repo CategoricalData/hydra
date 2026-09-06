@@ -1,6 +1,6 @@
 {
   "name": "hydra.adapt",
-  "metadata": {"description": "Simple, one-way adapters for types and terms", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Simple, one-way adapters for types and terms", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.annotations"},
     {"module": "hydra.dependencies"},

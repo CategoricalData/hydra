@@ -1,6 +1,6 @@
 {
   "name": "hydra.formatting",
-  "metadata": {"description": "String formatting types and functions.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "String formatting types and functions.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

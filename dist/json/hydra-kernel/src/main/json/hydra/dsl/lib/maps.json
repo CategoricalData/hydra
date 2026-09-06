@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.lib.maps",
-  "metadata": {"description": "DSL functions for hydra.lib.maps", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.lib.maps", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.lib.maps"},
     {"module": "hydra.typed"},

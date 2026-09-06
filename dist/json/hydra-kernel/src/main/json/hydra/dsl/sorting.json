@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.sorting",
-  "metadata": {"description": "DSL functions for hydra.sorting", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.sorting", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.sorting"},
     {"module": "hydra.typed"},

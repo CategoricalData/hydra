@@ -1,6 +1,10 @@
 {
   "name": "hydra.json.model",
-  "metadata": {"description": "A JSON syntax model. See the BNF at https://www.json.org", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "A JSON syntax model. See the BNF at https://www.json.org",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}],
   "definitions": [
     {

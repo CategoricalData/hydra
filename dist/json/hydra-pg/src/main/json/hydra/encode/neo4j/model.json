@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.neo4j.model",
-  "metadata": {"description": "Term encoders for hydra.neo4j.model", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.neo4j.model", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.neo4j.model"}],
   "definitions": [
     {

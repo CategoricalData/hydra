@@ -1,6 +1,6 @@
 {
   "name": "hydra.encode.system",
-  "metadata": {"description": "Term encoders for hydra.system", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Term encoders for hydra.system", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.encode.file"}, {"module": "hydra.system"}],
   "definitions": [
     {

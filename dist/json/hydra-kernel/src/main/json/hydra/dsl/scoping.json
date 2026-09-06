@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.scoping",
-  "metadata": {"description": "DSL functions for hydra.scoping", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.scoping", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.scoping"},
     {"module": "hydra.typed"},

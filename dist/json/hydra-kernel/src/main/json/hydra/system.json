@@ -3,7 +3,8 @@
   "metadata": {
     "description": "A model for a program's interface to the host operating system: running other programs, the environment, the working directory, and process exit status. Names and semantics follow the POSIX System Interfaces (XSH) volume; see https://pubs.opengroup.org/onlinepubs/9799919799. Only the portable, cross-platform subset is modeled.",
     "comments": [],
-    "seeAlso": []},
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.file"}],
   "definitions": [
     {

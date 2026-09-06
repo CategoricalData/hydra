@@ -1,6 +1,6 @@
 {
   "name": "hydra.lexical",
-  "metadata": {"description": "A module for lexical operations over graphs.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "A module for lexical operations over graphs.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.strip"},
     {"module": "hydra.print.core"},

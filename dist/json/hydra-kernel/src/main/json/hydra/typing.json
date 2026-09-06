@@ -1,6 +1,10 @@
 {
   "name": "hydra.typing",
-  "metadata": {"description": "Types supporting type inference and type reconstruction.", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Types supporting type inference and type reconstruction.",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.paths"}],
   "definitions": [
     {

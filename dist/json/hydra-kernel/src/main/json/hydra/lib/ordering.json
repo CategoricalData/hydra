@@ -1,6 +1,6 @@
 {
   "name": "hydra.lib.ordering",
-  "metadata": {"description": "Primitives in the hydra.lib.ordering module.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "Primitives in the hydra.lib.ordering module.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
@@ -43,7 +43,8 @@
             "Requires an 'ordering' type-class constraint on the argument type, which is the closest Hydra equivalent to Haskell's Ord instance.",
             "Since: 0.18 (moved from hydra.lib.equality.compare).",
             "Total. Corresponds to Haskell's compare :: Ord a => a -> a -> Ordering."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -62,7 +63,8 @@
             "Requires an 'ordering' constraint on the argument type.",
             "Since: 0.18 (moved from hydra.lib.equality.gt).",
             "Total. Corresponds to Haskell's (>) :: Ord a => a -> a -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -81,7 +83,8 @@
             "Requires an 'ordering' constraint on the argument type.",
             "Since: 0.18 (moved from hydra.lib.equality.gte).",
             "Total. Corresponds to Haskell's (>=) :: Ord a => a -> a -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -100,7 +103,8 @@
             "Requires an 'ordering' constraint on the argument type.",
             "Since: 0.18 (moved from hydra.lib.equality.lt).",
             "Total. Corresponds to Haskell's (<) :: Ord a => a -> a -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -119,7 +123,8 @@
             "Requires an 'ordering' constraint on the argument type.",
             "Since: 0.18 (moved from hydra.lib.equality.lte).",
             "Total. Corresponds to Haskell's (<=) :: Ord a => a -> a -> Bool."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -138,7 +143,8 @@
             "Requires an 'ordering' constraint on the argument type.",
             "Since: 0.18 (moved from hydra.lib.equality.max).",
             "Total. Corresponds to Haskell's max :: Ord a => a -> a -> a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [
@@ -176,7 +182,8 @@
             "Requires an 'ordering' constraint on the argument type.",
             "Since: 0.18 (moved from hydra.lib.equality.min).",
             "Total. Corresponds to Haskell's min :: Ord a => a -> a -> a."],
-          "seeAlso": []},
+          "seeAlso": [],
+          "provisions": []},
         "signature": {
           "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}],
           "parameters": [

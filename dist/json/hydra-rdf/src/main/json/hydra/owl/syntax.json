@@ -1,6 +1,10 @@
 {
   "name": "hydra.owl.syntax",
-  "metadata": {"description": "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.rdf.syntax"}, {"module": "hydra.xml.schema"}],
   "definitions": [
     {

@@ -1,6 +1,6 @@
 {
   "name": "hydra.util",
-  "metadata": {"description": "General-purpose utility types used across Hydra.", "comments": [], "seeAlso": []},
+  "metadata": {"description": "General-purpose utility types used across Hydra.", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.packaging"}],
   "definitions": [
     {

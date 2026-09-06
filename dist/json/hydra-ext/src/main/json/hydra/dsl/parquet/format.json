@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.parquet.format",
-  "metadata": {"description": "DSL functions for hydra.parquet.format", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.parquet.format", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.parquet.format"},
     {"module": "hydra.typed"},

@@ -1,6 +1,10 @@
 {
   "name": "hydra.coq.serde",
-  "metadata": {"description": "Coq serializer: converts Coq AST to concrete Coq source code", "comments": [], "seeAlso": []},
+  "metadata": {
+    "description": "Coq serializer: converts Coq AST to concrete Coq source code",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
   "dependencies": [
     {"module": "hydra.constants"},
     {"module": "hydra.formatting"},

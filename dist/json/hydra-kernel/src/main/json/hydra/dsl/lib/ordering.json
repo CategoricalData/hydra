@@ -1,6 +1,6 @@
 {
   "name": "hydra.dsl.lib.ordering",
-  "metadata": {"description": "DSL functions for hydra.lib.ordering", "comments": [], "seeAlso": []},
+  "metadata": {"description": "DSL functions for hydra.lib.ordering", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.lib.ordering"},
     {"module": "hydra.typed"},
