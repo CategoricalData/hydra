@@ -335,27 +335,33 @@ fromJson = define "fromJson" $
     -- Literals
     _Type_literal>>: "lt" ~> decodeLiteral @@ var "lt" @@ var "value",
 
-    -- Lists
+    -- Lists. A JSON null decodes as the empty list, so that a list-typed field newly added
+    -- to an existing record can be absent from JSON predating the field (mirrors _Type_optional's
+    -- null handling; see docs/specification/json-format.md "Format versioning").
     _Type_list>>: "elemType" ~>
       "decodeElem" <~ ("v" ~> fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "elemType" @@ var "v") $
-      "arrResult" <~ (expectArray @@ var "value") $
-      Eithers.either
-        ("err" ~> left $ var "err")
-        ("arr" ~>
-          "decoded" <~ (Eithers.mapList (var "decodeElem") (var "arr")) $
-          Eithers.map ("ts" ~> Core.termList $ var "ts") (var "decoded"))
-        (var "arrResult"),
+      match _Value (var "value")
+        (Just $
+          Eithers.either
+            ("err" ~> left $ var "err")
+            ("arr" ~>
+              "decoded" <~ (Eithers.mapList (var "decodeElem") (var "arr")) $
+              Eithers.map ("ts" ~> Core.termList $ var "ts") (var "decoded"))
+            (expectArray @@ var "value")) [
+        _Value_null>>: constant $ right $ Core.termList (list ([] :: [TypedTerm Term]))],
 
-    -- Sets
+    -- Sets. See the note on _Type_list: a JSON null decodes as the empty set.
     _Type_set>>: "elemType" ~>
       "decodeElem" <~ ("v" ~> fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "elemType" @@ var "v") $
-      "arrResult" <~ (expectArray @@ var "value") $
-      Eithers.either
-        ("err" ~> left $ var "err")
-        ("arr" ~>
-          "decoded" <~ (Eithers.mapList (var "decodeElem") (var "arr")) $
-          Eithers.map ("elems" ~> Core.termSet $ Sets.fromList $ var "elems") (var "decoded"))
-        (var "arrResult"),
+      match _Value (var "value")
+        (Just $
+          Eithers.either
+            ("err" ~> left $ var "err")
+            ("arr" ~>
+              "decoded" <~ (Eithers.mapList (var "decodeElem") (var "arr")) $
+              Eithers.map ("elems" ~> Core.termSet $ Sets.fromList $ var "elems") (var "decoded"))
+            (expectArray @@ var "value")) [
+        _Value_null>>: constant $ right $ Core.termSet Sets.empty],
 
     -- Maybe: decoding depends on whether the inner type is itself Maybe
     --   Simple Maybe(T): null -> Nothing, any other value -> Just (decoded as T)
