@@ -62,6 +62,7 @@ import qualified Hydra.Sources.Test.Json.Parser as JsonParser
 import qualified Hydra.Sources.Test.Json.Roundtrip as JsonRoundtrip
 import qualified Hydra.Sources.Test.Json.Writer as JsonWriter
 import qualified Hydra.Sources.Test.Json.Yaml as JsonYaml
+import qualified Hydra.Sources.Test.Names as Names
 import qualified Hydra.Sources.Test.Hoisting.All as HoistingAll
 import qualified Hydra.Sources.Test.Hoisting.Cases as HoistingCases
 import qualified Hydra.Sources.Test.Hoisting.Let as HoistingLet
@@ -140,6 +141,7 @@ otherPairs = [
   (JsonRoundtrip.ns, JsonRoundtrip.allTests),
   (JsonWriter.ns, JsonWriter.allTests),
   (JsonYaml.ns, JsonYaml.allTests),
+  (Names.ns, Names.allTests),
   (Ordering.ns, Ordering.allTests),
   (Reduction.ns, Reduction.allTests),
   (Rewriting.ns, Rewriting.allTests),
@@ -170,6 +172,7 @@ testSuiteModules =
    Annotations.module_, Dependencies.module_, Differentiation.module_, EtaExpansion.module_, Formatting.module_,
    Generation.module_,
    JsonParser.module_, JsonRoundtrip.module_, JsonWriter.module_, JsonYaml.module_,
+   Names.module_,
    Reduction.module_, Rewriting.module_, Serialization.module_, Shredding.module_, Sorting.module_,
    Strip.module_, Variables.module_, Ordering.module_,
    -- Checking tests (including sub-modules)

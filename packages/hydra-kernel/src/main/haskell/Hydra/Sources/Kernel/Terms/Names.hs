@@ -3,10 +3,10 @@ module Hydra.Sources.Kernel.Terms.Names where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  chooseUniqueLabel, compactName, derivedBindingName, derivedDefinitionName, derivedModuleName,
-  freshName, freshNames, localNameOf, moduleNameOf, moduleNameToFilePath, nameToFilePath,
-  nameToUpperDashed, normalTypeVariable, pushSubtermStep, qname, qualifyName, restoreTrace,
-  unqualifyName)
+  chooseUniqueLabel, compactName, composeProvisionName, derivedBindingName, derivedDefinitionName,
+  derivedModuleName, freshName, freshNames, localNameOf, moduleNameOf, moduleNameToFilePath,
+  nameToFilePath, nameToUpperDashed, normalTypeVariable, pushSubtermStep, qname, qualifyName,
+  restoreTrace, unqualifyName)
 import qualified Hydra.Dsl.Paths    as Paths
 import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
@@ -74,6 +74,7 @@ module_ = Module {
    definitions = [
      toDefinition chooseUniqueLabel,
      toDefinition compactName,
+     toDefinition composeProvisionName,
      toDefinition derivedBindingName,
      toDefinition derivedDefinitionName,
      toDefinition derivedModuleName,
@@ -116,6 +117,20 @@ compactName = define "compactName" $
     "local">: Util.qualifiedNameLocal $ var "qualName"]
     $ Optionals.match (var "mns") (Core.unName $ var "name") (lambda "ns" $
           Optionals.match (Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "namespaces")) (var "local") (lambda "pre" $ Strings.concat $ list [var "pre", string ":", var "local"]))
+
+-- | Compose a provision's fully-qualified name from the name of its enclosing entity (a
+-- definition, module, or package) and the provision's local segment, mirroring how a
+-- definition's own name is composed from its module's name. This is the single shared
+-- composition rule used by both the spec generator (hydra.lib.lists.concat + "emptyLists"
+-- -> hydra.lib.lists.concat.emptyLists) and the test harness (matching a test case's
+-- provisions reference against a Provision's stored name).
+-- For example, composeProvisionName "hydra.lib.lists.concat" "emptyLists" ->
+--   "hydra.lib.lists.concat.emptyLists"
+composeProvisionName :: TypedTermDefinition (Name -> String -> Name)
+composeProvisionName = define "composeProvisionName" $
+  doc "Compose a provision's fully-qualified name from its enclosing entity's name and its local segment" $
+  "entityName" ~> "localName" ~>
+  Core.name (Strings.concat $ list [Core.unName (var "entityName"), string ".", var "localName"])
 
 -- | Generate a fully qualified binding name for a derived function (encoder, decoder,
 -- DSL helper, etc.) from a type/term name, given the category's namespace segments
