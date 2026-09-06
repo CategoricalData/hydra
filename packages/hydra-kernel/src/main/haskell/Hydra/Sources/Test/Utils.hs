@@ -121,10 +121,11 @@ inferTestCase = define "inferTestCase" $
     "name_">: project _TestCaseWithMetadata _TestCaseWithMetadata_name @@ var "tcm",
     "tcase">: project _TestCaseWithMetadata _TestCaseWithMetadata_case @@ var "tcm",
     "desc">: project _TestCaseWithMetadata _TestCaseWithMetadata_description @@ var "tcm",
-    "tags_">: project _TestCaseWithMetadata _TestCaseWithMetadata_tags @@ var "tcm"] $
+    "tags_">: project _TestCaseWithMetadata _TestCaseWithMetadata_tags @@ var "tcm",
+    "provisions_">: project _TestCaseWithMetadata _TestCaseWithMetadata_provisions @@ var "tcm"] $
     Eithers.map
       (lambda "inferredCase" $
-        Testing.testCaseWithMetadata (var "name_") (var "inferredCase") (var "desc") (var "tags_"))
+        Testing.testCaseWithMetadataAndProvisions (var "name_") (var "inferredCase") (var "desc") (var "tags_") (var "provisions_"))
       (Phantoms.right (var "tcase"))
 
 
