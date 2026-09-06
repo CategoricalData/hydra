@@ -13,7 +13,7 @@ import Hydra.Dsl.Testing hiding (
   effectfulTestCase,
   tag, testCaseEffectful, testCaseUniversal, testCaseWithMetadata,
   testCaseWithMetadataCase, testCaseWithMetadataDescription,
-  testCaseWithMetadataName, testCaseWithMetadataTags, testGroup,
+  testCaseWithMetadataName, testCaseWithMetadataProvisions, testCaseWithMetadataTags, testGroup,
   universalTestCase, unTag)
 import Hydra.Kernel
 import Hydra.Error.Core (InvalidTermError)
@@ -457,11 +457,15 @@ testCaseUniversal :: TypedTerm UniversalTestCase -> TypedTerm TestCase
 testCaseUniversal = inject _TestCase _TestCase_universal
 
 testCaseWithMetadata :: TypedTerm String -> TypedTerm TestCase -> TypedTerm (Maybe String) -> TypedTerm [Tag] -> TypedTerm TestCaseWithMetadata
-testCaseWithMetadata name tcase description tags = Phantoms.record _TestCaseWithMetadata [
+testCaseWithMetadata name tcase description tags = testCaseWithMetadataAndProvisions name tcase description tags (list ([] :: [TypedTerm Name]))
+
+testCaseWithMetadataAndProvisions :: TypedTerm String -> TypedTerm TestCase -> TypedTerm (Maybe String) -> TypedTerm [Tag] -> TypedTerm [Name] -> TypedTerm TestCaseWithMetadata
+testCaseWithMetadataAndProvisions name tcase description tags provisions = Phantoms.record _TestCaseWithMetadata [
   _TestCaseWithMetadata_name>>: name,
   _TestCaseWithMetadata_case>>: tcase,
   _TestCaseWithMetadata_description>>: description,
-  _TestCaseWithMetadata_tags>>: tags]
+  _TestCaseWithMetadata_tags>>: tags,
+  _TestCaseWithMetadata_provisions>>: provisions]
 
 testCaseWithMetadataCase :: TypedTerm (TestCaseWithMetadata -> TestCase)
 testCaseWithMetadataCase = Phantoms.project _TestCaseWithMetadata _TestCaseWithMetadata_case
@@ -471,6 +475,9 @@ testCaseWithMetadataDescription = Phantoms.project _TestCaseWithMetadata _TestCa
 
 testCaseWithMetadataName :: TypedTerm (TestCaseWithMetadata -> String)
 testCaseWithMetadataName = Phantoms.project _TestCaseWithMetadata _TestCaseWithMetadata_name
+
+testCaseWithMetadataProvisions :: TypedTerm (TestCaseWithMetadata -> [Name])
+testCaseWithMetadataProvisions = Phantoms.project _TestCaseWithMetadata _TestCaseWithMetadata_provisions
 
 testCaseWithMetadataTags :: TypedTerm (TestCaseWithMetadata -> [Tag])
 testCaseWithMetadataTags = Phantoms.project _TestCaseWithMetadata _TestCaseWithMetadata_tags

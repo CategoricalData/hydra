@@ -75,7 +75,12 @@ testCaseWithMetadata = define "TestCaseWithMetadata" $
       T.optional T.string,
     "tags">:
       doc "Zero or more tags for the test case" $
-      T.list tag]
+      T.list tag,
+    "provisions">:
+      doc ("The fully-qualified names of zero or more provisions (hydra.packaging.Provision) which"
+        ++ " this test case confirms. A provision is authoritative with zero, one, or many"
+        ++ " confirming tests.") $
+      T.list Core.name]
 
 testGroup :: TypeDefinition
 testGroup = define "TestGroup" $
