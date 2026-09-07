@@ -6,7 +6,6 @@ import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Lib.Equality as Equality
 import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Lib.Strings  as Strings
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
@@ -14,6 +13,7 @@ import           Prelude hiding ((++))
 import qualified Data.List                   as L
 
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
+import qualified Hydra.Sources.Build.Format as Format
 
 
 -- | The translingual language registry (#416 / registry): the single source of
@@ -46,8 +46,10 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns] L.++ kernelTypesModuleNames),
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "The translingual language registry: per-language build identity (name, coder package, family) as data, so the build drivers read language properties instead of hardcoding name literals. See https://github.com/CategoricalData/hydra/issues/416")}
+            -- #559 Cluster 2: depends on hydra.build.format for the LanguageProfile record type
+            -- (the profiles below are LanguageProfile record values, replacing the former tuples).
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, Format.ns] L.++ kernelTypesModuleNames),
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "The translingual language registry: per-language build identity (name, coder package, family) as LanguageProfile records, so the build drivers read language properties instead of hardcoding name literals. See https://github.com/CategoricalData/hydra/issues/416 and https://github.com/CategoricalData/hydra/issues/559")}
   where
    definitions = [
      toDefinition allLanguageNames,
@@ -84,24 +86,22 @@ module_ = Module {
 -- into every host. Byte-parity: the emitted registry.json is unchanged by this
 -- factoring — only the Haskell source is refactored to a shared source.
 
--- | The raw @(name, coderPackage, family)@ tuples, in native @ALL_LANGS@ order.
-languageProfileData :: [(String, String, String)]
-languageProfileData = [
-  ("haskell",     "hydra-haskell",    "haskell"),
-  ("java",        "hydra-java",       "jvm"),
-  ("python",      "hydra-python",     "python"),
-  ("scala",       "hydra-scala",      "jvm"),
-  ("go",          "hydra-go",         "go"),
-  ("typescript",  "hydra-typescript", "typescript"),
-  ("clojure",     "hydra-lisp",       "lisp"),
-  ("scheme",      "hydra-lisp",       "lisp"),
-  ("common-lisp", "hydra-lisp",       "lisp"),
-  ("emacs-lisp",  "hydra-lisp",       "lisp")]
-
--- | Every language name in native @ALL_LANGS@ order (raw): @map first@ over
--- 'languageProfileData'.
+-- | Every language name in native @ALL_LANGS@ order (raw @[String]@).
+--
+-- #559 Cluster 2 (slice 1): the former @languageProfileData@ @(name, coderPackage,
+-- family)@ TUPLES have been DELETED — the rich per-language identity (coderPackage,
+-- family, and the slices-2-4 fields) now lives ONCE, as the @languageProfiles@
+-- LanguageProfile RECORDS below. This raw name-list remains only as the name-set the
+-- native @languages.json@ emitter (@ManifestGeneration.writeLanguagesJson@) consumes
+-- alongside the other per-script scope lists (@lispDialectNameList@ etc.), in
+-- byte-identical native order. Fully single-sourcing these names FROM the generated
+-- registry (so the emitter reads no raw Haskell at all) is Q1a — a follow-up within
+-- this tranche, since it touches the emitter + every @languages.json@ consumer;
+-- slice 1 is a byte-parity refactor and keeps the name-list where the emitter reads it.
 allLanguageNameList :: [String]
-allLanguageNameList = fmap (\(n, _, _) -> n) languageProfileData
+allLanguageNameList = [
+  "haskell", "java", "python", "scala", "go", "typescript",
+  "clojure", "scheme", "common-lisp", "emacs-lisp"]
 
 -- | The Lisp-dialect names in native @lisp@-alias order (raw).
 lispDialectNameList :: [String]
@@ -128,20 +128,44 @@ inferenceBenchHostNameList = [
 benchDefaultNameList :: [String]
 benchDefaultNameList = ["haskell", "java", "python"]
 
-languageProfiles :: TypedTermDefinition [(String, String, String)]
+-- | The fully-qualified name of the LanguageProfile record type, written as a Name
+-- LITERAL (not the generated @_LanguageProfile@ constant) so this authoring source
+-- constructs the record WITHOUT importing generated code — 'Phantoms.record'/'project'
+-- take @AsName@, so a Name literal suffices (#559 Cluster 2; the
+-- generator-imports-generated concern is thereby avoided while still emitting a typed
+-- record term).
+languageProfileName :: Name
+languageProfileName = Name "hydra.build.format.LanguageProfile"
+
+-- | Construct one LanguageProfile record value from its three fields (slice-1 shape).
+-- All three fields are PLAIN strings (see hydra.build.format.LanguageProfile) — a
+-- byte-parity refactor of the former (name, coderPackage, family) tuple. Field names
+-- are raw strings ('(>:)' takes String). The Haskell-side phantom is the untyped
+-- 'Term' (the record's DSL type is LanguageProfile, enforced at the term/JSON level).
+languageProfile :: String -> String -> String -> TypedTerm Term
+languageProfile n cp fam = Phantoms.record languageProfileName [
+    "name"         Phantoms.>: string n,
+    "coderPackage" Phantoms.>: string cp,
+    "family"       Phantoms.>: string fam]
+
+-- | Per-language build identity as LanguageProfile RECORDS (#559 Cluster 2, replacing
+-- the former (name, coderPackage, family) tuples), in native ALL_LANGS order: the
+-- single source of language build identity. The emitted TERM is a list of records;
+-- the 'Term' phantom is the untyped escape hatch (see 'languageProfile').
+languageProfiles :: TypedTermDefinition [Term]
 languageProfiles = define "languageProfiles" $
-  doc "Per-language build identity as (name, coderPackage, family) triples, in native ALL_LANGS order: the single source of language names" $
+  doc "Per-language build identity as LanguageProfile records, in native ALL_LANGS order: the single source of language names" $
   list [
-    triple (string "haskell")     (string "hydra-haskell")    (string "haskell"),
-    triple (string "java")        (string "hydra-java")       (string "jvm"),
-    triple (string "python")      (string "hydra-python")     (string "python"),
-    triple (string "scala")       (string "hydra-scala")      (string "jvm"),
-    triple (string "go")          (string "hydra-go")         (string "go"),
-    triple (string "typescript")  (string "hydra-typescript") (string "typescript"),
-    triple (string "clojure")     (string "hydra-lisp")       (string "lisp"),
-    triple (string "scheme")      (string "hydra-lisp")       (string "lisp"),
-    triple (string "common-lisp") (string "hydra-lisp")       (string "lisp"),
-    triple (string "emacs-lisp")  (string "hydra-lisp")       (string "lisp")]
+    languageProfile "haskell"     "hydra-haskell"    "haskell",
+    languageProfile "java"        "hydra-java"       "jvm",
+    languageProfile "python"      "hydra-python"     "python",
+    languageProfile "scala"       "hydra-scala"      "jvm",
+    languageProfile "go"          "hydra-go"         "go",
+    languageProfile "typescript"  "hydra-typescript" "typescript",
+    languageProfile "clojure"     "hydra-lisp"       "lisp",
+    languageProfile "scheme"      "hydra-lisp"       "lisp",
+    languageProfile "common-lisp" "hydra-lisp"       "lisp",
+    languageProfile "emacs-lisp"  "hydra-lisp"       "lisp"]
 
 -- | Every language name in the registry, in registry order (the former @ALL_LANGS@
 -- bash constant): @map first languageProfiles@. Neutral logic uses this instead of
@@ -149,7 +173,21 @@ languageProfiles = define "languageProfiles" $
 allLanguageNames :: TypedTermDefinition [String]
 allLanguageNames = define "allLanguageNames" $
   doc "Every language name in the registry (the former ALL_LANGS constant)" $
-  Lists.map ("p" ~> Pairs.first (var "p")) (asTerm languageProfiles)
+  Lists.map ("p" ~> profileName @@ var "p") (asTerm languageProfiles)
+
+-- | Project the @name@ field of a LanguageProfile record (a plain string). Field
+-- name as a Name LITERAL (project's field arg is @AsName@, which String is not — but
+-- Name is), so still no generated import.
+profileName :: TypedTerm (a -> String)
+profileName = Phantoms.project languageProfileName (Name "name")
+
+-- | Project the @coderPackage@ field of a LanguageProfile record (a plain string).
+profileCoderPackage :: TypedTerm (a -> String)
+profileCoderPackage = Phantoms.project languageProfileName (Name "coderPackage")
+
+-- | Project the @family@ field of a LanguageProfile record (a plain string).
+profileFamily :: TypedTerm (a -> String)
+profileFamily = Phantoms.project languageProfileName (Name "family")
 
 -- | The four Lisp-dialect names in the order the native @lisp@ alias expands them
 -- (@clojure common-lisp emacs-lisp scheme@ — see @bin/sync.sh@ expand_langs, which
@@ -211,10 +249,10 @@ coderPackageFor = define "coderPackageFor" $
   "name" ~>
     Optionals.match
       (Lists.head
-        (Lists.filter ("p" ~> Equality.equal (Pairs.first (var "p")) (var "name"))
+        (Lists.filter ("p" ~> Equality.equal (profileName @@ var "p") (var "name"))
           (asTerm languageProfiles)))
       (Strings.concat2 (string "hydra-") (var "name"))
-      ("p" ~> Pairs.first (Pairs.second (var "p")))
+      ("p" ~> profileCoderPackage @@ var "p")
 
 -- | The family of a language: the @family@ field of its profile, or the empty
 -- string for an unknown name.
@@ -224,10 +262,10 @@ familyFor = define "familyFor" $
   "name" ~>
     Optionals.match
       (Lists.head
-        (Lists.filter ("p" ~> Equality.equal (Pairs.first (var "p")) (var "name"))
+        (Lists.filter ("p" ~> Equality.equal (profileName @@ var "p") (var "name"))
           (asTerm languageProfiles)))
       (string "")
-      ("p" ~> Pairs.second (Pairs.second (var "p")))
+      ("p" ~> profileFamily @@ var "p")
 
 -- | Whether a language is a Lisp dialect (family @lisp@): the data-driven form of
 -- the @clojure|scheme|common-lisp|emacs-lisp@ case arm that recurs across the

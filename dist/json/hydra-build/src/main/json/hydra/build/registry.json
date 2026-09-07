@@ -1,12 +1,13 @@
 {
   "name": "hydra.build.registry",
   "metadata": {
-    "description": "The translingual language registry: per-language build identity (name, coder package, family) as data, so the build drivers read language properties instead of hardcoding name literals. See https://github.com/CategoricalData/hydra/issues/416",
+    "description": "The translingual language registry: per-language build identity (name, coder package, family) as LanguageProfile records, so the build drivers read language properties instead of hardcoding name literals. See https://github.com/CategoricalData/hydra/issues/416 and https://github.com/CategoricalData/hydra/issues/559",
     "comments": [],
     "seeAlso": [],
     "provisions": []},
   "dependencies": [
     {"module": "hydra.strip"},
+    {"module": "hydra.build.format"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
@@ -50,22 +51,15 @@
                     "function": {
                       "typeApplication": {
                         "body": {
-                          "typeApplication": {
-                            "body": {"variable": "hydra.lib.lists.map"},
-                            "type": {
-                              "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}},
+                          "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.build.format.LanguageProfile"}}},
                         "type": {"literal": "string"}}},
                     "argument": {
                       "lambda": {
                         "parameter": "p",
-                        "domain": {
-                          "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                        "domain": {"variable": "hydra.build.format.LanguageProfile"},
                         "body": {
                           "application": {
-                            "function": {
-                              "typeApplication": {
-                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": "string"}}},
-                                "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                            "function": {"project": {"typeName": "hydra.build.format.LanguageProfile", "fieldName": "name"}},
                             "argument": {"variable": "p"}}}}}}},
                 "argument": {"variable": "hydra.build.registry.languageProfiles"}}},
             "annotation": {
@@ -127,32 +121,22 @@
                             "function": {
                               "typeApplication": {
                                 "body": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.lib.optionals.match"},
-                                    "type": {
-                                      "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}},
+                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.build.format.LanguageProfile"}}},
                                 "type": {"literal": "string"}}},
                             "argument": {
                               "application": {
                                 "function": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.lib.lists.head"},
-                                    "type": {
-                                      "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}},
+                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"variable": "hydra.build.format.LanguageProfile"}}},
                                 "argument": {
                                   "application": {
                                     "function": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.lists.filter"},
-                                            "type": {
-                                              "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.filter"}, "type": {"variable": "hydra.build.format.LanguageProfile"}}},
                                         "argument": {
                                           "lambda": {
                                             "parameter": "p",
-                                            "domain": {
-                                              "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                                            "domain": {"variable": "hydra.build.format.LanguageProfile"},
                                             "body": {
                                               "application": {
                                                 "function": {
@@ -160,10 +144,7 @@
                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": "string"}}},
-                                                            "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                                                        "function": {"project": {"typeName": "hydra.build.format.LanguageProfile", "fieldName": "name"}},
                                                         "argument": {"variable": "p"}}}}},
                                                 "argument": {"variable": "name"}}}}}}},
                                     "argument": {"variable": "hydra.build.registry.languageProfiles"}}}}}}},
@@ -174,21 +155,11 @@
                     "argument": {
                       "lambda": {
                         "parameter": "p",
-                        "domain": {
-                          "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                        "domain": {"variable": "hydra.build.format.LanguageProfile"},
                         "body": {
                           "application": {
-                            "function": {
-                              "typeApplication": {
-                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}},
-                            "argument": {
-                              "application": {
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": "string"}}},
-                                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
-                                "argument": {"variable": "p"}}}}}}}}}}},
+                            "function": {"project": {"typeName": "hydra.build.format.LanguageProfile", "fieldName": "coderPackage"}},
+                            "argument": {"variable": "p"}}}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -216,32 +187,22 @@
                             "function": {
                               "typeApplication": {
                                 "body": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.lib.optionals.match"},
-                                    "type": {
-                                      "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}},
+                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.build.format.LanguageProfile"}}},
                                 "type": {"literal": "string"}}},
                             "argument": {
                               "application": {
                                 "function": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.lib.lists.head"},
-                                    "type": {
-                                      "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}},
+                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"variable": "hydra.build.format.LanguageProfile"}}},
                                 "argument": {
                                   "application": {
                                     "function": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {
-                                            "body": {"variable": "hydra.lib.lists.filter"},
-                                            "type": {
-                                              "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}},
+                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.filter"}, "type": {"variable": "hydra.build.format.LanguageProfile"}}},
                                         "argument": {
                                           "lambda": {
                                             "parameter": "p",
-                                            "domain": {
-                                              "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                                            "domain": {"variable": "hydra.build.format.LanguageProfile"},
                                             "body": {
                                               "application": {
                                                 "function": {
@@ -249,10 +210,7 @@
                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": "string"}}},
                                                     "argument": {
                                                       "application": {
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": "string"}}},
-                                                            "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                                                        "function": {"project": {"typeName": "hydra.build.format.LanguageProfile", "fieldName": "name"}},
                                                         "argument": {"variable": "p"}}}}},
                                                 "argument": {"variable": "name"}}}}}}},
                                     "argument": {"variable": "hydra.build.registry.languageProfiles"}}}}}}},
@@ -260,21 +218,11 @@
                     "argument": {
                       "lambda": {
                         "parameter": "p",
-                        "domain": {
-                          "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                        "domain": {"variable": "hydra.build.format.LanguageProfile"},
                         "body": {
                           "application": {
-                            "function": {
-                              "typeApplication": {
-                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}},
-                            "argument": {
-                              "application": {
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": "string"}}},
-                                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
-                                "argument": {"variable": "p"}}}}}}}}}}},
+                            "function": {"project": {"typeName": "hydra.build.format.LanguageProfile", "fieldName": "family"}},
+                            "argument": {"variable": "p"}}}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -331,181 +279,88 @@
         "signature": {
           "typeParameters": [],
           "parameters": [],
-          "result": {
-            "type": {
-              "list": {
-                "pair": {"first": {"literal": "string"}, "second": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}}}},
+          "result": {"type": {"list": {"variable": "hydra.build.format.LanguageProfile"}}}},
         "body": {
           "annotated": {
             "body": {
               "list": [
                 {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {
-                        "body": {
-                          "pair": {
-                            "first": {"literal": {"string": "haskell"}},
-                            "second": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"pair": {"first": {"literal": {"string": "hydra-haskell"}}, "second": {"literal": {"string": "haskell"}}}},
-                                    "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}}}},
-                        "type": {"literal": "string"}}},
-                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                  "record": {
+                    "typeName": "hydra.build.format.LanguageProfile",
+                    "fields": [
+                      {"name": "name", "term": {"literal": {"string": "haskell"}}},
+                      {"name": "coderPackage", "term": {"literal": {"string": "hydra-haskell"}}},
+                      {"name": "family", "term": {"literal": {"string": "haskell"}}}]}},
                 {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {
-                        "body": {
-                          "pair": {
-                            "first": {"literal": {"string": "java"}},
-                            "second": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"pair": {"first": {"literal": {"string": "hydra-java"}}, "second": {"literal": {"string": "jvm"}}}},
-                                    "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}}}},
-                        "type": {"literal": "string"}}},
-                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                  "record": {
+                    "typeName": "hydra.build.format.LanguageProfile",
+                    "fields": [
+                      {"name": "name", "term": {"literal": {"string": "java"}}},
+                      {"name": "coderPackage", "term": {"literal": {"string": "hydra-java"}}},
+                      {"name": "family", "term": {"literal": {"string": "jvm"}}}]}},
                 {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {
-                        "body": {
-                          "pair": {
-                            "first": {"literal": {"string": "python"}},
-                            "second": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"pair": {"first": {"literal": {"string": "hydra-python"}}, "second": {"literal": {"string": "python"}}}},
-                                    "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}}}},
-                        "type": {"literal": "string"}}},
-                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                  "record": {
+                    "typeName": "hydra.build.format.LanguageProfile",
+                    "fields": [
+                      {"name": "name", "term": {"literal": {"string": "python"}}},
+                      {"name": "coderPackage", "term": {"literal": {"string": "hydra-python"}}},
+                      {"name": "family", "term": {"literal": {"string": "python"}}}]}},
                 {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {
-                        "body": {
-                          "pair": {
-                            "first": {"literal": {"string": "scala"}},
-                            "second": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"pair": {"first": {"literal": {"string": "hydra-scala"}}, "second": {"literal": {"string": "jvm"}}}},
-                                    "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}}}},
-                        "type": {"literal": "string"}}},
-                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                  "record": {
+                    "typeName": "hydra.build.format.LanguageProfile",
+                    "fields": [
+                      {"name": "name", "term": {"literal": {"string": "scala"}}},
+                      {"name": "coderPackage", "term": {"literal": {"string": "hydra-scala"}}},
+                      {"name": "family", "term": {"literal": {"string": "jvm"}}}]}},
                 {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {
-                        "body": {
-                          "pair": {
-                            "first": {"literal": {"string": "go"}},
-                            "second": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"pair": {"first": {"literal": {"string": "hydra-go"}}, "second": {"literal": {"string": "go"}}}},
-                                    "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}}}},
-                        "type": {"literal": "string"}}},
-                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                  "record": {
+                    "typeName": "hydra.build.format.LanguageProfile",
+                    "fields": [
+                      {"name": "name", "term": {"literal": {"string": "go"}}},
+                      {"name": "coderPackage", "term": {"literal": {"string": "hydra-go"}}},
+                      {"name": "family", "term": {"literal": {"string": "go"}}}]}},
                 {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {
-                        "body": {
-                          "pair": {
-                            "first": {"literal": {"string": "typescript"}},
-                            "second": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"pair": {"first": {"literal": {"string": "hydra-typescript"}}, "second": {"literal": {"string": "typescript"}}}},
-                                    "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}}}},
-                        "type": {"literal": "string"}}},
-                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                  "record": {
+                    "typeName": "hydra.build.format.LanguageProfile",
+                    "fields": [
+                      {"name": "name", "term": {"literal": {"string": "typescript"}}},
+                      {"name": "coderPackage", "term": {"literal": {"string": "hydra-typescript"}}},
+                      {"name": "family", "term": {"literal": {"string": "typescript"}}}]}},
                 {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {
-                        "body": {
-                          "pair": {
-                            "first": {"literal": {"string": "clojure"}},
-                            "second": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"pair": {"first": {"literal": {"string": "hydra-lisp"}}, "second": {"literal": {"string": "lisp"}}}},
-                                    "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}}}},
-                        "type": {"literal": "string"}}},
-                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                  "record": {
+                    "typeName": "hydra.build.format.LanguageProfile",
+                    "fields": [
+                      {"name": "name", "term": {"literal": {"string": "clojure"}}},
+                      {"name": "coderPackage", "term": {"literal": {"string": "hydra-lisp"}}},
+                      {"name": "family", "term": {"literal": {"string": "lisp"}}}]}},
                 {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {
-                        "body": {
-                          "pair": {
-                            "first": {"literal": {"string": "scheme"}},
-                            "second": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"pair": {"first": {"literal": {"string": "hydra-lisp"}}, "second": {"literal": {"string": "lisp"}}}},
-                                    "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}}}},
-                        "type": {"literal": "string"}}},
-                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                  "record": {
+                    "typeName": "hydra.build.format.LanguageProfile",
+                    "fields": [
+                      {"name": "name", "term": {"literal": {"string": "scheme"}}},
+                      {"name": "coderPackage", "term": {"literal": {"string": "hydra-lisp"}}},
+                      {"name": "family", "term": {"literal": {"string": "lisp"}}}]}},
                 {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {
-                        "body": {
-                          "pair": {
-                            "first": {"literal": {"string": "common-lisp"}},
-                            "second": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"pair": {"first": {"literal": {"string": "hydra-lisp"}}, "second": {"literal": {"string": "lisp"}}}},
-                                    "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}}}},
-                        "type": {"literal": "string"}}},
-                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}},
+                  "record": {
+                    "typeName": "hydra.build.format.LanguageProfile",
+                    "fields": [
+                      {"name": "name", "term": {"literal": {"string": "common-lisp"}}},
+                      {"name": "coderPackage", "term": {"literal": {"string": "hydra-lisp"}}},
+                      {"name": "family", "term": {"literal": {"string": "lisp"}}}]}},
                 {
-                  "typeApplication": {
-                    "body": {
-                      "typeApplication": {
-                        "body": {
-                          "pair": {
-                            "first": {"literal": {"string": "emacs-lisp"}},
-                            "second": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {
-                                    "body": {"pair": {"first": {"literal": {"string": "hydra-lisp"}}, "second": {"literal": {"string": "lisp"}}}},
-                                    "type": {"literal": "string"}}},
-                                "type": {"literal": "string"}}}}},
-                        "type": {"literal": "string"}}},
-                    "type": {"pair": {"first": {"literal": "string"}, "second": {"literal": "string"}}}}}]},
+                  "record": {
+                    "typeName": "hydra.build.format.LanguageProfile",
+                    "fields": [
+                      {"name": "name", "term": {"literal": {"string": "emacs-lisp"}}},
+                      {"name": "coderPackage", "term": {"literal": {"string": "hydra-lisp"}}},
+                      {"name": "family", "term": {"literal": {"string": "lisp"}}}]}}]},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {
-                      "string": "Per-language build identity as (name, coderPackage, family) triples, in native ALL_LANGS order: the single source of language names"}}}]}}}}},
+                      "string": "Per-language build identity as LanguageProfile records, in native ALL_LANGS order: the single source of language names"}}}]}}}}},
     {
       "term": {
         "name": "hydra.build.registry.lispDialectNames",

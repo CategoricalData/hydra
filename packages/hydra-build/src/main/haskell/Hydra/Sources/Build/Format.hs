@@ -4,6 +4,7 @@ module Hydra.Sources.Build.Format where
 import           Hydra.Kernel                    hiding (
   definitionNameConventionProfile, definitionValidationProfile, digestEntry, digestKind,
   documentationProfile, generation, generationMode, hostOverride, inputDigest, languageName,
+  languageProfile,
   moduleValidationProfile, outputDigest, packageDescriptor, packageManifest,
   packageValidationConfiguration, packageValidationProfile, repositoryDescriptor, severity,
   sha256Hash, termValidationProfile, typeValidationProfile)
@@ -48,6 +49,7 @@ module_ = Module {
       hostOverride,
       inputDigest,
       languageName,
+      languageProfile,
       moduleValidationProfile,
       outputDigest,
       packageDescriptor,
@@ -213,6 +215,33 @@ languageName :: TypeDefinition
 languageName = define "LanguageName" $
   doc "The name of a source or target language in Hydra's build system, e.g. \"haskell\", \"java\", or \"python\"" $
   T.wrap T.string
+
+-- | Per-language build identity (#559 Cluster 2): the registry record replacing the
+-- former (name, coderPackage, family) tuple in hydra.build.registry. This slice-1
+-- shape carries only the existing three fields (byte-parity refactor); slices 2-4
+-- add coderSource, sourceSet, publish/hostConsumption, and toolchain-entrypoint
+-- fields, so that adding a build host becomes adding one LanguageProfile record with
+-- zero edits to any script's control flow (the #559 acceptance test).
+languageProfile :: TypeDefinition
+languageProfile = define "LanguageProfile" $
+  doc "The build identity of a source/target language: how the build system treats it. See https://github.com/CategoricalData/hydra/issues/559" $
+  T.record [
+    -- Slice-1 fields are PLAIN strings, matching the raw-string values of the
+    -- former (name, coderPackage, family) tuple exactly (a byte-parity refactor).
+    -- Refining `name`→LanguageName / `coderPackage`→PackageName is a deliberate
+    -- later slice; a wrapped-newtype field here forces every value through a
+    -- wrap-inject + the generated _LanguageName constant (generator-imports-generated)
+    -- for no slice-1 benefit, and self-inference rejects a raw string in a
+    -- newtype-typed field ("Cannot unify LanguageName with string").
+    "name">:
+      doc "The canonical language token, e.g. \"haskell\", \"java\", \"clojure\""
+      T.string,
+    "coderPackage">:
+      doc "The distribution package the language's coder lives in (the four Lisp dialects share hydra-lisp)"
+      T.string,
+    "family">:
+      doc "The build-treatment group the language belongs to, e.g. \"jvm\", \"python\", \"lisp\" (an open string: adding a host must not edit a type)"
+      T.string]
 
 moduleValidationProfile :: TypeDefinition
 moduleValidationProfile = define "ModuleValidationProfile" $

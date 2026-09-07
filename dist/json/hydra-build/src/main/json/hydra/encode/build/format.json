@@ -1207,6 +1207,107 @@
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.build.format.LanguageName"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.encode.build.format.languageProfile",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.build.format.LanguageProfile"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {"variable": "hydra.build.format.LanguageProfile"},
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.Term",
+                    "field": {
+                      "name": "record",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.Record",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.build.format.LanguageProfile"}}}}},
+                            {
+                              "name": "fields",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "name"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "function": {
+                                                "lambda": {
+                                                  "parameter": "x",
+                                                  "domain": {"literal": "string"},
+                                                  "body": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"variable": "x"}}}}}}}}},
+                                              "argument": {
+                                                "application": {
+                                                  "function": {"project": {"typeName": "hydra.build.format.LanguageProfile", "fieldName": "name"}},
+                                                  "argument": {"variable": "x"}}}}}}]}},
+                                  {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "coderPackage"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "function": {
+                                                "lambda": {
+                                                  "parameter": "x",
+                                                  "domain": {"literal": "string"},
+                                                  "body": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"variable": "x"}}}}}}}}},
+                                              "argument": {
+                                                "application": {
+                                                  "function": {"project": {"typeName": "hydra.build.format.LanguageProfile", "fieldName": "coderPackage"}},
+                                                  "argument": {"variable": "x"}}}}}}]}},
+                                  {
+                                    "record": {
+                                      "typeName": "hydra.core.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "family"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "function": {
+                                                "lambda": {
+                                                  "parameter": "x",
+                                                  "domain": {"literal": "string"},
+                                                  "body": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.Term",
+                                                      "field": {
+                                                        "name": "literal",
+                                                        "term": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "string", "term": {"variable": "x"}}}}}}}}},
+                                              "argument": {
+                                                "application": {
+                                                  "function": {"project": {"typeName": "hydra.build.format.LanguageProfile", "fieldName": "family"}},
+                                                  "argument": {"variable": "x"}}}}}}]}}]}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.build.format.LanguageProfile"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.encode.build.format.moduleValidationProfile",
         "signature": {
           "typeParameters": [],

@@ -447,6 +447,56 @@
           "constraints": []}}},
     {
       "type": {
+        "name": "hydra.build.format.LanguageProfile",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The canonical language token, e.g. \"haskell\", \"java\", \"clojure\""}}}]}}}},
+                  {
+                    "name": "coderPackage",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "The distribution package the language's coder lives in (the four Lisp dialects share hydra-lisp)"}}}]}}}},
+                  {
+                    "name": "family",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The build-treatment group the language belongs to, e.g. \"jvm\", \"python\", \"lisp\" (an open string: adding a host must not edit a type)"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "The build identity of a source/target language: how the build system treats it. See https://github.com/CategoricalData/hydra/issues/559"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
         "name": "hydra.build.format.ModuleValidationProfile",
         "body": {
           "variables": [],
