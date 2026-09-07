@@ -519,9 +519,11 @@ subtermsWithStepsGroup = subgroup "subtermsWithSteps" [
       (set [int32 1, int32 2, int32 3])
       (list [int32 1, int32 2, int32 3]),
 
-    subtermsWithStepsCase "map keys and values are all found"
+    -- Each map entry is a single mapEntry child, reached as a constructed pair (k, v); the key and
+    -- value are then children of that pair via pairFirst/pairSecond (#716).
+    subtermsWithStepsCase "map entries are all found as pairs"
       (Core.termMap (Phantoms.map (M.fromList [(nStr "a", int32 1), (nStr "b", int32 2)])))
-      (list [nStr "a", int32 1, nStr "b", int32 2])]
+      (list [pair (nStr "a") (int32 1), pair (nStr "b") (int32 2)])]
   where
     nStr s = Core.termLiteral (Core.literalString (Phantoms.string s))
 

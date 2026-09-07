@@ -61,7 +61,7 @@ import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Shredding      as Shredding
+import qualified Hydra.Sources.Kernel.Terms.Subterms       as Subterms
 import qualified Hydra.Sources.Kernel.Terms.Print.Paths as PrintPaths
 import qualified Hydra.Sources.Kernel.Terms.Print.Core      as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Print.Graph     as PrintGraph
@@ -92,10 +92,11 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([PrintPaths.ns, Names.ns, Rewriting.ns, Shredding.ns] L.++ (DotSyntax.ns:kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([PrintPaths.ns, Names.ns, Rewriting.ns, Subterms.ns] L.++ (DotSyntax.ns:kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for converting Hydra terms to Graphviz DOT graphs")}
   where
     definitions = [
+      toDefinition collectLetRefs,
       toDefinition graphToSubtermDotGraph,
       toDefinition graphToSubtermDotStmts,
       toDefinition labelAttr,
@@ -115,6 +116,30 @@ module_ = Module {
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
+-- | Walk a term-graph node's inline tree, collecting each let-reference to another binding as a
+--   (target binding name, printed occurrence path) pair. Reference links carry the target; subterm links
+--   recurse into the child (extending the path by the link's step). Attribute links contribute nothing.
+collectLetRefs :: TypedTermDefinition (SubtermPath -> TermNode -> [(Name, String)])
+collectLetRefs = define "collectLetRefs" $
+  doc "Collect (target binding, printed path) for every let-reference in a term node's tree" $
+  "path" ~> "node" ~>
+  "steps" <~ (unwrap _SubtermPath @@ var "path") $
+  Lists.concat (Lists.map
+    ("link" ~> match _TermLink (var "link")
+      (Just $ list ([] :: [TypedTerm (Name, String)])) [
+      _TermLink_reference>>: "rl" ~>
+        match _TermReference (project _TermReferenceLink _TermReferenceLink_target @@ var "rl")
+          (Just $ list ([] :: [TypedTerm (Name, String)])) [
+          _TermReference_let>>: "lv" ~> list [pair
+            (project _LetVariableReference _LetVariableReference_variable @@ var "lv")
+            (PrintPaths.subtermPath @@ (Paths.subtermPath $ Lists.concat2 (var "steps")
+              (list [project _TermReferenceLink _TermReferenceLink_step @@ var "rl"])))]],
+      _TermLink_subterm>>: "sl" ~>
+        collectLetRefs
+          @@ (Paths.subtermPath $ Lists.concat2 (var "steps") (list [project _SubtermLink _SubtermLink_step @@ var "sl"]))
+          @@ (project _SubtermLink _SubtermLink_child @@ var "sl")])
+    (project _TermNode _TermNode_links @@ var "node"))
+
 -- | Convert a typed graph to a subterm-style (link-view) DOT graph
 graphToSubtermDotGraph :: TypedTermDefinition (Graph -> Dot.Graph)
 graphToSubtermDotGraph = define "graphToSubtermDotGraph" $
@@ -126,55 +151,51 @@ graphToSubtermDotGraph = define "graphToSubtermDotGraph" $
       Dot._Graph_id>>: nothing,
       Dot._Graph_statements>>: graphToSubtermDotStmts @@ standardNamespaces @@ var "graph"]
 
--- | Convert a typed graph to subterm-style (link-view) DOT statements.
---   The graph is shredded (Hydra.Shredding.shredGraph) into path-addressed links; each node becomes a
---   DOT node (labelled by its compacted, uniquified name) and each edge-link a DOT edge labelled by its
---   printed path. Node labelling lives here in the coder, not in the shredder. A shredding failure
---   (an untyped or ill-formed graph) yields no statements.
+-- | Convert a typed graph to binding-level (cross-reference) DOT statements over the term graph.
+--   The graph is built into a term graph (Hydra.Subterms.graphToTermGraph); each root binding becomes a
+--   DOT node (labelled by its compacted, uniquified name), and each let-reference from one binding's tree
+--   to another binding becomes a DOT edge labelled by the occurrence path. Node labelling lives here in
+--   the coder, not in the builder. A build failure (an untyped or ill-formed graph) yields no statements.
 graphToSubtermDotStmts :: TypedTermDefinition (M.Map ModuleName String -> Graph -> [Dot.Stmt])
 graphToSubtermDotStmts = define "graphToSubtermDotStmts" $
-  doc "Convert a typed graph to subterm-style (link-view) DOT statements" $
+  doc "Convert a typed graph to binding-level DOT statements over the term graph" $
   "namespaces" ~> "graph" ~>
     Eithers.either
       (constant $ list ([] :: [TypedTerm Dot.Stmt]))
-      ("sg" ~> lets [
-        "nodes">: project _SubtermGraph _SubtermGraph_nodes @@ var "sg",
-        -- Assign a unique DOT label to each node name (labelling is the coder's job).
+      ("tg" ~> lets [
+        "roots">: project _TermGraph _TermGraph_roots @@ var "tg",
+        "names">: Maps.keys (var "roots" :: TypedTerm (M.Map Name TermNode)),
+        -- Assign a unique DOT label to each binding name (labelling is the coder's job).
         "labelsVisited">: Lists.foldl
-          ("acc" ~> "node" ~> lets [
+          ("acc" ~> "name" ~> lets [
             "accLabels">: ((Pairs.first $ var "acc") :: TypedTerm (M.Map Name String)),
             "accVisited">: ((Pairs.second $ var "acc") :: TypedTerm (S.Set String)),
-            "name">: project _SubtermNode _SubtermNode_name @@ var "node",
             "raw">: Names.compactName @@ var "namespaces" @@ var "name",
             "uniq">: Names.chooseUniqueLabel @@ var "accVisited" @@ var "raw"]
             $ pair
                 (Maps.insert (var "name" :: TypedTerm Name) (var "uniq") (var "accLabels"))
                 (Sets.insert (var "uniq" :: TypedTerm String) (var "accVisited")))
           (pair (Maps.empty :: TypedTerm (M.Map Name String)) (Sets.empty :: TypedTerm (S.Set String)))
-          (var "nodes"),
+          (var "names"),
         "labels">: ((Pairs.first $ var "labelsVisited") :: TypedTerm (M.Map Name String)),
         "labelOf">: "name" ~> Optionals.withDefault (Core.unName $ var "name") (Maps.lookup (var "name" :: TypedTerm Name) (var "labels")),
-        "nodeStmt">: "node" ~>
+        "nodeStmt">: "name" ~>
           inject Dot._Stmt Dot._Stmt_node (record Dot._NodeStmt [
-            Dot._NodeStmt_id>>: toNodeId @@ wrap Dot._Id (var "labelOf" @@ (project _SubtermNode _SubtermNode_name @@ var "node")),
-            Dot._NodeStmt_attributes>>: just $ wrap Dot._AttrList (list [list [labelAttr @@ (var "labelOf" @@ (project _SubtermNode _SubtermNode_name @@ var "node"))]])]),
-        -- One DOT edge per edge-link of a node: source node -> referenced binding, labelled by path.
-        "edgeStmtsForNode">: "node" ~> lets [
-          "srcLabel">: var "labelOf" @@ (project _SubtermNode _SubtermNode_name @@ var "node"),
-          "links">: project _SubtermNode _SubtermNode_links @@ var "node"]
-          $ Optionals.mapOptional
-            ("link" ~> match _SubtermLink (var "link")
-              (Just nothing) [
-              _SubtermLink_edge>>: "e" ~> lets [
-                "tgtLabel">: var "labelOf" @@ (project _SubtermEdge _SubtermEdge_target @@ var "e"),
-                "showPath">: PrintPaths.subtermPath @@ (project _SubtermEdge _SubtermEdge_path @@ var "e")]
-                $ just $ toEdgeStmt @@ wrap Dot._Id (var "srcLabel") @@ wrap Dot._Id (var "tgtLabel") @@
-                    (just $ wrap Dot._AttrList (list [list [labelAttr @@ var "showPath"]]))])
-            (var "links")]
+            Dot._NodeStmt_id>>: toNodeId @@ wrap Dot._Id (var "labelOf" @@ var "name"),
+            Dot._NodeStmt_attributes>>: just $ wrap Dot._AttrList (list [list [labelAttr @@ (var "labelOf" @@ var "name")]])]),
+        -- One DOT edge per let-reference (to another binding) found by walking a root's node tree.
+        "edgeStmtsForRoot">: "nm" ~> "node" ~> lets [
+          "srcLabel">: var "labelOf" @@ var "nm"]
+          $ Lists.map
+            ("nt" ~> toEdgeStmt @@ wrap Dot._Id (var "srcLabel")
+                @@ wrap Dot._Id (var "labelOf" @@ (Pairs.first $ var "nt"))
+                @@ (just $ wrap Dot._AttrList (list [list [labelAttr @@ (Pairs.second $ var "nt")]])))
+            (collectLetRefs @@ (Paths.subtermPath $ list ([] :: [TypedTerm SubtermStep])) @@ var "node")]
         $ Lists.concat2
-            (Lists.map (var "nodeStmt") (var "nodes"))
-            (Lists.concat (Lists.map (var "edgeStmtsForNode") (var "nodes"))))
-      (Shredding.shredGraph @@ var "graph")
+            (Lists.map (var "nodeStmt") (var "names"))
+            (Lists.concat (Lists.map ("nt" ~> var "edgeStmtsForRoot" @@ (Pairs.first $ var "nt") @@ (Pairs.second $ var "nt"))
+              (Maps.toList (var "roots" :: TypedTerm (M.Map Name TermNode))))))
+      (Subterms.graphToTermGraph @@ var "graph")
 
 -- | Create a label attribute equality pair
 labelAttr :: TypedTermDefinition (String -> Dot.EqualityPair)

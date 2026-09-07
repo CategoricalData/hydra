@@ -73,7 +73,7 @@ import qualified Hydra.Sources.Test.Rewriting as Rewriting
 import qualified Hydra.Sources.Test.Serialization as Serialization
 import qualified Hydra.Sources.Test.Sorting as Sorting
 import qualified Hydra.Sources.Test.Strip as Strip
-import qualified Hydra.Sources.Test.Shredding as Shredding
+import qualified Hydra.Sources.Test.Subterms as Subterms
 import qualified Hydra.Sources.Test.Substitution as Substitution
 import qualified Hydra.Sources.Test.Unification as Unification
 import qualified Hydra.Sources.Test.Validate.All as ValidateAll
@@ -146,9 +146,9 @@ otherPairs = [
   (Reduction.ns, Reduction.allTests),
   (Rewriting.ns, Rewriting.allTests),
   (Serialization.ns, Serialization.allTests),
-  (Shredding.ns, Shredding.allTests),
   (Sorting.ns, Sorting.allTests),
   (Strip.ns, Strip.allTests),
+  (Subterms.ns, Subterms.allTests),
   (Substitution.ns, Substitution.allTests),
   (Unification.ns, Unification.allTests),
   (ValidateAll.ns, ValidateAll.allTests),
@@ -173,8 +173,8 @@ testSuiteModules =
    Generation.module_,
    JsonParser.module_, JsonRoundtrip.module_, JsonWriter.module_, JsonYaml.module_,
    Names.module_,
-   Reduction.module_, Rewriting.module_, Serialization.module_, Shredding.module_, Sorting.module_,
-   Strip.module_, Variables.module_, Ordering.module_,
+   Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
+   Strip.module_, Subterms.module_, Variables.module_, Ordering.module_,
    -- Checking tests (including sub-modules)
    CheckingAll.module_,
    CheckingAdvanced.module_, CheckingAlgebraicTypes.module_, CheckingCollections.module_,
