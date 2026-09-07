@@ -419,6 +419,16 @@
                               "key": {"variable": "description"},
                               "value": {"literal": {"string": "A package whose name does not match the package-name naming convention"}}}]}}}},
                   {
+                    "name": "moduleInMultiplePackages",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.error.packaging.ModuleInMultiplePackagesError"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A module namespace declared by more than one package"}}}]}}}},
+                  {
                     "name": "undeclaredDependency",
                     "type": {
                       "annotated": {
@@ -491,6 +501,53 @@
                     "value": {
                       "literal": {
                         "string": "A top-level definition whose term (or type, for type definitions) lacks a description annotation. Every definition in a Hydra module is expected to be wrapped in a doc \"...\" annotation at its top level."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.error.packaging.ModuleInMultiplePackagesError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "moduleName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.ModuleName"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The module namespace declared by more than one package"}}}]}}}},
+                  {
+                    "name": "firstPackage",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.PackageName"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the first package declaring the module"}}}]}}}},
+                  {
+                    "name": "secondPackage",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.packaging.PackageName"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the second package declaring the module"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A module namespace declared by more than one package. Module-to-package routing requires each package's declared module set to partition the module universe; a namespace declared by two packages would otherwise be routed to one of them arbitrarily, with the other declaration silently ignored."}}}]}}},
           "constraints": []}}},
     {
       "type": {
