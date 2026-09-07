@@ -391,6 +391,7 @@
 (load-test-file "dependencies.lisp")
 (load-test-file "differentiation.lisp")
 (load-test-file "generation.lisp")
+(load-test-file "names.lisp")
 (load-test-file "ordering.lisp")
 (load-test-file "reduction.lisp")
 (load-test-file "rewriting.lisp")
