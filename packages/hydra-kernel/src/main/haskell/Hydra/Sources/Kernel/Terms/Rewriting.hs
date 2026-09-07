@@ -534,11 +534,11 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
         "rr" <~ Lists.foldl
           ("r" ~> "kv" ~>
             "rk" <~ var "recurse"
-              @@ Lists.concat2 (var "path") (list [Paths.subtermStepMapKey $ Pairs.first $ var "r"])
+              @@ Lists.concat2 (var "path") (list [Paths.subtermStepMapEntry $ Pairs.first $ var "r", Paths.subtermStepPairFirst])
               @@ (Pairs.first $ Pairs.second $ var "r")
               @@ (Pairs.first $ var "kv") $
             "rv" <~ var "recurse"
-              @@ Lists.concat2 (var "path") (list [Paths.subtermStepMapValue $ Pairs.first $ var "r"])
+              @@ Lists.concat2 (var "path") (list [Paths.subtermStepMapEntry $ Pairs.first $ var "r", Paths.subtermStepPairSecond])
               @@ (Pairs.first $ var "rk")
               @@ (Pairs.second $ var "kv") $
             pair
@@ -1170,12 +1170,12 @@ subtermsWithSteps = define "subtermsWithSteps" $
         (Core.letBindings $ var "lt")),
     _Term_list>>: "l" ~> indexed Paths.subtermStepListElement $ var "l",
     _Term_literal>>: constant none,
-    _Term_map>>: "m" ~> Lists.concat
-      (Lists.map
-        ("ip" ~> list [
-          result (Paths.subtermStepMapKey $ Pairs.first $ var "ip") $ Pairs.first $ Pairs.second $ var "ip",
-          result (Paths.subtermStepMapValue $ Pairs.first $ var "ip") $ Pairs.second $ Pairs.second $ var "ip"])
-        (withIndices $ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))),
+    -- Each entry is reached by a single mapEntry step, as a constructed pair (k, v); its key and value
+    -- are then children of that pair via pairFirst/pairSecond.
+    _Term_map>>: "m" ~> Lists.map
+      ("ip" ~> result (Paths.subtermStepMapEntry $ Pairs.first $ var "ip")
+        (Core.termPair $ pair (Pairs.first $ Pairs.second $ var "ip") (Pairs.second $ Pairs.second $ var "ip")))
+      (withIndices $ Maps.toList (var "m" :: TypedTerm (M.Map Term Term))),
     _Term_optional>>: "m" ~> Optionals.match (var "m") none ("t" ~> single Paths.subtermStepOptionalGiven $ var "t"),
     _Term_pair>>: "p" ~> list [
       result Paths.subtermStepPairFirst $ Pairs.first $ var "p",

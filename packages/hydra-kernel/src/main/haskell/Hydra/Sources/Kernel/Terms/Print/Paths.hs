@@ -113,8 +113,7 @@ parseSubtermStep = define "parseSubtermStep" $
   Logic.ifElse (Equality.equal (var "tag") (string "letBinding")) (Optionals.map (reify Paths.subtermStepLetBinding) (var "name")) $
   Logic.ifElse (Equality.equal (var "tag") (string "letBody")) (just Paths.subtermStepLetBody) $
   Logic.ifElse (Equality.equal (var "tag") (string "listElement")) (Optionals.map (reify Paths.subtermStepListElement) (var "idx")) $
-  Logic.ifElse (Equality.equal (var "tag") (string "mapKey")) (Optionals.map (reify Paths.subtermStepMapKey) (var "idx")) $
-  Logic.ifElse (Equality.equal (var "tag") (string "mapValue")) (Optionals.map (reify Paths.subtermStepMapValue) (var "idx")) $
+  Logic.ifElse (Equality.equal (var "tag") (string "mapEntry")) (Optionals.map (reify Paths.subtermStepMapEntry) (var "idx")) $
   Logic.ifElse (Equality.equal (var "tag") (string "optionalGiven")) (just Paths.subtermStepOptionalGiven) $
   Logic.ifElse (Equality.equal (var "tag") (string "pairFirst")) (just Paths.subtermStepPairFirst) $
   Logic.ifElse (Equality.equal (var "tag") (string "pairSecond")) (just Paths.subtermStepPairSecond) $
@@ -188,8 +187,7 @@ subtermStep = define "subtermStep" $
     _SubtermStep_letBinding>>: "name" ~> Strings.concat2 (string "letBinding:") (Core.unName $ var "name"),
     _SubtermStep_letBody>>: constant (string "letBody"),
     _SubtermStep_listElement>>: "i" ~> Strings.concat2 (string "listElement:") (Literals.printInt32 $ var "i"),
-    _SubtermStep_mapKey>>: "i" ~> Strings.concat2 (string "mapKey:") (Literals.printInt32 $ var "i"),
-    _SubtermStep_mapValue>>: "i" ~> Strings.concat2 (string "mapValue:") (Literals.printInt32 $ var "i"),
+    _SubtermStep_mapEntry>>: "i" ~> Strings.concat2 (string "mapEntry:") (Literals.printInt32 $ var "i"),
     _SubtermStep_optionalGiven>>: constant (string "optionalGiven"),
     _SubtermStep_pairFirst>>: constant (string "pairFirst"),
     _SubtermStep_pairSecond>>: constant (string "pairSecond"),

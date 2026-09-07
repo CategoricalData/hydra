@@ -20,101 +20,97 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
-            moduleMetadata = descriptionMetadata (Just "Subterm and subtype access, and the link view of a graph")}
+            moduleMetadata = descriptionMetadata (Just "Subterm and subtype access, and the term/type graph view of a graph")}
   where
     definitions = [
-      subtermAttribute,
-      subtermEdge,
-      subtermGraph,
+      lambdaVariableReference,
+      letVariableReference,
+      nominalTypeReference,
+      primitiveReference,
       subtermLink,
-      subtermNode,
       subtermPath,
-      subtermProperty,
       subtermStep,
-      subtypeAttribute,
-      subtypeEdge,
-      subtypeGraph,
       subtypeLink,
-      subtypeNode,
       subtypePath,
-      subtypeProperty,
       subtypeStep,
-      termAttribute,
-      typeAttribute]
+      termAttributeLink,
+      termGraph,
+      termLink,
+      termNode,
+      termNodeId,
+      termReference,
+      termReferenceLink,
+      typeAttributeLink,
+      typeGraph,
+      typeLink,
+      typeNode,
+      typeNodeId,
+      typeReference,
+      typeReferenceLink,
+      typeVariableReference]
 
-subtermAttribute :: TypeDefinition
-subtermAttribute = define "SubtermAttribute" $
-  doc "A link from a node to a non-term attribute of a position" $
+lambdaVariableReference :: TypeDefinition
+lambdaVariableReference = define "LambdaVariableReference" $
+  doc "A reference to a lambda-bound variable: the node introducing it is the binding lambda" $
   T.record [
-    "path">:
-      doc "The subterm path at which the attribute occurs"
-      subtermPath,
-    "target">:
-      doc "The attribute value"
-      termAttribute]
+    "variable">:
+      doc "The name of the lambda-bound variable"
+      Core.name,
+    "boundByNode">:
+      doc "The id of the node at the binding lambda"
+      termNodeId,
+    "type">:
+      doc "The type of the variable"
+      Core.type_]
 
-subtermEdge :: TypeDefinition
-subtermEdge = define "SubtermEdge" $
-  doc "A link from a node to another binding of the graph, addressed by the path at which it occurs" $
+letVariableReference :: TypeDefinition
+letVariableReference = define "LetVariableReference" $
+  doc "A reference to a let-bound variable: the node introducing it is the bound term" $
   T.record [
-    "path">:
-      doc "The subterm path at which the reference occurs"
-      subtermPath,
-    "target">:
-      doc "The name of the referenced binding of the graph"
+    "variable">:
+      doc "The name of the let-bound variable"
+      Core.name,
+    "bindingNode">:
+      doc "The id of the node at the bound term"
+      termNodeId,
+    "type">:
+      doc "The type of the variable"
+      Core.type_]
+
+nominalTypeReference :: TypeDefinition
+nominalTypeReference = define "NominalTypeReference" $
+  doc "A reference to a named type of the schema (analogous to a let-bound variable)" $
+  T.record [
+    "name">:
+      doc "The name of the referenced schema type"
       Core.name]
 
-subtermGraph :: TypeDefinition
-subtermGraph = define "SubtermGraph" $
-  doc "The link view of a graph as subterm nodes and their links" $
+primitiveReference :: TypeDefinition
+primitiveReference = define "PrimitiveReference" $
+  doc "A reference to a primitive function" $
   T.record [
-    "nodes">:
-      doc "All nodes in the graph" $
-      T.list subtermNode]
+    "name">:
+      doc "The name of the primitive"
+      Core.name,
+    "type">:
+      doc "The type of the primitive"
+      Core.type_]
 
 subtermLink :: TypeDefinition
 subtermLink = define "SubtermLink" $
-  doc "An outgoing link of a subterm node: an edge, a property, or an attribute" $
-  T.union [
-    "edge">:
-      doc "A reference to another binding of the graph"
-      subtermEdge,
-    "property">:
-      doc "A leaf term"
-      subtermProperty,
-    "attribute">:
-      doc "A non-term attribute of a position"
-      subtermAttribute]
-
-subtermNode :: TypeDefinition
-subtermNode = define "SubtermNode" $
-  doc "A node in a subterm graph: a binding of the graph, with its type scheme and outgoing links" $
+  doc "An outgoing link to an immediate subterm, carried inline as a child node" $
   T.record [
-    "name">:
-      doc "The name of the binding"
-      Core.name,
-    "type">:
-      doc "The type scheme of the binding"
-      Core.typeScheme,
-    "links">:
-      doc "The outgoing links of the node" $
-      T.list subtermLink]
+    "step">:
+      doc "The step by which the child subterm is reached"
+      subtermStep,
+    "child">:
+      doc "The child node (inline; the structure is a tree)"
+      termNode]
 
 subtermPath :: TypeDefinition
 subtermPath = define "SubtermPath" $
   doc "A sequence of subterm steps forming a path through a term, root first" $
   T.wrap $ T.list subtermStep
-
-subtermProperty :: TypeDefinition
-subtermProperty = define "SubtermProperty" $
-  doc "A link from a node to a leaf term (literal, unit, projection, unwrap, or an unbound variable)" $
-  T.record [
-    "path">:
-      doc "The subterm path at which the leaf term occurs"
-      subtermPath,
-    "target">:
-      doc "The leaf term"
-      Core.term]
 
 subtermStep :: TypeDefinition
 subtermStep = define "SubtermStep" $
@@ -159,11 +155,10 @@ subtermStep = define "SubtermStep" $
     "listElement">:
       doc "Access an element of a list by index"
       T.int32,
-    "mapKey">:
-      doc "Access the key of the map entry at the given index"
-      T.int32,
-    "mapValue">:
-      doc "Access the value of the map entry at the given index"
+    "mapEntry">:
+      doc ("Access the map entry at the given index as a pair (k, v). Accessing this step constructs the "
+        <> "pair; the entry is not itself a subterm occurrence, though its key and value components are, "
+        <> "reached via pairFirst/pairSecond. Entry indexes follow the total order on serializable terms.")
       T.int32,
     "optionalGiven">:
       doc "Access the term inside a given (present) optional value"
@@ -190,76 +185,21 @@ subtermStep = define "SubtermStep" $
       doc "Access the body of a wrapped term"
       T.unit]
 
-subtypeAttribute :: TypeDefinition
-subtypeAttribute = define "SubtypeAttribute" $
-  doc "A link from a node to a non-type attribute of a position" $
-  T.record [
-    "path">:
-      doc "The subtype path at which the attribute occurs"
-      subtypePath,
-    "target">:
-      doc "The attribute value"
-      typeAttribute]
-
-subtypeEdge :: TypeDefinition
-subtypeEdge = define "SubtypeEdge" $
-  doc "A link from a node to a named type, addressed by the path at which it occurs" $
-  T.record [
-    "path">:
-      doc "The subtype path at which the reference occurs"
-      subtypePath,
-    "target">:
-      doc "The name of the referenced type"
-      Core.name]
-
-subtypeGraph :: TypeDefinition
-subtypeGraph = define "SubtypeGraph" $
-  doc "The link view of a schema as subtype nodes and their links" $
-  T.record [
-    "nodes">:
-      doc "All nodes in the graph" $
-      T.list subtypeNode]
-
 subtypeLink :: TypeDefinition
 subtypeLink = define "SubtypeLink" $
-  doc "An outgoing link of a subtype node: an edge, a property, or an attribute" $
-  T.union [
-    "edge">:
-      doc "A reference to a named type"
-      subtypeEdge,
-    "property">:
-      doc "A leaf type"
-      subtypeProperty,
-    "attribute">:
-      doc "A non-type attribute of a position"
-      subtypeAttribute]
-
-subtypeNode :: TypeDefinition
-subtypeNode = define "SubtypeNode" $
-  doc "A node in a subtype graph: a named type, with its outgoing links" $
+  doc "An outgoing link to an immediate subtype, carried inline as a child node" $
   T.record [
-    "name">:
-      doc "The name of the type"
-      Core.name,
-    "links">:
-      doc "The outgoing links of the node" $
-      T.list subtypeLink]
+    "step">:
+      doc "The step by which the child subtype is reached"
+      subtypeStep,
+    "child">:
+      doc "The child node (inline; the structure is a tree)"
+      typeNode]
 
 subtypePath :: TypeDefinition
 subtypePath = define "SubtypePath" $
   doc "A sequence of subtype steps forming a path through a type, root first" $
   T.wrap $ T.list subtypeStep
-
-subtypeProperty :: TypeDefinition
-subtypeProperty = define "SubtypeProperty" $
-  doc "A link from a node to a leaf type (literal, unit, void, or a bound variable)" $
-  T.record [
-    "path">:
-      doc "The subtype path at which the leaf type occurs"
-      subtypePath,
-    "target">:
-      doc "The leaf type"
-      Core.type_]
 
 subtypeStep :: TypeDefinition
 subtypeStep = define "SubtypeStep" $
@@ -323,9 +263,9 @@ subtypeStep = define "SubtypeStep" $
       doc "Access the body type of a wrapped type"
       T.unit]
 
-termAttribute :: TypeDefinition
-termAttribute = define "TermAttribute" $
-  doc "A non-term constituent of the term at a path, together with its value" $
+termAttributeLink :: TypeDefinition
+termAttributeLink = define "TermAttributeLink" $
+  doc "A non-term constituent of this node's term, with its value" $
   T.union [
     "casesTypeName">:
       doc "The name of the union type eliminated by a case statement"
@@ -342,6 +282,9 @@ termAttribute = define "TermAttribute" $
     "letBindingTypeSchemeGiven">:
       doc "The name of a let binding together with its (given) type scheme" $
       T.pair Core.name Core.typeScheme,
+    "literal">:
+      doc "The literal value of a literal term (a leaf)"
+      Core.literal,
     "projectFieldName">:
       doc "The name of the field projected by a projection"
       Core.name,
@@ -357,17 +300,175 @@ termAttribute = define "TermAttribute" $
     "typeLambdaParameter">:
       doc "The type-variable parameter of a type lambda term"
       Core.name,
+    "unwrapTypeName">:
+      doc "The name of the wrapper type eliminated by an unwrap"
+      Core.name,
     "wrapTypeName">:
       doc "The name of the wrapper type of a wrapped term"
       Core.name]
 
-typeAttribute :: TypeDefinition
-typeAttribute = define "TypeAttribute" $
-  doc "A non-type constituent of the type at a path, together with its value" $
+termGraph :: TypeDefinition
+termGraph = define "TermGraph" $
+  doc "A typed graph as a term graph: one root node per binding of the graph" $
+  T.record [
+    "roots">:
+      doc "The root nodes, keyed by binding name" $
+      T.map Core.name termNode]
+
+termLink :: TypeDefinition
+termLink = define "TermLink" $
+  doc "An outgoing link of a term node: an inline subterm, a variable occurrence, or a non-term attribute" $
+  T.union [
+    "attribute">:
+      doc "A non-term constituent of this node's term"
+      termAttributeLink,
+    "reference">:
+      doc "A variable or primitive occurrence"
+      termReferenceLink,
+    "subterm">:
+      doc "An immediate subterm, carried inline"
+      subtermLink]
+
+termNode :: TypeDefinition
+termNode = define "TermNode" $
+  doc "A node in a term graph: a subterm as written, its type, and its outgoing links" $
+  T.record [
+    "term">:
+      doc "The subterm as written"
+      Core.term,
+    "type">:
+      doc "The subterm's type (a binding's forall type at roots), via hydra.checking"
+      Core.type_,
+    "links">:
+      doc "The outgoing links of the node" $
+      T.list termLink]
+
+termNodeId :: TypeDefinition
+termNodeId = define "TermNodeId" $
+  doc ("The id of a term-graph node: a root binding name plus a subterm path from that root. "
+    <> "A root node's id has an empty path. A letBinding step appears only for an actual nested "
+    <> "let inside a binding's term, never as a leading pseudo-step.") $
+  T.record [
+    "root">:
+      doc "The name of the root binding"
+      Core.name,
+    "path">:
+      doc "The subterm path from the root"
+      subtermPath]
+
+termReference :: TypeDefinition
+termReference = define "TermReference" $
+  doc "The target of a variable or primitive occurrence" $
+  T.union [
+    "lambda">:
+      doc "A reference to a lambda-bound variable"
+      lambdaVariableReference,
+    "let">:
+      doc "A reference to a let-bound variable"
+      letVariableReference,
+    "primitive">:
+      doc "A reference to a primitive function"
+      primitiveReference]
+
+termReferenceLink :: TypeDefinition
+termReferenceLink = define "TermReferenceLink" $
+  doc "An outgoing link to a variable or primitive occurrence" $
+  T.record [
+    "step">:
+      doc "The step by which the occurrence is reached"
+      subtermStep,
+    "target">:
+      doc "The referenced binding, lambda parameter, or primitive"
+      termReference]
+
+typeAttributeLink :: TypeDefinition
+typeAttributeLink = define "TypeAttributeLink" $
+  doc "A non-type constituent of this node's type, with its value" $
   T.union [
     "annotatedAnnotation">:
       doc "The annotation of an annotated type (a term; not descended into)"
       Core.term,
     "forallParameter">:
       doc "The type-variable parameter of a universally quantified type"
-      Core.name]
+      Core.name,
+    "literal">:
+      doc "The literal type of a literal type (a leaf)"
+      Core.literalType]
+
+typeGraph :: TypeDefinition
+typeGraph = define "TypeGraph" $
+  doc "A schema as a type graph: one root node per named type" $
+  T.record [
+    "roots">:
+      doc "The root nodes, keyed by type name" $
+      T.map Core.name typeNode]
+
+typeLink :: TypeDefinition
+typeLink = define "TypeLink" $
+  doc "An outgoing link of a type node: an inline subtype, a type reference, or a non-type attribute" $
+  T.union [
+    "attribute">:
+      doc "A non-type constituent of this node's type"
+      typeAttributeLink,
+    "reference">:
+      doc "A named-type or type-variable occurrence"
+      typeReferenceLink,
+    "subtype">:
+      doc "An immediate subtype, carried inline"
+      subtypeLink]
+
+typeNode :: TypeDefinition
+typeNode = define "TypeNode" $
+  doc "A node in a type graph: a subtype as written and its outgoing links" $
+  T.record [
+    "type">:
+      doc "The subtype as written (needed for linkless leaves: literal types, unit, void)"
+      Core.type_,
+    "links">:
+      doc "The outgoing links of the node" $
+      T.list typeLink]
+
+typeNodeId :: TypeDefinition
+typeNodeId = define "TypeNodeId" $
+  doc ("The id of a type-graph node: a root type name plus a subtype path from that root. "
+    <> "A root node's id has an empty path. There is no enclosing-let analog for schemas.") $
+  T.record [
+    "root">:
+      doc "The name of the root type"
+      Core.name,
+    "path">:
+      doc "The subtype path from the root"
+      subtypePath]
+
+typeReference :: TypeDefinition
+typeReference = define "TypeReference" $
+  doc "The target of a named-type or type-variable occurrence" $
+  T.union [
+    "nominal">:
+      doc "A reference to a named type of the schema"
+      nominalTypeReference,
+    "variable">:
+      doc "A reference to a forall-bound type variable"
+      typeVariableReference]
+
+typeReferenceLink :: TypeDefinition
+typeReferenceLink = define "TypeReferenceLink" $
+  doc "An outgoing link to a named-type or type-variable occurrence" $
+  T.record [
+    "step">:
+      doc "The step by which the occurrence is reached"
+      subtypeStep,
+    "target">:
+      doc "The referenced named type or type variable"
+      typeReference]
+
+typeVariableReference :: TypeDefinition
+typeVariableReference = define "TypeVariableReference" $
+  doc "A reference to a forall-bound type variable: the node introducing it is the binder" $
+  T.record [
+    "variable">:
+      doc "The name of the forall-bound type variable"
+      Core.name,
+    "boundByNode">:
+      doc "The id of the node at the binding forall"
+      typeNodeId]
