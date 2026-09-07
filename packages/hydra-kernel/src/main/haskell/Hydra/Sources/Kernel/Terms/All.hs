@@ -57,8 +57,8 @@ import qualified Hydra.Sources.Kernel.Terms.Resolution     as Resolution
 import qualified Hydra.Sources.Kernel.Terms.Rewriting       as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Scoping         as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
-import qualified Hydra.Sources.Kernel.Terms.Shredding       as Shredding
 import qualified Hydra.Sources.Kernel.Terms.Strip           as Strip
+import qualified Hydra.Sources.Kernel.Terms.Subterms        as Subterms
 import qualified Hydra.Sources.Kernel.Terms.Parse.Docs        as ParseDocs
 import qualified Hydra.Sources.Kernel.Terms.Print.Docs        as PrintDocs
 import qualified Hydra.Sources.Kernel.Terms.Print.Paths      as PrintPaths
@@ -82,6 +82,7 @@ import qualified Hydra.Sources.Kernel.Terms.Unification     as Unification
 import qualified Hydra.Sources.Kernel.Terms.Validate.Core  as ValidateCore
 import qualified Hydra.Sources.Kernel.Terms.Variables       as Variables
 import qualified Hydra.Sources.Kernel.Terms.Validate.Packaging as ValidatePackaging
+import qualified Hydra.Sources.Kernel.Terms.Validate.Paths  as ValidatePaths
 
 
 kernelTermsModules :: [Module]
@@ -143,8 +144,8 @@ kernelPrimaryTermsModules = [
   Rewriting.module_,
   Scoping.module_,
   Serialization.module_,
-  Shredding.module_,
   Strip.module_,
+  Subterms.module_,
   ParseDocs.module_,
   PrintDocs.module_,
   PrintPaths.module_,
@@ -167,6 +168,7 @@ kernelPrimaryTermsModules = [
   Unification.module_,
   ValidateCore.module_,
   ValidatePackaging.module_,
+  ValidatePaths.module_,
   Variables.module_]
 
 -- | The primitive-defining hydra.lib.* modules (a subset of kernelTermsModules).
