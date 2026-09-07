@@ -1,0 +1,398 @@
+{
+  "name": "hydra.validate.paths",
+  "metadata": {
+    "description": "The TermGraph : TypeGraph conformance relation: path erasure (a subterm position maps to the subtype position of its type) plus node typing, partial on the computation fragment.",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
+  "dependencies": [
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.docs"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.regex"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.system"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.validate.paths.eraseSubtermPath",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.paths.SubtermPath"}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "hydra.paths.SubtypePath"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "path",
+                "domain": {"variable": "hydra.paths.SubtermPath"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "steps",
+                        "term": {"application": {"function": {"unwrap": "hydra.paths.SubtermPath"}, "argument": {"variable": "path"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.paths.SubtermStep"}}, "constraints": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "go",
+                            "term": {
+                              "lambda": {
+                                "parameter": "acc",
+                                "domain": {"optional": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtypeStep"}}, "second": {"literal": "boolean"}}}},
+                                "body": {
+                                  "lambda": {
+                                    "parameter": "step",
+                                    "domain": {"variable": "hydra.paths.SubtermStep"},
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.lib.optionals.match"},
+                                                        "type": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtypeStep"}}, "second": {"literal": "boolean"}}}}},
+                                                    "type": {"optional": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtypeStep"}}, "second": {"literal": "boolean"}}}}}},
+                                                "argument": {"variable": "acc"}}},
+                                            "argument": {
+                                              "typeApplication": {
+                                                "body": {"optional": null},
+                                                "type": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtypeStep"}}, "second": {"literal": "boolean"}}}}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "stateP",
+                                            "domain": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtypeStep"}}, "second": {"literal": "boolean"}}},
+                                            "body": {
+                                              "let": {
+                                                "bindings": [
+                                                  {
+                                                    "name": "out",
+                                                    "term": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "hydra.paths.SubtypeStep"}}}},
+                                                            "type": {"literal": "boolean"}}},
+                                                        "argument": {"variable": "stateP"}}},
+                                                    "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.paths.SubtypeStep"}}, "constraints": []}}],
+                                                "body": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "pendingEntry",
+                                                        "term": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.paths.SubtypeStep"}}}},
+                                                                "type": {"literal": "boolean"}}},
+                                                            "argument": {"variable": "stateP"}}},
+                                                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
+                                                    "body": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.lib.logic.ifElse"},
+                                                                    "type": {"optional": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtypeStep"}}, "second": {"literal": "boolean"}}}}}},
+                                                                "argument": {"variable": "pendingEntry"}}},
+                                                            "argument": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "cases": {
+                                                                    "typeName": "hydra.paths.SubtermStep",
+                                                                    "default": {
+                                                                      "typeApplication": {
+                                                                        "body": {"optional": null},
+                                                                        "type": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtypeStep"}}, "second": {"literal": "boolean"}}}}},
+                                                                    "cases": [
+                                                                      {
+                                                                        "name": "pairFirst",
+                                                                        "handler": {
+                                                                          "lambda": {
+                                                                            "parameter": "_",
+                                                                            "domain": "unit",
+                                                                            "body": {
+                                                                              "optional": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "pair": {
+                                                                                          "first": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.paths.SubtypeStep"}}},
+                                                                                                  "argument": {"variable": "out"}}},
+                                                                                              "argument": {"list": [{"inject": {"typeName": "hydra.paths.SubtypeStep", "field": {"name": "mapKeys", "term": "unit"}}}]}}},
+                                                                                          "second": {"literal": {"boolean": false}}}},
+                                                                                      "type": {"list": {"variable": "hydra.paths.SubtypeStep"}}}},
+                                                                                  "type": {"literal": "boolean"}}}}}}},
+                                                                      {
+                                                                        "name": "pairSecond",
+                                                                        "handler": {
+                                                                          "lambda": {
+                                                                            "parameter": "_",
+                                                                            "domain": "unit",
+                                                                            "body": {
+                                                                              "optional": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "pair": {
+                                                                                          "first": {
+                                                                                            "application": {
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.paths.SubtypeStep"}}},
+                                                                                                  "argument": {"variable": "out"}}},
+                                                                                              "argument": {"list": [{"inject": {"typeName": "hydra.paths.SubtypeStep", "field": {"name": "mapValues", "term": "unit"}}}]}}},
+                                                                                          "second": {"literal": {"boolean": false}}}},
+                                                                                      "type": {"list": {"variable": "hydra.paths.SubtypeStep"}}}},
+                                                                                  "type": {"literal": "boolean"}}}}}}}]}},
+                                                                "argument": {"variable": "step"}}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {
+                                                              "cases": {
+                                                                "typeName": "hydra.paths.SubtermStep",
+                                                                "default": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.paths.SubtypeStep"}}},
+                                                                            "type": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtypeStep"}}, "second": {"literal": "boolean"}}}}},
+                                                                        "argument": {
+                                                                          "lambda": {
+                                                                            "parameter": "st",
+                                                                            "domain": {"variable": "hydra.paths.SubtypeStep"},
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "pair": {
+                                                                                        "first": {
+                                                                                          "application": {
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.paths.SubtypeStep"}}},
+                                                                                                "argument": {"variable": "out"}}},
+                                                                                            "argument": {"list": [{"variable": "st"}]}}},
+                                                                                        "second": {"literal": {"boolean": false}}}},
+                                                                                    "type": {"list": {"variable": "hydra.paths.SubtypeStep"}}}},
+                                                                                "type": {"literal": "boolean"}}}}}}},
+                                                                    "argument": {"application": {"function": {"variable": "hydra.validate.paths.eraseSubtermStep"}, "argument": {"variable": "step"}}}}},
+                                                                "cases": [
+                                                                  {
+                                                                    "name": "mapEntry",
+                                                                    "handler": {
+                                                                      "lambda": {
+                                                                        "parameter": "_",
+                                                                        "domain": {"literal": {"integer": "int32"}},
+                                                                        "body": {
+                                                                          "optional": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"pair": {"first": {"variable": "out"}, "second": {"literal": {"boolean": true}}}},
+                                                                                  "type": {"list": {"variable": "hydra.paths.SubtypeStep"}}}},
+                                                                              "type": {"literal": "boolean"}}}}}}}]}},
+                                                            "argument": {"variable": "step"}}}}}}}}}}}}}}}}},
+                            "typeScheme": {
+                              "variables": [],
+                              "body": {
+                                "function": {
+                                  "domain": {"optional": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtypeStep"}}, "second": {"literal": "boolean"}}}},
+                                  "codomain": {
+                                    "function": {
+                                      "domain": {"variable": "hydra.paths.SubtermStep"},
+                                      "codomain": {"optional": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtypeStep"}}, "second": {"literal": "boolean"}}}}}}}},
+                              "constraints": []}}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "result",
+                                "term": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.lib.lists.foldl"},
+                                                    "type": {"optional": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtypeStep"}}, "second": {"literal": "boolean"}}}}}},
+                                                "type": {"variable": "hydra.paths.SubtermStep"}}},
+                                            "argument": {"variable": "go"}}},
+                                        "argument": {
+                                          "optional": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "pair": {
+                                                      "first": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.paths.SubtypeStep"}}},
+                                                      "second": {"literal": {"boolean": false}}}},
+                                                  "type": {"list": {"variable": "hydra.paths.SubtypeStep"}}}},
+                                              "type": {"literal": "boolean"}}}}}},
+                                    "argument": {"variable": "steps"}}},
+                                "typeScheme": {
+                                  "variables": [],
+                                  "body": {"optional": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtypeStep"}}, "second": {"literal": "boolean"}}}},
+                                  "constraints": []}}],
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.lib.optionals.bind"},
+                                            "type": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtypeStep"}}, "second": {"literal": "boolean"}}}}},
+                                        "type": {"variable": "hydra.paths.SubtypePath"}}},
+                                    "argument": {"variable": "result"}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "stateP",
+                                    "domain": {"pair": {"first": {"list": {"variable": "hydra.paths.SubtypeStep"}}, "second": {"literal": "boolean"}}},
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.paths.SubtypePath"}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.paths.SubtypeStep"}}}},
+                                                        "type": {"literal": "boolean"}}},
+                                                    "argument": {"variable": "stateP"}}}}},
+                                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.paths.SubtypePath"}}}}},
+                                        "argument": {
+                                          "optional": {
+                                            "wrap": {
+                                              "typeName": "hydra.paths.SubtypePath",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"list": {"variable": "hydra.paths.SubtypeStep"}}}},
+                                                      "type": {"literal": "boolean"}}},
+                                                  "argument": {"variable": "stateP"}}}}}}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Erase a subterm path to the subtype path of its type, if wholly within the data fragment"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.validate.paths.eraseSubtermStep",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.paths.SubtermStep"}, "isLazy": false}],
+          "result": {"type": {"optional": {"variable": "hydra.paths.SubtypeStep"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "step",
+                "domain": {"variable": "hydra.paths.SubtermStep"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.paths.SubtermStep",
+                        "default": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.paths.SubtypeStep"}}},
+                        "cases": [
+                          {
+                            "name": "listElement",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"literal": {"integer": "int32"}},
+                                "body": {"optional": {"inject": {"typeName": "hydra.paths.SubtypeStep", "field": {"name": "listElement", "term": "unit"}}}}}}},
+                          {
+                            "name": "setElement",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"literal": {"integer": "int32"}},
+                                "body": {"optional": {"inject": {"typeName": "hydra.paths.SubtypeStep", "field": {"name": "setElement", "term": "unit"}}}}}}},
+                          {
+                            "name": "optionalGiven",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": "unit",
+                                "body": {"optional": {"inject": {"typeName": "hydra.paths.SubtypeStep", "field": {"name": "optionalElement", "term": "unit"}}}}}}},
+                          {
+                            "name": "injectField",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "n",
+                                "domain": {"variable": "hydra.core.Name"},
+                                "body": {
+                                  "optional": {"inject": {"typeName": "hydra.paths.SubtypeStep", "field": {"name": "unionField", "term": {"variable": "n"}}}}}}}},
+                          {
+                            "name": "recordField",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "n",
+                                "domain": {"variable": "hydra.core.Name"},
+                                "body": {
+                                  "optional": {"inject": {"typeName": "hydra.paths.SubtypeStep", "field": {"name": "recordField", "term": {"variable": "n"}}}}}}}}]}},
+                    "argument": {"variable": "step"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "The subtype-side analog of a subterm step on the data fragment, or nothing on the computation fragment"}}}]}}}}}]}
