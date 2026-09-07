@@ -19,6 +19,7 @@ import Hydra.Error.Packaging (
   _InvalidPackageError_conflictingModuleName,
   _InvalidPackageError_duplicateModuleName,
   _InvalidPackageError_invalidPackageName,
+  _InvalidPackageError_moduleInMultiplePackages,
   _InvalidPackageError_undeclaredDependency)
 import Hydra.Packaging (Package)
 import qualified Hydra.Dsl.Error.Packaging       as ErrorPackaging
@@ -74,6 +75,7 @@ module_ = Module {
       toDefinition checkDuplicateDefinitionNames,
       toDefinition checkDuplicateModuleNames,
       toDefinition checkModuleNameConvention,
+      toDefinition checkModulePartition,
       toDefinition checkPackageNameConvention,
       toDefinition checkUndeclaredDependencies,
       toDefinition definitionName,
@@ -426,6 +428,59 @@ checkDuplicateModuleNames = define "checkDuplicateModuleNames" $
         (constant $ var "acc"))
     (pair (Sets.empty :: TypedTerm (S.Set ModuleName)) nothing)
     (Packaging.packageModules $ var "pkg") $
+  Pairs.second (var "result")
+
+-- | Check that no module namespace is declared by more than one package.
+-- Module-to-package routing (see 'Hydra.Build.Routing.buildRoutingMap')
+-- requires each package's declared module set to partition the module
+-- universe; if two packages declare the same namespace, the routing map
+-- silently keeps one winner and the other declaration is never diagnosed.
+--
+-- Input: one (package name, declared module names) pair per package -- the
+-- same shape 'buildRoutingMap' flattens into its declaredPairs. A seen-map
+-- fold over the flattened (module, package) pairs: the first package seen
+-- for a namespace is recorded as its owner; a later package declaring the
+-- same namespace produces a 'moduleInMultiplePackages' finding. Two or more
+-- modules of the same name *within* one package are 'checkDuplicateModuleNames'
+-- concern, not this check's -- a repeat from the same package that already
+-- owns the namespace is not reported here.
+--
+-- This is a universe-level check (like 'kernelUniverseUndeclaredDependencies'),
+-- not scoped to a single 'Package', so it is not part of 'kernelPackagingRuleNames'
+-- / the per-package profile orchestrator. Callers should call it directly,
+-- e.g. alongside 'kernelUniverseUndeclaredDependencies' at a pipeline's
+-- validation entry point. Accumulates every violation found, rather than
+-- stopping at the first.
+checkModulePartition :: TypedTermDefinition ([(String, [ModuleName])] -> [InvalidPackageError])
+checkModulePartition = define "checkModulePartition" $
+  doc "Check that no module namespace is declared by more than one package, across the whole universe of packages." $
+  "pkgs" ~>
+  "declaredPairs" <~ (Lists.concat (Lists.map
+    ("p" ~> Lists.map ("m" ~> pair (var "m") (Pairs.first $ var "p")) (Pairs.second $ var "p"))
+    (var "pkgs")) :: TypedTerm [(ModuleName, String)]) $
+  "result" <~ Lists.foldl
+    ("acc" ~> "pair_" ~>
+      "seen" <~ Pairs.first (var "acc") $
+      "findings" <~ Pairs.second (var "acc") $
+      "ns" <~ Pairs.first (var "pair_") $
+      "pkg" <~ Pairs.second (var "pair_") $
+      "existing" <~ Maps.lookup (var "ns" :: TypedTerm ModuleName) (var "seen") $
+      Optionals.match (var "existing")
+        -- Not seen yet: record this package as the namespace's owner.
+        (pair (Maps.insert (var "ns" :: TypedTerm ModuleName) (var "pkg") (var "seen")) (var "findings"))
+        ("firstPkg" ~>
+          Logic.ifElse (Equality.equal (var "firstPkg" :: TypedTerm String) (var "pkg"))
+            -- Same package repeating a namespace: not this check's concern.
+            (var "acc")
+            -- A different package declares the same namespace: finding.
+            (pair (var "seen")
+              (Lists.concat2 (var "findings") (Lists.singleton $
+                ErrorPackaging.invalidPackageErrorModuleInMultiplePackages $
+                  ErrorPackaging.moduleInMultiplePackagesError (var "ns")
+                    (Packaging.packageName2 $ (var "firstPkg" :: TypedTerm String))
+                    (Packaging.packageName2 $ (var "pkg" :: TypedTerm String)))))))
+    (pair (Maps.empty :: TypedTerm (M.Map ModuleName String)) (list ([] :: [TypedTerm InvalidPackageError])))
+    (var "declaredPairs") $
   Pairs.second (var "result")
 
 -- | Check that the module's namespace matches the dotted-lowercase namespace regex

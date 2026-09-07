@@ -77,6 +77,7 @@ module_ = Module {
      toDefinition invalidPackageError,
      toDefinition invalidPackageNameError,
      toDefinition missingDocumentationError,
+     toDefinition moduleInMultiplePackagesError,
      toDefinition undeclaredDependencyError]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
@@ -182,6 +183,7 @@ invalidPackageError = define "invalidPackageError" $
       _InvalidPackageError_duplicateModuleName>>: duplicateModuleNameError,
       _InvalidPackageError_invalidModule>>: invalidModuleError,
       _InvalidPackageError_invalidPackageName>>: invalidPackageNameError,
+      _InvalidPackageError_moduleInMultiplePackages>>: moduleInMultiplePackagesError,
       _InvalidPackageError_undeclaredDependency>>: undeclaredDependencyError]
 
 invalidPackageNameError :: TypedTermDefinition (InvalidPackageNameError -> String)
@@ -201,6 +203,17 @@ missingDocumentationError = define "missingDocumentationError" $
     string ": definition ",
     Core.unName $ project _MissingDocumentationError _MissingDocumentationError_name @@ var "e",
     string " lacks a description annotation"]
+
+moduleInMultiplePackagesError :: TypedTermDefinition (ModuleInMultiplePackagesError -> String)
+moduleInMultiplePackagesError = define "moduleInMultiplePackagesError" $
+  doc "Show a module-in-multiple-packages error as a string" $
+  "e" ~> Strings.concat $ list [
+    string "module namespace ",
+    Packaging.unModuleName $ project _ModuleInMultiplePackagesError _ModuleInMultiplePackagesError_moduleName @@ var "e",
+    string " is declared by more than one package: ",
+    Packaging.unPackageName $ project _ModuleInMultiplePackagesError _ModuleInMultiplePackagesError_firstPackage @@ var "e",
+    string " vs ",
+    Packaging.unPackageName $ project _ModuleInMultiplePackagesError _ModuleInMultiplePackagesError_secondPackage @@ var "e"]
 
 undeclaredDependencyError :: TypedTermDefinition (UndeclaredDependencyError -> String)
 undeclaredDependencyError = define "undeclaredDependencyError" $

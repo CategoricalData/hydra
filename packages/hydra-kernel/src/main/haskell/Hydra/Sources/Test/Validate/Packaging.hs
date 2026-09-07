@@ -48,6 +48,7 @@ module_ = Module {
       Phantoms.toDefinition checkDuplicateDefinitionNamesTests,
       Phantoms.toDefinition checkDuplicateModuleNamesTests,
       Phantoms.toDefinition checkModuleNameConventionTests,
+      Phantoms.toDefinition checkModulePartitionTests,
       Phantoms.toDefinition checkPackageNameConventionTests,
       Phantoms.toDefinition checkUndeclaredDependenciesTests,
       Phantoms.toDefinition kernelModuleTests,
@@ -74,6 +75,7 @@ allTests = define "allTests" $
     checkDuplicateDefinitionNamesTests,
     checkDuplicateModuleNamesTests,
     checkModuleNameConventionTests,
+    checkModulePartitionTests,
     checkPackageNameConventionTests,
     checkUndeclaredDependenciesTests,
     kernelModuleTests,
@@ -259,6 +261,35 @@ checkModuleNameConventionTests = define "checkModuleNameConventionTests" $
       checkModuleNameConventionRef
       (mkModule "hydra.foo_bar" [])
       (invalidModuleNameConventionErr "hydra.foo_bar")]
+
+-- | Regression coverage for #733/#739: a module namespace declared by two
+-- distinct packages must be flagged, since 'buildRoutingMap' would
+-- otherwise silently keep one winner and drop the other declaration
+-- without any diagnostic.
+checkModulePartitionTests :: TypedTermDefinition TestGroup
+checkModulePartitionTests = define "checkModulePartitionTests" $
+  subgroup "checkModulePartition" [
+    mpc "empty universe: no error"
+      [] [],
+
+    mpc "single package, distinct namespaces: no error"
+      [("hydra-kernel", ["hydra.foo", "hydra.bar"])] [],
+
+    mpc "two packages, distinct namespaces: no error"
+      [("hydra-kernel", ["hydra.foo"]), ("hydra-java", ["hydra.java.coder"])] [],
+
+    mpc "same package repeats a namespace: not this check's concern, no error"
+      [("hydra-kernel", ["hydra.foo", "hydra.foo"])] [],
+
+    mpc "two packages declare the same namespace: error"
+      [("hydra-kernel", ["hydra.foo"]), ("hydra-java", ["hydra.foo"])]
+      [moduleInMultiplePackagesErr "hydra.foo" "hydra-kernel" "hydra-java"],
+
+    mpc "three packages, one namespace collides between the first two: single finding"
+      [("hydra-kernel", ["hydra.foo"]),
+       ("hydra-java", ["hydra.foo"]),
+       ("hydra-python", ["hydra.bar"])]
+      [moduleInMultiplePackagesErr "hydra.foo" "hydra-kernel" "hydra-java"]]
 
 checkPackageNameConventionTests :: TypedTermDefinition TestGroup
 checkPackageNameConventionTests = define "checkPackageNameConventionTests" $
@@ -514,6 +545,37 @@ missingDocumentationErr nsStr nameStr = justModuleError $
 -- | Fully qualified rule names used by the profile-aware tests.
 missingDocumentationRule :: Name
 missingDocumentationRule = Name "hydra.error.packaging.InvalidModuleError.missingDocumentation"
+
+-- | Package-universe convenience: run checkModulePartition over a list of
+-- (package name, declared module namespaces) pairs, comparing the rendered
+-- finding list against 'expected'. Like 'uc', this validator is not a
+-- Package/Module -> Maybe E function but a
+-- [(String, [ModuleName])] -> [InvalidPackageError] function, so it needs
+-- its own case-builder.
+mpc :: String -> [(String, [String])] -> [TypedTerm InvalidPackageError] -> TypedTerm TestCaseWithMetadata
+mpc cname pkgs expected = universalCase cname
+  (showFindings (checkModulePartitionRef @@ Phantoms.list (mkPkgDecl <$> pkgs)))
+  (showFindings (Phantoms.list expected))
+  where
+    mkPkgDecl :: (String, [String]) -> TypedTerm (String, [ModuleName])
+    mkPkgDecl (pkgStr, nsStrs) = Phantoms.pair (Phantoms.string pkgStr) (Phantoms.list (nsLit <$> nsStrs))
+    showFindings :: TypedTerm [InvalidPackageError] -> TypedTerm String
+    showFindings fs = retype $
+      Strings.concat2 (Phantoms.string "[") $
+        Strings.concat2 (Strings.join (Phantoms.string ";") $
+          Lists.map (Phantoms.lambda "e" $ Testing.showInvalidPackageErrorRef @@ Phantoms.var "e") fs)
+          (Phantoms.string "]")
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+-- | Bare InvalidPackageError for a module-in-multiple-packages finding.
+moduleInMultiplePackagesErr :: String -> String -> String -> TypedTerm InvalidPackageError
+moduleInMultiplePackagesErr nsStr firstPkgStr secondPkgStr =
+  Phantoms.inject _InvalidPackageError _InvalidPackageError_moduleInMultiplePackages $
+    Phantoms.record _ModuleInMultiplePackagesError [
+      unName _ModuleInMultiplePackagesError_moduleName Phantoms.>: nsLit nsStr,
+      unName _ModuleInMultiplePackagesError_firstPackage Phantoms.>: pn firstPkgStr,
+      unName _ModuleInMultiplePackagesError_secondPackage Phantoms.>: pn secondPkgStr]
 
 -- | Build a TermDefinition for a fully-qualified name whose term carries a
 -- top-level description annotation. Used for happy-path cases where every

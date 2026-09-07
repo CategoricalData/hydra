@@ -75,6 +75,9 @@ checkDuplicateModuleNamesRef = TypedTerm $ TermVariable $ Name "hydra.validate.p
 checkModuleNameConventionRef :: TypedTerm (Module -> Maybe InvalidModuleError)
 checkModuleNameConventionRef = TypedTerm $ TermVariable $ Name "hydra.validate.packaging.checkModuleNameConvention"
 
+checkModulePartitionRef :: TypedTerm ([(String, [ModuleName])] -> [InvalidPackageError])
+checkModulePartitionRef = TypedTerm $ TermVariable $ Name "hydra.validate.packaging.checkModulePartition"
+
 checkPackageNameConventionRef :: TypedTerm (Package -> Maybe InvalidPackageError)
 checkPackageNameConventionRef = TypedTerm $ TermVariable $ Name "hydra.validate.packaging.checkPackageNameConvention"
 

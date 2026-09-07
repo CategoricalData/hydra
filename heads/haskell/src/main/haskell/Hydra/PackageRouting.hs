@@ -48,7 +48,10 @@ module Hydra.PackageRouting (
 ) where
 
 import Hydra.Kernel hiding (buildRoutingMap, groupByPackageIn, namespaceToPackageIn)
+import Hydra.Error.Packaging (InvalidPackageError)
 import qualified Hydra.Build.Routing as GenRouting
+import qualified Hydra.Validate.Packaging as ValidatePackaging
+import qualified Hydra.Print.Error.Packaging as PrintErrorPackaging
 
 import qualified Data.Map as M
 import qualified System.FilePath as FP
@@ -95,8 +98,24 @@ fromPairs pairs = [ PackageManifest p ms [] [] [] | (p, ms) <- pairs ]
 -- @hydra.decode.<x>@, and their @hydra.sources.*@ source wrappers) using
 -- the shipped-kernel derived-name functions, so the naming rule lives in
 -- exactly one place (the generated module, not this shim).
+--
+-- Before delegating, gates on 'ValidatePackaging.checkModulePartition'
+-- (#733/#739): every package's declared module set must partition the
+-- module universe, or 'GenRouting.buildRoutingMap's underlying
+-- @Maps.union@ would silently keep one winner and drop the other
+-- declaration with no diagnostic. This is the single choke point for all
+-- ~7 driver call sites of 'buildRoutingMap' in this head, so gating here
+-- covers every one of them.
 buildRoutingMap :: [(String, [ModuleName])] -> RoutingMap
-buildRoutingMap pkgs = RoutingMap (GenRouting.buildRoutingMap pkgs)
+buildRoutingMap pkgs =
+  case ValidatePackaging.checkModulePartition pkgs of
+    [] -> RoutingMap (GenRouting.buildRoutingMap pkgs)
+    findings -> error (showPartitionErrors findings)
+
+showPartitionErrors :: [InvalidPackageError] -> String
+showPartitionErrors findings =
+  "module namespace(s) declared in more than one package (RoutingMap):\n"
+  ++ Prelude.unlines (("  " ++) . PrintErrorPackaging.invalidPackageError <$> findings)
 
 -- | Map a module name to the package that owns it, via a 'RoutingMap'.
 --

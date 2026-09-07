@@ -36,6 +36,7 @@ module_ = Module {
       invalidPackageError,
       invalidPackageNameError,
       missingDocumentationError,
+      moduleInMultiplePackagesError,
       undeclaredDependencyError]
 
 conflictingModuleNameError :: TypeDefinition
@@ -174,6 +175,9 @@ invalidPackageError = define "InvalidPackageError" $
     "invalidPackageName">:
       doc "A package whose name does not match the package-name naming convention" $
       invalidPackageNameError,
+    "moduleInMultiplePackages">:
+      doc "A module namespace declared by more than one package" $
+      moduleInMultiplePackagesError,
     "undeclaredDependency">:
       doc "A module references a name owned by another module that is not among its declared dependencies" $
       undeclaredDependencyError]
@@ -196,6 +200,20 @@ missingDocumentationError = define "MissingDocumentationError" $
     "name">:
       doc "The name of the undocumented definition" $
       Core.name]
+
+moduleInMultiplePackagesError :: TypeDefinition
+moduleInMultiplePackagesError = define "ModuleInMultiplePackagesError" $
+  doc "A module namespace declared by more than one package. Module-to-package routing requires each package's declared module set to partition the module universe; a namespace declared by two packages would otherwise be routed to one of them arbitrarily, with the other declaration silently ignored." $
+  T.record [
+    "moduleName">:
+      doc "The module namespace declared by more than one package" $
+      Packaging.moduleNameDef,
+    "firstPackage">:
+      doc "The name of the first package declaring the module" $
+      Packaging.packageName,
+    "secondPackage">:
+      doc "The name of the second package declaring the module" $
+      Packaging.packageName]
 
 undeclaredDependencyError :: TypeDefinition
 undeclaredDependencyError = define "UndeclaredDependencyError" $

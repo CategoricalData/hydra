@@ -127,9 +127,12 @@ bottom position; see [syntax.md](syntax.md)) · nonComparableMapKeyType / nonCom
 
 **Packages and modules.** duplicate module names · duplicate definition names · conflictingModuleNames
 (no lowercased collision) · conflictingVariantNames · definition-name prefixing (every definition name
-has its module name as a dotted prefix). (Dependency resolution is transitive; the stricter
-"declare every referenced module directly" check is a kernel-authoring convention — SHOULD-class, §4.2 —
-not a conformance rule.)
+has its module name as a dotted prefix) · modulePartition (no module namespace is declared by more than
+one package: the per-package declared module sets must partition the module universe; a doubly-declared
+module would be silently routed to a single winner. Universe-level, evaluated over all manifests
+together. Rule id `hydra.error.packaging.InvalidPackageError.moduleInMultiplePackages`.) (Dependency
+resolution is transitive; the stricter "declare every referenced module directly" check is a
+kernel-authoring convention — SHOULD-class, §4.2 — not a conformance rule.)
 
 ### 4.2 SHOULD-class (kernel-strict, opt-in elsewhere)
 
