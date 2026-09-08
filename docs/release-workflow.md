@@ -817,15 +817,23 @@ The published artifacts under group `net.fortytwo.hydra.java` (#519) are:
 Starting with 0.16.1, the publish set covers a Java/Maven artifact for **every official Hydra
 target language** — one coder package per implementation family
 (`hydra-haskell`/`-java`/`-python`/`-scala`/`-lisp`/`-typescript`, covering all nine of the
-implementation languages), plus the `hydra-kernel` base, the `hydra-build`/`hydra-jvm` support
-packages, and the `hydra-pg`/`hydra-rdf` domain packages (#468, #505, #508). The authoritative Java
-publish set lives in `PUBLISH_SET` in `heads/java/bin/publish-maven.sh`. Two related sets are
-*intentionally narrower* and no longer identical to it: `batch_emit_packages()` in
-`bin/lib/assemble-common.sh` (the coder packages the batch assembler emits a `build.gradle` for —
+implementation languages), plus the `hydra-kernel` base and the `hydra-pg`/`hydra-rdf` domain
+packages (#468). The set is **derived from the `hydra.json` registry** via
+`hydra-packages.py publish-set java` (#573): a coder/host package qualifies by listing `java` in
+its package.json `registries` field (the JVM registries — Maven, sbt — carry every coder family,
+unlike PyPI/npm which carry only their own native coder), and a domain package (`hydra-kernel`,
+`hydra-rdf`, `hydra-pg`, `hydra-build`) qualifies by listing `java` in `targetLanguages`. No
+hardcoded list to fall out of sync. The newer `hydra-coq`, `hydra-go`, `hydra-wasm`, and
+`hydra-bench` packages opt out everywhere via `"publishable": false`, since they are either
+head-bud targets too immature to publish or (for `hydra-bench`) never meant to ship at all.
+
+Two related sets are *intentionally narrower* and not derived the same way: `batch_emit_packages()`
+in `bin/lib/assemble-common.sh` (the coder packages the batch assembler emits a `build.gradle` for —
 kernel plus the six coders, omitting `hydra-jvm`/`hydra-build`/`hydra-pg`/`hydra-rdf`) and
 `PUBLISHED_HOSTS` in `bin/lib/hydra-packages.py` (which packages resolve to a published *host*
-version — now including `hydra-jvm`). The newer `hydra-coq`, `hydra-go`, and `hydra-wasm` targets
-do NOT yet qualify.
+version). These answer a different question (does a host have a published artifact at all, for the
+#370 consume-vs-local-build gate) than "which registries publish package P" — tracked as a separate
+follow-up, not part of #573.
 
 `hydra-ext` (Avro, Protobuf, GraphQL, Pegasus, etc.) joined the Java publish set as of 0.17.4
 (#636). It had been excluded since 0.15 due to a documented "Java-coder limitation with
@@ -836,6 +844,15 @@ confirmed clean generation (1105 files, no failures). `hydra-ext` also joined th
 set in the same pass (#636); it remains excluded from Scala/Maven and npm, which have their own
 independent eta-expansion exposure and have not yet been re-validated — track before adding
 `hydra-ext` to those.
+
+**Update (0.17.4, #643):** `hydra-ext` is TEMPORARILY excluded from the Java publish set again —
+its `targetLanguages`/registry metadata says it qualifies (per #636 above), but the generated
+Java does not compile (`#643`: a visitor-pattern inner interface collides with the enclosing
+`Visitor` type in `hydra.cpp.syntax`). `heads/java/bin/publish-maven.sh` filters `hydra-ext` out
+of the registry-derived set explicitly for this reason, since the registry metadata has no field
+yet for "codegen-eligible but temporarily broken for registry X" (a #573 metadata-gap finding).
+Python/Hackage are unaffected and continue to publish `hydra-ext` normally. Remove the filter in
+`publish-maven.sh` once `#643` lands.
 
 Each artifact's `build.gradle` is regenerated from `packages/<pkg>/package.json` (which declares
 the inter-package `dependencies` array) and `hydra.json:currentVersion` by
@@ -1014,10 +1031,14 @@ The published artifacts mirror the Java set (with `hydra-pg` still excluded, bel
 | `hydra-rdf_3` | RDF, OWL, SHACL, ShEx, XML Schema models. | `hydra-kernel_3` |
 | `hydra-pg_3` _(not yet published)_ | Property graph model, coders, GraphSON, TinkerPop. | `hydra-kernel_3`, `hydra-rdf_3` |
 
-`hydra-pg` is **not** in the current Scala publish set — the generated Scala pg coder has a
-type-variable threading issue that prevents standalone compilation. Track the fix separately
-before adding it. (`hydra-ext` is similarly excluded from this Scala/Maven set — see the Java
-section above for how the analogous Java/Python exclusion was resolved via #636.)
+The publish set is **derived from the `hydra.json` registry** via
+`hydra-packages.py publish-set scala` (#573), same mechanism as the Java/PyPI/npm sets (see
+[Java releases](#java-releases)). `hydra-pg` is **not** in the current Scala publish set — its
+package.json `targetLanguages` does not list `scala`, because the generated Scala pg coder has a
+type-variable threading issue that prevents standalone compilation. Track the fix separately before
+adding `scala` to `hydra-pg`'s `targetLanguages`. `hydra-ext`'s `targetLanguages` also does not
+list `scala`, so it is naturally excluded here too (unrelated to its Java-specific #643 exclusion
+above, which is a temporary post-derivation filter, not a metadata gap).
 
 Each artifact's `build.sbt` is regenerated from `packages/<pkg>/package.json` and
 `hydra.json:currentVersion` by `bin/lib/generate-scala-package-build.py`, and
@@ -1098,7 +1119,10 @@ The published wheels are:
 | `hydra-ext` | Avro, Protobuf, GraphQL, Pegasus, C++, Rust, Go extension models. | `hydra-kernel` |
 | `hydra-python` | Python syntax, serde, and coder. | `hydra-kernel` |
 
-`hydra-ext` joined the publish set as of 0.17.4 (#636) — see the publish steps below.
+The publish set is **derived from the `hydra.json` registry** via
+`hydra-packages.py publish-set python` (#573), same mechanism as the Java/Scala/npm sets (see
+[Java releases](#java-releases)). `hydra-ext` joined the publish set as of 0.17.4 (#636) — see
+the publish steps below.
 
 > **`hydra-ext` needs an extra sync in a fresh worktree** ([#705](https://github.com/CategoricalData/hydra/issues/705)).
 > `bin/sync.sh` deliberately excludes the extension packages from the host × target matrix, so a
@@ -1150,8 +1174,9 @@ The following are Python-specific release steps:
   twine check wheels/*                        # validate metadata (recommended pre-flight)
   heads/python/bin/publish-pypi.sh --upload   # build + twine upload
   ```
-  The publish set is `hydra-kernel`, `hydra-build`, `hydra-rdf`, `hydra-pg`, `hydra-ext`,
-  `hydra-python` (six packages as of 0.17.4 — `hydra-ext` joined per #636).
+  The publish set (`hydra-kernel`, `hydra-build`, `hydra-rdf`, `hydra-pg`, `hydra-ext`,
+  `hydra-python`) is derived from the registry, not hardcoded — see above. Six packages as of
+  0.17.4 — `hydra-ext` joined per #636.
   * **Builder portability.** The script prefers `uv build` (hermetic, needs no preinstalled
     `build` module) and falls back to `python3 -m build`. Plain `python -m build` fails with
     `No module named build.__main__` on an interpreter without the `build` package — prefer `uv`.
@@ -1339,6 +1364,10 @@ The published packages are:
 | `hydra-rdf` | RDF, OWL, SHACL, ShEx, XML Schema models. | `hydra-kernel` |
 | `hydra-pg` | Property graph model, coders, GraphSON, TinkerPop. | `hydra-kernel`, `hydra-rdf` |
 | `hydra-typescript` | TypeScript syntax and coder. | `hydra-kernel` |
+
+The publish set is **derived from the `hydra.json` registry** via
+`hydra-packages.py publish-set typescript` (#573), same mechanism as the Java/Scala/PyPI sets
+(see [Java releases](#java-releases)).
 
 Each package's `package.json` is generated by `bin/lib/generate-typescript-package-build.py`
 from `packages/<pkg>/package.json` and `hydra.json:currentVersion`.
