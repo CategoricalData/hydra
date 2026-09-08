@@ -21,6 +21,17 @@ Subcommands:
                                 bin/lib/assemble-common.sh:component_identity
                                 to find the right src/main/<lang>/ tree to
                                 fingerprint (#562).
+  publish-set <language>        Print the packages that should be published to
+                                <language>'s registry (Maven for java, PyPI for
+                                python, sbt/Sonatype for scala, npm for
+                                typescript, Hackage for haskell), topologically
+                                sorted (deps first). A package qualifies iff it
+                                is registered, its package.json does not set
+                                "publishable": false, and it lists <language> in
+                                its "registries" field if present, else in its
+                                targetLanguages (see supports-target). Fails
+                                loudly (nonzero exit, no output) if the result
+                                is empty, since an empty publish set is a bug.
 
 Version accessors (single source of truth is hydra.json; the standalone VERSION
 file has been retired):
@@ -291,6 +302,61 @@ def cmd_supports_target(root: Path, args: list[str]) -> int:
     return 0 if target in tls else 1
 
 
+def is_publishable(root: Path, pkg: str) -> bool:
+    """False iff <pkg>'s package.json explicitly sets "publishable": false — the
+    opt-out for packages that support a target language (so their code can be
+    generated for it) but should never appear in ANY per-registry publish set, e.g.
+    hydra-bench (never shipped anywhere), a head-bud target too immature to
+    publish (hydra-go, hydra-coq, hydra-wasm), or a package not mature/stable
+    enough for its declared target yet (hydra-ext: declares "python" in
+    targetLanguages for code-generation purposes, but has never shipped to PyPI).
+    Defaults to True: most packages are publishable everywhere supports_registry
+    allows."""
+    return load_package_meta(root, pkg).get("publishable", True) is not False
+
+
+def supports_registry(root: Path, pkg: str, language: str) -> bool:
+    """True iff <pkg> should be published to <language>'s package registry
+    (Hackage/Maven/PyPI/sbt/npm).
+
+    This is a NARROWER question than supports-target / targetLanguages, which
+    governs code-generation eligibility (can hydra-scala's DSL description be
+    generated as Python code — yes, trivially, like almost every package). A
+    generated coder/host package (hydra-haskell, hydra-jvm, hydra-java,
+    hydra-python, hydra-scala, hydra-lisp, hydra-typescript) is a valid JVM
+    artifact for EVERY JVM registry (Hackage's Haskell build, Maven, sbt) but is
+    NOT a valid PyPI wheel or npm package unless it IS that language's own coder
+    (e.g. hydra-python belongs on PyPI; hydra-scala does not). These packages
+    declare an explicit "registries" list in package.json for exactly this reason.
+
+    Domain/library packages (hydra-kernel, hydra-rdf, hydra-pg, hydra-ext,
+    hydra-build) have no such ambiguity — targetLanguages IS the registry list for
+    them (a Python wheel of hydra-rdf is exactly what "python" in targetLanguages
+    means) — so they fall back to supports-target's rule when "registries" is
+    absent."""
+    meta = load_package_meta(root, pkg)
+    registries = meta.get("registries")
+    if registries is not None:
+        return language in registries
+    return cmd_supports_target(root, [pkg, language]) == 0
+
+
+def cmd_publish_set(root: Path, args: list[str]) -> int:
+    if len(args) != 1:
+        print("Usage: hydra-packages.py publish-set <language>", file=sys.stderr)
+        return 2
+    language = args[0]
+    candidates = [
+        pkg for pkg in load_all_packages(root)
+        if is_publishable(root, pkg)
+        and supports_registry(root, pkg, language)
+    ]
+    if not candidates:
+        print(f"ERROR: empty publish set derived for language '{language}'", file=sys.stderr)
+        return 1
+    return cmd_topo(root, candidates)
+
+
 _VERSION_RE = None
 
 
@@ -424,6 +490,7 @@ COMMANDS = {
     "reverse-closure": cmd_reverse_closure,
     "supports-target": cmd_supports_target,
     "source-language": cmd_source_language,
+    "publish-set": cmd_publish_set,
     "current-version": cmd_current_version,
     "set-current-version": cmd_set_current_version,
     "host-version": cmd_host_version,
