@@ -569,6 +569,11 @@ Signals an error if any form remains unresolved after 10 retry passes."
     ;; otherwise loads the build/ modules alphabetically, putting the consumer
     ;; (langexpansion) before the dependency (registry) and leaving REGISTRY_*
     ;; unbound. Pin registry to load first.
+    ;; #559: hydra.build.registry now references the LanguageProfile constructor from
+    ;; hydra.build.format (languageProfiles-as-records). A missing constructor is NOT
+    ;; resolvable by the forward-reference retry loop (which only rebinds values), so
+    ;; format MUST load before registry. Pin format ahead of registry.
+    "build/format.el"
     "build/registry.el")
   "Priority ordering for gen-main module loading.")
 

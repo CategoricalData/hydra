@@ -701,6 +701,11 @@ forward references."
                      ;; loader otherwise loads the build/ modules alphabetically, which puts
                      ;; the consumer (langexpansion) before the dependency (registry) and
                      ;; leaves REGISTRY_* unbound. Pin registry to load first.
+                     ;; #559: hydra.build.registry now references the LanguageProfile constructor
+                     ;; from hydra.build.format (languageProfiles-as-records). A missing constructor
+                     ;; is NOT resolvable by the forward-reference retry loop (which only rebinds
+                     ;; values), so format MUST load before registry. Pin format ahead of registry.
+                     "build/format.lisp"
                      "build/registry.lisp"))
          ;; Collect ALL .lisp files from gen-main.
          (all-files (collect-lisp-files base))
