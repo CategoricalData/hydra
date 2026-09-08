@@ -51,24 +51,15 @@ HYDRA_ROOT="$( cd "$HYDRA_SCALA_DIR/../.." && pwd )"
 KEEP=false
 [ "${1:-}" = "--keep" ] && KEEP=true
 
-# Scala publish set, leaves-first (mirror of publish-sbt.sh PUBLISH_SET).
-# hydra-pg is included: the Scala pg coder's type-argument specialization on the
-# multi-param hydra.pg.mapping.Schema[S,T,V,E] is fixed (#589) so hydra-pg
-# compiles standalone. Experimental targets (go/coq/wasm), benchmarks
-# (hydra-bench), and hydra-ext (coder limitation) are not published for Scala.
-PUBLISH_SET=(
-    hydra-kernel
-    hydra-build
-    hydra-haskell
-    hydra-jvm
-    hydra-java
-    hydra-python
-    hydra-scala
-    hydra-lisp
-    hydra-typescript
-    hydra-rdf
-    hydra-pg
-)
+# Scala publish set, leaves-first. DERIVED from the hydra.json registry (#573),
+# same derivation as publish-sbt.sh — see that script for how a package
+# qualifies (hydra-pg is naturally excluded there: its package.json
+# targetLanguages does not list "scala").
+read -ra PUBLISH_SET < <("$HYDRA_ROOT/bin/lib/hydra-packages.py" publish-set scala)
+if [ "${#PUBLISH_SET[@]}" -eq 0 ]; then
+    echo "ERROR: could not derive Scala publish set from hydra.json registry" >&2
+    exit 1
+fi
 # #519: Scala artifacts publish under the per-language group
 # net.fortytwo.hydra.scala (must match GROUP_ID in
 # bin/lib/generate-scala-package-build.py), with the Scala 3 cross-version

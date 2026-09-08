@@ -46,9 +46,14 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_PYTHON_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT="$( cd "$HYDRA_PYTHON_DIR/../.." && pwd )"
 
-# The PyPI publish set (mirror of publish-pypi.sh PUBLISH_SET). Order is
-# leaves-first so a --no-index install can resolve inter-package deps.
-PUBLISH_SET=(hydra-kernel hydra-build hydra-rdf hydra-pg hydra-python)
+# The PyPI publish set, leaves-first (so a --no-index install can resolve
+# inter-package deps). DERIVED from the hydra.json registry (#573), same
+# derivation as publish-pypi.sh — see that script for how a package qualifies.
+read -ra PUBLISH_SET < <("$HYDRA_ROOT/bin/lib/hydra-packages.py" publish-set python)
+if [ "${#PUBLISH_SET[@]}" -eq 0 ]; then
+    echo "ERROR: could not derive PyPI publish set from hydra.json registry" >&2
+    exit 1
+fi
 
 WHEELS_DIR=""
 while [ $# -gt 0 ]; do

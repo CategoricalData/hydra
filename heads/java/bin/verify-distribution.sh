@@ -54,20 +54,14 @@ HYDRA_ROOT="$( cd "$HYDRA_JAVA_DIR/../.." && pwd )"
 KEEP=false
 [ "${1:-}" = "--keep" ] && KEEP=true
 
-# Java publish set, leaves-first (mirror of publish-maven.sh PUBLISH_SET).
-PUBLISH_SET=(
-    hydra-kernel
-    hydra-build
-    hydra-haskell
-    hydra-jvm
-    hydra-java
-    hydra-python
-    hydra-scala
-    hydra-lisp
-    hydra-typescript
-    hydra-rdf
-    hydra-pg
-)
+# Java publish set, leaves-first. DERIVED from the hydra.json registry (#573),
+# same derivation as publish-maven.sh — see that script for how a package
+# qualifies.
+read -ra PUBLISH_SET < <("$HYDRA_ROOT/bin/lib/hydra-packages.py" publish-set java)
+if [ "${#PUBLISH_SET[@]}" -eq 0 ]; then
+    echo "ERROR: could not derive Java publish set from hydra.json registry" >&2
+    exit 1
+fi
 # #519: Java artifacts publish under the per-language group net.fortytwo.hydra.java
 # (must match GROUP_ID in bin/lib/generate-java-package-build.py).
 GROUP="net.fortytwo.hydra.java"

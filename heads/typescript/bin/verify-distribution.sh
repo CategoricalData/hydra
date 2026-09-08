@@ -28,8 +28,14 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_TS_HEAD="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT="$( cd "$HYDRA_TS_HEAD/../.." && pwd )"
 
-# Mirror of publish-npm.sh PUBLISH_SET (leaves first).
-PUBLISH_SET=(hydra-kernel hydra-build hydra-rdf hydra-pg hydra-typescript)
+# The npm publish set, leaves-first. DERIVED from the hydra.json registry
+# (#573), same derivation as publish-npm.sh — see that script for how a
+# package qualifies.
+read -ra PUBLISH_SET < <("$HYDRA_ROOT/bin/lib/hydra-packages.py" publish-set typescript)
+if [ "${#PUBLISH_SET[@]}" -eq 0 ]; then
+    echo "ERROR: could not derive npm publish set from hydra.json registry" >&2
+    exit 1
+fi
 
 TARBALLS_DIR=""
 while [ $# -gt 0 ]; do
