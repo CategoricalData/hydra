@@ -93,30 +93,27 @@ fi
 
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 
-# The Java publish set, in LEAVES-FIRST topological order. hydra-ext joined as of
-# 0.17.4 (#636) — its prior exclusion (a documented "parametric union case-elimination"
-# coder limitation) was traced to #475 (Java/Python eta-expansion + re-inference gap
-# on polymorphic/recursive/Set-typed encoder/decoder shapes), which was fixed
-# 2026-06-13 but never re-validated against hydra-ext until #636 confirmed a clean
-# generation (1105 files, no failures) with the fix in place.
-PUBLISH_SET=(
-    hydra-kernel
-    hydra-build
-    hydra-haskell
-    hydra-jvm
-    hydra-java
-    hydra-python
-    hydra-scala
-    hydra-lisp
-    hydra-typescript
-    hydra-rdf
-    hydra-pg
-    # hydra-ext: TEMPORARILY EXCLUDED as of 0.17.4 — does not compile for Java
-    # (#643: the visitor-pattern inner interface collides with the enclosing
-    # `Visitor` type in hydra.cpp.syntax). ext still ships to Hackage and PyPI
-    # at 0.17.4. Restore this entry once #643 lands; see #636 for the intent to
-    # publish ext to Hackage + Maven-Java + PyPI.
-)
+# The Java publish set, in LEAVES-FIRST topological order. DERIVED from the
+# hydra.json registry via `hydra-packages.py publish-set java` (#573) — a package
+# qualifies iff it is registered, not opted out via "publishable": false, and
+# either declares "java" in its "registries" list (the generated coder/host
+# packages, which are valid Maven artifacts for every JVM registry) or declares
+# "java" in targetLanguages (the domain packages: hydra-kernel, hydra-rdf,
+# hydra-pg). No hardcoded list to fall out of sync as new packages are registered.
+read -ra PUBLISH_SET < <("$HYDRA_ROOT/bin/lib/hydra-packages.py" publish-set java)
+if [ "${#PUBLISH_SET[@]}" -eq 0 ]; then
+    echo "ERROR: could not derive Java publish set from hydra.json registry" >&2
+    exit 1
+fi
+# hydra-ext: TEMPORARILY EXCLUDED as of 0.17.4 (#643 — the visitor-pattern inner
+# interface collides with the enclosing `Visitor` type in hydra.cpp.syntax), even
+# though its targetLanguages/registries metadata says it qualifies for Java (#636).
+# This is a per-registry compile-time exception the registry metadata has no field
+# for yet (targetLanguages says "eligible for codegen," which is still true; the
+# generated Java just doesn't compile today). Filtered here rather than in the
+# registry so Hackage/PyPI (unaffected by #643) keep publishing it normally. Undo
+# this filter once #643 lands — see the #573 plan doc for the metadata-gap note.
+PUBLISH_SET=($(printf '%s\n' "${PUBLISH_SET[@]}" | grep -v '^hydra-ext$'))
 
 GRADLE_TASK="publishAggregationToCentralPortal"
 ROOT_AGGREGATOR_DIR="$HYDRA_ROOT/dist/java"

@@ -95,14 +95,14 @@ OUT_DIR="$(cd "$OUT_DIR" && pwd)"
 
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 
-# Leaves-first publish order (dependency-ordered).
-PUBLISH_SET=(
-    hydra-kernel
-    hydra-build
-    hydra-rdf
-    hydra-pg
-    hydra-typescript
-)
+# The npm publish set, in LEAVES-FIRST topological order. DERIVED from the
+# hydra.json registry via `hydra-packages.py publish-set typescript` (#573) —
+# see publish-maven.sh for how a package qualifies.
+read -ra PUBLISH_SET < <("$HYDRA_ROOT/bin/lib/hydra-packages.py" publish-set typescript)
+if [ "${#PUBLISH_SET[@]}" -eq 0 ]; then
+    echo "ERROR: could not derive npm publish set from hydra.json registry" >&2
+    exit 1
+fi
 
 # --- Guard: dependency closure -----------------------------------------------
 echo "=== Checking dependency closure of npm publish set ==="

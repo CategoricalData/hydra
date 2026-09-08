@@ -6,14 +6,16 @@
 # live under group net.fortytwo.hydra.scala (the per-JVM-language group from
 # #519, distinct from the Java set's net.fortytwo.hydra.java) with the Scala 3
 # cross-version suffix (_3). The group is read from the generated build.sbt.
-# The publish set is:
-#   hydra-kernel -> hydra-haskell/hydra-jvm/hydra-python/hydra-lisp/
-#   hydra-typescript/hydra-rdf/hydra-pg; hydra-jvm -> hydra-java/hydra-scala
-# (hydra-jvm is the shared JVM base that hydra-java and hydra-scala depend on,
-# so it must be in the set for dependency closure.)
-# hydra-pg is included: the Scala pg coder's type-argument specialization on the
-# multi-param Schema[S,T,V,E] is fixed (#589) so hydra-pg compiles standalone.
-# hydra-ext is excluded (coder limitation; not in the standard sync matrix).
+# The publish set is DERIVED from the hydra.json registry (see below) — a
+# package qualifies iff it is registered, not opted out via "publishable":
+# false, and lists "scala" in its "registries" field (the generated coder/host
+# packages) or targetLanguages (domain packages). hydra-jvm is the shared JVM
+# base that hydra-java/hydra-scala depend on, so it is always in the set for
+# dependency closure. hydra-pg's Scala coder bug is fixed (#589) but its
+# package.json targetLanguages does not yet list "scala", so it is currently
+# excluded here too — tracked as a separate registry-metadata gap, not #573
+# scope (see #573 plan doc). hydra-ext's targetLanguages does not list "scala"
+# either, so it is naturally excluded (no opt-out flag needed).
 #
 # Each dist/scala/<pkg>/ is a standalone sbt build whose generated build.sbt
 # carries `sbt-sonatype` + `sbt-pgp` publishing, AND points
@@ -154,24 +156,15 @@ run_621_scala_gate() {
 # per-package build.sbt was generated pointing at this same path.
 BUNDLE_DIR="$HYDRA_ROOT/dist/scala/.central-portal-bundle"
 
-# Publish set in LEAVES-FIRST topological order. Mirrors the Java publish set
-# (hydra-pg included): the Scala pg coder's type-argument specialization on the
-# multi-param hydra.pg.mapping.Schema[S,T,V,E] is fixed so hydra-pg compiles
-# standalone. Experimental targets (go/coq/wasm), benchmarks (hydra-bench), and
-# hydra-ext (coder limitation) are not published for Scala.
-PUBLISH_SET=(
-    hydra-kernel
-    hydra-build
-    hydra-haskell
-    hydra-jvm
-    hydra-java
-    hydra-python
-    hydra-scala
-    hydra-lisp
-    hydra-typescript
-    hydra-rdf
-    hydra-pg
-)
+# The Scala publish set, in LEAVES-FIRST topological order. DERIVED from the
+# hydra.json registry via `hydra-packages.py publish-set scala` (#573) — see
+# publish-maven.sh for how a package qualifies, and the file header above for
+# the current hydra-pg gap.
+read -ra PUBLISH_SET < <("$HYDRA_ROOT/bin/lib/hydra-packages.py" publish-set scala)
+if [ "${#PUBLISH_SET[@]}" -eq 0 ]; then
+    echo "ERROR: could not derive Scala publish set from hydra.json registry" >&2
+    exit 1
+fi
 
 # --- Guard: sbt on PATH ------------------------------------------------------
 if ! command -v sbt >/dev/null 2>&1; then

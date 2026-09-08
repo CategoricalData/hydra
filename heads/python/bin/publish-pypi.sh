@@ -52,7 +52,18 @@ mkdir -p "$OUT_DIR"
 OUT_DIR="$(cd "$OUT_DIR" && pwd)"
 
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
-PUBLISH_SET=(hydra-kernel hydra-build hydra-rdf hydra-pg hydra-ext hydra-python)
+# DERIVED from the hydra.json registry via `hydra-packages.py publish-set python`
+# (#573) — see publish-maven.sh for how a package qualifies. hydra-ext joined the
+# publish set as of #636 (its package.json now declares "python" in
+# targetLanguages with no "publishable": false opt-out). The generated coder/host
+# packages for OTHER languages (hydra-scala, hydra-java, …) are excluded because
+# they only declare "python" as a registry when it is their own native language
+# (hydra-python does; the others don't).
+read -ra PUBLISH_SET < <("$HYDRA_ROOT/bin/lib/hydra-packages.py" publish-set python)
+if [ "${#PUBLISH_SET[@]}" -eq 0 ]; then
+    echo "ERROR: could not derive PyPI publish set from hydra.json registry" >&2
+    exit 1
+fi
 
 # --- Guard: dependency closure -----------------------------------------------
 echo "=== Checking dependency closure of PyPI publish set ==="
