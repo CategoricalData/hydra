@@ -491,6 +491,61 @@ self-hosted coders' input digest omitted the native `hydra.<lang>.*` modules, so
 guard: the input digest for a package must hash *every* source module that feeds its
 generation, including ones whose JSON output is written by a different producer.
 
+### Per-module Merkle hashing (#701)
+
+Cross-package invalidation (`ppDeps`/`selfHash`, #347) has always been transitive: a package's
+recorded digest carries each declared dependency package's `selfHash`, so editing package B
+invalidates dependent package A even if A's own modules are untouched (see [Why
+`digest.json` is separate from `manifest.json`](#why-digestjson-is-separate-from-manifestjson)
+and the cache inventory table above). Until #701, the same principle did **not** apply one
+level in, at the *module* granularity within a package: each module name's entry in
+`moduleHashes` was the SHA-256 of that module's own DSL source content only, with no edge to
+the modules it depends on.
+
+**Why this was sound before type classes, and unsound after.** Before type classes, a term's
+inferred type signature could only change if its own source changed — any upstream change
+large enough to alter a dependent term's *type* would have forced the dependent's own source
+to change too, or it would not type-check. So "unchanged source ⟹ unchanged output" held, and
+own-content-hash was a sound freshness key on its own. Type classes broke that invariant: a
+primitive's *class constraints* can change and propagate a new constraint into a dependent
+term's inferred scheme through inference alone, with the dependent's untyped source staying
+byte-identical. A `hydra.lib.eithers.mapSet` constraint change silently left
+`hydra.extract.core`'s cached `setOf` signature stale, because `Core.hs` itself never changed —
+the classic instance (0.17 breaking batch, #508), worked around at the time with a full digest
+wipe.
+
+**The graph problem underneath**: even a Merkle fold is only as good as the dependency edges
+it folds over. The obvious source — each module's hand-declared `moduleDependencies` field —
+turned out to be structurally incomplete: `hydra.extract.core` calls `Eithers.mapSet` via a
+generated `Hydra.Dsl.Lib.Eithers` wrapper import (an ordinary Haskell import, invisible to the
+DSL-level dependency system) but never lists `hydra.lib.eithers` in its declared deps. A
+hand-maintained graph can't be kept exhaustive by construction — a DSL author adding a
+primitive call has no structural reason to also edit a separate dependency list. So the fix
+has two parts:
+
+1. **Derive the edges, don't trust the declaration.** `Hydra.Generation.moduleReferenceEdges`
+   unions each module's declared `moduleDependencies` with the modules actually referenced by
+   its term bodies, computed via the kernel's own `termDependencyNames` (which walks a term's
+   AST for every name it references, including primitive and nominal-type references that a
+   plain free-variable walk would miss) and resolved back to owning modules via `moduleNameOf`.
+2. **Fold the (derived) closure into the persisted hash itself.**
+   `Hydra.Digest.computeMerkleHashes` replaces each module's own-content hash with
+   `merkleHash(X) = H(ownContentHash(X), merkleHash(dep1), ..., merkleHash(depN))`, processing
+   strongly-connected components in topological order (via the kernel's
+   `topologicalSortComponents`) so a mutually-recursive module group collapses to one shared
+   Merkle value instead of looping. This step matters independently of (1): the in-process
+   dirty-set closure (`closeDirtySet`, used during a single `update-json-main` run to decide
+   which modules need re-inference) only runs inside one Haskell process invocation — it can't
+   make the *persisted*, cross-invocation freshness key (compared by `digest-check`/Layer 2
+   without ever re-invoking Haskell) sound on its own. Folding dependency hashes into the
+   stored key makes Layer 2 correct by construction, not just correct when `closeDirtySet`
+   happens to run first.
+
+Both parts land together: (2) alone, folded over the pre-existing incomplete
+`moduleDependencies` graph, would still miss the `setOf`/`hydra.lib.eithers` edge; (1) alone
+fixes `closeDirtySet`'s in-process completeness but leaves the persisted key structurally
+unsound in principle.
+
 ### The per-target generator stamp
 
 The Layer 2 cache is keyed on (a) per-module-name input hashes and (b) a per-target
@@ -933,21 +988,23 @@ around the corresponding `bin/` script; see [CLAUDE.md §Shorthand commands](../
 
 ## Remaining gaps
 
-### 1. File-level source-dependency Merkle (A-side)
+### 1. Definition-level source-dependency Merkle (A-side) — module-level resolved by #701
 
-Today the per-package input digest treats each package as an opaque bag of module names.
-A change to one source file `Foo.hs` invalidates the per-package digest's entry for
-`Foo`'s module name — but consumers of `Foo` in *other* packages aren't automatically
-flagged for regen unless they themselves changed. The current design relies on the
-universe-wide invalidation cascade for cross-package propagation, which is correct but
-coarse: a kernel-type edit may invalidate everything even though only a handful of
-downstream module names consume the changed type.
+**Module-level resolved.** Each module name's per-package input-digest entry is now a Merkle
+hash over its transitive intra-package (and cross-package-reachable, since a module's real
+references aren't bounded by package edges) dependency closure, not its own source content
+alone — see [Per-module Merkle hashing](#per-module-merkle-hashing-701) below. A change at the
+root propagates to every dependent's recorded hash, regardless of how many hops away.
 
-The proper Merkle structure on the A side is the file-level dependency DAG: each
-module name's cache key is `hash(its source content, its transitive deps' cache keys)`. A
-change at the root propagates exactly to dependents. Substantially overlaps with
-[#329 (definition-level change detection)](https://github.com/CategoricalData/hydra/issues/329);
-worth treating as one piece of work.
+**What's still coarse, and left to #329**: the closure is at MODULE granularity, not
+per-definition. A module with 50 definitions, only one of which actually depends on a changed
+upstream definition, still gets its whole module-level hash perturbed — correct (never
+under-invalidates), but not maximally precise (may over-invalidate: a downstream module regens
+even when the one definition it actually uses from the changed module is unaffected).
+[#329 (definition-level change detection)](https://github.com/CategoricalData/hydra/issues/329)
+is the natural next refinement — same Merkle principle, one level finer. Not required for
+correctness (module-level Merkle already restores the "unchanged source ⟹ unchanged output"
+invariant type classes broke; see below), only for build-time precision.
 
 ### 2. Consuming published hosts in the build (T-side) — cache half done
 

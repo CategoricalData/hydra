@@ -929,13 +929,25 @@ the renamed name has a different in-memory body, but only the modules whose own
 sources changed get re-emitted to JSON, so the on-disk JSON for the dependents
 stays at the pre-rename name.
 
-Workaround: delete `dist/json/build/digest.json` (or wipe the whole `dist/**/build/`
-subtree — it's all derivable cache state, never tracked) to force a full universe
-re-inference on the next sync. (Pre-#347, the canonical trick was to zero out the
-`encoderId` field in that file; that mechanism is retired — see
-`docs/build-system.md` §"Retired: encoderId" — so deletion is now the way.)
-This is a known limitation of the incremental dirty-detector;
-see the `incremental_inference_wiring_pending` follow-up.
+As of #701, this specific failure mode — a dependency's DSL source or inferred
+signature changing without the dependent module's own source changing (a rename, or a
+primitive gaining a new type-class constraint, e.g. the `setOf`/`hydra.lib.eithers.mapSet`
+case from the 0.17 breaking batch, #508) — is fixed at the source: the per-module cache key
+is now a Merkle hash over the module's transitive dependency closure (derived from actual
+term references, not just the hand-declared `moduleDependencies` list), not its own content
+hash alone. See [docs/build-system.md §Per-module Merkle
+hashing](../build-system.md#per-module-merkle-hashing-701). A plain re-sync (no wipe needed)
+should now pick up this class of change correctly.
+
+If verification still fails after a plain re-sync, the cause is likely a *different*
+staleness class — e.g. the coarser-than-necessary module-level (not yet definition-level;
+see [#329](https://github.com/CategoricalData/hydra/issues/329)) granularity, or a genuine
+cache bug. Workaround: delete `dist/json/build/digest.json` (or wipe the whole
+`dist/**/build/` subtree — it's all derivable cache state, never tracked) to force a full
+universe re-inference on the next sync. (Pre-#347, the canonical trick was to zero out the
+`encoderId` field in that file; that mechanism is retired — see `docs/build-system.md`
+§"Retired: encoderId" — so deletion is now the way.) If the wipe fixes it, the digest gate
+had a bug; file an issue with the reproduction rather than treating the wipe as routine.
 
 ---
 
