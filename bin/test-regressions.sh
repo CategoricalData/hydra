@@ -21,6 +21,8 @@
 #                                              oracle opt-in via HYDRA_DIGEST_ORACLE=1 + stack slot)
 #   bin/test-build-host-independence.sh       (guards #416 Phase-A, hermetic — no production digest-check
 #                                              invocation creeps back into the downstream build path)
+#   bin/test-generator-config-conformance.sh  (guards #559 Phase-A, hermetic — generator/host set stays
+#                                              external consumer config; no literal host branch in dispatch)
 #
 # The first five build their own Haskell executables from current source
 # before exec'ing them, so this script does not require a pre-built stack
@@ -47,6 +49,7 @@ SCRIPTS=(
     "test-assembly-plan-conformance.sh"
     "test-digest-conformance.sh"
     "test-build-host-independence.sh"
+    "test-generator-config-conformance.sh"
 )
 
 declare -a RESULTS=()

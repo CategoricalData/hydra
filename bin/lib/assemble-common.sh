@@ -162,12 +162,38 @@ export_generation_env() {
 # gitignored digests, e.g. after a pull) would cache-skip regeneration and ship the
 # pre-change layout — silently breaking self-host. Included for ALL targets, since the driver
 # is target-independent. (#473)
+# #559 Bug C fix: fingerprint the driver source of the ACTIVE generator host, resolved
+# from config the same way run_layer1_transform resolves it (GENERATOR_HOST override, else
+# generators.default). Previously this hardcoded the Haskell driver's sources unconditionally,
+# so once the default generator flipped to Java a change to the Java driver's emission logic
+# would NOT invalidate the stamp — warm builds could ship pre-change output (a cache-correctness
+# bug). The per-host driver source set is consumer config (generators.hosts.<host>.driverSources),
+# so no host name is hardcoded here. Each entry may be a file or a directory (recursively hashed).
 driver_identity() {
+    local gen_host driver_json
+    gen_host="${GENERATOR_HOST:-$(generator_config '.default')}"
+    if [ -z "$gen_host" ]; then
+        echo "driver_identity: no GENERATOR_HOST and no generators.default in hydra.json" >&2
+        return 1
+    fi
+    # The generator-driver source set for this host, one path per line.
+    local -a sources=()
+    while IFS= read -r src; do
+        [ -n "$src" ] && sources+=("$src")
+    done < <(jq -r "(.generators.hosts[\"$gen_host\"].driverSources // [])[]" "$HYDRA_ROOT_DIR/hydra.json" 2>/dev/null)
+    if [ "${#sources[@]}" -eq 0 ]; then
+        echo "driver_identity: no generators.hosts.$gen_host.driverSources in hydra.json" >&2
+        return 1
+    fi
     {
-        find "$HYDRA_ROOT_DIR/heads/haskell/src/exec/bootstrap-from-json" -type f -name '*.hs' 2>/dev/null \
-            | LC_ALL=C sort | xargs cat 2>/dev/null
-        for m in Generation ExtGeneration PackageRouting; do
-            cat "$HYDRA_ROOT_DIR/heads/haskell/src/main/haskell/Hydra/$m.hs" 2>/dev/null
+        local src abs
+        for src in "${sources[@]}"; do
+            abs="$HYDRA_ROOT_DIR/$src"
+            if [ -d "$abs" ]; then
+                find "$abs" -type f 2>/dev/null | LC_ALL=C sort | xargs cat 2>/dev/null
+            else
+                cat "$abs" 2>/dev/null
+            fi
         done
     } | shasum -a 256 | awk '{print $1}'
 }
@@ -358,60 +384,70 @@ assemble_refresh_digest() {
         --output-digest "$output_digest"
 }
 
-# #459: dispatch a single-package Layer 1 JSON->target transform to either the Haskell or
-# Java generator host, selected by $GENERATOR_HOST (default: java). Both generator
-# scripts share the identical CLI contract (transform-json-to-target.sh's convention:
-# <target> <pkg> [main|test] [OPTIONS]), so this is a pure dispatch — no target-specific
-# branching lives here. Call sites replace their hardcoded
-# "$HASKELL_BIN/transform-json-to-<lang>.sh" invocation with this function.
+# #559: the generator/host set is CONSUMER CONFIGURATION, external to published hydra-build.
+# It lives in the consumer's hydra.json-style config file under the "generators" section:
+#   "generators": {
+#     "default": "<host>",             # host used when GENERATOR_HOST is unset
+#     "bootstrapSeedHost": "<host>",   # non-circular seed host for the self-referential
+#                                      #   hydra-build package (see circular-seed note below)
+#     "hosts": { "<host>": {"transform": "<path to transform-json-to-target.sh>"}, ... }
+#   }
+# The dispatch below folds generically over this data: it names NO host in logic, reads the
+# transform binary path for whatever host the config declares, and invokes it. Adding a new
+# generator host is a CONFIG edit (a "generators.hosts.<host>" entry + its transform binary) —
+# ZERO edits to this shipped build logic. A downstream (non-Hydra) consumer of the build system
+# supplies its own such config file, consumed by this same reader (#416 host-independence,
+# external-consumer dimension; #559 closure criterion).
+
+# generator_config <jq-filter> [default] — read a value from the hydra.json "generators" section.
+# Returns the default (or empty) if the key is absent. jq is the config reader (Design-D: pure
+# data read, no host toolchain).
+generator_config() {
+    local filter="$1"
+    local fallback="${2:-}"
+    local val
+    val="$(jq -r "(.generators${filter}) // empty" "$HYDRA_ROOT_DIR/hydra.json" 2>/dev/null)"
+    if [ -n "$val" ]; then printf '%s' "$val"; else printf '%s' "$fallback"; fi
+}
+
+# #459 circular-seed guard, now data-driven via generators.bootstrapSeedHost: the Java generator
+# (target-driver) compiles hydra.build.* from dist/java/hydra-build/src, so generating `hydra-build`
+# via the Java driver is circular under the java-default (for ANY target: heal_java_python_native
+# also routes python/hydra-build through the java target-driver). hydra-build is the SOLE
+# non-published, self-referential seed. The config declares a bootstrapSeedHost (a host whose
+# generator srcDirs NEITHER target-driver NOR dist/java/hydra-build — a non-circular seed); this
+# function routes hydra-build's generation through it regardless of GENERATOR_HOST, and keeps the
+# configured default's speed win for every other (non-circular) package. No host name is hardcoded:
+# the seed host is whatever the consumer config declares.
 #
-# Default flipped to java (#459): byte-parity confirmed across every target (#612), and
-# the Java host is decisively faster — ~5x on transform time, ~20-30x on setup, measured
-# across small/medium/full-kernel-scale packages (see bin/bench-generator-hosts.sh). Set
-# GENERATOR_HOST=haskell to opt back into the Haskell path (e.g. temporary fallback for a
-# target-specific regression) without reverting this default.
-#
-# GENERATOR_HOST is a per-invocation choice, not a persistent config: it is read fresh on
-# each call, so a caller may run one package via Java and another via Haskell in the same
-# sync.sh pass (e.g. to fall back for a target the Java host does not yet emit correctly).
+# GENERATOR_HOST remains a per-invocation override (read fresh each call), so a caller may run one
+# package via one host and another via another in the same sync.sh pass. When unset, the configured
+# generators.default is used. Both generator scripts share the identical CLI contract
+# (transform-json-to-target.sh: <target> <pkg> [main|test] [OPTIONS]).
 #
 # Usage: run_layer1_transform <target> <pkg> [main|test] [OPTIONS...]
-#
-# #459 circular-seed guard: the Java generator (target-driver) compiles hydra.build.*
-# from dist/java/hydra-build/src (target-driver/build.gradle srcDirs it; hydra-build has
-# NO published Maven artifact, so it cannot come from the jar). That makes generating
-# `hydra-build` VIA THE JAVA DRIVER circular under the java-default — for ANY target, not
-# just java: the target-driver must compile dist/java/hydra-build to run, but it is the very
-# thing being asked to produce it, so on a cold checkout its compileJava fails and the pipeline
-# falls back to a ~4h from-source :hydra-java build (the #459 dry-run timeout). This also bites
-# target=python: heal_java_python_native (sync.sh) calls `run_layer1_transform python hydra-build`,
-# and since there is no Python native driver that path ALSO routes through the java target-driver
-# — same circularity (the bug the original target=java-scoped guard missed). hydra-build is the
-# SOLE non-published, self-referential seed. Force ITS generation through the Haskell generator
-# (which srcDirs NEITHER target-driver NOR dist/java/hydra-build — a non-circular seed) for EVERY
-# target, regardless of GENERATOR_HOST. This is exactly the "run one package via Haskell in the
-# same pass" fallback the per-invocation contract above allows, and it keeps the java-default's
-# bytecode win for every other (non-circular) package.
 run_layer1_transform() {
     local target="$1"
     local pkg="${2:-}"
-    local effective_host="${GENERATOR_HOST:-java}"
-    if [ "$effective_host" = "java" ] && [ "$pkg" = "hydra-build" ]; then
-        echo "run_layer1_transform: seeding $target/hydra-build via Haskell generator (#459 circular-seed guard)" >&2
-        effective_host="haskell"
+    local default_host seed_host effective_host transform_bin
+    default_host="$(generator_config '.default')"
+    if [ -z "$default_host" ]; then
+        echo "run_layer1_transform: no generators.default in hydra.json" >&2
+        return 1
     fi
-    case "$effective_host" in
-        java)
-            "$HYDRA_ROOT_DIR/heads/java/bin/transform-json-to-target.sh" "$@"
-            ;;
-        haskell)
-            "$HYDRA_ROOT_DIR/heads/haskell/bin/transform-json-to-target.sh" "$@"
-            ;;
-        *)
-            echo "run_layer1_transform: unknown GENERATOR_HOST '$GENERATOR_HOST' (expected java|haskell)" >&2
-            return 1
-            ;;
-    esac
+    effective_host="${GENERATOR_HOST:-$default_host}"
+    # Route the self-referential hydra-build seed through the configured non-circular seed host.
+    seed_host="$(generator_config '.bootstrapSeedHost')"
+    if [ -n "$seed_host" ] && [ "$pkg" = "hydra-build" ] && [ "$effective_host" != "$seed_host" ]; then
+        echo "run_layer1_transform: seeding $target/hydra-build via '$seed_host' generator (config bootstrapSeedHost, #459 circular-seed guard)" >&2
+        effective_host="$seed_host"
+    fi
+    transform_bin="$(generator_config ".hosts[\"$effective_host\"].transform")"
+    if [ -z "$transform_bin" ]; then
+        echo "run_layer1_transform: no generators.hosts.$effective_host.transform in hydra.json (unknown generator host '$effective_host')" >&2
+        return 1
+    fi
+    "$HYDRA_ROOT_DIR/$transform_bin" "$@"
 }
 
 # Print the package list emitted by a Layer 2 batch assembler — i.e.

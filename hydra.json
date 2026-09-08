@@ -2,6 +2,25 @@
   "currentVersion": "0.17.7",
   "hostVersion": "0.17.6",
   "hostOverrides": {"python": "local", "java": "local"},
+  "generators": {
+    "default": "java",
+    "bootstrapSeedHost": "haskell",
+    "hosts": {
+      "java": {
+        "transform": "heads/java/bin/transform-json-to-target.sh",
+        "driverSources": ["heads/java/src/main/java/hydra/TransformJsonToTarget.java"]
+      },
+      "haskell": {
+        "transform": "heads/haskell/bin/transform-json-to-target.sh",
+        "driverSources": [
+          "heads/haskell/src/exec/bootstrap-from-json",
+          "heads/haskell/src/main/haskell/Hydra/Generation.hs",
+          "heads/haskell/src/main/haskell/Hydra/ExtGeneration.hs",
+          "heads/haskell/src/main/haskell/Hydra/PackageRouting.hs"
+        ]
+      }
+    }
+  },
   "group": "net.fortytwo.hydra",
   "author": "Joshua Shinavier and collaborators",
   "url": "https://github.com/CategoricalData/hydra",
