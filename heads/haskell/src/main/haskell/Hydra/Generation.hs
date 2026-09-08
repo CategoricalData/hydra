@@ -10,12 +10,13 @@ import Hydra.Kernel
 import Hydra.Overlay.Haskell.Dsl.Annotations
 import Hydra.Overlay.Haskell.Bootstrap
 import Hydra.PackageRouting (RoutingMap, groupByPackageIn, namespaceToPackageIn, namespaceToPackageMaybeIn)
-import Hydra.Packaging (_Module)
+import Hydra.Packaging (_Module, unPackageName)
 import Hydra.Testing (TestGroup(..))
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Build.Walk as GenWalk
+import qualified Hydra.Build.PackagingProfile as PackagingProfile
 import qualified Hydra.Digest as Digest
 import qualified Hydra.DigestFormat as DigestFormat
 import qualified Hydra.Dsls as Dsls
@@ -734,7 +735,15 @@ inferAndWriteByPackageSeededFor
             -- the write universe (they're derived modules; inference must not
             -- run on them) the fallback would otherwise infer the whole native
             -- universe — hence this explicit skip.
-            isNativeOwnedPkg = pkg == "hydra-jvm" || pkg == "hydra-java" || pkg == "hydra-python"
+            -- #559: consume the generated hydra.build datum instead of an inline list, so the
+            -- native-owned set stays single-sourced (adding a native-owned package is a
+            -- PackagingProfile.nativeOwnedPackagingPackages edit, not a change here).
+            nativeOwnedPkgNames = map unPackageName PackagingProfile.nativeOwnedPackagingPackages
+            isNativeOwnedPkg = pkg `elem` nativeOwnedPkgNames
+            -- The native-owned namespace prefixes (hydra-jvm -> hydra.jvm.) derived from the
+            -- same datum, used to recognize a missing-native-binding error on a cold tree.
+            nativeOwnedNsPrefixes =
+              map (\n -> map (\c -> if c == '-' then '.' else c) n ++ ".") nativeOwnedPkgNames
             -- Infer only this package's write targets — re-inferring its whole
             -- universe (e.g. the full Java coder) blows the CI heap cap. The
             -- universe still participates as type-resolution context below, and
@@ -758,7 +767,7 @@ inferAndWriteByPackageSeededFor
                     pkgUniverse inferTargets of
                   Left (Error.ErrorResolution (Error.ResolutionErrorNoSuchBinding e))
                     | any (\pfx -> L.isPrefixOf pfx (unName (Error.noSuchBindingErrorName e)))
-                           ["hydra.jvm.", "hydra.java.", "hydra.python."]
+                           nativeOwnedNsPrefixes
                     -> do
                       putStrLn $ "  WARNING: skipping inference for " ++ pkg
                                ++ " (missing native binding: "
