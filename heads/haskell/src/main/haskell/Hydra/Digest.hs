@@ -19,6 +19,8 @@ module Hydra.Digest (
     PerPackageDigest(..),
     emptyPerPackageDigest,
     computeSelfHash,
+    -- Intra-package Merkle closure (#701)
+    computeMerkleHashes,
     -- v2 API (richer digest with inputs, outputs, generator stamp)
     Digest(..),
     DigestEntry(..),
@@ -294,6 +296,73 @@ data PerPackageDigest = PerPackageDigest
 
 emptyPerPackageDigest :: PerPackageDigest
 emptyPerPackageDigest = PerPackageDigest M.empty "" M.empty
+
+----------------------------------------------------------------------
+-- Intra-package Merkle closure (#701).
+----------------------------------------------------------------------
+-- 'computeSelfHash' summarizes a package's OWN per-module hashes, but each
+-- individual module hash historically covered only that module's own DSL
+-- source content -- no edge to the modules it depends on. Since type
+-- classes, a dependency's class-constraint change can alter a module's
+-- INFERRED signature without changing the module's own source text (e.g. a
+-- 'hydra.lib.eithers.mapSet' constraint change propagates into
+-- 'hydra.extract.core's inferred 'setOf' signature purely through
+-- inference), so own-content-hash alone is no longer a sound freshness key.
+--
+-- 'computeMerkleHashes' replaces each module's own-content hash with a hash
+-- over its transitive dependency closure, so any change anywhere upstream
+-- -- including a change many hops away -- perturbs every dependent's
+-- recorded hash. This mirrors the existing cross-package 'ppDeps'
+-- mechanism (#347), extended inward to the intra-package module graph.
+
+-- | Fold each module's own-content hash together with the (already-folded)
+-- hashes of its dependencies, processing strongly-connected components in
+-- topological (dependencies-first) order so a later SCC can read its
+-- dependencies' finished Merkle hashes.
+--
+-- A mutually-recursive SCC (cycle) gets ONE shared Merkle hash: computed
+-- from the sorted own-hashes of every module in the SCC plus the sorted
+-- Merkle hashes of every OUTSIDE module the SCC depends on. Every module in
+-- the SCC is assigned that same shared hash, so a change to any member (or
+-- to anything the SCC depends on) invalidates every member -- correct,
+-- since a change to one member of a mutually-recursive group can affect
+-- inference for every other member.
+--
+-- 'ownHashes' should come from 'hashUniverse' (own DSL-source content
+-- hashes). 'edges' maps each module to the set of modules it depends on
+-- (both declared 'moduleDependencies' and any derived reference set, e.g.
+-- from term-level primitive/type references the DSL author didn't declare).
+-- 'sccsTopological' lists strongly-connected components with dependencies
+-- appearing before their dependents (as returned by the kernel's
+-- 'Sorting.topologicalSortComponents' over 'edges'). Modules present in
+-- 'ownHashes' but absent from 'sccsTopological' (e.g. discovery gaps) keep
+-- their own-content hash unchanged, so the function is total over
+-- 'ownHashes' regardless of edge-graph completeness.
+computeMerkleHashes :: DigestMap -> M.Map ModuleName (S.Set ModuleName) -> [[ModuleName]] -> DigestMap
+computeMerkleHashes ownHashes edges sccsTopological =
+    let step acc scc =
+          let sccSet = S.fromList scc
+              -- Every dependency reachable from any member of this SCC,
+              -- excluding the SCC's own members (those are folded via
+              -- ownEntries below, not via a self-referential lookup into
+              -- 'acc').
+              depNames = S.toList $ S.difference
+                (S.unions [ M.findWithDefault S.empty m edges | m <- scc ])
+                sccSet
+              ownEntries = L.sortBy (\(a,_) (b,_) -> compare a b)
+                [ (ns, h) | ModuleName ns <- scc, Just h <- [M.lookup (ModuleName ns) ownHashes] ]
+              depEntries = L.sortBy (\(a,_) (b,_) -> compare a b)
+                [ (ns, h) | ModuleName ns <- depNames, Just h <- [M.lookup (ModuleName ns) acc] ]
+              rendered = concatMap (\(ns, h) -> "own\t" ++ ns ++ "\t" ++ h ++ "\n") ownEntries
+                      ++ concatMap (\(ns, h) -> "dep\t" ++ ns ++ "\t" ++ h ++ "\n") depEntries
+              merkle = SHA.showDigest (SHA.sha256 (BLC.pack rendered))
+          in if null ownEntries
+               then acc  -- SCC has no discoverable own-hash for any member; leave 'acc' untouched
+               else foldr (\ns m -> M.insert ns merkle m) acc scc
+        folded = L.foldl' step M.empty sccsTopological
+        -- Modules with an own-hash but absent from the SCC list (e.g. no
+        -- edges were computed for them) keep their own-content hash.
+    in M.union folded ownHashes
 
 -- | Compute the package's selfHash from its own namespace hashes.
 -- Deterministic: entries sorted lex by namespace, joined with explicit

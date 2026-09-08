@@ -1349,9 +1349,19 @@ discoverPackagesWithDigests distJsonRoot = do
 refreshPerPackageDigests :: RoutingMap -> FilePath -> [Module] -> [Module] -> IO ()
 refreshPerPackageDigests routingMap distJsonRoot universeMods _targetMods = do
   nsFiles <- Digest.discoverModuleNameFiles
-  let groups = groupByPackageIn routingMap universeMods
+  -- #701: compute own-content hashes + Merkle-over-closure hashes ONCE over
+  -- the whole universe (a module's dependency can live in a different
+  -- package), then have each per-package group select its own entries. See
+  -- 'moduleReferenceEdges' for why the edge graph is derived rather than
+  -- trusting declared 'moduleDependencies' alone.
+  universeSrcDigest <- Digest.hashUniverse nsFiles universeMods
+  let edges = moduleReferenceEdges universeMods
+      sccs = topologicalSortComponents (M.toList (M.map S.toList edges))
+      merkleDigest = Digest.computeMerkleHashes universeSrcDigest edges sccs
+      groups = groupByPackageIn routingMap universeMods
   CM.forM_ groups $ \(pkg, pkgMods) -> do
-    srcDigest <- Digest.hashUniverse nsFiles pkgMods
+    let pkgNames = S.fromList (fmap moduleName pkgMods)
+        srcDigest = M.filterWithKey (\ns _ -> ns `S.member` pkgNames) merkleDigest
     -- Some packages (e.g. hydra-haskell with its synthesized coder
     -- modules, hydra-coq with no DSL sources at all) won't have any
     -- DSL files discoverable; skip writing an empty digest.
@@ -1392,9 +1402,16 @@ refreshPerPackageDigests routingMap distJsonRoot universeMods _targetMods = do
 ensurePerPackageDigests :: RoutingMap -> FilePath -> [Module] -> IO ()
 ensurePerPackageDigests routingMap distJsonRoot universeMods = do
   nsFiles <- Digest.discoverModuleNameFiles
-  let groups = groupByPackageIn routingMap universeMods
+  -- #701: see 'refreshPerPackageDigests' for why the Merkle hashes are
+  -- computed once over the whole universe rather than per package group.
+  universeSrcDigest <- Digest.hashUniverse nsFiles universeMods
+  let edges = moduleReferenceEdges universeMods
+      sccs = topologicalSortComponents (M.toList (M.map S.toList edges))
+      merkleDigest = Digest.computeMerkleHashes universeSrcDigest edges sccs
+      groups = groupByPackageIn routingMap universeMods
   CM.forM_ groups $ \(pkg, pkgMods) -> do
-    srcDigest <- Digest.hashUniverse nsFiles pkgMods
+    let pkgNames = S.fromList (fmap moduleName pkgMods)
+        srcDigest = M.filterWithKey (\ns _ -> ns `S.member` pkgNames) merkleDigest
     CM.when (not (M.null srcDigest)) $ do
       -- #469: fold JSON content hashes in alongside source hashes,
       -- so an out-of-band JSON change (e.g. native coder runtime
@@ -1412,30 +1429,64 @@ ensurePerPackageDigests routingMap distJsonRoot universeMods = do
           ++ show (M.size jsonDigest) ++ " json = "
           ++ show (M.size pkgDigest) ++ " entries)"
 
--- | Transitive closure over @moduleDependencies@: starting from an
--- initial dirty set of namespaces, repeatedly add any module whose
--- declared dependencies intersect the current dirty set, until fixed
--- point. Returns the closure (which always contains the initial set).
+-- | Compute each module's REAL dependency edges: the union of its declared
+-- 'moduleDependencies' with the modules actually referenced by its term
+-- bodies, resolved via the kernel's own reference analysis.
 --
--- This is the reverse-edge walk: 'moduleDependencies' records what a
--- module imports; we want "modules that import any dirty thing." Built
--- as a fixed-point over the modules-with-some-dirty-dep predicate so
+-- #701: 'moduleDependencies' is hand-declared per DSL module and routinely
+-- omits primitive-library modules reached only through a generated
+-- 'Hydra.Dsl.Lib.*' wrapper call (an ordinary Haskell import, invisible to
+-- the DSL-level dependency system) — e.g. 'hydra.extract.core' calls
+-- 'Eithers.mapSet' in its 'setOf' body but never declares 'hydra.lib.eithers'
+-- as a dependency. A hand-declared graph can never be exhaustively
+-- maintained by construction (a DSL author adding a primitive call has no
+-- structural reason to also edit a separate dependency list), so this
+-- derives the edges instead of trusting the declaration.
+--
+-- 'termDependencyNames' (kernel-native once generated; re-exported via
+-- 'Hydra.Kernel' from 'Hydra.Dependencies') walks a term's AST and returns
+-- every name it references, including primitive and nominal-type references
+-- that a plain free-variable walk would miss (record/union/wrap field types
+-- referenced with no term-level call at all). 'moduleNameOf' (from
+-- 'Hydra.Names') maps each returned name back to its owning module via the
+-- name's fully-qualified dotted form — no lookup index needed. A name with
+-- no resolvable owning module (a local binder, or a name outside any known
+-- module) is silently dropped; only real cross-module edges are kept.
+moduleReferenceEdges :: [Module] -> M.Map ModuleName (S.Set ModuleName)
+moduleReferenceEdges universeMods = M.fromList
+    [ (moduleName m, S.union declared derived)
+    | m <- universeMods
+    , let declared = S.fromList (fmap moduleDependencyModule (moduleDependencies m))
+    , let derived = S.fromList
+            [ dep
+            | DefinitionTerm td <- moduleDefinitions m
+            , n <- S.toList (termDependencyNames False True True (termDefinitionBody td))
+            , Just dep <- [moduleNameOf n]
+            , dep /= moduleName m
+            ]
+    ]
+
+-- | Transitive closure over the REAL dependency graph (#701:
+-- 'moduleReferenceEdges', not the possibly-incomplete declared
+-- 'moduleDependencies' alone): starting from an initial dirty set of
+-- namespaces, repeatedly add any module whose dependency edges intersect
+-- the current dirty set, until fixed point. Returns the closure (which
+-- always contains the initial set).
+--
+-- This is the reverse-edge walk: 'moduleReferenceEdges' records what a
+-- module depends on; we want "modules that depend on any dirty thing."
+-- Built as a fixed-point over the modules-with-some-dirty-dep predicate so
 -- we don't have to materialize the inverted graph explicitly.
---
--- Note: @moduleDependencies@ reflects /declared/ deps (the
--- 'moduleDependencies' field on @Module@). Source files that use a
--- namespace without declaring it as a dep will not be picked up — but
--- such files would fail at inference time anyway, so the omission is
--- self-correcting in practice. See #347.
 closeDirtySet :: [Module] -> S.Set ModuleName -> S.Set ModuleName
 closeDirtySet universeMods initialDirty = fixedPoint initialDirty
   where
+    edges = moduleReferenceEdges universeMods
     fixedPoint d =
       let newlyDirty = S.fromList
             [ moduleName m
             | m <- universeMods
             , not (moduleName m `S.member` d)
-            , any ((`S.member` d) . moduleDependencyModule) (moduleDependencies m)
+            , any (`S.member` d) (S.toList (M.findWithDefault S.empty (moduleName m) edges))
             ]
           d' = S.union d newlyDirty
       in if S.size d' == S.size d then d else fixedPoint d'
