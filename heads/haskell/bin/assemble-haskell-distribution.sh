@@ -71,17 +71,24 @@ if [ -z "$PKG" ]; then
     exit 1
 fi
 
-# Publishable Haskell distribution packages. The generated coder packages plus
-# hydra-kernel (with its overlaid runtime) and the hand-written `hydra` umbrella.
-# Each is assembled UNIFORMLY from its complete dist/haskell/<pkg>/ tree, so no
-# per-package special-casing is needed below — only membership is checked here.
-# (#376: widened from the 0.16 trio hydra-kernel|hydra-haskell|hydra.)
-case "$PKG" in
-    hydra-kernel|hydra-build|hydra-haskell|hydra-coq|hydra-typescript|hydra-jvm|hydra-java|\
-    hydra-python|hydra-scala|hydra-lisp|hydra-go|hydra-wasm|hydra-rdf|hydra-pg|\
-    hydra-ext|hydra-bench|hydra) ;;
-    *) echo "ERROR: unsupported package '$PKG' (not a known Hydra Haskell distribution package)" >&2; exit 1 ;;
-esac
+# Publishable Haskell distribution packages: any package registered in the
+# hydra.json registry, or the hand-written `hydra` umbrella (which is not itself a
+# registered package). Each is assembled UNIFORMLY from its complete
+# dist/haskell/<pkg>/ tree, so no per-package special-casing is needed below — only
+# membership is checked here. DERIVED from the registry (#573) rather than a
+# hardcoded list, so a new package (like hydra-build in #546) is accepted the
+# moment it is registered, with no separate allowlist to fall out of sync.
+if [ "$PKG" != "hydra" ]; then
+    read -ra _REGISTERED < <("$HYDRA_ROOT/bin/lib/hydra-packages.py" list)
+    _KNOWN=false
+    for _p in "${_REGISTERED[@]}"; do
+        [ "$_p" = "$PKG" ] && { _KNOWN=true; break; }
+    done
+    if [ "$_KNOWN" != true ]; then
+        echo "ERROR: unsupported package '$PKG' (not a known Hydra Haskell distribution package)" >&2
+        exit 1
+    fi
+fi
 
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 mkdir -p "$OUT_DIR"

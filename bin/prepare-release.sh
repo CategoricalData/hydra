@@ -683,20 +683,25 @@ step 13 $TOTAL_STEPS "Verifying per-host published-package self-containment"
 echo ""
 
 for hv in \
-    "haskell:$HYDRA_ROOT/heads/haskell/bin/verify-distribution.sh" \
-    "python:$HYDRA_ROOT/heads/python/bin/verify-distribution.sh" \
-    "java:$HYDRA_ROOT/heads/java/bin/verify-distribution.sh" \
-    "scala:$HYDRA_ROOT/heads/scala/bin/verify-distribution.sh" \
-    "typescript:$HYDRA_ROOT/heads/typescript/bin/verify-distribution.sh"; do
+    "haskell:$HYDRA_ROOT/heads/haskell/bin/verify-distribution.sh:--full" \
+    "python:$HYDRA_ROOT/heads/python/bin/verify-distribution.sh:" \
+    "java:$HYDRA_ROOT/heads/java/bin/verify-distribution.sh:" \
+    "scala:$HYDRA_ROOT/heads/scala/bin/verify-distribution.sh:" \
+    "typescript:$HYDRA_ROOT/heads/typescript/bin/verify-distribution.sh:"; do
     host="${hv%%:*}"
-    script="${hv##*:}"
+    rest="${hv#*:}"
+    script="${rest%%:*}"
+    verifier_flag="${rest#*:}"
     echo "--- $host: verify-distribution ---"
     if [ ! -x "$script" ]; then
         echo "  FAIL: missing verifier: $script"
         ERRORS=$((ERRORS + 1))
         continue
     fi
-    if "$script" 2>&1 | tee "$LOG_DIR/verify-dist-$host.log"; then
+    # Haskell's verifier defaults to a lightweight smoke set (kernel, hydra-build,
+    # hydra-haskell, hydra); the release gate needs --full (the complete
+    # Hackage-shaped set) since this is what actually gets published (#573).
+    if "$script" ${verifier_flag:+"$verifier_flag"} 2>&1 | tee "$LOG_DIR/verify-dist-$host.log"; then
         echo "  OK: $host distribution is self-contained"
     else
         echo "  FAIL: $host distribution self-containment check failed (see verify-logs/verify-dist-$host.log)"
