@@ -1,11 +1,20 @@
--- | Regression tests for source-namespace discovery used by the per-package
--- input digest. See #400: the digest that gates regeneration of
--- dist/haskell/hydra-{java,python} must cover the native-generator-owned
--- hydra.<lang>.* modules (coder, environment, language, names, serde, syntax,
--- testing, utils), whose canonical sources are authored natively in .java/.py
--- (#344). Before #400, 'discoverModuleNameFiles' scanned only the Haskell DSL
--- tree, so editing e.g. Coder.java never invalidated the digest and the
--- freshness gate silently skipped regeneration.
+-- | Regression tests for the per-package input digest: source-namespace
+-- discovery (#400), per-package digest finalization (#606), and the
+-- per-module Merkle-over-dependency-closure freshness key (#701).
+--
+-- #400: the digest that gates regeneration of dist/haskell/hydra-{java,python}
+-- must cover the native-generator-owned hydra.<lang>.* modules (coder,
+-- environment, language, names, serde, syntax, testing, utils), whose
+-- canonical sources are authored natively in .java/.py (#344). Before #400,
+-- 'discoverModuleNameFiles' scanned only the Haskell DSL tree, so editing e.g.
+-- Coder.java never invalidated the digest and the freshness gate silently
+-- skipped regeneration.
+--
+-- #701: a module's freshness key must be a Merkle hash over its transitive
+-- dependency closure, not its own content hash alone -- and the closure must
+-- be derived from actual term references, not just the (routinely
+-- incomplete) hand-declared 'moduleDependencies' list. See
+-- 'moduleReferenceEdges', 'closeDirtySet', and 'Digest.computeMerkleHashes'.
 --
 -- These tests run from the Haskell head's working directory (heads/haskell),
 -- which is where 'discoverModuleNameFiles' resolves its relative packagesRoot
@@ -19,12 +28,16 @@ import Hydra.Digest
   ( Digest(..), DigestEntry(..), DigestKind(..)
   , Generation(..), GenerationMode(..)
   , PerPackageDigest(..) )
-import Hydra.Generation (ensurePerPackageDigests, finalizePerPackageDigests, perPackageDigestPath)
-import Hydra.Packaging (Module(..), ModuleName(..))
+import Hydra.Generation
+  ( ensurePerPackageDigests, finalizePerPackageDigests, perPackageDigestPath
+  , closeDirtySet, moduleReferenceEdges )
+import Hydra.Packaging (Module(..), ModuleName(..), ModuleDependency(..), Definition(..), TermDefinition(..))
 import Hydra.PackageRouting (buildRoutingMap)
+import Hydra.Core (Term(..), Application(..), Name(..))
 
 import qualified Data.List as L
 import qualified Data.Map as M
+import qualified Data.Set as S
 import qualified System.Directory as SD
 import System.FilePath ((</>), takeDirectory)
 import qualified Test.Hspec as H
@@ -34,6 +47,29 @@ import qualified Test.Hspec as H
 -- fields are irrelevant for digest computation.
 nameOnly :: String -> Module
 nameOnly ns = Module (ModuleName ns) Nothing [] []
+
+-- | A Module with declared dependencies but no term bodies (for exercising
+-- the declared-'moduleDependencies' half of 'moduleReferenceEdges').
+withDeclaredDeps :: String -> [String] -> Module
+withDeclaredDeps ns deps =
+  Module (ModuleName ns) Nothing [ModuleDependency (ModuleName d) Nothing | d <- deps] []
+
+-- | A Module with ONE term definition whose body is a bare reference
+-- (TermVariable) to each of the given fully-qualified names, and NO declared
+-- 'moduleDependencies' -- the #701 reproduction shape: a module that USES
+-- another module's definition (e.g. a primitive, via a term-level
+-- reference) without DECLARING it as a dependency.
+withUndeclaredTermRef :: String -> String -> [String] -> Module
+withUndeclaredTermRef ns defName refs =
+  Module (ModuleName ns) Nothing []
+    [DefinitionTerm (TermDefinition (Name defName) Nothing Nothing body)]
+  where
+    -- A single reference for one ref, or a nested application chain so
+    -- every name in 'refs' appears somewhere in the term tree.
+    body = case [TermVariable (Name r) | r <- refs] of
+      []     -> TermVariable (Name defName)  -- degenerate: self-reference only
+      [t]    -> t
+      (t:ts) -> foldl (\acc t' -> TermApplication (Application acc t')) t ts
 
 
 spec :: H.Spec
@@ -360,3 +396,114 @@ spec = do
 
       twice `H.shouldBe` once
       SD.removePathForcibly tmpRoot
+
+  -- #701: the intra-package module-freshness cache must be a Merkle hash
+  -- over its dependency closure, not a module's own content hash alone.
+  -- These tests reproduce the exact mechanism behind the setOf/encodeMap
+  -- staleness from the 0.17 breaking batch (#508): a module (like
+  -- hydra.extract.core) that references another module's definition (like
+  -- hydra.lib.eithers.mapSet) via a bare term-level reference, WITHOUT
+  -- declaring that module in 'moduleDependencies'.
+  H.describe "moduleReferenceEdges derives edges term references miss from declared deps (#701)" $ do
+
+    H.it "captures a declared moduleDependencies edge" $ do
+      let mods = [withDeclaredDeps "pkg.a" ["pkg.b"], nameOnly "pkg.b"]
+          edges = moduleReferenceEdges mods
+      M.lookup (ModuleName "pkg.a") edges `H.shouldBe` Just (S.singleton (ModuleName "pkg.b"))
+
+    H.it "captures an UNDECLARED edge reached only via a term-level reference (the setOf/mapSet shape)" $ do
+      -- hydra.extract.core's setOf calls Eithers.mapSet (hydra.lib.eithers.mapSet)
+      -- but never lists hydra.lib.eithers in moduleDependencies.
+      let extractCore = withUndeclaredTermRef "hydra.extract.core" "setOf" ["hydra.lib.eithers.mapSet"]
+          libEithers = nameOnly "hydra.lib.eithers"
+          mods = [extractCore, libEithers]
+          edges = moduleReferenceEdges mods
+      -- The declared side is empty (reproducing the real gap)...
+      moduleDependencies extractCore `H.shouldBe` []
+      -- ...but the DERIVED edge set still finds it, because the term body
+      -- references hydra.lib.eithers.mapSet and moduleNameOf resolves that
+      -- to hydra.lib.eithers.
+      M.lookup (ModuleName "hydra.extract.core") edges `H.shouldBe` Just (S.singleton (ModuleName "hydra.lib.eithers"))
+
+    H.it "unions declared and derived edges when both are present" $ do
+      let m = (withDeclaredDeps "pkg.a" ["pkg.b"])
+                { moduleDefinitions =
+                    [DefinitionTerm (TermDefinition (Name "f") Nothing Nothing (TermVariable (Name "pkg.c.g")))] }
+          mods = [m, nameOnly "pkg.b", nameOnly "pkg.c"]
+          edges = moduleReferenceEdges mods
+      M.lookup (ModuleName "pkg.a") edges `H.shouldBe`
+        Just (S.fromList [ModuleName "pkg.b", ModuleName "pkg.c"])
+
+    H.it "does not self-reference (a module's own definitions don't create a self-edge)" $ do
+      let m = withUndeclaredTermRef "pkg.a" "f" ["pkg.a.g"]
+          edges = moduleReferenceEdges [m]
+      M.lookup (ModuleName "pkg.a") edges `H.shouldBe` Just S.empty
+
+  H.describe "closeDirtySet closes over derived (not just declared) edges (#701)" $ do
+
+    H.it "marks a module dirty when its UNDECLARED term-level dependency is dirty (setOf/mapSet repro)" $ do
+      let extractCore = withUndeclaredTermRef "hydra.extract.core" "setOf" ["hydra.lib.eithers.mapSet"]
+          libEithers = nameOnly "hydra.lib.eithers"
+          mods = [extractCore, libEithers]
+          -- hydra.lib.eithers changed (e.g. mapSet gained an 'ordering'
+          -- constraint); nothing about hydra.extract.core's OWN source
+          -- changed.
+          initialDirty = S.singleton (ModuleName "hydra.lib.eithers")
+          closure = closeDirtySet mods initialDirty
+      S.member (ModuleName "hydra.extract.core") closure `H.shouldBe` True
+
+    H.it "does not mark an unrelated module dirty" $ do
+      let extractCore = withUndeclaredTermRef "hydra.extract.core" "setOf" ["hydra.lib.eithers.mapSet"]
+          libEithers = nameOnly "hydra.lib.eithers"
+          unrelated = nameOnly "hydra.unrelated"
+          mods = [extractCore, libEithers, unrelated]
+          closure = closeDirtySet mods (S.singleton (ModuleName "hydra.lib.eithers"))
+      S.member (ModuleName "hydra.unrelated") closure `H.shouldBe` False
+
+  H.describe "computeMerkleHashes folds dependency hashes into each module's stored key (#701)" $ do
+
+    H.it "a dependent's Merkle hash changes when its dependency's own-hash changes, even though the dependent's own-hash is unchanged" $ do
+      let edges = M.fromList [(ModuleName "a", S.singleton (ModuleName "b")), (ModuleName "b", S.empty)]
+          sccs = [[ModuleName "b"], [ModuleName "a"]]  -- topological: b before a
+          ownV1 = M.fromList [(ModuleName "a", "a-content"), (ModuleName "b", "b-content-v1")]
+          ownV2 = M.fromList [(ModuleName "a", "a-content"), (ModuleName "b", "b-content-v2")]
+          merkleV1 = Digest.computeMerkleHashes ownV1 edges sccs
+          merkleV2 = Digest.computeMerkleHashes ownV2 edges sccs
+      -- 'a's own content hash is IDENTICAL between v1 and v2 (the exact
+      -- #701 scenario: a's DSL source never changed) -- but its recorded
+      -- Merkle hash must still differ, because its dependency 'b' changed.
+      M.lookup (ModuleName "a") merkleV1 `H.shouldNotBe` M.lookup (ModuleName "a") merkleV2
+
+    H.it "a module's Merkle hash is unaffected by an unrelated module's change" $ do
+      let edges = M.fromList [(ModuleName "a", S.singleton (ModuleName "b")), (ModuleName "b", S.empty), (ModuleName "c", S.empty)]
+          sccs = [[ModuleName "b"], [ModuleName "c"], [ModuleName "a"]]
+          ownV1 = M.fromList [(ModuleName "a", "a-content"), (ModuleName "b", "b-content"), (ModuleName "c", "c-content-v1")]
+          ownV2 = M.fromList [(ModuleName "a", "a-content"), (ModuleName "b", "b-content"), (ModuleName "c", "c-content-v2")]
+          merkleV1 = Digest.computeMerkleHashes ownV1 edges sccs
+          merkleV2 = Digest.computeMerkleHashes ownV2 edges sccs
+      M.lookup (ModuleName "a") merkleV1 `H.shouldBe` M.lookup (ModuleName "a") merkleV2
+
+    H.it "a cyclic (mutually-recursive) SCC gets one shared hash, invalidated by any member" $ do
+      let edges = M.fromList
+            [ (ModuleName "a", S.singleton (ModuleName "b"))
+            , (ModuleName "b", S.singleton (ModuleName "a")) ]
+          sccs = [[ModuleName "a", ModuleName "b"]]  -- one SCC, both members
+          ownV1 = M.fromList [(ModuleName "a", "a-v1"), (ModuleName "b", "b-content")]
+          ownV2 = M.fromList [(ModuleName "a", "a-v2"), (ModuleName "b", "b-content")]
+          merkleV1 = Digest.computeMerkleHashes ownV1 edges sccs
+          merkleV2 = Digest.computeMerkleHashes ownV2 edges sccs
+      -- Both members share the same hash within one computation...
+      M.lookup (ModuleName "a") merkleV1 `H.shouldBe` M.lookup (ModuleName "b") merkleV1
+      -- ...and changing EITHER member (here 'a', while 'b' is unchanged)
+      -- perturbs BOTH members' recorded hash, since they're one SCC.
+      M.lookup (ModuleName "b") merkleV1 `H.shouldNotBe` M.lookup (ModuleName "b") merkleV2
+
+    H.it "is deterministic: recomputing over the same inputs yields the same hashes" $ do
+      let edges = M.fromList [(ModuleName "a", S.singleton (ModuleName "b")), (ModuleName "b", S.empty)]
+          sccs = [[ModuleName "b"], [ModuleName "a"]]
+          own = M.fromList [(ModuleName "a", "a-content"), (ModuleName "b", "b-content")]
+      Digest.computeMerkleHashes own edges sccs `H.shouldBe` Digest.computeMerkleHashes own edges sccs
+
+    H.it "a module absent from the SCC list keeps its own-content hash unchanged (totality over ownHashes)" $ do
+      let own = M.fromList [(ModuleName "orphan", "orphan-content")]
+      Digest.computeMerkleHashes own M.empty [] `H.shouldBe` own
