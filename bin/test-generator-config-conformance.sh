@@ -79,4 +79,37 @@ printf '%s\n' "$out" | grep -q 'SYNTHETIC_GENERATOR_INVOKED sometarget somepkg' 
     || fail "config-only host was not dispatched to its declared binary; got: $out"
 pass "a host declared only in config is dispatchable with zero script edit"
 
-echo "PASS: generator-config conformance (#559 host-set is external consumer config)"
+# --- 4. languages config: no literal lang->ext / coder-pkg / runtime-dir case in build logic ---
+# The three maps (component_identity ext, compute_generator_stamp coder pkg, runtime_identity dir)
+# must read from the hydra.json "languages" section, not hardcoded case/if on language names.
+for fn in component_identity compute_generator_stamp runtime_identity; do
+    body="$(awk "/^$fn\\(\\)/,/^}/" bin/lib/assemble-common.sh)"
+    if printf '%s\n' "$body" | grep -Eq '(case[[:space:]]+"?\$lang"?[[:space:]]+in|\[[[:space:]]+"\$lang"[[:space:]]*=[[:space:]]*"(clojure|scheme|common-lisp|emacs-lisp|lisp|java|python|scala|haskell)")'; then
+        fail "$fn re-introduced a literal language-name case/if (should read languages.* config)"
+    fi
+done
+pass "component_identity / compute_generator_stamp / runtime_identity have no literal language case"
+
+# lisp dialects share coderPackage + runtimeDir as DATA (not a hardcoded lisp case)
+[ "$(language_config clojure coderPackage)" = "hydra-lisp" ] || fail "clojure coderPackage not hydra-lisp via config"
+[ "$(language_config emacs-lisp runtimeDir)" = "heads/lisp" ] || fail "emacs-lisp runtimeDir not heads/lisp via config"
+[ "$(language_config java sourceExtension)" = "java" ] || fail "java sourceExtension not resolved via config"
+pass "lisp-dialect shared coderPackage/runtimeDir + per-lang ext resolve from config data"
+
+# unregistered language fails loud (the add-a-host contract: a new lang MUST be declared in config)
+if language_config __no_such_lang__ coderPackage >/dev/null 2>&1; then
+    fail "language_config did not fail loud on an unregistered language"
+fi
+pass "language_config fails loud on an unregistered language"
+
+# add-a-language-by-config-only: a synthetic language with novel ext + shared coder pkg + shared
+# runtime dir resolves entirely from a temp config, ZERO edit to assemble-common.sh.
+tmp2="$(mktemp -d)"; trap 'rm -rf "$tmp_root" "$tmp2"' EXIT
+jq '.languages["novolang"] = {"sourceExtension":"nl","coderPackage":"hydra-lisp","runtimeDir":"heads/lisp"}' \
+    hydra.json > "$tmp2/hydra.json"
+cfg="$(HYDRA_ROOT_DIR="$tmp2" bash -c 'source "'"$HYDRA_ROOT_DIR"'/bin/lib/assemble-common.sh"; language_config novolang sourceExtension; echo -n "|"; language_config novolang coderPackage; echo -n "|"; language_config novolang runtimeDir' 2>&1)"
+[ "$cfg" = "nl|hydra-lisp|heads/lisp" ] \
+    || fail "config-only new language did not resolve ext/coderPkg/runtimeDir; got: $cfg"
+pass "a language declared only in config resolves ext + coder pkg + runtime dir with zero script edit"
+
+echo "PASS: generator-config conformance (#559 host-set + languages are external consumer config)"

@@ -21,6 +21,19 @@
       }
     }
   },
+  "languages": {
+    "haskell":     {"sourceExtension": "hs",    "coderPackage": "hydra-haskell",    "runtimeDir": "heads/haskell"},
+    "java":        {"sourceExtension": "java",  "coderPackage": "hydra-java",       "runtimeDir": "heads/java"},
+    "python":      {"sourceExtension": "py",    "coderPackage": "hydra-python",     "runtimeDir": "heads/python"},
+    "scala":       {"sourceExtension": "scala", "coderPackage": "hydra-scala",      "runtimeDir": "heads/scala"},
+    "go":          {"sourceExtension": "go",    "coderPackage": "hydra-go",         "runtimeDir": "heads/go"},
+    "typescript":  {"sourceExtension": "ts",    "coderPackage": "hydra-typescript", "runtimeDir": "heads/typescript"},
+    "lisp":        {"sourceExtension": "lisp",  "coderPackage": "hydra-lisp",       "runtimeDir": "heads/lisp"},
+    "clojure":     {"sourceExtension": "clj",   "coderPackage": "hydra-lisp",       "runtimeDir": "heads/lisp"},
+    "scheme":      {"sourceExtension": "scm",   "coderPackage": "hydra-lisp",       "runtimeDir": "heads/lisp"},
+    "common-lisp": {"sourceExtension": "lisp",  "coderPackage": "hydra-lisp",       "runtimeDir": "heads/lisp"},
+    "emacs-lisp":  {"sourceExtension": "el",    "coderPackage": "hydra-lisp",       "runtimeDir": "heads/lisp"}
+  },
   "group": "net.fortytwo.hydra",
   "author": "Joshua Shinavier and collaborators",
   "url": "https://github.com/CategoricalData/hydra",

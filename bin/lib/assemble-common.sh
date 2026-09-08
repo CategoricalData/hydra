@@ -54,11 +54,10 @@
 # See #347 (Merkle cache invalidation) and #370 (external versioned hosts).
 compute_generator_stamp() {
     local lang="$1"
+    # #559: coder package is consumer config (languages.<lang>.coderPackage), not a hardcoded
+    # case — lisp dialects declare "hydra-lisp" as data, a novel host declares its own.
     local coder_pkg
-    case "$lang" in
-        clojure|scheme|common-lisp|emacs-lisp|lisp) coder_pkg="hydra-lisp" ;;
-        *)                                          coder_pkg="hydra-$lang" ;;
-    esac
+    coder_pkg="$(language_config "$lang" coderPackage)"
     local kernel_id coder_id
     # Assigned separately (not inline in printf) so a component_identity
     # failure — e.g. an empty DSL-source fingerprint set (#562) — actually
@@ -244,13 +243,10 @@ component_identity() {
     fi
     local lang
     lang=$("$HYDRA_ROOT_DIR/bin/lib/hydra-packages.py" source-language "$pkg")
-    local ext="hs"
-    case "$lang" in
-        java)   ext="java" ;;
-        python) ext="py" ;;
-        scala)  ext="scala" ;;
-        haskell) ext="hs" ;;
-    esac
+    # #559: source-file extension is consumer config (languages.<lang>.sourceExtension), not a
+    # hardcoded case — a host authoring DSL in a novel source-language declares its extension there.
+    local ext
+    ext="$(language_config "$lang" sourceExtension)"
     local src_dir="$HYDRA_ROOT_DIR/packages/$pkg/src/main/$lang"
     if [ ! -d "$src_dir" ]; then
         # A missing source dir on the local-source fallback path is ALWAYS a
@@ -294,22 +290,23 @@ component_identity() {
 # logic plus per-dialect heads/lisp/<dialect>/src/main/ runtime trees.
 runtime_identity() {
     local lang="$1"
+    # #559: the runtime dir is consumer config (languages.<lang>.runtimeDir), not a hardcoded lisp
+    # case — lisp dialects declare the SHARED "heads/lisp" as data; a non-lisp host declares its own
+    # "heads/<lang>". The hash walk below is generic over that dir: it captures the shared assembler
+    # helper (bin/common.sh, present for the lisp shared tree, absent otherwise), every src/main file
+    # (one tree for a single host, per-dialect trees under the shared lisp dir), and every
+    # assemble-distribution.sh (one per host, or one per dialect under the shared dir). Uniform across
+    # the shared-runtime and per-host layouts, so adding a host with a shared or private runtime dir is
+    # a config edit, not a new branch here.
+    local runtime_dir
+    runtime_dir="$(language_config "$lang" runtimeDir)"
+    local root="$HYDRA_ROOT_DIR/$runtime_dir"
     {
-        if [ "$lang" = "lisp" ] || [ "$lang" = "clojure" ] || [ "$lang" = "scheme" ] \
-                || [ "$lang" = "common-lisp" ] || [ "$lang" = "emacs-lisp" ]; then
-            [ -f "$HYDRA_ROOT_DIR/heads/lisp/bin/common.sh" ] && cat "$HYDRA_ROOT_DIR/heads/lisp/bin/common.sh"
-            find "$HYDRA_ROOT_DIR/heads/lisp" -path '*/src/main/*' -type f 2>/dev/null \
-                | LC_ALL=C sort | xargs cat 2>/dev/null
-            find "$HYDRA_ROOT_DIR/heads/lisp" -name 'assemble-distribution.sh' -type f 2>/dev/null \
-                | LC_ALL=C sort | xargs cat 2>/dev/null
-        else
-            local main_dir="$HYDRA_ROOT_DIR/heads/$lang/src/main"
-            [ -d "$main_dir" ] && \
-                find "$main_dir" -type f 2>/dev/null \
-                    | LC_ALL=C sort | xargs cat 2>/dev/null
-            local assembler="$HYDRA_ROOT_DIR/heads/$lang/bin/assemble-distribution.sh"
-            [ -f "$assembler" ] && cat "$assembler"
-        fi
+        [ -f "$root/bin/common.sh" ] && cat "$root/bin/common.sh"
+        find "$root" -path '*/src/main/*' -type f 2>/dev/null \
+            | LC_ALL=C sort | xargs cat 2>/dev/null
+        find "$root" -name 'assemble-distribution.sh' -type f 2>/dev/null \
+            | LC_ALL=C sort | xargs cat 2>/dev/null
     } | shasum -a 256 | awk '{print $1}'
 }
 
@@ -408,6 +405,22 @@ generator_config() {
     local val
     val="$(jq -r "(.generators${filter}) // empty" "$HYDRA_ROOT_DIR/hydra.json" 2>/dev/null)"
     if [ -n "$val" ]; then printf '%s' "$val"; else printf '%s' "$fallback"; fi
+}
+
+# #559: per-language build data (source extension, coder package, runtime dir) is CONSUMER CONFIG,
+# external to published hydra-build — the hydra.json "languages" section keyed by language name.
+# language_config <lang> <field> reads .languages.<lang>.<field>, fail-loud if absent (adding a host
+# with a novel source-language / shared coder pkg / shared runtime dir is a config edit — a
+# "languages.<lang>" entry — with ZERO edits to this build logic). Lisp dialects share coderPackage
+# "hydra-lisp" and runtimeDir "heads/lisp" as DATA, not a hardcoded case.
+language_config() {
+    local lang="$1" field="$2" val
+    val="$(jq -r "(.languages[\"$lang\"].$field) // empty" "$HYDRA_ROOT_DIR/hydra.json" 2>/dev/null)"
+    if [ -z "$val" ]; then
+        echo "language_config: no languages.$lang.$field in hydra.json (unregistered language '$lang')" >&2
+        return 1
+    fi
+    printf '%s' "$val"
 }
 
 # #459 circular-seed guard, now data-driven via generators.bootstrapSeedHost: the Java generator
