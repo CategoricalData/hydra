@@ -3,5 +3,6 @@
   "name": "hydra-typescript",
   "description": "TypeScript support for Hydra",
   "sourceLanguage": "haskell",
+  "registries": ["haskell", "java", "scala", "typescript"],
   "dependencies": ["hydra-kernel"]
 }

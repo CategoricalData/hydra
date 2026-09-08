@@ -3,5 +3,6 @@
   "name": "hydra-lisp",
   "description": "Lisp support for Hydra (shared across Clojure, Scheme, Common Lisp, and Emacs Lisp)",
   "sourceLanguage": "haskell",
+  "registries": ["haskell", "java", "scala"],
   "dependencies": ["hydra-kernel"]
 }

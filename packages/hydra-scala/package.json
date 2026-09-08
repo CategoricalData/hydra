@@ -3,5 +3,6 @@
   "name": "hydra-scala",
   "description": "Scala support for Hydra",
   "sourceLanguage": "scala",
+  "registries": ["haskell", "java", "scala"],
   "dependencies": ["hydra-kernel", "hydra-jvm"]
 }

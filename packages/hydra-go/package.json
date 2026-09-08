@@ -3,5 +3,6 @@
   "name": "hydra-go",
   "description": "Go support for Hydra",
   "sourceLanguage": "haskell",
-  "dependencies": ["hydra-kernel"]
+  "dependencies": ["hydra-kernel"],
+  "publishable": false
 }

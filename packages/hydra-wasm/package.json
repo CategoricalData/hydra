@@ -4,5 +4,6 @@
   "description": "WebAssembly support for Hydra",
   "sourceLanguage": "haskell",
   "targetLanguages": ["haskell"],
-  "dependencies": ["hydra-kernel"]
+  "dependencies": ["hydra-kernel"],
+  "publishable": false
 }

@@ -4,5 +4,6 @@
   "description": "Synthetic inference benchmark workloads for cross-host performance comparison. Not part of the standard sync; regenerate on demand via bin/sync-bench.sh.",
   "sourceLanguage": "haskell",
   "targetLanguages": ["haskell", "java", "python"],
-  "dependencies": ["hydra-kernel"]
+  "dependencies": ["hydra-kernel"],
+  "publishable": false
 }

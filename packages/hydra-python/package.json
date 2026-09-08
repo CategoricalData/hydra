@@ -3,5 +3,6 @@
   "name": "hydra-python",
   "description": "Python support for Hydra",
   "sourceLanguage": "python",
+  "registries": ["haskell", "java", "scala", "python"],
   "dependencies": ["hydra-kernel"]
 }
