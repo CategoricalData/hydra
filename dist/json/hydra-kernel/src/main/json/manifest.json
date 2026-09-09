@@ -330,6 +330,7 @@
     "hydra.test.inference.classes",
     "hydra.test.inference.failures",
     "hydra.test.inference.fundamentals",
+    "hydra.test.inference.idempotence",
     "hydra.test.inference.kernelExamples",
     "hydra.test.inference.nominalTypes",
     "hydra.test.json.parser",

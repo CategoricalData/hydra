@@ -8,6 +8,7 @@
     {"module": "hydra.test.inference.classes"},
     {"module": "hydra.test.inference.failures"},
     {"module": "hydra.test.inference.fundamentals"},
+    {"module": "hydra.test.inference.idempotence"},
     {"module": "hydra.test.inference.kernelExamples"},
     {"module": "hydra.test.inference.nominalTypes"},
     {"module": "hydra.paths"},
@@ -62,6 +63,7 @@
                         {"variable": "hydra.test.inference.classes.allTests"},
                         {"variable": "hydra.test.inference.failures.allTests"},
                         {"variable": "hydra.test.inference.fundamentals.allTests"},
+                        {"variable": "hydra.test.inference.idempotence.allTests"},
                         {"variable": "hydra.test.inference.kernelExamples.allTests"},
                         {"variable": "hydra.test.inference.nominalTypes.allTests"}]}},
                   {
