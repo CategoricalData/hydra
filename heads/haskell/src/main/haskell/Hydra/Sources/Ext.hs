@@ -41,6 +41,7 @@ import qualified Hydra.Sources.TypeScript.Manifest as TypeScriptManifest
 import qualified Hydra.Sources.Lisp.Manifest as LispManifest
 import qualified Hydra.Sources.Pg.Manifest as PgManifest
 import qualified Hydra.Sources.Rdf.Manifest as RdfManifest
+import qualified Hydra.Sources.Rust.Manifest as RustManifest
 import qualified Hydra.Sources.Wasm.Manifest as WasmManifest
 
 -- Override: demo-only module that today leaks into hydraExtModules.
@@ -133,6 +134,9 @@ hydraPythonModules = []
 hydraRdfModules :: [Module]
 hydraRdfModules = RdfManifest.mainModules
 
+hydraRustModules :: [Module]
+hydraRustModules = RustManifest.mainModules
+
 -- | hydra-scala is no longer sourced from a Haskell DSL (#509). Its canonical
 -- hydra.scala.* and hydra.dsl.scala.* JSON is produced solely by the native
 -- Scala driver (hydra.UpdateScalaJson via bin/generate-hydra-scala-from-scala.sh)
@@ -169,6 +173,7 @@ allDslModules =
   ++ LispManifest.mainDslModules
   ++ PgManifest.mainDslModules
   ++ RdfManifest.mainDslModules
+  ++ RustManifest.mainDslModules
   ++ WasmManifest.mainDslModules
 
 allEncodingModules :: [Module]
@@ -184,6 +189,7 @@ allEncodingModules =
   ++ LispManifest.mainEncodingModules
   ++ PgManifest.mainEncodingModules
   ++ RdfManifest.mainEncodingModules
+  ++ RustManifest.mainEncodingModules
   ++ WasmManifest.mainEncodingModules
 
 -- ----------------------------------------------------------------------
@@ -237,6 +243,7 @@ extRoutingInput =
   -- fail-loud router routes it to hydra-python (#511).
   , ("hydra-python",     map moduleName hydraPythonModules ++ [ModuleName "hydra.python.pyproject"])
   , ("hydra-rdf",        map moduleName hydraRdfModules)
+  , ("hydra-rust",       map moduleName hydraRustModules)
   , ("hydra-scala",      map moduleName hydraScalaModules)
   , ("hydra-wasm",       map moduleName hydraWasmModules)
   ]
@@ -325,6 +332,7 @@ hydraExtModules =
   ++ hydraPgModules
   ++ hydraPythonModules
   ++ hydraRdfModules
+  ++ hydraRustModules
   ++ hydraScalaModules
   ++ [GenPGTransform.module_]
 
