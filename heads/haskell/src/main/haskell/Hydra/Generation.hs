@@ -1452,6 +1452,22 @@ ensurePerPackageDigests routingMap distJsonRoot universeMods = do
 -- name's fully-qualified dotted form — no lookup index needed. A name with
 -- no resolvable owning module (a local binder, or a name outside any known
 -- module) is silently dropped; only real cross-module edges are kept.
+--
+-- IMPORTANT (#701 bug fix): despite its name, 'termDependencyNames's
+-- @withPrims@ flag does NOT gate primitive/variable references -- reading
+-- its DSL definition (Terms/Dependencies.hs), the @_Term_variable@ case is
+-- gated solely by the @binds@ flag (its internal "var" helper), and the
+-- @withPrims@-gated "prim" helper is never actually invoked from the
+-- traversal. A call like 'Eithers.mapSet' resolves to a bare
+-- 'TermVariable' after inference, so it is ONLY captured when @binds=True@.
+-- The original @binds=False@ call here returned an always-empty derived set
+-- for exactly this reason -- caught by DigestSpec's setOf/mapSet
+-- reproduction. @binds=True@ also picks up bound (lambda/let-bound)
+-- variable occurrences, which resolve to intra-module or local names that
+-- 'moduleNameOf' silently drops (no owning module in the universe) or that
+-- collapse harmlessly into the @dep /= moduleName m@ self-edge filter
+-- below, so the extra inclusiveness costs nothing for this closure's
+-- purposes (soundness matters here, not precision).
 moduleReferenceEdges :: [Module] -> M.Map ModuleName (S.Set ModuleName)
 moduleReferenceEdges universeMods = M.fromList
     [ (moduleName m, S.union declared derived)
@@ -1460,7 +1476,7 @@ moduleReferenceEdges universeMods = M.fromList
     , let derived = S.fromList
             [ dep
             | DefinitionTerm td <- moduleDefinitions m
-            , n <- S.toList (termDependencyNames False True True (termDefinitionBody td))
+            , n <- S.toList (termDependencyNames True True True (termDefinitionBody td))
             , Just dep <- [moduleNameOf n]
             , dep /= moduleName m
             ]
