@@ -1,8 +1,0 @@
-{
-  "packageFormatVersion": 1,
-  "name": "hydra-rust",
-  "description": "Rust support for Hydra",
-  "sourceLanguage": "haskell",
-  "targetLanguages": ["haskell"],
-  "dependencies": ["hydra-kernel"]
-}
