@@ -575,9 +575,19 @@ unknownPrimitiveTests = define "unknownPrimitiveTests" $
   subgroup "unknown primitive" [
     -- A qualified reference to an ordinary (non-primitive) kernel term
     -- definition resolves via graphBoundTerms, not graphPrimitives -- must
-    -- not be misclassified as an unknown primitive.
+    -- not be misclassified as an unknown primitive. Uses
+    -- hydra.constants.keyDescription rather than another hydra.constants.*
+    -- binding because every host's hand-written test harness populates its
+    -- graphBoundTerms equivalent from a narrow, independently-curated
+    -- subset of kernel bindings (Haskell's TestEnv.hs is the only harness
+    -- that imports whole kernel term modules); keyDescription is the one
+    -- hydra.constants.* name every host (Java/Scala/Scheme/Clojure/
+    -- Common Lisp/Emacs Lisp) already includes, since their own test
+    -- fixtures reference it for annotation handling. See #722 P0 (main
+    -- red on 6 hosts): regexCamelCase is real but was never ported to any
+    -- non-Haskell harness, so it isn't a safe cross-host test fixture.
     untypedCase "qualified reference to a bound (non-primitive) kernel term is valid"
-      (toTermTerm $ var "hydra.constants.regexCamelCase")
+      (toTermTerm $ var "hydra.constants.keyDescription")
       noError,
     -- A qualified (primitive-shaped) name that resolves to neither a known
     -- primitive nor a bound term is the actual unknownPrimitiveName case.
