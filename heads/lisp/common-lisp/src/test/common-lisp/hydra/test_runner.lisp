@@ -614,9 +614,11 @@
          (prim-entries (funcall hydra_overlay_common_lisp_lib_maps_to_list all-prims))
          (bound-terms
            (funcall hydra_overlay_common_lisp_lib_maps_from_list
-               (list
-                 (list "hydra.monads.emptyContext" (list :unit))
-                 (list "hydra.lexical.emptyGraph" (list :unit))))))
+               (append
+                 (annotation-bindings)
+                 (list
+                   (list "hydra.monads.emptyContext" (list :unit))
+                   (list "hydra.lexical.emptyGraph" (list :unit)))))))
     (list (cons :bound_terms bound-terms)
           (cons :bound_types hydra_overlay_common_lisp_lib_maps_empty)
           (cons :class_constraints hydra_overlay_common_lisp_lib_maps_empty)
