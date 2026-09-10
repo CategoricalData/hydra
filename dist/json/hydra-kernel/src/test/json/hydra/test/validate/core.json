@@ -4287,7 +4287,7 @@
                                                                           "typeName": "hydra.core.Term",
                                                                           "field": {
                                                                             "name": "variable",
-                                                                            "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.constants.regexCamelCase"}}}}}}}}}}}}}}},
+                                                                            "term": {"wrap": {"typeName": "hydra.core.Name", "body": {"literal": {"string": "hydra.constants.keyDescription"}}}}}}}}}}}}}}},
                                                       "argument": {"literal": {"string": "valid"}}}},
                                                   "argument": {
                                                     "lambda": {
