@@ -1,8 +1,0 @@
-{
-  "mainDslModules": ["hydra.rust.syntax"],
-  "mainEncodingModules": [],
-  "mainModules": ["hydra.rust.coder", "hydra.rust.language", "hydra.rust.operators", "hydra.rust.serde", "hydra.rust.syntax"],
-  "manifestFormatVersion": 1,
-  "moduleFormatVersion": 1,
-  "package": "hydra-rust",
-  "testModules": []}
