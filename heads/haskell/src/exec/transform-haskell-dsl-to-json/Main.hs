@@ -30,7 +30,7 @@ import Hydra.Sources.Ext (
   kernelModules, haskellModules, jsonModules, otherModules,
   hydraCoqModules, hydraGoModules, hydraJvmModules, hydraJavaModules, hydraTypeScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
-  hydraPgModules, hydraRdfModules, hydraWasmModules,
+  hydraPgModules, hydraRdfModules, hydraRustModules, hydraWasmModules,
   hydraBuildModules, hydraBuildTestModules,
   hydraExtPackageModules, allEncodingModules,
   extRoutingInput)
@@ -93,6 +93,7 @@ buildFullMainUniverse = do
         , hydraLispModules
         , hydraPgModules
         , hydraRdfModules
+        , hydraRustModules
         , hydraWasmModules
         , hydraBuildModules
         , hydraExtPackageModules
@@ -146,8 +147,8 @@ usage = unlines
   , "                           Packages: hydra-kernel, hydra-haskell,"
   , "                           hydra-java, hydra-python, hydra-scala,"
   , "                           hydra-lisp, hydra-coq, hydra-typescript,"
-  , "                           hydra-build, hydra-pg, hydra-rdf, hydra-ext,"
-  , "                           hydra-wasm."
+  , "                           hydra-build, hydra-pg, hydra-rdf, hydra-rust,"
+  , "                           hydra-ext, hydra-wasm."
   , "  --all                    Batch mode: transform every package."
   , "  --source-set <main|test> Source set to transform (default: main)."
   , "                           'test' is non-empty for hydra-kernel and hydra-build."
@@ -177,6 +178,7 @@ allPackages =
   , "hydra-build"
   , "hydra-pg"
   , "hydra-rdf"
+  , "hydra-rust"
   , "hydra-ext"
   ]
 
@@ -206,6 +208,7 @@ packageDslInputModules "hydra-python"  = hydraPythonModules
 packageDslInputModules "hydra-scala"   = hydraScalaModules
 packageDslInputModules "hydra-lisp"    = hydraLispModules
 packageDslInputModules "hydra-go"      = hydraGoModules
+packageDslInputModules "hydra-rust"    = hydraRustModules
 packageDslInputModules _               = []
 
 
