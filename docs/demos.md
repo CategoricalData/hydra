@@ -91,7 +91,7 @@ Validates a **live Neo4j graph** against a Hydra Neo4j graph type, running the s
 using that language's Neo4j client driver, reads the nodes and relationships, maps the driver's
 types onto `hydra.neo4j.model`, and reports all violations.
 
-It showcases the capability Neo4j itself lacks — retroactive, client-side, whole-graph validation
+It demonstrates a capability Neo4j itself lacks — retroactive, client-side, whole-graph validation
 that reports every violation at once (Neo4j enforces constraints and graph types only at write time,
 one element at a time). The demo covers property existence and type constraints, overloaded
 relationship-type endpoint patterns, and open- vs. closed-world matching. It needs a running Neo4j

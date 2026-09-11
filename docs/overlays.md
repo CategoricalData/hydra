@@ -20,7 +20,7 @@ A distribution package is the combination of two inputs:
   target language; and
 - **copy** — hand-written files copied verbatim from the overlay tree (`overlay/<lang>/<pkg>/`).
 
-Two load-bearing invariants follow:
+Two invariants follow:
 
 1. **Only the copy step reads `overlay/`.** No head build, test config, or IDE project references the
    overlay tree directly — its sole purpose is to feed `dist/`.

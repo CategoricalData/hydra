@@ -1,7 +1,7 @@
 # Hydra
 
 Hydra is a strongly typed intermediate language for data, schemas, and code.
-Programs and domain models written in Hydra map seamlessly to major programming languages
+Programs and domain models written in Hydra map directly to major programming languages
 like Java, Scala, and Python, to data exchange formats like Protobuf, Avro, and JSON,
 and to graph data models like RDF and labeled property graphs.
 
@@ -28,7 +28,7 @@ in Hydra, programs are graphs, and graphs are programs
   and [SHACL](https://en.wikipedia.org/wiki/SHACL),
   and has been used in combination with the ISO/IEC [GQL](https://en.wikipedia.org/wiki/Graph_Query_Language) standard.
   Hydra provides [DSLs](https://en.wikipedia.org/wiki/Domain-specific_language) for defining schemas and mappings,
-  as well as tools for validating schemas and data, and moving them seamlessly into and out of the graph formats.
+  as well as tools for validating schemas and data, and moving them into and out of the graph formats.
 * **Data integration**. Hydra includes "coders" (encoders+decoders) for many data and schema languages
   which you can easily compose together
   to build data transform pipelines. Some of the currently supported languages and formats include
@@ -62,13 +62,13 @@ language), Java, Python, Scala, TypeScript, and four dialects of Lisp (Clojure, 
 Common Lisp, and Emacs Lisp) —
 and all of them pass the [hydra-kernel test suite](https://github.com/CategoricalData/hydra/wiki/Testing)
 under every bootstrapping path. TypeScript, Emacs Lisp, and (like Scala and Lisp) the JVM
-Lisp dialects self-host in the two load-bearing pillars — running as a codegen target and as a
-codegen host — but do not yet author Hydra DSL sources in their own language; only Haskell,
+Lisp dialects self-host as both codegen target and codegen host, but do not yet author Hydra
+DSL sources in their own language; only Haskell,
 Java, Python, and Scala do all three today.
 Additional ports are in active development; see the [Implementations](#implementations) table below
 for the full set.
 
-The hydra-kernel test suite is what makes translingual programming load-bearing rather than
+The hydra-kernel test suite is what makes translingual programming real rather than
 aspirational: it ensures every program behaves the same when translated into each supported language,
 which is essential in heterogeneous environments where the same logic must be manifested identically
 across more than one programming language.

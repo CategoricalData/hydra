@@ -27,7 +27,7 @@ and serves as a reference for adding other constructs like pairs, sum types, etc
   - [Step 10: Run Code Generation](#step-10-run-code-generation)
   - [Step 11: Final Verification](#step-11-final-verification)
   - [Step 11.5: Update Language Support](#step-115-update-language-support-optional)
-  - [Step 12: Add Comprehensive Tests](#step-12-add-comprehensive-tests)
+  - [Step 12: Add tests](#step-12-add-tests)
 - [Common Pitfalls](#common-pitfalls)
 - [Tips for Success](#tips-for-success)
 - [File Modification Checklist](#file-modification-checklist)
@@ -753,7 +753,7 @@ sbt compile
 
 ---
 
-### Step 12: Add Comprehensive Tests
+### Step 12: Add tests
 
 After verifying that the build succeeds, add thorough test coverage for both type inference and type checking.
 
@@ -1025,7 +1025,7 @@ ulimit -n 4096; stack test
 - [ ] Build succeeds with bootstrap patches
 - [ ] Code generation completes successfully
 - [ ] Final build succeeds with regenerated files
-- [ ] All tests pass with comprehensive coverage
+- [ ] All tests pass with coverage of the new behavior
 
 ---
 

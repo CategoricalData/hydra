@@ -40,7 +40,7 @@ The governing equation is:
 
 A distribution package is the *combination* of two inputs: modules **transformed** from the
 translingual source package into the target language, plus hand-written files **copied** from
-the overlay tree. Two invariants follow, and both are load-bearing:
+the overlay tree. Two invariants follow:
 
 1. **Only the copy step reads `overlay/`.** Nothing else — no head build, no test config, no
    IDE project — may reference the `overlay/` tree directly. Its sole purpose is to feed
@@ -922,7 +922,7 @@ this seeder, a recurring class of red CI (#500, #608, #617, and the #703 investi
 
 - Resolves the **published** Java host (`net.fortytwo.hydra.java:hydra-java` and its published
   target-coder siblings, incl. `hydra-build`) from Maven — no local Java or Haskell build required.
-- Reads `dist/json`'s term-AST directly and walks it to produce Haskell source **text**. Crucially, it
+- Reads `dist/json`'s term-AST directly and walks it to produce Haskell source **text**. It
   never compiles or type-checks against any Haskell type at all — Haskell is purely the *output
   language*, a string it writes, not something the Java process links against. A kernel shape change
   changes the *shape of the JSON*, which the Java-side decoder transcribes faithfully regardless — there

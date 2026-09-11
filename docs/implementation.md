@@ -341,7 +341,7 @@ dist/haskell/hydra-<pkg>/src/main/haskell/Hydra/         # Generated per-package
                                                           #    hydra-coq, ...)
 ```
 
-**See also:** [DSL guide](dsl-guide.md) - Comprehensive guide with examples and operator reference
+**See also:** [DSL guide](dsl-guide.md) - Full DSL guide with examples and an operator reference
 
 ### Three levels of DSLs
 
@@ -1740,7 +1740,7 @@ Hydra's implementation demonstrates a sophisticated multi-layer architecture:
 
 1. **Type modules** define the core type system in a modular, dependency-aware manner
 2. **DSLs** provide multiple levels of abstraction for writing Hydra code with compile-time safety
-3. **Primitives** offer a comprehensive standard library with multi-language generation
+3. **Primitives** provide the standard library — ~270 functions generated into every target language
 4. **Coders** transform Hydra definitions into multiple target languages systematically
 5. **Bootstrap process** enables self-hosting and gradual extension of the language
 
@@ -1748,11 +1748,9 @@ This architecture enables:
 - Type-safe code generation across languages
 - Self-modifying compiler capabilities
 - Systematic addition of new features
-- Clear separation of concerns
-- Maintainable and extensible codebase
 
-The combination of Haskell's type system, phantom types, and careful layering creates a robust foundation for
-a multi-language transformation framework.
+Haskell's type system, phantom types, and layered DSLs give the multi-language transformation
+framework its compile-time guarantees.
 
 ---
 

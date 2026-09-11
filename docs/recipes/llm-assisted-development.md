@@ -18,7 +18,7 @@ The lexicon serves as a compact reference that can be included in an LLM's conte
 enabling it to understand and generate correct Hydra code.
 
 Note: most of Hydra's primitive functions are intentionally aligned with Haskell,
-so that LLMs familiar with Haskell can leverage that knowledge when generating Hydra code.
+so that LLMs familiar with Haskell can use that knowledge when generating Hydra code.
 
 ### Structure
 

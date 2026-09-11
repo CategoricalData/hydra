@@ -284,6 +284,67 @@ def "NewType" $
 -- ... more code ...
 ```
 
+## Avoiding AI-generated tells
+
+Documentation drafted or edited with LLM help tends to accumulate a recognizable style: decorative
+adjectives standing in for substance, filler openers, and manufactured rhetorical structure. None of
+these words are individually banned — the tell is *frequency*, not any single occurrence. The rule:
+**substantiate or cut.** If a word claims something ("comprehensive", "robust", "load-bearing"), the
+surrounding text must show the specific thing that makes it true; if it doesn't, replace the word with
+a plainer one or delete it.
+
+### Tier 1: decorative adjectives and verbs
+
+Avoid using these as a default way to sound impressive; each has a plain-English substitute:
+
+`delve`, `load-bearing` (metaphorical use — see below for legitimate technical use), `tapestry`,
+`testament` / `a testament to`, `underscore` (as a verb meaning "emphasize" — the literal character
+`_` is unaffected), `showcase`, `intricate`, `meticulous`, `pivotal`, `realm`, `foster`, `elevate`,
+`paramount`, `boasts`, `seamless` / `seamlessly`, `leverage` (as a verb), `robust`, `rich ecosystem`,
+`comprehensive` (as a default adjective for "complete" or "large"), `holistic`, `multifaceted`.
+
+**Legitimate technical exception:** "load-bearing" is a real engineering metaphor when the text names
+the specific thing that would break if the referent were removed (e.g. "these are load-bearing
+invariants: violating either one breaks the copy step's isolation guarantee"). Keep it there; cut it
+where it's just a synonym for "important."
+
+### Tier 2: filler openers
+
+Avoid using these as sentence-openers — they add words without adding information:
+
+`it's worth noting`, `it is important to note`, `crucially` / `importantly` / `notably` (as
+sentence-openers), `that said`, `at its core`, `in essence`.
+
+### Tier 3: structural tells
+
+- **Manufactured antithesis**: "not just X but Y" / "This isn't about X, it's about Y" — legitimate
+  when X is a real, plausible-but-wrong alternative the text is correcting; a tell when X is a straw
+  man nobody would have assumed.
+- **Tricolon overuse**: forcing lists, clauses, or examples into groups of three throughout a
+  document, regardless of whether three is the natural count.
+- **Bold lead-in on every list item**: `**Term**: explanation` is fine occasionally; on every single
+  item in a list it reads as templated.
+- **Em-dash runs**: two or more em-dashes in a single sentence, repeated across many sentences.
+- **Uniform sentence cadence**: every sentence landing in the same 18-24-word range reads as
+  machine-generated rhythm; real technical writing varies sentence length with content.
+
+### Applying this section
+
+This is a judgment pass, not find-and-replace. Before changing a flagged word, check:
+
+1. Does the surrounding text substantiate the claim the word makes? If yes, it may be legitimate —
+   leave it (e.g. "not a load-bearing type check" when the text explains exactly what the check does
+   and doesn't guarantee).
+2. Is the word part of an unrelated literal usage (the `_` character, a CI "gate"/"-gated" mechanism,
+   a genuinely surprising "not just X but Y")? Leave it.
+3. Otherwise, replace with the plain alternative or cut the sentence fragment entirely.
+
+Sources informing this section: aggregated community observations on LLM writing tells (the-decoder,
+Reddit r/ClaudeAI compilations), targeted analysis of "load-bearing" as an LLM tic, and independent
+write-ups on filler-opener and em-dash patterns (productized.nl, willfrancis.com, pangram.com); the
+em-dash-as-tell claim specifically is contested (see Duey's rebuttal) and is included here as a
+frequency signal, not a hard rule.
+
 ## Reviewing documentation
 
 When reviewing documentation, check for:
@@ -295,3 +356,4 @@ When reviewing documentation, check for:
 5. Consistent link formatting
 6. Complete code examples
 7. Clear, active voice
+8. No unsubstantiated AI-generated tells (see [Avoiding AI-generated tells](#avoiding-ai-generated-tells))
