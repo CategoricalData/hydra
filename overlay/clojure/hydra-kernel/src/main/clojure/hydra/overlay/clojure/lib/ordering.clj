@@ -1,5 +1,54 @@
 (ns hydra.overlay.clojure.lib.ordering)
 
+;; Declared-variant order for each hydra.core union family, transcribed from
+;; the generated hydra/core.clj (hydra_core_term-variants, hydra_core_type-
+;; variants, etc.), which in turn come from the DSL declaration order
+;; (packages/hydra-kernel/.../Sources/Kernel/Types/Core.hs). Mirrors Python's
+;; _VARIANT_ORDER table (overlay/python/.../util/_compare.py) -- the
+;; established #718 precedent hand-authors variant order for kernel types
+;; only; non-kernel (user-schema) unions fall back to a still-deterministic
+;; but non-declared-order tag comparison (see generic-compare's keyword
+;; branch below). Keyed by family name (not by tag alone): a union value's
+;; tag keyword alone carries no runtime type identity, and tags collide
+;; across unrelated unions repo-wide (:literal, :map, :unit, etc.), so a
+;; single flat tag->ordinal table would be unsound. Hydra's static typing
+;; guarantees compare/equal are only ever called on same-typed values
+;; (docs/specification/ordering-and-equality.md), so it is safe to resolve
+;; the family from BOTH sides' tags and require them to agree.
+(def ^:private variant-order
+  {"term" [:annotated :application :cases :either :lambda :let :list
+           :literal :map :optional :pair :project :record :set
+           :type_lambda :type_application :inject :unit :unwrap
+           :variable :wrap]
+   "type" [:annotated :application :effect :either :forall :function
+           :list :literal :map :optional :pair :record :set :union
+           :unit :variable :void :wrap]
+   "literal" [:binary :boolean :decimal :float :integer :string]
+   "integer" [:bigint :int8 :int16 :int32 :int64 :uint8 :uint16 :uint32 :uint64]
+   "float" [:float32 :float64]})
+
+;; If tags A and B both belong to the SAME known family, return
+;; [ordinal-a ordinal-b]; otherwise nil (unknown family, or a family
+;; mismatch that should not arise under Hydra's static typing -- callers
+;; fall back to a deterministic tag compare in that case).
+(defn- variant-ordinals [tag-a tag-b]
+  (some (fn [variants]
+          (let [pa (.indexOf ^java.util.List variants tag-a)
+                pb (.indexOf ^java.util.List variants tag-b)]
+            (when (and (not= pa -1) (not= pb -1)) [pa pb])))
+        (vals variant-order)))
+
+;; Compare two tag keywords: declared-variant order when both resolve to the
+;; same known kernel family, else a deterministic (not print-based) keyword
+;; compare -- the same scope limitation #718 carries on every host but Java.
+(defn- compare-tags [ta tb]
+  (if (= ta tb)
+    0
+    (let [ordinals (variant-ordinals ta tb)]
+      (if ordinals
+        (compare (first ordinals) (second ordinals))
+        (compare ta tb)))))
+
 (defn generic-compare
   "Generic comparison function for arbitrary Clojure values, returning -1, 0, or 1."
   [a b]
@@ -16,22 +65,24 @@
       (if (not= c 0) c (compare (.scale ^java.math.BigDecimal a) (.scale ^java.math.BigDecimal b))))
     (and (number? a) (number? b)) (compare a b)
     (and (string? a) (string? b)) (compare a b)
-    (and (keyword? a) (keyword? b)) (compare a b)
+    (and (keyword? a) (keyword? b)) (compare-tags a b)
     (and (boolean? a) (boolean? b)) (compare a b)
     (and (char? a) (char? b)) (compare (int a) (int b))
     ;; Records (defrecord instances): compare by type name first, then fields
+    ;; in DECLARATION order -- (keys record) on a defrecord instance already
+    ;; preserves declaration order (verified: defrecord fields are backed by
+    ;; a fixed-order struct-map), so no separate field-order table is needed
+    ;; here (unlike the union-tag case above); do NOT `sort` the keys, which
+    ;; would silently re-order them alphabetically.
     (instance? clojure.lang.IRecord a)
     (if (instance? clojure.lang.IRecord b)
       (let [ta (type a) tb (type b)]
         (if (= ta tb)
-          ;; Same record type: compare field values in key order
-          (let [ka (sort (keys a)) ;; record keys are always the same for same type
-                ]
-            (loop [ks (seq ka)]
-              (if (nil? ks) 0
-                (let [k (first ks)
-                      c (generic-compare (get a k) (get b k))]
-                  (if (not= c 0) c (recur (next ks)))))))
+          (loop [ks (seq (keys a))]
+            (if (nil? ks) 0
+              (let [k (first ks)
+                    c (generic-compare (get a k) (get b k))]
+                (if (not= c 0) c (recur (next ks))))))
           (compare (str ta) (str tb))))
       (compare (str (type a)) (str (type b))))
     (map? a)
@@ -50,14 +101,22 @@
                     (if (not= cv 0) cv
                       (recur (next ra) (next rb))))))))))
       (compare (str (type a)) (str (type b))))
+    ;; Lists (including the (tag payload...) union encoding, whose arity
+    ;; varies by variant) and the tuple encoding of Pair: lexicographic,
+    ;; shorter-is-prefix-less (docs/specification/ordering-and-equality.md),
+    ;; NOT length-first -- comparing lengths before elements was wrong (it
+    ;; would rank a (:unit nil) 2-element union payload as "less than" any
+    ;; 3-element variant's payload regardless of the tag itself, since
+    ;; :unit's own tag ordinal is never reached).
     (and (sequential? a) (sequential? b))
-    (let [len-a (count a) len-b (count b)]
-      (if (not= len-a len-b)
-        (compare len-a len-b)
-        (loop [ra (seq a) rb (seq b)]
-          (if (nil? ra) 0
-              (let [c (generic-compare (clojure.core/first ra) (clojure.core/first rb))]
-                (if (not= c 0) c (recur (next ra) (next rb))))))))
+    (loop [ra (seq a) rb (seq b)]
+      (cond
+        (and (nil? ra) (nil? rb)) 0
+        (nil? ra) -1
+        (nil? rb) 1
+        :else
+        (let [c (generic-compare (clojure.core/first ra) (clojure.core/first rb))]
+          (if (not= c 0) c (recur (next ra) (next rb))))))
     :else (compare (pr-str a) (pr-str b))))
 
 ;; compare :: a -> a -> Comparison

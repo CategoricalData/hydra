@@ -21,6 +21,45 @@
          (nb (* cb (expt 10 (- max-scale sb)))))
     (cond ((< na nb) -1) ((> na nb) 1) (t (- sa sb)))))
 
+;; Declared-variant order for each hydra.core union family, transcribed from
+;; the generated hydra/core.lisp (hydra_core_term-variants, hydra_core_type-
+;; variants, etc.), which in turn come from the DSL declaration order
+;; (packages/hydra-kernel/.../Sources/Kernel/Types/Core.hs). Mirrors Python's
+;; _VARIANT_ORDER table (overlay/python/.../util/_compare.py) -- the
+;; established #718 precedent hand-authors variant order for kernel types
+;; only; non-kernel (user-schema) unions fall back to a still-deterministic
+;; but non-declared-order tag comparison (see the tag-keyword branch below).
+;; Keyed by family name (not by tag alone): CL union values are bare
+;; (:tag . payload) conses with no runtime type identity, and tag keywords
+;; collide across unrelated unions repo-wide (:literal, :map, :unit, etc.),
+;; so a single flat tag->ordinal table would be unsound. Hydra's static
+;; typing guarantees compare/equal are only ever called on same-typed
+;; values (docs/specification/ordering-and-equality.md), so it is safe to
+;; resolve the family from BOTH sides' tags and require them to agree.
+(defparameter *hydra-variant-order*
+  (list
+   (cons "term" '(:annotated :application :cases :either :lambda :let :list
+                   :literal :map :optional :pair :project :record :set
+                   :type_lambda :type_application :inject :unit :unwrap
+                   :variable :wrap))
+   (cons "type" '(:annotated :application :effect :either :forall :function
+                   :list :literal :map :optional :pair :record :set :union
+                   :unit :variable :void :wrap))
+   (cons "literal" '(:binary :boolean :decimal :float :integer :string))
+   (cons "integer" '(:bigint :int8 :int16 :int32 :int64 :uint8 :uint16 :uint32 :uint64))
+   (cons "float" '(:float32 :float64))))
+
+;; If tags A and B both belong to the SAME known family, return their
+;; (ordinal-a . ordinal-b); otherwise NIL (unknown family, or a family
+;; mismatch that should not arise under Hydra's static typing -- callers
+;; fall back to a deterministic tag compare in that case).
+(defun hydra-variant-ordinals (tag-a tag-b)
+  (dolist (entry *hydra-variant-order*)
+    (let ((variants (cdr entry)))
+      (let ((pa (position tag-a variants)) (pb (position tag-b variants)))
+        (when (and pa pb) (return-from hydra-variant-ordinals (cons pa pb))))))
+  nil)
+
 ;; Generic comparison for ordering heterogeneous values.
 ;; Returns -1, 0, or 1.
 (defun hash-table-equal-p (a b)
@@ -54,13 +93,70 @@
      (cond ((string< a b) -1) ((string= a b) 0) (t 1)))
     ((and (characterp a) (characterp b))
      (cond ((char< a b) -1) ((char= a b) 0) (t 1)))
-    ((and (symbolp a) (symbolp b))
-     (let ((sa (symbol-name a)) (sb (symbol-name b)))
-       (cond ((string< sa sb) -1) ((string= sa sb) 0) (t 1))))
     ((and (typep a 'boolean) (typep b 'boolean))
      (cond ((and (not a) b) -1) ((eq a b) 0) (t 1)))
     ((and (hydra-decimal-term-p a) (hydra-decimal-term-p b))
      (hydra-compare-decimals (hydra-decimal-term-value a) (hydra-decimal-term-value b)))
+    ;; Union values: (:tag . payload) or (:tag payload ...). Compare by
+    ;; declared-variant order (when both tags resolve to the same known
+    ;; kernel family) rather than the keyword's print/alphabetical order;
+    ;; same variant (or unknown family) recurses into the payload.
+    ((and (consp a) (consp b) (keywordp (car a)) (keywordp (car b)))
+     (cond
+       ((eq (car a) (car b)) (generic-compare (cdr a) (cdr b)))
+       (t (let ((ordinals (hydra-variant-ordinals (car a) (car b))))
+            (cond
+              (ordinals (- (car ordinals) (cdr ordinals)))
+              (t
+               ;; Unknown (non-kernel) family: no declared-order table
+               ;; available -- fall back to a deterministic (not
+               ;; print-based) keyword compare. Same scope limitation
+               ;; #718 carries on every host but Java.
+               (let ((sa (symbol-name (car a))) (sb (symbol-name (car b))))
+                 (cond ((string< sa sb) -1) ((string= sa sb) 0) (t 1)))))))))
+    ((and (symbolp a) (symbolp b))
+     (let ((sa (symbol-name a)) (sb (symbol-name b)))
+       (cond ((string< sa sb) -1) ((string= sa sb) 0) (t 1))))
+    ;; Maps and sets (overlay/common_lisp/lib/maps.lisp, sets.lisp): persistent
+    ;; red-black trees (rbnode structs, loaded before this file -- see
+    ;; run-tests.lisp's load order). An rbnode's shape depends on INSERTION
+    ;; ORDER (that's the whole point of a balanced tree: different insertion
+    ;; sequences produce different tree shapes for the same logical content),
+    ;; so comparing rbnode structs as generic opaque structs (equalp, then a
+    ;; write-to-string fallback below) is WRONG whenever two maps/sets with
+    ;; identical contents were built in different orders -- equalp fails
+    ;; (different shape) and the printed form differs too, so `equal`/
+    ;; `compare` would disagree with two maps/sets that the spec considers
+    ;; equal. Canonicalize to a key-sorted entry list first (maps-entries-
+    ;; sorted / sets-elements-sorted do an in-order tree traversal, already
+    ;; key-sorted by the BST invariant -- no extra sort needed) and compare
+    ;; that structurally, mirroring the CanonMap/CanonSet branches in the
+    ;; TypeScript fix (ordering.ts).
+    ((and (rbnode-p a) (rbnode-p b))
+     (generic-compare (maps-entries-sorted a) (maps-entries-sorted b)))
+    ((or (rbnode-p a) (rbnode-p b))
+     ;; One side is an rbnode and the other is the legacy nil/alist/sorted-list
+     ;; representation maps.lisp/sets.lisp also accept (see maps-alist-p) --
+     ;; canonicalize both sides the same way rather than falling through to
+     ;; struct/print comparison, which would never even reach here for a
+     ;; non-struct legacy value anyway (its own conses would take the (consp
+     ;; a) (consp b) branch below with no rbnode-aware canonicalization).
+     ;; Delegate to maps-entries-sorted, which already accepts rbnode, alist,
+     ;; or nil uniformly.
+     (generic-compare (maps-entries-sorted a) (maps-entries-sorted b)))
+    ;; Structs (records): compare by slot values in declaration order.
+    ;; struct-slots is portable across CL implementations via SBCL/CCL's
+    ;; sb-mop/mop introspection would add a dependency; instead rely on the
+    ;; struct's own PRINT-OBJECT-independent slot accessors being applied by
+    ;; the caller -- structs reach generic-compare only via slot recursion
+    ;; from decode/encode, which already walks fields in order, so a bare
+    ;; struct value here is a LEAF (non-decomposed) struct with no further
+    ;; structure to recurse into from this generic function; fall through to
+    ;; the equalp-based struct comparison below.
+    ((and (typep a 'structure-object) (typep b 'structure-object) (eq (type-of a) (type-of b)))
+     (if (equalp a b) 0
+         (let ((sa (write-to-string a)) (sb (write-to-string b)))
+           (cond ((string< sa sb) -1) ((string= sa sb) 0) (t 1)))))
     ((and (consp a) (consp b))
      (let ((c (generic-compare (car a) (car b))))
        (if (= c 0)
