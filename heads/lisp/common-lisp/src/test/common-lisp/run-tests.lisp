@@ -369,6 +369,7 @@
              "inference/classes.lisp"
              "inference/failures.lisp"
              "inference/kernel_examples.lisp"
+             "inference/idempotence.lisp"
              "inference/all.lisp"))
   (load-test-file f))
 
