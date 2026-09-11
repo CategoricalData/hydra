@@ -264,7 +264,7 @@ public class Language {
         .to(() -> {
         TypedTerm<?> specialNames = doc(
             "Special names reserved for use by Hydra",
-            stringList("Elements"));
+            stringList("Elements", "PartialVisitor", "Visitor"));
         TypedTerm<?> classNames = doc(
             "java.lang classes as of JDK 7\n"
                 + "See: https://docs.oracle.com/javase/7/docs/api/java/lang/package-summary.html",
