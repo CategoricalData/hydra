@@ -282,7 +282,7 @@ and produces the upload-ready artifacts in `release-artifacts/`:
 
 1. **Version synchronization** — all version files match (`hydra.json:currentVersion`, Haskell, Java, Python, Scala, and bootstrapping resources).
 2. **Haskell tests** — `stack test` in `heads/haskell`.
-3. **Java tests** — `./gradlew test` from the root (requires Java 11+).
+3. **Java tests** — `(cd heads/java && ./gradlew :hydra-java:test)` (requires Java 11+).
 4. **Python tests** — `pytest` plus `ruff check` and `ruff format --check`.
 5. **TypeScript tests** — the TypeScript head's own test suite.
 6. **Scala tests** — `sbt test` in `packages/hydra-scala`.
@@ -1329,5 +1329,5 @@ all scripts and Stack executables (including internal ones called by the sync sc
 | `generate-python-package-build.py` | `bin/lib/` | Emits a standalone `dist/python/<pkg>/pyproject.toml` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `"<dep> == <version>"`. |
 | `generate-scala-package-build.py` | `bin/lib/` | Emits a standalone `dist/scala/<pkg>/build.sbt` + `project/plugins.sbt` + `project/build.properties` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `"net.fortytwo.hydra.scala" % "<dep>_3" % version`. |
 | `generate-typescript-package-build.py` | `bin/lib/` | Emits a standalone `dist/typescript/<pkg>/package.json` + `tsconfig.build.json` from `packages/<pkg>/package.json` and `hydra.json:currentVersion`. Inter-Hydra deps emit as `"<dep>": "<version>"` in the npm `dependencies` map. (#492) |
-| `transform-json-to-<lang>.sh` | `heads/haskell/bin/` | Layer 1 transform. Thin wrapper over `bootstrap-from-json` for one (pkg, source-set). |
+| `transform-json-to-target.sh <lang>` | `heads/haskell/bin/` | Layer 1 transform. Thin wrapper over `bootstrap-from-json` for one (pkg, source-set). |
 | `transform-haskell-dsl-to-json.sh` | `heads/haskell/bin/` | Layer 1 transform. Supports `--package <pkg>` (one package) or `--all` (batch mode, one universe load). |

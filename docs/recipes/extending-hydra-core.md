@@ -670,32 +670,37 @@ place to explicitly reject a new constructor by omission.
 
 #### 11.5.1: Update Python Language Definition
 
-**File:** `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Language.hs`
+**File:** `packages/hydra-python/src/main/python/hydra/sources/python/language.py`
 
-Add the new term variant to the supported features:
+This is host-native Python DSL source (authoritative; the former Haskell copy was
+removed in #346). Add the new term variant to the supported features:
 
-```haskell
--- Around line 115-130
-"termVariants">: Sets.fromList $ list [
-  Mantle.termVariantAnnotated,
-  Mantle.termVariantApplication,
-  Mantle.termVariantEither,  -- ← ADD THIS
-  Mantle.termVariantFunction,
-  Mantle.termVariantLet,
-  -- ...
-]
+```python
+# Around line 58-80
+field("termVariants",
+    Sets.from_list(list_([
+        Variants.term_variant_annotated,
+        Variants.term_variant_application,
+        Variants.term_variant_either,  # <- ADD THIS
+        Variants.term_variant_cases,
+        Variants.term_variant_lambda,
+        # ...
+    ])),
+),
 ```
 
 Add the type variant if you added a new type constructor:
 
-```haskell
-"typeVariants">: Sets.fromList $ list [
-  Mantle.typeVariantAnnotated,
-  Mantle.typeVariantApplication,
-  Mantle.typeVariantEither,  -- ← ADD THIS
-  Mantle.typeVariantFunction,
-  -- ...
-]
+```python
+field("typeVariants",
+    Sets.from_list(list_([
+        Variants.type_variant_annotated,
+        Variants.type_variant_application,
+        Variants.type_variant_either,  # <- ADD THIS
+        Variants.type_variant_effect,
+        # ...
+    ])),
+),
 ```
 
 #### 11.5.2: Regenerate Python Code
@@ -983,7 +988,7 @@ ulimit -n 4096; stack test
 
 ### Language Support Files (Optional)
 
-- [ ] `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Language.hs`
+- [ ] `packages/hydra-python/src/main/python/hydra/sources/python/language.py`
   - [ ] Add to `termVariants` list
   - [ ] Add to `typeVariants` list (if applicable)
 

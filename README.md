@@ -183,7 +183,8 @@ or [open a GitHub issue](https://github.com/CategoricalData/hydra/issues).
 
 - **[Getting started](docs/getting-started.md)** — using Hydra as a library from your own project.
 - **[DSL guide](docs/dsl-guide.md)** — writing Hydra programs and domain models using the embedded DSLs.
-  See also the [Java](docs/dsl-guide-java.md) and [Python](docs/dsl-guide-python.md) variants.
+  See also the [Java](docs/dsl-guide-java.md), [Python](docs/dsl-guide-python.md), and
+  [Scala](docs/dsl-guide-scala.md) variants.
 - **[Demos](docs/demos.md)** — runnable demos illustrating Hydra's capabilities, with input data and expected output.
 - **[Troubleshooting](docs/troubleshooting.md)** — common failure modes and how to diagnose them.
 

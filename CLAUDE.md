@@ -345,6 +345,8 @@ Primary entry point — the doc most likely to answer the question by task:
 | Understand type inference (HM + class constraints) | [Inference wiki](https://github.com/CategoricalData/hydra/wiki/Inference) |
 | Understand type classes (`equality`/`numeric`/`ordering`; mapping to hosts without native type classes) | [Type classes wiki](https://github.com/CategoricalData/hydra/wiki/Type-classes) |
 | Understand the validation framework (checks, profiles, constraint catalog) | [Validation wiki](https://github.com/CategoricalData/hydra/wiki/Validation) |
+| Effects (`effect<t>`, effect libraries, effectful testing) | [Effects wiki](https://github.com/CategoricalData/hydra/wiki/Effects) |
+| Textual syntax (reading/writing Hydra types and terms natively) | [Textual syntax by example wiki](https://github.com/CategoricalData/hydra/wiki/Textual-syntax-by-example) (learn by example) / [docs/specification/syntax.md](docs/specification/syntax.md) (formal spec) |
 | Write Haskell / Java / Python / Scala DSL code | [docs/dsl-guide.md](docs/dsl-guide.md) / [-java.md](docs/dsl-guide-java.md) / [-python.md](docs/dsl-guide-python.md) / [-scala.md](docs/dsl-guide-scala.md) |
 | Add a primitive | [docs/recipes/adding-primitives.md](docs/recipes/adding-primitives.md) |
 | Promote Haskell to DSL | [docs/recipes/promoting-code.md](docs/recipes/promoting-code.md) |
@@ -361,6 +363,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Build/test commands per language | per-package READMEs under `packages/hydra-<lang>/README.md` |
 | Concepts (System F, design) | [Concepts wiki](https://github.com/CategoricalData/hydra/wiki/Concepts) |
 | Packaging model (packages, modules, definitions, entity metadata) | [Packaging wiki](https://github.com/CategoricalData/hydra/wiki/Packaging) |
+| hydra-build package (Hydra's own build system, promoted into Hydra) | [hydra-build README](packages/hydra-build/README.md) |
 | Property graphs | [Property graphs wiki](https://github.com/CategoricalData/hydra/wiki/Property-graphs) / [hydra-pg README](packages/hydra-pg/README.md) |
 | RDF / SHACL | [RDF wiki](https://github.com/CategoricalData/hydra/wiki/RDF) / [hydra-rdf README](packages/hydra-rdf/README.md) |
 | Inference benchmarks | [hydra-bench README](packages/hydra-bench/README.md) — synthetic workloads + `bin/run-inference-bench.sh` |

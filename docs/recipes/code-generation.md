@@ -149,7 +149,7 @@ of orchestrators above them:
 | Layer | Script | Role |
 |-------|--------|------|
 | 1 (transform) | `heads/haskell/bin/transform-haskell-dsl-to-json.sh` | DSL → JSON for one package or `--all` packages |
-| 1 (transform) | `heads/haskell/bin/transform-json-to-<lang>.sh` | JSON → target language for one package |
+| 1 (transform) | `heads/haskell/bin/transform-json-to-target.sh <lang>` | JSON → target language for one package |
 | 2 (assemble) | `heads/<lang>/bin/assemble-distribution.sh <pkg>` | Produce `dist/<lang>/<pkg>/` (calls Layer 1 + post-processing) |
 | 2 (assemble) | `heads/<lang>/bin/assemble-all.sh` | Batch: produce every `dist/<lang>/<pkg>/` in one universe load |
 | 2.5 (test) | `heads/<lang>/bin/test-distribution.sh` | Run the target's test suite |

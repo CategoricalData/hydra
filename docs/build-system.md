@@ -143,7 +143,7 @@ short-circuits in seconds.
 
 | Layer | Where | What it does |
 |-------|-------|--------------|
-| 1. Transform | `heads/haskell/bin/transform-haskell-dsl-to-json.sh`, `transform-json-to-<lang>.sh` | One-shot conversion, one direction, one package or `--all` |
+| 1. Transform | `heads/haskell/bin/transform-haskell-dsl-to-json.sh`, `transform-json-to-target.sh <lang>` | One-shot conversion, one direction, one package or `--all` |
 | 2. Assemble | `heads/<lang>/bin/assemble-distribution.sh <pkg>` (one package), `assemble-all.sh` (batch) | Run Layer 1 + per-target post-processing (TestGraph patches, line-wrap, etc.). For Java/Python/TypeScript `hydra-kernel`, also copies hand-written runtime support — see [Hand-written runtime in hydra-kernel](#hand-written-runtime-in-hydra-kernel) below. |
 | 2.5. Test | `heads/<lang>/bin/test-distribution.sh` | Compile and run the target's test suite |
 | 3. Orchestrate | `bin/sync.sh`, `bin/sync-packages.sh`, `bin/sync-all.sh`, per-lang `bin/sync-<lang>.sh` | Walk the matrix; gate each step on its cache |
