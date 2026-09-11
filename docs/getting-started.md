@@ -241,8 +241,8 @@ Kernel types are plain tagged unions in TypeScript, so values can be constructed
 literals:
 
 ```typescript
-import { checkLiteral } from "hydra-kernel/hydra/validate/core";
-import { isGiven } from "hydra-kernel/hydra/runtime";
+import { checkLiteral } from "hydra-kernel/dist/hydra/validate/core.js";
+import { isGiven } from "hydra-kernel/dist/hydra/runtime.js";
 
 const expected = { tag: "string" };
 const value = { tag: "integer", value: { tag: "int32", value: 42 } };
