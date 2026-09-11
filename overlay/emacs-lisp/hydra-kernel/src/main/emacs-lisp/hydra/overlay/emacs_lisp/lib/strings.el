@@ -33,9 +33,10 @@
   (lambda (n)
     "Drop the first n characters from a string."
     (lambda (s)
-      (if (>= n (length s))
-          ""
-          (substring s n)))))
+      (let ((ms (hydra--ensure-multibyte s)))
+        (if (>= n (length ms))
+            ""
+            (substring ms n))))))
 
 ;; from_list :: [Int32] -> String (codepoints to string)
 (defvar hydra_overlay_emacs_lisp_lib_strings_from_list
@@ -47,7 +48,7 @@
 (defvar hydra_overlay_emacs_lisp_lib_strings_head
   (lambda (s)
     "Get the first character of a string as a Unicode code point."
-    (aref s 0)))
+    (aref (hydra--ensure-multibyte s) 0)))
 
 ;; join :: String -> [String] -> String
 (defvar hydra_overlay_emacs_lisp_lib_strings_join
@@ -117,7 +118,7 @@
 (defvar hydra_overlay_emacs_lisp_lib_strings_reverse
   (lambda (s)
     "Reverse a string."
-    (reverse s)))
+    (reverse (hydra--ensure-multibyte s))))
 
 ;; split_on :: String -> String -> [String]
 ;; Haskell semantics: splitOn "" "" = [""], splitOn "" "abc" = ["", "a", "b", "c"]
@@ -147,14 +148,15 @@
 (defvar hydra_overlay_emacs_lisp_lib_strings_tail
   (lambda (s)
     "Get all characters of a string except the first."
-    (substring s 1)))
+    (substring (hydra--ensure-multibyte s) 1)))
 
 ;; take :: Int -> String -> String
 (defvar hydra_overlay_emacs_lisp_lib_strings_take
   (lambda (n)
     "Take the first n characters from a string."
     (lambda (s)
-      (substring s 0 (min n (length s))))))
+      (let ((ms (hydra--ensure-multibyte s)))
+        (substring ms 0 (min n (length ms)))))))
 
 ;; to_list :: String -> [Int32] (string to codepoints)
 (defvar hydra_overlay_emacs_lisp_lib_strings_to_list
