@@ -57,6 +57,24 @@ When folding host-specific source into an overlay, only the genuinely host-nativ
 the Cypher parser overlay is `hydra.overlay.java.cypher.FromCypher`, but it imports the generated Cypher
 AST as `hydra.cypher.openCypher.*` and the query model as `hydra.pg.query.*` — those do **not** move.
 
+### Bare primitive references: "implementation wins" (deferred: nullary undecidability)
+
+When overlay emission resolves a bare reference to a `hydra.lib.*` primitive, the host-native
+implementation (`hydra.overlay.<lang>.*`) takes precedence — "implementation wins."
+This is applied unconditionally: the overlay-namespace rewrite operates on namespace strings
+and performs no term-level applied-vs-nullary distinction.
+
+There is a known, deliberately-deferred subtlety. For a *nullary* primitive, whether a bare
+reference denotes the value or the (zero-arg) implementation is undecidable without
+term-level context.
+Today this is latent: no currently-emittable code exercises a case where the distinction
+would matter, so "implementation wins" is safe.
+Introducing an applied-vs-nullary branch in overlay emission would surface it.
+The interim decision ("implementation wins") stands until then; see
+[#655](https://github.com/CategoricalData/hydra/issues/655).
+**Do not add a naive applied-vs-nullary heuristic to "fix" this without revisiting the #655
+design discussion** — the current unconditional behavior is intentional.
+
 ## Folding host-specific integrations into overlays
 
 Third-party integrations — adapters wiring a Hydra package to an external library (rdf4j, Apache
