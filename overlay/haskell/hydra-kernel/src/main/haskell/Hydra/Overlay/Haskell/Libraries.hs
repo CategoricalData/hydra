@@ -168,11 +168,32 @@ decimalPayload (TermLiteral (LiteralDecimal a)) = Just a
 decimalPayload (TermInject (Injection _ (Field _ t))) = decimalPayload t
 decimalPayload _ = Nothing
 
+-- Floats (float32 and float64): IEEE 754 extended totalOrder per docs/specification/
+-- ordering-and-equality.md, not Haskell's native Eq instance for Double/Float, whose IEEE
+-- semantics differ at NaN (unordered, so NaN == NaN is False) and signed zero (-0.0 == 0.0 is
+-- True). Order: -inf < negative finite < -0.0 < +0.0 < positive finite < +inf < NaN (equal to
+-- itself). Mirrors the Python/Scala fix for the same defect (#745). Widening float32 to Double
+-- via realToFrac is exact for equality purposes (both NaN-ness and zero-sign survive the cast).
+floatPayload :: Term -> Maybe Double
+floatPayload (TermLiteral (LiteralFloat (FloatValueFloat32 f))) = Just (realToFrac f)
+floatPayload (TermLiteral (LiteralFloat (FloatValueFloat64 d))) = Just d
+floatPayload (TermInject (Injection _ (Field _ t))) = floatPayload t
+floatPayload _ = Nothing
+
+floatTotalOrderEqual :: Double -> Double -> Bool
+floatTotalOrderEqual x y
+  | isNaN x || isNaN y = isNaN x && isNaN y
+  | x /= y = False
+  | x == 0.0 = isNegativeZero x == isNegativeZero y
+  | otherwise = True
+
 termEqual :: Term -> Term -> Bool
 termEqual x y = case (decimalPayload x, decimalPayload y) of
   (Just a, Just b) ->
     (Sci.coefficient a, Sci.base10Exponent a) == (Sci.coefficient b, Sci.base10Exponent b)
-  _ -> x == y
+  _ -> case (floatPayload x, floatPayload y) of
+    (Just a, Just b) -> floatTotalOrderEqual a b
+    _ -> x == y
 
 termNotEqual :: Term -> Term -> Bool
 termNotEqual x y = not (termEqual x y)
