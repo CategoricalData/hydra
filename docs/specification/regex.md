@@ -1,19 +1,17 @@
-# Hydra regex syntax (draft specification)
+# Hydra regex syntax (design record)
 
-**Status:** Draft — Stage 0 (host-engine investigation). Tracks issue
-[#567](https://github.com/CategoricalData/hydra/issues/567).
+**Status:** Design record (non-normative) — the regex syntax is still being finalized under
+[#567](https://github.com/CategoricalData/hydra/issues/567); this document is not yet part of the
+normative specification.
 
-> **Dependency note.** The `docs/specification/` tree is nominally owed by
-> [#417](https://github.com/CategoricalData/hydra/issues/417) (primitives finalization). This file is
-> created early under #567 so the regex grammar has a home; #417 may absorb or relocate it. The
-> grammar/BNF formalism must also be reconciled with
-> [#497](https://github.com/CategoricalData/hydra/issues/497) (formally specified Hydra textual
-> syntax), of which the regex sub-syntax is a concrete increment.
+> **Related work.** The regex grammar/BNF formalism relates to
+> [#417](https://github.com/CategoricalData/hydra/issues/417) (primitives finalization) and must be
+> reconciled with [#497](https://github.com/CategoricalData/hydra/issues/497) (formally specified
+> Hydra textual syntax), of which the regex sub-syntax is a concrete increment.
 >
-> **Naming.** This work uses the **`parse`/`print`** axis, superseding the earlier `read`/`show`
-> naming (project-wide adoption, per the coordinator): `hydra.parse.regex` (text → AST),
-> `hydra.print.regex` (AST → canonical text), and `hydra.print.<dialect>.regex` (per-dialect
-> rendering, e.g. `hydra.print.jvm.regex`).
+> **Naming.** This work uses the **`parse`/`print`** axis rather than the earlier `read`/`show`
+> naming: `hydra.parse.regex` (text → AST), `hydra.print.regex` (AST → canonical text), and
+> `hydra.print.<dialect>.regex` (per-dialect rendering, e.g. `hydra.print.jvm.regex`).
 
 ## Purpose
 
