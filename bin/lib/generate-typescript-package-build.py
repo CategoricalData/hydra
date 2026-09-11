@@ -36,11 +36,24 @@ ENGINES_NODE = ">=20"
 # exists, so no third-party npm deps are pulled into the published packages.
 EXTERNAL_DEPS: dict[str, list[str]] = {}
 
-# For hydra-kernel the main entry point exports the top-level core module.
-# Other packages are multi-module namespace directories with no single
-# umbrella file (matching the shipping Python PEP 420 namespace-package
-# model) — they have no "." export; consumers import specific submodules
-# via the "./dist/*.js" subpath export instead.
+# hydra-kernel is the one deliberate exception to subpath-only packaging: its
+# "." entry (hydra/core) is exercised by the npm publish/verify smoke tests
+# (heads/typescript/bin/{publish-npm,verify-distribution}.sh, `import {} from
+# 'hydra-kernel'`), so it stays even though hydra/core is not otherwise
+# special among the kernel's ~60 top-level modules.
+#
+# Every other package (hydra-build, hydra-pg, hydra-rdf, hydra-typescript) is
+# a multi-module namespace package with no single umbrella file, and MUST NOT
+# get a synthesized "." entry (e.g. a generated re-export index.ts): hydra-pg
+# alone has 35 modules across hydra/{pg,cypher,tinkerpop,neo4j,graphviz,...},
+# several sharing a basename (model.ts, coder.ts, syntax.ts, mapping.ts each
+# appear under 2+ different subdirectories) — a flat barrel would collide.
+# This is by design (#600): these packages have no "." export at all, and
+# their package.json intentionally has no "main"/"types" fields either.
+# Consumers import specific submodules via the "./dist/*.js" subpath export
+# instead (documented in docs/getting-started.md). Do not "fix" this by
+# adding entries here for packages other than hydra-kernel — it is the
+# resolved outcome of #600, not a gap.
 PKG_MAIN_MODULE: dict[str, str] = {
     "hydra-kernel": "hydra/core",
 }
