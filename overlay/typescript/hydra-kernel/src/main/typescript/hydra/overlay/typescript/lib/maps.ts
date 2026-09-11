@@ -73,13 +73,32 @@ export const fromList = <K, V>(pairs: readonly (readonly [K, V])[]): any => {
 // the original key value (numeric for numbers, lexicographic for strings,
 // etc.) rather than the canonicalized JSON string — otherwise numbers
 // like `10` sort before `2` (because "n:10" < "n:2" lexically).
+// Lexicographic string comparison by Unicode code point (docs/specification/
+// ordering-and-equality.md), not by native UTF-16 code unit: astral (non-BMP) characters are
+// surrogate-pair encoded with a leading unit in U+D800-DBFF, which native `<` sorts before the
+// BMP range U+E000-FFFF even though the astral character's code point is numerically larger.
+const compareStringsByCodePoint = (a: string, b: string): number => {
+  const ai = a[Symbol.iterator]();
+  const bi = b[Symbol.iterator]();
+  for (;;) {
+    const an = ai.next();
+    const bn = bi.next();
+    if (an.done && bn.done) return 0;
+    if (an.done) return -1;
+    if (bn.done) return 1;
+    const ac = an.value.codePointAt(0)!;
+    const bc = bn.value.codePointAt(0)!;
+    if (ac !== bc) return ac - bc;
+  }
+};
+
 const compareKeys = (a: unknown, b: unknown): number => {
   if (typeof a === "number" && typeof b === "number") return a - b;
   if (typeof a === "bigint" && typeof b === "bigint") return a < b ? -1 : a > b ? 1 : 0;
-  if (typeof a === "string" && typeof b === "string") return a < b ? -1 : a > b ? 1 : 0;
+  if (typeof a === "string" && typeof b === "string") return compareStringsByCodePoint(a, b);
   // Object keys (Names etc.): fall back to canonical string compare.
   const ca = canon(a), cb = canon(b);
-  return ca < cb ? -1 : ca > cb ? 1 : 0;
+  return compareStringsByCodePoint(ca, cb);
 };
 
 export const toList = (m: any): readonly (readonly [any, any])[] => {
