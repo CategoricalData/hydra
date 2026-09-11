@@ -340,14 +340,51 @@ is older.
 Two worktrees running `bin/sync.sh` simultaneously share GHC, Stack, the
 machine's CPU, and (transiently) the same `.stack` global cache. A sync
 that completes in a few minutes solo can stretch to an hour or more with
-a sibling sync competing. The work still succeeds — this is contention,
-not corruption — but expect dramatically longer wall-clock times.
+a sibling sync competing — and worse, two concurrent `stack build`s can
+race the shared package DB and fail at link with no clear error, or drive
+the box into OOM. **As of #730 this is now serialized automatically** by the
+`bin/with-stack-slot.sh` `flock` mutex (see the next section): the second
+Haskell build simply *blocks* on the slot until the first releases, instead
+of racing. You no longer need to hand-scan for sibling syncs before starting
+one — just run it and it queues. (Non-Haskell work — Java/Gradle, Python,
+TypeScript — does not take the slot and still runs concurrently, which was
+the point.)
 
-Before scheduling a long sync in your worktree, scan for sibling activity:
-`pgrep -fl "bin/sync.sh"` lists every active sync across all worktrees.
-If another session is mid-sync, prefer waiting unless the user explicitly
-authorizes parallel syncs. Don't kill the other process — it belongs to a
-different session (see CLAUDE.md "Hard rules").
+### The shared `~/.stack` build slot (#730)
+
+Every worktree shares one `~/.stack` (`STACK_ROOT` is unset), so concurrent
+`stack build`s race on the global package DB. `bin/with-stack-slot.sh`
+serializes them: it holds an exclusive `flock(2)` on `~/.hydra-stack-slot.lock`
+for the whole child process tree (fd 9 is inherited), so a build three wrappers
+deep still holds one slot end-to-end, and the slot **auto-releases the instant
+the holder tree dies** — the key win over the old `pgrep`-based monitor, which
+could neither prevent two agents both reading "clear" nor free a slot when a
+holder crashed.
+
+- **How builds acquire it:** the Haskell-building entry points self-re-exec
+  through the wrapper via a guard at the top
+  (`if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ]; then exec .../with-stack-slot.sh -- "$0" "$@"; fi`).
+  Wrapped: `sync.sh`, `sync-haskell.sh`, `test.sh`, `test-distribution.sh`,
+  `run-bootstrapping-demo.sh`, the `test-*` regression harnesses, and the
+  occasional `prepare-release.sh` / `regenerate-lexicon.sh` / `run-inference-bench.sh`
+  / `sync-bench.sh`. INTERNAL scripts (`transform-json-to-target.sh`,
+  `assemble-*`, `cold-seed-*`, `verify-*`, `update-json-*`) need NO guard — they
+  inherit the slot from the wrapped parent.
+- **Reentrancy:** the exported `HYDRA_STACK_SLOT_HELD` marker makes a wrapped
+  parent calling a wrapped child pass straight through instead of self-deadlocking
+  on a second `flock`. Wrapping both an entry point and an inner step it calls is
+  therefore safe.
+- **Who holds it:** `cat ~/.hydra-stack-slot.lock.holder` (pid + worktree + label
+  + cmd). A blocked caller prints this automatically.
+- **Force-break a wedged holder** (coordinator override): `fuser -k ~/.hydra-stack-slot.lock`
+  kills whoever holds it — use with care; a live-but-slow build is not wedged
+  (sample %CPU before killing).
+- **Escape hatch:** `HYDRA_STACK_SLOT_BYPASS=1 <cmd>` runs without the lock (logs a
+  warning). For one-off local runs only; never in the fleet.
+- **Bounded wait:** `--timeout N` returns 124 on timeout (mirrors coreutils
+  `timeout`); the default blocks indefinitely.
+- **CI is unaffected:** each CI runner has its own `~/.stack` (a fleet-of-one), so
+  the first acquire succeeds instantly.
 
 ### Phase 5 Java self-host wedging at "typed-so-far" — fixed in #372, but watch for regression
 

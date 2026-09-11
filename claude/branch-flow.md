@@ -197,10 +197,22 @@ tick (every ~20–30 min, even when quiet), sweep:
    on, a decision holding up the fleet, a design choice — **raise it immediately**,
    don't let it sit until asked. A blocker the user never hears about is a stall
    the user cannot fix.
-4. **Verify machine state before slot answers.** Before telling any agent "the
-   build slot is clear," actually `pgrep` for heavy builds (`sync.sh` / `stack
-   build` / `stack test`) across *all* worktrees — a build you are not tracking
-   still consumes the fleet-wide slot (§5, one heavy Haskell build at a time).
+4. **The Haskell build slot is a real lock now, not a manual `pgrep` check (#730).**
+   Every Haskell-building entry point (`sync.sh`, `sync-haskell.sh`, `test.sh`,
+   `test-distribution.sh`, `run-bootstrapping-demo.sh`, the `test-*` regression
+   harnesses, and the occasional `prepare-release.sh` / `regenerate-lexicon.sh` /
+   `run-inference-bench.sh` / `sync-bench.sh`) self-re-execs under
+   `bin/with-stack-slot.sh`, which holds a `flock(2)` mutex on
+   `~/.hydra-stack-slot.lock` across the whole build tree. Concurrent builds now
+   *block on each other automatically*; a dead holder frees the slot instantly (the
+   key win over the old monitor). So a coordinator no longer hand-arbitrates "is the
+   slot clear" for granting a Haskell build — a queued build simply waits its turn.
+   SLOT-REQ handoff is still useful for *sequencing* who goes next and for surfacing
+   who holds it (read `~/.hydra-stack-slot.lock.holder`), but it is advisory: the lock
+   is authoritative. To force-break a genuinely wedged holder:
+   `fuser -k ~/.hydra-stack-slot.lock` (kills the holder — use with care). Escape
+   hatch for one-off local runs: `HYDRA_STACK_SLOT_BYPASS=1`. See
+   [pitfalls.md](pitfalls.md#the-shared-stack-build-slot-730).
 5. **Scan for new sessions.** New agents get spawned without announcing to
    staging; a periodic `tmux ls` against your known roster catches worktrees you
    are not yet shepherding.
@@ -258,7 +270,9 @@ latency-bound, not CPU-bound.** Waiting on a ~90-minute cloud CI run, a remote p
 or a queued job consumes *zero* local compute — so there is no conflict between watching
 it and coordinating the rest of the fleet in the meantime. The one real serialization
 constraint on heavy local work is narrow: only Haskell `stack` builds contend (the shared
-`~/.stack` package DB — see §5). Do not generalize that narrow "one heavy Haskell build
+`~/.stack` package DB), and that contention is now enforced automatically by the
+`bin/with-stack-slot.sh` `flock` mutex (#730, item 4 above) — a second Haskell build
+blocks instead of racing. Do not generalize that narrow "one heavy Haskell build
 at a time" rule into a blanket "do nothing but watch the critical path."
 
 ##### Machine-utilization — designated build machines ONLY
