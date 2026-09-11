@@ -24,6 +24,46 @@
          (nb (* cb (expt 10 (- max-scale sb)))))
     (cond ((< na nb) -1) ((> na nb) 1) (t (- sa sb)))))
 
+;; Declared-variant order for each hydra.core union family, transcribed from
+;; the generated hydra/core.el (hydra_core_term-variants, hydra_core_type-
+;; variants, etc.), which in turn come from the DSL declaration order
+;; (packages/hydra-kernel/.../Sources/Kernel/Types/Core.hs). Mirrors Python's
+;; _VARIANT_ORDER table (overlay/python/.../util/_compare.py) -- the
+;; established #718 precedent hand-authors variant order for kernel types
+;; only; non-kernel (user-schema) unions fall back to a still-deterministic
+;; but non-declared-order tag comparison (see the tag-keyword branch below).
+;; Keyed by family name (not by tag alone): EL union values are bare
+;; (:tag . payload) conses with no runtime type identity, and tag keywords
+;; collide across unrelated unions repo-wide (:literal, :map, :unit, etc.),
+;; so a single flat tag->ordinal table would be unsound. Hydra's static
+;; typing guarantees compare/equal are only ever called on same-typed
+;; values (docs/specification/ordering-and-equality.md), so it is safe to
+;; resolve the family from BOTH sides' tags and require them to agree.
+(defconst hydra--variant-order
+  '(("term" . (:annotated :application :cases :either :lambda :let :list
+               :literal :map :optional :pair :project :record :set
+               :type_lambda :type_application :inject :unit :unwrap
+               :variable :wrap))
+    ("type" . (:annotated :application :effect :either :forall :function
+               :list :literal :map :optional :pair :record :set :union
+               :unit :variable :void :wrap))
+    ("literal" . (:binary :boolean :decimal :float :integer :string))
+    ("integer" . (:bigint :int8 :int16 :int32 :int64 :uint8 :uint16 :uint32 :uint64))
+    ("float" . (:float32 :float64))))
+
+;; If tags A and B both belong to the SAME known family, return
+;; (ordinal-a . ordinal-b); otherwise nil (unknown family, or a family
+;; mismatch that should not arise under Hydra's static typing -- callers
+;; fall back to a deterministic tag compare in that case).
+(defun hydra--variant-ordinals (tag-a tag-b)
+  (catch 'found
+    (dolist (entry hydra--variant-order)
+      (let* ((variants (cdr entry))
+             (pa (cl-position tag-a variants))
+             (pb (cl-position tag-b variants)))
+        (when (and pa pb) (throw 'found (cons pa pb)))))
+    nil))
+
 ;; Generic comparison for ordering heterogeneous values.
 ;; Returns -1, 0, or 1.
 (defun hash-table-structurally-equal-p (a b)
@@ -66,11 +106,56 @@
      (cond ((string< a b) -1) ((string= a b) 0) (t 1)))
     ((and (characterp a) (characterp b))
      (cond ((< a b) -1) ((= a b) 0) (t 1)))
+    ((and (hydra-decimal-term-p a) (hydra-decimal-term-p b))
+     (hydra-compare-decimals (hydra-decimal-term-value a) (hydra-decimal-term-value b)))
+    ;; Union values: (:tag . payload) or (:tag payload ...). Compare by
+    ;; declared-variant order (when both tags resolve to the same known
+    ;; kernel family) rather than the keyword's print/alphabetical order;
+    ;; same variant (or unknown family) recurses into the payload.
+    ;;
+    ;; :map is special-cased: a Term.map payload (overlay/emacs_lisp/lib/
+    ;; maps.el) is a raw cons-prepended alist -- possibly with shadowed/
+    ;; tombstoned entries from prior inserts/deletes -- that is
+    ;; INDISTINGUISHABLE from generic cons data once unwrapped from the
+    ;; union tag (no type marker survives the unwrap), so plain (consp a)
+    ;; (consp b) car/cdr recursion below would compare raw insertion-order
+    ;; list structure instead of map contents: two maps with identical
+    ;; logical content built via different insert sequences would compare
+    ;; UNEQUAL (confirmed empirically). Canonicalize via
+    ;; hydra-map-sorted-pairs (overlay/emacs_lisp/lib/maps.el, dedup +
+    ;; key-sort) before recursing -- same fix shape as CL's rbnode branch
+    ;; above and TS's CanonMap branch (ordering.ts). Term.set does not need
+    ;; the same treatment: its payload is a hash-table (sets.el), already
+    ;; handled by the hash-table-p branch above regardless of union-tag
+    ;; wrapping.
+    ((and (consp a) (consp b) (eq (car a) :map) (eq (car b) :map))
+     (generic-compare (hydra-map-sorted-pairs (cadr a)) (hydra-map-sorted-pairs (cadr b))))
+    ((and (consp a) (consp b) (keywordp (car a)) (keywordp (car b)))
+     (cond
+      ((eq (car a) (car b)) (generic-compare (cdr a) (cdr b)))
+      (t (let ((ordinals (hydra--variant-ordinals (car a) (car b))))
+           (cond
+            (ordinals (- (car ordinals) (cdr ordinals)))
+            (t
+             ;; Unknown (non-kernel) family: no declared-order table
+             ;; available -- fall back to a deterministic (not
+             ;; print-based) keyword compare. Same scope limitation
+             ;; #718 carries on every host but Java.
+             (let ((sa (symbol-name (car a))) (sb (symbol-name (car b))))
+               (cond ((string< sa sb) -1) ((string= sa sb) 0) (t 1)))))))))
     ((and (symbolp a) (symbolp b))
      (let ((sa (symbol-name a)) (sb (symbol-name b)))
        (cond ((string< sa sb) -1) ((string= sa sb) 0) (t 1))))
-    ((and (hydra-decimal-term-p a) (hydra-decimal-term-p b))
-     (hydra-compare-decimals (hydra-decimal-term-value a) (hydra-decimal-term-value b)))
+    ;; Structs (records): compare structurally via `equal` (EL's `equal`
+    ;; recurses into cl-defstruct instances), falling back to a
+    ;; deterministic (not print-based) type+slot-value compare when unequal
+    ;; -- structs reach here as leaves; field-level structural recursion for
+    ;; nested records already happens through decode/encode's own field
+    ;; walk before generic-compare sees a bare struct value.
+    ((and (recordp a) (recordp b) (eq (type-of a) (type-of b)))
+     (if (equal a b) 0
+       (let ((sa (format "%S" a)) (sb (format "%S" b)))
+         (cond ((string< sa sb) -1) ((string= sa sb) 0) (t 1)))))
     ((and (consp a) (consp b))
      (let ((c (generic-compare (car a) (car b))))
        (if (= c 0)

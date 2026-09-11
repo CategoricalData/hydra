@@ -41,7 +41,8 @@ allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.equality primitives" $
     supergroup "hydra.lib.equality primitives" [
       equalityEqual,
-      equalityEqualDecimals]
+      equalityEqualDecimals,
+      equalityEqualCollections]
 
 equalityEqual :: TypedTerm TestGroup
 equalityEqual = subgroup "equal" [
@@ -60,3 +61,28 @@ equalityEqualDecimals = subgroup "equal decimals" [
   where
     test name x y result = primCase name DefEquality.equal [x, y] result
     decimalOf coefficient scale = decimal (Sci.scientific coefficient (negate scale))
+
+-- Map/set equality with collection payloads (#742): a naive host
+-- implementation may compare collections by an unreliable proxy (e.g. a
+-- print/stringify representation that doesn't actually serialize the
+-- collection's contents, or a decimal comparison that only fires for a bare
+-- top-level decimal and not one nested inside a collection value) rather
+-- than comparing elements/entries structurally. These cases regression-test
+-- both failure modes found on the TypeScript and Clojure overlays: a
+-- differing-contents non-empty map must not be reported equal, and a
+-- decimal's scale-distinctness (#719) must still apply when the decimal is a
+-- map value rather than a bare top-level term.
+equalityEqualCollections :: TypedTerm TestGroup
+equalityEqualCollections = subgroup "equal collections" [
+  test "non-empty maps with different contents"
+    (mapOf "k1" (int32 1)) (mapOf "k1" (int32 99)) false,
+  test "non-empty maps with same contents"
+    (mapOf "k1" (int32 1)) (mapOf "k1" (int32 1)) true,
+  test "decimal nested in a map value, different scale"
+    (mapOf "k" (decimalOf 11 1)) (mapOf "k" (decimalOf 110 2)) false,
+  test "decimal nested in a map value, same scale"
+    (mapOf "k" (decimalOf 11 1)) (mapOf "k" (decimalOf 11 1)) true]
+  where
+    test name x y result = primCase name DefEquality.equal [x, y] result
+    decimalOf coefficient scale = decimal (Sci.scientific coefficient (negate scale))
+    mapOf key value = Terms.map $ Phantoms.map $ M.singleton (string key) value
