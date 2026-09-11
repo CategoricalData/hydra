@@ -124,6 +124,102 @@ const convertCases = (rhs: unknown): unknown => {
 // arm names proven collision-free by the full suite.
 const NULLARY_UNION_ARMS = new Set<string>(["unit", "void"]);
 
+// Type-directed compact-form resolution (#572): a bare string can ONLY be a
+// valid compact-form encoding of a nullary (Unit-payload) union arm — never
+// of ordinary string data — at a JSON position whose declared type is a
+// union with a matching nullary arm. `NULLARY_UNION_ARMS` above handles the
+// position-independent case (arm names that are nullary in every union they
+// ever appear in, so no schema lookup is needed). This table handles arm
+// names that are nullary in SOME enclosing union but not others (the #564
+// collision class: `literal: "string"` compact-encodes `LiteralType.string`
+// when the enclosing union is Type, but `literal: {string: "..."}` never
+// compact-encodes when the enclosing union is Term, because `Literal` --
+// the payload of `Term.literal` -- has no nullary arms of its own and so is
+// never bare-string-encoded). Because of that asymmetry, seeing a bare
+// string as the rhs of a recognized `armName` unambiguously selects the
+// nullary-arm interpretation: build the map by reading each candidate
+// union's own reflected schema from the loaded kernel JSON (hydra.core,
+// etc.) rather than hand-enumerating names, so new unions/arms need no
+// converter change (the "type-directed" fix requested by #572).
+//
+// Maps: outer armName -> Set of nullary arm names of that armName's
+// payload union (only entries where the payload IS a union with at least
+// one nullary arm are recorded; non-union or all-non-nullary payloads are
+// omitted, since they can never legitimately appear as a bare string).
+//
+// Two passes over every union type def in the type-bearing kernel
+// namespaces (see TYPE_NAMESPACES below): first collect each union's own
+// nullary arm names (by full type name), then scan every arm of every
+// union for payloads referencing one of those types and union the nullary
+// set into that arm's table entry (an arm name like "literal" can be
+// produced by more than one defining union, e.g. both Term and Type).
+const buildArmNullaryPayloadTable = (kernelJsonDir: string | null): ReadonlyMap<string, ReadonlySet<string>> => {
+  const table = new Map<string, Set<string>>();
+  if (!kernelJsonDir) return table;
+  const unionsByType = new Map<string, ReadonlyArray<{ name: string; type: unknown }>>();
+  for (const ns of TYPE_NAMESPACES) {
+    const filePath = join(kernelJsonDir, ns.replace(/\./g, "/") + ".json");
+    let raw: string;
+    try { raw = readFileSync(filePath, "utf-8"); }
+    catch { continue; }
+    let parsed: { definitions?: Array<{ type?: { name?: string; body?: unknown } }> };
+    try { parsed = JSON.parse(raw); }
+    catch { continue; }
+    for (const def of parsed.definitions ?? []) {
+      const typeName = def.type?.name;
+      const schemeBody = def.type?.body as { body?: unknown } | undefined;
+      const unionArms = typeName && schemeBody ? unwrapUnionArms(schemeBody.body) : null;
+      if (typeName && unionArms) unionsByType.set(typeName, unionArms);
+    }
+  }
+  const nullaryArmsOf = new Map<string, Set<string>>();
+  for (const [typeName, arms] of unionsByType) {
+    const nullary = new Set(arms.filter((a) => unwrapArmPayload(a.type) === "unit").map((a) => a.name));
+    if (nullary.size > 0) nullaryArmsOf.set(typeName, nullary);
+  }
+  for (const arms of unionsByType.values()) {
+    for (const arm of arms) {
+      const payload = unwrapArmPayload(arm.type);
+      const ref = payload !== null && typeof payload === "object" ? (payload as { variable?: unknown }).variable : undefined;
+      const nullary = typeof ref === "string" ? nullaryArmsOf.get(ref) : undefined;
+      if (!nullary) continue;
+      const existing = table.get(arm.name) ?? new Set<string>();
+      for (const n of nullary) existing.add(n);
+      table.set(arm.name, existing);
+    }
+  }
+  return table;
+};
+
+// Unwrap a type-scheme body down to its `union` arm list, if the type is a
+// (possibly annotated) union. Returns null for non-union types.
+const unwrapUnionArms = (body: unknown): ReadonlyArray<{ name: string; type: unknown }> | null => {
+  if (body === null || typeof body !== "object") return null;
+  const b = body as { annotated?: { body?: unknown }; union?: unknown };
+  const inner = b.annotated?.body ?? body;
+  if (inner === null || typeof inner !== "object") return null;
+  const u = (inner as { union?: unknown }).union;
+  return Array.isArray(u) ? (u as Array<{ name: string; type: unknown }>) : null;
+};
+
+// Unwrap a (possibly annotated) arm payload type to its raw form: the
+// string "unit" for a Unit payload, or an object for anything else.
+const unwrapArmPayload = (armType: unknown): unknown => {
+  if (armType === null || typeof armType !== "object") return armType;
+  const a = armType as { annotated?: { body?: unknown } };
+  return a.annotated?.body ?? armType;
+};
+
+// Populated lazily on first use (after TYPE_NAMESPACES is defined below and
+// findKernelJsonDir() can resolve dist/json).
+let _armNullaryPayloadCache: ReadonlyMap<string, ReadonlySet<string>> | null = null;
+const getArmNullaryPayloadTable = (): ReadonlyMap<string, ReadonlySet<string>> => {
+  if (_armNullaryPayloadCache === null) {
+    _armNullaryPayloadCache = buildArmNullaryPayloadTable(findKernelJsonDir());
+  }
+  return _armNullaryPayloadCache;
+};
+
 // Convert one JSON value from the adjacently-tagged kernel encoding to
 // the internally-tagged runtime encoding. Recursive.
 //
@@ -204,19 +300,24 @@ const convert = (j: unknown): unknown => {
         return { tag: armName, value: [convert(r.first), convert(r.second)] as const };
       }
     }
-    // TypeLiteral (`{literal: <LiteralType>}`): the payload is a LiteralType.
-    // Its unit-valued arms (string, boolean, binary, decimal) serialize in
-    // Aeson's compact string form as a bare word, e.g. `{literal: "string"}`
-    // = TypeLiteral(LiteralType.string). convert()'s NULLARY_UNION_ARMS set
-    // deliberately excludes these words (they collide with ordinary string
-    // data elsewhere — see bug_564), so the bare word survives unconverted
-    // and reaches show/inference as a malformed `{tag:"literal", value:"string"}`
-    // instead of `{tag:"literal", value:{tag:"string"}}`. Here we have type
-    // context (we know rhs is a LiteralType), so promoting a bare-string
-    // payload to `{tag: rhs}` is safe. Non-string payloads (integer/float,
-    // which carry a width) fall through to the generic convert(rhs). (#564)
-    if (armName === "literal" && typeof rhs === "string") {
-      return { tag: armName, value: { tag: rhs } };
+    // Type-directed compact-form decoding (#572, generalizing the #564 fix):
+    // a bare string as `armName`'s rhs is only ever a valid encoding when
+    // `armName`'s payload type is itself a union with a matching nullary
+    // arm — e.g. `{literal: "string"}` = Type.literal(LiteralType.string),
+    // since Type.literal's payload is LiteralType (which has nullary arms:
+    // string, boolean, binary, decimal). It can never mean Term.literal
+    // (payload Literal, which has NO nullary arms — `Literal` is always
+    // object-encoded, e.g. `{literal: {string: "..."}}`), so there is no
+    // ambiguity to resolve at runtime: seeing a bare string here already
+    // proves which enclosing union we're in. getArmNullaryPayloadTable()
+    // derives this from the kernel's own reflected type schemas (hydra.core
+    // et al.) instead of a hand-maintained name list, so it covers every
+    // nullary arm of every union without needing a new entry per case.
+    if (typeof rhs === "string") {
+      const nullaryArms = getArmNullaryPayloadTable().get(armName);
+      if (nullaryArms?.has(rhs)) {
+        return { tag: armName, value: { tag: rhs } };
+      }
     }
     return { tag: armName, value: convert(rhs) };
   }
