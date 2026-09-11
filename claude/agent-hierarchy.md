@@ -654,8 +654,8 @@ Design against "found out by accident."
    repository** — `STATE.md` (durable, edit-in-place) + `LOG.md` (append-only
    claims/events); a claim is a commit, so push-rejection gives atomic
    compare-and-swap semantics; the branch is periodically deleted/recreated so
-   churn never bloats the wiki. See the rendered "Fleet coordination" wiki
-   page. (A pinned coordination issue was considered and rejected: unbounded
+   churn never bloats the wiki. See [fleet-coordination.md](fleet-coordination.md).
+   (A pinned coordination issue was considered and rejected: unbounded
    comment growth, weaker claim atomicity, and — decisive — main-repo events
    including issue comments echo to the community Discord, so coordination
    churn there would spam human developers. Wiki changes are not echoed;
