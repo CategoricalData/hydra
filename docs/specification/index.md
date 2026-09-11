@@ -174,6 +174,8 @@ Part II — The type system:
 Part III — The library:
 
 - [Primitives](primitives/index.md) — the complete primitive catalog, by module
+- Supporting kernel types, as needed by the primitive specifications:
+  [files](types/files.md), [system](types/system.md), [time](types/time.md), [util](types/util.md)
 - The kernel module reference *(generated pages; drafting)*
 - The lexicon (`lexicon.txt`) — the compact kernel signature listing
 

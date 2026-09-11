@@ -921,7 +921,7 @@ We created `hydra.hoisting` to separate these concerns.
    - Added to `kernelPrimaryTermsModules` list
 
 5. **Updated references** in callers:
-   - `Hydra/Sources/Kernel/Terms/Adapt/Simple.hs`:
+   - `Hydra/Sources/Kernel/Terms/Adapt.hs`:
      - Added import for `Hoisting`
      - Added `Hoisting.ns` to module dependencies
      - Changed `Reduction.hoistCaseStatementsInGraph` to `Hoisting.hoistCaseStatementsInGraph`
@@ -958,7 +958,7 @@ We created `hydra.hoisting` to separate these concerns.
 **Modified:**
 - `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Reduction.hs` (removed hoisting functions)
 - `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/All.hs` (registered new module)
-- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Adapt/Simple.hs` (updated imports)
+- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Adapt.hs` (updated imports)
 - `heads/haskell/src/test/haskell/Hydra/TestSuiteSpec.hs` (updated test imports)
 
 **Generated:**
@@ -1093,7 +1093,7 @@ Adding a primitive requires updates to **six files**:
 5. **Updated kernel source files** - Key changes:
    - `Lexical.hs`: `lookupElement` uses `Lists.find` instead of `Maps.lookup`
    - `Schemas.hs`: `typesToElements` returns `[Binding]` instead of `M.Map Name Binding`
-   - `Adapt/Simple.hs`: Element manipulation uses list operations
+   - `Adapt.hs` (then `Adapt/Simple.hs`): Element manipulation uses list operations
    - Many files: Removed `Maps.elems` wrapper around `graphElements`
 
 6. **Updated extension package files**:
@@ -1129,14 +1129,16 @@ Lists.find ("b" ~> (Core.bindingName (var "b")) `eq` (var "name")) elements
 - `Hydra/Dsl/Lib/Lists.hs`
 - `Hydra/Eval/Lib/Lists.hs` (generated)
 
-**Kernel Terms (Sources + Generated):**
+**Kernel Terms (Sources + Generated), paths as of this writing — `Schemas.hs` has since been removed
+and its functions redistributed; see the staleness note below:**
 - `Hydra/Sources/Kernel/Terms/Lexical.hs` + `Hydra/Lexical.hs`
-- `Hydra/Sources/Kernel/Terms/Schemas.hs` + `Hydra/Schemas.hs`
+- `Hydra/Sources/Kernel/Terms/Schemas.hs` + `Hydra/Schemas.hs` (module since removed)
 - `Hydra/Sources/Kernel/Terms/Inference.hs` + `Hydra/Inference.hs`
 - `Hydra/Sources/Kernel/Terms/Templates.hs` + `Hydra/Templates.hs`
-- `Hydra/Sources/Kernel/Terms/Adapt/Simple.hs` + `Hydra/Adapt/Simple.hs`
-- `Hydra/Sources/Kernel/Terms/Show/Graph.hs` + `Hydra/Show/Graph.hs`
-- `Hydra/Sources/Kernel/Terms/Haskell/Coder.hs` + `Hydra/Haskell/Coder.hs`
+- `Hydra/Sources/Kernel/Terms/Adapt.hs` + `Hydra/Adapt.hs` (flattened out of an `Adapt/Simple.hs` subpath)
+- `Hydra/Sources/Kernel/Terms/Print/Graph.hs` + `Hydra/Print/Graph.hs` (renamed from `Show/Graph.hs`)
+- `packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Coder.hs` (moved out of the kernel
+  Terms tree entirely; no longer under `Sources/Kernel/Terms/Haskell/`)
 
 **Extension packages (packages/hydra-ext, etc.):**
 - `Hydra/Python/Coder.hs`

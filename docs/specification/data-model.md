@@ -19,9 +19,9 @@ type constructs, their well-formedness conditions, and the graph view of a term.
 surface for the *core representation* — the requirements a conforming implementation is measured
 against. For an informative, first-principles introduction to the same model, see the
 [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) wiki page; this chapter does not
-repeat that exposition. The exhaustive per-variant reference lives in the generated
-[`hydra.core`](modules/hydra.core.md) and [`hydra.graph`](modules/hydra.graph.md) module pages, whose
-variant sets this chapter closes over.
+repeat that exposition. An exhaustive per-variant reference generated from `hydra.core` and
+`hydra.graph` is planned (#723) but does not yet exist; this chapter closes over their variant sets
+in the meantime.
 
 **Provisions.** Non-derivable conditions — behavioral or semantic claims that cannot simply be read off
 a definition's signature or variant set — are stated as named **provisions**, shown in bold at the head
@@ -109,7 +109,7 @@ These term variants form the calculus:
 A `literal` term carries a value of one of the primitive types (`hydra.core.Literal` /
 `hydra.core.LiteralType`): `boolean`, `string`, `binary`, and the numeric families. The numeric types
 are exactly: the integer types (`int8`, `int16`, `int32`, `int64`, `uint8`, `uint16`, `uint32`,
-`uint64`, `bigint`), the floating-point types (`float32`, `float64`, `bigfloat`), and arbitrary-scale
+`uint64`, `bigint`), the floating-point types (`float32`, `float64`), and arbitrary-scale
 `decimal`. A literal's value MUST inhabit its stated literal type (e.g. an `int8` literal outside
 [-128, 127] is non-conforming). Integer types other than `bigint` wrap in two's complement; `bigint`
 and `decimal` are unbounded. **[HYDRA-DM-DECIMAL-SCALE-DISTINCT]** Two `decimal` values with equal numeric
@@ -224,6 +224,6 @@ to terms. The falsifiable content:
 - [Validation](validation.md) — the conformance relation and the packaging rules (the well-formedness
   claims above are enforced there).
 - [JSON format](json-format.md), [Serialization](serialization.md) — the wire representation.
-- Generated [`hydra.core`](modules/hydra.core.md) / [`hydra.graph`](modules/hydra.graph.md) module
-  pages — the exhaustive per-variant catalog (#723).
+- Generated `hydra.core` / `hydra.graph` module pages — the exhaustive per-variant catalog
+  — *(planned; #723)*.
 - Type inference and elaboration, reduction semantics — *(planned; consume #377's rules)*.

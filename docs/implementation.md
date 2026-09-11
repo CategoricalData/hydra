@@ -796,7 +796,7 @@ shown below are hand-written per host language. For the big three (Haskell, Java
 Python) they live in the top-level `overlay/<lang>/hydra-kernel/` tree (#418) and
 are overlaid into the published `dist/<host>/hydra-kernel/` artifact during sync
 (for Haskell by `sync-haskell.sh`, for Java/Python by
-`heads/<host>/bin/copy-kernel-runtime.sh`); other hosts keep their implementations
+`heads/<host>/bin/copy-overlay.sh`); other hosts keep their implementations
 under `heads/<host>/`. See
 [build-system.md §Hand-written runtime in hydra-kernel](build-system.md#hand-written-runtime-in-hydra-kernel)
 for the full mechanism and the catalog of which subtrees are overlaid per language.

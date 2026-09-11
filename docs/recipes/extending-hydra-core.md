@@ -470,11 +470,9 @@ Add import: `import qualified Hydra.Dsl.Lib.Eithers as Eithers`
 #### 5.2: Other traversal files
 
 Check other term traversal files that may need updates:
-- `Hydra/Sources/Kernel/Terms/Monads.hs`
-- `Hydra/Sources/Kernel/Terms/Encode/Core.hs`
-- `Hydra/Sources/Kernel/Terms/Decode/Core.hs`
-- `Hydra/Sources/Kernel/Terms/Show/Core.hs`
-- `Hydra/Sources/Kernel/Terms/Describe/Core.hs`
+- `Hydra/Sources/Kernel/Terms/Encoding.hs`
+- `Hydra/Sources/Kernel/Terms/Decoding.hs`
+- `Hydra/Sources/Kernel/Terms/Print/Core.hs`
 
 Follow the same pattern: use library elimination functions for Haskell built-in types.
 
@@ -927,10 +925,10 @@ ulimit -n 4096; stack test
   - [ ] Map the new core constructor to its `TermVariant` or `TypeVariant`
   - [ ] Add the new variant to the complete variant list
 
-- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Show/Core.hs`
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Print/Core.hs`
   - [ ] Add display logic for the new constructor
 
-- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Show/Variants.hs`
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Print/Variants.hs`
   - [ ] Add display logic for the new variant metadata
 
 - [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Unification.hs`
@@ -1068,6 +1066,13 @@ Adding a field to an existing record type requires updates to:
 The key insight is that **both generated files AND DSL source files must be updated** --
 this is different from adding new type/term constructors
 where bootstrap patching of generated files is the main challenge.
+
+> **Staleness note:** this worked example uses `TypeContext` as its running case, but `TypeContext`
+> no longer exists in the kernel (`Hydra.Sources.Kernel.Types.Typing` has neither a `TypeContext`
+> definition nor its field names). The mechanism it was replaced by has not been re-derived here;
+> the step-by-step *procedure* below (type definition, DSL helper module, DSL source files, generated
+> files) still reflects the general shape of an add-a-field change, but every file path and code
+> snippet under `TypeContext` needs re-verification against a current record type before use.
 
 ### Step-by-Step Guide
 

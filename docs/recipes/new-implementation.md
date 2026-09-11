@@ -46,10 +46,12 @@ Some considerations to keep in mind:
 
 Look at other syntax models for inspiration:
 
-**Kernel languages** (in packages/hydra-haskell):
-- [Haskell syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Haskell.hs) -
+**Kernel languages**:
+- [Haskell syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Syntax.hs) -
   Based on Haskell language specification
-- [JSON syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Json.hs) - Simple data format
+- [JSON model](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/Model.hs),
+  [encode](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/Encode.hs),
+  [decode](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/Decode.hs) - Simple data format
 
 **Extended languages** (in per-language packages, authored host-native — Java/Python/Scala):
 - [Java syntax](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/java/hydra/sources/java/Syntax.java) - Based on standardized grammar
@@ -111,7 +113,7 @@ set of language constraints, then refining them as you get to know the target la
 
 **Kernel languages**:
 - [Haskell constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Language.hs) - Written in DSL
-- [JSON constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/Language.hs) - Very constrained (no functions)
+- [JSON constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Sources/Json/Schema/Language.hs) - Very constrained (no functions)
 
 **Extended languages**:
 - [Java constraints](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/java/hydra/sources/java/Language.java) - OOP language
@@ -189,7 +191,7 @@ Currently, the Hydra kernel and also the language coders are written in Haskell.
 
 **Kernel language coders**:
 - [Haskell coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Coder.hs) - ~600 lines, very close to Hydra Core
-- [JSON coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/Coder.hs) - Data format coder
+- [JSON coder](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Sources/Json/Schema/Coder.hs) - Data format coder
 
 **Extended language coders** (generated in dist/haskell/hydra-ext/):
 - [Java coder](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Java/Coder.hs) - ~1500 lines, OOP patterns
@@ -256,7 +258,7 @@ module here.
 
 **Kernel languages**:
 - [Haskell SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-haskell/src/main/haskell/Hydra/Sources/Haskell/Serde.hs) - Written in DSL
-- [JSON SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/Serde.hs) - Simple format
+- [JSON SerDe](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-ext/src/main/haskell/Hydra/Sources/Json/Schema/Serde.hs) - Simple format
 
 **Extended languages** (generated in dist/haskell/hydra-ext/):
 - [Java SerDe](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-ext/src/main/haskell/Hydra/Java/Serde.hs) - Handles complex syntax
