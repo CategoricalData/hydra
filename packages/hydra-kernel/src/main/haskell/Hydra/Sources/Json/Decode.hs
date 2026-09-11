@@ -552,11 +552,13 @@ fromJson = define "fromJson" $
         ("obj" ~>
           "leftJson" <~ (Maps.lookup (string "left") (var "obj")) $
           "rightJson" <~ (Maps.lookup (string "right") (var "obj")) $
-          Optionals.match (var "leftJson") (Optionals.match (var "rightJson") (left $ string "expected left or right in Either") ("rj" ~>
-                "decoded" <~ (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "rightType" @@ var "rj") $
-                Eithers.map ("v" ~> Core.termEither $ right $ var "v") (var "decoded"))) ("lj" ~>
-              "decoded" <~ (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "leftType" @@ var "lj") $
-              Eithers.map ("v" ~> Core.termEither $ left $ var "v") (var "decoded")))
+          Logic.ifElse (Logic.and (Optionals.isGiven $ var "leftJson") (Optionals.isGiven $ var "rightJson"))
+            (left $ string "Either object must not carry both left and right keys")
+            (Optionals.match (var "leftJson") (Optionals.match (var "rightJson") (left $ string "expected left or right in Either") ("rj" ~>
+                  "decoded" <~ (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "rightType" @@ var "rj") $
+                  Eithers.map ("v" ~> Core.termEither $ right $ var "v") (var "decoded"))) ("lj" ~>
+                "decoded" <~ (fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "leftType" @@ var "lj") $
+                Eithers.map ("v" ~> Core.termEither $ left $ var "v") (var "decoded"))))
         (var "objResult"),
 
     -- Type variables (look up in type table and recurse)

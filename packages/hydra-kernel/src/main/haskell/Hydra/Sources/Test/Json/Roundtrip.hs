@@ -19,6 +19,7 @@ import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
 import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
 import qualified Hydra.Dsl.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Lib.Maps      as Maps
+import qualified Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -67,6 +68,7 @@ allTests = define "allTests" $
       optionalRoundtripGroup,
       recordRoundtripGroup,
       parametricTypeRoundtripGroup,
+      eitherRoundtripGroup,
       unionRoundtripGroup,
       mapRoundtripGroup,
       wireShapeGroup]
@@ -330,10 +332,6 @@ parametricTypeRoundtripGroup = subgroup "parametric types" [
           "target">: string "example.AtomId2",
           "note">: string "cites"]])]
 
-----------------------------------------
--- Union types (compact string form for unit-valued variants)
-----------------------------------------
-
 -- | Decode a pre-built JSON Value to a Term and show the result.
 -- Used for backward-compat tests: verify the old {"variant": {}} form still decodes.
 decodeTest :: String -> TypedTerm Type -> TypedTerm Value -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
@@ -343,6 +341,45 @@ decodeTest testName typ jsonVal expectedTerm = universalCase testName
     (Phantoms.lambda "decoded" $ PrintCore.term @@ Phantoms.var "decoded")
     (JsonDecode.fromJson @@ Maps.empty @@ Literals.true @@ Core.name (Phantoms.string "test") @@ typ @@ jsonVal))
   (PrintCore.term @@ expectedTerm)
+
+-- | Decode a pre-built JSON Value and assert that decoding is rejected (returns an error).
+-- Used for negative tests: e.g. a malformed tagged-union object must not silently decode.
+decodeFailureTest :: String -> TypedTerm Type -> TypedTerm Value -> TypedTerm TestCaseWithMetadata
+decodeFailureTest testName typ jsonVal = universalCase testName
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.string "rejected")
+    (Phantoms.lambda "decoded" $ Strings.concat2 (Phantoms.string "unexpected: ") (PrintCore.term @@ Phantoms.var "decoded"))
+    (JsonDecode.fromJson @@ Maps.empty @@ Literals.true @@ Core.name (Phantoms.string "test") @@ typ @@ jsonVal))
+  (Phantoms.string "rejected")
+
+----------------------------------------
+-- Either types
+----------------------------------------
+
+eitherType :: TypedTerm Type
+eitherType = T.either_ T.string T.int32
+
+eitherRoundtripGroup :: TypedTerm TestGroup
+eitherRoundtripGroup = subgroup "either types" [
+    roundtripTest "either left"
+      eitherType
+      (left (string "hello")),
+
+    roundtripTest "either right"
+      eitherType
+      (right (int32 42)),
+
+    -- #743: an Either object carrying both "left" and "right" keys must be rejected,
+    -- not silently decoded as Left (discarding the "right" value).
+    decodeFailureTest "either both keys present is rejected"
+      eitherType
+      (Typed.TypedTerm (EncodeJsonModel.value (Model.ValueObject [
+        ("left", Model.ValueString "hello"),
+        ("right", Model.ValueNumber 42)])))]
+
+----------------------------------------
+-- Union types (compact string form for unit-valued variants)
+----------------------------------------
 
 unionType :: TypedTerm Type
 unionType = T.union (name "test") [
