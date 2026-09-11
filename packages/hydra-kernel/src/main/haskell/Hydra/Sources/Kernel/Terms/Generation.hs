@@ -401,8 +401,21 @@ generateSourceFiles = define "generateSourceFiles" $
             var "printDefinitions" @@ var "mod" @@ Lists.map ("d" ~> Packaging.definitionTerm (var "d")) (var "defs") @@ var "cx" @@ var "g1")
         (Lists.zip (var "refreshedMods") (var "dedupedDefLists"))) $
 
-  -- Combine results
-  right $ Lists.concat2 (var "schemaFiles") (var "termFiles")
+  -- Combine results, merging by path. A module which has both type and term definitions
+  -- yields one entry in schemaFiles and one in termFiles for the *same* path; a naive
+  -- concatenation leaves both in the result list, and a driver that writes each entry to
+  -- its path in order silently loses the schema (types) entry to the term entry that
+  -- follows it. Merge same-path entries by concatenating their content instead. (#649)
+  "mergeFileEntry" <~ ("acc" ~> "p" ~>
+      Maps.alter
+        ("mv" ~> just (Optionals.match (var "mv")
+          (Pairs.second (var "p"))
+          ("existing" ~> Strings.concat2 (var "existing") (Strings.concat2 (string "\n") (Pairs.second (var "p"))))))
+        (Pairs.first (var "p") :: TypedTerm String)
+        (var "acc")) $
+  right $ Maps.toList (Lists.foldl (var "mergeFileEntry")
+    (Maps.empty :: TypedTerm (M.Map String String))
+    (Lists.concat2 (var "schemaFiles") (var "termFiles")))
 
 -- | Check whether a module has any term definitions.
 hasTermDefinitions :: TypedTerm Module -> TypedTerm Bool
