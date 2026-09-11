@@ -12,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -219,15 +218,11 @@ public class TransformJsonToTarget {
                 }
             }
             modsToGenerate = testModsFiltered;
-            // #719/#727: strip scale-distinct decimal test CASES (not whole modules) for the
-            // 4 lossy-double hosts that cannot pass them yet (Literal.decimal has no scale
-            // field on these targets). Mirrors heads/haskell/src/exec/bootstrap-from-json/
-            // Main.hs's scaleDistinctTestNames/dropsScaleDistinctTests/stripScaleDistinctCases
-            // -- that Haskell-side filter never ran for targets generated via THIS transcriber
-            // (java/python/scala/typescript go through TransformJsonToTarget, not
-            // bootstrap-from-json), so it was silently a no-op for them. Remove this whole
-            // block (and the Haskell-side one) once all lossy-double hosts carry a real
-            // (coefficient, scale) decimal (#727).
+            // #735: strip scale-distinct decimal test CASES (not whole modules) for targets
+            // whose Language lacks a real (coefficient, scale) decimal -- see
+            // dropsScaleDistinctTests/isScaleDistinctCase below, and their translingual
+            // twins in heads/haskell/src/exec/bootstrap-from-json/Main.hs. Auto-empties as
+            // #727 gives the remaining lossy-double hosts a real decimal.
             if (dropsScaleDistinctTests(target)) {
                 List<Module> scaleFiltered = new ArrayList<>();
                 for (Module m : modsToGenerate) {
@@ -423,38 +418,65 @@ public class TransformJsonToTarget {
         System.out.println("Pruning stale outputs (#459 H1)... pruned " + pruned + " file(s).");
     }
 
-    // #719/#727: all five lossy-double hosts now have real scale-preserving decimal
-    // representations, so this is empty. Mirrors Main.hs's dropsScaleDistinctTests; kept as a
-    // mechanism (rather than deleted outright) until Emacs Lisp's fix is validated end-to-end.
-    private static final Set<String> SCALE_DISTINCT_DROP_TARGETS = new HashSet<>();
+    // #735: which cases to drop, and which targets to drop them for, are both kernel data
+    // instead of hand-copied lists (the #719 root cause: this filter and Main.hs's copy
+    // drifted out of sync). A case is scale-distinct iff it carries the hydra.testing.Tag
+    // "scaleDistinct" (see tag_scaleDistinct in
+    // Hydra.Overlay.Haskell.Dsl.Typed.Testing); a target drops such cases iff its
+    // Language's literalVariants omits literalVariantDecimal (i.e. Literal.decimal has no
+    // real scale field there, so scale-distinctness can't be observed). This auto-empties
+    // as each host's Language gains decimal in literalVariants -- no driver edit needed.
+    private static final String SCALE_DISTINCT_TAG = "scaleDistinct";
 
-    private static boolean dropsScaleDistinctTests(String target) {
-        return SCALE_DISTINCT_DROP_TARGETS.contains(target);
+    // Mirrors Main.hs's languageForTarget/lispLanguageForTarget. All four Lisp dialects now
+    // have their own decimal-aware Language (#727); routed through GenerationTargets'
+    // lispDialectLanguage reflection helper (not a direct hydra.lisp.Language.xLanguage()
+    // call) for the same reason writeLispDialect uses it: this file is compiled by
+    // target-driver against the PUBLISHED hydra-lisp jar, and a compile-time reference to a
+    // factory method added alongside a not-yet-published kernel/coder change would break
+    // that build. See GenerationTargets.lispDialectLanguage's comment for the full rationale.
+    private static hydra.coders.Language languageForTarget(String target) {
+        switch (target) {
+            case "haskell":    return hydra.haskell.Language.haskellLanguage();
+            case "java":       return hydra.java.Language.javaLanguage();
+            case "python":     return hydra.python.Language.pythonLanguage();
+            case "scala":      return hydra.scala.Language.scalaLanguage();
+            case "typescript": return hydra.typeScript.Language.typeScriptLanguage();
+            case "clojure":      return GenerationTargets.lispDialectLanguage("clojureLanguage");
+            case "scheme":       return GenerationTargets.lispDialectLanguage("schemeLanguage");
+            case "common-lisp":  return GenerationTargets.lispDialectLanguage("commonLispLanguage");
+            case "emacs-lisp":   return GenerationTargets.lispDialectLanguage("emacsLispLanguage");
+            default:
+                throw new IllegalArgumentException("Unknown target: " + target);
+        }
     }
 
-    // Test-case names that assert scale-distinctness (1.1 != 1.10) or exact-exponent
-    // rendering beyond what a float64-backed decimal can represent. Mirrors Main.hs's
-    // scaleDistinctTestNames. The "decimal " prefix matches Sources/Test/Json/Roundtrip.hs's
-    // decimalRoundtripGroup case names ("decimal tiny exponent"/"decimal huge exponent") --
-    // until #727, this used the un-prefixed short names and never actually matched those two
-    // roundtrip cases on any host.
-    private static final Set<String> SCALE_DISTINCT_TEST_NAMES = new HashSet<>(Arrays.asList(
-            "same value, different scale",
-            "same value, scale tiebreak",
-            "same value, scale tiebreak (larger scale)",
-            "same value, scale tiebreak (transitively)",
-            "decimal tiny exponent",
-            "decimal huge exponent"));
+    private static boolean dropsScaleDistinctTests(String target) {
+        hydra.coders.Language language = languageForTarget(target);
+        for (Object variant : language.constraints.literalVariants) {
+            if (variant instanceof hydra.variants.LiteralVariant.Decimal) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     private static boolean isScaleDistinctCase(hydra.core.Term t) {
         if (!(t instanceof hydra.core.Term.Record)) return false;
         hydra.core.Record r = ((hydra.core.Term.Record) t).value;
         if (!r.typeName.value.equals("hydra.testing.TestCaseWithMetadata")) return false;
         for (hydra.core.Field f : r.fields) {
-            if (f.name.value.equals("name") && f.term instanceof hydra.core.Term.Literal) {
-                hydra.core.Literal lit = ((hydra.core.Term.Literal) f.term).value;
-                if (lit instanceof hydra.core.Literal.String_) {
-                    return SCALE_DISTINCT_TEST_NAMES.contains(((hydra.core.Literal.String_) lit).value);
+            if (f.name.value.equals("tags") && f.term instanceof hydra.core.Term.List) {
+                for (hydra.core.Term tagTerm : ((hydra.core.Term.List) f.term).value) {
+                    if (!(tagTerm instanceof hydra.core.Term.Wrap)) continue;
+                    hydra.core.WrappedTerm wrapped = ((hydra.core.Term.Wrap) tagTerm).value;
+                    if (!wrapped.typeName.value.equals("hydra.testing.Tag")) continue;
+                    if (!(wrapped.body instanceof hydra.core.Term.Literal)) continue;
+                    hydra.core.Literal lit = ((hydra.core.Term.Literal) wrapped.body).value;
+                    if (lit instanceof hydra.core.Literal.String_
+                            && SCALE_DISTINCT_TAG.equals(((hydra.core.Literal.String_) lit).value)) {
+                        return true;
+                    }
                 }
             }
         }

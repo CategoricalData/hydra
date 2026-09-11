@@ -40,6 +40,11 @@ type Int32 = I.Int32
 
 tag_disabled = Tag "disabled"
 tag_disabledForScala = Tag "disabledForScala"
+-- | Marks a test case as scale-distinct-sensitive (e.g. "1.10" != "1.1"): it only passes
+-- on hosts whose Literal.decimal carries a real scale field. Read by the JSON->target
+-- drivers (bootstrap-from-json/Main.hs, TransformJsonToTarget.java) together with the
+-- target Language's literalVariants to decide whether to drop the case for that target.
+tag_scaleDistinct = Tag "scaleDistinct"
 
 alphaConvertRef :: TypedTerm (Name -> Name -> Term -> Term)
 alphaConvertRef = TypedTerm $ TermVariable $ Name "hydra.reduction.alphaConvert"

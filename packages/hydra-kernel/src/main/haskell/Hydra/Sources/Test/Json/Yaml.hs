@@ -65,9 +65,9 @@ decimalBridgeGroup = subgroup "decimal round-trip" [
     yamlBridgeCase "negative whole" (Json.valueNumber $ Phantoms.decimal (-17)),
     yamlBridgeCase "fraction" (Json.valueNumber $ Phantoms.decimal 3.14),
     yamlBridgeCase "negative fraction" (Json.valueNumber $ Phantoms.decimal (-2.5)),
-    yamlBridgeCase "tiny exponent"
+    yamlBridgeCaseWithTags "tiny exponent" [tag_scaleDistinct]
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 (-20))),
-    yamlBridgeCase "huge exponent"
+    yamlBridgeCaseWithTags "huge exponent" [tag_scaleDistinct]
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 20)),
     -- Non-number JSON values pass through unchanged
     yamlBridgeCase "null" Json.valueNull,
@@ -84,7 +84,10 @@ decimalBridgeGroup = subgroup "decimal round-trip" [
 -- | Round-trip a JSON value through YAML and back, asserting the result prints identically.
 -- JSON -> YAML -> JSON must preserve the full decimal value for any JSON number.
 yamlBridgeCase :: String -> TypedTerm Value -> TypedTerm TestCaseWithMetadata
-yamlBridgeCase testName jsonValue = universalCase testName
+yamlBridgeCase testName jsonValue = yamlBridgeCaseWithTags testName [] jsonValue
+
+yamlBridgeCaseWithTags :: String -> [Tag] -> TypedTerm Value -> TypedTerm TestCaseWithMetadata
+yamlBridgeCaseWithTags testName tags jsonValue = universalCaseWithTags testName tags
   (Eithers.either
     (Phantoms.lambda "e" $ Phantoms.var "e")
     (Phantoms.lambda "back" $ JsonWriter.printJson @@ Phantoms.var "back")

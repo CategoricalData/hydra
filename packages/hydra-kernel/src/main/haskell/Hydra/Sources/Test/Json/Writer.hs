@@ -89,10 +89,10 @@ decimalPrecisionGroup :: TypedTerm TestGroup
 decimalPrecisionGroup = subgroup "decimal precision" [
     -- Tiny exponents (adjusted exponent a < -6) stay in scientific notation; huge
     -- exponents (a < 21) still print positionally (ECMAScript Number::toString / RFC 8785).
-    writerCase "tiny exponent"
+    writerCaseWithTags "tiny exponent" [tag_scaleDistinct]
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 (-20)))
       "1.0e-20",
-    writerCase "huge exponent"
+    writerCaseWithTags "huge exponent" [tag_scaleDistinct]
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 20))
       "100000000000000000000"]
 
@@ -178,6 +178,9 @@ stringsGroup = subgroup "strings" [
 
 -- Helper for creating JSON writer test cases (universal)
 writerCase :: String -> TypedTerm Value -> String -> TypedTerm TestCaseWithMetadata
-writerCase name jsonValue expectedStr = universalCase name
+writerCase name jsonValue expectedStr = writerCaseWithTags name [] jsonValue expectedStr
+
+writerCaseWithTags :: String -> [Tag] -> TypedTerm Value -> String -> TypedTerm TestCaseWithMetadata
+writerCaseWithTags name tags jsonValue expectedStr = universalCaseWithTags name tags
   (JsonWriter.printJson @@ jsonValue)
   (Phantoms.string expectedStr)

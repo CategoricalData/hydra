@@ -88,10 +88,10 @@ arraysGroup = subgroup "arrays" [
 -- the parser. The decimal type coder (separate test) preserves full precision end-to-end.
 decimalPrecisionGroup :: TypedTerm TestGroup
 decimalPrecisionGroup = subgroup "decimal precision" [
-    parserCase "tiny exponent"
+    parserCaseWithTags "tiny exponent" [tag_scaleDistinct]
       "1e-20"
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 (-20))),
-    parserCase "huge exponent"
+    parserCaseWithTags "huge exponent" [tag_scaleDistinct]
       "1e20"
       (Json.valueNumber $ Phantoms.decimal (Sci.scientific 1 20))]
 
@@ -138,7 +138,10 @@ objectsGroup = subgroup "objects" [
 
 -- Helper for creating successful JSON parser test cases as UniversalTestCase
 parserCase :: String -> String -> TypedTerm Value -> TypedTerm TestCaseWithMetadata
-parserCase name input expectedValue = universalCase name
+parserCase name input expectedValue = parserCaseWithTags name [] input expectedValue
+
+parserCaseWithTags :: String -> [Tag] -> String -> TypedTerm Value -> TypedTerm TestCaseWithMetadata
+parserCaseWithTags name tags input expectedValue = universalCaseWithTags name tags
   (showParseResult (Parsers.runParser @@ JsonParser.jsonValue @@ Phantoms.string input))
   (showParseResult (Parsing.parseResultSuccess $ Parsing.parseSuccess expectedValue (Phantoms.list ([] :: [TypedTerm Int]))))
 

@@ -75,10 +75,11 @@ equalityNotEqual = subgroup "notEqual" [
 equalityEqualDecimals :: TypedTerm TestGroup
 equalityEqualDecimals = subgroup "equal decimals" [
   test "same value, same scale" (decimalOf 11 1) (decimalOf 11 1) true,
-  test "same value, different scale" (decimalOf 11 1) (decimalOf 110 2) false,
+  scaleDistinctTest "same value, different scale" (decimalOf 11 1) (decimalOf 110 2) false,
   test "different value, same scale" (decimalOf 11 1) (decimalOf 12 1) false]
   where
     test name x y result = primCase name DefEquality.equal [x, y] result
+    scaleDistinctTest name x y result = primCaseWithTags name [tag_scaleDistinct] DefEquality.equal [x, y] result
     decimalOf coefficient scale = decimal (Sci.scientific coefficient (negate scale))
 
 -- Map/set equality with collection payloads (#742): a naive host

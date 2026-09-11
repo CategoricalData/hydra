@@ -23,6 +23,8 @@
 #                                              invocation creeps back into the downstream build path)
 #   bin/test-generator-config-conformance.sh  (guards #559 Phase-A, hermetic — generator/host set stays
 #                                              external consumer config; no literal host branch in dispatch)
+#   bin/test-decimal-scale-conformance.sh     (guards #719/#735, needs synced dist/json; SKIPs cleanly
+#                                              otherwise or if the Java transform can't run)
 #
 # The first five build their own Haskell executables from current source
 # before exec'ing them, so this script does not require a pre-built stack
@@ -57,6 +59,7 @@ SCRIPTS=(
     "test-digest-conformance.sh"
     "test-build-host-independence.sh"
     "test-generator-config-conformance.sh"
+    "test-decimal-scale-conformance.sh"
 )
 
 declare -a RESULTS=()

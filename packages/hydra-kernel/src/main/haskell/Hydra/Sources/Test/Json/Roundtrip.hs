@@ -76,7 +76,10 @@ allTests = define "allTests" $
 -- Helper for creating JSON round-trip test cases (universal)
 -- Encodes term to JSON, decodes back, shows both and compares.
 roundtripTest :: String -> TypedTerm Type -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
-roundtripTest testName typ term = universalCase testName
+roundtripTest testName typ term = roundtripTestWithTags testName [] typ term
+
+roundtripTestWithTags :: String -> [Tag] -> TypedTerm Type -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+roundtripTestWithTags testName tags typ term = universalCaseWithTags testName tags
   (Eithers.either
     (Phantoms.lambda "e" $ Phantoms.var "e")
     (Phantoms.lambda "json" $
@@ -186,10 +189,10 @@ decimalRoundtripGroup = subgroup "decimal precision" [
     roundtripTest "decimal fraction" T.decimal (decimal 3.14),
     roundtripTest "decimal negative fraction" T.decimal (decimal (-2.5)),
     -- Tiny and huge exponents (single-coefficient, representable as Double)
-    roundtripTest "decimal tiny exponent"
+    roundtripTestWithTags "decimal tiny exponent" [tag_scaleDistinct]
       T.decimal
       (decimal (Sci.scientific 1 (-20))),
-    roundtripTest "decimal huge exponent"
+    roundtripTestWithTags "decimal huge exponent" [tag_scaleDistinct]
       T.decimal
       (decimal (Sci.scientific 1 20))]
 

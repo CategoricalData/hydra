@@ -245,7 +245,7 @@ public class GenerationTargets {
     // published jar when run via target-driver), falling back to the always-published
     // lispLanguage() so target-driver keeps compiling either way. Safe because target-driver never
     // calls writeLispDialect at runtime; local builds always have the fresh method.
-    private static hydra.coders.Language lispDialectLanguage(String factoryMethodName) {
+    static hydra.coders.Language lispDialectLanguage(String factoryMethodName) {
         try {
             return (hydra.coders.Language) hydra.lisp.Language.class
                     .getMethod(factoryMethodName)

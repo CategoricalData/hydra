@@ -56,6 +56,7 @@ import Hydra.Lisp.Language (clojureLanguage, commonLispLanguage, emacsLispLangua
 import qualified Hydra.Lisp.Syntax as LispSyntax
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import Hydra.Sources.Test.All (testSkipEmitModuleNames)
+import Hydra.Overlay.Haskell.Dsl.Typed.Testing (tag_scaleDistinct)
 
 import Control.Exception (catch, IOException)
 import Control.Monad (when, forM)
@@ -1051,50 +1052,36 @@ main = do
               Prelude.filter
                 (\m -> namespaceToPackageIn routingMap (moduleName m) == pkg)
                 testModsAll
-      -- #719 TEMPORARY: Common Lisp, Emacs Lisp, and Scheme represent
-      -- Literal.decimal as a native double/float with no scale field, so
-      -- they cannot pass the scale-distinctness tests in
-      -- hydra.test.lib.equality / hydra.test.lib.ordering (e.g. "1.10" and
-      -- "1.1" are bit-identical once parsed on these 3 hosts). This mirrors
-      -- the existing precedent in Sources/Test/Json/Roundtrip.hs's
-      -- decimalRoundtripGroup, which already excludes precision claims
-      -- these hosts can't make -- except those cases are simply never
-      -- authored for any host, while these ARE genuine test cases that DO
-      -- run (and pass) on every arbitrary-precision host (Java/Scala/
-      -- Clojure/Python/Haskell/TypeScript), so the exclusion has to happen
-      -- per-target instead. Tracked for a real fix (proper arbitrary-
-      -- precision decimals on these 3 hosts); remove this filter once
-      -- that lands.
-      let scaleDistinctTestNames = S.fromList [
-            "same value, different scale",
-            "same value, scale tiebreak",
-            "same value, scale tiebreak (larger scale)",
-            "same value, scale tiebreak (transitively)",
-            -- Tiny/huge single-coefficient decimals (1e-20, 1e20) that a
-            -- float64-backed decimal cannot render in the kernel's exact
-            -- exponential form ("1.0e-20"/"1.0e20") -- same lossy-double
-            -- casualty class as the scale-distinct cases above (JSON
-            -- serialization / parser / yaml-bridge "decimal precision"
-            -- groups). Removed once these hosts carry a real (coeff,scale)
-            -- decimal (#727). Names carry the "decimal " prefix used by
-            -- Sources/Test/Json/Roundtrip.hs's decimalRoundtripGroup
-            -- ("decimal tiny exponent"/"decimal huge exponent") -- until
-            -- #727, this filter used the un-prefixed short names and never
-            -- actually matched these two roundtrip cases on any host.
-            "decimal tiny exponent",
-            "decimal huge exponent"]
-      -- #727: all five lossy-double hosts (Clojure, TypeScript, Common Lisp, Scheme, Emacs
-      -- Lisp) now have real scale-preserving decimal representations, so this skip list is
-      -- empty. Kept as a mechanism (rather than deleted outright) until Emacs Lisp's fix is
-      -- validated end-to-end; remove this whole filter (scaleDistinctTestNames,
-      -- dropsScaleDistinctTests, isScaleDistinctCase, stripScaleDistinctCases,
-      -- filterScaleDistinctTests) once confirmed.
-      let dropsScaleDistinctTests = target `elem` ([] :: [String])
+      -- #735: which cases to drop, and which targets to drop them for, are both kernel
+      -- data instead of hand-copied lists (the #719 root cause: this filter and
+      -- TransformJsonToTarget.java's copy drifted out of sync). A case is scale-distinct
+      -- iff it carries the hydra.testing.Tag "scaleDistinct" (see tag_scaleDistinct in
+      -- Hydra.Overlay.Haskell.Dsl.Typed.Testing); a target drops such cases iff its
+      -- Language's literalVariants omits literalVariantDecimal (i.e. Literal.decimal has
+      -- no real scale field there, so scale-distinctness can't be observed). Reuses
+      -- lispLanguageForTarget (defined above for codegen) rather than re-deriving the Lisp
+      -- dialect dispatch, so this filter and the coder always agree on each dialect's
+      -- Language -- in particular all four Lisp dialects now have their own decimal-aware
+      -- Language (#727), so this auto-empties without any driver edit.
+      let languageForTarget t = case t of
+            "haskell"    -> haskellLanguage
+            "java"       -> javaLanguage
+            "python"     -> pythonLanguage
+            "scala"      -> scalaLanguage
+            "go"         -> goLanguage
+            "typescript" -> typeScriptLanguage
+            _            -> lispLanguageForTarget
+      let dropsScaleDistinctTests = not $ S.member LiteralVariantDecimal
+            (languageConstraintsLiteralVariants (languageConstraints (languageForTarget target)))
+      let isScaleDistinctTagTerm tagTerm = case tagTerm of
+            TermWrap (WrappedTerm wname (TermLiteral (LiteralString s)))
+              | wname == _Tag -> s == unTag tag_scaleDistinct
+            _ -> False
       let isScaleDistinctCase t = case t of
             TermRecord (Record tname fields)
               | tname == _TestCaseWithMetadata ->
-                  case [s | Field fname (TermLiteral (LiteralString s)) <- fields, fname == _TestCaseWithMetadata_name] of
-                    [nm] -> S.member nm scaleDistinctTestNames
+                  case [tags | Field fname (TermList tags) <- fields, fname == _TestCaseWithMetadata_tags] of
+                    [tags] -> Prelude.any isScaleDistinctTagTerm tags
                     _ -> False
             _ -> False
       let stripScaleDistinctCases = rewriteTerm (\recurse t -> case recurse t of

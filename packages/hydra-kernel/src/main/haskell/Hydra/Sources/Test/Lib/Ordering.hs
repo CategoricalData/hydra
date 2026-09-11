@@ -97,11 +97,12 @@ orderingCompareDecimals :: TypedTerm TestGroup
 orderingCompareDecimals = subgroup "compare decimals" [
   test "different value" (decimalOf 11 1) (decimalOf 12 1) "lessThan",
   test "same value, same scale" (decimalOf 11 1) (decimalOf 11 1) "equalTo",
-  test "same value, scale tiebreak" (decimalOf 11 1) (decimalOf 110 2) "lessThan",
-  test "same value, scale tiebreak (larger scale)" (decimalOf 110 2) (decimalOf 1100 3) "lessThan",
-  test "same value, scale tiebreak (transitively)" (decimalOf 11 1) (decimalOf 1100 3) "lessThan"]
+  scaleDistinctTest "same value, scale tiebreak" (decimalOf 11 1) (decimalOf 110 2) "lessThan",
+  scaleDistinctTest "same value, scale tiebreak (larger scale)" (decimalOf 110 2) (decimalOf 1100 3) "lessThan",
+  scaleDistinctTest "same value, scale tiebreak (transitively)" (decimalOf 11 1) (decimalOf 1100 3) "lessThan"]
   where
     test testName x y resultField = primCase testName DefOrdering.compare [x, y] (injectUnit (name "hydra.util.Comparison") resultField)
+    scaleDistinctTest testName x y resultField = primCaseWithTags testName [tag_scaleDistinct] DefOrdering.compare [x, y] (injectUnit (name "hydra.util.Comparison") resultField)
     decimalOf coefficient scale = decimal (Sci.scientific coefficient (negate scale))
 
 -- Tests for ordering with string values
