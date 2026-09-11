@@ -23,24 +23,29 @@
   (lambda (x) x))
 
 ;; bigint_to_int8 :: BigInteger -> Int8
-;; Convert a bigint (Integer) to an int8.
+;; Narrow modulo 2^8 and reinterpret as two's-complement (e.g. 255 -> -1), wrapping silently
+;; with no error -- mirroring the Clojure host's (unchecked-byte x). Reuses the narrowing
+;; helper already defined in math.lisp (loaded before this file; see run-tests.lisp load order).
 (defvar hydra_overlay_common_lisp_lib_literals_bigint_to_int8
-  (lambda (x) x))
+  (lambda (x) (hydra-wrap-int :int8 x)))
 
 ;; bigint_to_int16 :: BigInteger -> Int16
-;; Convert a bigint (Integer) to an int16.
+;; Narrow modulo 2^16 and reinterpret as two's-complement, mirroring Clojure's
+;; (unchecked-short x).
 (defvar hydra_overlay_common_lisp_lib_literals_bigint_to_int16
-  (lambda (x) x))
+  (lambda (x) (hydra-wrap-int :int16 x)))
 
 ;; bigint_to_int32 :: BigInteger -> Int32
-;; Convert a bigint (Integer) to an int32.
+;; Narrow modulo 2^32 and reinterpret as two's-complement, mirroring Clojure's
+;; (unchecked-int x).
 (defvar hydra_overlay_common_lisp_lib_literals_bigint_to_int32
-  (lambda (x) x))
+  (lambda (x) (hydra-wrap-int :int32 x)))
 
 ;; bigint_to_int64 :: BigInteger -> Int64
-;; Convert a bigint (Integer) to an int64.
+;; Narrow modulo 2^64 and reinterpret as two's-complement, mirroring Clojure's
+;; (unchecked-long x).
 (defvar hydra_overlay_common_lisp_lib_literals_bigint_to_int64
-  (lambda (x) x))
+  (lambda (x) (hydra-wrap-int :int64 x)))
 
 ;; bigint_to_uint :: BigInteger -> Uint
 ;; Convert a bigint (Integer) to a uint.
@@ -419,7 +424,7 @@
 (defvar hydra_overlay_common_lisp_lib_literals_parse_uint32
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
-      (if (and n (>= n 0))
+      (if (and n (>= n 0) (<= n 4294967295))
           (list :given n)
           (list :none)))))
 
@@ -428,7 +433,7 @@
 (defvar hydra_overlay_common_lisp_lib_literals_parse_uint64
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
-      (if (and n (>= n 0))
+      (if (and n (>= n 0) (<= n 18446744073709551615))
           (list :given n)
           (list :none)))))
 
