@@ -41,6 +41,15 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 
+# --- #730 build-slot guard: serialize shared-~/.stack GHC builds fleet-wide. ---
+# test.sh pre-syncs via bin/sync.sh (--hosts haskell builds the Haskell host for
+# every target) and its --no-sync haskell branch runs `stack test` directly, so
+# every non-help run touches a Haskell build. Re-exec under the slot wrapper unless
+# already held (reentrant — the inner sync.sh/test-distribution.sh pass through).
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ] && [ "${1:-}" != "--help" ] && [ "${1:-}" != "-h" ]; then
+  exec "$HYDRA_ROOT/bin/with-stack-slot.sh" --label "test.sh $*" -- "$0" "$@"
+fi
+
 # Languages whose test-distribution.sh we know how to call. Order is the
 # default-triad-first convention used by /bootstrap.
 # Go is intentionally excluded: it is a "head bud" whose runtime is still mostly

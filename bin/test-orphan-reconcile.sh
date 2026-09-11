@@ -29,6 +29,12 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 
+# --- #730 build-slot guard: this harness runs `stack build` (digest-check)
+# directly; serialize it under the shared-~/.stack slot unless already held. ---
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ]; then
+  exec "$SCRIPT_DIR/with-stack-slot.sh" --label "test-orphan-reconcile.sh" -- "$0" "$@"
+fi
+
 PASS=0
 FAIL=0
 

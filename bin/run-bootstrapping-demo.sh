@@ -35,6 +35,14 @@ if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
     exit 0
 fi
 
+# --- #730 build-slot guard: serialize shared-~/.stack GHC builds fleet-wide. ---
+# The bootstrap demo generates + tests across hosts (Haskell builds included).
+# Re-exec under the slot wrapper unless already held (reentrant) or this is the
+# dashboard-only mode below, which just renders a prior run and does no build.
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ] && [ "${1:-}" != "dashboard" ]; then
+  exec "$REPO_ROOT/bin/with-stack-slot.sh" --label "run-bootstrapping-demo.sh $*" -- "$0" "$@"
+fi
+
 # Check for dashboard-only mode
 if [ "${1:-}" = "dashboard" ]; then
     shift

@@ -24,6 +24,13 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_HASKELL_DIR="$HYDRA_ROOT/heads/haskell"
 
+# --- #730 build-slot guard: runs `stack build` + `stack exec` (update-json-main)
+# and per-host assemble directly; serialize under the shared-~/.stack slot unless
+# already held or help-only. ---
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ] && [ "${1:-}" != "--help" ] && [ "${1:-}" != "-h" ]; then
+  exec "$SCRIPT_DIR/with-stack-slot.sh" --label "sync-bench.sh $*" -- "$0" "$@"
+fi
+
 # Default host set read from the generated hydra.build language registry (#416):
 # .benchDefault is the bootstrapping-triad bench scope (lisp excluded — too slow).
 LANGUAGES_JSON="$HYDRA_ROOT/dist/json/hydra-build/src/main/json/languages.json"

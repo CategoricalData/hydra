@@ -37,6 +37,13 @@ set -euo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# --- #730 build-slot guard: orchestrates sub-harnesses that run `stack build`.
+# Acquire the shared-~/.stack slot ONCE for the whole batch (the sub-harnesses'
+# own guards then pass through reentrantly) unless already held. ---
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ]; then
+  exec "$SCRIPT_DIR/with-stack-slot.sh" --label "test-regressions.sh" -- "$0" "$@"
+fi
+
 SCRIPTS=(
     "test-orphan-reconcile.sh"
     "test-json-orphan-reconcile.sh"

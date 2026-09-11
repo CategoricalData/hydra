@@ -25,6 +25,14 @@ THIS_SCRIPT="$SCRIPT_DIR/$(basename "${BASH_SOURCE[0]}")"
 HYDRA_HASKELL_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT_DIR="$( cd "$HYDRA_HASKELL_DIR/../.." && pwd )"
 
+# --- #730 build-slot guard: serialize shared-~/.stack GHC builds fleet-wide. ---
+# Runs `stack test` directly. Re-exec under the slot wrapper unless already held
+# (reentrant — test.sh and sync.sh call this within the slot). A cache-hit run
+# below exits fast, holding the slot only momentarily.
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ]; then
+  exec "$HYDRA_ROOT_DIR/bin/with-stack-slot.sh" --label "test-distribution.sh $PACKAGE" -- "$0" "$@"
+fi
+
 echo "=== Testing Haskell distribution: $PACKAGE ==="
 echo "  (Note: hydra.cabal is monolithic today — running the full test suite)"
 echo ""

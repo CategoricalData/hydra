@@ -45,6 +45,13 @@ export GENERATOR_HOST=haskell
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 
+# --- #730 build-slot guard: this harness runs `stack build` (digest-check +
+# bootstrap-from-json) directly; serialize under the shared-~/.stack slot
+# unless already held. ---
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ]; then
+  exec "$SCRIPT_DIR/with-stack-slot.sh" --label "test-json-content-invalidates-render.sh" -- "$0" "$@"
+fi
+
 PACKAGES=("${1:-all}")
 if [ "${PACKAGES[0]}" = "all" ]; then
     PACKAGES=(hydra-python hydra-java)

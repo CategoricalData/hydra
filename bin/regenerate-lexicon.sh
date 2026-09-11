@@ -23,6 +23,12 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 
+# --- #730 build-slot guard: runs `stack ghci` (a GHC compile) directly;
+# serialize under the shared-~/.stack slot unless already held. ---
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ]; then
+  exec "$SCRIPT_DIR/with-stack-slot.sh" --label "regenerate-lexicon.sh" -- "$0" "$@"
+fi
+
 cd "$HYDRA_ROOT/heads/haskell"
 
 LOG_FILE="$(mktemp)"

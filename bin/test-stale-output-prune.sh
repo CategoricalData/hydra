@@ -19,6 +19,12 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 
+# --- #730 build-slot guard: this harness runs `stack build` (bootstrap-from-json)
+# directly; serialize it under the shared-~/.stack slot unless already held. ---
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ]; then
+  exec "$SCRIPT_DIR/with-stack-slot.sh" --label "test-stale-output-prune.sh" -- "$0" "$@"
+fi
+
 TARGETS=("${1:-all}")
 if [ "${TARGETS[0]}" = "all" ]; then
     TARGETS=(haskell java python scala)

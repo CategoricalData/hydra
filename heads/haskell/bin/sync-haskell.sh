@@ -60,6 +60,14 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_HASKELL_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT_DIR="$( cd "$HYDRA_HASKELL_DIR/../.." && pwd )"
 
+# --- #730 build-slot guard: serialize shared-~/.stack GHC builds fleet-wide. ---
+# Runs `stack build`/`stack test` directly. Re-exec under bin/with-stack-slot.sh
+# unless we already hold the slot (reentrant — sync.sh calls this) or this is
+# help-only.
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ] && [ "${1:-}" != "--help" ] && [ "${1:-}" != "-h" ]; then
+  exec "$HYDRA_ROOT_DIR/bin/with-stack-slot.sh" --label "sync-haskell.sh $*" -- "$0" "$@"
+fi
+
 source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
 raise_open_file_limit 4096

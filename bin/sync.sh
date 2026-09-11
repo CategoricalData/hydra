@@ -67,6 +67,15 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_HASKELL_DIR="$HYDRA_ROOT/heads/haskell"
 
+# --- #730 build-slot guard: serialize shared-~/.stack GHC builds fleet-wide. ---
+# sync.sh is THE chokepoint — every sync-*.sh execs it, and it drives the Haskell
+# host build. Re-exec under bin/with-stack-slot.sh unless we already hold the slot
+# (reentrant pass-through) or this is a help-only invocation. Internal scripts it
+# calls (transform-json-to-target, assemble-*, sync-haskell) inherit fd 9 — no guard.
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ] && [ "${1:-}" != "--help" ] && [ "${1:-}" != "-h" ]; then
+  exec "$HYDRA_ROOT/bin/with-stack-slot.sh" --label "sync.sh $*" -- "$0" "$@"
+fi
+
 source "$HYDRA_ROOT/bin/lib/common.sh"
 
 raise_open_file_limit 4096

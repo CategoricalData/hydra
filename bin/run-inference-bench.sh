@@ -46,6 +46,13 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+# --- #730 build-slot guard: calls sync-bench.sh + `stack exec bench-inference`
+# (may trigger a `stack build`) directly; serialize the whole run under the
+# shared-~/.stack slot unless already held or help-only. ---
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ] && [ "${1:-}" != "--help" ] && [ "${1:-}" != "-h" ]; then
+  exec "$REPO_ROOT/bin/with-stack-slot.sh" --label "run-inference-bench.sh $*" -- "$0" "$@"
+fi
 RUNS_DIR="$REPO_ROOT/benchmark/inference-runs"
 
 source "$REPO_ROOT/bin/lib/common.sh"

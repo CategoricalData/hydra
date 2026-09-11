@@ -45,6 +45,12 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
 HASKELL_DIR="$HYDRA_ROOT_DIR/heads/haskell"
 
+# --- #730 build-slot guard: this harness runs `stack build` (update-json-test)
+# directly; serialize it under the shared-~/.stack slot unless already held. ---
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ]; then
+  exec "$SCRIPT_DIR/with-stack-slot.sh" --label "test-test-digest-freshness.sh" -- "$0" "$@"
+fi
+
 PASS=0
 FAIL=0
 fail() { echo "  FAIL: $*"; FAIL=$((FAIL + 1)); }

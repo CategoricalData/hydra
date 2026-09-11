@@ -57,6 +57,13 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 
+# --- #730 build-slot guard: runs `stack test` (and assembles) directly during
+# release prep; serialize under the shared-~/.stack slot unless already held or
+# help-only. ---
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ] && [ "${1:-}" != "--help" ] && [ "${1:-}" != "-h" ]; then
+  exec "$SCRIPT_DIR/with-stack-slot.sh" --label "prepare-release.sh $*" -- "$0" "$@"
+fi
+
 source "$HYDRA_ROOT/bin/lib/common.sh"
 
 while [ $# -gt 0 ]; do
