@@ -1047,10 +1047,16 @@ See commit history for the complete implementation of Either type support, which
 ## Adding Fields to Existing Record Types
 
 This section documents the process of adding a new field to an existing record type in Hydra Core.
-The walked-through example uses `TypeContext`, which has since been unified out of existence
-(0.14, #192) — but the procedure remains accurate for any kernel record.
-Substitute the type of interest (e.g., `Lambda`, `TestCaseWithMetadata`)
-for `TypeContext` throughout.
+The walked-through example uses `InferenceContext`
+(`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Typing.hs`), the state record
+threaded through type inference. As of this writing it has two fields, `freshTypeVariableCount` and
+`trace`; the walkthrough adds an illustrative third field, `letDepth : int32`, that does not really
+exist — substitute the field and type you actually need.
+
+`InferenceContext` is the successor to an earlier `TypeContext` record that carried `types`,
+`metadata`, `typeVariables`, and `lambdaVariables` in addition to an inference context. Those four
+fields were unified into `Graph` in the 0.14 rework (#192); `InferenceContext` is not a
+reconstruction of the old six-field record, just a faithful current example of the same kind of change.
 
 For renaming an existing field rather than adding one,
 see [Renaming a field in an existing record type](#renaming-a-field-in-an-existing-record-type) below.
@@ -1059,253 +1065,156 @@ see [Renaming a field in an existing record type](#renaming-a-field-in-an-existi
 
 Adding a field to an existing record type requires updates to:
 1. **Type definition** - The schema definition of the record
-2. **DSL helper module** - Functions for constructing the record in DSL code
-3. **DSL source files** - All places that construct the record
-4. **Generated files** - The output files that use the record
+2. **Generated DSL module** - Regenerate; do not hand-edit
+3. **DSL source files** - All places that construct or access the record
+4. **Full sync + tests** - Regenerate every downstream target and verify
 
-The key insight is that **both generated files AND DSL source files must be updated** --
-this is different from adding new type/term constructors
-where bootstrap patching of generated files is the main challenge.
-
-> **Staleness note:** this worked example uses `TypeContext` as its running case, but `TypeContext`
-> no longer exists in the kernel (`Hydra.Sources.Kernel.Types.Typing` has neither a `TypeContext`
-> definition nor its field names). The mechanism it was replaced by has not been re-derived here;
-> the step-by-step *procedure* below (type definition, DSL helper module, DSL source files, generated
-> files) still reflects the general shape of an add-a-field change, but every file path and code
-> snippet under `TypeContext` needs re-verification against a current record type before use.
+**The constructor, accessors, and "with" helpers are auto-generated from the type definition** —
+`Hydra.Dsl.Typing` (like every `Hydra.Dsl.*` module) carries a "Do not edit" header and is produced
+by `sync-haskell.sh` from the type definition in `Types/Typing.hs`. There is no hand-written DSL
+helper module to edit; adding a field to the type definition and regenerating is what produces the
+new constructor parameter and the new `inferenceContext<Field>` / `inferenceContextWith<Field>`
+functions. The only source-level work is fixing call sites whose arity or behavior the new field
+changes.
 
 ### Step-by-Step Guide
 
 #### Step 1: Update the Type Definition
 
-**File:** The schema file where the record is defined
-(e.g., `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Typing.hs` for `TypeContext`)
+**File:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Typing.hs`
 
 Add the new field to the record definition:
 
 ```haskell
-def "TypeContext" $
-  doc "A typing environment used for type reconstruction" $
-  record [
-    "types">:
-      doc "A mapping of lambda- and let-bound variables to their types" $
-      Types.map (core "Name") (core "Type"),
-    "metadata">:
-      doc "Any additional metadata about variables" $
-      Types.map (core "Name") (core "Term"),
-    "typeVariables">:
-      doc "The set of type variables introduced by enclosing type lambdas" $
-      Types.set (core "Name"),
-    "lambdaVariables">:
-      doc "The set of term variables introduced by lambdas" $
-      Types.set (core "Name"),
-    "letVariables">:                                    -- ← NEW FIELD
-      doc "The set of term variables introduced by let bindings" $
-      Types.set (core "Name"),
-    "inferenceContext">:
-      doc "The schema type schemes, type schemes of primitives, and let-bound type schemes of the graph" $
-      typing "InferenceContext"]
+inferenceContext :: TypeDefinition
+inferenceContext = define "InferenceContext" $
+  doc ("State threaded through type inference: the fresh type variable counter,"
+    ++ " the current subterm-path trace, and the current let-nesting depth.") $
+  T.record [
+    "freshTypeVariableCount">:
+      doc "Counter used to generate distinct fresh type variables during inference"
+      T.int32,
+    "trace">:
+      doc ("The current subterm-path trace, accumulated backwards (head = most-recently-pushed step,"
+        ++ " corresponding to the deepest point in the descent). At the moment an inference error is"
+        ++ " constructed, the list is reversed and wrapped into a SubtermPath (root-to-leaf order)"
+        ++ " and stamped onto the error.") $
+      T.list Paths.subtermStep,
+    "letDepth">:                                    -- <- NEW FIELD (illustrative)
+      doc "The current let-binding nesting depth" $
+      T.int32]
 ```
 
-#### Step 2: Update the DSL Helper Module
+#### Step 2: Regenerate — do not hand-write the DSL module
 
-**File:** `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/Typing.hs` (or the appropriate `Hydra.Overlay.Haskell.Dsl.Typed.*` module)
-
-This is the **critical step** that is often missed.
-The DSL helper module provides functions used by all `Hydra.Sources.*` files to construct records.
-
-**2.1: Update the constructor function signature:**
-
-```haskell
--- Before:
-typeContext :: TypedTerm (M.Map Name Type) -> TypedTerm (M.Map Name Term) -> TypedTerm (S.Set Name) -> TypedTerm (S.Set Name) -> TypedTerm InferenceContext -> TypedTerm TypeContext
-
--- After:
-typeContext :: TypedTerm (M.Map Name Type) -> TypedTerm (M.Map Name Term) -> TypedTerm (S.Set Name) -> TypedTerm (S.Set Name) -> TypedTerm (S.Set Name) -> TypedTerm InferenceContext -> TypedTerm TypeContext
-typeContext types metadata typeVariables lambdaVariables letVariables inferenceContext = Phantoms.record _TypeContext [
-  _TypeContext_types>>: types,
-  _TypeContext_metadata>>: metadata,
-  _TypeContext_typeVariables>>: typeVariables,
-  _TypeContext_lambdaVariables>>: lambdaVariables,
-  _TypeContext_letVariables>>: letVariables,           -- ← NEW
-  _TypeContext_inferenceContext>>: inferenceContext]
-```
-
-**2.2: Add the accessor function:**
-
-```haskell
-typeContextLetVariables :: TypedTerm TypeContext -> TypedTerm (S.Set Name)
-typeContextLetVariables tc = Phantoms.project _TypeContext _TypeContext_letVariables @@ tc
-```
-
-**2.3: Add the "with" helper function:**
-
-```haskell
-typeContextWithLetVariables :: TypedTerm TypeContext -> TypedTerm (S.Set Name) -> TypedTerm TypeContext
-typeContextWithLetVariables ctx letVariables = typeContext
-  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextTypes ctx)
-  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextMetadata ctx)
-  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextTypeVariables ctx)
-  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextLambdaVariables ctx)
-  letVariables
-  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextInferenceContext ctx)
-```
-
-**2.4: Update ALL existing "with" helpers** to pass through the new field:
-
-```haskell
-typeContextWithTypes :: TypedTerm TypeContext -> TypedTerm (M.Map Name Type) -> TypedTerm TypeContext
-typeContextWithTypes ctx types = typeContext
-  types
-  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextMetadata ctx)
-  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextTypeVariables ctx)
-  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextLambdaVariables ctx)
-  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextLetVariables ctx)  -- ← ADD THIS LINE
-  (Hydra.Overlay.Haskell.Dsl.Typed.Typing.typeContextInferenceContext ctx)
-
--- Similarly update typeContextWithMetadata, typeContextWithTypeVariables, etc.
-```
-
-#### Step 3: Update DSL Source Files
-
-Find all files that call the constructor function and update them:
+Run the Haskell sync (Step 1 only needs the Haskell side to update `Hydra.Dsl.Typing`; a full
+cross-host sync comes in Step 4):
 
 ```bash
-# Find all usages
-grep -r "Typing.typeContext" packages/hydra-haskell/src/main/haskell/Hydra/Sources/
+ulimit -n 4096; heads/haskell/bin/sync-haskell.sh --local-host --no-tests
 ```
 
-**Common locations for TypeContext:**
-- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Schemas.hs` -
-  `graphToTypeContext`, `extendTypeContextForLet`, `extendTypeContextForLambda`
-- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Hoisting.hs` - Empty TypeContext constructions
-- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Inference.hs` - `initialTypeContext`
+This regenerates `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Typing.hs`. The generated
+`inferenceContext` constructor now takes an extra argument, and two new functions appear:
+`inferenceContextLetDepth` (accessor) and `inferenceContextWithLetDepth` (with-helper) — following
+the same naming pattern as the existing `inferenceContextFreshTypeVariableCount` /
+`inferenceContextWithFreshTypeVariableCount` and `inferenceContextTrace` / `inferenceContextWithTrace`.
+**Do not hand-edit `Hydra.Dsl.Typing` (or any `Hydra.Dsl.*` module)** — it carries a "Do not edit"
+generated-file header, and any manual fix is overwritten (and silently diverges from source) on the
+next sync.
 
-**Example updates:**
+#### Step 3: Fix the call sites the new arity breaks
 
-```haskell
--- Empty TypeContext (e.g., in Hoisting.hs)
-Typing.typeContext
-  Maps.empty
-  Maps.empty
-  Sets.empty
-  Sets.empty
-  Sets.empty          -- ← NEW (letVariables = empty set)
-  inferenceContext
-
--- Context extension for let bindings (in Schemas.hs)
-extendTypeContextForLet = ...
-  Typing.typeContext
-    (...)
-    (...)
-    (...)
-    (Typing.typeContextLambdaVariables $ var "tcontext")
-    (Lists.foldl                        -- ← NEW: accumulate let binding names
-      ("s" ~> "b" ~> Sets.insert (Core.bindingName $ var "b") (var "s"))
-      (Typing.typeContextLetVariables $ var "tcontext")
-      (var "bindings"))
-    (Typing.typeContextInferenceContext $ var "tcontext")
-```
-
-#### Step 4: Update Generated Files
-
-After updating source files, update the generated Haskell files:
-
-**4.1: Update the data definition** in `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Typing.hs`:
-
-```haskell
-data TypeContext =
-  TypeContext {
-    typeContextTypes :: (M.Map Core.Name Core.Type),
-    typeContextMetadata :: (M.Map Core.Name Core.Term),
-    typeContextTypeVariables :: (S.Set Core.Name),
-    typeContextLambdaVariables :: (S.Set Core.Name),
-    typeContextLetVariables :: (S.Set Core.Name),      -- ← NEW
-    typeContextInferenceContext :: InferenceContext}
-```
-
-**4.2: Update all constructions** of the record throughout `dist/haskell/hydra-kernel/src/main/haskell/`:
+The type checker finds every call site for you: rebuild and follow the arity/type errors.
 
 ```bash
-# Find all files constructing TypeContext
-grep -l "TypeContext {" dist/haskell/hydra-kernel/src/main/haskell/Hydra/*.hs
+grep -r "Typing.inferenceContext " packages/hydra-kernel/src/main/haskell/Hydra/Sources/
 ```
 
-Common files:
-- `Hydra/Schemas.hs`
-- `Hydra/Hoisting.hs`
-- `Hydra/Inference.hs`
-- `Hydra/Checking.hs`
+**Real call sites today** (both will need a value for the new field):
+- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Lexical.hs` (~L205-208) —
+  `emptyInferenceContext`, the only direct construction site:
+  ```haskell
+  emptyInferenceContext :: TypedTermDefinition InferenceContext
+  emptyInferenceContext = define "emptyInferenceContext" $
+    doc "An empty inference context; fresh-variable counter at zero, empty trace, zero let depth." $
+    Typing.inferenceContext (MetaLiterals.int32 0) (list ([] :: [TypedTerm SubtermStep]))
+      (MetaLiterals.int32 0)  -- <- NEW (letDepth = 0)
+  ```
+- `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Names.hs` (~L200-207) —
+  `freshName`, which reads and rewrites the fresh-variable counter via the generated accessor/with-
+  helper (unaffected by an unrelated new field, but is the pattern to follow for any function that
+  needs to read or update `letDepth`):
+  ```haskell
+  freshName :: TypedTermDefinition (InferenceContext -> (Name, InferenceContext))
+  freshName = define "freshName" $
+    doc "Generate a fresh type variable name, threading InferenceContext" $
+    "cx" ~>
+    "count" <~ Typing.inferenceContextFreshTypeVariableCount (var "cx") $
+    pair
+      (normalTypeVariable @@ var "count")
+      (Typing.inferenceContextWithFreshTypeVariableCount (var "cx") (Math.add (var "count") (int32 1)))
+  ```
+  A function that needs to increment `letDepth` on entering a `let` would read it with
+  `Typing.inferenceContextLetDepth` and update it with `Typing.inferenceContextWithLetDepth`, the
+  same shape as the fresh-variable-counter threading above.
 
-**4.3: Update encoders/decoders** if the record has them:
-- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Encode/Typing.hs`
-- `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Decode/Typing.hs`
+Any other function pattern-matching on `InferenceContext`'s record shape, or calling
+`Typing.inferenceContext` positionally, needs the same treatment: add the new argument (construction
+sites) or thread the new accessor/with-helper (sites that only touched existing fields don't need
+to change unless they reconstruct the whole record).
 
-**4.4: Update test files:**
-- `heads/haskell/src/test/haskell/Hydra/TestSuiteSpec.hs`
-- `heads/haskell/src/test/haskell/Hydra/TestUtils.hs`
-
-#### Step 5: Build and Regenerate
+#### Step 4: Full sync and test
 
 ```bash
-# Build to verify generated files compile
-stack build
+# Full cross-host sync (regenerates every target from the updated type definition)
+bin/sync.sh --hosts all --targets all
 
-# Regenerate code to verify DSL sources are correct
-stack runghc tmp_write_haskell.hs
-# Or in GHCi:
-# writeHaskell "../../dist/haskell/hydra-kernel/src/main/haskell" mainModules mainModules
-
-# Rebuild with regenerated files
-stack build
+# Haskell kernel tests must pass first
+ulimit -n 4096; stack test
 ```
+
+Haskell must go green before syncing/testing downstream hosts — see
+[Hard rule 2](../../CLAUDE.md#hard-rules) in the project root guide.
 
 ### Common Pitfalls
 
 | Error | Cause | Solution |
 |-------|-------|----------|
-| Type unification error (5 fields vs 6 fields) | DSL source files not updated | Update `Hydra.Overlay.Haskell.Dsl.Typed.*` helper module AND all `Hydra.Sources.*` files that construct the record |
-| `No such field: xyz` | Field constant not defined | Add `_RecordName_fieldName` constant in the type definition file |
-| Pattern match failure | Generated record constructor missing field | Update generated file's data definition and all construction sites |
-| "With" helper loses data | Forgot to pass through new field in existing "with" helpers | Update ALL `recordWithX` functions to include the new field |
+| Type/arity mismatch calling the constructor | A construction site wasn't updated | Fix every direct `Typing.inferenceContext` call (Step 3) |
+| Hand edit to `Hydra.Dsl.Typing` "disappears" | The file is generated | Add the field in Step 1 and regenerate (Step 2) instead |
+| `No such field: xyz` at the type-definition level | Field missing from `T.record [...]` | Add the field in `Types/Typing.hs` |
+| A function silently keeps stale field data | Record reconstructed positionally, not via a "with" helper | Prefer `inferenceContextWith<Field>` over reconstructing the record |
 
 ### Key Differences from Adding New Constructors
 
 | Aspect | Adding New Constructor | Adding Record Field |
 |--------|----------------------|---------------------|
 | Bootstrap problem | Main challenge | Not a significant issue |
-| DSL helper updates | Usually not needed | **Critical** - must update first |
-| Generated file patches | Required before regeneration | Required, but simpler |
-| Number of files affected | Many (all traversals) | Fewer (just record usage sites) |
+| DSL module | Usually not needed | Regenerated from the type def — never hand-edited |
+| Generated file patches | Required before regeneration | Not needed; regeneration alone suffices |
+| Number of files affected | Many (all traversals) | Fewer (just the record's construction/access sites) |
 
 ### File Modification Checklist for Record Fields
 
 #### Source Files
 - [ ] Type definition file (e.g., `Hydra/Sources/Kernel/Types/Typing.hs`)
-  - [ ] Add field to record definition
-  - [ ] Add field constant (`_RecordName_fieldName`)
+  - [ ] Add field to the `T.record [...]` list
 
-- [ ] DSL helper module (e.g., `Hydra/Dsl/Meta/Typing.hs`) **CRITICAL**
-  - [ ] Update constructor function signature
-  - [ ] Update constructor function body
-  - [ ] Add accessor function
-  - [ ] Add "with" helper function
-  - [ ] Update ALL existing "with" helpers to pass through new field
-
-- [ ] DSL source files that construct the record
-  - [ ] Find with: `grep -r "ModuleName.recordConstructor" packages/hydra-haskell/src/main/haskell/Hydra/Sources/`
-  - [ ] Update each construction site
+- [ ] DSL source files that construct or access the record
+  - [ ] Find with: `grep -r "Typing.inferenceContext" packages/hydra-kernel/src/main/haskell/Hydra/Sources/`
+  - [ ] Update each construction site (new positional argument)
+  - [ ] Update any site that needs to read/write the new field via the generated accessor/with-helper
 
 #### Generated Files
-- [ ] Data definition file (e.g., `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Typing.hs`)
-- [ ] All files that construct the record (use grep to find)
-- [ ] Encoder/decoder files if applicable
-- [ ] Test files
+- [ ] Do NOT hand-edit `Hydra.Dsl.Typing` (or any `Hydra.Dsl.*` module) — regenerate instead (Step 2)
+- [ ] Confirm the regenerated constructor/accessor/with-helper names match the pattern
+  `<record><Field>` / `<record>With<Field>`
 
 #### Build Checkpoints
-- [ ] Initial build succeeds with generated file updates
-- [ ] Code regeneration succeeds (verifies DSL sources are correct)
-- [ ] Final build succeeds with regenerated files
+- [ ] `sync-haskell.sh` regenerates `Hydra.Dsl.Typing` with the new field
+- [ ] `stack build` / `stack test` pass with all call sites updated
+- [ ] Full `bin/sync.sh --hosts all --targets all` succeeds
 - [ ] All tests pass
 
 ---
