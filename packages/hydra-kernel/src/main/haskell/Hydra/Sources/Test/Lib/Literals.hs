@@ -42,7 +42,11 @@ literalsBigintToInt32 :: TypedTerm TestGroup
 literalsBigintToInt32 = subgroup "bigintToInt32" [
   test "positive" 42 42,
   test "negative" (-42) (-42),
-  test "zero" 0 0]
+  test "zero" 0 0,
+  -- Out-of-range values narrow modulo 2^32 and reinterpret as two's-complement (#745): a
+  -- host implementing this as bare identity returns the bigint unchanged instead of wrapping.
+  test "wraps at max int32 + 1" 2147483648 (-2147483648),
+  test "wraps at -1 equivalent" 4294967295 (-1)]
   where
     test name x result = primCase name DefLiterals.bigintToInt32 [bigint x] (int32 result)
 
@@ -114,21 +118,31 @@ literalsUint8ToBigint = subgroup "uint8ToBigint" [
 literalsBigintToInt16 :: TypedTerm TestGroup
 literalsBigintToInt16 = subgroup "bigintToInt16" [
   test "positive" 1000 1000,
-  test "negative" (-1000) (-1000)]
+  test "negative" (-1000) (-1000),
+  -- Out-of-range values narrow modulo 2^16 and reinterpret as two's-complement (#745).
+  test "wraps at max int16 + 1" 32768 (-32768),
+  test "wraps at -1 equivalent" 65535 (-1)]
   where
     test name x result = primCase name DefLiterals.bigintToInt16 [bigint x] (int16 result)
 
 literalsBigintToInt64 :: TypedTerm TestGroup
 literalsBigintToInt64 = subgroup "bigintToInt64" [
   test "positive" 1000000 1000000,
-  test "negative" (-1000000) (-1000000)]
+  test "negative" (-1000000) (-1000000),
+  -- Out-of-range values narrow modulo 2^64 and reinterpret as two's-complement (#745).
+  test "wraps at max int64 + 1" 9223372036854775808 (-9223372036854775808),
+  test "wraps at -1 equivalent" 18446744073709551615 (-1)]
   where
     test name x result = primCase name DefLiterals.bigintToInt64 [bigint x] (int64 result)
 
 literalsBigintToInt8 :: TypedTerm TestGroup
 literalsBigintToInt8 = subgroup "bigintToInt8" [
   test "positive" 42 42,
-  test "negative" (-42) (-42)]
+  test "negative" (-42) (-42),
+  -- Out-of-range values narrow modulo 2^8 and reinterpret as two's-complement (#745): a host
+  -- implementing this as bare identity would return 255 unchanged instead of wrapping to -1.
+  test "wraps at max int8 + 1" 128 (-128),
+  test "wraps at -1 equivalent" 255 (-1)]
   where
     test name x result = primCase name DefLiterals.bigintToInt8 [bigint x] (int8 result)
 
@@ -558,8 +572,12 @@ literalsParseUint32 :: TypedTerm TestGroup
 literalsParseUint32 = subgroup "parseUint32" [
   testJust "zero" "0" 0,
   testJust "typical" "100000" 100000,
+  testJust "max value" "4294967295" 4294967295,
   testNothing "invalid" "abc",
-  testNothing "negative" "-1"]
+  testNothing "negative" "-1",
+  -- A host that checks only the lower bound (>= 0) would wrongly accept this as a
+  -- too-large-but-nonnegative value instead of rejecting it (#745).
+  testNothing "overflow (max value + 1)" "4294967296"]
   where
     testJust name x result = primCase name DefLiterals.parseUint32 [string x] (Core.termOptional $ just (uint32 result))
     testNothing name x = primCase name DefLiterals.parseUint32 [string x] (Core.termOptional nothing)
@@ -568,8 +586,11 @@ literalsParseUint64 :: TypedTerm TestGroup
 literalsParseUint64 = subgroup "parseUint64" [
   testJust "zero" "0" 0,
   testJust "typical" "1000000" 1000000,
+  testJust "max value" "18446744073709551615" 18446744073709551615,
   testNothing "invalid" "abc",
-  testNothing "negative" "-1"]
+  testNothing "negative" "-1",
+  -- Same missing-upper-bound defect as parseUint32, at the uint64 boundary (#745).
+  testNothing "overflow (max value + 1)" "18446744073709551616"]
   where
     testJust name x result = primCase name DefLiterals.parseUint64 [string x] (Core.termOptional $ just (uint64 result))
     testNothing name x = primCase name DefLiterals.parseUint64 [string x] (Core.termOptional nothing)

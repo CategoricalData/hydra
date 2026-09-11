@@ -96,7 +96,13 @@ orderingCompareStrings = subgroup "compare strings" [
   test "equal" "hello" "hello" "equalTo",
   test "greater than (lexicographic)" "zebra" "apple" "greaterThan",
   test "empty vs non-empty" "" "a" "lessThan",
-  test "prefix vs longer" "ab" "abc" "lessThan"]
+  test "prefix vs longer" "ab" "abc" "lessThan",
+  -- Strings compare lexicographically by Unicode CODE POINT (docs/specification/
+  -- ordering-and-equality.md), not by UTF-16 code unit. An astral (non-BMP, U+10000+)
+  -- character is surrogate-pair encoded with a leading unit in U+D800-DBFF, which a native
+  -- UTF-16 code-unit comparison places BEFORE the BMP private-use range U+E000-FFFF even
+  -- though the astral character's code point is numerically larger (#745).
+  test "astral character greater than BMP private-use character" "\127757" "\xE000" "greaterThan"]
   where
     test testName x y resultField = primCase testName DefOrdering.compare [string x, string y] (injectUnit (name "hydra.util.Comparison") resultField)
 

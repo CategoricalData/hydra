@@ -153,6 +153,15 @@ allTests = define "allTests" $
         test "unicode character" 0 "\241" (Just 241),           -- ñ
         test "multi-byte unicode" 0 "\19990" (Just 19990),      -- 世
         test "second of combining pair" 1 "e\769" (Just 769),   -- combining acute accent
+        -- Astral (non-BMP) character, index BEFORE it: a UTF-16-unit-indexing host (rather
+        -- than code-point-indexing) still gets this one right by coincidence -- the divergent
+        -- case is the index AFTER it, below (#745).
+        test "before an astral character" 0 "a\127757" (Just 97),
+        -- Astral character occupies two UTF-16 code units but one code point: a host that
+        -- indexes by UTF-16 unit returns the trailing surrogate (wrong) or shifts every
+        -- subsequent index by one; the correct code-point index 1 must return the character
+        -- immediately after the astral one (#745).
+        test "after an astral character" 1 "\127757a" (Just 97),
         test "out of bounds" 5 "hello" Nothing,
         test "negative index" (-1) "hello" Nothing,
         test "empty string" 0 "" Nothing]
@@ -194,6 +203,10 @@ allTests = define "allTests" $
 
         -- Empty string cases
         test "empty separator" "" "abc" ["", "a", "b", "c"],
+        -- Empty separator with an astral (non-BMP) character: splitting by UTF-16 code unit
+        -- (rather than code point) breaks the astral character into two surrogate-half
+        -- "characters" instead of yielding it as a single element (#745).
+        test "empty separator with astral character" "" "a\127757b" ["", "a", "\127757", "b"],
         test "separator on empty string" "x" "" [""],
         test "both empty" "" "" [""],
 
