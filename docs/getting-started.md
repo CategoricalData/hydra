@@ -227,13 +227,18 @@ with TypeScript type declarations included.
 npm install hydra-kernel
 ```
 
-`hydra-kernel`'s root export is the kernel's `hydra/core` module; every other module is
-available as a subpath export (e.g. `hydra-kernel/dist/hydra/validate/core.js`).
+**All Hydra TypeScript packages are subpath-only: none has a root (`.`) export.** Each is a namespace
+package spanning many modules with no single umbrella. Import specific submodules by subpath, e.g.
+`import { ... } from "hydra-rdf/dist/hydra/rdf/syntax.js"`. A bare `import "hydra-rdf"` (or
+`import "hydra-kernel"`) fails by design, with Node's standard "No exports main defined" error.
 
-`hydra-build`, `hydra-typescript`, `hydra-pg`, and `hydra-rdf` are namespace packages with no single
-umbrella module, so they have no root (`.`) export — `import "hydra-rdf"` fails by design.
-Import specific submodules by subpath instead, e.g.
-`import { ... } from "hydra-rdf/dist/hydra/rdf/syntax.js"`.
+> **Design note (do not "fix" by adding a root export).** It is tempting to give a package a root
+> export by pointing `.` at one module (e.g. hydra-kernel → `hydra/core`). Do not — that is a
+> misleading easy fix: it privileges one arbitrary module as *the* entry point when these packages
+> deliberately have no single umbrella. A principled root export would re-export symbols from *many*
+> modules at once while resolving the cross-module name collisions that arise (e.g. hydra-pg has
+> multiple `model`/`coder`/`syntax` modules in different subdirectories). Until such a collision-safe
+> aggregate entry is designed, all packages remain uniformly subpath-only. See #600.
 
 ### Check a literal type
 
