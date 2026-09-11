@@ -36,31 +36,24 @@ ENGINES_NODE = ">=20"
 # exists, so no third-party npm deps are pulled into the published packages.
 EXTERNAL_DEPS: dict[str, list[str]] = {}
 
-# hydra-kernel is the one deliberate exception to subpath-only packaging: its
-# "." entry (hydra/core) is exercised by the npm publish/verify smoke tests
-# (heads/typescript/bin/{publish-npm,verify-distribution}.sh, `import {} from
-# 'hydra-kernel'`), so it stays even though hydra/core is not otherwise
-# special among the kernel's ~60 top-level modules.
+# All Hydra TypeScript packages are subpath-only by design (#600): none gets
+# a "." export, "main", or "types" field. Consumers import specific submodules
+# via the "./dist/*.js" subpath export instead (documented in
+# docs/getting-started.md).
 #
-# Every other package (hydra-build, hydra-pg, hydra-rdf, hydra-typescript) is
-# a multi-module namespace package with no single umbrella file, and MUST NOT
-# get a synthesized "." entry (e.g. a generated re-export index.ts): hydra-pg
-# alone has 35 modules across hydra/{pg,cypher,tinkerpop,neo4j,graphviz,...},
-# several sharing a basename (model.ts, coder.ts, syntax.ts, mapping.ts each
-# appear under 2+ different subdirectories) — a flat barrel would collide.
-# This is by design (#600): these packages have no "." export at all, and
-# their package.json intentionally has no "main"/"types" fields either.
-# Consumers import specific submodules via the "./dist/*.js" subpath export
-# instead (documented in docs/getting-started.md). Do not "fix" this by
-# adding entries here for packages other than hydra-kernel — it is the
-# resolved outcome of #600, not a gap.
-PKG_MAIN_MODULE: dict[str, str] = {
-    "hydra-kernel": "hydra/core",
-}
-
-
-def main_module(pkg_name: str) -> str | None:
-    return PKG_MAIN_MODULE.get(pkg_name)
+# DO NOT "FIX" THIS by pointing "." at one module (e.g. hydra-kernel ->
+# hydra/core, which this generator briefly did). That is a misleading easy
+# fix: it privileges one arbitrary module as *the* entry point among many,
+# which is exactly the asymmetry that made #600 look like a bug in the first
+# place (hydra-kernel had a hand-picked front door; hydra-build, hydra-pg,
+# hydra-rdf, hydra-typescript did not). A principled root export would
+# re-export symbols from MANY modules at once while resolving the cross-module
+# name collisions that arise — hydra-pg alone has 35 modules across
+# hydra/{pg,cypher,tinkerpop,neo4j,graphviz,...}, several sharing a basename
+# (model.ts, coder.ts, syntax.ts, mapping.ts each appear under 2+ different
+# subdirectories), so a naive flat re-export barrel would collide. Until such
+# a collision-safe aggregate entry is designed, every package stays uniformly
+# subpath-only. See #600.
 
 
 def render_package_json(
@@ -81,31 +74,17 @@ def render_package_json(
     else:
         deps_block = "{}"
 
-    mod = main_module(name)
     safe_desc = description.replace('"', '\\"')
     readme_field = f',\n  "readme": "{readme_rel}"' if readme_rel else ""
-
-    main_types_fields = (
-        f'\n  "main": "./dist/{mod}.js",\n  "types": "./dist/{mod}.d.ts",' if mod else ""
-    )
-    dot_export = (
-        f"""    ".": {{
-      "import": "./dist/{mod}.js",
-      "types": "./dist/{mod}.d.ts"
-    }},
-"""
-        if mod
-        else ""
-    )
 
     return f"""\
 {{
   "name": "{name}",
   "version": "{version}",
   "description": "{safe_desc}",
-  "type": "module",{main_types_fields}
+  "type": "module",
   "exports": {{
-{dot_export}    "./dist/*.js": {{
+    "./dist/*.js": {{
       "import": "./dist/*.js",
       "types": "./dist/*.d.ts"
     }}

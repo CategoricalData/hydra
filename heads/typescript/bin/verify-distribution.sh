@@ -98,9 +98,11 @@ TMP_INSTALL="$(mktemp -d "${TMPDIR:-/tmp}/hydra-npm-smoke.XXXXXX")"
     # Minimal package.json so npm install works.
     printf '{"name":"smoke","version":"0.0.0","type":"module","private":true}\n' > package.json
     npm install --no-audit --no-fund --loglevel=error "${tarballs[@]}" 2>/dev/null
-    # Verify the kernel core module loads — catches a file missing from the pack.
+    # Verify the kernel core module loads via its subpath export — catches a
+    # file missing from the pack. All Hydra TS packages are subpath-only by
+    # design (#600); there is no "." entry to smoke-test.
     node --input-type=module <<'EOF'
-import {} from 'hydra-kernel';
+import {} from 'hydra-kernel/dist/hydra/core.js';
 console.log('  OK   hydra-kernel');
 EOF
 )

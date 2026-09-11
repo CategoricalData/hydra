@@ -239,19 +239,8 @@ trap 'rm -rf "$SMOKE_DIR"' EXIT
     npm install --no-audit --no-fund --loglevel=error \
         "$OUT_DIR"/*.tgz 2>/dev/null
 
-    # Verify the kernel's top-level core module imports cleanly via its bare
-    # "." export (main entry). hydra-kernel is the only package with a real
-    # single-module entry point; the other four are multi-module namespace
-    # packages whose package.json currently guesses a nonexistent main file
-    # (a separate, pre-existing bug independent of #584 — see the plan doc /
-    # follow-up issue), so they're smoke-tested via a representative subpath
-    # import instead — this is also how a real consumer uses them today.
-    node --input-type=module <<'EOF'
-import { } from 'hydra-kernel';
-console.log('hydra-kernel: OK');
-EOF
-
-    # For each downstream package, import an own module that itself imports
+    # For each package, import a representative own module via its subpath
+    # export. For the four downstream packages that module itself imports
     # across the package boundary (into hydra-kernel and, for hydra-pg, also
     # hydra-rdf) — this is exactly what the #584 fix (prune + rewrite) must
     # get right: the import must resolve via the installed sibling npm
@@ -263,8 +252,12 @@ EOF
     # GPLv2 release; Apple never upgraded it), which is what a clean PATH
     # resolves to. Under `set -u`, bash 3.2 misparses `declare -A ... ([k]=v)`
     # and dies with "unbound variable" on the array syntax itself.
+    # All Hydra TS packages are subpath-only by design (#600), hydra-kernel
+    # included — none has a "." export, so every package (not just the
+    # downstream four) is smoke-tested via a representative subpath import.
     cross_import_subpath() {
         case "$1" in
+            hydra-kernel) echo "dist/hydra/core.js" ;;
             hydra-build) echo "dist/hydra/build/reconcile.js" ;;
             hydra-rdf) echo "dist/hydra/rdf/serde.js" ;;
             hydra-pg) echo "dist/hydra/pg/rdf/mappings.js" ;;
@@ -272,7 +265,6 @@ EOF
         esac
     }
     for pkg in "${PUBLISH_SET[@]}"; do
-        [ "$pkg" = "hydra-kernel" ] && continue
         [ -n "$ONLY_PKG" ] && [ "$ONLY_PKG" != "$pkg" ] && continue
         subpath="$(cross_import_subpath "$pkg")"
         node --input-type=module <<EOF
