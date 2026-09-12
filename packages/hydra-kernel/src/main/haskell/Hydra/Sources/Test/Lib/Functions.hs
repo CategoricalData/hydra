@@ -16,6 +16,7 @@ import qualified Data.Map                     as M
 import Hydra.Testing
 import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Lib.Functions as DefFunctions
+import qualified Hydra.Lib.Ordering as DefOrdering
 
 
 ns :: ModuleName
@@ -41,10 +42,40 @@ allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.functions primitives" $
     supergroup "hydra.lib.functions primitives" [
-      functionsIdentity]
+      functionsIdentity,
+      functionsConst,
+      functionsFlip]
 
 functionsIdentity :: TypedTerm TestGroup
 functionsIdentity = subgroup "identity" [
   test "integer" 42 42]
   where
     test name x result = primCase name DefFunctions.identity [int32 x] (int32 result)
+
+-- const :: x -> y -> x (#749): had zero test coverage prior to this addition. Cases
+-- confirm both argument positions independently, since a monomorphization bug could
+-- pass one and fail the other (e.g. if the second, ignored argument's type leaked in).
+functionsConst :: TypedTerm TestGroup
+functionsConst = subgroup "const" [
+  test "returns first argument, ignoring an int second argument"
+    (Terms.primitive DefFunctions.const @@ int32 5 @@ string "ignored") (int32 5),
+  test "returns first argument, ignoring a string second argument"
+    (Terms.primitive DefFunctions.const @@ string "a" @@ int32 99) (string "a")]
+  where
+    test name input result = evalCase name input result
+
+-- flip :: (a -> b -> c) -> a -> b -> c, where flip(f, x, y) = f(y, x) (#749): had zero
+-- test coverage prior to this addition. Uses ordering.gt (an existing, order-sensitive,
+-- non-class-constrained binary primitive) as the function argument to prove flip
+-- actually swaps argument order, rather than merely passing its two value arguments
+-- through unchanged.
+functionsFlip :: TypedTerm TestGroup
+functionsFlip = subgroup "flip" [
+  -- flip(f, x, y) = f(y, x): flip(gt, 5, 3) = gt(3, 5) = false
+  test "flip(gt, 5, 3) = gt(3, 5)"
+    (Terms.primitive DefFunctions.flip @@ Terms.primitive DefOrdering.gt @@ int32 5 @@ int32 3) false,
+  -- flip(gt, 3, 5) = gt(5, 3) = true
+  test "flip(gt, 3, 5) = gt(5, 3)"
+    (Terms.primitive DefFunctions.flip @@ Terms.primitive DefOrdering.gt @@ int32 3 @@ int32 5) true]
+  where
+    test name input result = evalCase name input result
