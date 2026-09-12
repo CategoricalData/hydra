@@ -24,11 +24,8 @@ bigintToInt16 :: Integer -> Int16
 bigintToInt16 = fromIntegral
 
 -- | Convert a bigint (Integer) to an int32.
--- Hydra's Int32 is represented as native Int, which is 64-bit on this platform, so a bare
--- fromIntegral to Int would not narrow at all (silently wrong above 2^31-1, #745). Narrow
--- explicitly through the genuinely 32-bit Int32 first, then widen to Int.
 bigintToInt32 :: Integer -> Int
-bigintToInt32 = fromIntegral . (fromIntegral :: Integer -> Int32)
+bigintToInt32 = fromIntegral
 
 -- | Convert a bigint (Integer) to an int64.
 bigintToInt64 :: Integer -> Int64
