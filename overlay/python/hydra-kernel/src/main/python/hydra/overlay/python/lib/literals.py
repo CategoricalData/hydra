@@ -94,24 +94,34 @@ def bigint_to_decimal(x: int) -> Decimal:
     return Decimal(x)
 
 
+def _narrow_signed(bits: int, x: int) -> int:
+    """Two's-complement narrowing to a signed `bits`-wide range. Python ints are
+    arbitrary-precision, so without this an out-of-range bigint would pass through
+    unnarrowed instead of wrapping (matching the Haskell/Java/other hosts' fixed-width
+    representation types)."""
+    m = 1 << bits
+    w = x % m
+    return w - m if w >= m // 2 else w
+
+
 def bigint_to_int8(x: int) -> int:
     """Convert a bigint (Integer) to an int8."""
-    return x
+    return _narrow_signed(8, x)
 
 
 def bigint_to_int16(x: int) -> int:
     """Convert a bigint (Integer) to an int16."""
-    return x
+    return _narrow_signed(16, x)
 
 
 def bigint_to_int32(x: int) -> int:
     """Convert a bigint (Integer) to an int32."""
-    return x
+    return _narrow_signed(32, x)
 
 
 def bigint_to_int64(x: int) -> int:
     """Convert a bigint (Integer) to an int64."""
-    return x
+    return _narrow_signed(64, x)
 
 
 def bigint_to_uint8(x: int) -> int:
