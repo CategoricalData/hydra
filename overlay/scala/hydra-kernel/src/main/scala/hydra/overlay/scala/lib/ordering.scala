@@ -13,6 +13,22 @@ package hydra.overlay.scala.lib
 object ordering:
   private def cmp(x: Any, y: Any): Int = compareTerms(x, y)
 
+  /** Compare two strings by Unicode code point rather than UTF-16 code unit (native
+    * String.compareTo), which misorders an astral character (code point > 0xFFFF, a
+    * surrogate pair) relative to a BMP private-use character (U+E000-FFFF, a single unit). */
+  private def compareStringsByCodePoint(a: String, b: String): Int =
+    var i = 0
+    var j = 0
+    val lenA = a.length
+    val lenB = b.length
+    while i < lenA && j < lenB do
+      val cpA = a.codePointAt(i)
+      val cpB = b.codePointAt(j)
+      if cpA != cpB then return Integer.compare(cpA, cpB)
+      i += Character.charCount(cpA)
+      j += Character.charCount(cpB)
+    Integer.compare(lenA - i, lenB - j)
+
   def compare[A](x: A)(y: A): hydra.util.Comparison =
     val c = cmp(x, y)
     if c < 0 then hydra.util.Comparison.lessThan
@@ -36,7 +52,7 @@ object ordering:
     // java.lang.Float/Double natively implement IEEE 754 totalOrder semantics.
     case (a: Float, b: Float) => java.lang.Float.compare(a, b)
     case (a: Double, b: Double) => java.lang.Double.compare(a, b)
-    case (a: String, b: String) => a.compareTo(b)
+    case (a: String, b: String) => compareStringsByCodePoint(a, b)
     case (a: Boolean, b: Boolean) => java.lang.Boolean.compare(a, b)
     case (a: Byte, b: Byte) => java.lang.Byte.compare(a, b)
     case (a: Short, b: Short) => java.lang.Short.compare(a, b)

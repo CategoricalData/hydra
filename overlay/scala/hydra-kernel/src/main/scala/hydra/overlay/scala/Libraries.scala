@@ -504,19 +504,15 @@ object Libraries:
     val xEq = Seq(("x", Seq("equality")))
     Map(
       // equal only here (moved: compare/gt/gte/lt/lte/max/min -> ordering; identity -> functions).
-      // These work on Term values directly since they are polymorphic. Delegates to
-      // ordering.compareTerms (hydra.overlay.scala.lib.ordering) rather than a separate
-      // decimal special-case: a BARE top-level Term.literal(Literal.decimal(...)) match
-      // (the previous version here) is correct for a decimal at the term's own top level, but
-      // WRONG for one nested inside a Term.map/Term.record/etc. -- the `case _ => a == b`
-      // fallback recurses structurally into case classes/collections via Scala's native
-      // equals, but that recursion eventually reaches a nested Literal.decimal's
-      // scala.math.BigDecimal payload, whose own equals/hashCode delegate to compareTo
-      // (scale-BLIND, unlike java.math.BigDecimal), silently losing scale-distinctness
-      // (docs/specification/ordering-and-equality.md: 1.1 != 1.10) below the top level
-      // (#742). compareTerms's BigDecimal branch fires at every recursion depth already (it
-      // recurses via itself, not a shallow pre-check), so delegating to it fixes decimal
-      // equality at any nesting depth, not just the top level.
+      // These work on Term values directly since they are polymorphic, so equal delegates to
+      // ordering.compareTerms (equal iff compare == 0, per docs/specification/ordering-and-
+      // equality.md) rather than plain Term structural equality (a == b): the latter is
+      // scale-BLIND for decimals (Literal.decimal wraps a scala.math.BigDecimal, whose own
+      // equals/hashCode delegate to compareTo unlike java.math.BigDecimal, so "1.1" == "1.10"
+      // would wrongly be true -- #727/#719) and IEEE-754-native rather than Hydra's extended
+      // totalOrder for floats (NaN != NaN; -0.0 == 0.0 -- #745). compareTerms already handles
+      // both correctly (and recursively, so a decimal/float nested inside a map/set/record
+      // value is covered too, not just a bare top-level literal).
       hydra.lib.equality.equal.name -> mkPrimImpl(hydra.lib.equality.equal.name, tSchemeConstrained(xEq, tFun(x, tFun(x, tBool))),
         impl2((a, b) => mkBool(ordering.compareTerms(a, b) == 0))),
     )
