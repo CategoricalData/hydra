@@ -47,7 +47,14 @@
   "Split a string on a delimiter string."
   (fn [sep] (fn [s]
     (if (= sep "")
-      (cons "" (map str (seq s)))
+      ;; Code-point-safe: (map str (seq s)) would split an astral character's
+      ;; surrogate pair into two separate one-char strings.
+      (cons "" (loop [i 0 acc ()]
+                 (if (>= i (.length ^String s))
+                   (reverse acc)
+                   (let [cp (.codePointAt ^String s i)
+                         chars (Character/charCount cp)]
+                     (recur (+ i chars) (cons (String. (Character/toChars cp)) acc))))))
       (loop [i 0 start 0 acc ()]
         (cond
           (> (+ i (count sep)) (count s))

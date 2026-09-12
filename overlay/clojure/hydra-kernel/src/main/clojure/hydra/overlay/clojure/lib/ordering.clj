@@ -49,6 +49,22 @@
         (compare (first ordinals) (second ordinals))
         (compare ta tb)))))
 
+;; Compare two strings by Unicode code point rather than UTF-16 code unit
+;; (native String/compareTo): a code-unit compare misorders an astral
+;; character (code point > 0xFFFF, a surrogate pair) relative to a BMP
+;; private-use character (U+E000-FFFF, a single unit).
+(defn- compare-strings-by-code-point [a b]
+  (let [ca (.codePoints ^String a) cb (.codePoints ^String b)
+        ia (.iterator ca) ib (.iterator cb)]
+    (loop []
+      (cond
+        (and (not (.hasNext ia)) (not (.hasNext ib))) 0
+        (not (.hasNext ia)) -1
+        (not (.hasNext ib)) 1
+        :else
+        (let [x (.nextInt ia) y (.nextInt ib)]
+          (if (= x y) (recur) (compare x y)))))))
+
 (defn generic-compare
   "Generic comparison function for arbitrary Clojure values, returning -1, 0, or 1."
   [a b]
@@ -63,8 +79,18 @@
     (and (instance? java.math.BigDecimal a) (instance? java.math.BigDecimal b))
     (let [c (compare a b)]
       (if (not= c 0) c (compare (.scale ^java.math.BigDecimal a) (.scale ^java.math.BigDecimal b))))
+    ;; Floats: Clojure's `compare` already treats NaN as equal to itself (matching
+    ;; IEEE 754 extended totalOrder, docs/specification/ordering-and-equality.md),
+    ;; but treats -0.0 and +0.0 as equal (native Java Double.compare disagrees:
+    ;; -0.0 < +0.0). Delegate to Double/compare, which gets both right.
+    (and (instance? Double a) (instance? Double b)) (Double/compare a b)
+    (and (instance? Float a) (instance? Float b)) (Float/compare a b)
     (and (number? a) (number? b)) (compare a b)
-    (and (string? a) (string? b)) (compare a b)
+    ;; Native String/compare compares UTF-16 code units, which misorders an
+    ;; astral character (code point > 0xFFFF, a surrogate pair) relative to a
+    ;; BMP private-use character (U+E000-FFFF, a single unit): compare by code
+    ;; point instead.
+    (and (string? a) (string? b)) (compare-strings-by-code-point a b)
     (and (keyword? a) (keyword? b)) (compare-tags a b)
     (and (boolean? a) (boolean? b)) (compare a b)
     (and (char? a) (char? b)) (compare (int a) (int b))
