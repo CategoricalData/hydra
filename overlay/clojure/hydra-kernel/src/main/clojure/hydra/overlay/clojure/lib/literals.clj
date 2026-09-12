@@ -88,7 +88,7 @@
 
 (def hydra_overlay_clojure_lib_literals_parse_uint32
   (fn [s] (try (let [n (Long/parseLong s)]
-                 (if (and (>= n 0) (<= n 4294967295)) (list :given n) (list :none)))
+                 (if (>= n 0) (list :given n) (list :none)))
                (catch Exception _ (list :none)))))
 
 (def hydra_overlay_clojure_lib_literals_parse_uint64
