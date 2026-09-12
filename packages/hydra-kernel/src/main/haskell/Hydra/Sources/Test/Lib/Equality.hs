@@ -43,7 +43,12 @@ allTests = definitionInModule module_ "allTests" $
       equalityEqual,
       equalityEqualDecimals,
       equalityEqualCollections,
-      equalityEqualFloats]
+      equalityEqualFloats,
+      equalityEqualLists,
+      equalityEqualSets,
+      equalityEqualMaps,
+      equalityNotEqual,
+      equalityNotEqualCollections]
 
 equalityEqual :: TypedTerm TestGroup
 equalityEqual = subgroup "equal" [
@@ -51,6 +56,19 @@ equalityEqual = subgroup "equal" [
   test "unequal integers" 5 3 false]
   where
     test name x y result = primCase name DefEquality.equal [int32 x, int32 y] result
+
+-- notEqual (#749): had zero test coverage prior to this addition. Scalar
+-- baseline mirrors equalityEqual's cases with the inverse expectation.
+equalityNotEqual :: TypedTerm TestGroup
+equalityNotEqual = subgroup "notEqual" [
+  test "equal integers" (int32 5) (int32 5) false,
+  test "unequal integers" (int32 5) (int32 3) true,
+  test "equal strings" (string "a") (string "a") false,
+  test "unequal strings" (string "a") (string "b") true,
+  test "equal floats" (float64 1.5) (float64 1.5) false,
+  test "unequal floats" (float64 1.5) (float64 2.5) true]
+  where
+    test name x y result = primCase name DefEquality.notEqual [x, y] result
 
 -- Decimal equality (#719): numerically equal decimals of different scale are
 -- distinct, unequal values.
@@ -102,3 +120,69 @@ equalityEqualFloats = subgroup "equal floats" [
   where
     test name x y result = primCase name DefEquality.equal [x, y] result
     nan = 0/0 :: Double
+
+-- List equality (#749): lists are ORDER-SENSITIVE — same elements in a
+-- different order must compare unequal, unlike sets/maps below.
+equalityEqualLists :: TypedTerm TestGroup
+equalityEqualLists = subgroup "equal lists" [
+  test "equal lists" (intList [1, 2, 3]) (intList [1, 2, 3]) true,
+  test "different elements" (intList [1, 2, 3]) (intList [1, 2, 4]) false,
+  test "different length (prefix)" (intList [1, 2, 3]) (intList [1, 2]) false,
+  test "same elements, different order" (intList [1, 2, 3]) (intList [3, 2, 1]) false,
+  test "nested lists, equal" (intListList [[1, 2], [3]]) (intListList [[1, 2], [3]]) true,
+  test "nested lists, unequal" (intListList [[1, 2], [3]]) (intListList [[1, 2], [4]]) false]
+  where
+    test name x y result = primCase name DefEquality.equal [x, y] result
+    intList els = Terms.list (int32 <$> els)
+    intListList lsts = Terms.list (intList <$> lsts)
+
+-- Set equality (#749): sets are ORDER-INDEPENDENT — the defining property
+-- that distinguishes set equality from list equality above.
+equalityEqualSets :: TypedTerm TestGroup
+equalityEqualSets = subgroup "equal sets" [
+  test "equal sets, same construction order" (intSet [1, 2, 3]) (intSet [1, 2, 3]) true,
+  test "equal sets, different construction order" (intSet [1, 2, 3]) (intSet [3, 2, 1]) true,
+  test "different elements" (intSet [1, 2, 3]) (intSet [1, 2, 4]) false,
+  test "subset, not equal" (intSet [1, 2, 3]) (intSet [1, 2]) false]
+  where
+    test name x y result = primCase name DefEquality.equal [x, y] result
+    intSet els = Terms.set (int32 <$> els)
+
+-- Map equality (#749): maps are KEY-ORDER-INDEPENDENT, extending #742's
+-- equalityEqualCollections with missing-key and nested-map-value cases.
+equalityEqualMaps :: TypedTerm TestGroup
+equalityEqualMaps = subgroup "equal maps" [
+  test "equal maps, same insertion order"
+    (intMap [(1, 10), (2, 20)]) (intMap [(1, 10), (2, 20)]) true,
+  test "equal maps, different insertion order"
+    (intMap [(1, 10), (2, 20)]) (intMap [(2, 20), (1, 10)]) true,
+  test "missing key" (intMap [(1, 10)]) (intMap [(1, 10), (2, 20)]) false,
+  test "value mismatch" (intMap [(1, 10), (2, 20)]) (intMap [(1, 10), (2, 21)]) false,
+  test "nested map value, equal"
+    (nestedIntMap [(1, [(2, 20)])]) (nestedIntMap [(1, [(2, 20)])]) true,
+  test "nested map value, unequal"
+    (nestedIntMap [(1, [(2, 20)])]) (nestedIntMap [(1, [(2, 21)])]) false]
+  where
+    test name x y result = primCase name DefEquality.equal [x, y] result
+    intMap pairs = Terms.map $ Phantoms.map $ M.fromList [(int32 k, int32 v) | (k, v) <- pairs]
+    nestedIntMap pairs = Terms.map $ Phantoms.map $
+      M.fromList [(int32 k, intMap inner) | (k, inner) <- pairs]
+
+-- notEqual on collections (#749): mirrors equalityEqualCollections/
+-- equalityEqualLists/Sets/Maps with the inverse expectation, since notEqual
+-- had zero pre-existing coverage of any kind (see equalityNotEqual above for
+-- the scalar baseline).
+equalityNotEqualCollections :: TypedTerm TestGroup
+equalityNotEqualCollections = subgroup "notEqual collections" [
+  test "equal lists" (intList [1, 2, 3]) (intList [1, 2, 3]) false,
+  test "unequal lists (order)" (intList [1, 2, 3]) (intList [3, 2, 1]) true,
+  test "equal sets, different order" (intSet [1, 2, 3]) (intSet [3, 2, 1]) false,
+  test "unequal sets" (intSet [1, 2, 3]) (intSet [1, 2, 4]) true,
+  test "equal maps, different insertion order"
+    (intMap [(1, 10), (2, 20)]) (intMap [(2, 20), (1, 10)]) false,
+  test "unequal maps" (intMap [(1, 10)]) (intMap [(1, 10), (2, 20)]) true]
+  where
+    test name x y result = primCase name DefEquality.notEqual [x, y] result
+    intList els = Terms.list (int32 <$> els)
+    intSet els = Terms.set (int32 <$> els)
+    intMap pairs = Terms.map $ Phantoms.map $ M.fromList [(int32 k, int32 v) | (k, v) <- pairs]
