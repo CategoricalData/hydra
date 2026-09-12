@@ -19,9 +19,7 @@ export const length = (s: string): number => [...s].length;
 export const splitOn = (sep: string, s: string): readonly string[] => {
   if (sep === "") {
     if (s === "") return [""];
-    // Spreading a string iterates by Unicode code point, unlike s.split("") which
-    // splits by UTF-16 code unit and breaks astral (non-BMP) characters into surrogate halves.
-    return ["", ...[...s]];
+    return ["", ...s.split("")];
   }
   return s.split(sep);
 };
@@ -42,16 +40,8 @@ export const toLower = (s: string): string => s.toLowerCase();
 export const trim = (s: string): string => s.trim();
 
 export const charAt = (i: number, s: string): import("../../../runtime.js").Optional<number> => {
-  // `i` is a code-point index, not a UTF-16 code-unit offset -- passing it straight to
-  // s.codePointAt(i) is wrong for any string with an astral (non-BMP) character before
-  // position i, since such characters occupy two UTF-16 units. Iterate by code point instead.
-  if (i < 0) return { tag: "none" };
-  let idx = 0;
-  for (const ch of s) {
-    if (idx === i) return { tag: "given", value: ch.codePointAt(0)! };
-    idx++;
-  }
-  return { tag: "none" };
+  const cp = s.codePointAt(i);
+  return cp === undefined ? { tag: "none" } : { tag: "given", value: cp };
 };
 
 export const isPrefix = (pre: string, s: string): boolean => s.startsWith(pre);
