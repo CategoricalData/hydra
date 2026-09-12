@@ -7,12 +7,7 @@ object strings:
   def join(sep: String)(ss: Seq[String]): String = ss.mkString(sep)
   def isEmpty(s: String): Boolean = s.isEmpty
   def length(s: String): Int = s.codePointCount(0, s.length)
-  // i is a code-point index, not a UTF-16 code-unit offset: bound via codePointCount and
-  // translate to a UTF-16 offset via offsetByCodePoints before indexing, mirroring the Java
-  // host's overlay/java/.../lib/strings/CharAt.java (astral chars occupy two UTF-16 units).
-  def charAt(i: Int)(s: String): Option[Int] =
-    val len = s.codePointCount(0, s.length)
-    if i >= 0 && i < len then Some(s.codePointAt(s.offsetByCodePoints(0, i))) else None
+  def charAt(i: Int)(s: String): Option[Int] = if i >= 0 && i < s.length then Some(s.codePointAt(i)) else None
   def splitOn(sep: String)(s: String): Seq[String] =
     if sep.isEmpty then
       // Haskell Data.List.Split.splitOn "" "abc" = ["","a","b","c"]
