@@ -46,9 +46,7 @@ import qualified Hydra.Lib.System as DefSystem
 import qualified Hydra.Lib.Text as DefText
 
 import qualified Data.List as L
-import qualified Data.Map as M
 import qualified Data.Scientific as Sci
-import qualified Data.Set as S
 
 
 -- Term coders for type variables (used in primitive implementations)
@@ -170,120 +168,32 @@ decimalPayload (TermLiteral (LiteralDecimal a)) = Just a
 decimalPayload (TermInject (Injection _ (Field _ t))) = decimalPayload t
 decimalPayload _ = Nothing
 
--- | Scale-aware comparison of two decimal payloads.
-compareDecimals :: Sci.Scientific -> Sci.Scientific -> Ordering
-compareDecimals a b
-  | a < b = LT
-  | a > b = GT
-  -- Equal value; scale is -base10Exponent, so smaller scale is the larger
-  -- (less negative) exponent.
-  | ea > eb = LT
-  | ea < eb = GT
-  | otherwise = EQ
-  where
-    ea = Sci.base10Exponent a
-    eb = Sci.base10Exponent b
-
--- | Structural comparison of two terms, per docs/specification/ordering-and-equality.md:
--- records compare field-by-field in declaration order, unions by declared-variant order
--- then payload (the derived Ord on Term/Literal/etc. already implements this via
--- constructor declaration order -- see Hydra.Core), decimals by numeric value then scale.
---
--- This is a full recursive walk (NOT a check of the top level only): decimalPayload above
--- only recognizes a decimal at the term's own top level (or one Injection layer above it,
--- for DSL-constructed literals) -- a decimal nested inside a Map/List/Set/Record/etc. is
--- invisible to it, so termCompareOrdering must recurse through every container-shaped Term
--- constructor and apply the decimal special-case at each leaf, falling back to the derived
--- Ord only for genuinely decimal-free subtrees (an optimization: once neither side contains
--- a decimal, derived Ord already agrees with structural comparison, since Scientific's Eq/Ord
--- is the only actual divergence point from the spec).
-termCompareOrdering :: Term -> Term -> Ordering
-termCompareOrdering x y = case (decimalPayload x, decimalPayload y) of
-  (Just a, Just b) -> compareDecimals a b
-  _ -> case (x, y) of
-    (TermAnnotated (AnnotatedTerm bx ax), TermAnnotated (AnnotatedTerm by ay)) ->
-      termCompareOrdering bx by <> termCompareOrdering ax ay
-    (TermApplication (Application fx ax), TermApplication (Application fy ay)) ->
-      termCompareOrdering fx fy <> termCompareOrdering ax ay
-    (TermCases (CaseStatement tnx dx csx), TermCases (CaseStatement tny dy csy)) ->
-      compare tnx tny <> compareMaybeTerm dx dy <> compareCaseAlternatives csx csy
-    (TermEither ex, TermEither ey) -> case (ex, ey) of
-      (Left lx, Left ly) -> termCompareOrdering lx ly
-      (Right rx, Right ry) -> termCompareOrdering rx ry
-      (Left _, Right _) -> LT
-      (Right _, Left _) -> GT
-    (TermInject (Injection tnx (Field fnx fvx)), TermInject (Injection tny (Field fny fvy))) ->
-      compare tnx tny <> compare fnx fny <> termCompareOrdering fvx fvy
-    (TermLambda (Lambda px dx bx), TermLambda (Lambda py dy by)) ->
-      compare px py <> compare dx dy <> termCompareOrdering bx by
-    (TermLet (Let bsx bx), TermLet (Let bsy by)) ->
-      compareBindings bsx bsy <> termCompareOrdering bx by
-    (TermList xs, TermList ys) -> compareTermLists xs ys
-    (TermLiteral lx, TermLiteral ly) -> compare lx ly
-    (TermMap mx, TermMap my) -> compareTermPairLists (M.toAscList mx) (M.toAscList my)
-    (TermOptional mx, TermOptional my) -> case (mx, my) of
-      (Nothing, Nothing) -> EQ
-      (Nothing, Just _) -> LT
-      (Just _, Nothing) -> GT
-      (Just tx, Just ty) -> termCompareOrdering tx ty
-    (TermPair (x1, x2), TermPair (y1, y2)) -> termCompareOrdering x1 y1 <> termCompareOrdering x2 y2
-    (TermProject px, TermProject py) -> compare px py
-    (TermRecord (Record tnx fsx), TermRecord (Record tny fsy)) ->
-      compare tnx tny <> compareFields fsx fsy
-    (TermSet sx, TermSet sy) -> compareTermLists (S.toAscList sx) (S.toAscList sy)
-    (TermTypeApplication (TypeApplicationTerm bx tx), TermTypeApplication (TypeApplicationTerm by ty)) ->
-      termCompareOrdering bx by <> compare tx ty
-    (TermTypeLambda (TypeLambda px bx), TermTypeLambda (TypeLambda py by)) ->
-      compare px py <> termCompareOrdering bx by
-    (TermUnwrap nx, TermUnwrap ny) -> compare nx ny
-    (TermVariable nx, TermVariable ny) -> compare nx ny
-    -- Different variants, or a variant with no decimal-bearing substructure (TermUnit, or
-    -- a mismatched-variant pair): the derived Ord already agrees with the spec's
-    -- declared-variant-order-then-payload rule (constructor declaration order in
-    -- Hydra.Core mirrors the DSL, and the payload itself was checked above for the
-    -- same-variant cases that can carry a Term).
-    _ -> compare x y
-  where
-    compareMaybeTerm Nothing Nothing = EQ
-    compareMaybeTerm Nothing (Just _) = LT
-    compareMaybeTerm (Just _) Nothing = GT
-    compareMaybeTerm (Just a) (Just b) = termCompareOrdering a b
-    compareTermLists [] [] = EQ
-    compareTermLists [] (_:_) = LT
-    compareTermLists (_:_) [] = GT
-    compareTermLists (a:as) (b:bs) = termCompareOrdering a b <> compareTermLists as bs
-    compareTermPairLists [] [] = EQ
-    compareTermPairLists [] (_:_) = LT
-    compareTermPairLists (_:_) [] = GT
-    compareTermPairLists ((ka,va):as) ((kb,vb):bs) =
-      termCompareOrdering ka kb <> termCompareOrdering va vb <> compareTermPairLists as bs
-    compareFields [] [] = EQ
-    compareFields [] (_:_) = LT
-    compareFields (_:_) [] = GT
-    compareFields (Field nax tax : as) (Field nbx tbx : bs) =
-      compare nax nbx <> termCompareOrdering tax tbx <> compareFields as bs
-    compareCaseAlternatives [] [] = EQ
-    compareCaseAlternatives [] (_:_) = LT
-    compareCaseAlternatives (_:_) [] = GT
-    compareCaseAlternatives (CaseAlternative nax hax : as) (CaseAlternative nbx hbx : bs) =
-      compare nax nbx <> termCompareOrdering hax hbx <> compareCaseAlternatives as bs
-    compareBindings [] [] = EQ
-    compareBindings [] (_:_) = LT
-    compareBindings (_:_) [] = GT
-    compareBindings (Binding nax tax tsax : as) (Binding nbx tbx tsbx : bs) =
-      compare nax nbx <> termCompareOrdering tax tbx <> compare tsax tsbx <> compareBindings as bs
-
 termEqual :: Term -> Term -> Bool
-termEqual x y = termCompareOrdering x y == EQ
+termEqual x y = case (decimalPayload x, decimalPayload y) of
+  (Just a, Just b) ->
+    (Sci.coefficient a, Sci.base10Exponent a) == (Sci.coefficient b, Sci.base10Exponent b)
+  _ -> x == y
 
 termNotEqual :: Term -> Term -> Bool
 termNotEqual x y = not (termEqual x y)
 
 termCompare :: Term -> Term -> Comparison
-termCompare x y = case termCompareOrdering x y of
-  LT -> ComparisonLessThan
-  GT -> ComparisonGreaterThan
-  EQ -> ComparisonEqualTo
+termCompare x y = case (decimalPayload x, decimalPayload y) of
+  (Just a, Just b)
+    | a < b -> ComparisonLessThan
+    | a > b -> ComparisonGreaterThan
+    -- Equal value; scale is -base10Exponent, so smaller scale is the larger
+    -- (less negative) exponent.
+    | ea > eb -> ComparisonLessThan
+    | ea < eb -> ComparisonGreaterThan
+    | otherwise -> ComparisonEqualTo
+    where
+      ea = Sci.base10Exponent a
+      eb = Sci.base10Exponent b
+  _
+    | x < y     -> ComparisonLessThan
+    | x > y     -> ComparisonGreaterThan
+    | otherwise -> ComparisonEqualTo
 
 termGt :: Term -> Term -> Bool
 termGt x y = case termCompare x y of
