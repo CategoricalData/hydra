@@ -8,7 +8,6 @@ import qualified Hydra.Avro.Testing as T
 import qualified Hydra.Avro.SchemaJson as SchemaJson
 import qualified Hydra.Avro.Encoder as Encoder
 import qualified Hydra.Avro.Environment as AvroEnv
-import qualified Hydra.Util as Util
 import Hydra.Avro.TestRunner
 import qualified Hydra.Avro.Coder as AvroCoder
 import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
@@ -49,6 +48,12 @@ spec = do
   kernelTypeSpec
   edgeCaseSpec
 
+
+-- | The context used for all tests (the underlying type is polymorphic and unused
+-- by decodeSchema/encodeType/avroHydraAdapter/hydraAvroAdapter's first argument;
+-- any InferenceContext value satisfies it, matching TestRunner.hs's testContext)
+emptyContext :: InferenceContext
+emptyContext = emptyInferenceContext
 
 -- Avro schema helpers
 
@@ -784,15 +789,15 @@ schemaSerializationCases = map T.AvroTestCaseSchemaSerialization [
     T.schemaSerializationTestCaseDescription = "enum schema -> JSON object",
     T.schemaSerializationTestCaseSchema = avroEnum "Color" ["red", "green", "blue"],
     T.schemaSerializationTestCaseJson = Json.ValueObject [
-      ("type", Json.ValueString "enum"),
       ("name", Json.ValueString "Color"),
+      ("type", Json.ValueString "enum"),
       ("symbols", Json.ValueArray [Json.ValueString "red", Json.ValueString "green", Json.ValueString "blue"])]},
   T.SchemaSerializationTestCase {
     T.schemaSerializationTestCaseDescription = "record schema -> JSON object",
     T.schemaSerializationTestCaseSchema = avroRecord "Point" [simpleField "x" (avroPrim Avro.PrimitiveInt), simpleField "y" (avroPrim Avro.PrimitiveInt)],
     T.schemaSerializationTestCaseJson = Json.ValueObject [
-      ("type", Json.ValueString "record"),
       ("name", Json.ValueString "Point"),
+      ("type", Json.ValueString "record"),
       ("fields", Json.ValueArray [
         Json.ValueObject [("name", Json.ValueString "x"), ("type", Json.ValueString "int")],
         Json.ValueObject [("name", Json.ValueString "y"), ("type", Json.ValueString "int")]])]},
@@ -852,7 +857,7 @@ avscFileSpec :: H.Spec
 avscFileSpec = H.describe ".avsc file integration" $ do
 
   H.it "parse and round-trip Review.avsc schema" $ do
-    json <- readAvscFile "src/test/avro/moviedemo/Review.avsc"
+    json <- readAvscFile "src/test/avro-ext/moviedemo/Review.avsc"
     case SchemaJson.decodeSchema emptyContext json of
       Left e -> H.expectationFailure $ "decode failed: " ++ show e
       Right schema -> do
@@ -873,7 +878,7 @@ avscFileSpec = H.describe ".avsc file integration" $ do
           Right schema' -> schema' `H.shouldBe` schema
 
   H.it "parse and round-trip AirplaneInfo.avsc schema" $ do
-    json <- readAvscFile "src/test/avro/aviationdemo/AirplaneInfo.avsc"
+    json <- readAvscFile "src/test/avro-ext/aviationdemo/AirplaneInfo.avsc"
     case SchemaJson.decodeSchema emptyContext json of
       Left e -> H.expectationFailure $ "decode failed: " ++ show e
       Right schema -> do
@@ -891,8 +896,8 @@ avscFileSpec = H.describe ".avsc file integration" $ do
           Right schema' -> schema' `H.shouldBe` schema
 
   H.it "parse Review.avsc and encode/decode example data" $ do
-    schemaJson <- readAvscFile "src/test/avro/moviedemo/Review.avsc"
-    dataJson <- readAvscFile "src/test/json/moviedemo/exampleReview.json"
+    schemaJson <- readAvscFile "src/test/avro-ext/moviedemo/Review.avsc"
+    dataJson <- readAvscFile "src/test/json-ext/moviedemo/exampleReview.json"
     case SchemaJson.decodeSchema emptyContext schemaJson of
       Left e -> H.expectationFailure $ "schema decode failed: " ++ show e
       Right schema -> do
@@ -900,16 +905,16 @@ avscFileSpec = H.describe ".avsc file integration" $ do
           Left e -> H.expectationFailure $ "adapter creation failed: " ++ show e
           Right (adapter, _env) -> do
             -- Forward: JSON -> Term
-            case Util.coderEncode (Util.adapterCoder adapter) dataJson of
+            case coderEncode (adapterCoder adapter) dataJson of
               Left e -> H.expectationFailure $ "encode failed: " ++ show e
               Right term -> do
                 -- Reverse: Term -> JSON
-                case Util.coderDecode (Util.adapterCoder adapter) term of
+                case coderDecode (adapterCoder adapter) term of
                   Left e -> H.expectationFailure $ "decode failed: " ++ show e
                   Right roundTripped -> roundTripped `H.shouldBe` dataJson
 
   H.it "parse .avsc and run through forward adapter" $ do
-    json <- readAvscFile "src/test/avro/moviedemo/Review.avsc"
+    json <- readAvscFile "src/test/avro-ext/moviedemo/Review.avsc"
     case SchemaJson.decodeSchema emptyContext json of
       Left e -> H.expectationFailure $ "decode failed: " ++ show e
       Right schema -> do
@@ -921,7 +926,7 @@ avscFileSpec = H.describe ".avsc file integration" $ do
                   Core.TypeRecord _ -> True
                   Core.TypeAnnotated (Core.AnnotatedType inner _) -> isRecord inner
                   _ -> False
-            isRecord (Util.adapterTarget adapter) `H.shouldBe` True
+            isRecord (adapterTarget adapter) `H.shouldBe` True
 
 -- | Read and parse a JSON file (used for .avsc files)
 readAvscFile :: FilePath -> IO Json.Value
@@ -948,7 +953,7 @@ schemaStringCoderSpec = H.describe "avroSchemaStringCoder" $ do
 
   H.it "encode a record schema to JSON string" $ do
     let schema = avroRecord "Point" [simpleField "x" (avroPrim Avro.PrimitiveInt)]
-    case Util.coderEncode coder schema of
+    case coderEncode coder schema of
       Left e -> H.expectationFailure $ "encode failed: " ++ show e
       Right str -> do
         -- Should contain "record" and "Point"
@@ -956,7 +961,7 @@ schemaStringCoderSpec = H.describe "avroSchemaStringCoder" $ do
 
   H.it "decode a JSON string to a schema" $ do
     let jsonStr = "{\"type\":\"record\",\"name\":\"Point\",\"fields\":[{\"name\":\"x\",\"type\":\"int\"}]}"
-    case Util.coderDecode coder jsonStr of
+    case coderDecode coder jsonStr of
       Left e -> H.expectationFailure $ "decode failed: " ++ show e
       Right schema -> case schema of
         Avro.SchemaNamed named -> Avro.namedName named `H.shouldBe` "Point"
@@ -964,10 +969,10 @@ schemaStringCoderSpec = H.describe "avroSchemaStringCoder" $ do
 
   H.it "encode then decode round-trips" $ do
     let schema = avroEnum "Color" ["red", "green", "blue"]
-    case Util.coderEncode coder schema of
+    case coderEncode coder schema of
       Left e -> H.expectationFailure $ "encode failed: " ++ show e
       Right str -> do
-        case Util.coderDecode coder str of
+        case coderDecode coder str of
           Left e -> H.expectationFailure $ "decode failed: " ++ show e
           Right decoded -> decoded `H.shouldBe` schema
 
@@ -988,12 +993,12 @@ endToEndSpec = H.describe "End-to-end pipeline" $ do
     case AvroCoder.avroHydraAdapter emptyContext schema AvroCoder.emptyAvroEnvironment of
       Left e -> H.expectationFailure $ "forward adapt failed: " ++ show e
       Right (adapter, _) -> do
-        let hydraType = Util.adapterTarget adapter
+        let hydraType = adapterTarget adapter
         -- Reverse: Hydra Type -> Avro Schema
         case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
           Left e -> H.expectationFailure $ "reverse adapt failed: " ++ show e
           Right revAdapter -> do
-            let avroSchema = Util.adapterTarget revAdapter
+            let avroSchema = adapterTarget revAdapter
             -- Encode to JSON
             let json = SchemaJson.encodeSchema avroSchema
             -- Verify it's a valid record schema JSON
@@ -1020,18 +1025,18 @@ endToEndSpec = H.describe "End-to-end pipeline" $ do
               ("metadata", Core.TermMap (M.fromList [
                 (Terms.string "role", Terms.string "engineer")]))]
         -- Encode term -> JSON
-        case Util.coderEncode (Util.adapterCoder adapter) term of
+        case coderEncode (adapterCoder adapter) term of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> do
             -- Decode JSON -> term
-            case Util.coderDecode (Util.adapterCoder adapter) json of
+            case coderDecode (adapterCoder adapter) json of
               Left e -> H.expectationFailure $ "decode failed: " ++ show e
               Right term' -> term' `H.shouldBe` term
 
   H.it "annotations round-trip through forward then reverse" $ do
     -- The Review.avsc has annotations like @edgeLabel, @vertexId, etc.
     -- Forward adapter preserves them as TypeAnnotated. Reverse should emit them.
-    schemaJson <- readAvscFile "src/test/avro/moviedemo/Review.avsc"
+    schemaJson <- readAvscFile "src/test/avro-ext/moviedemo/Review.avsc"
     case SchemaJson.decodeSchema emptyContext schemaJson of
       Left e -> H.expectationFailure $ "schema decode failed: " ++ show e
       Right schema -> do
@@ -1039,13 +1044,13 @@ endToEndSpec = H.describe "End-to-end pipeline" $ do
         case AvroCoder.avroHydraAdapter emptyContext schema AvroCoder.emptyAvroEnvironment of
           Left e -> H.expectationFailure $ "forward adapter failed: " ++ show e
           Right (fwdAdapter, _env) -> do
-            let hydraType = Util.adapterTarget fwdAdapter
+            let hydraType = adapterTarget fwdAdapter
             -- Reverse: Hydra -> Avro (should recover annotations)
             let reviewName = Core.Name "com.example.ReviewInfo"
             case Encoder.encodeType emptyContext (M.singleton reviewName hydraType) reviewName of
               Left e -> H.expectationFailure $ "reverse adapter failed: " ++ show e
               Right revAdapter -> do
-                case Util.adapterTarget revAdapter of
+                case adapterTarget revAdapter of
                   Avro.SchemaNamed named -> do
                     -- The top-level @edgeLabel annotation should be preserved
                     M.member "edgeLabel" (Avro.namedAnnotations named) `H.shouldBe` True
@@ -1072,7 +1077,7 @@ endToEndSpec = H.describe "End-to-end pipeline" $ do
     case Encoder.encodeType emptyContext typeMap lineName of
       Left e -> H.expectationFailure $ "encode failed: " ++ show e
       Right adapter -> do
-        case Util.adapterTarget adapter of
+        case adapterTarget adapter of
           Avro.SchemaNamed named -> do
             Avro.namedName named `H.shouldBe` "Line"
             case Avro.namedType named of
@@ -1097,7 +1102,7 @@ endToEndSpec = H.describe "End-to-end pipeline" $ do
     case Encoder.encodeType emptyContext (M.singleton pointName hydraType) pointName of
       Left e -> H.expectationFailure $ "adapter creation failed: " ++ show e
       Right adapter -> do
-        case Util.adapterTarget adapter of
+        case adapterTarget adapter of
           Avro.SchemaNamed named -> do
             Avro.namedName named `H.shouldBe` "Point"
             Avro.namedNamespace named `H.shouldBe` Just "com.example"
@@ -1109,12 +1114,12 @@ endToEndSpec = H.describe "End-to-end pipeline" $ do
     case AvroCoder.avroHydraAdapter cx (avroPrim Avro.PrimitiveString) AvroCoder.emptyAvroEnvironment of
       Left e -> H.expectationFailure $ "forward adapter failed: " ++ show e
       Right (fwdAdapter, _) ->
-        Util.adapterTarget fwdAdapter `H.shouldBe` Types.string
+        adapterTarget fwdAdapter `H.shouldBe` Types.string
     -- Reverse direction (Hydra -> Avro)
     case Encoder.hydraAvroAdapter cx M.empty Types.int32 of
       Left e -> H.expectationFailure $ "reverse adapter failed: " ++ show e
       Right revAdapter ->
-        Util.adapterTarget revAdapter `H.shouldBe` avroPrim Avro.PrimitiveInt
+        adapterTarget revAdapter `H.shouldBe` avroPrim Avro.PrimitiveInt
 
 
 -- ============================================================
@@ -1130,7 +1135,7 @@ binaryTermSpec = H.describe "Binary (bytes) term encoding" $ do
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right (adapter, _) -> do
         -- "aGVsbG8=" is the base64 encoding of "hello"
-        let result = Util.coderEncode (Util.adapterCoder adapter) (Json.ValueString "aGVsbG8=")
+        let result = coderEncode (adapterCoder adapter) (Json.ValueString "aGVsbG8=")
         case result of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right term -> term `H.shouldBe` Core.TermLiteral (Core.LiteralBinary (B.pack [104,101,108,108,111]))
@@ -1140,7 +1145,7 @@ binaryTermSpec = H.describe "Binary (bytes) term encoding" $ do
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
         let term = Core.TermLiteral (Core.LiteralBinary (B.pack [104,101,108,108,111]))
-        case Util.coderEncode (Util.adapterCoder adapter) term of
+        case coderEncode (adapterCoder adapter) term of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> json `H.shouldBe` Json.ValueString "aGVsbG8="
 
@@ -1149,10 +1154,10 @@ binaryTermSpec = H.describe "Binary (bytes) term encoding" $ do
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
         let term = Core.TermLiteral (Core.LiteralBinary (B.pack [0, 1, 255]))
-        case Util.coderEncode (Util.adapterCoder adapter) term of
+        case coderEncode (adapterCoder adapter) term of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> do
-            case Util.coderDecode (Util.adapterCoder adapter) json of
+            case coderDecode (adapterCoder adapter) json of
               Left e -> H.expectationFailure $ "decode failed: " ++ show e
               Right term' -> term' `H.shouldBe` term
 
@@ -1164,10 +1169,10 @@ binaryTermSpec = H.describe "Binary (bytes) term encoding" $ do
         let term = hydraRecord "Record" [
               ("data", Core.TermLiteral (Core.LiteralBinary (B.pack [1, 2, 3]))),
               ("label", Terms.string "test")]
-        case Util.coderEncode (Util.adapterCoder adapter) term of
+        case coderEncode (adapterCoder adapter) term of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> do
-            case Util.coderDecode (Util.adapterCoder adapter) json of
+            case coderDecode (adapterCoder adapter) json of
               Left e -> H.expectationFailure $ "decode failed: " ++ show e
               Right term' -> term' `H.shouldBe` term
 
@@ -1184,8 +1189,8 @@ lossyIntegerFloatSpec = H.describe "Lossy integer and float type mapping" $ do
     case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
-        Util.adapterIsLossy adapter `H.shouldBe` True
-        case Util.adapterTarget adapter of
+        adapterIsLossy adapter `H.shouldBe` True
+        case adapterTarget adapter of
           Avro.SchemaPrimitive Avro.PrimitiveLong -> return ()
           other -> H.expectationFailure $ "expected long, got: " ++ show other
 
@@ -1194,8 +1199,8 @@ lossyIntegerFloatSpec = H.describe "Lossy integer and float type mapping" $ do
     case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
-        Util.adapterIsLossy adapter `H.shouldBe` True
-        case Util.adapterTarget adapter of
+        adapterIsLossy adapter `H.shouldBe` True
+        case adapterTarget adapter of
           Avro.SchemaPrimitive Avro.PrimitiveLong -> return ()
           other -> H.expectationFailure $ "expected long, got: " ++ show other
 
@@ -1203,20 +1208,20 @@ lossyIntegerFloatSpec = H.describe "Lossy integer and float type mapping" $ do
     let hydraType = Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint16)
     case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
-      Right adapter -> Util.adapterIsLossy adapter `H.shouldBe` True
+      Right adapter -> adapterIsLossy adapter `H.shouldBe` True
 
   H.it "bigint -> long (lossy)" $ do
     let hydraType = Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint)
     case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
-      Right adapter -> Util.adapterIsLossy adapter `H.shouldBe` True
+      Right adapter -> adapterIsLossy adapter `H.shouldBe` True
 
   H.it "int32 -> int (not lossy)" $ do
     case Encoder.hydraAvroAdapter emptyContext M.empty Types.int32 of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
-        Util.adapterIsLossy adapter `H.shouldBe` False
-        case Util.adapterTarget adapter of
+        adapterIsLossy adapter `H.shouldBe` False
+        case adapterTarget adapter of
           Avro.SchemaPrimitive Avro.PrimitiveInt -> return ()
           other -> H.expectationFailure $ "expected int, got: " ++ show other
 
@@ -1224,8 +1229,8 @@ lossyIntegerFloatSpec = H.describe "Lossy integer and float type mapping" $ do
     case Encoder.hydraAvroAdapter emptyContext M.empty Types.int64 of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
-        Util.adapterIsLossy adapter `H.shouldBe` False
-        case Util.adapterTarget adapter of
+        adapterIsLossy adapter `H.shouldBe` False
+        case adapterTarget adapter of
           Avro.SchemaPrimitive Avro.PrimitiveLong -> return ()
           other -> H.expectationFailure $ "expected long, got: " ++ show other
 
@@ -1233,8 +1238,8 @@ lossyIntegerFloatSpec = H.describe "Lossy integer and float type mapping" $ do
     case Encoder.hydraAvroAdapter emptyContext M.empty Types.float32 of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
-        Util.adapterIsLossy adapter `H.shouldBe` False
-        case Util.adapterTarget adapter of
+        adapterIsLossy adapter `H.shouldBe` False
+        case adapterTarget adapter of
           Avro.SchemaPrimitive Avro.PrimitiveFloat -> return ()
           other -> H.expectationFailure $ "expected float, got: " ++ show other
 
@@ -1242,8 +1247,8 @@ lossyIntegerFloatSpec = H.describe "Lossy integer and float type mapping" $ do
     case Encoder.hydraAvroAdapter emptyContext M.empty Types.float64 of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
-        Util.adapterIsLossy adapter `H.shouldBe` False
-        case Util.adapterTarget adapter of
+        adapterIsLossy adapter `H.shouldBe` False
+        case adapterTarget adapter of
           Avro.SchemaPrimitive Avro.PrimitiveDouble -> return ()
           other -> H.expectationFailure $ "expected double, got: " ++ show other
 
@@ -1253,12 +1258,12 @@ lossyIntegerFloatSpec = H.describe "Lossy integer and float type mapping" $ do
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
         let term = Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt8 42))
-        case Util.coderEncode (Util.adapterCoder adapter) term of
+        case coderEncode (adapterCoder adapter) term of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> do
             json `H.shouldBe` Json.ValueNumber 42.0
             -- Decode comes back as int64 (lossy: original int8 precision lost)
-            case Util.coderDecode (Util.adapterCoder adapter) json of
+            case coderDecode (adapterCoder adapter) json of
               Left e -> H.expectationFailure $ "decode failed: " ++ show e
               Right term' -> term' `H.shouldBe` Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 42))
 
@@ -1276,29 +1281,29 @@ wrapTypeSpec = H.describe "TypeWrap (newtype) encoding" $ do
     case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
-        Util.adapterTarget adapter `H.shouldBe` avroPrim Avro.PrimitiveString
-        Util.adapterIsLossy adapter `H.shouldBe` False
+        adapterTarget adapter `H.shouldBe` avroPrim Avro.PrimitiveString
+        adapterIsLossy adapter `H.shouldBe` False
 
   H.it "wrapped int32 is encoded as Avro int" $ do
     let hydraType = Core.TypeWrap Types.int32
     case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter ->
-        Util.adapterTarget adapter `H.shouldBe` avroPrim Avro.PrimitiveInt
+        adapterTarget adapter `H.shouldBe` avroPrim Avro.PrimitiveInt
 
   H.it "wrapped list(string) is encoded as Avro array(string)" $ do
     let hydraType = Core.TypeWrap (Types.list Types.string)
     case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter ->
-        Util.adapterTarget adapter `H.shouldBe` avroArray (avroPrim Avro.PrimitiveString)
+        adapterTarget adapter `H.shouldBe` avroArray (avroPrim Avro.PrimitiveString)
 
   H.it "nested wraps are unwrapped correctly" $ do
     let hydraType = Core.TypeWrap (Core.TypeWrap Types.boolean)
     case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter ->
-        Util.adapterTarget adapter `H.shouldBe` avroPrim Avro.PrimitiveBoolean
+        adapterTarget adapter `H.shouldBe` avroPrim Avro.PrimitiveBoolean
 
   H.it "record with wrapped field types" $ do
     -- A record where one field is a wrapped string (like Hydra Name)
@@ -1308,7 +1313,7 @@ wrapTypeSpec = H.describe "TypeWrap (newtype) encoding" $ do
     case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
-        case Util.adapterTarget adapter of
+        case adapterTarget adapter of
           Avro.SchemaNamed named -> do
             let Avro.NamedTypeRecord (Avro.Record fields) = Avro.namedType named
             length fields `H.shouldBe` 2
@@ -1372,7 +1377,7 @@ complexRealisticSpec = H.describe "Complex realistic Avro schemas" $ do
     case Encoder.encodeType emptyContext typeMap messageName of
       Left e -> H.expectationFailure $ "encode failed: " ++ show e
       Right adapter -> do
-        case Util.adapterTarget adapter of
+        case adapterTarget adapter of
           Avro.SchemaNamed named -> do
             Avro.namedName named `H.shouldBe` "Message"
             Avro.namedNamespace named `H.shouldBe` Just "com.messaging"
@@ -1424,7 +1429,7 @@ complexRealisticSpec = H.describe "Complex realistic Avro schemas" $ do
     case Encoder.encodeType emptyContext typeMap deviceName of
       Left e -> H.expectationFailure $ "encode failed: " ++ show e
       Right adapter -> do
-        case Util.adapterTarget adapter of
+        case adapterTarget adapter of
           Avro.SchemaNamed named -> do
             Avro.namedName named `H.shouldBe` "Device"
             case Avro.namedType named of
@@ -1481,17 +1486,17 @@ complexRealisticSpec = H.describe "Complex realistic Avro schemas" $ do
                 (Terms.string "source", Terms.string "api"),
                 (Terms.string "version", Terms.string "1.0")])),
               ("replyTo", Core.TermOptional (Just (Terms.string "reply-queue")))]
-        case Util.coderEncode (Util.adapterCoder adapter) term of
+        case coderEncode (adapterCoder adapter) term of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> do
-            case Util.coderDecode (Util.adapterCoder adapter) json of
+            case coderDecode (adapterCoder adapter) json of
               Left e -> H.expectationFailure $ "decode failed: " ++ show e
               Right term' -> term' `H.shouldBe` term
 
   -- Full round-trip through AirplaneInfo.avsc with real data
   H.it "AirplaneInfo.avsc: forward adapter processes real data end-to-end" $ do
-    schemaJson <- readAvscFile "src/test/avro/aviationdemo/AirplaneInfo.avsc"
-    dataJson <- readJsonFile "src/test/json/aviationdemo/exampleAirplaneInfo.json"
+    schemaJson <- readAvscFile "src/test/avro-ext/aviationdemo/AirplaneInfo.avsc"
+    dataJson <- readJsonFile "src/test/json-ext/aviationdemo/exampleAirplaneInfo.json"
     case SchemaJson.decodeSchema emptyContext schemaJson of
       Left e -> H.expectationFailure $ "schema decode failed: " ++ show e
       Right schema -> do
@@ -1499,11 +1504,11 @@ complexRealisticSpec = H.describe "Complex realistic Avro schemas" $ do
           Left e -> H.expectationFailure $ "adapter failed: " ++ show e
           Right (adapter, _) -> do
             -- Encode the data JSON through the adapter
-            case Util.coderEncode (Util.adapterCoder adapter) dataJson of
+            case coderEncode (adapterCoder adapter) dataJson of
               Left e -> H.expectationFailure $ "data encode failed: " ++ show e
               Right hydraTerm -> do
                 -- Decode back to JSON
-                case Util.coderDecode (Util.adapterCoder adapter) hydraTerm of
+                case coderDecode (adapterCoder adapter) hydraTerm of
                   Left e -> H.expectationFailure $ "data decode failed: " ++ show e
                   Right jsonResult -> do
                     -- The round-tripped JSON should be structurally equivalent
@@ -1518,18 +1523,18 @@ complexRealisticSpec = H.describe "Complex realistic Avro schemas" $ do
 
   -- Full round-trip through Review.avsc with real data
   H.it "Review.avsc: forward adapter processes real data end-to-end" $ do
-    schemaJson <- readAvscFile "src/test/avro/moviedemo/Review.avsc"
-    dataJson <- readJsonFile "src/test/json/moviedemo/exampleReview.json"
+    schemaJson <- readAvscFile "src/test/avro-ext/moviedemo/Review.avsc"
+    dataJson <- readJsonFile "src/test/json-ext/moviedemo/exampleReview.json"
     case SchemaJson.decodeSchema emptyContext schemaJson of
       Left e -> H.expectationFailure $ "schema decode failed: " ++ show e
       Right schema -> do
         case AvroCoder.avroHydraAdapter emptyContext schema AvroCoder.emptyAvroEnvironment of
           Left e -> H.expectationFailure $ "adapter failed: " ++ show e
           Right (adapter, _) -> do
-            case Util.coderEncode (Util.adapterCoder adapter) dataJson of
+            case coderEncode (adapterCoder adapter) dataJson of
               Left e -> H.expectationFailure $ "data encode failed: " ++ show e
               Right hydraTerm -> do
-                case Util.coderDecode (Util.adapterCoder adapter) hydraTerm of
+                case coderDecode (adapterCoder adapter) hydraTerm of
                   Left e -> H.expectationFailure $ "data decode failed: " ++ show e
                   Right jsonResult -> do
                     case (dataJson, jsonResult) of
@@ -1556,7 +1561,7 @@ complexRealisticSpec = H.describe "Complex realistic Avro schemas" $ do
     case Encoder.encodeType emptyContext typeMap routeName of
       Left e -> H.expectationFailure $ "encode failed: " ++ show e
       Right adapter -> do
-        case Util.adapterTarget adapter of
+        case adapterTarget adapter of
           Avro.SchemaNamed named -> do
             Avro.namedName named `H.shouldBe` "Route"
             -- The origin field references Coordinate, which was already inlined in Segment
@@ -1589,7 +1594,7 @@ kernelTypeSpec = H.describe "Hydra kernel types as Avro schemas" $ do
     case Encoder.encodeType emptyContext typeMap fieldTypeName of
       Left e -> H.expectationFailure $ "encode failed: " ++ show e
       Right adapter -> do
-        case Util.adapterTarget adapter of
+        case adapterTarget adapter of
           Avro.SchemaNamed named -> do
             Avro.namedName named `H.shouldBe` "FieldType"
             Avro.namedNamespace named `H.shouldBe` Just "hydra.core"
@@ -1616,7 +1621,7 @@ kernelTypeSpec = H.describe "Hydra kernel types as Avro schemas" $ do
         let term = hydraRecord "hydra.core.Projection" [
               ("typeName", Terms.string "MyRecord"),
               ("field", Terms.string "myField")]
-        case Util.coderEncode (Util.adapterCoder adapter) term of
+        case coderEncode (adapterCoder adapter) term of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> do
             case json of
@@ -1625,7 +1630,7 @@ kernelTypeSpec = H.describe "Hydra kernel types as Avro schemas" $ do
                 M.lookup "typeName" m `H.shouldBe` Just (Json.ValueString "MyRecord")
                 M.lookup "field" m `H.shouldBe` Just (Json.ValueString "myField")
               _ -> H.expectationFailure "expected JSON object"
-            case Util.coderDecode (Util.adapterCoder adapter) json of
+            case coderDecode (adapterCoder adapter) json of
               Left e -> H.expectationFailure $ "decode failed: " ++ show e
               Right term' -> term' `H.shouldBe` term
 
@@ -1640,10 +1645,10 @@ kernelTypeSpec = H.describe "Hydra kernel types as Avro schemas" $ do
         let term = hydraRecord "hydra.core.MapType" [
               ("keys", Terms.string "string"),
               ("values", Terms.string "int32")]
-        case Util.coderEncode (Util.adapterCoder adapter) term of
+        case coderEncode (adapterCoder adapter) term of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> do
-            case Util.coderDecode (Util.adapterCoder adapter) json of
+            case coderDecode (adapterCoder adapter) json of
               Left e -> H.expectationFailure $ "decode failed: " ++ show e
               Right term' -> term' `H.shouldBe` term
 
@@ -1676,7 +1681,7 @@ kernelTypeSpec = H.describe "Hydra kernel types as Avro schemas" $ do
     case Encoder.encodeType emptyContext typeMap graphName of
       Left e -> H.expectationFailure $ "encode failed: " ++ show e
       Right adapter -> do
-        case Util.adapterTarget adapter of
+        case adapterTarget adapter of
           Avro.SchemaNamed named -> do
             Avro.namedName named `H.shouldBe` "Graph"
             case Avro.namedType named of
@@ -1712,10 +1717,10 @@ kernelTypeSpec = H.describe "Hydra kernel types as Avro schemas" $ do
               ("properties", Core.TermMap (M.fromList [
                 (Terms.string "name", prop1),
                 (Terms.string "age", prop2)]))]
-        case Util.coderEncode (Util.adapterCoder adapter) term of
+        case coderEncode (adapterCoder adapter) term of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> do
-            case Util.coderDecode (Util.adapterCoder adapter) json of
+            case coderDecode (adapterCoder adapter) json of
               Left e -> H.expectationFailure $ "decode failed: " ++ show e
               Right term' -> term' `H.shouldBe` term
 
@@ -1732,11 +1737,11 @@ edgeCaseSpec = H.describe "Edge cases" $ do
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
         let term = Terms.list []
-        case Util.coderEncode (Util.adapterCoder adapter) term of
+        case coderEncode (adapterCoder adapter) term of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> do
             json `H.shouldBe` Json.ValueArray []
-            case Util.coderDecode (Util.adapterCoder adapter) json of
+            case coderDecode (adapterCoder adapter) json of
               Left e -> H.expectationFailure $ "decode failed: " ++ show e
               Right term' -> term' `H.shouldBe` term
 
@@ -1745,11 +1750,11 @@ edgeCaseSpec = H.describe "Edge cases" $ do
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
         let term = Core.TermMap M.empty
-        case Util.coderEncode (Util.adapterCoder adapter) term of
+        case coderEncode (adapterCoder adapter) term of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> do
             json `H.shouldBe` Json.ValueObject []
-            case Util.coderDecode (Util.adapterCoder adapter) json of
+            case coderDecode (adapterCoder adapter) json of
               Left e -> H.expectationFailure $ "decode failed: " ++ show e
               Right term' -> term' `H.shouldBe` term
 
@@ -1758,17 +1763,17 @@ edgeCaseSpec = H.describe "Edge cases" $ do
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
         let maxTerm = Terms.int32 2147483647
-        case Util.coderEncode (Util.adapterCoder adapter) maxTerm of
+        case coderEncode (adapterCoder adapter) maxTerm of
           Left e -> H.expectationFailure $ "encode max failed: " ++ show e
           Right json -> do
             json `H.shouldBe` Json.ValueNumber 2147483647.0
-            case Util.coderDecode (Util.adapterCoder adapter) json of
+            case coderDecode (adapterCoder adapter) json of
               Left e -> H.expectationFailure $ "decode max failed: " ++ show e
               Right term' -> term' `H.shouldBe` maxTerm
         let minTerm = Terms.int32 (-2147483648)
-        case Util.coderEncode (Util.adapterCoder adapter) minTerm of
+        case coderEncode (adapterCoder adapter) minTerm of
           Left e -> H.expectationFailure $ "encode min failed: " ++ show e
-          Right json -> case Util.coderDecode (Util.adapterCoder adapter) json of
+          Right json -> case coderDecode (adapterCoder adapter) json of
             Left e -> H.expectationFailure $ "decode min failed: " ++ show e
             Right term' -> term' `H.shouldBe` minTerm
 
@@ -1777,9 +1782,9 @@ edgeCaseSpec = H.describe "Edge cases" $ do
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
         let unicodeTerm = Terms.string "\19990\30028"
-        case Util.coderEncode (Util.adapterCoder adapter) unicodeTerm of
+        case coderEncode (adapterCoder adapter) unicodeTerm of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
-          Right json -> case Util.coderDecode (Util.adapterCoder adapter) json of
+          Right json -> case coderDecode (adapterCoder adapter) json of
             Left e -> H.expectationFailure $ "decode failed: " ++ show e
             Right term' -> term' `H.shouldBe` unicodeTerm
 
@@ -1788,7 +1793,7 @@ edgeCaseSpec = H.describe "Edge cases" $ do
     case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
-        case Util.adapterTarget adapter of
+        case adapterTarget adapter of
           Avro.SchemaArray (Avro.Array items) -> case items of
             Avro.SchemaMap (Avro.Map vals) -> case vals of
               Avro.SchemaUnion (Avro.Union schemas) -> length schemas `H.shouldBe` 2
@@ -1800,13 +1805,13 @@ edgeCaseSpec = H.describe "Edge cases" $ do
     case Encoder.hydraAvroAdapter emptyContext M.empty Types.unit of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e
       Right adapter -> do
-        Util.adapterTarget adapter `H.shouldBe` avroPrim Avro.PrimitiveNull
+        adapterTarget adapter `H.shouldBe` avroPrim Avro.PrimitiveNull
         let term = Core.TermUnit
-        case Util.coderEncode (Util.adapterCoder adapter) term of
+        case coderEncode (adapterCoder adapter) term of
           Left e -> H.expectationFailure $ "encode failed: " ++ show e
           Right json -> do
             json `H.shouldBe` Json.ValueNull
-            case Util.coderDecode (Util.adapterCoder adapter) json of
+            case coderDecode (adapterCoder adapter) json of
               Left e -> H.expectationFailure $ "decode failed: " ++ show e
               Right term' -> term' `H.shouldBe` term
 
