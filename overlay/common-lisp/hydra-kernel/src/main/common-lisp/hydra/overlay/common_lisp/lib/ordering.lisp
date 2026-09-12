@@ -87,6 +87,22 @@
                 (bl (sort (let (r) (maphash (lambda (k v) (push (cons k v) r)) b) r)
                           (lambda (x y) (< (generic-compare (car x) (car y)) 0)))))
            (generic-compare al bl))))
+    ((and (floatp a) (floatp b))
+     ;; IEEE 754 extended totalOrder (docs/specification/ordering-and-equality.md):
+     ;; NaN is greatest and equal to itself; -0.0 < +0.0. Native CL < / = treat
+     ;; NaN as unordered and (= -0.0 0.0) as true, so both need special-casing
+     ;; (hydra-nan-p from math.lisp, loaded before this file).
+     (let ((na (hydra-nan-p a)) (nb (hydra-nan-p b)))
+       (cond
+         ((and na nb) 0)
+         (na 1)
+         (nb -1)
+         ((< a b) -1)
+         ((> a b) 1)
+         ((and (= a 0) (= b 0))
+          (let ((nega (minusp (float-sign a))) (negb (minusp (float-sign b))))
+            (cond ((eq nega negb) 0) (nega -1) (t 1))))
+         (t 0))))
     ((and (numberp a) (numberp b))
      (cond ((< a b) -1) ((= a b) 0) (t 1)))
     ((and (stringp a) (stringp b))

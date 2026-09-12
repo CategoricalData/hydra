@@ -23,24 +23,25 @@
   (lambda (x) x))
 
 ;; bigint_to_int8 :: BigInteger -> Int8
-;; Convert a bigint (Integer) to an int8.
+;; Convert a bigint (Integer) to an int8, with two's-complement narrowing (hydra-wrap-int,
+;; overlay/common_lisp/lib/math.lisp, loaded before this file).
 (defvar hydra_overlay_common_lisp_lib_literals_bigint_to_int8
-  (lambda (x) x))
+  (lambda (x) (hydra-wrap-int :int8 x)))
 
 ;; bigint_to_int16 :: BigInteger -> Int16
-;; Convert a bigint (Integer) to an int16.
+;; Convert a bigint (Integer) to an int16, with two's-complement narrowing.
 (defvar hydra_overlay_common_lisp_lib_literals_bigint_to_int16
-  (lambda (x) x))
+  (lambda (x) (hydra-wrap-int :int16 x)))
 
 ;; bigint_to_int32 :: BigInteger -> Int32
-;; Convert a bigint (Integer) to an int32.
+;; Convert a bigint (Integer) to an int32, with two's-complement narrowing.
 (defvar hydra_overlay_common_lisp_lib_literals_bigint_to_int32
-  (lambda (x) x))
+  (lambda (x) (hydra-wrap-int :int32 x)))
 
 ;; bigint_to_int64 :: BigInteger -> Int64
-;; Convert a bigint (Integer) to an int64.
+;; Convert a bigint (Integer) to an int64, with two's-complement narrowing.
 (defvar hydra_overlay_common_lisp_lib_literals_bigint_to_int64
-  (lambda (x) x))
+  (lambda (x) (hydra-wrap-int :int64 x)))
 
 ;; bigint_to_uint :: BigInteger -> Uint
 ;; Convert a bigint (Integer) to a uint.
@@ -419,7 +420,7 @@
 (defvar hydra_overlay_common_lisp_lib_literals_parse_uint32
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
-      (if (and n (>= n 0))
+      (if (and n (>= n 0) (<= n 4294967295))
           (list :given n)
           (list :none)))))
 
@@ -428,7 +429,7 @@
 (defvar hydra_overlay_common_lisp_lib_literals_parse_uint64
   (lambda (s)
     (let ((n (ignore-errors (parse-integer s :junk-allowed nil))))
-      (if (and n (>= n 0))
+      (if (and n (>= n 0) (<= n 18446744073709551615))
           (list :given n)
           (list :none)))))
 
