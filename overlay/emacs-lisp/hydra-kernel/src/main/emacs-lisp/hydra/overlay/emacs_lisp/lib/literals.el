@@ -23,20 +23,23 @@
   (lambda (x) x))
 
 ;; bigint_to_int8 :: BigInteger -> Int8
+;; Two's-complement narrowing (#745): hydra--wrap-int (math.el, loaded after this
+;; file, but not called until test-run time -- a defvar'd lambda body isn't
+;; evaluated at load time).
 (defvar hydra_overlay_emacs_lisp_lib_literals_bigint_to_int8
-  (lambda (x) x))
+  (lambda (x) (hydra--wrap-int :int8 x)))
 
 ;; bigint_to_int16 :: BigInteger -> Int16
 (defvar hydra_overlay_emacs_lisp_lib_literals_bigint_to_int16
-  (lambda (x) x))
+  (lambda (x) (hydra--wrap-int :int16 x)))
 
 ;; bigint_to_int32 :: BigInteger -> Int32
 (defvar hydra_overlay_emacs_lisp_lib_literals_bigint_to_int32
-  (lambda (x) x))
+  (lambda (x) (hydra--wrap-int :int32 x)))
 
 ;; bigint_to_int64 :: BigInteger -> Int64
 (defvar hydra_overlay_emacs_lisp_lib_literals_bigint_to_int64
-  (lambda (x) x))
+  (lambda (x) (hydra--wrap-int :int64 x)))
 
 ;; bigint_to_uint :: BigInteger -> Uint
 (defvar hydra_overlay_emacs_lisp_lib_literals_bigint_to_uint
@@ -300,7 +303,7 @@
   (lambda (s)
     (condition-case nil
         (let ((n (string-to-number s)))
-          (if (and (integerp n) (>= n 0) (string= (number-to-string n) s))
+          (if (and (integerp n) (>= n 0) (<= n 4294967295) (string= (number-to-string n) s))
               (list :given n)
               (list :none)))
       (error (list :none)))))
@@ -310,7 +313,7 @@
   (lambda (s)
     (condition-case nil
         (let ((n (string-to-number s)))
-          (if (and (integerp n) (>= n 0) (string= (number-to-string n) s))
+          (if (and (integerp n) (>= n 0) (<= n 18446744073709551615) (string= (number-to-string n) s))
               (list :given n)
               (list :none)))
       (error (list :none)))))

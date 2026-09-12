@@ -100,6 +100,21 @@
          (setq bl (sort bl (lambda (x y) (< (generic-compare (car x) (car y)) 0))))
          (generic-compare al bl))))
     ((equal a b) 0)
+    ((and (floatp a) (floatp b))
+     ;; IEEE 754 extended totalOrder (docs/specification/ordering-and-equality.md):
+     ;; NaN is greatest and equal to itself; -0.0 < +0.0. Native < / = treat NaN
+     ;; as unordered and (= -0.0 0.0) as true, so both need special-casing.
+     (let ((na (isnan a)) (nb (isnan b)))
+       (cond
+         ((and na nb) 0)
+         (na 1)
+         (nb -1)
+         ((< a b) -1)
+         ((> a b) 1)
+         ((and (= a 0) (= b 0))
+          (let ((nega (< (copysign 1.0 a) 0)) (negb (< (copysign 1.0 b) 0)))
+            (cond ((eq nega negb) 0) (nega -1) (t 1))))
+         (t 0))))
     ((and (numberp a) (numberp b))
      (cond ((< a b) -1) ((= a b) 0) (t 1)))
     ((and (stringp a) (stringp b))
