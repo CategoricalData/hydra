@@ -69,6 +69,21 @@ export const fromList = <K, V>(pairs: readonly (readonly [K, V])[]): any => {
   return mkCanon(internal) as unknown as ReadonlyMap<K, V>;
 };
 
+// Native `<` on strings compares UTF-16 code units, which misorders astral
+// characters (code point > 0xFFFF) relative to BMP private-use characters
+// (U+E000-FFFF): compare by code point instead.
+const compareStringsByCodePoint = (a: string, b: string): number => {
+  const ia = a[Symbol.iterator](), ib = b[Symbol.iterator]();
+  for (;;) {
+    const ra = ia.next(), rb = ib.next();
+    if (ra.done && rb.done) return 0;
+    if (ra.done) return -1;
+    if (rb.done) return 1;
+    const ca = ra.value.codePointAt(0)!, cb = rb.value.codePointAt(0)!;
+    if (ca !== cb) return ca - cb;
+  }
+};
+
 // Maps (matching Haskell's Data.Map) are conceptually ordered. Sort by
 // the original key value (numeric for numbers, lexicographic for strings,
 // etc.) rather than the canonicalized JSON string — otherwise numbers
@@ -76,10 +91,10 @@ export const fromList = <K, V>(pairs: readonly (readonly [K, V])[]): any => {
 const compareKeys = (a: unknown, b: unknown): number => {
   if (typeof a === "number" && typeof b === "number") return a - b;
   if (typeof a === "bigint" && typeof b === "bigint") return a < b ? -1 : a > b ? 1 : 0;
-  if (typeof a === "string" && typeof b === "string") return a < b ? -1 : a > b ? 1 : 0;
+  if (typeof a === "string" && typeof b === "string") return compareStringsByCodePoint(a, b);
   // Object keys (Names etc.): fall back to canonical string compare.
   const ca = canon(a), cb = canon(b);
-  return ca < cb ? -1 : ca > cb ? 1 : 0;
+  return compareStringsByCodePoint(ca, cb);
 };
 
 export const toList = (m: any): readonly (readonly [any, any])[] => {

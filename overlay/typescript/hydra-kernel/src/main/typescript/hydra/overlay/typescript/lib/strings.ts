@@ -19,7 +19,9 @@ export const length = (s: string): number => [...s].length;
 export const splitOn = (sep: string, s: string): readonly string[] => {
   if (sep === "") {
     if (s === "") return [""];
-    return ["", ...s.split("")];
+    // Code-point-safe: s.split("") would break astral characters into
+    // surrogate halves.
+    return ["", ...s];
   }
   return s.split(sep);
 };
@@ -40,8 +42,16 @@ export const toLower = (s: string): string => s.toLowerCase();
 export const trim = (s: string): string => s.trim();
 
 export const charAt = (i: number, s: string): import("../../../runtime.js").Optional<number> => {
-  const cp = s.codePointAt(i);
-  return cp === undefined ? { tag: "none" } : { tag: "given", value: cp };
+  // i is a code-point index, not a UTF-16 code-unit index: iterate code
+  // points rather than indexing s.codePointAt(i) directly, which would
+  // desync after any preceding astral character.
+  if (i < 0) return { tag: "none" };
+  let idx = 0;
+  for (const ch of s) {
+    if (idx === i) return { tag: "given", value: ch.codePointAt(0)! };
+    idx++;
+  }
+  return { tag: "none" };
 };
 
 export const isPrefix = (pre: string, s: string): boolean => s.startsWith(pre);

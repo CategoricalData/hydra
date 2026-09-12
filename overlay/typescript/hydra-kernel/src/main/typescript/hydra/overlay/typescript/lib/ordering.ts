@@ -55,6 +55,21 @@ const compareFloats = (a: number, b: number): number => {
   return 0;
 };
 
+// Native `<` on strings compares UTF-16 code units, which misorders astral
+// characters (code point > 0xFFFF) relative to BMP private-use characters
+// (U+E000-FFFF): compare by code point instead.
+const compareStringsByCodePoint = (a: string, b: string): number => {
+  const ia = a[Symbol.iterator](), ib = b[Symbol.iterator]();
+  for (;;) {
+    const ra = ia.next(), rb = ib.next();
+    if (ra.done && rb.done) return 0;
+    if (ra.done) return -1;
+    if (rb.done) return 1;
+    const ca = ra.value.codePointAt(0)!, cb = rb.value.codePointAt(0)!;
+    if (ca !== cb) return ca - cb;
+  }
+};
+
 // Declared-variant order for each hydra.core union family, transcribed from
 // the generated hydra/reflect.ts (termVariants, typeVariants, literalVariants,
 // integerTypes, floatTypes, literalTypes), which in turn come from the
@@ -129,7 +144,7 @@ export const compareValues = (a: unknown, b: unknown): number => {
   // under both rules).
   if (typeof a === "number" && typeof b === "number") return compareFloats(a, b);
 
-  if (typeof a === "string" && typeof b === "string") return a < b ? -1 : a > b ? 1 : 0;
+  if (typeof a === "string" && typeof b === "string") return compareStringsByCodePoint(a, b);
   if (typeof a === "boolean" && typeof b === "boolean") return a === b ? 0 : a ? 1 : -1;
 
   // Arrays: List, and the tuple encoding of Pair -- lexicographic,

@@ -908,7 +908,14 @@ const literalsPrimitives = (): readonly Primitive[] => [
     prim(`hydra.lib.literals.bigintTo${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(tyBigint, intTypeOf(w))),
       (g, args) =>
         bind(need(args, 0, `bigintTo${w}`), (a0) =>
-          bind(dBigint(g, a0), (n) => right(tInt(Number(n), w))))),
+          bind(dBigint(g, a0), (n) => {
+            // Two's-complement narrowing at bigint precision before converting to
+            // Number: Number(n) alone (the prior bug) never narrows, since Number
+            // has no fixed width. Computed on the bigint so int8/16/32 (well within
+            // Number's safe-integer range) narrow exactly.
+            const bits = w === "int8" ? 8 : w === "int16" ? 16 : w === "int32" ? 32 : 64;
+            return right(tInt(Number(BigInt.asIntN(bits, n)), w));
+          }))),
     prim(`hydra.lib.literals.print${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(intTypeOf(w), tyString)),
       (g, args) =>
         bind(need(args, 0, `print${w}`), (a0) =>
@@ -935,7 +942,12 @@ const literalsPrimitives = (): readonly Primitive[] => [
     prim(`hydra.lib.literals.bigintTo${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(tyBigint, intTypeOf(w))),
       (g, args) =>
         bind(need(args, 0, `bigintTo${w}`), (a0) =>
-          bind(dBigint(g, a0), (n) => right({ tag: "literal", value: { tag: "integer", value: { tag: w, value: Number(n) } } } as never)))),
+          bind(dBigint(g, a0), (n) => {
+            // Narrowing at bigint precision before converting to Number -- see the
+            // signed-width comment above for why Number(n) alone never narrows.
+            const bits = w === "uint8" ? 8 : w === "uint16" ? 16 : w === "uint32" ? 32 : 64;
+            return right({ tag: "literal", value: { tag: "integer", value: { tag: w, value: Number(BigInt.asUintN(bits, n)) } } } as never);
+          }))),
     prim(`hydra.lib.literals.print${w[0]!.toUpperCase()}${w.slice(1)}`, scheme(tyFn(intTypeOf(w), tyString)),
       (g, args) =>
         bind(need(args, 0, `print${w}`), (a0) =>
@@ -944,10 +956,22 @@ const literalsPrimitives = (): readonly Primitive[] => [
       (g, args) =>
         bind(need(args, 0, `parse${w}`), (a0) =>
           bind(dString(g, a0), (s) => {
+            // uint64's range (up to 2^64-1) exceeds Number's safe-integer precision
+            // (2^53-1): parse and range-check at bigint precision, not via the
+            // number-based readUint (the prior bug: readUint's parseInt silently
+            // rounds a genuinely-in-range uint64 string, and Number.MAX_SAFE_INTEGER
+            // is far smaller than uint64's actual max, incorrectly rejecting it).
+            if (w === "uint64") {
+              const r = libLiterals.parseBigint(s);
+              if (r.tag === "none") return right(tOptionalNone);
+              const n = r.value;
+              if (n < 0n || n > 18446744073709551615n) return right(tOptionalNone);
+              return right(tOptional(r, (n: bigint) => ({ tag: "literal", value: { tag: "integer", value: { tag: w, value: Number(n) } } } as never)));
+            }
             const r = libLiterals.readUint(s);
             if (r.tag === "none") return right(tOptionalNone);
             const n = r.value;
-            const max = w === "uint8" ? 255 : w === "uint16" ? 65535 : w === "uint32" ? 4294967295 : Number.MAX_SAFE_INTEGER;
+            const max = w === "uint8" ? 255 : w === "uint16" ? 65535 : 4294967295;
             if (n < 0 || n > max) return right(tOptionalNone);
             return right(tOptional(r, (n) => ({ tag: "literal", value: { tag: "integer", value: { tag: w, value: n } } } as never)));
           }))),
@@ -1120,8 +1144,8 @@ const stringsPrimitives = (): readonly Primitive[] => [
         bind(need(args, 1, "maybeCharAt"), (a1) =>
           bind(dAnyInt(g, a0), (i) =>
             bind(dString(g, a1), (s) => {
-              const cp = s.codePointAt(i);
-              return right(cp === undefined ? tOptionalNone : tOptionalGiven(tInt(cp)));
+              const result = libStrings.charAt(i, s);
+              return right(result.tag === "none" ? tOptionalNone : tOptionalGiven(tInt(result.value)));
             }))))),
   prim("hydra.lib.strings.split", scheme(tyFnCurried(tyString, tyString, tyList(tyString))),
     (g, args) =>
@@ -1136,7 +1160,7 @@ const stringsPrimitives = (): readonly Primitive[] => [
         bind(need(args, 1, "splitOn"), (a1) =>
           bind(dString(g, a0), (sep) =>
             bind(dString(g, a1), (s) =>
-              right({ tag: "list", value: s.split(sep).map((p) => tString(p)) } as never)))))),
+              right({ tag: "list", value: libStrings.splitOn(sep, s).map((p) => tString(p)) } as never)))))),
   prim("hydra.lib.strings.isEmpty", scheme(tyFn(tyString, tyBool)),
     (g, args) =>
       bind(need(args, 0, "isEmpty"), (a0) =>
