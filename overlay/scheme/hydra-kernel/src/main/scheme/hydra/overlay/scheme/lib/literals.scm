@@ -98,34 +98,25 @@
       (lambda (x)
         x))
 
-    ;; Narrow a bigint modulo 2^bits and reinterpret as two's-complement, wrapping silently
-    ;; with no error (e.g. 255 -> -1 for 8 bits) -- mirroring the Clojure host's
-    ;; (unchecked-byte/short/int/long x). literals.scm has no visibility into math.scm's
-    ;; internal wrap-int (not in that library's export list), so this narrow helper is local.
-    (define (hydra-narrow-signed bits x)
-      (let* ((m (expt 2 bits))
-             (w (modulo x m)))
-        (if (>= w (/ m 2)) (- w m) w)))
-
     ;; bigint_to_int8 :: BigInteger -> Int8
     (define hydra_overlay_scheme_lib_literals_bigint_to_int8
       (lambda (x)
-        (hydra-narrow-signed 8 x)))
+        x))
 
     ;; bigint_to_int16 :: BigInteger -> Int16
     (define hydra_overlay_scheme_lib_literals_bigint_to_int16
       (lambda (x)
-        (hydra-narrow-signed 16 x)))
+        x))
 
     ;; bigint_to_int32 :: BigInteger -> Int32
     (define hydra_overlay_scheme_lib_literals_bigint_to_int32
       (lambda (x)
-        (hydra-narrow-signed 32 x)))
+        x))
 
     ;; bigint_to_int64 :: BigInteger -> Int64
     (define hydra_overlay_scheme_lib_literals_bigint_to_int64
       (lambda (x)
-        (hydra-narrow-signed 64 x)))
+        x))
 
     ;; bigint_to_uint :: BigInteger -> Uint
     (define hydra_overlay_scheme_lib_literals_bigint_to_uint
@@ -392,7 +383,7 @@
     (define hydra_overlay_scheme_lib_literals_parse_uint32
       (lambda (s)
         (let ((n (string->number s)))
-          (if (and n (integer? n) (>= n 0) (<= n 4294967295))
+          (if (and n (integer? n) (>= n 0))
               (list 'given (exact n))
               (list 'none)))))
 
@@ -400,7 +391,7 @@
     (define hydra_overlay_scheme_lib_literals_parse_uint64
       (lambda (s)
         (let ((n (string->number s)))
-          (if (and n (integer? n) (>= n 0) (<= n 18446744073709551615))
+          (if (and n (integer? n) (>= n 0))
               (list 'given (exact n))
               (list 'none)))))
 
