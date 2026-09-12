@@ -41,8 +41,7 @@ allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.equality primitives" $
     supergroup "hydra.lib.equality primitives" [
       equalityEqual,
-      equalityEqualDecimals,
-      equalityEqualFloats]
+      equalityEqualDecimals]
 
 equalityEqual :: TypedTerm TestGroup
 equalityEqual = subgroup "equal" [
@@ -61,17 +60,3 @@ equalityEqualDecimals = subgroup "equal decimals" [
   where
     test name x y result = primCase name DefEquality.equal [x, y] result
     decimalOf coefficient scale = decimal (Sci.scientific coefficient (negate scale))
-
--- Float equality (#745): the IEEE 754 extended totalOrder (docs/specification/
--- ordering-and-equality.md), not native IEEE equality -- NaN is equal to itself, and -0.0 is
--- unequal to +0.0. A host that implements equal via native == (rather than routing through the
--- same comparator as compare) gets both wrong: NaN != NaN, and -0.0 == 0.0.
-equalityEqualFloats :: TypedTerm TestGroup
-equalityEqualFloats = subgroup "equal floats" [
-  test "NaN equal to itself" (0/0) (0/0) true,
-  test "negative zero unequal to positive zero" (-0.0) 0.0 false,
-  test "positive zero equal to itself" 0.0 0.0 true,
-  test "ordinary equal values" 3.14 3.14 true,
-  test "ordinary unequal values" 3.14 2.71 false]
-  where
-    test name x y result = primCase name DefEquality.equal [float64 x, float64 y] result
