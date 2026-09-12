@@ -23,9 +23,12 @@ bigintToInt8 = fromIntegral
 bigintToInt16 :: Integer -> Int16
 bigintToInt16 = fromIntegral
 
--- | Convert a bigint (Integer) to an int32.
+-- | Convert a bigint (Integer) to an int32. Result type is Int (not Int32) because
+-- Hydra's Int32 term is represented natively as Int -- but Int is host-word-sized
+-- (64-bit here), so narrow explicitly through the genuinely-32-bit Int32 type first
+-- to get two's-complement wraparound, then widen back to Int.
 bigintToInt32 :: Integer -> Int
-bigintToInt32 = fromIntegral
+bigintToInt32 = fromIntegral . (fromIntegral :: Integer -> Int32)
 
 -- | Convert a bigint (Integer) to an int64.
 bigintToInt64 :: Integer -> Int64

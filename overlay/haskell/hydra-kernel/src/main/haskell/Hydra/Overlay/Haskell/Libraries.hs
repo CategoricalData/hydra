@@ -184,6 +184,29 @@ compareDecimals a b
     ea = Sci.base10Exponent a
     eb = Sci.base10Exponent b
 
+-- | Extract a float payload as a Double, unwrapping the same DSL-injection shape
+-- decimalPayload handles. Both Float32 and Float64 widen to Double for comparison,
+-- matching the other hosts' float overlay comparators.
+floatPayload :: Term -> Maybe Double
+floatPayload (TermLiteral (LiteralFloat (FloatValueFloat32 f))) = Just (realToFrac f)
+floatPayload (TermLiteral (LiteralFloat (FloatValueFloat64 d))) = Just d
+floatPayload (TermInject (Injection _ (Field _ t))) = floatPayload t
+floatPayload _ = Nothing
+
+-- | IEEE 754 extended totalOrder comparison (docs/specification/ordering-and-equality.md):
+-- NaN is greatest and equal to itself; -0.0 < +0.0. Native Haskell compare/== on
+-- Double/Float disagree on both (NaN is unordered; -0.0 == 0.0).
+compareFloats :: Double -> Double -> Ordering
+compareFloats a b
+  | aNaN || bNaN = if aNaN && bNaN then EQ else if aNaN then GT else LT
+  | a < b = LT
+  | a > b = GT
+  | a == 0 && b == 0 = compare (isNegativeZero b) (isNegativeZero a)
+  | otherwise = EQ
+  where
+    aNaN = isNaN a
+    bNaN = isNaN b
+
 -- | Structural comparison of two terms, per docs/specification/ordering-and-equality.md:
 -- records compare field-by-field in declaration order, unions by declared-variant order
 -- then payload (the derived Ord on Term/Literal/etc. already implements this via
@@ -198,9 +221,10 @@ compareDecimals a b
 -- a decimal, derived Ord already agrees with structural comparison, since Scientific's Eq/Ord
 -- is the only actual divergence point from the spec).
 termCompareOrdering :: Term -> Term -> Ordering
-termCompareOrdering x y = case (decimalPayload x, decimalPayload y) of
-  (Just a, Just b) -> compareDecimals a b
-  _ -> case (x, y) of
+termCompareOrdering x y
+  | Just a <- decimalPayload x, Just b <- decimalPayload y = compareDecimals a b
+  | Just a <- floatPayload x, Just b <- floatPayload y = compareFloats a b
+  | otherwise = case (x, y) of
     (TermAnnotated (AnnotatedTerm bx ax), TermAnnotated (AnnotatedTerm by ay)) ->
       termCompareOrdering bx by <> termCompareOrdering ax ay
     (TermApplication (Application fx ax), TermApplication (Application fy ay)) ->
