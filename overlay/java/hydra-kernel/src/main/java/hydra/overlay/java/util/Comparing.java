@@ -45,8 +45,32 @@ public class Comparing {
             return compareSets((Set<?>) a, (Set<?>) b);
         }
 
+        // Strings: compare by Unicode code point rather than UTF-16 code unit
+        // (native String.compareTo), which misorders an astral character (code
+        // point > 0xFFFF, a surrogate pair) relative to a BMP private-use
+        // character (U+E000-FFFF, a single unit).
+        if (a instanceof String && b instanceof String) {
+            return compareStringsByCodePoint((String) a, (String) b);
+        }
+
         // Default: use Comparable
         return ((Comparable<Object>) a).compareTo(b);
+    }
+
+    /**
+     * Compares two strings by Unicode code point rather than UTF-16 code unit.
+     */
+    public static int compareStringsByCodePoint(String a, String b) {
+        int i = 0, j = 0;
+        int lenA = a.length(), lenB = b.length();
+        while (i < lenA && j < lenB) {
+            int cpA = a.codePointAt(i);
+            int cpB = b.codePointAt(j);
+            if (cpA != cpB) return Integer.compare(cpA, cpB);
+            i += Character.charCount(cpA);
+            j += Character.charCount(cpB);
+        }
+        return Integer.compare(lenA - i, lenB - j);
     }
 
     /**
