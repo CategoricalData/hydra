@@ -87,6 +87,13 @@
     (define (hydra-decimal-coefficient d) (car d))
     (define (hydra-decimal-scale d) (cdr d))
 
+    ;; Two's-complement narrowing to a signed N-bit range (math.scm's wrap-int is
+    ;; internal to that library and not exported, so it's re-defined locally here).
+    (define (hydra-narrow-signed bits x)
+      (let* ((m (expt 2 bits))
+             (w (modulo x m)))
+        (if (>= w (/ m 2)) (- w m) w)))
+
     ;; bigint_to_decimal :: BigInteger -> Decimal
     ;; Exact: a bigint is a decimal with scale 0.
     (define hydra_overlay_scheme_lib_literals_bigint_to_decimal
@@ -101,22 +108,22 @@
     ;; bigint_to_int8 :: BigInteger -> Int8
     (define hydra_overlay_scheme_lib_literals_bigint_to_int8
       (lambda (x)
-        x))
+        (hydra-narrow-signed 8 x)))
 
     ;; bigint_to_int16 :: BigInteger -> Int16
     (define hydra_overlay_scheme_lib_literals_bigint_to_int16
       (lambda (x)
-        x))
+        (hydra-narrow-signed 16 x)))
 
     ;; bigint_to_int32 :: BigInteger -> Int32
     (define hydra_overlay_scheme_lib_literals_bigint_to_int32
       (lambda (x)
-        x))
+        (hydra-narrow-signed 32 x)))
 
     ;; bigint_to_int64 :: BigInteger -> Int64
     (define hydra_overlay_scheme_lib_literals_bigint_to_int64
       (lambda (x)
-        x))
+        (hydra-narrow-signed 64 x)))
 
     ;; bigint_to_uint :: BigInteger -> Uint
     (define hydra_overlay_scheme_lib_literals_bigint_to_uint
@@ -383,7 +390,7 @@
     (define hydra_overlay_scheme_lib_literals_parse_uint32
       (lambda (s)
         (let ((n (string->number s)))
-          (if (and n (integer? n) (>= n 0))
+          (if (and n (integer? n) (>= n 0) (<= n 4294967295))
               (list 'given (exact n))
               (list 'none)))))
 
@@ -391,7 +398,7 @@
     (define hydra_overlay_scheme_lib_literals_parse_uint64
       (lambda (s)
         (let ((n (string->number s)))
-          (if (and n (integer? n) (>= n 0))
+          (if (and n (integer? n) (>= n 0) (<= n 18446744073709551615))
               (list 'given (exact n))
               (list 'none)))))
 

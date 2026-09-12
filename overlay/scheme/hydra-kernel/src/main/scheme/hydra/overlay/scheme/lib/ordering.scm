@@ -1,5 +1,5 @@
 (define-library (hydra overlay scheme lib ordering)
-  (import (scheme base) (scheme write)
+  (import (scheme base) (scheme write) (scheme inexact)
           (ice-9 vlist)
           (only (guile) make-hash-table hash-ref hash-set! sort))
   (export hydra_overlay_scheme_lib_ordering_compare
@@ -114,6 +114,21 @@
     (define (generic-compare a b)
       (cond
         ((equal? a b) 0)
+        ((and (real? a) (real? b) (inexact? a) (inexact? b))
+         ;; IEEE 754 extended totalOrder (docs/specification/ordering-and-equality.md):
+         ;; NaN is greatest and equal to itself; -0.0 < +0.0. Native < / = treat
+         ;; NaN as unordered and (= -0.0 0.0) as true, so both need special-casing.
+         (let ((na (nan? a)) (nb (nan? b)))
+           (cond
+             ((and na nb) 0)
+             (na 1)
+             (nb -1)
+             ((< a b) -1)
+             ((> a b) 1)
+             ((and (= a 0) (= b 0))
+              (let ((nega (negative? (/ 1.0 a))) (negb (negative? (/ 1.0 b))))
+                (cond ((eq? nega negb) 0) (nega -1) (else 1))))
+             (else 0))))
         ((and (number? a) (number? b))
          (cond ((< a b) -1) ((= a b) 0) (else 1)))
         ((and (string? a) (string? b))
