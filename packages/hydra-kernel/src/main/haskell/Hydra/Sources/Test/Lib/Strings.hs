@@ -155,7 +155,13 @@ allTests = define "allTests" $
         test "second of combining pair" 1 "e\769" (Just 769),   -- combining acute accent
         test "out of bounds" 5 "hello" Nothing,
         test "negative index" (-1) "hello" Nothing,
-        test "empty string" 0 "" Nothing]
+        test "empty string" 0 "" Nothing,
+        -- Astral (non-BMP) characters (#745): an index scheme that counts
+        -- UTF-16 code units instead of code points desyncs once an astral
+        -- character (outside the Basic Multilingual Plane) appears before
+        -- the target index.
+        test "before an astral character" 0 "\127757a" (Just 127757),  -- 🌍
+        test "after an astral character" 1 "\127757a" (Just 97)]       -- 🌍, a
         where
           test name idx s result = primCase name DefStrings.charAt [int32 idx, string s] (optionalInt32 result)
           optionalInt32 Nothing = Core.termOptional nothing
@@ -205,7 +211,12 @@ allTests = define "allTests" $
         test "unicode content" "," "\241,\19990,\127757" ["\241", "\19990", "\127757"],  -- ñ,世,🌍
 
         -- Special characters
-        test "newline separator" "\n" "line1\nline2\nline3" ["line1", "line2", "line3"]]
+        test "newline separator" "\n" "line1\nline2\nline3" ["line1", "line2", "line3"],
+
+        -- Astral (non-BMP) characters (#745): an empty-separator split that
+        -- operates on UTF-16 code units instead of code points breaks a
+        -- surrogate pair apart.
+        test "empty separator with astral character" "" "a\127757b" ["", "a", "\127757", "b"]]
         where
           test name s0 s1 result = evalPair name showStringList
             (Strings.splitOn (Phantoms.string s0) (Phantoms.string s1))

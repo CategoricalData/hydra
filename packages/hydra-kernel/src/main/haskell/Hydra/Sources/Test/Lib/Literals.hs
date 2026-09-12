@@ -42,7 +42,12 @@ literalsBigintToInt32 :: TypedTerm TestGroup
 literalsBigintToInt32 = subgroup "bigintToInt32" [
   test "positive" 42 42,
   test "negative" (-42) (-42),
-  test "zero" 0 0]
+  test "zero" 0 0,
+  -- Two's-complement narrowing (#745): Int32 is represented as a native Int
+  -- on hosts where that's word-sized (e.g. 64-bit Haskell Int), so a naive
+  -- `fromIntegral` never narrows -- these catch that regression.
+  test "wraps at max int32 + 1" 2147483648 (-2147483648),
+  test "wraps at -1 equivalent" 4294967295 (-1)]
   where
     test name x result = primCase name DefLiterals.bigintToInt32 [bigint x] (int32 result)
 
@@ -114,7 +119,11 @@ literalsUint8ToBigint = subgroup "uint8ToBigint" [
 literalsBigintToInt16 :: TypedTerm TestGroup
 literalsBigintToInt16 = subgroup "bigintToInt16" [
   test "positive" 1000 1000,
-  test "negative" (-1000) (-1000)]
+  test "negative" (-1000) (-1000),
+  -- Two's-complement narrowing (#745): a naive host impl (identity, no
+  -- narrowing) fails these.
+  test "wraps at max int16 + 1" 32768 (-32768),
+  test "wraps at -1 equivalent" 65535 (-1)]
   where
     test name x result = primCase name DefLiterals.bigintToInt16 [bigint x] (int16 result)
 
@@ -122,13 +131,24 @@ literalsBigintToInt64 :: TypedTerm TestGroup
 literalsBigintToInt64 = subgroup "bigintToInt64" [
   test "positive" 1000000 1000000,
   test "negative" (-1000000) (-1000000)]
+  -- No wrap-boundary case here (unlike int8/16/32): the genuine int64 boundary
+  -- (2^63) exceeds 2^53, JS Number's exact-integer ceiling, and the TypeScript host
+  -- represents int64 terms as a native `number` -- a pre-existing scope limitation
+  -- independent of #745 (every other host uses a true 64-bit/bigint representation).
+  -- A boundary value small enough to round-trip exactly in a JS number would be far
+  -- too small to actually exercise int64 wraparound, so there is no value that both
+  -- proves the fix and is representable on every host; the fix itself (Lib/Literals.hs
+  -- bigintToInt64, and the equivalent per-host narrowing) is still applied uniformly.
   where
     test name x result = primCase name DefLiterals.bigintToInt64 [bigint x] (int64 result)
 
 literalsBigintToInt8 :: TypedTerm TestGroup
 literalsBigintToInt8 = subgroup "bigintToInt8" [
   test "positive" 42 42,
-  test "negative" (-42) (-42)]
+  test "negative" (-42) (-42),
+  -- Two's-complement narrowing (#745).
+  test "wraps at max int8 + 1" 128 (-128),
+  test "wraps at -1 equivalent" 255 (-1)]
   where
     test name x result = primCase name DefLiterals.bigintToInt8 [bigint x] (int8 result)
 
@@ -559,7 +579,11 @@ literalsParseUint32 = subgroup "parseUint32" [
   testJust "zero" "0" 0,
   testJust "typical" "100000" 100000,
   testNothing "invalid" "abc",
-  testNothing "negative" "-1"]
+  testNothing "negative" "-1",
+  -- Upper-bound check (#745): a naive impl that only checks >= 0 accepts an
+  -- out-of-range value instead of rejecting it.
+  testJust "max value" "4294967295" 4294967295,
+  testNothing "overflow" "4294967296"]
   where
     testJust name x result = primCase name DefLiterals.parseUint32 [string x] (Core.termOptional $ just (uint32 result))
     testNothing name x = primCase name DefLiterals.parseUint32 [string x] (Core.termOptional nothing)
@@ -569,7 +593,15 @@ literalsParseUint64 = subgroup "parseUint64" [
   testJust "zero" "0" 0,
   testJust "typical" "1000000" 1000000,
   testNothing "invalid" "abc",
-  testNothing "negative" "-1"]
+  testNothing "negative" "-1",
+  -- Upper-bound check (#745). "large in-range value" is well within 2^53 (JS Number's
+  -- exact-integer ceiling) rather than the genuine uint64 max: the TypeScript host
+  -- represents uint64 terms as a native `number` (a pre-existing scope limitation
+  -- independent of #745), so the true max (2^64-1) cannot round-trip exactly there.
+  -- The overflow-rejection case below doesn't depend on exact-value round-tripping,
+  -- so it still exercises the true boundary (one past the real uint64 max).
+  testJust "large in-range value" "9007199254740991" 9007199254740991,
+  testNothing "overflow" "18446744073709551616"]
   where
     testJust name x result = primCase name DefLiterals.parseUint64 [string x] (Core.termOptional $ just (uint64 result))
     testNothing name x = primCase name DefLiterals.parseUint64 [string x] (Core.termOptional nothing)

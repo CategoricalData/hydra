@@ -42,7 +42,8 @@ allTests = definitionInModule module_ "allTests" $
     supergroup "hydra.lib.equality primitives" [
       equalityEqual,
       equalityEqualDecimals,
-      equalityEqualCollections]
+      equalityEqualCollections,
+      equalityEqualFloats]
 
 equalityEqual :: TypedTerm TestGroup
 equalityEqual = subgroup "equal" [
@@ -86,3 +87,18 @@ equalityEqualCollections = subgroup "equal collections" [
     test name x y result = primCase name DefEquality.equal [x, y] result
     decimalOf coefficient scale = decimal (Sci.scientific coefficient (negate scale))
     mapOf key value = Terms.map $ Phantoms.map $ M.singleton (string key) value
+
+-- Float equality (#745): IEEE 754 extended totalOrder semantics
+-- (docs/specification/ordering-and-equality.md) -- NaN is equal to itself, and
+-- -0.0 is unequal to +0.0. A host that delegates to its native == disagrees on
+-- both (NaN != NaN, -0.0 == 0.0 natively).
+equalityEqualFloats :: TypedTerm TestGroup
+equalityEqualFloats = subgroup "equal floats" [
+  test "NaN equal to itself" (float64 nan) (float64 nan) true,
+  test "negative zero unequal to positive zero" (float64 (-0.0)) (float64 0.0) false,
+  test "positive zero equal to itself" (float64 0.0) (float64 0.0) true,
+  test "ordinary equal values" (float64 1.5) (float64 1.5) true,
+  test "ordinary unequal values" (float64 1.5) (float64 2.5) false]
+  where
+    test name x y result = primCase name DefEquality.equal [x, y] result
+    nan = 0/0 :: Double

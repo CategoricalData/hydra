@@ -96,7 +96,12 @@ orderingCompareStrings = subgroup "compare strings" [
   test "equal" "hello" "hello" "equalTo",
   test "greater than (lexicographic)" "zebra" "apple" "greaterThan",
   test "empty vs non-empty" "" "a" "lessThan",
-  test "prefix vs longer" "ab" "abc" "lessThan"]
+  test "prefix vs longer" "ab" "abc" "lessThan",
+  -- Astral (non-BMP) vs. BMP private-use character (#745): comparing by
+  -- UTF-16 code unit instead of code point misorders an astral character
+  -- (code point > 0xFFFF, encoded as a surrogate pair starting near 0xD800)
+  -- relative to a BMP private-use character (U+E000-FFFF, a single unit).
+  test "astral character greater than BMP private-use character" "\127757" "\xE000" "greaterThan"]
   where
     test testName x y resultField = primCase testName DefOrdering.compare [string x, string y] (injectUnit (name "hydra.util.Comparison") resultField)
 
