@@ -1,24 +1,28 @@
-(ns hydra.overlay.clojure.lib.equality
-  (:require [hydra.overlay.clojure.lib.ordering :refer [generic-compare]]))
+(ns hydra.overlay.clojure.lib.equality)
+
+;; A Literal.decimal wrapped as a Hydra term, as `equal`'s generic x/x TermCoder (which just
+;; passes terms through unchanged -- see prims.clj's tc-variable) actually receives it:
+;; (:literal (:decimal <BigDecimal>)), not a bare BigDecimal.
+(defn- decimal-term? [t]
+  (and (sequential? t) (= (first t) :literal)
+       (let [lit (second t)]
+         (and (sequential? lit) (= (first lit) :decimal)))))
+
+(defn- decimal-term-value [t] (second (second t)))
 
 ;; equal :: a -> a -> Bool
-;; Delegates to generic-compare (hydra.overlay.clojure.lib.ordering) -- the
-;; established pattern already used by maps.clj/sets.clj/lists.clj/eithers.clj
-;; -- rather than a separate implementation, per
-;; docs/specification/ordering-and-equality.md: equal a b holds exactly when
-;; compare a b is equalTo.
-;;
-;; This also fixes a bug where a bare top-level (:literal (:decimal ...)) term
-;; got the correct scale-sensitive comparison (via a dedicated decimal-term?
-;; check, using BigDecimal .equals instead of Clojure's scale-blind numeric-
-;; tower `=`), but a decimal NESTED inside a record/map (e.g. a Field's term,
-;; or a map value) fell straight through to native `=`, which recurses
-;; structurally but compares any BigDecimal leaf it reaches with scale-blind
-;; equality ((= 1.10M 1.1M) => true) -- silently wrong for exactly the values
-;; docs/specification/ordering-and-equality.md's decimal scale-distinctness
-;; provision exists to distinguish. generic-compare's decimal branch is
-;; unconditional (used at every recursion depth, not just the top level), so
-;; delegating to it is correct at any nesting depth.
 (def hydra_overlay_clojure_lib_equality_equal
   "Check if two values are equal."
-  (fn [a] (fn [b] (zero? (generic-compare a b)))))
+  (fn [a] (fn [b]
+    ;; Hydra decimal equality is scale-distinct (docs/specification/ordering-and-equality.md):
+    ;; 1.10 and 1.1 are the same number but distinct, unequal values (coefficient AND scale
+    ;; must agree). Clojure's own `=` on BigDecimal (and on the (:literal (:decimal ...)) term
+    ;; wrapping it, since = recurses structurally) is numeric-tower equality (scale-blind:
+    ;; (= 1.10M 1.1M) is true), the opposite of what's needed -- use BigDecimal's .equals
+    ;; (scale-sensitive) instead. A decimal is never compared against a float/double in practice
+    ;; (#727 -- Clojure is the only Lisp dialect with a real decimal representation, and
+    ;; float/decimal are distinct Hydra literal types never adapted into each other for a
+    ;; language that supports both), so no cross-type coercion is needed here.
+    (if (and (decimal-term? a) (decimal-term? b))
+      (.equals ^java.math.BigDecimal (decimal-term-value a) (decimal-term-value b))
+      (= a b)))))

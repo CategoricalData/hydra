@@ -1,16 +1,18 @@
 // Hand-written runtime: hydra.lib.equality primitives.
 //
-// Hydra equality is structural (docs/specification/ordering-and-equality.md):
-// two values are equal exactly when `compare` (hydra.lib.ordering, ./ordering.ts)
-// returns `equalTo`. Delegate to the structural comparator there rather than
-// reimplementing equality separately -- see ordering.ts for the rationale
-// (print-based/stringify comparison is not spec-conformant for structured
-// values: it is sensitive to JSON key order, float/decimal rendering, and
-// set/map iteration order).
+// Hydra equality is structural — JS reference equality only works for primitives.
+// For objects we use JSON.stringify as a pragmatic fallback; this matches the
+// behavior of Hydra's encode-and-compare semantics for serializable data.
 
-import { compareValues } from "./ordering.js";
+// Structural stringify that tolerates bigint (plain JSON.stringify throws on
+// bigint). Records like Timespec carry nested bigint fields (int64/uint32 encode
+// as bigint in TS), so any structural compare over them must be bigint-safe.
+// Exported for reuse by hydra.lib.ordering (see ./ordering.ts).
+export const stableStringify = (x: unknown): string =>
+  JSON.stringify(x, (_k, v) => (typeof v === "bigint" ? `${v}n` : v));
 
 export const equal = <A>(a: A, b: A): boolean => {
   if (Object.is(a, b)) return true;
-  return compareValues(a, b) === 0;
+  if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) return false;
+  return stableStringify(a) === stableStringify(b);
 };

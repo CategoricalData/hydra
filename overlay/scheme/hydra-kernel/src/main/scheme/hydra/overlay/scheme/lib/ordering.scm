@@ -1,7 +1,5 @@
 (define-library (hydra overlay scheme lib ordering)
-  (import (scheme base) (scheme write)
-          (ice-9 vlist)
-          (only (guile) make-hash-table hash-ref hash-set! sort))
+  (import (scheme base) (scheme write))
   (export hydra_overlay_scheme_lib_ordering_compare
           hydra_overlay_scheme_lib_ordering_gt
           hydra_overlay_scheme_lib_ordering_gte
@@ -39,78 +37,6 @@
              (nb (* cb (expt 10 (- max-scale sb)))))
         (cond ((< na nb) -1) ((> na nb) 1) (else (- sa sb)))))
 
-    ;; Declared-variant order for each hydra.core union family, transcribed
-    ;; from the generated hydra/core.scm (hydra_core_term-variants,
-    ;; hydra_core_type-variants, etc.), which in turn come from the DSL
-    ;; declaration order (packages/hydra-kernel/.../Sources/Kernel/Types/
-    ;; Core.hs). Mirrors Python's _VARIANT_ORDER table
-    ;; (overlay/python/.../util/_compare.py) -- the established #718
-    ;; precedent hand-authors variant order for kernel types only;
-    ;; non-kernel (user-schema) unions fall back to a still-deterministic
-    ;; but non-declared-order tag comparison (see generic-compare's symbol
-    ;; branch below). Keyed by family name (not by tag alone): a union
-    ;; value's tag symbol alone carries no runtime type identity, and tags
-    ;; collide across unrelated unions repo-wide (literal, map, unit, etc.),
-    ;; so a single flat tag->ordinal table would be unsound. Hydra's static
-    ;; typing guarantees compare/equal are only ever called on same-typed
-    ;; values (docs/specification/ordering-and-equality.md), so it is safe
-    ;; to resolve the family from BOTH sides' tags and require them to agree.
-    (define variant-order
-      (list
-       (cons 'term '(annotated application cases either lambda let list
-                      literal map optional pair project record set
-                      type_lambda type_application inject unit unwrap
-                      variable wrap))
-       (cons 'type '(annotated application effect either forall function
-                      list literal map optional pair record set union
-                      unit variable void wrap))
-       (cons 'literal '(binary boolean decimal float integer string))
-       (cons 'integer '(bigint int8 int16 int32 int64 uint8 uint16 uint32 uint64))
-       (cons 'float '(float32 float64))))
-
-    ;; If tags A and B both belong to the SAME known family, return
-    ;; (ordinal-a . ordinal-b); otherwise #f (unknown family, or a family
-    ;; mismatch that should not arise under Hydra's static typing --
-    ;; callers fall back to a deterministic tag compare in that case).
-    (define (list-position x lst)
-      (let loop ((rest lst) (i 0))
-        (cond ((null? rest) #f)
-              ((eq? (car rest) x) i)
-              (else (loop (cdr rest) (+ i 1))))))
-    (define (variant-ordinals tag-a tag-b)
-      (let loop ((entries variant-order))
-        (if (null? entries) #f
-            (let* ((variants (cdar entries))
-                   (pa (list-position tag-a variants))
-                   (pb (list-position tag-b variants)))
-              (if (and pa pb) (cons pa pb) (loop (cdr entries)))))))
-
-    ;; Term.map's payload (overlay/scheme/lib/maps.scm) is a Guile vhash --
-    ;; an opaque type (vlist? #t, pair? #f), NOT cons-shaped, so it never
-    ;; reaches the (pair? a) (pair? b) branch below and would otherwise fall
-    ;; all the way to the print-based `else` branch: two vhashes with
-    ;; identical logical content but different insertion order (vhash-cons
-    ;; prepends physical entries; iteration order is insertion order, not
-    ;; key order) would compare via `write`, which reflects insertion order,
-    ;; not content -- always wrong on shape/order-divergent builds. This
-    ;; mirrors the same bug found in Common Lisp's rbnode maps/sets and
-    ;; Emacs Lisp's cons-alist maps (#742); TypeScript's CanonMap branch
-    ;; (ordering.ts) is the same fix shape again.
-    ;;
-    ;; A self-contained unique-entries+sort helper is defined here (not
-    ;; reused from maps.scm's private vhash-sorted-entries) to avoid a
-    ;; circular import: maps.scm already imports generic-compare FROM this
-    ;; library (to sort map entries by key), so this library cannot import
-    ;; back from maps.scm.
-    (define (vhash-sorted-unique-entries vh)
-      (let ((seen (make-hash-table)))
-        (sort
-          (vhash-fold (lambda (k v acc)
-                        (if (hash-ref seen k #f) acc
-                            (begin (hash-set! seen k #t) (cons (cons k v) acc))))
-                      '() vh)
-          (lambda (x y) (< (generic-compare (car x) (car y)) 0)))))
-
     (define (generic-compare a b)
       (cond
         ((equal? a b) 0)
@@ -120,31 +46,13 @@
          (cond ((string<? a b) -1) ((string=? a b) 0) (else 1)))
         ((and (char? a) (char? b))
          (cond ((char<? a b) -1) ((char=? a b) 0) (else 1)))
+        ((and (symbol? a) (symbol? b))
+         (let ((sa (symbol->string a)) (sb (symbol->string b)))
+           (cond ((string<? sa sb) -1) ((string=? sa sb) 0) (else 1))))
         ((and (boolean? a) (boolean? b))
          (cond ((and (not a) b) -1) ((eq? a b) 0) (else 1)))
         ((and (hydra-decimal-term-p a) (hydra-decimal-term-p b))
          (hydra-compare-decimals (hydra-decimal-term-value a) (hydra-decimal-term-value b)))
-        ((and (vlist? a) (vlist? b))
-         (generic-compare (vhash-sorted-unique-entries a) (vhash-sorted-unique-entries b)))
-        ;; Union values: (tag . payload) or (tag payload ...). Compare by
-        ;; declared-variant order (when both tags resolve to the same known
-        ;; kernel family) rather than the symbol's print/alphabetical
-        ;; order; same variant (or unknown family) recurses into the payload.
-        ((and (pair? a) (pair? b) (symbol? (car a)) (symbol? (car b)))
-         (if (eq? (car a) (car b))
-             (generic-compare (cdr a) (cdr b))
-             (let ((ordinals (variant-ordinals (car a) (car b))))
-               (if ordinals
-                   (- (car ordinals) (cdr ordinals))
-                   ;; Unknown (non-kernel) family: no declared-order table
-                   ;; available -- fall back to a deterministic (not
-                   ;; print-based) symbol compare. Same scope limitation
-                   ;; #718 carries on every host but Java.
-                   (let ((sa (symbol->string (car a))) (sb (symbol->string (car b))))
-                     (cond ((string<? sa sb) -1) ((string=? sa sb) 0) (else 1)))))))
-        ((and (symbol? a) (symbol? b))
-         (let ((sa (symbol->string a)) (sb (symbol->string b)))
-           (cond ((string<? sa sb) -1) ((string=? sa sb) 0) (else 1))))
         ((and (pair? a) (pair? b))
          (let ((c (generic-compare (car a) (car b))))
            (if (= c 0)

@@ -1,7 +1,6 @@
 (define-library (hydra overlay scheme lib lists)
   (import (scheme base)
-          (scheme write)
-          (only (hydra overlay scheme lib ordering) generic-compare))
+          (scheme write))
   (export hydra_overlay_scheme_lib_lists_concat
           hydra_overlay_scheme_lib_lists_concat2
           hydra_overlay_scheme_lib_lists_cons
@@ -40,12 +39,34 @@
           hydra_overlay_scheme_lib_lists_zip_with)
   (begin
 
-    ;; generic-compare is imported from (hydra overlay scheme lib ordering)
-    ;; -- see that library for the structural-comparison implementation
-    ;; (declared-variant-order for unions, decimal scale tiebreak, etc.).
-    ;; Previously this library carried its own copy, independently
-    ;; print-based-fallback-buggy from the one in ordering.scm/maps.scm/
-    ;; sets.scm (#742).
+    (define (obj->string x)
+      (let ((p (open-output-string)))
+        (write x p)
+        (get-output-string p)))
+
+    (define (generic-compare a b)
+      (cond
+        ((equal? a b) 0)  ;; Fast path: if equal, no need for ordering
+        ((and (number? a) (number? b))
+         (cond ((< a b) -1) ((= a b) 0) (else 1)))
+        ((and (string? a) (string? b))
+         (cond ((string<? a b) -1) ((string=? a b) 0) (else 1)))
+        ((and (char? a) (char? b))
+         (cond ((char<? a b) -1) ((char=? a b) 0) (else 1)))
+        ((and (symbol? a) (symbol? b))
+         (let ((sa (symbol->string a)) (sb (symbol->string b)))
+           (cond ((string<? sa sb) -1) ((string=? sa sb) 0) (else 1))))
+        ((and (boolean? a) (boolean? b))
+         (cond ((and (not a) b) -1) ((eq? a b) 0) (else 1)))
+        ((and (pair? a) (pair? b))
+         (let ((c (generic-compare (car a) (car b))))
+           (if (= c 0) (generic-compare (cdr a) (cdr b)) c)))
+        ((and (null? a) (null? b)) 0)
+        ((null? a) -1)
+        ((null? b) 1)
+        ;; Fallback: compare string representations for records and other types
+        (else (let ((sa (obj->string a)) (sb (obj->string b)))
+                (cond ((string<? sa sb) -1) ((string=? sa sb) 0) (else 1))))))
 
     (define (generic<? a b) (< (generic-compare a b) 0))
 
