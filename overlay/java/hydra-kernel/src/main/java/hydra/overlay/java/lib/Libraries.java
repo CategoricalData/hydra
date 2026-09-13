@@ -76,10 +76,10 @@ public class Libraries {
      * Each is registered as a {@link DefaultFallbackPrimitiveFunction}, which evaluates the
      * default term via {@link hydra.Reduction#reduceTerm} rather than running Java logic.
      *
-     * Spike (#609 Stage 2): only lists.takeWhile is wired here, as the validation case for the
-     * reduceTerm-fallback mechanism. Once confirmed sound, the remaining 11 Group-A primitives
-     * (eithers.{apply,compose,pure}, equality.notEqual, functions.{compose,const,flip},
-     * optionals.{foldList,mapList,mapSet}, sets.filter) are wired the same way.
+     * Spike (#609 Stage 2) validated lists.takeWhile; equality.notEqual and functions.{const,flip}
+     * were added under #749. The remaining 8 Group-A primitives (eithers.{apply,compose,pure},
+     * functions.compose, optionals.{foldList,mapList,mapSet}, sets.filter) are wired the same way
+     * as needed.
      */
     private static List<PrimitiveFunction> defaultFallbackPrimitives() {
         Set<String> alreadyNative = new HashSet<>();
@@ -96,7 +96,10 @@ public class Libraries {
 
         ConsList<PrimitiveFunction> fallbacks = ConsList.empty();
         for (hydra.packaging.PrimitiveDefinition def : Arrays.asList(
-                hydra.lib.Lists.takeWhile())) {
+                hydra.lib.Lists.takeWhile(),
+                hydra.lib.Equality.notEqual(),
+                hydra.lib.Functions.const_(),
+                hydra.lib.Functions.flip())) {
             if (!alreadyNative.contains(def.name.value)) {
                 hydra.core.Term defaultImpl = hydra.lib.Defaults.defaultImplementations().get(def.name);
                 if (defaultImpl != null) {
