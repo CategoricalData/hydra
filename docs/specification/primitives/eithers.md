@@ -31,7 +31,7 @@ once `ef` is known to be a `left`.
 `apply ef ex` is `bind ef (λf → map f ex)`; this defining equation is the specification, and
 the default implementation.
 
-Since: 0.18
+Since: 0.17.6
 
 #### bimap — **Draft**
 
@@ -85,7 +85,7 @@ Kleisli composition for either.
 implementation.
 If either `f x` or the second stage produces a `left`, the result is that `left`.
 
-Since: 0.18
+Since: 0.17.6
 
 #### foldList — **Draft**
 
@@ -102,7 +102,7 @@ Equivalent to chaining `bind` over the list.
 `foldList f acc xs` is `hydra.lib.lists.foldl (λe y → bind e (λx → f x y)) (right acc) xs`;
 this defining equation is the specification, and the default implementation.
 
-Since: 0.18 (renamed from `hydra.lib.eithers.foldl`)
+Since: 0.17.6 (renamed from `hydra.lib.eithers.foldl`)
 
 #### isLeft — **Draft**
 
@@ -136,7 +136,7 @@ Construct a `left` (error/exceptional) either value.
 `left x` is `Left x`. The dual constructor to `right`, injecting into the Left
 (error/exceptional) side of an either.
 
-Since: 0.18
+Since: 0.17.6
 
 #### lefts — **Draft**
 
@@ -217,7 +217,7 @@ Returns a pair whose first component contains every `left` value from `xs`, in t
 order, and whose second component contains every `right` value from `xs`, in their original
 order.
 
-Since: 0.18 (renamed from `hydra.lib.eithers.partitionEithers`)
+Since: 0.17.6 (renamed from `hydra.lib.eithers.partitionEithers`)
 
 #### right — **Draft**
 
@@ -229,7 +229,7 @@ Construct a `right` (success/normal) either value.
 `right x` is `Right x`. The dual constructor to `left`, injecting into the Right
 (success/normal) side of an either.
 
-Since: 0.18
+Since: 0.17.6
 
 #### rights — **Draft**
 

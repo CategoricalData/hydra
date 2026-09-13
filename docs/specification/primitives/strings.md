@@ -25,7 +25,7 @@ Returns `given c`, where `c` is the code point at zero-based position `i` of `s`
 `i` is negative or `i` is greater than or equal to `length s`.
 Positions count code points, not bytes and not grapheme clusters.
 
-Since: 0.18 (renamed from `hydra.lib.strings.maybeCharAt`)
+Since: 0.17.6 (renamed from `hydra.lib.strings.maybeCharAt`)
 
 #### concat — **Draft**
 
@@ -37,7 +37,7 @@ Concatenate a list of strings into a single string.
 Returns the string formed by concatenating every string in `xs`, in order.
 `concat []` is the empty string.
 
-Since: 0.18 (renamed from `hydra.lib.strings.cat`)
+Since: 0.17.6 (renamed from `hydra.lib.strings.cat`)
 
 #### concat2 — **Draft**
 
@@ -50,7 +50,7 @@ Returns the concatenation of `s` and `t`: every code point of `s` followed by ev
 of `t`.
 The binary form of `concat`: `concat2 s t` is `concat [s, t]`.
 
-Since: 0.18 (renamed from `hydra.lib.strings.cat2`)
+Since: 0.17.6 (renamed from `hydra.lib.strings.cat2`)
 
 #### fromList — **Draft**
 
@@ -95,7 +95,7 @@ string `s`.
 To join lines, use a newline separator: `join "\n" xs` (this does not append a trailing
 newline; the removed `unlines` did).
 
-Since: 0.18 (renamed from `hydra.lib.strings.intercalate`)
+Since: 0.17.6 (renamed from `hydra.lib.strings.intercalate`)
 
 #### length — **Draft**
 

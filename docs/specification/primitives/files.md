@@ -119,7 +119,7 @@ A recoverable file-system failure is returned as `left` of a
 
 Effectful: writes to the file system.
 
-Since: 0.18
+Since: 0.17.6
 
 #### exists — **Draft**
 
@@ -189,7 +189,7 @@ A recoverable file-system failure — including `path` not being a symbolic link
 
 Effectful: reads from the file system.
 
-Since: 0.18
+Since: 0.17.6
 
 #### removeDirectory — **Draft**
 

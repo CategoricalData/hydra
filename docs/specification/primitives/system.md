@@ -147,7 +147,7 @@ A recoverable failure is returned as `left` of a
 
 Effectful: reads from standard input.
 
-Since: 0.18
+Since: 0.17.6
 
 #### writeStderr — **Draft**
 
@@ -163,7 +163,7 @@ A recoverable failure is returned as `left` of a
 
 Effectful: writes to standard error.
 
-Since: 0.18
+Since: 0.17.6
 
 #### writeStdout — **Draft**
 
@@ -179,4 +179,4 @@ A recoverable failure is returned as `left` of a
 
 Effectful: writes to standard output.
 
-Since: 0.18
+Since: 0.17.6

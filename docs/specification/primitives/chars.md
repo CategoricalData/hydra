@@ -27,7 +27,7 @@ Lo) — and `false` otherwise.
 Alphabetic is broader than cased: letters in scripts without a case distinction are included.
 `isAlphaNum c` is `true` whenever `isAlpha c` is `true`.
 
-Since: 0.18
+Since: 0.17.6
 
 #### isAlphaNum — **Draft**
 
@@ -55,7 +55,7 @@ Unlike the other predicates in this module, this one is deliberately ASCII-only:
 outside the ASCII range (general category Nd) are rejected here, though `isAlphaNum` accepts
 them.
 
-Since: 0.18
+Since: 0.17.6
 
 #### isLower — **Draft**
 

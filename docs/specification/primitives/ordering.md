@@ -32,7 +32,7 @@ defined for the type `t` in [ordering-and-equality.md](../ordering-and-equality.
 Defined for all pairs of values of any type admitted by the `ordering` constraint,
 including all floating-point values.
 
-Since: 0.18 (moved from `hydra.lib.equality.compare`)
+Since: 0.17.6 (moved from `hydra.lib.equality.compare`)
 
 #### gt — **Draft**
 
@@ -43,7 +43,7 @@ Usage: `gt x y`
 Check whether `x` strictly follows `y` in the type's total order:
 `gt x y` is `true` exactly when `compare x y` is `greaterThan`.
 
-Since: 0.18 (moved from `hydra.lib.equality.gt`)
+Since: 0.17.6 (moved from `hydra.lib.equality.gt`)
 
 #### gte — **Draft**
 
@@ -54,7 +54,7 @@ Usage: `gte x y`
 Check whether `x` follows or equals `y` in the type's total order:
 `gte x y` is `true` exactly when `compare x y` is not `lessThan`.
 
-Since: 0.18 (moved from `hydra.lib.equality.gte`)
+Since: 0.17.6 (moved from `hydra.lib.equality.gte`)
 
 #### lt — **Draft**
 
@@ -65,7 +65,7 @@ Usage: `lt x y`
 Check whether `x` strictly precedes `y` in the type's total order:
 `lt x y` is `true` exactly when `compare x y` is `lessThan`.
 
-Since: 0.18 (moved from `hydra.lib.equality.lt`)
+Since: 0.17.6 (moved from `hydra.lib.equality.lt`)
 
 #### lte — **Draft**
 
@@ -76,7 +76,7 @@ Usage: `lte x y`
 Check whether `x` precedes or equals `y` in the type's total order:
 `lte x y` is `true` exactly when `compare x y` is not `greaterThan`.
 
-Since: 0.18 (moved from `hydra.lib.equality.lte`)
+Since: 0.17.6 (moved from `hydra.lib.equality.lte`)
 
 #### max — **Draft**
 
@@ -87,7 +87,7 @@ Usage: `max x y`
 Return the greater of two values in the type's total order; returns `y` when
 `compare x y` is `equalTo`.
 
-Since: 0.18 (moved from `hydra.lib.equality.max`)
+Since: 0.17.6 (moved from `hydra.lib.equality.max`)
 
 #### min — **Draft**
 
@@ -98,4 +98,4 @@ Usage: `min x y`
 Return the lesser of two values in the type's total order; returns `y` when
 `compare x y` is `equalTo`.
 
-Since: 0.18 (moved from `hydra.lib.equality.min`)
+Since: 0.17.6 (moved from `hydra.lib.equality.min`)

@@ -98,7 +98,7 @@ right in list order and threading the accumulator through each step; each elemen
 performed exactly once.
 The described computation produces the final accumulator.
 
-Since: 0.18 (renamed from `hydra.lib.effects.foldl`)
+Since: 0.17.6 (renamed from `hydra.lib.effects.foldl`)
 
 #### map — **Draft**
 
@@ -149,7 +149,7 @@ Describes an effectful computation which applies `f` to each element of `s`, seq
 effects in ascending element order (the order is normative, since the effects are observable),
 and collects the results as a set, deduplicated by the result type's ordering.
 
-Since: 0.18
+Since: 0.17.6
 
 #### pure — **Draft**
 

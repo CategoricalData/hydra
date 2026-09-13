@@ -86,7 +86,7 @@ uint64, bigint) and the two floating-point types (float32, float64).
 `decimal` has no numeric instance: it is a presentation/interchange type, and exact division
 without a precision context is not well-defined; see classes.md for the re-open trigger.
 
-Since: 0.18 (generalized from int32-only; the `numeric` class is #566)
+Since: 0.17.6 (generalized from int32-only; the `numeric` class is #566)
 
 #### asin — **Draft**
 
@@ -234,7 +234,7 @@ See `mod` for the matching floor-division remainder.
 `div`, `mod`, and `rem` generalize over the `integral` class (the nine integer types);
 float division is `divide` (the `fractional` class: float32, float64).
 
-Since: 0.18 (renamed from `hydra.lib.math.maybeDiv`)
+Since: 0.17.6 (renamed from `hydra.lib.math.maybeDiv`)
 
 #### divide — **Draft**
 
@@ -252,7 +252,7 @@ signs; ±0 divided by ±0 is NaN; ±∞ divided by ±∞ is NaN; ±∞ divided b
 Note: integer division is `div` (which returns an optional, since no integer sentinel
 value exists); `divide` has no integer instances.
 
-Since: 0.18
+Since: 0.17.6
 
 #### e — **Draft**
 
@@ -356,7 +356,7 @@ returned by `div x y`; consequently the sign of the result matches the sign of `
 (floor-division convention), e.g. `mod -7 2` is `given 1`.
 See `rem` for the truncated-division counterpart, whose result takes the sign of `x`.
 
-Since: 0.18 (renamed from `hydra.lib.math.maybeMod`)
+Since: 0.17.6 (renamed from `hydra.lib.math.maybeMod`)
 
 #### mul — **Draft**
 
@@ -379,7 +379,7 @@ uint64, bigint) and the two floating-point types (float32, float64).
 `decimal` has no numeric instance: it is a presentation/interchange type, and exact division
 without a precision context is not well-defined; see classes.md for the re-open trigger.
 
-Since: 0.18 (generalized from int32-only; the `numeric` class is #566)
+Since: 0.17.6 (generalized from int32-only; the `numeric` class is #566)
 
 #### negate — **Draft**
 
@@ -400,7 +400,7 @@ uint64, bigint) and the two floating-point types (float32, float64).
 `decimal` has no numeric instance: it is a presentation/interchange type, and exact division
 without a precision context is not well-defined; see classes.md for the re-open trigger.
 
-Since: 0.18 (generalized from int32-only; the `numeric` class is #566)
+Since: 0.17.6 (generalized from int32-only; the `numeric` class is #566)
 
 #### odd — **Draft**
 
@@ -474,7 +474,7 @@ The boundary case `rem -2147483648 -1` is `given 0`: the quotient overflow is ab
 wrapping occurs.
 See `mod` for the floor-division counterpart, whose result takes the sign of `y`.
 
-Since: 0.18 (renamed from `hydra.lib.math.maybeRem`)
+Since: 0.17.6 (renamed from `hydra.lib.math.maybeRem`)
 
 #### round — **Draft**
 
@@ -611,7 +611,7 @@ uint64, bigint) and the two floating-point types (float32, float64).
 `decimal` has no numeric instance: it is a presentation/interchange type, and exact division
 without a precision context is not well-defined; see classes.md for the re-open trigger.
 
-Since: 0.18 (generalized from int32-only; the `numeric` class is #566)
+Since: 0.17.6 (generalized from int32-only; the `numeric` class is #566)
 
 #### tan — **Draft**
 

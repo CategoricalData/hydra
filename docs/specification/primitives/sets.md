@@ -56,7 +56,7 @@ Usage: `filter p s`
 Filter a set by a predicate.
 Returns the subset of `s` containing exactly the elements `x` for which `p x` is `true`.
 
-Since: 0.18
+Since: 0.17.6
 
 #### fromList — **Draft**
 

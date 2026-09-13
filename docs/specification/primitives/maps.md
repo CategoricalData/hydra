@@ -67,7 +67,7 @@ Returns the map containing exactly the bindings of `m1` whose keys do not appear
 Only the key set of `m2` matters; its values are ignored.
 The key-set analogue is `hydra.lib.sets.difference`.
 
-Since: 0.18
+Since: 0.17.6
 
 #### elems — **Draft**
 
@@ -173,7 +173,7 @@ On each common key the value is taken from `m1`; only the key set of `m2` matter
 values are ignored.
 The key-set analogue is `hydra.lib.sets.intersection`.
 
-Since: 0.18
+Since: 0.17.6
 
 #### isEmpty — **Draft**
 
@@ -307,4 +307,4 @@ one map, the binding from the earliest such map in the list wins.
 `unions ms` is equivalent to folding `union` over `ms` from the left, starting from `empty`.
 `unions []` is `empty`, and the bias matches `union` and `hydra.lib.sets.unions`.
 
-Since: 0.18
+Since: 0.17.6

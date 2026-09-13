@@ -39,7 +39,7 @@ Check whether two values are unequal.
 `notEqual x y` is `hydra.lib.logic.not (equal x y)`; this defining equation is the
 specification, and the default implementation.
 
-Since: 0.18
+Since: 0.17.6
 
 #### identity — **Deprecated**
 

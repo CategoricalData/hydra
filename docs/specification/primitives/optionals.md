@@ -87,7 +87,7 @@ If every element is processed, the result is `given` of the final accumulator.
 `foldList f acc xs` is `hydra.lib.lists.foldl (λm y → bind m (λx → f x y)) (given acc) xs`;
 this defining equation is the specification, and the default implementation.
 
-Since: 0.18
+Since: 0.17.6
 
 #### given — **Draft**
 
@@ -99,7 +99,7 @@ Wrap a value in `given`.
 Returns the optional value containing `x`. The constructor for the present case of an
 optional value.
 
-Since: 0.18
+Since: 0.17.6
 
 #### givens — **Draft**
 
@@ -112,7 +112,7 @@ Returns the list of contained values from the `given` elements of `xs`, in their
 order; `none` elements are discarded.
 Parallel to `hydra.lib.eithers.lefts` and `hydra.lib.eithers.rights`.
 
-Since: 0.18 (renamed from `hydra.lib.optionals.cat`)
+Since: 0.17.6 (renamed from `hydra.lib.optionals.cat`)
 
 #### isGiven — **Draft**
 
@@ -160,7 +160,7 @@ If every application yields `given`, the result is `given` of the list of contai
 in their original order.
 The result is `none` as soon as any application yields `none`.
 
-Since: 0.18
+Since: 0.17.6
 
 #### mapSet — **Draft**
 
@@ -174,7 +174,7 @@ If every application yields `given`, the result is `given` of the set of contain
 deduplicated by the result type's ordering.
 The result is `none` as soon as any application yields `none`.
 
-Since: 0.18
+Since: 0.17.6
 
 #### toList — **Draft**
 
@@ -202,7 +202,7 @@ The default comes first — a documented exception to the standard parameter ord
 
 Lazy: `default` — evaluated only when the optional is `none`.
 
-Since: 0.18 (renamed from `hydra.lib.optionals.fromOptional`)
+Since: 0.17.6 (renamed from `hydra.lib.optionals.fromOptional`)
 
 #### cat — **Deprecated**
 

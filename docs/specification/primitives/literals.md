@@ -302,7 +302,7 @@ The accepted syntax is an optional leading minus sign followed by one or more de
 Whitespace is not stripped; leading or trailing whitespace causes parse failure.
 The inverse of `printBigint`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.readBigint`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.readBigint`)
 
 #### parseBoolean — **Draft**
 
@@ -317,7 +317,7 @@ Exactly the lowercase forms `"true"` and `"false"` are accepted; every other inp
 including capitalized or whitespace-padded variants — yields `none`.
 The inverse of `printBoolean`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.readBoolean`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.readBoolean`)
 
 #### parseDecimal — **Draft**
 
@@ -336,7 +336,7 @@ exactly, so `"1.10"` and `"1.1"` parse to distinct decimal values (see
 Input that is not a single complete number token yields `none`.
 The inverse of `printDecimal`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.readDecimal`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.readDecimal`)
 
 #### parseFloat32 — **Draft**
 
@@ -351,7 +351,7 @@ The special values are accepted under exactly the spellings `"NaN"`, `"Infinity"
 `"-Infinity"`, and negative zero as `"-0.0"` — the JSON wire-format sentinel set.
 The inverse of `printFloat32`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.readFloat32`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.readFloat32`)
 
 #### parseFloat64 — **Draft**
 
@@ -366,7 +366,7 @@ The special values are accepted under exactly the spellings `"NaN"`, `"Infinity"
 `"-Infinity"`, and negative zero as `"-0.0"` — the JSON wire-format sentinel set.
 The inverse of `printFloat64`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.readFloat64`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.readFloat64`)
 
 #### parseInt16 — **Draft**
 
@@ -382,7 +382,7 @@ decimal digits, with no surrounding whitespace.
 Out-of-range values cause parse failure; they do not wrap.
 The inverse of `printInt16`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.readInt16`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.readInt16`)
 
 #### parseInt32 — **Draft**
 
@@ -398,7 +398,7 @@ decimal digits, with no surrounding whitespace.
 Out-of-range values cause parse failure; they do not wrap.
 The inverse of `printInt32`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.readInt32`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.readInt32`)
 
 #### parseInt64 — **Draft**
 
@@ -414,7 +414,7 @@ decimal digits, with no surrounding whitespace.
 Out-of-range values cause parse failure; they do not wrap.
 The inverse of `printInt64`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.readInt64`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.readInt64`)
 
 #### parseInt8 — **Draft**
 
@@ -430,7 +430,7 @@ decimal digits, with no surrounding whitespace.
 Out-of-range values cause parse failure; they do not wrap.
 The inverse of `printInt8`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.readInt8`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.readInt8`)
 
 #### parseString — **Draft**
 
@@ -451,7 +451,7 @@ surrogate escapes (which denote no Unicode string, since Hydra strings are seque
 Unicode scalar values).
 The inverse of `printString`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.readString`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.readString`)
 
 #### parseUint16 — **Draft**
 
@@ -467,7 +467,7 @@ whitespace.
 Out-of-range values cause parse failure; they do not wrap.
 The inverse of `printUint16`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.readUint16`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.readUint16`)
 
 #### parseUint32 — **Draft**
 
@@ -483,7 +483,7 @@ whitespace.
 Out-of-range values cause parse failure; they do not wrap.
 The inverse of `printUint32`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.readUint32`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.readUint32`)
 
 #### parseUint64 — **Draft**
 
@@ -499,7 +499,7 @@ whitespace.
 Out-of-range values cause parse failure; they do not wrap.
 The inverse of `printUint64`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.readUint64`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.readUint64`)
 
 #### parseUint8 — **Draft**
 
@@ -515,7 +515,7 @@ whitespace.
 Out-of-range values cause parse failure; they do not wrap.
 The inverse of `printUint8`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.readUint8`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.readUint8`)
 
 #### printBigint — **Draft**
 
@@ -528,7 +528,7 @@ Returns the canonical decimal representation of `x`: an optional leading minus s
 by decimal digits, with no leading zeros (the value 0 renders as `"0"`).
 `parseBigint (printBigint x)` is `given x` for every bigint `x`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.showBigint`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.showBigint`)
 
 #### printBoolean — **Draft**
 
@@ -540,7 +540,7 @@ Render a boolean as a string.
 `printBoolean true` is `"true"`, and `printBoolean false` is `"false"`.
 `parseBoolean (printBoolean x)` is `given x` for both boolean values.
 
-Since: 0.18 (renamed from `hydra.lib.literals.showBoolean`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.showBoolean`)
 
 #### printDecimal — **Draft**
 
@@ -566,7 +566,7 @@ The JSON coder renders and reads number payloads via `printDecimal`/`parseDecima
 this canonical form is therefore also the JSON wire form of a decimal, and scale survives
 the wire.
 
-Since: 0.18 (renamed from `hydra.lib.literals.showDecimal`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.showDecimal`)
 
 #### printFloat32 — **Draft**
 
@@ -580,7 +580,7 @@ Finite values use the shortest decimal representation that round-trips:
 The special values print under exactly the spellings `"NaN"`, `"Infinity"`, and
 `"-Infinity"`, and negative zero as `"-0.0"` — the JSON wire-format sentinel set.
 
-Since: 0.18 (renamed from `hydra.lib.literals.showFloat32`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.showFloat32`)
 
 #### printFloat64 — **Draft**
 
@@ -594,7 +594,7 @@ Finite values use the shortest decimal representation that round-trips:
 The special values print under exactly the spellings `"NaN"`, `"Infinity"`, and
 `"-Infinity"`, and negative zero as `"-0.0"` — the JSON wire-format sentinel set.
 
-Since: 0.18 (renamed from `hydra.lib.literals.showFloat64`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.showFloat64`)
 
 #### printInt16 — **Draft**
 
@@ -607,7 +607,7 @@ Returns the canonical decimal representation of `x`: an optional leading minus s
 by decimal digits, with no leading zeros.
 `parseInt16 (printInt16 x)` is `given x` for every int16 `x`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.showInt16`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.showInt16`)
 
 #### printInt32 — **Draft**
 
@@ -620,7 +620,7 @@ Returns the canonical decimal representation of `x`: an optional leading minus s
 by decimal digits, with no leading zeros.
 `parseInt32 (printInt32 x)` is `given x` for every int32 `x`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.showInt32`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.showInt32`)
 
 #### printInt64 — **Draft**
 
@@ -633,7 +633,7 @@ Returns the canonical decimal representation of `x`: an optional leading minus s
 by decimal digits, with no leading zeros.
 `parseInt64 (printInt64 x)` is `given x` for every int64 `x`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.showInt64`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.showInt64`)
 
 #### printInt8 — **Draft**
 
@@ -646,7 +646,7 @@ Returns the canonical decimal representation of `x`: an optional leading minus s
 by decimal digits, with no leading zeros.
 `parseInt8 (printInt8 x)` is `given x` for every int8 `x`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.showInt8`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.showInt8`)
 
 #### printString — **Draft**
 
@@ -664,7 +664,7 @@ and the control characters U+0000–U+001F are escaped; the short escapes (`\b`,
 characters — including non-ASCII — appear unescaped as raw text.
 `parseString (printString x)` is `given x` for every string `x`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.showString`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.showString`)
 
 #### printUint16 — **Draft**
 
@@ -677,7 +677,7 @@ Returns the canonical decimal representation of `x`: decimal digits with no sign
 leading zeros.
 `parseUint16 (printUint16 x)` is `given x` for every uint16 `x`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.showUint16`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.showUint16`)
 
 #### printUint32 — **Draft**
 
@@ -690,7 +690,7 @@ Returns the canonical decimal representation of `x`: decimal digits with no sign
 leading zeros.
 `parseUint32 (printUint32 x)` is `given x` for every uint32 `x`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.showUint32`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.showUint32`)
 
 #### printUint64 — **Draft**
 
@@ -703,7 +703,7 @@ Returns the canonical decimal representation of `x`: decimal digits with no sign
 leading zeros.
 `parseUint64 (printUint64 x)` is `given x` for every uint64 `x`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.showUint64`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.showUint64`)
 
 #### printUint8 — **Draft**
 
@@ -716,7 +716,7 @@ Returns the canonical decimal representation of `x`: decimal digits with no sign
 leading zeros.
 `parseUint8 (printUint8 x)` is `given x` for every uint8 `x`.
 
-Since: 0.18 (renamed from `hydra.lib.literals.showUint8`)
+Since: 0.17.6 (renamed from `hydra.lib.literals.showUint8`)
 
 #### uint16ToBigint — **Draft**
 

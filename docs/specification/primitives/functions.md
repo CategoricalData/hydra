@@ -22,7 +22,7 @@ Its purpose is to discharge an impossible branch in otherwise-total code, such a
 `left` case of an `either<void, a>` that can never occur.
 The eliminator dual to the (nonexistent) introducer for `void`.
 
-Since: 0.18
+Since: 0.17.6
 
 #### compose — **Draft**
 
@@ -36,7 +36,7 @@ The outer function comes first: `f` is applied to `x`, and `g` is applied to the
 This is ordinary function composition, distinct from the Kleisli `compose` primitives of the
 monad modules.
 
-Since: 0.18
+Since: 0.17.6
 
 #### const — **Draft**
 
@@ -48,7 +48,7 @@ Return the first argument, ignoring the second: `const x y` is `x`; this definin
 the specification.
 Partially applied, `const x` is the constant function which returns `x` on every input.
 
-Since: 0.18
+Since: 0.17.6
 
 #### flip — **Draft**
 
@@ -59,7 +59,7 @@ Usage: `flip f x y`
 Swap the argument order of a binary function: `flip f x y` is `f y x`; this defining equation
 is the specification.
 
-Since: 0.18
+Since: 0.17.6
 
 #### identity — **Draft**
 
@@ -72,4 +72,4 @@ specification.
 `identity` is the unit of `compose`: `compose identity f` and `compose f identity` are both
 `f`.
 
-Since: 0.18 (moved from `hydra.lib.equality.identity`)
+Since: 0.17.6 (moved from `hydra.lib.equality.identity`)

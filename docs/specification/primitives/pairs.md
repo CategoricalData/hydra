@@ -43,7 +43,7 @@ Construct a pair from two values.
 Returns the pair `(x, y)`.
 The type-free pair constructor, useful point-free (e.g. `zipWith pair xs ys`).
 
-Since: 0.18
+Since: 0.17.6
 
 #### second — **Draft**
 

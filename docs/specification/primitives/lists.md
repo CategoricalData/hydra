@@ -40,7 +40,7 @@ when `0 <= i < length xs`, and `none` otherwise.
 Out-of-range indices, including negative indices, are expressed in the codomain as `none`
 rather than as a failure.
 
-Since: 0.18 (renamed from `hydra.lib.lists.maybeAt`)
+Since: 0.17.6 (renamed from `hydra.lib.lists.maybeAt`)
 
 #### bind — **Draft**
 
@@ -66,7 +66,7 @@ Compose two functions that return lists (Kleisli composition in the list monad).
 `compose f g x` is `bind (f x) g`; this defining equation is the specification.
 The results of applying `g` to each element of `f x` are concatenated in order.
 
-Since: 0.18
+Since: 0.17.6
 
 #### concat — **Draft**
 
@@ -114,7 +114,7 @@ Returns the list of distinct elements of `xs`, in the order of their first occur
 Requires an `equality` constraint on the element type.
 Quadratic in the length of `xs` in the worst case.
 
-Since: 0.18 (renamed from `hydra.lib.lists.nub`)
+Since: 0.17.6 (renamed from `hydra.lib.lists.nub`)
 
 #### drop — **Draft**
 
@@ -201,7 +201,7 @@ For the empty list the result is `singleton acc0`.
 For example, if `f acc x` returns the two-element list containing `acc` and the sum of `acc`
 and `x`, then `foldList f 0 xs` computes the sums of all subsets of `xs`.
 
-Since: 0.18
+Since: 0.17.6
 
 #### foldr — **Draft**
 
@@ -241,7 +241,7 @@ Returns `given x` where `x` is the first element of `xs`, or `none` if `xs` is e
 Emptiness is expressed in the codomain as `none` rather than as a failure.
 `uncons` returns the head and tail together.
 
-Since: 0.18 (renamed from `hydra.lib.lists.maybeHead`)
+Since: 0.17.6 (renamed from `hydra.lib.lists.maybeHead`)
 
 #### init — **Draft**
 
@@ -254,7 +254,7 @@ Returns `given ys` where `ys` is `xs` with its last element removed, or `none` i
 empty.
 Emptiness is expressed in the codomain as `none` rather than as a failure.
 
-Since: 0.18 (renamed from `hydra.lib.lists.maybeInit`)
+Since: 0.17.6 (renamed from `hydra.lib.lists.maybeInit`)
 
 #### intersperse — **Draft**
 
@@ -291,7 +291,7 @@ Returns the concatenation of the lists in `xss`, in order, with `sep` inserted b
 consecutive lists.
 `join sep xss` is `concat (intersperse sep xss)`; this defining equation is the specification.
 
-Since: 0.18 (renamed from `hydra.lib.lists.intercalate`)
+Since: 0.17.6 (renamed from `hydra.lib.lists.intercalate`)
 
 #### last — **Draft**
 
@@ -303,7 +303,7 @@ Return the last element of a list, if any.
 Returns `given x` where `x` is the last element of `xs`, or `none` if `xs` is empty.
 Emptiness is expressed in the codomain as `none` rather than as a failure.
 
-Since: 0.18 (renamed from `hydra.lib.lists.maybeLast`)
+Since: 0.17.6 (renamed from `hydra.lib.lists.maybeLast`)
 
 #### length — **Draft**
 
@@ -363,7 +363,7 @@ any element, the result is the empty list.
 `mapList f []` is `singleton []`, the single-element list containing the empty list.
 This is the list-monad instance of the traversal family (`mapList`, `mapOptional`, `mapSet`).
 
-Since: 0.18
+Since: 0.17.6
 
 #### mapOptional — **Draft**
 
@@ -376,7 +376,7 @@ For `none` the result is the single-element list containing `none`.
 For `given x` the result contains `given y` for each element `y` of `f x`, in order.
 This is the list-monad instance of the traversal family, applied to the optional container.
 
-Since: 0.18
+Since: 0.17.6
 
 #### mapSet — **Draft**
 
@@ -394,7 +394,7 @@ is the single-element list containing the empty set.
 The `ordering` constraints follow from the set type contract (see
 [index.md](index.md#type-classes-and-constraints)).
 
-Since: 0.18
+Since: 0.17.6
 
 #### member — **Draft**
 
@@ -406,7 +406,7 @@ Test whether a value is an element of a list.
 Returns `true` if and only if some element of `xs` is equal to `x`.
 Requires an `equality` constraint on the element type.
 
-Since: 0.18 (renamed from `hydra.lib.lists.elem`)
+Since: 0.17.6 (renamed from `hydra.lib.lists.elem`)
 
 #### partition — **Draft**
 
@@ -484,7 +484,7 @@ the key type's total order.
 The sort is stable: elements with equal keys preserve their original relative order.
 Requires an `ordering` constraint on the key type only; the element type is unconstrained.
 
-Since: 0.18 (renamed from `hydra.lib.lists.sortOn`)
+Since: 0.17.6 (renamed from `hydra.lib.lists.sortOn`)
 
 #### span — **Draft**
 
@@ -513,7 +513,7 @@ empty.
 Emptiness is expressed in the codomain as `none` rather than as a failure.
 `uncons` returns the head and tail together.
 
-Since: 0.18 (renamed from `hydra.lib.lists.maybeTail`)
+Since: 0.17.6 (renamed from `hydra.lib.lists.maybeTail`)
 
 #### take — **Draft**
 
@@ -541,7 +541,7 @@ element the result is `xs` unchanged.
 `dropWhile` returns the complementary suffix, and `span p xs` returns the pair of
 `takeWhile p xs` and `dropWhile p xs`.
 
-Since: 0.18
+Since: 0.17.6
 
 #### transpose — **Draft**
 
