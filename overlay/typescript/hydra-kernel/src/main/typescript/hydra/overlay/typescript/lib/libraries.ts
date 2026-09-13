@@ -301,11 +301,15 @@ const defaultFallback = (qname: string, ts: TypeScheme): Primitive => {
 };
 
 // Primitives which have no native TypeScript implementation, but do declare a portable
-// defaultImplementation term. Spike (#609 Stage 3): only lists.takeWhile is wired here so far;
-// once confirmed, the remaining Group-A names (sets.filter among them) are wired the same way.
+// defaultImplementation term. Spike (#609 Stage 3) validated lists.takeWhile; equality.notEqual
+// and functions.{const,flip} were added under #749. The remaining Group-A names (sets.filter
+// among them) are wired the same way as needed.
 const defaultFallbackPrimitives = (alreadyNative: ReadonlySet<string>): readonly Primitive[] => {
   const candidates: ReadonlyArray<readonly [string, TypeScheme]> = [
     ["hydra.lib.lists.takeWhile", scheme(tyFnCurried(tyFn(tyVar("x"), tyBool), tyList(tyVar("x")), tyList(tyVar("x"))), ["x"])],
+    ["hydra.lib.equality.notEqual", schemeC(tyFnCurried(tyVar("x"), tyVar("x"), tyBool), ["x"], [["x", ["equality"]]])],
+    ["hydra.lib.functions.const", scheme(tyFnCurried(tyVar("t1"), tyVar("t2"), tyVar("t1")), ["t1", "t2"])],
+    ["hydra.lib.functions.flip", scheme(tyFnCurried(tyFnCurried(tyVar("t1"), tyVar("t2"), tyVar("t3")), tyVar("t2"), tyVar("t1"), tyVar("t3")), ["t1", "t2", "t3"])],
   ];
   return candidates
     .filter(([qname]) => !alreadyNative.has(qname) && defaultImplementationsByName.has(qname))
