@@ -394,13 +394,21 @@ object Libraries:
     Primitive(mkPrimDef(name, ts), impl)
 
   // Primitives which have no native Scala implementation, but do declare a portable
-  // defaultImplementation term. Spike (#609 Stage 3): only lists.takeWhile is wired here, mirroring
-  // the Java/Python validation case. Once confirmed, the remaining 11 Group-A names are wired the
-  // same way.
+  // defaultImplementation term. Spike (#609 Stage 3) wired lists.takeWhile, mirroring the
+  // Java/Python validation case; #749 added equality.notEqual and functions.{const,flip}. 8
+  // Group-A names remain: eithers.{apply,compose,pure}, functions.compose,
+  // optionals.{foldList,mapList,mapSet}, sets.filter.
   private def defaultFallbackPrimitives(alreadyNative: Set[String]): Map[String, Primitive] =
     val x = tVar("x")
+    val xEq = Seq(("x", Seq("equality")))
+    val t1 = tVar("t1")
+    val t2 = tVar("t2")
+    val t3 = tVar("t3")
     val candidates: Seq[(String, TypeScheme)] = Seq(
       hydra.lib.lists.takeWhile.name -> tScheme(Seq("x"), tFun(tFun(x, tBool), tFun(tList(x), tList(x)))),
+      hydra.lib.equality.notEqual.name -> tSchemeConstrained(xEq, tFun(x, tFun(x, tBool))),
+      hydra.lib.functions.const.name -> tScheme(Seq("t1", "t2"), tFun(t1, tFun(t2, t1))),
+      hydra.lib.functions.flip.name -> tScheme(Seq("t1", "t2", "t3"), tFun(tFun(t1, tFun(t2, t3)), tFun(t2, tFun(t1, t3)))),
     )
     candidates
       .filterNot((name, _) => alreadyNative.contains(name))
