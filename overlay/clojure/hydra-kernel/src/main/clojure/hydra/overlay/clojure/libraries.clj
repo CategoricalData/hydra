@@ -869,16 +869,35 @@
 
 ;; Default-implementation fallbacks (#609 Stage 3): primitives with no native Clojure
 ;; implementation, but which declare a portable defaultImplementation term. Spike: only
-;; lists.takeWhile is wired here, mirroring the Java/Python/Scala validation case. Once
-;; confirmed, the remaining 11 Group-A names are wired the same way.
+;; lists.takeWhile is wired here, mirroring the Java/Python/Scala validation case. Under
+;; #749, equality.notEqual and functions.{const,flip} were added as well. 8 Group-A names
+;; remain: eithers.{apply,compose,pure}, functions.compose, optionals.{foldList,mapList,mapSet},
+;; sets.filter.
 ;; ============================================================
 
 (defn register-default-fallbacks [already-native]
   (let [a (p/tc-variable "a")
+        x (p/tc-variable "x")
+        eq-x {"x" ["equality"]}
+        t1 (p/tc-variable "t1")
+        t2 (p/tc-variable "t2")
+        t3 (p/tc-variable "t3")
         candidates {(prim-name 'hydra.lib.lists/hydra_lib_lists_take_while)
                     (fn [] (p/default-fallback-primitive
                             (prim-name 'hydra.lib.lists/hydra_lib_lists_take_while)
-                            [] [(fun a (p/tc-boolean)) (p/tc-list a)] (p/tc-list a)))}]
+                            [] [(fun a (p/tc-boolean)) (p/tc-list a)] (p/tc-list a)))
+                    (prim-name 'hydra.lib.equality/hydra_lib_equality_not_equal)
+                    (fn [] (p/default-fallback-primitive
+                            (prim-name 'hydra.lib.equality/hydra_lib_equality_not_equal)
+                            [] [x x] (p/tc-boolean) eq-x))
+                    (prim-name 'hydra.lib.functions/hydra_lib_functions_const)
+                    (fn [] (p/default-fallback-primitive
+                            (prim-name 'hydra.lib.functions/hydra_lib_functions_const)
+                            [] [t1 t2] t1))
+                    (prim-name 'hydra.lib.functions/hydra_lib_functions_flip)
+                    (fn [] (p/default-fallback-primitive
+                            (prim-name 'hydra.lib.functions/hydra_lib_functions_flip)
+                            [] [(fun t1 (fun t2 t3)) t2 t1] t3))}]
     (into {} (map (fn [[pname build-fn]] [pname (build-fn)])
                   (remove (fn [[pname _]] (contains? already-native pname)) candidates)))))
 
