@@ -528,12 +528,18 @@
                                                                                               "lambda": {
                                                                                                 "parameter": "t",
                                                                                                 "domain": {"application": {"function": {"variable": "hydra.parsing.ParseSuccess"}, "argument": {"variable": "a"}}},
-                                                                                                "body": {"inject": {"typeName": "hydra.parsing.ParseResult", "field": {"name": "success", "term": {"variable": "t"}}}}}}}},
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"inject": {"typeName": "hydra.parsing.ParseResult", "field": {"name": "success", "term": {"variable": "t"}}}},
+                                                                                                    "type": {"variable": "a"}}}}}}},
                                                                                         "argument": {
                                                                                           "application": {
                                                                                             "function": {
                                                                                               "application": {
-                                                                                                "function": {"application": {"function": {"variable": "hydra.decode.parsing.parseSuccess"}, "argument": {"variable": "a"}}},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.decode.parsing.parseSuccess"}, "type": {"variable": "a"}}},
+                                                                                                    "argument": {"variable": "a"}}},
                                                                                                 "argument": {"variable": "cx"}}},
                                                                                             "argument": {"variable": "input"}}}}}}}}},
                                                                             "type": {"variable": "hydra.core.Name"}}},
@@ -570,7 +576,10 @@
                                                                                               "lambda": {
                                                                                                 "parameter": "t",
                                                                                                 "domain": {"variable": "hydra.parsing.ParseError"},
-                                                                                                "body": {"inject": {"typeName": "hydra.parsing.ParseResult", "field": {"name": "failure", "term": {"variable": "t"}}}}}}}},
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"inject": {"typeName": "hydra.parsing.ParseResult", "field": {"name": "failure", "term": {"variable": "t"}}}},
+                                                                                                    "type": {"variable": "a"}}}}}}},
                                                                                         "argument": {
                                                                                           "application": {
                                                                                             "function": {"application": {"function": {"variable": "hydra.decode.parsing.parseError"}, "argument": {"variable": "cx"}}},

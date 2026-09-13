@@ -13806,12 +13806,32 @@
                                             {
                                               "name": "function",
                                               "term": {
-                                                "application": {
-                                                  "function": {"variable": "hydra.decoding.decodeType"},
-                                                  "argument": {
-                                                    "application": {
-                                                      "function": {"project": {"typeName": "hydra.core.ApplicationType", "fieldName": "function"}},
-                                                      "argument": {"variable": "appType"}}}}}},
+                                                "inject": {
+                                                  "typeName": "hydra.core.Term",
+                                                  "field": {
+                                                    "name": "typeApplication",
+                                                    "term": {
+                                                      "record": {
+                                                        "typeName": "hydra.core.TypeApplicationTerm",
+                                                        "fields": [
+                                                          {
+                                                            "name": "body",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {"variable": "hydra.decoding.decodeType"},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {"project": {"typeName": "hydra.core.ApplicationType", "fieldName": "function"}},
+                                                                    "argument": {"variable": "appType"}}}}}},
+                                                          {
+                                                            "name": "type",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {"variable": "hydra.decoding.decoderFullResultType"},
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "function": {"project": {"typeName": "hydra.core.ApplicationType", "fieldName": "argument"}},
+                                                                    "argument": {"variable": "appType"}}}}}}]}}}}}},
                                             {
                                               "name": "argument",
                                               "term": {
@@ -14096,12 +14116,32 @@
                                                     {
                                                       "name": "function",
                                                       "term": {
-                                                        "application": {
-                                                          "function": {"variable": "hydra.decoding.decodeType"},
-                                                          "argument": {
-                                                            "application": {
-                                                              "function": {"project": {"typeName": "hydra.core.ApplicationType", "fieldName": "function"}},
-                                                              "argument": {"variable": "appType"}}}}}},
+                                                        "inject": {
+                                                          "typeName": "hydra.core.Term",
+                                                          "field": {
+                                                            "name": "typeApplication",
+                                                            "term": {
+                                                              "record": {
+                                                                "typeName": "hydra.core.TypeApplicationTerm",
+                                                                "fields": [
+                                                                  {
+                                                                    "name": "body",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "function": {"variable": "hydra.decoding.decodeType"},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {"project": {"typeName": "hydra.core.ApplicationType", "fieldName": "function"}},
+                                                                            "argument": {"variable": "appType"}}}}}},
+                                                                  {
+                                                                    "name": "type",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "function": {"variable": "hydra.decoding.decoderFullResultType"},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {"project": {"typeName": "hydra.core.ApplicationType", "fieldName": "argument"}},
+                                                                            "argument": {"variable": "appType"}}}}}}]}}}}}},
                                                     {
                                                       "name": "argument",
                                                       "term": {
