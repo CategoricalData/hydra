@@ -100,6 +100,24 @@ issue's work, rename/retire the old branch rather than spawning a second; the
 spawn guard's closed-plan check (keyed on `<type>_<NNN>_`) assumes one branch per
 issue.
 
+**Agent name = worktree name = branch name — this identity is invariant.** An
+agent *is* its worktree directory, and that worktree stays on its home branch of
+the same name for the agent's entire life (`hydra/worktrees/<name>/` checked out
+on branch `<name>`). The three never diverge. A worktree is a fixed directory,
+but the branch it has checked out is *mutable state* — so the coupling must be
+**verified, not assumed**: at session start, after any compaction/interruption,
+and before any land or push, run `git branch --show-current` in the worktree and
+reconcile it against the worktree's own name. If they differ, **stop and surface
+it before doing any work** — you have drifted off your home branch. Do not take
+the current branch from a context summary, from `CLAUDE.md`, or from a `/loop`
+prompt; those state *intent*, and a stale one will silently keep you on the wrong
+branch (git commands with explicit refs — `git push origin <sha>:main`,
+`git -C <path>` — succeed regardless of local `HEAD`, so a mismatch stays hidden
+until something forces it into view). Any *additional* branches or worktrees
+created for a specific short-lived purpose (a scratch verify, a temporary
+bisect) are **transitory** — create, use, and delete them; they are never a home,
+and the agent always returns to its named branch.
+
 ## Agent kinds and the coordinator responsibility
 
 There are exactly **two kinds of agent**, keyed to the [two homes for all
