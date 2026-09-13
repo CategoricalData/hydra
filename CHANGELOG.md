@@ -15,6 +15,55 @@ they are documented here for completeness.
 
 ---
 
+## [0.17.7] - 2026-09-13
+
+Correctness-hardening point release on the 0.17.x line, consolidating the 0.17.6 breaking batch. It
+closes a family of silent cross-host correctness bugs in the equality, ordering, integer-narrowing
+and string primitives, and adds the systematic test coverage that exposed them. No kernel-surface
+breaking changes.
+
+### Highlights
+
+- **Silent-wrong primitives corrected across hosts**
+  ([#745](https://github.com/CategoricalData/hydra/issues/745),
+  [#742](https://github.com/CategoricalData/hydra/issues/742)): new shared cross-host fixtures
+  uncovered ~a dozen primitives (`equal`/`compare` on collections, float equality, `bigintToIntN`
+  narrowing, `parseUint*` bounds, astral-plane string ops) that returned wrong results on one or more
+  non-Haskell hosts while appearing to pass. All are now correct and verified per-host against the
+  Haskell reference oracle.
+- **Systematic test-coverage hardening**
+  ([#749](https://github.com/CategoricalData/hydra/issues/749)): new kernel coverage for previously
+  untested primitive behavior (equality/ordering collection depth, `notEqual`, `functions.const`/`flip`),
+  which drove wiring those primitives into every host's default-implementation fallback.
+
+### Bug fixes
+
+- **[#745](https://github.com/CategoricalData/hydra/issues/745)** silent-wrong equality/ordering,
+  `bigintToIntN` narrowing, `parseUint32/64` bounds, and astral-plane `charAt`/`splitOn`/`compare`
+  across the eight non-Haskell hosts.
+- **[#742](https://github.com/CategoricalData/hydra/issues/742)** structural `equal`/`compare` on
+  maps, sets and nested decimals no longer falls back to scale-blind or print-based comparison
+  (including a hand-inlined Scala primitive that shadowed the overlay fix).
+- **[#743](https://github.com/CategoricalData/hydra/issues/743)** kernel JSON decoder now rejects an
+  `Either` object carrying both `left` and `right` keys instead of silently resolving one arm.
+
+### Improvements
+
+- **[#749](https://github.com/CategoricalData/hydra/issues/749)** `notEqual`/`const`/`flip` wired
+  into each host's `#609` default-implementation fallback; orphaned Avro coder test suite recovered.
+- **[#730](https://github.com/CategoricalData/hydra/issues/730)** flock-based shared `~/.stack` build
+  slot (`bin/with-stack-slot.sh`) replaces the pgrep slot mechanic.
+- **[#600](https://github.com/CategoricalData/hydra/issues/600)** the five published TypeScript
+  packages are subpath-import-only (uniform export surface).
+- **[#721](https://github.com/CategoricalData/hydra/issues/721)** `checkNestedModuleNames` packaging
+  check enforces the module-namespace no-prefix rule.
+
+### Documentation
+
+- **[#508](https://github.com/CategoricalData/hydra/issues/508)** de-Claude-speak documentation pass:
+  style-guide section added, stale paths and dead links repaired, agent-operations wiki pages moved
+  into `claude/`, and a `getting-started.md` guardrail against re-adding a TypeScript root export.
+
 ## [0.17.6] - 2026-08-30
 
 Point release on the 0.17.x line, and the last backward-incompatible batch before the 1.0 surface
