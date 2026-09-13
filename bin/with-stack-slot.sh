@@ -80,6 +80,11 @@ fi
 # ---- bypass escape hatch --------------------------------------------------
 if [ "${HYDRA_STACK_SLOT_BYPASS:-0}" = "1" ]; then
   echo "with-stack-slot: WARNING — HYDRA_STACK_SLOT_BYPASS=1, running WITHOUT the slot lock: $*" >&2
+  # Mark the slot as "held" for the child tree even though we took no lock. Entry-point
+  # guards re-exec through this wrapper whenever HYDRA_STACK_SLOT_HELD is unset, so
+  # exec'ing without setting it makes wrapper -> script -> wrapper loop forever (observed:
+  # 55k iterations). The marker is what terminates that recursion; bypass still takes no lock.
+  export HYDRA_STACK_SLOT_HELD="bypass (HYDRA_STACK_SLOT_BYPASS=1; no lock held)"
   exec "$@"
 fi
 
