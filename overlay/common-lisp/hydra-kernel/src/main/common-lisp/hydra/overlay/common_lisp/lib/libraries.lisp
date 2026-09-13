@@ -895,19 +895,36 @@
 
 ;; ============================================================================
 ;; Default-implementation fallbacks (#609 Stage 4): primitives with no native Common Lisp
-;; implementation, but which declare a portable defaultImplementation term. NOT YET
-;; SLOT-VALIDATED (no dist/common-lisp build in this worktree) — mirrors the Java/Python/
-;; Scala/TS/Clojure validation case; only lists.takeWhile is wired here pending confirmation.
+;; implementation, but which declare a portable defaultImplementation term. lists.takeWhile,
+;; equality.notEqual, and functions.const/flip are wired here (#749). See the caller's
+;; verification notes for slot-validation status of this build.
 ;; ============================================================================
 
 (defun register-default-fallbacks (already-native)
-  (let ((a (tc-variable "a")))
+  (let ((a (tc-variable "a"))
+        (x (tc-variable "x"))
+        (t1 (tc-variable "t1"))
+        (t2 (tc-variable "t2"))
+        (t3 (tc-variable "t3"))
+        (eq-x '(("x" . ("equality")))))
     (remove nil
       (list
         (unless (member (prim-name hydra_lib_lists_take_while) already-native :test #'equal)
           (cons (prim-name hydra_lib_lists_take_while)
                 (default-fallback-primitive (prim-name hydra_lib_lists_take_while)
-                  nil (list (fun a (tc-boolean)) (tc-list a)) (tc-list a))))))))
+                  nil (list (fun a (tc-boolean)) (tc-list a)) (tc-list a))))
+        (unless (member (prim-name hydra_lib_equality_not_equal) already-native :test #'equal)
+          (cons (prim-name hydra_lib_equality_not_equal)
+                (default-fallback-primitive (prim-name hydra_lib_equality_not_equal)
+                  (list "x") (list x x) (tc-boolean) eq-x)))
+        (unless (member (prim-name hydra_lib_functions_const) already-native :test #'equal)
+          (cons (prim-name hydra_lib_functions_const)
+                (default-fallback-primitive (prim-name hydra_lib_functions_const)
+                  (list "t1" "t2") (list t1 t2) t1)))
+        (unless (member (prim-name hydra_lib_functions_flip) already-native :test #'equal)
+          (cons (prim-name hydra_lib_functions_flip)
+                (default-fallback-primitive (prim-name hydra_lib_functions_flip)
+                  (list "t1" "t2" "t3") (list (fun t1 (fun t2 t3)) t2 t1) t3)))))))
 
 ;; ============================================================================
 ;; Standard library: all primitives combined
