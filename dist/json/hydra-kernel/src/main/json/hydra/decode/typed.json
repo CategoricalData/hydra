@@ -181,10 +181,7 @@
                                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                                             "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "a"}}}}},
                                                                                         "argument": {"literal": {"string": "term"}}}},
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.decode.typed.typedTerm"}, "type": {"variable": "a"}}},
-                                                                                        "argument": {"variable": "a"}}}}},
+                                                                                    "argument": {"application": {"function": {"variable": "hydra.decode.typed.typedTerm"}, "argument": {"variable": "a"}}}}},
                                                                                 "argument": {"variable": "fieldMap"}}},
                                                                             "argument": {"variable": "cx"}}}}},
                                                                     "argument": {
@@ -626,10 +623,7 @@
                                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                                             "type": {"application": {"function": {"variable": "hydra.typed.TypedTerm"}, "argument": {"variable": "a"}}}}},
                                                                                         "argument": {"literal": {"string": "term"}}}},
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.decode.typed.typedTerm"}, "type": {"variable": "a"}}},
-                                                                                        "argument": {"variable": "a"}}}}},
+                                                                                    "argument": {"application": {"function": {"variable": "hydra.decode.typed.typedTerm"}, "argument": {"variable": "a"}}}}},
                                                                                 "argument": {"variable": "fieldMap"}}},
                                                                             "argument": {"variable": "cx"}}}}},
                                                                     "argument": {
