@@ -68,7 +68,8 @@ def register_equality_primitives() -> dict[Name, Primitive]:
 
 def register_functions_primitives() -> dict[Name, Primitive]:
     """Register all functions primitive functions. absurd/identity are provided natively;
-    compose/const/flip carry kernel default implementations and need no overlay. For #417."""
+    compose/const/flip carry kernel default implementations and need no native overlay here
+    (const/flip are wired via register_default_fallback_primitives instead, #749). For #417."""
     from hydra.overlay.python.lib import functions
     from hydra.lib import functions as def_functions
 
@@ -1353,14 +1354,18 @@ def register_default_fallback_primitives(already_native: dict[Name, Primitive]) 
     Each is registered via prims.default_fallback_primitive, which evaluates the default term via
     reduce_term rather than running Python logic.
 
-    Spike (#609 Stage 3): only lists.takeWhile is wired here, mirroring the Java validation case
-    (#609 Stage 2). Once confirmed here, the remaining 11 Group-A primitives are wired the same way.
+    Spike (#609 Stage 2/3) validated lists.takeWhile; equality.notEqual and functions.{const,flip}
+    were added under #749. The remaining 8 Group-A primitives (eithers.{apply,compose,pure},
+    functions.compose, optionals.{foldList,mapList,mapSet}, sets.filter) are wired the same way
+    as needed.
     """
+    from hydra.lib import equality as def_equality
+    from hydra.lib import functions as def_functions
     from hydra.lib import lists as def_lists
     from hydra.overlay.python.dsl.python import Given
 
     primitives: dict[Name, Primitive] = {}
-    for definition in [def_lists.take_while]:
+    for definition in [def_lists.take_while, def_equality.not_equal, def_functions.const, def_functions.flip]:
         if definition.name not in already_native and isinstance(definition.default_implementation, Given):
             primitives[definition.name] = prims.default_fallback_primitive(definition)
     return primitives
