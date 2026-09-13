@@ -831,19 +831,42 @@
 
     ;; ============================================================================
     ;; Default-implementation fallbacks (#609 Stage 4): primitives with no native Scheme
-    ;; implementation, but which declare a portable defaultImplementation term. NOT YET
-    ;; SLOT-VALIDATED (no dist/scheme build in this worktree) — mirrors the Java/Python/
-    ;; Scala/TS/Clojure/Common-Lisp/Emacs-Lisp validation case; only lists.takeWhile is wired
-    ;; here pending confirmation.
+    ;; implementation, but which declare a portable defaultImplementation term. Originally a
+    ;; spike with only lists.takeWhile wired, mirroring the Java/Python/Scala/TS/Clojure/
+    ;; Common-Lisp/Emacs-Lisp validation case. Under #749, equality.notEqual and
+    ;; functions.{const,flip} were added as well.
     ;; ============================================================================
 
     (define (register-default-fallbacks already-native)
-      (let ((a (tc-variable "a")))
-        (if (member (prim-name def:hydra_lib_lists_take_while) already-native)
-            '()
-            (list (cons (prim-name def:hydra_lib_lists_take_while)
-                        (default-fallback-primitive (prim-name def:hydra_lib_lists_take_while)
-                          #f (list (fun a (tc-boolean)) (tc-list a)) (tc-list a)))))))
+      (let* (
+             (a (tc-variable "a"))
+             (x (tc-variable "x"))
+             (eq-x (list (list "x" (make-hydra_core_type_variable_constraints (constraints "equality")))))
+             (t1 (tc-variable "t1"))
+             (t2 (tc-variable "t2"))
+             (t3 (tc-variable "t3"))
+             (candidates
+               (list
+                 (cons (prim-name def:hydra_lib_lists_take_while)
+                       (lambda () (default-fallback-primitive (prim-name def:hydra_lib_lists_take_while)
+                                    #f (list (fun a (tc-boolean)) (tc-list a)) (tc-list a))))
+                 (cons (prim-name def:hydra_lib_equality_not_equal)
+                       (lambda () (default-fallback-primitive (prim-name def:hydra_lib_equality_not_equal)
+                                    #f (list x x) (tc-boolean) eq-x)))
+                 (cons (prim-name def:hydra_lib_functions_const)
+                       (lambda () (default-fallback-primitive (prim-name def:hydra_lib_functions_const)
+                                    #f (list t1 t2) t1)))
+                 (cons (prim-name def:hydra_lib_functions_flip)
+                       (lambda () (default-fallback-primitive (prim-name def:hydra_lib_functions_flip)
+                                    #f (list (fun t1 (fun t2 t3)) t2 t1) t3))))))
+        (let loop ((cs candidates) (acc '()))
+          (if (null? cs)
+              (reverse acc)
+              (let ((entry (car cs)))
+                (loop (cdr cs)
+                      (if (member (car entry) already-native)
+                          acc
+                          (cons (cons (car entry) ((cdr entry))) acc))))))))
 
     ;; ============================================================================
     ;; Standard library: all primitives combined
