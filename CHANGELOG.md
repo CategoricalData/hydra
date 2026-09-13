@@ -35,6 +35,14 @@ breaking changes.
   ([#749](https://github.com/CategoricalData/hydra/issues/749)): new kernel coverage for previously
   untested primitive behavior (equality/ordering collection depth, `notEqual`, `functions.const`/`flip`),
   which drove wiring those primitives into every host's default-implementation fallback.
+- **Scale-preserving decimals across every lossy-double host**
+  ([#727](https://github.com/CategoricalData/hydra/issues/727),
+  [#719](https://github.com/CategoricalData/hydra/issues/719)): `Literal.decimal` gains a real
+  scale-preserving representation (coefficient + scale) in the Scheme, Emacs Lisp, Common Lisp and
+  TypeScript runtimes and coders, and the generated `Literal.Decimal` `equals`/`compareTo` on Java,
+  Python and Scala stop ignoring
+  scale. The `scaleDistinctTestNames` skip list — which had been masking the gap on five hosts — is
+  deleted, so decimal scale is now verified everywhere rather than excused.
 
 ### Bug fixes
 
@@ -46,6 +54,12 @@ breaking changes.
   (including a hand-inlined Scala primitive that shadowed the overlay fix).
 - **[#743](https://github.com/CategoricalData/hydra/issues/743)** kernel JSON decoder now rejects an
   `Either` object carrying both `left` and `right` keys instead of silently resolving one arm.
+- **[#720](https://github.com/CategoricalData/hydra/issues/720)** Python's
+  `hydra.lib.equality`/`ordering` did not satisfy IEEE `totalOrder` for floats, mis-ordering `NaN`
+  and signed zero.
+- **[#722](https://github.com/CategoricalData/hydra/issues/722)** two `kernelDefaultCoreProfile`
+  correctness defects: rule ids that referred to rules no longer present, and a stubbed
+  `isValidName` that accepted every name.
 
 ### Improvements
 
@@ -55,6 +69,15 @@ breaking changes.
   slot (`bin/with-stack-slot.sh`) replaces the pgrep slot mechanic.
 - **[#600](https://github.com/CategoricalData/hydra/issues/600)** the five published TypeScript
   packages are subpath-import-only (uniform export surface).
+- **[#716](https://github.com/CategoricalData/hydra/issues/716)** `hydra.paths` reshaped onto the
+  term-graph model (`TermGraph`/`TypeGraph`), aligning path steps with the term and type grammars
+  and adding the link view of a graph; `mapKey`/`mapValue` collapse into a single `mapEntry` step.
+- **[#701](https://github.com/CategoricalData/hydra/issues/701)** module cache freshness is now a
+  Merkle hash over each module's dependency closure, so a change deep in the closure correctly
+  invalidates dependents.
+- **[#559](https://github.com/CategoricalData/hydra/issues/559)** host-agnostic build: the
+  remaining hand-coded host build logic is promoted into `hydra.build.*`, with Java as the
+  definitive second host.
 - **[#721](https://github.com/CategoricalData/hydra/issues/721)** `checkNestedModuleNames` packaging
   check enforces the module-namespace no-prefix rule.
 
