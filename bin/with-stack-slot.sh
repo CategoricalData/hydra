@@ -95,9 +95,64 @@ if [ -n "${HYDRA_STACK_SLOT_HELD:-}" ]; then
   exec "$@"
 fi
 
+# ---- portable flock(1) shim ------------------------------------------------
+# flock(1) is util-linux and DOES NOT EXIST on macOS/BSD, where the entire Hydra
+# fleet's laptop tier runs. Without a shim, every entry point that re-execs through
+# this wrapper (sync.sh, test.sh, run-bootstrapping-demo.sh, prepare-release.sh,
+# regenerate-lexicon.sh, ...) dies with "flock: command not found" — and worse, a
+# `flock -n 9` that fails with 127 is indistinguishable from "lock is held", so the
+# script silently fell through to the blocking path and failed there too.
+#
+# We keep real flock(1) where it exists (Linux CI) because kernel-held locks release
+# automatically when the holder dies. Where it does not, we emulate just the three
+# forms this script uses (-n, blocking, -w SECONDS) with Perl's flock(), which binds
+# the same advisory-lock syscall and is present in the macOS base system. Perl holds
+# the lock on the inherited fd for as long as it runs, so we must NOT let it exit
+# while we need the lock; instead we test acquisition and rely on our own fd 9.
+if command -v flock >/dev/null 2>&1; then
+  _slot_flock() { flock "$@"; }
+elif command -v perl >/dev/null 2>&1; then
+  # _slot_flock [-n | -w SECS] FD  — mirrors the flock(1) exit contract:
+  #   0 = acquired, non-zero = not acquired (1 for -n, 1 for -w timeout).
+  _slot_flock() {
+    local mode="block" secs=0 fd
+    case "${1:-}" in
+      -n) mode="nb"; fd="${2:?}" ;;
+      -w) mode="timed"; secs="${2:?}"; fd="${3:?}" ;;
+      *)  fd="${1:?}" ;;
+    esac
+    HYDRA_SLOT_FD="$fd" HYDRA_SLOT_MODE="$mode" HYDRA_SLOT_SECS="$secs" perl -e '
+      my $fd   = $ENV{HYDRA_SLOT_FD};
+      my $mode = $ENV{HYDRA_SLOT_MODE};
+      my $secs = $ENV{HYDRA_SLOT_SECS} || 0;
+      open(my $fh, ">&=", $fd) or exit 2;   # reuse the ALREADY-OPEN inherited fd
+      my $LOCK_EX = 2; my $LOCK_NB = 4;
+      if ($mode eq "nb") {
+        exit(flock($fh, $LOCK_EX | $LOCK_NB) ? 0 : 1);
+      } elsif ($mode eq "timed") {
+        my $deadline = time + $secs;
+        while (1) {
+          exit 0 if flock($fh, $LOCK_EX | $LOCK_NB);
+          exit 1 if time >= $deadline;
+          select(undef, undef, undef, 0.2);
+        }
+      } else {
+        exit(flock($fh, $LOCK_EX) ? 0 : 1);  # blocks in-kernel until acquired
+      }
+    '
+  }
+else
+  echo "with-stack-slot: neither flock(1) nor perl is available; cannot serialize builds." >&2
+  echo "with-stack-slot: install util-linux (Linux) or use HYDRA_STACK_SLOT_BYPASS=1 to skip the lock." >&2
+  exit 125
+fi
+
 # Identify this holder. Prefer the git worktree name for human readability.
 WORKTREE="$(git rev-parse --show-toplevel 2>/dev/null | sed 's#.*/worktrees/##' || echo "$PWD")"
-HOLDER_DESC="pid=$$ worktree=${WORKTREE} label=${LABEL:-none} started=$(date -Is) cmd=[$*]"
+# started= is recorded as BOTH a human-readable local timestamp and epoch seconds.
+# startedEpoch is what stale detection parses: `date -d` (GNU-only) is unavailable on
+# BSD/macOS, and `date -Is` is likewise GNU-only, so neither may be used here.
+HOLDER_DESC="pid=$$ worktree=${WORKTREE} label=${LABEL:-none} started=$(date '+%Y-%m-%dT%H:%M:%S%z') startedEpoch=$(date +%s) cmd=[$*]"
 
 # The metadata file sits next to the lock and records the current holder. It is
 # advisory (for humans + stale detection); the flock() on $LOCKFILE is the real mutex.
@@ -124,31 +179,28 @@ report_holder() {
 }
 
 # Try a non-blocking grab first so we can report who holds it and enforce -w.
-if ! flock -n 9; then
+if ! _slot_flock -n 9; then
   report_holder
   # Stale-metadata note (informational only; flock liveness is authoritative).
   if [ "$STALE" != "0" ] && [ -r "$METAFILE" ]; then
-    held_since=$(sed -n 's/.*started=\([0-9T:+-]*\).*/\1/p' "$METAFILE" | head -1)
-    if [ -n "$held_since" ]; then
-      held_epoch=$(date -d "$held_since" +%s 2>/dev/null || echo 0)
-      if [ "$held_epoch" != "0" ]; then
-        age=$(( acquire_epoch - held_epoch ))
-        if [ "$age" -gt "$STALE" ]; then
-          echo "with-stack-slot: WARNING — recorded holder is ${age}s old (> ${STALE}s stale threshold)." >&2
-          echo "with-stack-slot:   flock is still live, so the process is alive but wedged, OR" >&2
-          echo "with-stack-slot:   the metafile is stale. Inspect the pid above; a coordinator may" >&2
-          echo "with-stack-slot:   override with:  fuser -k ${LOCKFILE}   (kills the holder — use with care)." >&2
-        fi
+    held_epoch=$(sed -n 's/.*startedEpoch=\([0-9]*\).*/\1/p' "$METAFILE" | head -1)
+    if [ -n "$held_epoch" ] && [ "$held_epoch" != "0" ]; then
+      age=$(( acquire_epoch - held_epoch ))
+      if [ "$age" -gt "$STALE" ]; then
+        echo "with-stack-slot: WARNING — recorded holder is ${age}s old (> ${STALE}s stale threshold)." >&2
+        echo "with-stack-slot:   flock is still live, so the process is alive but wedged, OR" >&2
+        echo "with-stack-slot:   the metafile is stale. Inspect the pid above; a coordinator may" >&2
+        echo "with-stack-slot:   override with:  fuser -k ${LOCKFILE}   (kills the holder — use with care)." >&2
       fi
     fi
   fi
 
   if [ "$WAIT" = "0" ]; then
     echo "with-stack-slot: waiting for the build slot (blocking; set --timeout N to bound the wait)..." >&2
-    flock 9   # block until acquired
+    _slot_flock 9   # block until acquired
   else
     echo "with-stack-slot: waiting up to ${WAIT}s for the build slot..." >&2
-    if ! flock -w "$WAIT" 9; then
+    if ! _slot_flock -w "$WAIT" 9; then
       echo "with-stack-slot: timed out after ${WAIT}s waiting for the slot; giving up." >&2
       exit 124
     fi
