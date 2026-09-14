@@ -15,7 +15,7 @@ they are documented here for completeness.
 
 ---
 
-## [0.17.7] - 2026-09-13
+## [0.17.7] - 2026-09-14
 
 Correctness-hardening point release on the 0.17.x line, consolidating the 0.17.6 breaking batch. It
 closes a family of silent cross-host correctness bugs in the equality, ordering, integer-narrowing
@@ -40,9 +40,9 @@ breaking changes.
   [#719](https://github.com/CategoricalData/hydra/issues/719)): `Literal.decimal` gains a real
   scale-preserving representation (coefficient + scale) in the Scheme, Emacs Lisp, Common Lisp and
   TypeScript runtimes and coders, and the generated `Literal.Decimal` `equals`/`compareTo` on Java,
-  Python and Scala stop ignoring
-  scale. The `scaleDistinctTestNames` skip list — which had been masking the gap on five hosts — is
-  deleted, so decimal scale is now verified everywhere rather than excused.
+  Python and Scala stop ignoring scale. The `scaleDistinctTestNames` skip list — which had been
+  masking the gap on five hosts — is deleted, so decimal scale is now verified everywhere rather
+  than excused.
 
 ### Bug fixes
 
@@ -69,8 +69,14 @@ breaking changes.
 
 - **[#749](https://github.com/CategoricalData/hydra/issues/749)** `notEqual`/`const`/`flip` wired
   into each host's `#609` default-implementation fallback; orphaned Avro coder test suite recovered.
-- **[#730](https://github.com/CategoricalData/hydra/issues/730)** flock-based shared `~/.stack` build
-  slot (`bin/with-stack-slot.sh`) replaces the pgrep slot mechanic.
+- **[#730](https://github.com/CategoricalData/hydra/issues/730)** a shared `~/.stack` build slot
+  (`bin/with-stack-slot.sh`) replaces the pgrep slot mechanic, serializing concurrent GHC builds
+  across the fleet behind a real mutex. The wrapper is now portable to macOS: `flock(1)` is
+  util-linux and absent there, so it is emulated via Perl's `flock()` where missing, and the
+  GNU-only `date -Is`/`date -d` calls are replaced with portable equivalents. Its bypass path also
+  no longer re-execs forever. Without these, every entry point that routes through the slot —
+  `bin/sync.sh`, `bin/test.sh`, `bin/run-bootstrapping-demo.sh` and `bin/prepare-release.sh` —
+  failed immediately on macOS.
 - **[#600](https://github.com/CategoricalData/hydra/issues/600)** the five published TypeScript
   packages are subpath-import-only (uniform export surface).
 - **[#716](https://github.com/CategoricalData/hydra/issues/716)** `hydra.paths` reshaped onto the
