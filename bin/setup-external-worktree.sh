@@ -55,6 +55,14 @@ else
     fi
 fi
 
+# 1b. core.bare=false on the external worktree — REQUIRED. This is a bare repo
+# (hydra.git shared config core.bare=true); without a per-worktree override the
+# external worktree is treated as bare and `git submodule update` below fails with
+# "git-submodule cannot be used without a working tree". Must set worktreeConfig +
+# core.bare=false here, before the submodule update. (Incident 2026-09-15.)
+run git -C "$EXTERNAL_DIR" config extensions.worktreeConfig true
+run git -C "$EXTERNAL_DIR" config --worktree core.bare false
+
 # 2. Populate the three submodules IN the external worktree.
 echo "Populating submodules in the external worktree..."
 run git -C "$EXTERNAL_DIR" submodule update --init agents wiki coordination
