@@ -1,0 +1,15 @@
+[submodule "agents"]
+	path = agents
+	url = git@github-CategoricalData-hydra-agents:CategoricalData/hydra-agents.git
+	branch = main
+	ignore = all
+[submodule "wiki"]
+	path = wiki
+	url = git@github-CategoricalData-hydra:CategoricalData/hydra.wiki.git
+	branch = master
+	ignore = all
+[submodule "coordination"]
+	path = coordination
+	url = git@github-CategoricalData-hydra:CategoricalData/hydra.wiki.git
+	branch = coordination
+	ignore = all

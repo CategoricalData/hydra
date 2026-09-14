@@ -117,6 +117,21 @@ At the beginning of every new session, follow these steps **before doing any oth
 2. **Identify the current branch**: Run `git branch --show-current`.
    It should match the name of the worktree directory.
 
+2a. **Verify the hydra-agents harness is populated.** The generic agent harness (docs, hooks,
+   spawn/recovery scripts) is consumed as a git submodule `agents`, populated only in the
+   local-only `external` worktree at `hydra/external/agents/` and reached from any worktree as
+   `../../external/agents/`. The submodule FLOATS (we always take the latest hydra-agents `main`,
+   pulled deliberately when we're aware of an update) — there is no version pin and nothing to
+   drift-check. Just confirm it resolves:
+   ```sh
+   test -f ../../external/agents/bin/lib-config.sh \
+     || echo "⚠ hydra-agents not populated — run 'git submodule update' in the external worktree"
+   ```
+   If it's missing, the `external` worktree hasn't been created/populated on this machine yet;
+   see the per-machine setup in the harness docs (create the local-only `external` worktree,
+   `git submodule update --init`). Do NOT clone hydra-agents by hand into a worktree — that
+   defeats the single-populated-copy model.
+
 3. **Probe the toolchain if this looks like a fresh checkout**: If the
    parent `hydra/` directory is newly cloned or you have not run any
    build commands in this environment before, run `bin/check-env.sh`
@@ -374,12 +389,12 @@ Primary entry point — the doc most likely to answer the question by task:
 | Python-host perf history | [docs/history/python-host-perf-investigation.md](docs/history/python-host-perf-investigation.md) |
 | Running benchmarks (kernel + inference) | [docs/recipes/running-benchmarks.md](docs/recipes/running-benchmarks.md) |
 | Inference scaling analysis | [docs/history/inference-bench-complexity-analysis.md](docs/history/inference-bench-complexity-analysis.md) |
-| Agent + issue hierarchy (roles, parentage, proposals, two homes, cross-machine staging) | [claude/agent-hierarchy.md](claude/agent-hierarchy.md) — the organizing model that coordinator-workflow + branch-flow implement |
-| Coordinate/spawn/finalize agents (coordinator responsibility) | [claude/coordinator-workflow.md](claude/coordinator-workflow.md) — spawn command, model policy, agent lifecycle; companion to [claude/agent-handoff.md](claude/agent-handoff.md) (the assigned agent's view) |
-| Branch promotion + staging cycle | [claude/branch-flow.md](claude/branch-flow.md) |
-| External/environmental alerts (resource watchdog) + preventive back-pressure | [claude/external-alerts.md](claude/external-alerts.md) |
-| Recover the fleet after a machine crash (relaunch sessions, repair worktree corruption) | [claude/crash-recovery.md](claude/crash-recovery.md) |
-| Sandbox permission bypass (why/how agents skip prompts on a sandbox, not a laptop) | [claude/sandbox-permissions.md](claude/sandbox-permissions.md) — `~/.hydra-sandbox` marker gates it |
+| Agent + issue hierarchy (roles, parentage, proposals, two homes, cross-machine staging) | [claude/agent-hierarchy.md](claude/agent-hierarchy.md) — generic harness doc; now a pointer into `external/agents/docs/` (maintained in hydra-agents) |
+| Coordinate/spawn/finalize agents (coordinator responsibility) | [claude/coordinator-workflow.md](claude/coordinator-workflow.md) — spawn command, model policy, agent lifecycle; companion to [claude/agent-handoff.md](claude/agent-handoff.md) (both now pointers into `external/agents/docs/`) |
+| Branch promotion + staging cycle | [claude/branch-flow.md](claude/branch-flow.md) — pointer into `external/agents/docs/` |
+| External/environmental alerts (resource watchdog) + preventive back-pressure | [claude/external-alerts.md](claude/external-alerts.md) — pointer into `external/agents/docs/` |
+| Recover the fleet after a machine crash (relaunch sessions, repair worktree corruption) | [claude/crash-recovery.md](claude/crash-recovery.md) — pointer into `external/agents/docs/` |
+| Sandbox permission bypass (why/how agents skip prompts on a sandbox, not a laptop) | [claude/sandbox-permissions.md](claude/sandbox-permissions.md) — `~/.hydra-sandbox` marker gates it; pointer into `external/agents/docs/` |
 
 ---
 

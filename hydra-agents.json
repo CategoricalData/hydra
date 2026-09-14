@@ -1,0 +1,12 @@
+{
+  "_comment": "Hydra's hydra-agents harness config. Checked in at the repo root (present in every worktree). The hydra-agents harness is consumed as a git submodule 'agents', populated at hydra/external/agents/ (the local-only 'external' worktree is the one populated tree), reached as ../../external/agents from a worktree. Read by the hydra-agents scripts there via lib-config.sh. The submodule FLOATS (we always take the latest hydra-agents main, pulled deliberately); there is no recorded version pin, so this file carries no agentsVersion.",
+
+  "agentsDir": "../../external/agents",
+
+  "issueUrlBase": "https://github.com/CategoricalData/hydra/issues/",
+  "issueRepo": "CategoricalData/hydra",
+
+  "agentGuide": "CLAUDE.md",
+  "spawnModel": "opusplan",
+  "sessionPrefix": "hydra-"
+}

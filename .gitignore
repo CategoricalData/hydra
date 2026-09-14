@@ -8,8 +8,6 @@ benchmark/
 # Bootstrapping demo runs
 bootstrap/
 
-# Hydra wiki
-wiki/
 
 # Old files
 old/

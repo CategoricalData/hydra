@@ -1,5 +1,12 @@
 # Pitfalls and gotchas (extended)
 
+> **Generic agent-ops pitfalls moved to hydra-agents.** The framework-level session/process/
+> coordination gotchas (heredoc hangs, background exit-code masking, tmux quirks, build-slot
+> contention, verify-before-concluding, etc.) now live in `../../external/agents/docs/pitfalls.md`
+> (`../../external/agents/docs/pitfalls.md`; pinned rev 4857d95;
+> https://github.com/CategoricalData/hydra-agents/blob/main/docs/pitfalls.md). **This file keeps
+> Hydra's own build/codegen/DSL-specific pitfalls below** — those stay Hydra-side. Check both.
+
 CLAUDE.md keeps a short list of hard rules and a short list of mental models.
 This page covers specific gotchas — concrete known-issue notes that don't belong
 in the top-level orientation.
