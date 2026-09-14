@@ -109,6 +109,7 @@ testTypes = define "testTypes" $
     Phantoms.pair TestTypes.testTypeTripleName TestTypes.testTypeTriple,
     Phantoms.pair TestTypes.testTypeUnionMonomorphicName TestTypes.testTypeUnionMonomorphic,
     Phantoms.pair TestTypes.testTypeUnionPolymorphicRecursiveName TestTypes.testTypeUnionPolymorphicRecursive,
+    Phantoms.pair TestTypes.testTypeUnionPolymorphicRecursiveListWrappedName TestTypes.testTypeUnionPolymorphicRecursiveListWrapped,
     Phantoms.pair TestTypes.testTypeUnitName TestTypes.testTypeUnit]
 
 fileErrorName :: TypedTerm Name
