@@ -97,6 +97,11 @@ The steps below assume that setup:
    (see "Updating the release index" below).
 1. **Delete the release branch and its worktree** — it is local-only scratch and its
    contents are now on `main` plus the tag (see [above](#where-a-release-is-performed-a-throwaway-local-release-branch)).
+1. **Retire any migration shims**, once the published artifacts are confirmed visible in their
+   registries: bump `hostVersion` to the version just published and drop the corresponding
+   `hostOverrides` entries, in one commit. See
+   [Migration shims retire AFTER publishing](#migration-shims-retire-after-publishing-never-before).
+   This step is *after* publishing by necessity — retiring a shim earlier breaks the release build.
 1. **Open the next development cycle**: immediately after tagging, run
    `bin/bump-version.sh <next-version>` (see "Version synchronization" below) so that all
    post-release dev-cycle source is versioned *ahead* of the release just cut. This is
@@ -166,7 +171,9 @@ The canonical version lives in `hydra.json` at the repository root as the
   [build-system.md](build-system.md)). Bumped separately by
   `bin/bump-host-version.sh`. Per-host exceptions live in the
   `hostOverrides` map and are hand-edited. This field is independent of the
-  release flow and is normally left alone during a release.
+  release flow and is normally left alone *during* a release — but see
+  [Migration shims retire AFTER publishing](#migration-shims-retire-after-publishing-never-before)
+  below for the one routine exception, which happens *after* publishing, not during.
 
   One release-time interaction: when a release introduces new public generated modules
   (e.g. 0.17.1's `hydra.dsl.<term-module>` reference DSLs, #467), they become consumable
@@ -174,6 +181,33 @@ The canonical version lives in `hydra.json` at the repository root as the
   Any `hostOverrides` local pins taken out during the development window (e.g. the
   #524/#467 java/python pins) should be reverted as part of the release, after the
   published artifacts are confirmed visible in their registries.
+
+#### Migration shims retire AFTER publishing, never before
+
+When a release contains breaking changes, the previous published host generally **cannot build
+it**. The build therefore pins the affected hosts to locally-compiled ones via
+`hostOverrides` (e.g. `{"java":"local","python":"local"}`). These pins are *migration shims*, and
+their lifecycle is fixed:
+
+1. A breaking change lands during the development cycle and the shim goes in with it
+   (e.g. `bb08563cc3`, "pin java+python hostOverrides to local until next publish").
+2. The release is built and published **with the shim still in place**.
+3. **Only after** the new packages are visible in their registries, the shim retires: bump
+   `hostVersion` to the just-published version and drop the `hostOverrides` entries, together,
+   in one commit (the 0.17.5 pattern, `0a7f22cfd7`).
+
+**Do not retire a shim before the release publishes.** Dropping it points the build at the
+*previous* published host, which by definition lacks the new surface, and the release build
+fails — the shim failing is the shim doing its job. A concrete 0.17.7 example: #719 added
+`decimal_variant_methods` to the Python DSL wrapper, which published 0.17.6 does not have, so a
+published-0.17.6 host regenerating 0.17.7 source raises `AttributeError` (`6f38d1a50e`).
+
+**The trap to avoid:** reading `hostVersion: "0.17.6"` alongside published 0.17.6 artifacts and
+concluding the override is a stale leftover. *Existing* is not the same as
+*sufficient-to-build-the-next-release*. That is precisely what a breaking batch means, and it is
+why the shim cannot retire until the batch itself is published. Both staging agents independently
+reached the wrong conclusion on this during 0.17.7 prep; if you find yourself about to call a
+`hostOverrides` entry a pre-release blocker, re-read this section first.
 
   **Retire the #417 published-host-breaking shim at the 0.17.2 release.** #417 (the R20/R21
   primitive finalization) landed with `hostOverrides: {"java":"local","python":"local"}` because
