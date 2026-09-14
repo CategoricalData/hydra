@@ -144,6 +144,17 @@ fi
 echo "Creating worktree $WT (branch $BRANCH off origin/main)..."
 git worktree add -b "$BRANCH" "$WT" origin/main
 
+# Opt this worktree out of the agents/wiki/coordination submodules (#583).
+# Only the local-only `external` worktree is meant to be populated; every
+# other worktree reaches those trees via ../../external/{agents,wiki,coordination}.
+# extensions.worktreeConfig MUST be set before any --worktree write below, or
+# the write lands in the SHARED config and leaks submodule.update=none to
+# every other worktree (see claude/pitfalls.md / the #583 cutover runbook).
+git -C "$WT" config extensions.worktreeConfig true
+git -C "$WT" config --worktree submodule.agents.update none
+git -C "$WT" config --worktree submodule.wiki.update none
+git -C "$WT" config --worktree submodule.coordination.update none
+
 # From here on, any abort must undo BOTH the worktree and the branch that
 # `git worktree add -b` created — otherwise a retry fails with "$WT already
 # exists" (worktree left) or "branch already exists" (branch left). A single
