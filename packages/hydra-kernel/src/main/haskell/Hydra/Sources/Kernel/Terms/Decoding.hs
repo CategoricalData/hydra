@@ -709,8 +709,17 @@ decodeType = define "decodeType" $
   match _Type (var "typ")
     (Just $ MetaTerms.lambdaTyped "cx" (Core.typeVariable (Core.name (string "hydra.graph.Graph"))) $ MetaTerms.lambdaTyped "t" (Core.typeVariable (Core.nameLift _Term)) $ leftError (Core.typeVariable (Core.nameLift _Term)) $ string "unsupported type variant") [
     _Type_annotated>>: "at" ~> decodeType @@ (Core.annotatedTypeBody (var "at")),
+    -- The function side is wrapped in an explicit TypeApplication carrying the DECODED
+    -- result type of the argument (decoderFullResultType, matching every sibling call site
+    -- below — decodeListType, decodeMapType, decodeEitherType, etc.), not the raw argument
+    -- type. This lets etaExpandTerm's termHeadType resolve a self-recursive (Forall-typed)
+    -- decoder reference by substituting the forall parameter with the applied type, instead
+    -- of leaving it opaque and forcing eta-expansion to pad with untyped lambdas. Using the
+    -- raw type here would still make the UntypedLambda symptom disappear, but would
+    -- instantiate the forall to the WRONG type wherever decoded != raw (literal variants,
+    -- wrapper-transparency, nested containers — see decoderFullResultType's own arms). (#740)
     _Type_application>>: "appType" ~>
-      (decodeType @@ Core.applicationTypeFunction (var "appType"))
+      (MetaTerms.tyapp (decodeType @@ Core.applicationTypeFunction (var "appType")) (decoderFullResultType @@ Core.applicationTypeArgument (var "appType")))
         @@@ (decodeType @@ Core.applicationTypeArgument (var "appType")),
     _Type_either>>: "et" ~> decodeEitherType @@ var "et",
     _Type_forall>>: "ft" ~> decodeForallType @@ var "ft",
@@ -740,8 +749,10 @@ decodeTypeNamed = define "decodeTypeNamed" $
   match _Type (var "typ")
     (Just $ MetaTerms.lambdaTyped "cx" (Core.typeVariable (Core.name (string "hydra.graph.Graph"))) $ MetaTerms.lambdaTyped "t" (Core.typeVariable (Core.nameLift _Term)) $ leftError (Core.typeVariable (Core.nameLift _Term)) $ string "unsupported type variant") [
     _Type_annotated>>: "at" ~> decodeTypeNamed @@ var "ename" @@ (Core.annotatedTypeBody (var "at")) @@ var "rtype",
+    -- See decodeType's _Type_application case (#740) for why the function side needs an
+    -- explicit TypeApplication wrapper carrying decoderFullResultType, not the raw type.
     _Type_application>>: "appType" ~>
-      (decodeType @@ Core.applicationTypeFunction (var "appType"))
+      (MetaTerms.tyapp (decodeType @@ Core.applicationTypeFunction (var "appType")) (decoderFullResultType @@ Core.applicationTypeArgument (var "appType")))
         @@@ (decodeType @@ Core.applicationTypeArgument (var "appType")),
     _Type_either>>: "et" ~> decodeEitherType @@ var "et",
     _Type_forall>>: "ft" ~>

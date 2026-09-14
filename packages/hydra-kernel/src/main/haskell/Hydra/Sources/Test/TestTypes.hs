@@ -88,6 +88,8 @@ module_ = Module {
       toDefinition testTypeUnionMonomorphic,
       toDefinition testTypeUnionMonomorphicName,
       toDefinition testTypeUnionPolymorphicRecursive,
+      toDefinition testTypeUnionPolymorphicRecursiveListWrapped,
+      toDefinition testTypeUnionPolymorphicRecursiveListWrappedName,
       toDefinition testTypeUnionPolymorphicRecursiveName,
       toDefinition testTypeUnit,
       toDefinition testTypeUnitName]
@@ -405,6 +407,25 @@ testTypeUnionPolymorphicRecursive = defineType "testTypeUnionPolymorphicRecursiv
 testTypeUnionPolymorphicRecursiveName :: TypedTermDefinition Name
 testTypeUnionPolymorphicRecursiveName = define "testTypeUnionPolymorphicRecursiveName" $
   testTypesName "UnionPolymorphicRecursive"
+
+-- | Regression fixture for #740: a union type which is both parametric and
+-- self-referential where the recursive variant is CONTAINER-WRAPPED
+-- (list<Self<a>>) rather than a bare self-application (Self<a>, as in
+-- testTypeUnionPolymorphicRecursive above). Per #740's bisection, only this
+-- container-wrapped shape triggers the decoder-emission bug (hydra-java coder
+-- fails with UntypedLambda); the bare-application shape above does not. The
+-- kernel corpus had no recursive parametric union of any shape before #740's
+-- investigation added testTypeUnionPolymorphicRecursive, and neither shape by
+-- itself is a substitute for the other as a regression fixture.
+testTypeUnionPolymorphicRecursiveListWrapped :: TypedTermDefinition Type
+testTypeUnionPolymorphicRecursiveListWrapped = defineType "testTypeUnionPolymorphicRecursiveListWrapped" $
+  T.forAll "a" $ T.union testTypeUnionPolymorphicRecursiveListWrappedName [
+    "single">: T.variable "a",
+    "multiple">: T.list (T.apply (Core.typeVariable testTypeUnionPolymorphicRecursiveListWrappedName) (T.variable "a"))]
+
+testTypeUnionPolymorphicRecursiveListWrappedName :: TypedTermDefinition Name
+testTypeUnionPolymorphicRecursiveListWrappedName = define "testTypeUnionPolymorphicRecursiveListWrappedName" $
+  testTypesName "UnionPolymorphicRecursiveListWrapped"
 
 testTypeUnit :: TypedTermDefinition Type
 testTypeUnit = defineType "testTypeUnit" $
