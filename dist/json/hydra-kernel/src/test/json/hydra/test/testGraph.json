@@ -390,6 +390,16 @@
                       "typeApplication": {
                         "body": {
                           "pair": {
+                            "first": {"variable": "hydra.test.testTypes.testTypeUnionPolymorphicRecursiveListWrappedName"},
+                            "second": {"variable": "hydra.test.testTypes.testTypeUnionPolymorphicRecursiveListWrapped"}}},
+                        "type": {"variable": "hydra.core.Name"}}},
+                    "type": {"variable": "hydra.core.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
                             "first": {"variable": "hydra.test.testTypes.testTypeUnitName"},
                             "second": {"variable": "hydra.test.testTypes.testTypeUnit"}}},
                         "type": {"variable": "hydra.core.Name"}}},
