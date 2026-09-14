@@ -26,10 +26,16 @@
 set -euo pipefail
 
 ROOT="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
-WIKI="$(cd "$ROOT/../../wiki" 2>/dev/null && pwd || true)"
+# Prefer the #583 submodule location (external/coordination, on the
+# `coordination` branch); fall back to the pre-cutover loose checkout
+# (hydra/wiki, also fetches the `coordination` branch/ref) for worktrees
+# that haven't been rebased past the cutover yet. Never both at once — the
+# first one found on disk wins.
+WIKI="$(cd "$ROOT/../../external/coordination" 2>/dev/null && pwd || true)"
+[ -n "$WIKI" ] || WIKI="$(cd "$ROOT/../../wiki" 2>/dev/null && pwd || true)"
 SEEN="$ROOT/.coordination-seen"
 
-# Silently exit unless the wiki clone is present with a coordination branch.
+# Silently exit unless a coordination-branch clone is present.
 [ -n "$WIKI" ] && [ -d "$WIKI/.git" ] || exit 0
 
 # Bounded fetch. Without a timeout a network stall would hang the user's
