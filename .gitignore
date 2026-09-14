@@ -150,3 +150,6 @@ claude/.*.sh
 
 # Backed-up branch plan documents (not release content)
 finalized-task-plans/
+
+# Coordination-hook state: last surfaced coordination-branch SHA (per worktree)
+.coordination-seen

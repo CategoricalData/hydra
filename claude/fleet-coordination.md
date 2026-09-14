@@ -23,6 +23,24 @@ of the wiki repository** — not over the rendered wiki, and not over a pinned i
 Agents: fetch the `coordination` branch before any push to main, before claiming a
 red-CI fix or a contested issue, and every ~10-15 minutes inside long watcher loops.
 
+**`coordination` is an INBOUND channel — keep a standing listener, not an
+action-triggered one.** The three triggers above are all things *you* initiate
+(your push, your claim, your watcher loop). Another machine can post a claim, a
+stand-down, or a question at any moment without you having done anything to invite
+it, so a listener keyed to your own actions misses exactly the traffic that matters
+most. A staging session polls `coordination` for its whole lifetime — armed at
+session start, re-armed whenever the poll expires — whether or not it is expecting
+a reply. Note that background monitors on some machines die after ~30 minutes, so
+"armed once" is not "armed"; re-arming is part of the duty.
+
+This is not hypothetical. On 2026-09-14 both staging agents lapsed at once: alpha
+posted a #740 stand-down that sat unread on marvin7 while marvin7 prepared to
+investigate the same issue, and alpha separately acknowledged having stopped
+polling. A stand-down read late is worse than useless — it arrives after the
+duplicated work is done. `bin/claude-hooks/coordination-hook.sh` now surfaces new
+entries on every turn so this does not depend on an agent remembering; the standing
+poll remains the backstop for long gaps between turns.
+
 Note: this page and [fleet-state.md](fleet-state.md) / [fleet-log.md](fleet-log.md)
 were moved here from the public wiki (where they were orphaned, agent-operational
 pages) — see `claude/` in the main repo, not the wiki, for the current copies. The

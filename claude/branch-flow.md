@@ -139,7 +139,12 @@ Each iteration:
 ### Cycle cadence
 
 - **The loop is pipelined, never serial. Idle-watching CI is a coordination
-  failure.** The moment a push to `origin/main` succeeds, begin assembling the
+  failure.** This prohibits *blocking on your own CI run* — it does NOT prohibit
+  keeping a `coordination`-branch listener alive. Maintaining that listener is a
+  standing duty of a staging session, not idle-watching: it costs nothing between
+  turns and it is how another machine's claim or stand-down reaches you (see
+  [fleet-coordination.md](fleet-coordination.md)). Do not let this line talk you
+  out of it. The moment a push to `origin/main` succeeds, begin assembling the
   *next* batch immediately — CI validates batch N while you prepare N+1. Do not
   block a new cycle on the prior push going green (only a *red* main gates a new
   push, and even then you can keep preparing). If you ever find yourself with
