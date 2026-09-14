@@ -46,9 +46,6 @@ breaking changes.
   (including a hand-inlined Scala primitive that shadowed the overlay fix).
 - **[#743](https://github.com/CategoricalData/hydra/issues/743)** kernel JSON decoder now rejects an
   `Either` object carrying both `left` and `right` keys instead of silently resolving one arm.
-- **[#740](https://github.com/CategoricalData/hydra/issues/740)** the recursive parametric union decoder
-  now emits an explicit type application instead of an untyped lambda, so recursive parametric-union
-  types generate and compile on the Java host.
 
 ### Improvements
 
