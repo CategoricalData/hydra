@@ -59,6 +59,15 @@ for wt in "${WT_PATHS[@]}"; do
     echo "  worktree: $base"
     # (1) worktreeConfig TRUE first — MUST precede any --worktree write.
     run git -C "$wt" config extensions.worktreeConfig true
+    # (1b) core.bare=false per worktree — REQUIRED. This is a bare repo
+    # (hydra.git shared config has core.bare=true). Turning on
+    # extensions.worktreeConfig makes every worktree read core.bare from the
+    # SHARED config unless overridden per-worktree, so without this line every
+    # worktree becomes "bare" and `git status`/`rev-parse --is-inside-work-tree`
+    # fail with "must be run in a work tree". Must be written to config.worktree,
+    # right after enabling the extension. (Incident 2026-09-15: the omission of
+    # this line broke all ~69 alpha worktrees fleet-wide.)
+    run git -C "$wt" config --worktree core.bare false
     # (2) opt out every submodule.
     for name in "${SUBMODULES[@]}"; do
         run git -C "$wt" config --worktree "submodule.$name.update" none
