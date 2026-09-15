@@ -43,8 +43,15 @@ subprojects {
     java {
         withJavadocJar()
         withSourcesJar()
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        // #736: toolchain replaces sourceCompatibility/targetCompatibility (both
+        // VERSION_11 previously) — Gradle 7.6 rejects combining toolchain with
+        // explicit compatibility on the same java{} extension. The toolchain pin
+        // selects JDK 11 regardless of ambient PATH/JAVA_HOME; without it, a JDK 17+
+        // host can hit a javac DeferredAttr hang in compileHeadsExtrasJava.
+        // Perf-neutral vs 17 (measured); matches CI's pinned 11.0.19.
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(11)
+        }
     }
 
     tasks.withType(JavaCompile) {
