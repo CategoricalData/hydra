@@ -53,6 +53,7 @@ inferred from this script's location (../..).
 
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Optional
@@ -157,12 +158,23 @@ def load_config(root: Path) -> dict:
         return json.load(f)
 
 
-def save_config(root: Path, config: dict) -> None:
-    # Round-trip preserving insertion order and the file's 2-space indent style.
+def set_config_scalar(root: Path, key: str, value: str) -> None:
+    """Overwrite a single top-level string field in hydra.json in place, via a
+    targeted regex substitution rather than a full json.dump round-trip. The
+    file's hand-tuned formatting (e.g. compact one-line objects) is otherwise
+    unrelated to any single field and must not be disturbed by an unrelated
+    version bump — a prior full-rewrite implementation reformatted the entire
+    file on every version bump (every nested object expanded to one key per
+    line), producing large, unrelated diffs alongside the intended one-line
+    version change."""
     path = config_path(root)
-    with open(path, "w") as f:
-        json.dump(config, f, indent=2)
-        f.write("\n")
+    text = path.read_text()
+    pattern = r'("' + re.escape(key) + r'"\s*:\s*)"[^"]*"'
+    replacement = r'\1"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'
+    new_text, count = re.subn(pattern, replacement, text, count=1)
+    if count != 1:
+        raise SystemExit(f"error: could not find a single top-level \"{key}\": \"...\" field to update in {path}")
+    path.write_text(new_text)
 
 
 def load_all_packages(root: Path) -> list[str]:
@@ -321,9 +333,7 @@ def cmd_set_current_version(root: Path, args: list[str]) -> int:
     if len(args) != 1 or not _valid_version(args[0]):
         print("Usage: hydra-packages.py set-current-version <X.Y.Z>", file=sys.stderr)
         return 2
-    config = load_config(root)
-    config["currentVersion"] = args[0]
-    save_config(root, config)
+    set_config_scalar(root, "currentVersion", args[0])
     return 0
 
 
@@ -344,9 +354,7 @@ def cmd_set_host_version(root: Path, args: list[str]) -> int:
     if len(args) != 1 or not _valid_version(args[0]):
         print("Usage: hydra-packages.py set-host-version <X.Y.Z>", file=sys.stderr)
         return 2
-    config = load_config(root)
-    config["hostVersion"] = args[0]
-    save_config(root, config)
+    set_config_scalar(root, "hostVersion", args[0])
     return 0
 
 
