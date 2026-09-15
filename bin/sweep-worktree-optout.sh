@@ -45,7 +45,15 @@ echo
 # Every registered worktree except the `external` one (which IS the populated
 # tree and must keep default update behavior). Use `git worktree list` so we
 # catch all of them, not just a dir glob.
-mapfile -t WT_PATHS < <(git worktree list --porcelain | awk '/^worktree /{print $2}')
+# Portability: macOS ships bash 3.2, which has no `mapfile`/`readarray` (the
+# whole fleet's laptop tier runs there). Use a plain while-read loop instead so
+# this sweep runs unchanged on macOS and Linux — without it the script aborts
+# before touching anything, leaving every worktree broken by the
+# extensions.worktreeConfig + core.bare inheritance this sweep exists to repair.
+WT_PATHS=()
+while IFS= read -r _wt_path; do
+    [ -n "$_wt_path" ] && WT_PATHS+=("$_wt_path")
+done < <(git worktree list --porcelain | awk '/^worktree /{print $2}')
 
 for wt in "${WT_PATHS[@]}"; do
     base="$(basename "$wt")"
