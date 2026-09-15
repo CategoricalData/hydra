@@ -603,6 +603,44 @@ are **convenience binaries**: downstream of, and secondary to, the canonical sig
 The source archive is the release of record; the registry artifacts are how consumers obtain usable
 packages without running the codegen toolchain themselves.
 
+### Signing key: set `HYDRA_PGP_KEY` before publishing
+
+**Export `HYDRA_PGP_KEY` (the fingerprint from the repo-root `KEYS` file) for the whole release run.**
+Both Maven publishers ignore the key selection they document — Gradle reads `signing.gnupg.keyName`
+(*not* `signing.keyId`, which applies only to the in-process signer) and sbt-pgp shells out to `gpg`
+— so without an explicit pin they silently sign with the operator's **default** gpg key and publish
+immutable, wrongly-signed artifacts.
+
+`prepare-release.sh` names the same secret `HYDRA_RELEASE_SIGNING_KEY` (for the source archive). The
+publish scripts accept that as an alias, but exporting **both** is clearest:
+
+```bash
+export HYDRA_PGP_KEY=AAB83F3B1F4E67754A50D506FC93F19114D72013          # the KEYS fingerprint
+export HYDRA_RELEASE_SIGNING_KEY="$HYDRA_PGP_KEY"
+```
+
+As of 0.17.7 both publish scripts **refuse to upload** when neither variable is set, rather than
+proceeding with the default key.
+
+**This has bitten twice.** 0.17.5 shipped default-key Maven artifacts. 0.17.7 repeated it: the
+operator exported only `HYDRA_RELEASE_SIGNING_KEY`, so the source archive was correctly signed with
+the KEYS key while all 22 Maven artifacts carried the 2014 default key — and because the scripts'
+own re-sign/verify steps were *skipped entirely* when `HYDRA_PGP_KEY` was unset, nothing caught it.
+Maven Central is immutable, so neither release can be corrected in place.
+
+**After publishing, verify the fingerprint on a PUBLISHED artifact**, not on the source archive and
+not on a local build — Sonatype validating a deployment only checks that signatures are well-formed,
+never whose key made them:
+
+```bash
+curl -sO https://repo1.maven.org/maven2/net/fortytwo/hydra/java/hydra-kernel/<version>/hydra-kernel-<version>.pom
+curl -sO https://repo1.maven.org/maven2/net/fortytwo/hydra/java/hydra-kernel/<version>/hydra-kernel-<version>.pom.asc
+gpg --verify hydra-kernel-<version>.pom.asc hydra-kernel-<version>.pom   # expect the KEYS fingerprint
+```
+
+With `HYDRA_JAVA_PUBLISH_HOLD=1` / `HYDRA_SCALA_PUBLISH_HOLD=1` the deployment stops at VALIDATED,
+so a wrong-key result at that point means "drop the deployment", not "too late". Check it *there*.
+
 ### PGP signing for Maven Central (one publisher's local convention)
 
 > This subsection describes **how the current maintainer's machine is set up**, not a requirement of

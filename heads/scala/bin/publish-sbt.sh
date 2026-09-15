@@ -210,6 +210,29 @@ if [ "$DO_UPLOAD" = true ]; then
         echo "ERROR: gpg not found on PATH — required for publishSigned." >&2
         exit 1
     fi
+
+    # Accept the source-archive variable name as an alias. One release, one key:
+    # prepare-release.sh calls it HYDRA_RELEASE_SIGNING_KEY, and an operator who
+    # exports only that one must not silently get default-key artifacts.
+    if [ -z "${HYDRA_PGP_KEY:-}" ] && [ -n "${HYDRA_RELEASE_SIGNING_KEY:-}" ]; then
+        HYDRA_PGP_KEY="$HYDRA_RELEASE_SIGNING_KEY"
+        export HYDRA_PGP_KEY
+        echo "  HYDRA_PGP_KEY unset; adopting HYDRA_RELEASE_SIGNING_KEY=$HYDRA_PGP_KEY"
+    fi
+
+    # HARD GATE (0.17.7 regression): refuse to upload without an explicit key.
+    # Previously an unset HYDRA_PGP_KEY silently SKIPPED the re-signing block
+    # below, so sbt-pgp's default-key fallback went to Central unchallenged --
+    # exactly what 0.17.5 and 0.17.7 shipped. "No key specified" is never a safe
+    # default for a release-signing script; fail here instead.
+    if [ -z "${HYDRA_PGP_KEY:-}" ]; then
+        echo "ERROR: HYDRA_PGP_KEY (or HYDRA_RELEASE_SIGNING_KEY) is not set." >&2
+        echo "       sbt-pgp ignores key selection and would fall back to gpg's" >&2
+        echo "       default key, publishing IMMUTABLE artifacts signed with the" >&2
+        echo "       wrong identity. Set it to the fingerprint in the repo-root" >&2
+        echo "       KEYS file and re-run." >&2
+        exit 1
+    fi
     _sign_probe="$(mktemp)"; printf 'hydra-release-signing-probe\n' > "$_sign_probe"
     _sign_key_flag=()
     [ -n "${HYDRA_PGP_KEY:-}" ] && _sign_key_flag=(--local-user "$HYDRA_PGP_KEY")
