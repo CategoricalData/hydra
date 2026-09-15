@@ -36,6 +36,29 @@ data GoState = GoState {
   goStateFuncTypeParams :: S.Set Core.Name, -- ^ Forall-bound type vars of the current generic function
   goStateVarTypes :: M.Map String Bool, -- ^ Tracks Go type of local vars: True = any, False = concrete
   goStateFuncParamTypes :: M.Map String Core.Type, -- ^ First param type of let-bound function bindings
+  -- | FULL (uncurried) parameter-type list of let-bound function bindings. The
+  -- single-type goStateFuncParamTypes only coerces the FIRST argument of a curried
+  -- local call, so `helper(cons(...).([]any), drop(maxlen, rem))` leaves the second
+  -- arg un-asserted (`drop` returns any, param is []any). Storing every param type
+  -- lets the curried-call path assert each argument against its declared param.
+  goStateFuncAllParamTypes :: M.Map String [Core.Type],
+  -- | Let-bound function names whose EMITTED Go signature actually uses the declared
+  -- parameter types, so a call site may coerce its arguments to them.
+  --
+  -- A recursive binding's forward declaration takes its first parameter type from the
+  -- lambda's own domain annotation and falls back to `any` when there is none
+  -- (`var recurse func(any) func(core.Term) util.Pair` in hydra/rewriting, versus
+  -- `var peel func([]any) func(core.Type) util.Pair` in hydra/scoping). The declared
+  -- Hydra parameter types recorded in goStateFuncAllParamTypes are authoritative only
+  -- in the second case; coercing arguments against them when the emitted signature
+  -- erased the parameter fights that erasure and breaks rewriting.go wholesale.
+  goStateDeclaredParamsEmitted :: S.Set String,
+  -- | Names of let-bound functions whose FULLY-APPLIED result is a concrete
+  -- (non-`any`) Go type. Once producers are concretely typed (the codomain fix),
+  -- `f(x)` on such a function is already concrete, so `producesAny` must report
+  -- False for it -- otherwise a stale `.(T)` assertion is appended and Go rejects
+  -- it ("is not an interface"). Empty means "assume any", preserving old behavior.
+  goStateConcreteResultFuncs :: S.Set String,
   goStateCallableVars :: S.Set String, -- ^ Variables known to be callable (function-typed params)
   goStateExpectedType :: Maybe Core.Type, -- ^ Expected type for the current expression (bidirectional)
   goStateTermParamTypes :: M.Map Core.Name Core.Type -- ^ Hydra types of function params (for type inference)
@@ -57,6 +80,9 @@ initState mod_ = GoState {
   goStateInTypeDef = False,
   goStateVarTypes = M.empty,
   goStateFuncParamTypes = M.empty,
+  goStateFuncAllParamTypes = M.empty,
+  goStateDeclaredParamsEmitted = S.empty,
+  goStateConcreteResultFuncs = S.empty,
   goStateCallableVars = S.empty,
   goStateFuncTypeParams = S.empty,
   goStateExpectedType = Nothing,
@@ -88,6 +114,11 @@ namespaceToGoPackage (ModuleName name) =
   in case parts of
     -- Single segment (e.g., stdlib "big") → use as-is
     [p] -> p
+    -- The generated hydra.util package (Comparison, etc.) would collapse to the
+    -- bare name "util", colliding with the hand-written overlay util package
+    -- (hydra.overlay.go.util), which also declares package "util". Give the
+    -- generated one a distinct alias so both can be imported together.
+    ["hydra", "util"] -> "hutil"
     -- Two segments (hydra.core, math.big) → last segment
     [_, p] -> sanitizePackageName p
     -- Deeper (hydra.encode.core) → join all non-hydra segments for uniqueness
@@ -681,10 +712,22 @@ encodeTermInner cx g term st = case term of
           Core.TermUnit -> failGo cx "application of the unit value"
           Core.TermOptional _ -> failGo cx "application of an optional value"
           _ -> do
-            -- Look up the first param type for local function calls
+            -- Look up the first param type so an any-typed argument can be
+            -- asserted to it. For a named-variable head, read the recorded
+            -- param type; for an INLINE lambda head (an IIFE like
+            -- `func(x2 T) any {...}(arg)`), read the lambda's own domain
+            -- annotation — otherwise the any-typed arg reaches a concrete Go
+            -- parameter with no assertion and fails to compile (E1a).
+            -- Full parameter-type list for the head, so EVERY argument (not just
+            -- the first) can be asserted to its declared param type. Only the first
+            -- type was tracked before, leaving `helper(cons(..), drop(maxlen, rem))`
+            -- with the second arg (a lib-prim result typed `any`) un-asserted where
+            -- the param is `[]any`. For an inline lambda head, fall back to the
+            -- lambda's own domain (single param).
             let mFuncParamType = case deannotateTerm funTerm of
                   Core.TermVariable name ->
                     M.lookup (toGoUnexported $ unName name) (goStateFuncParamTypes st1)
+                  Core.TermLambda lam -> Core.lambdaDomain lam
                   _ -> Nothing
             case argTerms of
               [] -> pure (funExpr, st1)
@@ -695,12 +738,34 @@ encodeTermInner cx g term st = case term of
                   Just pt | producesAny st2 firstArg ->
                     coerceToType cx g firstExpr pt firstArg st2
                   _ -> pure (firstExpr, st2)
-                (restExprs, st3) <- encodeTermList cx g restArgs st2'
-                -- Check if the function is a callable var (returns concrete, not any)
-                let isCallableFun = case deannotateTerm funTerm of
+                -- Coerce the remaining arguments of a curried call to their declared
+                -- parameter types. Only the first argument was coerced above, so
+                -- `peel([]any{})(body)` and `helper(Cons(..).([]any))(Drop(maxlen, rem))`
+                -- passed an `any`-typed second argument into a concrete parameter.
+                --
+                -- Gated on goStateDeclaredParamsEmitted: the declared types are
+                -- authoritative only when the emitted Go signature actually uses them.
+                -- Where the emission erased the parameter to `any` (hydra/rewriting's
+                -- recurse/fsub), coercing against the declared types fights the erasure.
+                let restParamTypes = case deannotateTerm funTerm of
                       Core.TermVariable name ->
-                        S.member (toGoUnexported (unName name)) (goStateCallableVars st)
-                      _ -> False
+                        let n = toGoUnexported (unName name)
+                        in if S.member n (goStateDeclaredParamsEmitted st2')
+                             then drop 1 $ M.findWithDefault [] n (goStateFuncAllParamTypes st2')
+                             else []
+                      _ -> []
+                (restExprs, st3) <- if null restParamTypes
+                  then encodeTermList cx g restArgs st2'
+                  else encodeAndCoerceArgs cx g restArgs restParamTypes st2'
+                -- A curried head needs no .(func(any) any) assertion when its
+                -- intermediate result already has a concrete Go function type:
+                -- either a function-typed lambda param (goStateCallableVars) OR a
+                -- let-bound function whose codomain is now typed (isLocalFuncVar).
+                -- Before the codomain fix a let-bound func returned any and DID need
+                -- the assertion; now `splitOnUppercase(x)` is a concrete
+                -- func(int32) []any, and asserting .(func(any) any) on a
+                -- non-interface is illegal ("is not an interface").
+                let isCallableFun = isCallableVar st funTerm || isLocalFuncVar st funTerm
                     firstCall = goCall (exprToPrimary funExpr) [coercedFirst]
                 case restExprs of
                   [] -> pure (firstCall, st3)
@@ -732,20 +797,54 @@ encodeTermInner cx g term st = case term of
                 Nothing -> Core.TypeVariable (Core.Name "_")
               _ -> Core.TypeVariable (Core.Name "_")
             calledHasTypeParams = any (\v -> typeVarNeedsGoParam g v (calledParamTypes0 ++ [calledRetType0])) calledSchemeVars0
-        (funExpr, st1a) <- if not (null funTypeArgs) && calledHasTypeParams && isQualifiedName (case deannotateTerm bareFun of { Core.TermVariable n -> n; _ -> Core.Name "" })
-          then case funTypeArgs of
-            [singleArg] -> do
-              (goArg, st') <- encodeTypeForTerm cx g singleArg st1
-              -- Only generate instantiation for simple type names (T0, core.Type, etc.)
-              -- Composite types ([]any, func...) can't be represented in IndexExpr
-              if isSimpleGoType goArg
-                then do
-                  let typeExpr = typeToExpr goArg
-                  pure (Go.ExpressionUnary $ Go.UnaryExprPrimary $
-                    Go.PrimaryExprIndex $ Go.IndexExpr
-                      (exprToPrimary rawFunExpr) typeExpr, st')
-                else pure (rawFunExpr, st')
-            _ -> pure (rawFunExpr, st1)
+            -- When the term carries NO explicit type applications (collectFuncTypeArgs
+            -- is empty) but the callee has Go-visible type params whose binding is only
+            -- reachable through the RESULT (e.g. `pure : a -> Parser a`, where `a` never
+            -- appears in a value-argument position), synthesize the type-arg list from
+            -- the expected return type. Without this the call emits bare `Pure(...)` and
+            -- Go infers `Pure[any]`, so a `func(...) Parser[[]any]` return breaks
+            -- ("Parser[any] as Parser[[]any]"). Match the callee's declared return type
+            -- against the saved expected type, then read each Go-visible scheme var in
+            -- declared order.
+            synthRetSubst = case savedExpectedType of
+              Just expectedRet -> inferRetTypeSubst g funTerm calledSchemeVars0 expectedRet
+              Nothing -> M.empty
+            synthArgSubst = inferArgTypeSubst g funTerm argTerms st1
+            synthSubst = synthArgSubst `M.union` synthRetSubst
+            goVisibleSchemeVars =
+              [v | v <- calledSchemeVars0, typeVarNeedsGoParam g v (calledParamTypes0 ++ [calledRetType0])]
+            synthesizedTypeArgs =
+              [ M.findWithDefault (Core.TypeVariable v) v synthSubst | v <- goVisibleSchemeVars ]
+            -- funTypeArgs is consumed reversed (outermost-first), so the synthesized
+            -- list (declared order) is reversed here to match that convention. Only use
+            -- it when EVERY Go-visible var resolved to a non-variable concrete type.
+            allSynthResolved = not (null goVisibleSchemeVars)
+              && all (\t -> case deannotateType t of { Core.TypeVariable _ -> False; _ -> True }) synthesizedTypeArgs
+            effectiveTypeArgs = if not (null funTypeArgs) then funTypeArgs
+              else if allSynthResolved then reverse synthesizedTypeArgs
+              else []
+        (funExpr, st1a) <- if not (null effectiveTypeArgs) && calledHasTypeParams && isQualifiedName (case deannotateTerm bareFun of { Core.TermVariable n -> n; _ -> Core.Name "" })
+          then do
+              -- effectiveTypeArgs is outermost-first (reversed relative to declared
+              -- type-param order), so reverse before emitting. Attach the args to the
+              -- function's OperandName (rendered `Name[A, B]`) -- unlike IndexExpr, this
+              -- path renders COMPOSITE Go types too (`Pure[[]any]`, `Bind[[]any, T0]`),
+              -- which the old IndexExpr/isSimpleGoType gate could not, forcing bare
+              -- calls that Go then mis-inferred (`Pure[any]` where `Parser[[]any]` was
+              -- needed). Only when the arg count matches the Go-visible param count
+              -- exactly and the function reference is a bare OperandName.
+              (goArgs, st') <- encodeTypesForTerm cx g (reverse effectiveTypeArgs) st1
+              let goVisibleCount = length
+                    [v | v <- calledSchemeVars0,
+                         typeVarNeedsGoParam g v (calledParamTypes0 ++ [calledRetType0])]
+              case rawFunExpr of
+                Go.ExpressionUnary (Go.UnaryExprPrimary
+                  (Go.PrimaryExprOperand (Go.OperandNamed (Go.OperandName qid []))))
+                  | length goArgs == goVisibleCount ->
+                    pure (Go.ExpressionUnary $ Go.UnaryExprPrimary $
+                      Go.PrimaryExprOperand $ Go.OperandNamed $
+                        Go.OperandName qid goArgs, st')
+                _ -> pure (rawFunExpr, st')
           else pure (rawFunExpr, st1)
         case deannotateTerm funTerm of
           Core.TermLiteral _ -> pure (funExpr, st1a)
@@ -769,20 +868,87 @@ encodeTermInner cx g term st = case term of
                 retTypeSubst = case savedExpectedType of
                   Just expectedRet -> inferRetTypeSubst g funTerm calledSchemeVars expectedRet
                   Nothing -> M.empty
-                -- Combine all inferred substitutions
-                allInferred = M.union argTypeSubst retTypeSubst
+                -- Bind scheme vars from the call's EXPLICIT type applications. Some
+                -- scheme vars appear only in a codomain position that value-argument
+                -- inference cannot reach -- e.g. `map[t0, Optional t0]`'s second var
+                -- `b` fixes the mapping function's result type `(a -> b)`. Without
+                -- this the codomain stays the raw scheme var (`func(t0) t1`) and the
+                -- lambda is emitted `func(_p T0) T0` instead of `func(_p T0) Optional`.
+                -- funTypeArgs is outermost-first, so reverse to declared order. The
+                -- KEY must match renamedParamTypes: those were alpha-renamed via
+                -- `renaming` (t1 -> t1_), so a subst keyed on the original `t1` would
+                -- never fire. Key on the renamed name where the var was renamed.
+                -- Use effectiveTypeArgs (synthesized from the expected return type when
+                -- the term carries no explicit type application, e.g. `pure`) so the
+                -- argument coercion resolves the same type var the emitted `Name[..]`
+                -- instantiation uses -- e.g. Pure's `a -> []any`, coercing the arg to
+                -- []any so `Pure[[]any](cons(...).([]any))` type-checks.
+                explicitArgSubst = M.fromList
+                  [ (maybe v (\_ -> Core.Name (unName v ++ "_")) (M.lookup v renaming), ta)
+                  | (v, ta) <- zip calledSchemeVars (reverse effectiveTypeArgs) ]
+                -- Combine all inferred substitutions. Value-inferred args win over the
+                -- explicit type app on conflict (left-biased union), then the explicit
+                -- app fills any scheme var inference left unresolved. explicitArgSubst
+                -- is applied to renamedParamTypes directly (already renamed keys), so
+                -- it is unioned into resolvedParamTypes' substitution below rather than
+                -- re-run through the k_ comprehension.
+                allInferred = argTypeSubst `M.union` retTypeSubst
                 -- Rename the keys to match the renamed param types
+                -- Fallback: any renamed var (k_) that inference does NOT resolve
+                -- must collapse back to its ORIGINAL name k, never leak into emitted
+                -- code as an undeclared type parameter. The renaming exists only to
+                -- avoid shadowing DURING inference; a renamed var that survives to a
+                -- position like an argument lambda's result type (`Parser[T0_]`)
+                -- would be `undefined: T0_` in Go. Mapping k_ -> k restores the
+                -- enclosing function's real type parameter (T0), which IS declared.
+                renameFallback = M.fromList
+                  [(Core.Name (unName k ++ "_"), Core.TypeVariable k) | k <- M.keys renaming]
+                -- A value-argument inference that resolves a scheme var to a bare type
+                -- variable (`_`, or `t0` itself) is UNINFORMATIVE: it happens when the
+                -- argument is `any`-erased (e.g. `pure(cons(x,xs))` where cons returns
+                -- any), so the var's real binding is only reachable from the expected
+                -- RETURN type via explicitArgSubst. Drop such entries so explicitArgSubst
+                -- wins in the union below -- otherwise `t0 -> _` from the arg shadows
+                -- `t0 -> []any` from the return type and `Pure[[]any]`'s arg stays
+                -- un-coerced ("Cons(x,xs) as []any: need type assertion").
+                informative t = case deannotateType t of
+                  Core.TypeVariable _ -> False
+                  _ -> True
+                allInferredInf = M.filter informative allInferred
                 renamedInferred = M.fromList
-                  [(Core.Name (unName k ++ "_"), v) | (k, v) <- M.toList allInferred,
+                  [(Core.Name (unName k ++ "_"), v) | (k, v) <- M.toList allInferredInf,
                     S.member k (goStateFuncTypeParams st1)]
-                  `M.union` allInferred
+                  `M.union` allInferredInf
+                  `M.union` explicitArgSubst
+                  `M.union` renameFallback
                 -- Apply to get final resolved param types
                 resolvedParamTypes = if M.null renamedInferred then renamedParamTypes
                   else fmap (applyTypeSubst renamedInferred) renamedParamTypes
             (argExprs, st2) <- encodeAndCoerceArgs cx g argTerms resolvedParamTypes st1a
             -- Restore substitution
             let st2' = st2 { goStateTypeSubst = goStateTypeSubst st1a }
-            pure (goCall (exprToPrimary funExpr) argExprs, st2')
+                arity = length rawParamTypes
+                given = length argExprs
+            if arity > 0 && given < arity
+              then do
+                -- PARTIAL application of a flat multi-arg generated function:
+                -- Go has no currying, so `f(a, b)` on a 3-arg `f` is a compile
+                -- error. Eta-expand to a closure that supplies the missing
+                -- arguments: func(_etaN any) any { return f(a, b, _etaN...) },
+                -- asserting each surplus param to its declared type.
+                (missingGoTypes, st3) <- encodeTypesForTerm cx g (drop given resolvedParamTypes) st2'
+                let etaNames = ["_p" ++ show i | i <- [given .. arity - 1]]
+                    etaArgExprs = [ if gt == goAnyType
+                                      then goNameExpr n
+                                      else goTypeAssertExpr (goNameExpr n) gt
+                                  | (n, gt) <- zip etaNames missingGoTypes]
+                    fullCall = goCall (exprToPrimary funExpr) (argExprs ++ etaArgExprs)
+                    wrapped = foldr (\n body -> goFuncLit
+                      [Go.ParameterDecl [goIdent n] False goAnyType]
+                      (Just $ Go.ResultType goAnyType)
+                      [goReturn [body]]) fullCall etaNames
+                pure (wrapped, st3)
+              else pure (goCall (exprToPrimary funExpr) argExprs, st2')
   Core.TermEither e -> case e of
     Left l -> do
       (le, st1) <- encodeTerm cx g l st
@@ -797,8 +963,17 @@ encodeTermInner cx g term st = case term of
   Core.TermCases cs -> encodeCases cx g cs Nothing st
   Core.TermUnwrap wname -> encodeUnwrap cx g wname Nothing st
   Core.TermLet lt -> do
-    let bindings = Core.letBindings lt
-        body = Core.letBody lt
+    -- Flatten a chain of nested lets into ONE block before encoding.
+    --
+    -- The DSL writes sequential bindings as nested lets ("a" <~ .. $ "b" <~ .. $ body),
+    -- so a chain of N bindings arrives here as N nested TermLets. Encoding each as its
+    -- own immediately-invoked closure produced N-deep closure nesting, and the Go
+    -- compiler's cost on nested `func() any` closures is EXPONENTIAL in depth: a
+    -- minimal repro (no Hydra code) compiles at 0.17 GB at depth 18, 1.62 GB at
+    -- depth 20, and blows past 12 GB by depth 22. serialization.PrintExpr nested to
+    -- ~24 and drove `compile` to 44 GB, hard-resetting the build machine twice
+    -- (2026-07-20). Emitting one block with N sequential statements keeps depth at 1.
+    let (bindings, body) = flattenLetChain lt
         -- Pre-compute type substitutions for bindings that have TypeLambda params.
         -- For each binding with TypeLambdas, scan the let body (and other bindings)
         -- for TypeApplication args, and build a substitution mapping TypeLambda params
@@ -1065,6 +1240,15 @@ encodeLambda cx g lam st = do
         stWithParam = st1 {
           goStateVarTypes = M.insert param isParamAny (goStateVarTypes st1),
           goStateTypeSubst = M.union domainSubst (goStateTypeSubst st1),
+          -- Register the lambda parameter's HYDRA type so inferTermType can type a
+          -- reference to it. Only top-level definition parameters were registered, so a
+          -- `cases` handler's parameter (hydra/parsers' `sf : ParseSuccess[func(T0) T1]`,
+          -- `sa : ParseSuccess[T0]`) had no inferable type, and a projection on it fell
+          -- back to the ambient, name-keyed type substitution -- emitting every such
+          -- projection at the same wrong instantiation.
+          goStateTermParamTypes = case mEffectiveDomain of
+            Just dom -> M.insert (Core.lambdaParameter lam) dom (goStateTermParamTypes st1)
+            Nothing -> goStateTermParamTypes st1,
           goStateCallableVars = case mDomain of
             Just dom | isFunctionType dom -> S.insert param (goStateCallableVars st1)
             _ -> goStateCallableVars st1,
@@ -1086,26 +1270,59 @@ encodeLambda cx g lam st = do
           Nothing -> Nothing
         stWithBody = stWithParam { goStateExpectedType = bodyExpectedType }
     (bodyExpr, st2) <- encodeTerm cx g (Core.lambdaBody lam) stWithBody
+    -- Emit the lambda's RESULT type, not a blanket `any`.
+    --
+    -- Core.Lambda carries only a domain, so the codomain has to come from the
+    -- expected function type (bodyExpectedType, computed above). Erasing it to
+    -- `any` is what breaks curried higher-order arguments: a two-parameter
+    -- curried lambda emitted as `func(val any) any` is NOT assignable to a
+    -- parameter declared `func(any) func(core.Binding) util.Pair`, because Go has
+    -- no subtyping -- even though every value flowing through is identical at
+    -- runtime. That single erasure accounts for the bulk of the rewriting
+    -- failures (shape mismatch / "not a function" / "not an interface" /
+    -- "does not implement core.Term", depending on how the value is consumed).
+    --
+    -- Fall back to `any` when there is no expected type to derive from: an
+    -- unconstrained lambda body is genuinely any-typed here.
+    (resultType, st2b) <- case bodyExpectedType of
+      Just cod -> encodeTypeForTerm cx g cod st2
+      Nothing -> pure (goAnyType, st2)
+    -- Now that the result type is concrete, the returned body must actually HAVE
+    -- that type. If the body produces `any` (typical for a lib-call or eliminator
+    -- body) and the declared result is concrete, `return <any>` in a
+    -- `func(...) string` fails to compile -- assert the body to the result type.
+    (coercedBody, st2c) <- case bodyExpectedType of
+      Just cod | resultType /= goAnyType && producesAny st2 (Core.lambdaBody lam) ->
+        coerceToType cx g bodyExpr cod (Core.lambdaBody lam) st2b
+      _ -> pure (bodyExpr, st2b)
     -- Restore var types and func param types after encoding body (lambda scope)
-    let st3 = st2 { goStateVarTypes = goStateVarTypes st,
+    let st3 = st2c { goStateVarTypes = goStateVarTypes st,
                      goStateTypeSubst = goStateTypeSubst st,
                      goStateFuncParamTypes = goStateFuncParamTypes st,
+                     goStateTermParamTypes = goStateTermParamTypes st,
+                     goStateConcreteResultFuncs = goStateConcreteResultFuncs st,
                      goStateCallableVars = goStateCallableVars st }
     pure (goFuncLit
       [Go.ParameterDecl [goIdent param] False paramType]
-      (Just $ Go.ResultType goAnyType)
-      [goReturn [bodyExpr]], st3)
+      (Just $ Go.ResultType resultType)
+      [goReturn [coercedBody]], st3)
+
+-- | The Go package alias for an overlay lib package. Lib namespaces (pairs,
+-- lists, maps, sets, ...) frequently coincide with Hydra binding/parameter
+-- names, and a local variable would shadow a bare `pairs`/`lists` package
+-- reference. Prefix every lib import with "lib" so it can never be shadowed.
+libPackageAlias :: String -> String
+libPackageAlias lib = "lib" ++ lib
 
 -- | Resolve a Hydra primitive name to a reference to its native overlay
--- implementation: "hydra.lib.strings.concat" -> strings.Concat with import
--- "hydra.dev/hydra/overlay/go/lib/strings". Overlay lib packages declare
--- their short names, so no alias is needed (and buildImports never aliases
--- overlay paths).
+-- implementation: "hydra.lib.strings.concat" -> libstrings.Concat with import
+-- "hydra.dev/hydra/overlay/go/lib/strings" aliased as libstrings (via
+-- libPackageAlias, so a bare `strings` binding/param can never shadow the pkg).
 resolvePrimRef :: Core.Name -> GoState -> (Go.Expression, GoState)
 resolvePrimRef (Core.Name name) st = case Strings.splitOn "." name of
   ["hydra", "lib", lib, fn] ->
     let impPath = goModulePath ++ "/hydra/overlay/go/lib/" ++ lib
-    in (goQualNameExpr lib (capitalize fn), addImport impPath st)
+    in (goQualNameExpr (libPackageAlias lib) (capitalize fn), addImport impPath st)
   _ -> (goNameExpr name, st)
 
 -- | Extract the primitive name from a (possibly type-wrapped) primitive reference.
@@ -1207,24 +1424,60 @@ encodeProjection :: InferenceContext -> Graph -> Core.Projection -> Maybe Core.T
 encodeProjection cx g proj marg st = do
     let fname = toGoExported (unName $ Core.projectionFieldName proj)
         typeName = Core.projectionTypeName proj
-        -- Resolve type arguments from the current substitution context
-        resolvedArgs = resolveTypeArgs g typeName st
+        fieldName = Core.projectionFieldName proj
+        -- Resolve type arguments, preferring the PROJECTED VALUE's own type.
+        --
+        -- resolveTypeArgs reads the ambient goStateTypeSubst, which is keyed by bare
+        -- type-variable name across one flat namespace. When the projected record's
+        -- forall var shares a name with an enclosing scheme var, the ambient entry wins
+        -- and the projection is emitted at the wrong instantiation. In hydra/parsers'
+        -- `ap`, `ParseSuccess`'s forall `a` collides with the enclosing `a`, so
+        -- projections of `sf : ParseSuccess[func(T0) T1]` and `sa : ParseSuccess[T0]`
+        -- BOTH emitted `v.(parsing.ParseSuccess[T1])`.
+        --
+        -- The argument's inferred type is authoritative here: it already carries the
+        -- instantiation for this specific use. Fall back to the ambient substitution
+        -- when the argument's type is unknown or is not an application of this record.
+        ambientArgs = resolveTypeArgs g typeName st
+        argTypeArgs = case marg of
+          Just argTerm -> case inferTermType g argTerm st of
+            Just at ->
+              let (baseType, typeArgs) = collectTypeArgs at
+              in case deannotateType baseType of
+                Core.TypeVariable bn | bn == typeName, not (null typeArgs) -> Just typeArgs
+                _ -> Nothing
+            Nothing -> Nothing
+          Nothing -> Nothing
+        resolvedArgs = case argTypeArgs of
+          Just tas | length tas == length ambientArgs -> tas
+          _ -> ambientArgs
     (goTypeArgs, st0) <- encodeTypes cx g resolvedArgs st
     let (recType, st1) = resolveTypeRef typeName goTypeArgs st0
+    -- The projected field's declared type: emitting the projection lambda with
+    -- this concrete Go result type (instead of `any`) means callers receive the
+    -- field's real type and need no downstream assertion (E1b — the higher-
+    -- leverage half of the return-type threading).
+    (mGoFieldType, stF) <- case M.lookup fieldName (lookupRecordFieldTypes g typeName) of
+      Just ft -> do
+        (gft, s) <- encodeTypeForTerm cx g ft st1
+        pure (if gft == goAnyType then Nothing else Just gft, s)
+      Nothing -> pure (Nothing, st1)
     case marg of
       Nothing ->
-        -- Unapplied projection: func(v any) any { return v.(RecordType).Field }
-        pure (goFuncLit
+        -- Unapplied projection: func(v any) FieldType { return v.(RecordType).Field }
+        let selector = Go.ExpressionUnary $ Go.UnaryExprPrimary $
+              goSelector (Go.PrimaryExprTypeAssertion $
+                Go.TypeAssertionExpr
+                  (Go.PrimaryExprOperand $ Go.OperandNamed $
+                    Go.OperandName (goQualIdent Nothing "v") [])
+                  recType) fname
+            resultType = maybe goAnyType id mGoFieldType
+        in pure (goFuncLit
           [Go.ParameterDecl [goIdent "v"] False goAnyType]
-          (Just $ Go.ResultType goAnyType)
-          [goReturn [Go.ExpressionUnary $ Go.UnaryExprPrimary $
-            goSelector (Go.PrimaryExprTypeAssertion $
-              Go.TypeAssertionExpr
-                (Go.PrimaryExprOperand $ Go.OperandNamed $
-                  Go.OperandName (goQualIdent Nothing "v") [])
-                recType) fname]], st1)
+          (Just $ Go.ResultType resultType)
+          [goReturn [selector]], stF)
       Just arg -> do
-        (argExpr, st2) <- encodeTerm cx g arg st1
+        (argExpr, st2) <- encodeTerm cx g arg stF
         pure (Go.ExpressionUnary $ Go.UnaryExprPrimary $
           goSelector (Go.PrimaryExprTypeAssertion $
             Go.TypeAssertionExpr (exprToPrimary argExpr) recType) fname, st2)
@@ -1266,10 +1519,25 @@ encodeCases cx g cs marg st = do
             (Core.TermApplication $ Core.Application dt arg) st2
         Nothing -> failGo cx "case statement with no cases and no default"
       else do
-        let allArms = arms ++ defArm
+        -- The type switch binds `v := x.(type)` only if some arm actually
+        -- references it. Unit-variant handlers ignore the payload (they receive
+        -- the unit literal, not v), so a case statement whose variants are ALL
+        -- unit and whose default (if any) does not use v would leave `v`
+        -- declared-and-unused — a Go compile error. Bind only when needed.
+        let anyArmUsesV = any (not . variantIsUnit g csTypeName . Core.caseAlternativeName) caseFields
+            defaultUsesV = case defCase of
+              Just dt -> case deannotateTerm dt of
+                Core.TermLambda _ -> True
+                Core.TermProject _ -> True
+                Core.TermCases _ -> True
+                Core.TermUnwrap _ -> True
+                _ -> False
+              Nothing -> False
+            guardBinding = if anyArmUsesV || defaultUsesV then Just (goIdent "v") else Nothing
+            allArms = arms ++ defArm
             switchStmt = Go.StatementSwitch $ Go.SwitchStmtType $ Go.TypeSwitchStmt
               Nothing
-              (Go.TypeSwitchGuard (Just $ goIdent "v")
+              (Go.TypeSwitchGuard guardBinding
                 (Go.PrimaryExprOperand $ Go.OperandNamed $
                   Go.OperandName (goQualIdent Nothing "x") []))
               allArms
@@ -1337,12 +1605,7 @@ encodeCaseArms cx g baseName (cf:cfs) st = do
   let vExpr = Core.TermVariable $ Core.Name "v"
   -- Check if the variant type is unit (no Value field)
   let variantFieldType = lookupUnionVariantType g baseName (Core.caseAlternativeName cf)
-      isUnit = case variantFieldType of
-        Just vt -> case deannotateType vt of
-          Core.TypeUnit -> True
-          Core.TypeRecord rt -> null rt
-          _ -> False
-        Nothing -> False
+      isUnit = variantIsUnit g baseName (Core.caseAlternativeName cf)
   -- Build substitution from the variant's field type for the case arm body.
   -- The variant field type (e.g., ParseSuccess[a]) with the ambient substitution
   -- gives the concrete type (e.g., ParseSuccess[t0]). Extract substitutions from this
@@ -1355,7 +1618,14 @@ encodeCaseArms cx g baseName (cf:cfs) st = do
       stForArm = if M.null variantSubst then st1
         else st1 { goStateTypeSubst = M.union variantSubst (goStateTypeSubst st1) }
   (armBody, st2) <- if isUnit
-    then encodeTerm cx g (Core.TermApplication $ Core.Application cfterm vExpr) stForArm
+    then do
+      -- The handler for a unit variant takes the unit value. The switch binds
+      -- `v` to the concrete variant struct, which is unit-shaped, so pass the
+      -- unit literal struct{}{} — NOT `v`. Passing `v` would let argument
+      -- coercion emit `v.(struct{})`, an illegal assertion on a concrete
+      -- (non-interface) value.
+      (cfExpr, st1') <- encodeTerm cx g cfterm stForArm
+      pure (goCall (exprToPrimary cfExpr) [goEmptyStructLit], st1')
     else do
       -- For non-unit variants, pass v.Value to the case function
       let vValue = Core.TermAnnotated $ Core.AnnotatedTerm vExpr (Core.TermMap M.empty)  -- placeholder; empty TermMap matches the convention
@@ -1410,32 +1680,127 @@ encodeBindings cx g (b:bs) st = do
           _ -> Nothing
         else Nothing
       -- Pre-register recursive bindings so the body can reference them
-      stForEncode = if isRecursive
+      stForEncodeBase = if isRecursive
         then st {
           goStateVarTypes = M.insert bname False (goStateVarTypes st),
           goStateFuncParamTypes = case mRecLamDomain of
             Just pt -> M.insert bname pt (goStateFuncParamTypes st)
-            Nothing -> M.insert bname (Core.TypeVariable $ Core.Name "_any") (goStateFuncParamTypes st)
+            Nothing -> M.insert bname (Core.TypeVariable $ Core.Name "_any") (goStateFuncParamTypes st),
+          -- Full param list so the RECURSIVE self-calls coerce every argument, not
+          -- just the first (`helper(cons(...), drop(maxlen, rem))` -- the second
+          -- arg is a lib-prim result that needs `.([]any)`).
+          goStateFuncAllParamTypes = M.insert bname
+            (bindingAllParamTypes b bterm) (goStateFuncAllParamTypes st)
         }
         else st
+      -- Propagate the binding's declared type as the expected type for its value.
+      -- Without this, a let-bound lambda is encoded with no expected type, so
+      -- encodeLambda cannot derive a codomain and falls back to `any` -- emitting
+      -- `forField := func(val any) any` where the consumer declares
+      -- `func(any) func(core.Binding) util.Pair`. Go has no subtyping, so that is a
+      -- hard mismatch even though the runtime values agree. The binding's type
+      -- scheme is the authority on its shape, so hand it to the value's encoding.
+      -- Strip foralls: the quantifier is not part of the Go shape, and passing a
+      -- TypeForall through as an expected type would surface bare type variables.
+      stForEncode = case Core.bindingTypeScheme b of
+        Just tscheme -> case snd (unpackForallType (Core.typeSchemeBody tscheme)) of
+          inner | isFunctionType inner -> stForEncodeBase { goStateExpectedType = Just inner }
+          _ -> stForEncodeBase
+        Nothing -> stForEncodeBase
+      -- Whether this binding is function-valued, and its first parameter type.
+      -- Computed here (not only in the non-recursive emit branch below) so the
+      -- following siblings can be encoded with this binding already registered.
+      isFuncBindingEarly = case Core.bindingTypeScheme b of
+        Just tscheme -> isFunctionType (Core.typeSchemeBody tscheme)
+        Nothing -> case stripTermWrappers bterm of
+          Core.TermLambda _ -> True
+          _ -> False
+      firstParamTypeEarly = case stripTermWrappers bterm of
+        Core.TermLambda lam -> case Core.lambdaDomain lam of
+          Just d -> Just d
+          Nothing -> case Core.bindingTypeScheme b of
+            Just tscheme ->
+              let (_, innerTyp) = unpackForallType (Core.typeSchemeBody tscheme)
+                  (paramTypes, _) = unpackFunctionType innerTyp
+              in case paramTypes of
+                (pt:_) -> Just pt
+                _ -> Nothing
+            Nothing -> Nothing
+        _ -> Nothing
   (bval, st1) <- encodeTerm cx g btermForEncode stForEncode
-  (rest, st2) <- encodeBindings cx g bs st1
+  -- Register THIS binding before encoding the following siblings. Sibling bindings
+  -- are in scope for one another (`replace` is referenced by `result` in the same
+  -- let chain), so encoding the rest against the pre-registration state loses this
+  -- binding's param type and any reference to it from a later sibling is emitted
+  -- without the concrete-domain assertion it needs.
+  -- Concrete-result flag, computed early so LATER SIBLINGS see it. Sibling
+  -- bindings reference each other (`isCycle` used by `withCycles` in the same
+  -- let), and without threading this a sibling call site re-asserts the concrete
+  -- result (`isCycle(_p).(bool)`). Mirrors the hasConcreteResult logic below,
+  -- against st1 (the value is already encoded here).
+  let hasConcreteResultEarly = case Core.bindingTypeScheme b of
+        Just tscheme -> finalCodomainIsConcrete g tscheme
+        Nothing -> case stripTermWrappers bterm of
+          Core.TermLambda _ ->
+            let stripLambdas t = case deannotateTerm t of
+                  Core.TermLambda lam -> stripLambdas (Core.lambdaBody lam)
+                  other -> other
+            in not (producesAny st1 (stripLambdas (stripTermWrappers bterm)))
+          _ -> False
+  let stForRest = if isFuncBindingEarly
+        then st1 {
+          goStateVarTypes = M.insert bname False (goStateVarTypes st1),
+          goStateConcreteResultFuncs = if hasConcreteResultEarly
+            then S.insert bname (goStateConcreteResultFuncs st1)
+            else goStateConcreteResultFuncs st1,
+          goStateFuncParamTypes = M.insert bname
+            (maybe (Core.TypeVariable $ Core.Name "_any") id firstParamTypeEarly)
+            (goStateFuncParamTypes st1),
+          goStateFuncAllParamTypes = M.insert bname
+            (bindingAllParamTypes b bterm) (goStateFuncAllParamTypes st1) }
+        -- A NON-function binding is emitted as `var <name> any = <value>`, so later
+        -- SIBLINGS see an `any`-typed variable and must assert before passing it to a
+        -- concrete parameter. Without an entry here `producesAny` falls through to a
+        -- different registration that reports it concrete, so the assertion is skipped:
+        --   var e any = func(v any) ast.Expr { ... }(bracketExpr)
+        --   var body any = PrintExpr(e)      // PrintExpr wants ast.Expr
+        else st1 { goStateVarTypes = M.insert bname True (goStateVarTypes st1) }
+  (rest, st2) <- encodeBindings cx g bs stForRest
   if isRecursive
     then do
-      -- Recursive binding: var name func(ParamType) any; name = value
+      -- Recursive binding: var name func(ParamType) <Cod>; name = value
       -- Use the actual lambda domain type for the forward declaration
       (goRecParamType, st2a) <- case mRecLamDomain of
         Just dom -> encodeTypeForTerm cx g dom st2
         Nothing -> pure (goAnyType, st2)
+      -- The forward declaration's type must match the value's emitted type
+      -- EXACTLY, or the assignment `name = value` fails. The value's codomain is
+      -- now derived from the binding scheme (see stForEncode above), so the
+      -- forward decl must use the same codomain rather than a blanket `any` --
+      -- otherwise a recursive `stripAnnotations := func(t core.Type) core.Type`
+      -- cannot be assigned to a var declared `func(core.Type) any` (Go has no
+      -- subtyping). Fall back to `any` when the scheme yields no function codomain.
+      (goRecCodType, st2a2) <- case Core.bindingTypeScheme b of
+        Just tscheme -> case deannotateType (snd (unpackForallType (Core.typeSchemeBody tscheme))) of
+          Core.TypeFunction ft -> encodeTypeForTerm cx g (Core.functionTypeCodomain ft) st2a
+          _ -> pure (goAnyType, st2a)
+        Nothing -> pure (goAnyType, st2a)
       -- Register the recursive function in tracking state
-      let st2b = st2a {
-            goStateVarTypes = M.insert bname False (goStateVarTypes st2a),
+      let st2b = st2a2 {
+            goStateVarTypes = M.insert bname False (goStateVarTypes st2a2),
             goStateFuncParamTypes = case mRecLamDomain of
-              Just pt -> M.insert bname pt (goStateFuncParamTypes st2a)
-              Nothing -> M.insert bname (Core.TypeVariable $ Core.Name "_any") (goStateFuncParamTypes st2a)
+              Just pt -> M.insert bname pt (goStateFuncParamTypes st2a2)
+              Nothing -> M.insert bname (Core.TypeVariable $ Core.Name "_any") (goStateFuncParamTypes st2a2),
+            goStateFuncAllParamTypes = M.insert bname
+              (bindingAllParamTypes b bterm) (goStateFuncAllParamTypes st2a2),
+            -- Only trust the declared parameter types at call sites when the emitted
+            -- forward declaration actually uses the first one (see the field's note).
+            goStateDeclaredParamsEmitted = if goRecParamType /= goAnyType
+              then S.insert bname (goStateDeclaredParamsEmitted st2a2)
+              else goStateDeclaredParamsEmitted st2a2
           }
           varDecl = Go.StatementDeclaration $ Go.DeclarationVar $ Go.VarDecl
-            [Go.VarSpec [goIdent bname] (Just $ goFuncType [goRecParamType] goAnyType) []]
+            [Go.VarSpec [goIdent bname] (Just $ goFuncType [goRecParamType] goRecCodType) []]
           assignStmt = Go.StatementSimple $ Go.SimpleStmtAssignment $ Go.Assignment
             [goNameExpr bname] Go.AssignOpSimple [bval]
       pure (varDecl : assignStmt : rest, st2b)
@@ -1467,15 +1832,40 @@ encodeBindings cx g (b:bs) st = do
                     _ -> Nothing
                 Nothing -> Nothing
             _ -> Nothing
+          -- A function binding's fully-applied result is concrete when the final
+          -- codomain of its (uncurried) type is not a type variable. Record such
+          -- bindings so producesAny stops treating `f(x)` as any-typed.
+          hasConcreteResult = case Core.bindingTypeScheme b of
+            Just tscheme -> finalCodomainIsConcrete g tscheme
+            -- Inferred lets carry no type scheme (e.g. `isCycle <~ \scc -> gt ...`,
+            -- `sourceToTargetMapping <~ \els -> ...`), so the scheme-based check
+            -- misses them and their result is wrongly assumed `any` -- producing an
+            -- illegal redundant assertion at the call site (`isCycle(_p).(bool)`).
+            -- Fall back to the lambda BODY: strip the lambda binders and ask whether
+            -- the innermost body produces `any`. A concrete body (a comparison,
+            -- a list/record op) means the function's result is concrete.
+            Nothing -> case stripTermWrappers bterm of
+              Core.TermLambda _ ->
+                let stripLambdas t = case deannotateTerm t of
+                      Core.TermLambda lam -> stripLambdas (Core.lambdaBody lam)
+                      other -> other
+                in not (producesAny st2 (stripLambdas (stripTermWrappers bterm)))
+              _ -> False
           -- Register all function bindings in goStateFuncParamTypes to mark them as callable.
           -- Use the actual domain type if available, or a dummy type variable as sentinel.
           st2' = st2 {
             goStateVarTypes = M.insert bname (not isFuncBinding) (goStateVarTypes st2),
+            goStateConcreteResultFuncs = if isFuncBinding && hasConcreteResult
+              then S.insert bname (goStateConcreteResultFuncs st2)
+              else goStateConcreteResultFuncs st2,
             goStateFuncParamTypes = if isFuncBinding
               then M.insert bname (case firstParamType of
                 Just pt -> pt
                 Nothing -> Core.TypeVariable $ Core.Name "_any") (goStateFuncParamTypes st2)
-              else goStateFuncParamTypes st2
+              else goStateFuncParamTypes st2,
+            goStateFuncAllParamTypes = if isFuncBinding
+              then M.insert bname (bindingAllParamTypes b bterm) (goStateFuncAllParamTypes st2)
+              else goStateFuncAllParamTypes st2
           }
       if isFuncBinding
         then pure (goShortVar bname bval : rest, st2')
@@ -1557,7 +1947,16 @@ producesAny st t = case deannotateTerm t of
   Core.TermPair _ -> False
   Core.TermVariable name ->
     case qualifiedNameModuleName (qualifyName name) of
-      Just _ -> False   -- Qualified: concrete type
+      -- A bare hydra.lib.* reference is an arity-0 primitive constant
+      -- (maps.empty, sets.empty, ...) emitted as a native call returning `any`
+      -- (Native Contract v1), so it PRODUCES any and must be asserted in a
+      -- concrete position (e.g. a typed struct field `Indices: libmaps.Empty()`).
+      -- This qualified-name branch previously returned False for ALL qualified
+      -- names, shadowing the hydra.lib.* -> True rule further down (dead code)
+      -- and dropping the assertion. #417's typeApplication wrapping on primitives
+      -- routed maps.empty through here, exposing the shadow.
+      Just _ | L.isPrefixOf "hydra.lib." (unName name) -> True
+      Just _ -> False   -- Other qualified names: concrete type
       Nothing ->
         -- Check if the local variable has a tracked concrete type.
         -- Try both raw name and Go-sanitized name (for reserved words like close → close_)
@@ -1582,19 +1981,51 @@ producesAny st t = case deannotateTerm t of
               Nothing -> True
               Just _ -> False
             isCallable = S.member goName (goStateCallableVars st)
+            -- A let-bound function whose final codomain is concrete yields a
+            -- concrete value once fully applied, so `f(x)` needs no `.(T)`.
+            hasConcreteResult = S.member goName (goStateConcreteResultFuncs st)
         -- Callable vars (function-typed params) return their actual type, not any
         in if isCallable then False
+           else if hasConcreteResult then False
            else isLocal || isPrimitiveRef (Core.TermVariable name)
       Core.TermVariable _ -> True
-      -- Projection applied to any-typed arg: result is concrete (field's type)
-      Core.TermProject _ ->
-        case argTerms of
-          [arg] | producesAny st arg -> False  -- Direct field access returns concrete type
-          _ -> True
+      -- A projection application yields the field's concrete Go type — both the
+      -- inlined form (arg.(Record).Field) and the lambda form
+      -- (func(v any) FieldType {...}(arg), post-E1b) return the concrete type,
+      -- so it never produces `any` (unless the field type itself erases to any,
+      -- which the field-typed emission already reflects). Reporting False here
+      -- stops coerceToType from appending a now-redundant, and illegal, .(T)
+      -- assertion on the already-concrete result.
+      Core.TermProject _ -> False
+      -- A DEFAULT-ONLY applied case elimination (`cases _T x (Just true) []`, no
+      -- alternatives) is emitted as its bare default term (see the const-function
+      -- shortcut in the application encoder), so it produces exactly what the default
+      -- produces. A concrete literal default is then already concrete, and the old
+      -- blanket `_ -> True` wrongly forced a redundant, illegal `true.(bool)`. A
+      -- multi-branch cases IS emitted as a `func(x any) any {...}` IIFE returning any,
+      -- so it stays any (True) -- narrowing here avoids dropping the .(T) those need.
+      Core.TermCases cs
+        | null (Core.caseStatementCases cs) ->
+          maybe True (producesAny st) (Core.caseStatementDefault cs)
       _ -> True
-  -- 0-arg primitive constants (maps.empty, sets.empty) produce concrete values
+  -- A bare primitive reference (arity-0 constant like maps.empty / sets.empty)
+  -- is emitted as a native call returning `any` (Native Contract v1), so it
+  -- DOES produce any and must be asserted in a concrete position (e.g. a typed
+  -- struct field). It is not concrete despite being a constant.
   Core.TermVariable (Core.Name n)
-    | n `elem` ["hydra.lib.maps.empty", "hydra.lib.sets.empty"] -> False
+    | L.isPrefixOf "hydra.lib." n -> True
+  -- A case expression's produced type is whatever its handlers produce. If every
+  -- arm and the default yield a concrete Go value (e.g. a bool literal default),
+  -- the whole expression is concrete -- so a caller must NOT assert `.(T)` on it
+  -- (`true.(bool)` is illegal). Any any-producing handler makes the whole thing
+  -- any. A lambda handler is applied to the payload, so inspect its body.
+  Core.TermCases cs ->
+    let handlerBodies = maybe [] (:[]) (Core.caseStatementDefault cs)
+          ++ fmap Core.caseAlternativeHandler (Core.caseStatementCases cs)
+        bodyProducesAny h = case deannotateTerm h of
+          Core.TermLambda lam -> producesAny st (Core.lambdaBody lam)
+          other -> producesAny st other
+    in any bodyProducesAny handlerBodies
   _ -> True
 
 -- | Check if a named type is a union type (interface in Go) by looking it up in the graph.
@@ -1620,6 +2051,17 @@ lookupRecordFieldTypes g tname =
     Nothing -> M.empty
 
 -- | Look up the type of a union variant's value field.
+-- | Whether a union variant is unit-typed (its handler ignores the payload,
+-- so no Value field is generated and the case switch need not bind `v`).
+variantIsUnit :: Graph -> Core.Name -> Core.Name -> Bool
+variantIsUnit g unionName variantName =
+  case lookupUnionVariantType g unionName variantName of
+    Just vt -> case deannotateType vt of
+      Core.TypeUnit -> True
+      Core.TypeRecord rt -> null rt
+      _ -> False
+    Nothing -> False
+
 lookupUnionVariantType :: Graph -> Core.Name -> Core.Name -> Maybe Core.Type
 lookupUnionVariantType g unionName variantName =
   case M.lookup unionName (graphSchemaTypes g) of
@@ -1801,21 +2243,113 @@ coerceToType cx g expr targetType sourceTerm st
             mSourceDom = case sourceFuncParamTypes of
               (t:_) -> Just t
               _ -> case deannotateTerm sourceTerm of
-                Core.TermVariable name -> M.lookup (unName name) (goStateFuncParamTypes st)
+                -- Key by the Go-cased name: encodeBindings registers under
+                -- `toGoUnexported bname`, so a bare `unName` lookup silently misses
+                -- (and the concrete domain assertion is then never emitted).
+                Core.TermVariable name -> lookupFuncParamType name st
                 Core.TermTypeApplication ta -> case deannotateTerm (Core.typeApplicationTermBody ta) of
-                  Core.TermVariable name -> M.lookup (unName name) (goStateFuncParamTypes st)
+                  Core.TermVariable name -> lookupFuncParamType name st
                   _ -> Nothing
+                -- An inline source lambda carries its own domain annotation; use
+                -- it so a curried fold function `\acc -> ...` (acc concrete)
+                -- gets its `_p` argument asserted to the concrete domain (E1c).
+                Core.TermLambda lam -> Core.lambdaDomain lam
                 _ -> Nothing
         (goSourceDom, st3) <- case mSourceDom of
           Just sd -> encodeTypeForTerm cx g sd st2
           Nothing -> pure (goAnyType, st2)
-        let sourceReturnsAny = isPrimitiveRef sourceTerm || producesAny st sourceTerm
-              || isLocalFuncVar st sourceTerm
+        -- The source function's SECOND parameter type, when known. Needed when the
+        -- adapter target codomain is itself a function (a curried reducer passed to
+        -- Foldl expects `func(any) func(any) any`): the outer wrapper applies the
+        -- first arg, and the still-curried result `f(x)` -- of concrete Go type
+        -- `func(<2ndParam>) <res>` -- must be inner-wrapped to `func(any) any`
+        -- (Family B: joinElements/splitOnUppercase/replace/foldFun). Prefer the
+        -- source's full param list (local bindings) then the graph list.
+        let sourceAllParamTypes = case stripTermWrappers sourceTerm of
+              Core.TermVariable nm ->
+                case M.lookup (toGoUnexported (unName nm)) (goStateFuncAllParamTypes st) of
+                  Just pts@(_:_) -> pts
+                  _ -> sourceFuncParamTypes
+              _ -> sourceFuncParamTypes
+            mSourceInnerDom = case drop 1 sourceAllParamTypes of
+              (t:_) -> Just t
+              _ -> Nothing
+        (goSourceInnerDom, st3b) <- case mSourceInnerDom of
+          Just sd -> encodeTypeForTerm cx g sd st3
+          Nothing -> pure (goAnyType, st3)
+        -- A local function var is normally assumed to return `any`. But a
+        -- concrete-result local function (registered in goStateConcreteResultFuncs)
+        -- already yields a concrete Go value when called, so asserting its result
+        -- to goCod is the illegal `isCycle(_p).(bool)` on an already-bool value.
+        -- Exclude such functions from sourceReturnsAny.
+        -- Strip type applications/lambdas: a concrete-result let function passed
+        -- to a generic primitive arrives type-applied (`isCycle[t0]`), so a bare
+        -- TermVariable match misses it and the redundant `.(bool)` reappears.
+        let srcIsConcreteResultFunc = case stripTermWrappers sourceTerm of
+              Core.TermVariable nm -> S.member (toGoUnexported (unName nm)) (goStateConcreteResultFuncs st)
+              _ -> False
+            sourceReturnsAny = not srcIsConcreteResultFunc
+              && (isPrimitiveRef sourceTerm || producesAny st sourceTerm
+                  || isLocalFuncVar st sourceTerm)
             needsDomCoerce = goDom /= goSourceDom
-            needsCodCoerce = goCod /= goAnyType && sourceReturnsAny
+            -- The wrapped body is `expr(argExpr)`. When `expr` is itself a function
+            -- literal that already returns goCod (the target codomain), the call
+            -- already HAS type goCod and asserting `.(goCod)` on it is illegal
+            -- ("... is not an interface") -- this is the parsers case, where a
+            -- `func(_) parsing.Parser[T] {...}` body is wrapped and then wrongly
+            -- re-asserted to parsing.Parser[T]. Skip the codomain assertion when
+            -- the source expression's own result type already equals goCod.
+            exprResultType = goFuncLitResultType expr
+            codAlreadyConcrete = exprResultType == Just goCod
+            needsCodCoerce = goCod /= goAnyType && sourceReturnsAny && not codAlreadyConcrete
+            -- Family B: the target codomain is itself a function (a curried reducer
+            -- adapted to `func(any) func(any) any`), and the source is a concrete-
+            -- result curried function. After applying the outer arg, `f(x)` has a
+            -- concrete Go function type (`func(<2ndParam>) <res>`) that is NOT goCod
+            -- (`func(any) any`), so the result must be inner-wrapped. Only when the
+            -- source's second param is a real concrete type (goSourceInnerDom known).
+            needsInnerFuncWrap = isFuncGoType goCod && srcIsConcreteResultFunc
+              && goSourceInnerDom /= goAnyType
+            -- A FLAT top-level generated function (e.g. `Alt[T0](p1, p2)`) passed as a
+            -- curried reducer (`func(any) func(any) any`, a Foldl reducer) has arity >= 2
+            -- and takes ALL args at once -- Go has no currying. The single-arg wrapper
+            -- below would emit `Alt[T0](_p)` ("not enough arguments") whose result is
+            -- `Parser[T0]`, not `func(any) any`. Detect it (source is a graph function
+            -- with >= 2 params AND the adapter target is curried) and emit a fully
+            -- nested wrapper `func(_p0)...func(_pN-1) ret { return Src(_p0.(T0), ...) }`.
+            srcGraphParamTypes = case stripTermWrappers sourceTerm of
+              Core.TermVariable _ -> lookupFunctionParamTypes g sourceTerm
+              Core.TermTypeApplication _ -> lookupFunctionParamTypes g (stripTermWrappers sourceTerm)
+              _ -> []
+            srcIsFlatMultiArg = isFuncGoType goCod && length srcGraphParamTypes >= 2
         -- Skip wrapping if no coercion is needed at all
-        if not needsDomCoerce && not needsCodCoerce
-          then pure (expr, st3)
+        if not needsDomCoerce && not needsCodCoerce && not needsInnerFuncWrap && not srcIsFlatMultiArg
+          then pure (expr, st3b)
+          else if srcIsFlatMultiArg then do
+            -- Nested currying wrapper for a flat N-arg source. Assert each any-typed
+            -- eta param to the source's declared param type; the innermost body is the
+            -- flat call Src(a0, a1, ..., aN-1). All intermediate return types are `any`
+            -- (the curried-representation boundary), the innermost result is `any`.
+            (goParamTypes, stFM) <- encodeTypesForTerm cx g srcGraphParamTypes st3b
+            let n = length goParamTypes
+                etaNames = ["_p" ++ show i | i <- [0 .. n - 1]]
+                callArgs = [ if pt == goAnyType then goNameExpr nm
+                             else goTypeAssertExpr (goNameExpr nm) pt
+                           | (nm, pt) <- zip etaNames goParamTypes ]
+                flatCall = goCall (exprToPrimary expr) callArgs
+                -- Build func(_p0 any) func(_p1 any) ... any { return flatCall } from the
+                -- inside out: the innermost lambda returns the call; each outer lambda
+                -- returns the next lambda, typed `func(any) ...`.
+                wrap [] = flatCall
+                wrap (nm:rest) =
+                  let innerBody = wrap rest
+                      innerResType = if null rest then goAnyType
+                                     else foldr (\_ acc -> goFuncType [goAnyType] acc) goAnyType rest
+                  in goFuncLit
+                       [Go.ParameterDecl [goIdent nm] False goAnyType]
+                       (Just $ Go.ResultType innerResType)
+                       [goReturn [innerBody]]
+            pure (wrap etaNames, stFM)
           else do
             -- func(_p TargetDom) TargetCod { return expr(argExpr).(TargetCod?) }
             -- For higher-order domains: when _p is func(A)B but source expects func(any)B,
@@ -1841,15 +2375,52 @@ coerceToType cx g expr targetType sourceTerm st
                          [goReturn [goCall
                            (exprToPrimary $ goNameExpr "_p")
                            [goTypeAssertExpr (goNameExpr "_q") innerParam]]]
+                  -- Adapter param `_p` is any-typed but the source function
+                  -- expects a concrete (non-any, non-func) domain: assert.
+                  -- Covers curried fold/accumulator functions whose first
+                  -- parameter is concrete (e.g. func(acc bool)), where _p flows
+                  -- in un-asserted (E1c).
+                  | goDom == goAnyType && goSourceDom /= goAnyType && not (isFuncGoType goSourceDom) =
+                    goTypeAssertExpr (goNameExpr "_p") goSourceDom
                   | otherwise = goNameExpr "_p"
-                callExpr = goCall (exprToPrimary expr) [argExpr]
-                bodyExpr = if needsCodCoerce
-                  then goTypeAssertExpr callExpr goCod
-                  else callExpr
+                -- The adapter body calls `expr`. When `expr` is itself an any-typed
+                -- VALUE rather than a callable function -- e.g. a saturated primitive
+                -- call whose result happens to be a function, as in
+                -- `mapOptional (pairs.second graphResult) comp` where the pair's second
+                -- component is `Vertex -> Maybe a` -- Go rejects the direct call
+                -- ("cannot call ...: any is not a function"). Assert it to
+                -- `func(any) any` first, mirroring what the curried-call path does via
+                -- goTypeAssertFunc. Named functions, function literals, and callable
+                -- params are already concretely typed and must NOT be asserted (that
+                -- would be an assertion on a non-interface).
+                -- Restricted to an APPLICATION source: a named function (local or
+                -- top-level), a lambda, or a callable param already has a concrete Go
+                -- function type, and asserting on those is the illegal
+                -- "not an interface". Only a call RESULT arrives as an `any` value.
+                srcIsAppResult = case deannotateTerm sourceTerm of
+                  Core.TermApplication _ -> producesAny st sourceTerm
+                  _ -> False
+                calleePrimary = if srcIsAppResult
+                  then goTypeAssertFunc (exprToPrimary expr)
+                  else exprToPrimary expr
+                callExpr = goCall calleePrimary [argExpr]
+                -- Inner eta-wrapper for a still-curried concrete result (Family B):
+                -- func(_q any) <innerCod> { return callExpr(_q.(goSourceInnerDom)) }.
+                -- The inner codomain is goCod's own codomain (any at a fold boundary).
+                innerCod = if isFuncGoType goCod then funcCodType goCod else goAnyType
+                innerWrapped = goFuncLit
+                  [Go.ParameterDecl [goIdent "_q"] False goAnyType]
+                  (Just $ Go.ResultType innerCod)
+                  [goReturn [goCall (exprToPrimary callExpr)
+                    [goTypeAssertExpr (goNameExpr "_q") goSourceInnerDom]]]
+                bodyExpr
+                  | needsInnerFuncWrap = innerWrapped
+                  | needsCodCoerce = goTypeAssertExpr callExpr goCod
+                  | otherwise = callExpr
             pure (goFuncLit
               [Go.ParameterDecl [goIdent "_p"] False goDom]
               (Just $ Go.ResultType goCod)
-              [goReturn [bodyExpr]], st3)
+              [goReturn [bodyExpr]], st3b)
       _ -> pure (expr, st)
   | not (producesAny st sourceTerm) = pure (expr, st)
   | otherwise = do
@@ -1863,8 +2434,13 @@ coerceToType cx g expr targetType sourceTerm st
           _ -> False
     if goTarget == goAnyType
       then pure (expr, st')
-      else if isTypeParam && not (producesAny st sourceTerm)
-        then pure (expr, st')  -- source already has the right type, skip redundant assertion
+      -- A type assertion is only legal on an INTERFACE value. Once producers are
+      -- concretely typed (the codomain/binding-type fixes), a source that does not
+      -- produce `any` is already a concrete Go value, and `expr.(T)` on it is
+      -- "invalid operation: ... is not an interface" (e.g. `true.(bool)`,
+      -- `types(_p).(bool)`). Assert ONLY when the source is actually any-typed.
+      else if not (producesAny st sourceTerm)
+        then pure (expr, st')  -- already concrete: assertion would be illegal
         else pure (goTypeAssertExpr expr goTarget, st')
 
 -- | Check if a Name is qualified (has a namespace/package prefix).
@@ -2143,6 +2719,20 @@ funcCodType (Go.TypeLiteral (Go.TypeLitFunction ft)) =
     _ -> goAnyType
 funcCodType _ = goAnyType
 
+-- | The declared result type of an ENCODED Go function-literal expression, if the
+-- expression is a function literal with a single result type. Used to tell whether
+-- a wrapped call `expr(arg)` already has a given codomain (so a `.(Cod)` assertion
+-- on it would be illegal). Returns Nothing for anything that is not a plain
+-- function literal with a ResultType result.
+goFuncLitResultType :: Go.Expression -> Maybe Go.Type
+goFuncLitResultType e = case e of
+  Go.ExpressionUnary (Go.UnaryExprPrimary
+    (Go.PrimaryExprOperand (Go.OperandLiteral (Go.LiteralFunction fl)))) ->
+      case Go.signatureResult (Go.functionLitSignature fl) of
+        Just (Go.ResultType t) -> Just t
+        _ -> Nothing
+  _ -> Nothing
+
 -- | Check whether a type variable needs to become a Go type parameter.
 -- A type var needs a Go param if it appears as a type argument to a named generic type
 -- (like ParserTestCase[a], ParseResult[a]) in any of the given types.
@@ -2346,8 +2936,16 @@ encodeTermDefinitionWithScheme cx g tdef tscheme st = do
         then st2' { goStateExpectedType = Just retTyp }
         else st2'
   (rawBodyExpr, st3) <- encodeTerm cx g body st2''
-  -- Coerce the body expression to the return type
-  (bodyExpr, st4) <- if goRetType /= goAnyType
+  -- Coerce the body expression to the return type — but ONLY when the lambda
+  -- chain fully saturates the signature's parameters. When the body has fewer
+  -- lambda binders than the signature has parameters (e.g. a definition
+  -- `f : A -> B` whose body is a bare `cases`/eliminator that itself evaluates
+  -- to a function), the body is a FUNCTION value, not a value of the return
+  -- type; asserting it to retTyp would emit `funcLiteral.(B)`, which is illegal
+  -- Go (a function literal is not an interface). In that case leave the body as
+  -- encoded and drop the surplus parameters from the Go signature (see below).
+  let bodySaturates = length params >= length paramTypes
+  (bodyExpr, st4) <- if goRetType /= goAnyType && bodySaturates
     then coerceToType cx g rawBodyExpr retTyp body st3
     else pure (rawBodyExpr, st3)
   -- Build parameter declarations (zip names with types)
@@ -2358,11 +2956,50 @@ encodeTermDefinitionWithScheme cx g tdef tscheme st = do
                 else Just $ Go.TypeParameters
                   [Go.TypeParamDecl (fmap (goIdent . capitalize . unName) goVisibleVarsList)
                     (Go.TypeConstraint $ Go.TypeElem [Go.TypeTerm False goAnyType])]
-  if null params
+  -- When the signature has more parameters than the lambda binds (bodyExpr is
+  -- itself a function value — a bare eliminator like `cases`), ETA-EXPAND: emit
+  -- a func declaration taking the full signature parameters and apply the body
+  -- to the surplus. This both gives the definition its correct Go function type
+  -- and avoids a self-referential `var X = ...X...` (an illegal Go
+  -- initialization cycle) for recursive eliminator-bodied definitions.
+  let missingCount = length paramTypes - length params
+  if missingCount > 0
+    then do
+      let etaNames = ["_eta" ++ show i | i <- [0 .. missingCount - 1]]
+          etaTypes = drop (length params) goParamTypes
+          etaDecls = [Go.ParameterDecl [goIdent n] False t | (n, t) <- zip etaNames etaTypes]
+          -- Apply the body value to each surplus parameter. The body of an
+          -- under-saturated definition is an eliminator/lambda that already
+          -- emits as a concrete `func(x any) any` literal, so the FIRST call
+          -- is a direct call — asserting it to func(any) any (an interface
+          -- assertion on a concrete function value) would be illegal Go. Only
+          -- the intermediate results (any-typed) need the func(any) any
+          -- assertion before being called again.
+          applied = case etaNames of
+            [] -> bodyExpr
+            (n0:ns) ->
+              let firstCall = goCall (exprToPrimary bodyExpr) [goNameExpr n0]
+              in L.foldl' (\acc n ->
+                   goCall (goTypeAssertFunc $ exprToPrimary acc) [goNameExpr n]) firstCall ns
+          retExpr = if goRetType /= goAnyType
+            then goTypeAssertExpr applied goRetType
+            else applied
+      pure (Go.TopLevelDeclFunction $ Go.FunctionDecl
+        (goIdent goName)
+        tparams
+        (Go.Signature
+          (Go.Parameters (goParams ++ etaDecls))
+          (Just $ Go.ResultType goRetType))
+        (Just $ Go.FunctionBody $ Go.Block [goReturn [retExpr]]), st4)
+    else if null params
     then
-      -- No parameters: generate a var declaration
-      pure (Go.TopLevelDeclDeclaration $ Go.DeclarationVar $ Go.VarDecl
-        [Go.VarSpec [goIdent goName] Nothing [bodyExpr]], st4)
+      -- No parameters: generate a var declaration. Declare the explicit type
+      -- when it is known and concrete, so an integer/float constant gets its
+      -- kernel width (e.g. `var MaxLineWidth int32 = 120`) instead of Go's
+      -- default `int` inference, which mismatches int32-typed call sites.
+      let varType = if goRetType /= goAnyType then Just goRetType else Nothing
+      in pure (Go.TopLevelDeclDeclaration $ Go.DeclarationVar $ Go.VarDecl
+        [Go.VarSpec [goIdent goName] varType [bodyExpr]], st4)
     else
       -- Has parameters: generate a func declaration
       pure (Go.TopLevelDeclFunction $ Go.FunctionDecl
@@ -2415,6 +3052,94 @@ unpackLambdasWithDomains t = case deannotateTerm t of
     let (rest, doms, body, tsubst) = unpackLambdasWithDomains (Core.typeApplicationTermBody ta)
     in (rest, doms, body, tsubst)
   _ -> ([], [], t, M.empty)
+
+-- | Look up the first-parameter type of a let-bound function by variable name.
+--
+-- Two things this gets right that a bare @M.lookup (unName name)@ does not:
+-- (1) encodeBindings registers under the Go-cased name (@toGoUnexported@), so the
+-- key must be cased the same way or every lookup silently misses; and
+-- (2) bindings whose domain is unknown are registered against a @_any@ sentinel
+-- type, which must NOT be treated as a real domain -- encoding it would emit a
+-- nonsense @.(_any)@ assertion. Both were latent until let-flattening turned
+-- these call sites from inline lambdas into variable references.
+-- | Compute the full (uncurried) list of parameter types for a function binding.
+-- Prefers the binding's type scheme; falls back to the lambda-chain domains when
+-- the binding is an inferred `<~` let with no scheme (e.g. `joinElements`,
+-- `splitOnUppercase`, `helper`). A domain that is not annotated maps to Nothing,
+-- so the returned list truncates at the first unknown -- callers coerce only the
+-- prefix they know, which is safe (an un-coerced arg is left as-is, as before).
+-- | Whether a binding's fully-applied result is a concrete (non-`any`) Go type.
+--
+-- The final codomain of the binding's uncurried type decides this. The subtlety is
+-- that a NOMINAL type reference and a genuine polymorphic type variable share the
+-- same @Core.TypeVariable@ constructor (the #476 nominal-alias form: synthesized
+-- types name their nominal types rather than inlining them). Treating every
+-- @TypeVariable@ as polymorphic therefore misclassifies concrete results — e.g.
+-- @processNeighbor : TarjanState -> int32 -> TarjanState@, whose final codomain is
+-- @TypeVariable "hydra.topology.TarjanState"@, was recorded as any-producing, so the
+-- Foldl adapter emitted the illegal @processNeighbor(_p.(TarjanState)).(func(any) any)@
+-- (an assertion on a non-interface) instead of taking the inner-eta-wrap path.
+--
+-- The graph's schema types are the authority: a name bound there is nominal (hence
+-- concrete), and anything else is a real type variable.
+finalCodomainIsConcrete :: Graph -> Core.TypeScheme -> Bool
+finalCodomainIsConcrete g tscheme =
+  let (forallVars, inner) = unpackForallType (Core.typeSchemeBody tscheme)
+      (_, finalCod) = unpackFunctionType inner
+  in case deannotateType finalCod of
+       Core.TypeVariable name ->
+         -- Forall-bound => genuinely polymorphic; otherwise concrete iff nominal.
+         not (name `elem` forallVars) && M.member name (graphSchemaTypes g)
+       _ -> True
+
+bindingAllParamTypes :: Core.Binding -> Core.Term -> [Core.Type]
+bindingAllParamTypes b bterm = case Core.bindingTypeScheme b of
+  Just tscheme ->
+    let (_, innerTyp) = unpackForallType (Core.typeSchemeBody tscheme)
+        (paramTypes, _) = unpackFunctionType innerTyp
+    in paramTypes
+  Nothing ->
+    let collect t = case deannotateTerm t of
+          Core.TermLambda lam -> case Core.lambdaDomain lam of
+            Just d -> d : collect (Core.lambdaBody lam)
+            Nothing -> []  -- unknown domain: stop; downstream args stay un-coerced
+          _ -> []
+    in collect (stripTermWrappers bterm)
+
+lookupFuncParamType :: Core.Name -> GoState -> Maybe Core.Type
+lookupFuncParamType name st =
+  case M.lookup (toGoUnexported $ unName name) (goStateFuncParamTypes st) of
+    Just (Core.TypeVariable (Core.Name "_any")) -> Nothing
+    other -> other
+
+-- | Collapse a chain of nested lets into a single binding list plus a final body.
+--
+-- The DSL expresses sequential bindings as right-nested lets, so
+-- @let a = .. in let b = .. in body@ arrives as two nested TermLets. Encoding each
+-- separately wraps each in its own immediately-invoked closure, and the Go compiler
+-- is exponential in closure-nesting depth (see the note at the TermLet case), so a
+-- long binding chain becomes uncompilable. Flattening keeps the emitted depth at 1.
+--
+-- Shadowing guard: bindings become Go @:=@ short declarations in one shared block,
+-- so merging scopes would be wrong if an inner let rebinds a name already bound
+-- outward -- Go would reject the redeclaration, or worse, the inner binding would
+-- silently apply to statements that expected the outer one. We therefore stop
+-- flattening at the first inner let that rebinds any name collected so far, and
+-- leave the remainder to be encoded as a nested closure. Correctness first; the
+-- depth win still applies to every non-shadowing prefix, which is the common case
+-- (generated binding names are distinct within a function).
+flattenLetChain :: Core.Let -> ([Core.Binding], Core.Term)
+flattenLetChain lt = go (Core.letBindings lt) (Core.letBody lt)
+  where
+    go acc body = case deannotateTerm body of
+      Core.TermLet inner ->
+        let innerBindings = Core.letBindings inner
+            boundSoFar = S.fromList (fmap Core.bindingName acc)
+            innerNames = S.fromList (fmap Core.bindingName innerBindings)
+        in if S.null (S.intersection boundSoFar innerNames)
+             then go (acc ++ innerBindings) (Core.letBody inner)
+             else (acc, body)
+      _ -> (acc, body)
 
 -- | Extract outer TypeLambda params from a term.
 extractTypeLambdaParams :: Core.Term -> [Core.Name]
@@ -2782,9 +3507,27 @@ encodeTermDefs :: InferenceContext -> Graph -> [TermDefinition] -> GoState
 encodeTermDefs _ _ [] st = pure ([], st)
 encodeTermDefs cx g (td:tds) st = do
   (d, st1) <- encodeTermDefinition cx g td st
-  -- Clear per-function state before encoding the next term definition
+  -- Clear per-function state before encoding the next term definition.
+  --
+  -- The VARIABLE-level maps must be cleared here too. They are keyed on the bare Go
+  -- name in one flat namespace, so a name marked concrete by one definition's
+  -- parameter stays marked for every later definition -- and `producesAny` then
+  -- reports False at a use site where the name is actually an `any`-typed local.
+  -- In hydra/sorting, `pairs` is a concrete `[]any` parameter of AdjacencyListToMap /
+  -- TopologicalSort / TopologicalSortComponents AND an any-typed local inside
+  -- TopologicalSortComponents; the leaked concrete mark suppressed the `.([]any)`
+  -- that local's use needed. Local names cannot legitimately outlive their
+  -- definition, so a per-definition reset is the correct scope (this mirrors the
+  -- Java/Python coders, which re-derive the name->type environment per scope from
+  -- the graph rather than sharing one module-wide map).
   let st1' = st1 { goStateFuncTypeParams = S.empty, goStateTypeSubst = M.empty,
-                    goStateTermParamTypes = M.empty }
+                    goStateTermParamTypes = M.empty,
+                    goStateVarTypes = M.empty,
+                    goStateFuncParamTypes = M.empty,
+                    goStateFuncAllParamTypes = M.empty,
+                    goStateDeclaredParamsEmitted = S.empty,
+                    goStateConcreteResultFuncs = S.empty,
+                    goStateCallableVars = S.empty }
   (rest, st2) <- encodeTermDefs cx g tds st1'
   pure (d : rest, st2)
 
@@ -2800,11 +3543,18 @@ buildImports imps
       let dirName = lastSeg path
           -- Reconstruct the namespace from the import path to get the Go alias
           ns = pathToNamespace path
-          goAlias = namespaceToGoPackage ns
-          -- Add alias if the Go alias differs from the directory name.
-          -- Overlay packages (hydra/overlay/go/...) declare their own short
-          -- package names (util, lib subpackages), so they are never aliased.
-          alias = if goAlias /= dirName && not ("/hydra/overlay/go/" `L.isInfixOf` path)
+          -- Overlay lib packages (hydra/overlay/go/lib/<name>) are referenced
+          -- under a "lib"-prefixed alias so a same-named local variable cannot
+          -- shadow them; that alias must be declared on the import too. Other
+          -- overlay packages (util) keep their declared short name. Everything
+          -- else uses the computed Go package alias.
+          isLibPkg = "/hydra/overlay/go/lib/" `L.isInfixOf` path
+          isOverlayPkg = "/hydra/overlay/go/" `L.isInfixOf` path
+          goAlias
+            | isLibPkg = libPackageAlias dirName
+            | isOverlayPkg = dirName
+            | otherwise = namespaceToGoPackage ns
+          alias = if goAlias /= dirName
             then Just $ Go.ImportAliasName $ Go.Identifier goAlias
             else Nothing
       in Go.ImportSpec alias (Go.ImportPath $ Go.StringLitInterpreted $
