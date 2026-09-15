@@ -184,6 +184,15 @@ jobs:
               bin/sync-packages.sh "$pkg" --targets "$tgt" --no-tests
             done
           done
+      # hydra-rust (#382) is also an on-demand package, outside the bootstrapping
+      # matrix like the ones above, but its targetLanguages is haskell-only (its
+      # DSL sources are self-targeting, unlike hydra-pg/hydra-rdf which target
+      # java/python). The manifest-emitted check below requires it, so generate
+      # it here rather than leaving it to the same java/python loop, which would
+      # be a no-op for this package.
+      - name: Regenerate on-demand packages (hydra-rust)
+        run: |
+          bin/sync-packages.sh hydra-rust --targets haskell --no-tests
       # 0.17.2 hydra-build defect guard: assert every module a package's
       # manifest.json declares in mainModules is actually EMITTED into the
       # assembled dist/haskell tree. The 0.17.2 hydra-build sdist shipped 3 of
