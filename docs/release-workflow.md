@@ -455,7 +455,7 @@ Run at least:
 
   | Cell | Status | Detail |
   |------|--------|--------|
-  | `typescript → python` | **RED, known, non-blocking** | Never passed. Failed 2026-07-13 with `ModuleNotFoundError: hydra.test.test_suite` (run `run_2026-07-13_061427_335_typescript_to_python`, `{"status":"fail"}`) and again at 0.17.7 with `TypeError: xs.map is not a function` at `overlay/typescript/lib/lists.ts` (via `encodePythonModule → reorderDefs → partitionDefinitions`), 168+ occurrences, one per module. Different symptom, same standing gap: TypeScript self-hosts (proved by `/test all`) but has never cross-generated. Tracked for 0.18. |
+  | `typescript → python` | **RED, known, non-blocking** | Never passed. Failed 2026-07-13 with `ModuleNotFoundError: hydra.test.test_suite` (run `run_2026-07-13_061427_335_typescript_to_python`, `{"status":"fail"}`) and again at 0.17.7 with `TypeError: xs.map is not a function` at `overlay/typescript/lib/lists.ts` (via `encodePythonModule → reorderDefs → partitionDefinitions`), 168+ occurrences, one per module. Different symptom, same standing gap: TypeScript self-hosts (proved by `/test all`) but has never cross-generated. Tracked as [#762](https://github.com/CategoricalData/hydra/issues/762). |
 
   The other self-host-only dialects were not separately re-verified at 0.17.7; treat a red cell from any
   of them the same way unless it was previously green.
