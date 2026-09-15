@@ -47,9 +47,11 @@ for f in ${CURRENT[@]+"${CURRENT[@]}"}; do
     printf '%s\n' "$SEEN_TEXT" | grep -qxF -- "$f" || NEW+=("$f")
 done
 
-# Nothing new → silent. (Guard the expansion: under `set -u`, bash 3.2 treats
-# "${arr[@]}" on an empty array as an unbound variable.)
-[ "${#NEW[@]:-0}" -eq 0 ] && exit 0
+# Nothing new → silent. (`${#NEW[@]}` is always a defined integer, even for an
+# empty array under `set -u` — no `:-0` default is needed or valid on this
+# arithmetic-length expansion; `:-` only applies to `${arr[@]}` element
+# expansion, which is guarded separately below via `${NEW[@]+"${NEW[@]}"}`.)
+[ "${#NEW[@]}" -eq 0 ] && exit 0
 
 # Mark them seen BEFORE emitting. If the consumer closes the pipe early (a
 # truncated read sends SIGPIPE mid-loop), a write that trailed the output would
