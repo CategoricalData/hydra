@@ -21,7 +21,31 @@ of the wiki repository** — not over the rendered wiki, and not over a pinned i
   migrate this channel into the main repo or onto a GitHub issue.
 
 Agents: fetch the `coordination` branch before any push to main, before claiming a
-red-CI fix or a contested issue, and every ~10-15 minutes inside long watcher loops.
+red-CI fix or a contested issue, and on the cadence below.
+
+**Polling cadence: exponential backoff with reset — the same rule as the inbox.** This branch is a
+message channel, so it follows the cadence defined canonically for cross-worktree messages
+(`../../external/agents/docs/cross-worktree-messages.md`, "Polling cadence"):
+
+- Poll after **1 minute**. If nothing new arrived, poll again after **2**, then **4**, then **8** —
+  doubling each idle round.
+- **Cap at 15 minutes.** Once there, keep polling every 15 minutes indefinitely; do not back off
+  further.
+- **Reset to 1 minute whenever you SEND or RECEIVE** anything on the channel. Traffic in *either*
+  direction signals an active conversation — receiving a reply tightens the cadence just as sending
+  does. It decays again only through consecutive idle polls.
+
+A flat idle interval is wrong right after traffic: that is exactly when the next message is most
+likely, and a 15-minute poll wastes the whole probable window. Being otherwise busy is not an
+exemption — a long build does not excuse missing a stand-down.
+
+When waiting on a named external event instead (a CI run, a long build), match that event's own
+timescale rather than this schedule.
+
+The **inbox** (`claude-hydra-messages/`) needs no schedule: `bin/claude-hooks/inbox-hook.sh` surfaces
+new messages on every turn, and `bin/claude-hooks/coordination-hook.sh` now does the same for this
+branch. The cadence above governs explicit polling *between* turns — a long autonomous stretch where
+no turn boundary occurs to fire the hooks.
 
 **`coordination` is an INBOUND channel — keep a standing listener, not an
 action-triggered one.** The three triggers above are all things *you* initiate
