@@ -542,7 +542,9 @@
                                                                         "name": "literal",
                                                                         "term": {"inject": {"typeName": "hydra.core.Literal", "field": {"name": "boolean", "term": {"literal": {"boolean": false}}}}}}}}}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {"list": [{"wrap": {"typeName": "hydra.testing.Tag", "body": {"literal": {"string": "scaleDistinct"}}}}]}},
                                           {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                                     {
                                       "record": {

@@ -440,7 +440,9 @@
                                                           "name": "expected",
                                                           "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "1.0e-20"}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {"list": [{"wrap": {"typeName": "hydra.testing.Tag", "body": {"literal": {"string": "scaleDistinct"}}}}]}},
                                           {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}},
                                     {
                                       "record": {
@@ -475,7 +477,9 @@
                                                           "name": "expected",
                                                           "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "100000000000000000000"}}}}}]}}}}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
-                                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                                          {
+                                            "name": "tags",
+                                            "term": {"list": [{"wrap": {"typeName": "hydra.testing.Tag", "body": {"literal": {"string": "scaleDistinct"}}}}]}},
                                           {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}},
                         {
                           "record": {
