@@ -445,6 +445,21 @@ Run at least:
   `emacs-lisp`. Use a fresh `--tag` per cell and confirm the cell actually **generated files** (a cached
   no-op can exit 0 having written nothing — that is not a pass).
 
+  **Of these, only `scala → python` is release-BLOCKING.** Scala is a full cross-generation build host;
+  the rest (`typescript`, `clojure`, `common-lisp`, `scheme`, `emacs-lisp`) are self-host-only dialects,
+  and per the scope note at the end of this section a red cell for one of them is a known gap, not a
+  regression. Run them for information — a *newly* red cell that was previously green is still worth
+  investigating — but do not hold the release on one.
+
+  **Known-red as of 0.17.7 (do not be surprised):**
+
+  | Cell | Status | Detail |
+  |------|--------|--------|
+  | `typescript → python` | **RED, known, non-blocking** | Never passed. Failed 2026-07-13 with `ModuleNotFoundError: hydra.test.test_suite` (run `run_2026-07-13_061427_335_typescript_to_python`, `{"status":"fail"}`) and again at 0.17.7 with `TypeError: xs.map is not a function` at `overlay/typescript/lib/lists.ts` (via `encodePythonModule → reorderDefs → partitionDefinitions`), 168+ occurrences, one per module. Different symptom, same standing gap: TypeScript self-hosts (proved by `/test all`) but has never cross-generated. Tracked for 0.18. |
+
+  The other self-host-only dialects were not separately re-verified at 0.17.7; treat a red cell from any
+  of them the same way unless it was previously green.
+
 - **Targets:** `haskell → L` for each remaining target, plus `haskell → go` (`go` is a head bud — target
   only, tolerated if it fails; tracked by #289).
 
