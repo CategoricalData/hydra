@@ -99,9 +99,15 @@ fi
 # resolves fine (it may be resolvable yet semantically stale — #727/#719). Checked
 # against "java", not $TARGET: this tool's runtime classes (hydra.print.Core etc.) come
 # from published hydra-kernel/hydra-java regardless of which --target is requested.
-FORCE_LOCAL=0
-if [ -z "${HYDRA_HOST_VERSION:-}" ]; then
-    OVERRIDE_RAW=$(python3 -c "
+#
+# Checked UNCONDITIONALLY (#761) — NOT gated on HYDRA_HOST_VERSION being unset. The two
+# concerns are orthogonal: HYDRA_HOST_VERSION pins a version to make the published
+# classpath *resolvable* (the cold-seed path, #703); hostOverrides["java"]=local means
+# the published classpath is resolvable but *semantically stale* and must not be used
+# regardless. Gating this check on HYDRA_HOST_VERSION being empty meant the cold-seed
+# path (which always sets HYDRA_HOST_VERSION) silently skipped the override entirely and
+# used the published host even when hostOverrides["java"]=local was explicitly set.
+OVERRIDE_RAW=$(python3 -c "
 import json
 try:
     with open('$HYDRA_ROOT_DIR/hydra.json') as f:
@@ -110,9 +116,9 @@ try:
 except Exception:
     pass
 " 2>/dev/null || true)
-    if [ "$OVERRIDE_RAW" = "local" ]; then
-        FORCE_LOCAL=1
-    fi
+FORCE_LOCAL=0
+if [ "$OVERRIDE_RAW" = "local" ]; then
+    FORCE_LOCAL=1
 fi
 
 JAVA_CP=""
