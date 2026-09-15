@@ -69,7 +69,7 @@ module_ = Module {
       Phantoms.toDefinition stringLiteralsTests,
       Phantoms.toDefinition integerLiteralsTests,
       Phantoms.toDefinition floatLiteralsTests,
---      toDefinition binaryLiteralsTests,  -- TODO: restore when binary literal code generation is supported
+      Phantoms.toDefinition binaryLiteralsTests,
       Phantoms.toDefinition literalsInComplexContextsTests,
       Phantoms.toDefinition primitivesTests,
       Phantoms.toDefinition nullaryPrimitivesTests,
@@ -626,7 +626,7 @@ literalsTests = define "literalsTests" $
   stringLiteralsTests,
   integerLiteralsTests,
   floatLiteralsTests,
---  binaryLiteralsTests, -- TODO: restore this group
+  binaryLiteralsTests,
   literalsInComplexContextsTests]
 
 stringLiteralsTests :: TypedTermDefinition TestGroup

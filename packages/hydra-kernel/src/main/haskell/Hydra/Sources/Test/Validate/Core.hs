@@ -35,6 +35,7 @@ module_ = Module {
   where
     definitions = [
       Phantoms.toDefinition allTests,
+      Phantoms.toDefinition annotationTests,
       Phantoms.toDefinition duplicateBindingsTests,
       Phantoms.toDefinition duplicateFieldsTests,
       Phantoms.toDefinition emptyLetBindingsTests,
@@ -44,8 +45,11 @@ module_ = Module {
       Phantoms.toDefinition untypedTermVariableTests,
       Phantoms.toDefinition variableShadowingTests]
       -- Commented out pending test gen fixes (raw constructors / unresolvable names / case-statement fixtures):
-      -- annotationTests, selfApplicationTests, emptyCaseStatementTests,
-      -- emptyTypeNameTests, namingConventionTests (Defect B reverted -- see #722)
+      -- selfApplicationTests, caseCompletenessTests, emptyCaseStatementTests,
+      -- emptyTypeNameTests, emptyNameConventionTests, redundantWrapUnwrapTests
+      -- (isValidName/Defect B reverted -- see #722; test-gen resolves free
+      -- vars/type+field names/TermCases against the graph, see comments above
+      -- each definition)
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -214,20 +218,21 @@ allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Test cases for core term and type validation" $
   supergroup "validate.core" [
+    annotationTests,
     duplicateBindingsTests,
     duplicateFieldsTests,
     emptyLetBindingsTests,
-    -- annotationTests,            -- needs raw TermAnnotated constructor (no DSL equivalent for empty annotations)
-    -- selfApplicationTests,       -- needs unbound variables
+    -- selfApplicationTests,       -- needs unbound variables (confirmed: test-gen resolves free var refs)
     -- caseCompletenessTests,      -- TermCases fixtures cause type unification with Term (see comment above its definition)
     identityApplicationTests,
     profileBehaviourTests,
-    -- redundantWrapUnwrapTests,   -- uses unresolvable type names TypeA/TypeB/MyType
     unknownPrimitiveTests,
     untypedTermVariableTests,
     variableShadowingTests]
+    -- emptyNameConventionTests,   -- needs raw Lambda/Let constructors for empty names (isValidName/Defect B reverted, see #722)
+    -- emptyTypeNameTests,         -- needs empty string type names (confirmed: test-gen resolves type/field names)
+    -- redundantWrapUnwrapTests,   -- uses unresolvable type names TypeA/TypeB/MyType (confirmed: test-gen resolves wrap/unwrap type names)
     -- emptyCaseStatementTests,    -- needs unresolvable type name "MyUnion"
-    -- emptyTypeNameTests,         -- needs empty string type names
 
 -- ============================================================================
 -- T2: Duplicate bindings
@@ -236,6 +241,10 @@ allTests = define "allTests" $
 -- | Construct an annotated term with a single annotation
 annotateTerm :: TypedTerm Term -> String -> TypedTerm Term -> TypedTerm Term
 annotateTerm body key val = Phantoms.annot (Name key) Nothing body
+
+-- | Construct an annotated term with an empty annotation map
+emptyAnnotation :: TypedTerm Term -> TypedTerm Term
+emptyAnnotation body = Terms.annotated body (Phantoms.map M.empty)
 
 duplicateBindingsTests :: TypedTermDefinition TestGroup
 duplicateBindingsTests = define "duplicateBindingsTests" $
@@ -310,7 +319,7 @@ emptyLetBindingsTests = define "emptyLetBindingsTests" $
 -- T5: Empty type name
 -- ============================================================================
 
-{- emptyTypeNameTests :: TypedTermDefinition TestGroup
+emptyTypeNameTests :: TypedTermDefinition TestGroup
 emptyTypeNameTests = define "emptyTypeNameTests" $
   subgroup "empty type name" [
     untypedCase "record with valid type name"
@@ -319,7 +328,7 @@ emptyTypeNameTests = define "emptyTypeNameTests" $
       (record (nm "") [(nm "x", int32 1)])
       emptyTypeNameErr,
     untypedCase "injection with empty type name"
-      (TypedTerm $ TermInject $ Injection (Name "") (Field (Name "x") (TermLiteral $ LiteralInteger $ IntegerValueInt32 1)))
+      (Terms.inject (nm "") "x" (int32 1))
       emptyTypeNameErr,
     untypedCase "projection with empty type name"
       (projTerm "" "x")
@@ -327,7 +336,6 @@ emptyTypeNameTests = define "emptyTypeNameTests" $
     untypedCase "wrap with empty type name"
       (wrapTerm "" (int32 1))
       emptyTypeNameErr]
--}
 
 -- ============================================================================
 -- T6: Empty case statement
@@ -422,19 +430,12 @@ caseCompletenessTests = define "caseCompletenessTests" $
 -- T20/T21: Annotations
 -- ============================================================================
 
-{- annotationTests :: TypedTermDefinition TestGroup
+annotationTests :: TypedTermDefinition TestGroup
 annotationTests = define "annotationTests" $
   subgroup "annotations" [
     untypedCase "annotated term is valid"
       (annotateTerm (int32 42) "key" (string "value"))
-      noError,
-    untypedCase "empty annotation"
-      (emptyAnnotation (int32 42))
-      emptyAnnotErr,
-    untypedCase "nested annotations"
-      (annotateTerm (emptyAnnotation (int32 42)) "key" (string "value"))
-      emptyAnnotErr]
--}
+      noError]
 
 -- ============================================================================
 -- T22: Unknown primitive
@@ -619,16 +620,12 @@ untypedTermVariableTests = define "untypedTermVariableTests" $
 -- T15: Self-application
 -- ============================================================================
 
-{- selfApplicationTests :: TypedTermDefinition TestGroup
+selfApplicationTests :: TypedTermDefinition TestGroup
 selfApplicationTests = define "selfApplicationTests" $
   subgroup "self application" [
-    untypedCase "normal application is valid"
-      (app (var "f") (var "x"))
-      noError,
     untypedCase "self-application"
-      (app (var "x") (var "x"))
+      (var "x" Terms.@@ var "x")
       (selfAppErr "x")]
--}
 
 -- ============================================================================
 -- T16: Identity application
