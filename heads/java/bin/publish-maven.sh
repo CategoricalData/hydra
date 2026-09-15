@@ -133,6 +133,33 @@ if [ -z "$JAVA_MAJOR" ] || [ "$JAVA_MAJOR" -lt 17 ]; then
 fi
 echo "  JDK OK: $("$JAVA_BIN" -version 2>&1 | head -1)"
 
+# --- Guard: an explicit signing key is pinned ---------------------------------
+# HARD GATE (0.17.7 regression). Gradle's useGpgCmd() reads signing.gnupg.keyName,
+# which the generated root aggregator sets ONLY when HYDRA_PGP_KEY is present
+# (bin/lib/generate-java-package-build.py). With it unset, Gradle silently signs
+# with gpg's DEFAULT key and the post-upload fingerprint check below has nothing
+# to compare against -- so wrong-key artifacts reach Central, immutably. That is
+# what 0.17.5 and 0.17.7 shipped. "No key specified" is never a safe default for
+# a release-signing script.
+#
+# The alias exists because prepare-release.sh names the same secret
+# HYDRA_RELEASE_SIGNING_KEY; an operator exporting only that one previously got
+# a correctly-signed source archive and default-key Maven artifacts (0.17.7).
+if [ "$DO_UPLOAD" = true ]; then
+    if [ -z "${HYDRA_PGP_KEY:-}" ] && [ -n "${HYDRA_RELEASE_SIGNING_KEY:-}" ]; then
+        HYDRA_PGP_KEY="$HYDRA_RELEASE_SIGNING_KEY"
+        export HYDRA_PGP_KEY
+        echo "  HYDRA_PGP_KEY unset; adopting HYDRA_RELEASE_SIGNING_KEY=$HYDRA_PGP_KEY"
+    fi
+    if [ -z "${HYDRA_PGP_KEY:-}" ]; then
+        echo "ERROR: HYDRA_PGP_KEY (or HYDRA_RELEASE_SIGNING_KEY) is not set." >&2
+        echo "       Gradle would fall back to gpg's default signing key and publish" >&2
+        echo "       IMMUTABLE artifacts signed with the wrong identity. Set it to the" >&2
+        echo "       fingerprint in the repo-root KEYS file and re-run." >&2
+        exit 1
+    fi
+fi
+
 # --- Guard: Sonatype credentials present -------------------------------------
 GRADLE_PROPS="${GRADLE_USER_HOME:-$HOME/.gradle}/gradle.properties"
 if [ "$DO_UPLOAD" = true ]; then
