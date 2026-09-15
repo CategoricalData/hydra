@@ -430,9 +430,11 @@ Types:
   hydra.error.packaging.InvalidDefinitionNameError = record{moduleName:hydra.packaging.ModuleName, name:hydra.core.Name, expectedConvention:hydra.util.CaseConvention}
   hydra.error.packaging.InvalidModuleError = union{conflictingVariantName:hydra.error.packaging.ConflictingVariantNameError, definitionNotInModuleName:hydra.error.packaging.DefinitionNotInModuleNameError, definitionsOutOfOrder:hydra.error.packaging.DefinitionsOutOfOrderError, duplicateDefinitionName:hydra.error.packaging.DuplicateDefinitionNameError, invalidDefinitionName:hydra.error.packaging.InvalidDefinitionNameError, invalidModuleNameConvention:hydra.error.packaging.InvalidModuleNameConventionError, missingDocumentation:hydra.error.packaging.MissingDocumentationError}
   hydra.error.packaging.InvalidModuleNameConventionError = record{moduleName:hydra.packaging.ModuleName}
-  hydra.error.packaging.InvalidPackageError = union{conflictingModuleName:hydra.error.packaging.ConflictingModuleNameError, duplicateModuleName:hydra.error.packaging.DuplicateModuleNameError, invalidModule:hydra.error.packaging.InvalidModuleError, invalidPackageName:hydra.error.packaging.InvalidPackageNameError, undeclaredDependency:hydra.error.packaging.UndeclaredDependencyError}
+  hydra.error.packaging.InvalidPackageError = union{conflictingModuleName:hydra.error.packaging.ConflictingModuleNameError, duplicateModuleName:hydra.error.packaging.DuplicateModuleNameError, invalidModule:hydra.error.packaging.InvalidModuleError, invalidPackageName:hydra.error.packaging.InvalidPackageNameError, moduleInMultiplePackages:hydra.error.packaging.ModuleInMultiplePackagesError, nestedModuleName:hydra.error.packaging.NestedModuleNameError, undeclaredDependency:hydra.error.packaging.UndeclaredDependencyError}
   hydra.error.packaging.InvalidPackageNameError = record{packageName:hydra.packaging.PackageName}
   hydra.error.packaging.MissingDocumentationError = record{moduleName:hydra.packaging.ModuleName, name:hydra.core.Name}
+  hydra.error.packaging.ModuleInMultiplePackagesError = record{moduleName:hydra.packaging.ModuleName, firstPackage:hydra.packaging.PackageName, secondPackage:hydra.packaging.PackageName}
+  hydra.error.packaging.NestedModuleNameError = record{outer:hydra.packaging.ModuleName, inner:hydra.packaging.ModuleName}
   hydra.error.packaging.UndeclaredDependencyError = record{moduleName:hydra.packaging.ModuleName, referencedName:hydra.core.Name, owningModuleName:hydra.packaging.ModuleName}
   hydra.error.system.SystemError = union{commandNotFound:hydra.file.FilePath, permissionDenied:hydra.file.FilePath, invalidWorkingDirectory:hydra.file.FilePath, interrupted:unit, other:string}
   hydra.errors.DecodingError = wrap(string)
@@ -465,7 +467,7 @@ Types:
   hydra.packaging.Definition = union{primitive:hydra.packaging.PrimitiveDefinition, term:hydra.packaging.TermDefinition, type:hydra.packaging.TypeDefinition}
   hydra.packaging.DefinitionReference = union{primitive:hydra.core.Name, term:hydra.core.Name, type:hydra.core.Name}
   hydra.packaging.DependencyScope = union{api:unit, runtime:unit, test:unit, tool:unit}
-  hydra.packaging.EntityMetadata = record{description:optional<string>, comments:list<string>, seeAlso:list<hydra.packaging.EntityReference>, lifecycle:optional<hydra.packaging.LifecycleInfo>}
+  hydra.packaging.EntityMetadata = record{description:optional<string>, comments:list<string>, seeAlso:list<hydra.packaging.EntityReference>, lifecycle:optional<hydra.packaging.LifecycleInfo>, provisions:list<hydra.packaging.Provision>}
   hydra.packaging.EntityReference = union{definition:hydra.packaging.DefinitionReference, module:hydra.packaging.ModuleName, package:hydra.packaging.PackageName, termExpr:string, typeExpr:string}
   hydra.packaging.LifecycleInfo = record{availableSince:optional<hydra.packaging.Version>, deprecatedSince:optional<hydra.packaging.Version>}
   hydra.packaging.Module = record{name:hydra.packaging.ModuleName, metadata:optional<hydra.packaging.EntityMetadata>, dependencies:list<hydra.packaging.ModuleDependency>, definitions:list<hydra.packaging.Definition>}
@@ -475,6 +477,8 @@ Types:
   hydra.packaging.PackageDependency = record{name:hydra.packaging.PackageName, version:hydra.packaging.VersionSpecifier, scope:optional<hydra.packaging.DependencyScope>}
   hydra.packaging.PackageName = wrap(string)
   hydra.packaging.PrimitiveDefinition = record{name:hydra.core.Name, metadata:optional<hydra.packaging.EntityMetadata>, signature:hydra.typing.TermSignature, isPure:boolean, isTotal:boolean, defaultImplementation:optional<hydra.core.Term>}
+  hydra.packaging.Provision = record{name:hydra.core.Name, kind:hydra.packaging.ProvisionKind, statement:string}
+  hydra.packaging.ProvisionKind = union{requirement:unit, recommendation:unit}
   hydra.packaging.TermDefinition = record{name:hydra.core.Name, metadata:optional<hydra.packaging.EntityMetadata>, signature:optional<hydra.typing.TermSignature>, body:hydra.core.Term}
   hydra.packaging.TypeDefinition = record{name:hydra.core.Name, metadata:optional<hydra.packaging.EntityMetadata>, body:hydra.core.TypeScheme}
   hydra.packaging.Version = wrap(string)
@@ -484,24 +488,31 @@ Types:
   hydra.parsing.ParseResult = (∀a.union{success:(hydra.parsing.ParseSuccess @ a), failure:hydra.parsing.ParseError})
   hydra.parsing.ParseSuccess = (∀a.record{value:a, remainder:list<int32>})
   hydra.parsing.Parser = (∀a.wrap((list<int32> → (hydra.parsing.ParseResult @ a))))
-  hydra.paths.SubtermAttribute = record{path:hydra.paths.SubtermPath, target:hydra.paths.TermAttribute}
-  hydra.paths.SubtermEdge = record{path:hydra.paths.SubtermPath, target:hydra.core.Name}
-  hydra.paths.SubtermGraph = record{nodes:list<hydra.paths.SubtermNode>}
-  hydra.paths.SubtermLink = union{edge:hydra.paths.SubtermEdge, property:hydra.paths.SubtermProperty, attribute:hydra.paths.SubtermAttribute}
-  hydra.paths.SubtermNode = record{name:hydra.core.Name, type:hydra.core.TypeScheme, links:list<hydra.paths.SubtermLink>}
+  hydra.paths.LambdaVariableReference = record{variable:hydra.core.Name, boundByNode:hydra.paths.TermNodeId, type:hydra.core.Type}
+  hydra.paths.LetVariableReference = record{variable:hydra.core.Name, bindingNode:hydra.paths.TermNodeId, type:hydra.core.Type}
+  hydra.paths.NominalTypeReference = record{name:hydra.core.Name}
+  hydra.paths.PrimitiveReference = record{name:hydra.core.Name, type:hydra.core.Type}
+  hydra.paths.SubtermLink = record{step:hydra.paths.SubtermStep, child:hydra.paths.TermNode}
   hydra.paths.SubtermPath = wrap(list<hydra.paths.SubtermStep>)
-  hydra.paths.SubtermProperty = record{path:hydra.paths.SubtermPath, target:hydra.core.Term}
-  hydra.paths.SubtermStep = union{annotatedAnnotation:unit, annotatedBody:unit, applicationArgument:unit, applicationFunction:unit, casesCase:hydra.core.Name, casesDefault:unit, eitherLeft:unit, eitherRight:unit, injectField:hydra.core.Name, lambdaBody:unit, letBinding:hydra.core.Name, letBody:unit, listElement:int32, mapKey:int32, mapValue:int32, optionalGiven:unit, pairFirst:unit, pairSecond:unit, recordField:hydra.core.Name, setElement:int32, typeApplicationBody:unit, typeLambdaBody:unit, wrapBody:unit}
-  hydra.paths.SubtypeAttribute = record{path:hydra.paths.SubtypePath, target:hydra.paths.TypeAttribute}
-  hydra.paths.SubtypeEdge = record{path:hydra.paths.SubtypePath, target:hydra.core.Name}
-  hydra.paths.SubtypeGraph = record{nodes:list<hydra.paths.SubtypeNode>}
-  hydra.paths.SubtypeLink = union{edge:hydra.paths.SubtypeEdge, property:hydra.paths.SubtypeProperty, attribute:hydra.paths.SubtypeAttribute}
-  hydra.paths.SubtypeNode = record{name:hydra.core.Name, links:list<hydra.paths.SubtypeLink>}
+  hydra.paths.SubtermStep = union{annotatedAnnotation:unit, annotatedBody:unit, applicationArgument:unit, applicationFunction:unit, casesCase:hydra.core.Name, casesDefault:unit, eitherLeft:unit, eitherRight:unit, injectField:hydra.core.Name, lambdaBody:unit, letBinding:hydra.core.Name, letBody:unit, listElement:int32, mapEntry:int32, optionalGiven:unit, pairFirst:unit, pairSecond:unit, recordField:hydra.core.Name, setElement:int32, typeApplicationBody:unit, typeLambdaBody:unit, wrapBody:unit}
+  hydra.paths.SubtypeLink = record{step:hydra.paths.SubtypeStep, child:hydra.paths.TypeNode}
   hydra.paths.SubtypePath = wrap(list<hydra.paths.SubtypeStep>)
-  hydra.paths.SubtypeProperty = record{path:hydra.paths.SubtypePath, target:hydra.core.Type}
   hydra.paths.SubtypeStep = union{annotatedBody:unit, applicationArgument:unit, applicationFunction:unit, effectValue:unit, eitherLeft:unit, eitherRight:unit, forallBody:unit, functionCodomain:unit, functionDomain:unit, listElement:unit, mapKeys:unit, mapValues:unit, optionalElement:unit, pairFirst:unit, pairSecond:unit, recordField:hydra.core.Name, setElement:unit, unionField:hydra.core.Name, wrapBody:unit}
-  hydra.paths.TermAttribute = union{casesTypeName:hydra.core.Name, injectTypeName:hydra.core.Name, lambdaDomainGiven:hydra.core.Type, lambdaParameter:hydra.core.Name, letBindingTypeSchemeGiven:(hydra.core.Name, hydra.core.TypeScheme), projectFieldName:hydra.core.Name, projectTypeName:hydra.core.Name, recordTypeName:hydra.core.Name, typeApplicationType:hydra.core.Type, typeLambdaParameter:hydra.core.Name, wrapTypeName:hydra.core.Name}
-  hydra.paths.TypeAttribute = union{annotatedAnnotation:hydra.core.Term, forallParameter:hydra.core.Name}
+  hydra.paths.TermAttributeLink = union{casesTypeName:hydra.core.Name, injectTypeName:hydra.core.Name, lambdaDomainGiven:hydra.core.Type, lambdaParameter:hydra.core.Name, letBindingTypeSchemeGiven:(hydra.core.Name, hydra.core.TypeScheme), literal:hydra.core.Literal, projectFieldName:hydra.core.Name, projectTypeName:hydra.core.Name, recordTypeName:hydra.core.Name, typeApplicationType:hydra.core.Type, typeLambdaParameter:hydra.core.Name, unwrapTypeName:hydra.core.Name, wrapTypeName:hydra.core.Name}
+  hydra.paths.TermGraph = record{roots:map<hydra.core.Name, hydra.paths.TermNode>}
+  hydra.paths.TermLink = union{attribute:hydra.paths.TermAttributeLink, reference:hydra.paths.TermReferenceLink, subterm:hydra.paths.SubtermLink}
+  hydra.paths.TermNode = record{term:hydra.core.Term, type:hydra.core.Type, links:list<hydra.paths.TermLink>}
+  hydra.paths.TermNodeId = record{root:hydra.core.Name, path:hydra.paths.SubtermPath}
+  hydra.paths.TermReference = union{lambda:hydra.paths.LambdaVariableReference, let:hydra.paths.LetVariableReference, primitive:hydra.paths.PrimitiveReference}
+  hydra.paths.TermReferenceLink = record{step:hydra.paths.SubtermStep, target:hydra.paths.TermReference}
+  hydra.paths.TypeAttributeLink = union{annotatedAnnotation:hydra.core.Term, forallParameter:hydra.core.Name, literal:hydra.core.LiteralType}
+  hydra.paths.TypeGraph = record{roots:map<hydra.core.Name, hydra.paths.TypeNode>}
+  hydra.paths.TypeLink = union{attribute:hydra.paths.TypeAttributeLink, reference:hydra.paths.TypeReferenceLink, subtype:hydra.paths.SubtypeLink}
+  hydra.paths.TypeNode = record{type:hydra.core.Type, links:list<hydra.paths.TypeLink>}
+  hydra.paths.TypeNodeId = record{root:hydra.core.Name, path:hydra.paths.SubtypePath}
+  hydra.paths.TypeReference = union{nominal:hydra.paths.NominalTypeReference, variable:hydra.paths.TypeVariableReference}
+  hydra.paths.TypeReferenceLink = record{step:hydra.paths.SubtypeStep, target:hydra.paths.TypeReference}
+  hydra.paths.TypeVariableReference = record{variable:hydra.core.Name, boundByNode:hydra.paths.TypeNodeId}
   hydra.query.ComparisonConstraint = union{equal:unit, notEqual:unit, lessThan:unit, greaterThan:unit, lessThanOrEqual:unit, greaterThanOrEqual:unit}
   hydra.query.Edge = record{type:hydra.core.Name, out:optional<hydra.core.Name>, in:optional<hydra.core.Name>}
   hydra.query.GraphPattern = record{graph:hydra.core.Name, patterns:list<hydra.query.Pattern>}
@@ -548,7 +559,7 @@ Types:
   hydra.testing.EffectfulTestCase = record{actual:(unit → effect<string>), expected:(unit → string)}
   hydra.testing.Tag = wrap(string)
   hydra.testing.TestCase = union{effectful:hydra.testing.EffectfulTestCase, universal:hydra.testing.UniversalTestCase}
-  hydra.testing.TestCaseWithMetadata = record{name:string, case:hydra.testing.TestCase, description:optional<string>, tags:list<hydra.testing.Tag>}
+  hydra.testing.TestCaseWithMetadata = record{name:string, case:hydra.testing.TestCase, description:optional<string>, tags:list<hydra.testing.Tag>, provisions:list<hydra.core.Name>}
   hydra.testing.TestGroup = record{name:string, description:optional<string>, subgroups:list<hydra.testing.TestGroup>, cases:list<hydra.testing.TestCaseWithMetadata>}
   hydra.testing.UniversalTestCase = record{actual:(unit → string), expected:(unit → string)}
   hydra.time.Timespec = record{seconds:int64, nanoseconds:uint32}
@@ -571,7 +582,7 @@ Types:
   hydra.typing.TypeConstraint = record{left:hydra.core.Type, right:hydra.core.Type, comment:string}
   hydra.typing.TypeParameter = record{name:hydra.core.Name, constraints:list<hydra.core.TypeClassConstraint>}
   hydra.typing.TypeSubst = wrap(map<hydra.core.Name, hydra.core.Type>)
-  hydra.util.CaseConvention = union{camel:unit, pascal:unit, lowerSnake:unit, upperSnake:unit}
+  hydra.util.CaseConvention = union{camel:unit, pascal:unit, lowerSnake:unit, upperSnake:unit, upperDashed:unit}
   hydra.util.Comparison = union{lessThan:unit, equalTo:unit, greaterThan:unit}
   hydra.util.ModuleNames = (∀n.record{focus:(hydra.packaging.ModuleName, n), mapping:map<hydra.packaging.ModuleName, n>})
   hydra.util.Precision = union{arbitrary:unit, bits:int32}
@@ -875,6 +886,8 @@ Terms:
   hydra.decode.error.packaging.invalidPackageError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.packaging.InvalidPackageError>))
   hydra.decode.error.packaging.invalidPackageNameError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.packaging.InvalidPackageNameError>))
   hydra.decode.error.packaging.missingDocumentationError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.packaging.MissingDocumentationError>))
+  hydra.decode.error.packaging.moduleInMultiplePackagesError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.packaging.ModuleInMultiplePackagesError>))
+  hydra.decode.error.packaging.nestedModuleNameError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.packaging.NestedModuleNameError>))
   hydra.decode.error.packaging.undeclaredDependencyError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.packaging.UndeclaredDependencyError>))
   hydra.decode.error.system.systemError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.error.system.SystemError>))
   hydra.decode.errors.decodingError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.errors.DecodingError>))
@@ -913,6 +926,8 @@ Terms:
   hydra.decode.packaging.packageDependency : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.packaging.PackageDependency>))
   hydra.decode.packaging.packageName : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.packaging.PackageName>))
   hydra.decode.packaging.primitiveDefinition : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.packaging.PrimitiveDefinition>))
+  hydra.decode.packaging.provision : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.packaging.Provision>))
+  hydra.decode.packaging.provisionKind : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.packaging.ProvisionKind>))
   hydra.decode.packaging.termDefinition : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.packaging.TermDefinition>))
   hydra.decode.packaging.typeDefinition : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.packaging.TypeDefinition>))
   hydra.decode.packaging.version : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.packaging.Version>))
@@ -921,24 +936,31 @@ Terms:
   hydra.decode.parsing.parseError : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.parsing.ParseError>))
   hydra.decode.parsing.parseResult : (forall t0. ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, t0>) → hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, (hydra.parsing.ParseResult @ t0)>))
   hydra.decode.parsing.parseSuccess : (forall t0. ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, t0>) → hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, (hydra.parsing.ParseSuccess @ t0)>))
-  hydra.decode.paths.subtermAttribute : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermAttribute>))
-  hydra.decode.paths.subtermEdge : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermEdge>))
-  hydra.decode.paths.subtermGraph : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermGraph>))
+  hydra.decode.paths.lambdaVariableReference : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.LambdaVariableReference>))
+  hydra.decode.paths.letVariableReference : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.LetVariableReference>))
+  hydra.decode.paths.nominalTypeReference : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.NominalTypeReference>))
+  hydra.decode.paths.primitiveReference : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.PrimitiveReference>))
   hydra.decode.paths.subtermLink : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermLink>))
-  hydra.decode.paths.subtermNode : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermNode>))
   hydra.decode.paths.subtermPath : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermPath>))
-  hydra.decode.paths.subtermProperty : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermProperty>))
   hydra.decode.paths.subtermStep : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtermStep>))
-  hydra.decode.paths.subtypeAttribute : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypeAttribute>))
-  hydra.decode.paths.subtypeEdge : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypeEdge>))
-  hydra.decode.paths.subtypeGraph : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypeGraph>))
   hydra.decode.paths.subtypeLink : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypeLink>))
-  hydra.decode.paths.subtypeNode : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypeNode>))
   hydra.decode.paths.subtypePath : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypePath>))
-  hydra.decode.paths.subtypeProperty : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypeProperty>))
   hydra.decode.paths.subtypeStep : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.SubtypeStep>))
-  hydra.decode.paths.termAttribute : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TermAttribute>))
-  hydra.decode.paths.typeAttribute : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TypeAttribute>))
+  hydra.decode.paths.termAttributeLink : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TermAttributeLink>))
+  hydra.decode.paths.termGraph : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TermGraph>))
+  hydra.decode.paths.termLink : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TermLink>))
+  hydra.decode.paths.termNode : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TermNode>))
+  hydra.decode.paths.termNodeId : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TermNodeId>))
+  hydra.decode.paths.termReference : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TermReference>))
+  hydra.decode.paths.termReferenceLink : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TermReferenceLink>))
+  hydra.decode.paths.typeAttributeLink : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TypeAttributeLink>))
+  hydra.decode.paths.typeGraph : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TypeGraph>))
+  hydra.decode.paths.typeLink : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TypeLink>))
+  hydra.decode.paths.typeNode : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TypeNode>))
+  hydra.decode.paths.typeNodeId : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TypeNodeId>))
+  hydra.decode.paths.typeReference : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TypeReference>))
+  hydra.decode.paths.typeReferenceLink : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TypeReferenceLink>))
+  hydra.decode.paths.typeVariableReference : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.paths.TypeVariableReference>))
   hydra.decode.query.comparisonConstraint : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.query.ComparisonConstraint>))
   hydra.decode.query.edge : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.query.Edge>))
   hydra.decode.query.graphPattern : ((hydra.graph.Graph → hydra.core.Term → either<hydra.errors.DecodingError, hydra.query.GraphPattern>))
@@ -1223,6 +1245,8 @@ Terms:
   hydra.encode.error.packaging.invalidPackageError : ((hydra.error.packaging.InvalidPackageError → hydra.core.Term))
   hydra.encode.error.packaging.invalidPackageNameError : ((hydra.error.packaging.InvalidPackageNameError → hydra.core.Term))
   hydra.encode.error.packaging.missingDocumentationError : ((hydra.error.packaging.MissingDocumentationError → hydra.core.Term))
+  hydra.encode.error.packaging.moduleInMultiplePackagesError : ((hydra.error.packaging.ModuleInMultiplePackagesError → hydra.core.Term))
+  hydra.encode.error.packaging.nestedModuleNameError : ((hydra.error.packaging.NestedModuleNameError → hydra.core.Term))
   hydra.encode.error.packaging.undeclaredDependencyError : ((hydra.error.packaging.UndeclaredDependencyError → hydra.core.Term))
   hydra.encode.error.system.systemError : ((hydra.error.system.SystemError → hydra.core.Term))
   hydra.encode.errors.decodingError : ((hydra.errors.DecodingError → hydra.core.Term))
@@ -1261,6 +1285,8 @@ Terms:
   hydra.encode.packaging.packageDependency : ((hydra.packaging.PackageDependency → hydra.core.Term))
   hydra.encode.packaging.packageName : ((hydra.packaging.PackageName → hydra.core.Term))
   hydra.encode.packaging.primitiveDefinition : ((hydra.packaging.PrimitiveDefinition → hydra.core.Term))
+  hydra.encode.packaging.provision : ((hydra.packaging.Provision → hydra.core.Term))
+  hydra.encode.packaging.provisionKind : ((hydra.packaging.ProvisionKind → hydra.core.Term))
   hydra.encode.packaging.termDefinition : ((hydra.packaging.TermDefinition → hydra.core.Term))
   hydra.encode.packaging.typeDefinition : ((hydra.packaging.TypeDefinition → hydra.core.Term))
   hydra.encode.packaging.version : ((hydra.packaging.Version → hydra.core.Term))
@@ -1269,24 +1295,31 @@ Terms:
   hydra.encode.parsing.parseError : ((hydra.parsing.ParseError → hydra.core.Term))
   hydra.encode.parsing.parseResult : (forall t0. ((t0 → hydra.core.Term) → (hydra.parsing.ParseResult @ t0) → hydra.core.Term))
   hydra.encode.parsing.parseSuccess : (forall t0. ((t0 → hydra.core.Term) → (hydra.parsing.ParseSuccess @ t0) → hydra.core.Term))
-  hydra.encode.paths.subtermAttribute : ((hydra.paths.SubtermAttribute → hydra.core.Term))
-  hydra.encode.paths.subtermEdge : ((hydra.paths.SubtermEdge → hydra.core.Term))
-  hydra.encode.paths.subtermGraph : ((hydra.paths.SubtermGraph → hydra.core.Term))
+  hydra.encode.paths.lambdaVariableReference : ((hydra.paths.LambdaVariableReference → hydra.core.Term))
+  hydra.encode.paths.letVariableReference : ((hydra.paths.LetVariableReference → hydra.core.Term))
+  hydra.encode.paths.nominalTypeReference : ((hydra.paths.NominalTypeReference → hydra.core.Term))
+  hydra.encode.paths.primitiveReference : ((hydra.paths.PrimitiveReference → hydra.core.Term))
   hydra.encode.paths.subtermLink : ((hydra.paths.SubtermLink → hydra.core.Term))
-  hydra.encode.paths.subtermNode : ((hydra.paths.SubtermNode → hydra.core.Term))
   hydra.encode.paths.subtermPath : ((hydra.paths.SubtermPath → hydra.core.Term))
-  hydra.encode.paths.subtermProperty : ((hydra.paths.SubtermProperty → hydra.core.Term))
   hydra.encode.paths.subtermStep : ((hydra.paths.SubtermStep → hydra.core.Term))
-  hydra.encode.paths.subtypeAttribute : ((hydra.paths.SubtypeAttribute → hydra.core.Term))
-  hydra.encode.paths.subtypeEdge : ((hydra.paths.SubtypeEdge → hydra.core.Term))
-  hydra.encode.paths.subtypeGraph : ((hydra.paths.SubtypeGraph → hydra.core.Term))
   hydra.encode.paths.subtypeLink : ((hydra.paths.SubtypeLink → hydra.core.Term))
-  hydra.encode.paths.subtypeNode : ((hydra.paths.SubtypeNode → hydra.core.Term))
   hydra.encode.paths.subtypePath : ((hydra.paths.SubtypePath → hydra.core.Term))
-  hydra.encode.paths.subtypeProperty : ((hydra.paths.SubtypeProperty → hydra.core.Term))
   hydra.encode.paths.subtypeStep : ((hydra.paths.SubtypeStep → hydra.core.Term))
-  hydra.encode.paths.termAttribute : ((hydra.paths.TermAttribute → hydra.core.Term))
-  hydra.encode.paths.typeAttribute : ((hydra.paths.TypeAttribute → hydra.core.Term))
+  hydra.encode.paths.termAttributeLink : ((hydra.paths.TermAttributeLink → hydra.core.Term))
+  hydra.encode.paths.termGraph : ((hydra.paths.TermGraph → hydra.core.Term))
+  hydra.encode.paths.termLink : ((hydra.paths.TermLink → hydra.core.Term))
+  hydra.encode.paths.termNode : ((hydra.paths.TermNode → hydra.core.Term))
+  hydra.encode.paths.termNodeId : ((hydra.paths.TermNodeId → hydra.core.Term))
+  hydra.encode.paths.termReference : ((hydra.paths.TermReference → hydra.core.Term))
+  hydra.encode.paths.termReferenceLink : ((hydra.paths.TermReferenceLink → hydra.core.Term))
+  hydra.encode.paths.typeAttributeLink : ((hydra.paths.TypeAttributeLink → hydra.core.Term))
+  hydra.encode.paths.typeGraph : ((hydra.paths.TypeGraph → hydra.core.Term))
+  hydra.encode.paths.typeLink : ((hydra.paths.TypeLink → hydra.core.Term))
+  hydra.encode.paths.typeNode : ((hydra.paths.TypeNode → hydra.core.Term))
+  hydra.encode.paths.typeNodeId : ((hydra.paths.TypeNodeId → hydra.core.Term))
+  hydra.encode.paths.typeReference : ((hydra.paths.TypeReference → hydra.core.Term))
+  hydra.encode.paths.typeReferenceLink : ((hydra.paths.TypeReferenceLink → hydra.core.Term))
+  hydra.encode.paths.typeVariableReference : ((hydra.paths.TypeVariableReference → hydra.core.Term))
   hydra.encode.query.comparisonConstraint : ((hydra.query.ComparisonConstraint → hydra.core.Term))
   hydra.encode.query.edge : ((hydra.query.Edge → hydra.core.Term))
   hydra.encode.query.graphPattern : ((hydra.query.GraphPattern → hydra.core.Term))
@@ -1665,6 +1698,7 @@ Terms:
   hydra.literals.integerValueToBigint : ((hydra.core.IntegerValue → bigint))
   hydra.names.chooseUniqueLabel : ((set<string> → string → string))
   hydra.names.compactName : ((map<hydra.packaging.ModuleName, string> → hydra.core.Name → string))
+  hydra.names.composeProvisionName : ((hydra.core.Name → string → hydra.core.Name))
   hydra.names.derivedBindingName : ((list<string> → boolean → hydra.core.Name → hydra.core.Name))
   hydra.names.derivedDefinitionName : ((list<string> → boolean → boolean → hydra.core.Name → string → hydra.core.Name))
   hydra.names.derivedModuleName : ((list<string> → boolean → hydra.packaging.ModuleName → hydra.packaging.ModuleName))
@@ -1674,6 +1708,7 @@ Terms:
   hydra.names.moduleNameOf : ((hydra.core.Name → optional<hydra.packaging.ModuleName>))
   hydra.names.moduleNameToFilePath : ((hydra.util.CaseConvention → hydra.file.FileExtension → hydra.packaging.ModuleName → string))
   hydra.names.nameToFilePath : ((hydra.util.CaseConvention → hydra.util.CaseConvention → hydra.file.FileExtension → hydra.core.Name → string))
+  hydra.names.nameToUpperDashed : ((hydra.core.Name → string))
   hydra.names.normalTypeVariable : ((int32 → hydra.core.Name))
   hydra.names.pushSubtermStep : ((hydra.paths.SubtermStep → hydra.typing.InferenceContext → hydra.typing.InferenceContext))
   hydra.names.qname : ((hydra.packaging.ModuleName → string → hydra.core.Name))
@@ -1838,6 +1873,8 @@ Terms:
   hydra.print.error.packaging.invalidPackageError : ((hydra.error.packaging.InvalidPackageError → string))
   hydra.print.error.packaging.invalidPackageNameError : ((hydra.error.packaging.InvalidPackageNameError → string))
   hydra.print.error.packaging.missingDocumentationError : ((hydra.error.packaging.MissingDocumentationError → string))
+  hydra.print.error.packaging.moduleInMultiplePackagesError : ((hydra.error.packaging.ModuleInMultiplePackagesError → string))
+  hydra.print.error.packaging.nestedModuleNameError : ((hydra.error.packaging.NestedModuleNameError → string))
   hydra.print.error.packaging.undeclaredDependencyError : ((hydra.error.packaging.UndeclaredDependencyError → string))
   hydra.print.errors.checkingError : ((hydra.error.checking.CheckingError → string))
   hydra.print.errors.decodingError : ((hydra.errors.DecodingError → string))
@@ -2050,14 +2087,6 @@ Terms:
   hydra.serialization.unsupportedVariant : ((string → string → hydra.ast.Expr))
   hydra.serialization.withComma : ((hydra.ast.Expr → hydra.ast.Expr))
   hydra.serialization.withSemi : ((hydra.ast.Expr → hydra.ast.Expr))
-  hydra.shredding.shredGraph : ((hydra.graph.Graph → either<hydra.errors.Error, hydra.paths.SubtermGraph>))
-  hydra.shredding.shredSchema : ((map<hydra.core.Name, hydra.core.Type> → either<hydra.errors.Error, hydra.paths.SubtypeGraph>))
-  hydra.shredding.shredTerm : ((hydra.graph.Graph → hydra.core.Name → hydra.core.TypeScheme → hydra.core.Term → either<hydra.errors.Error, hydra.paths.SubtermNode>))
-  hydra.shredding.shredTermLinks : ((hydra.graph.Graph → set<hydra.core.Name> → hydra.paths.SubtermPath → hydra.core.Term → either<hydra.errors.Error, list<hydra.paths.SubtermLink>>))
-  hydra.shredding.shredType : (forall t0. (map<hydra.core.Name, t0> → hydra.core.Name → hydra.core.Type → either<hydra.errors.Error, hydra.paths.SubtypeNode>))
-  hydra.shredding.shredTypeLinks : (forall t0. (map<hydra.core.Name, t0> → set<hydra.core.Name> → hydra.paths.SubtypePath → hydra.core.Type → either<hydra.errors.Error, list<hydra.paths.SubtypeLink>>))
-  hydra.shredding.termAttributes : ((hydra.paths.SubtermPath → hydra.core.Term → list<hydra.paths.SubtermAttribute>))
-  hydra.shredding.typeAttributes : ((hydra.paths.SubtypePath → hydra.core.Type → list<hydra.paths.SubtypeAttribute>))
   hydra.sorting.adjacencyListToMap : (forall t0,t1. (ordering t0) => (list<(t0, list<t1>)> → map<t0, list<t1>>))
   hydra.sorting.adjacencyListsToGraph : (forall t0. (ordering t0) => (list<(t0, list<t0>)> → (map<int32, list<int32>>, (int32 → optional<t0>))))
   hydra.sorting.createOrderingIsomorphism : (forall t0,t1. (ordering t0) => (list<t0> → list<t0> → (hydra.topology.OrderingIsomorphism @ t1)))
@@ -2097,6 +2126,20 @@ Terms:
   hydra.substitution.substituteInConstraint : ((hydra.typing.TypeSubst → hydra.typing.TypeConstraint → hydra.typing.TypeConstraint))
   hydra.substitution.substituteInConstraints : ((hydra.typing.TypeSubst → list<hydra.typing.TypeConstraint> → list<hydra.typing.TypeConstraint>))
   hydra.substitution.substituteInTerm : ((hydra.typing.TermSubst → hydra.core.Term → hydra.core.Term))
+  hydra.subterms.expectedForStep : ((map<hydra.core.Name, hydra.core.Type> → hydra.core.Type → hydra.core.Term → hydra.paths.SubtermStep → optional<hydra.core.Type>))
+  hydra.subterms.fieldTypeFromSchema : ((map<hydra.core.Name, hydra.core.Type> → hydra.core.Term → hydra.core.Name → optional<hydra.core.Type>))
+  hydra.subterms.findFieldTypeIn : ((hydra.core.Name → list<hydra.core.FieldType> → optional<hydra.core.Type>))
+  hydra.subterms.graphToTermGraph : ((hydra.graph.Graph → either<hydra.errors.Error, hydra.paths.TermGraph>))
+  hydra.subterms.rootExpectedType : (forall t0,t1. (ordering t0) => (map<t0, t1> → t0 → optional<t1>))
+  hydra.subterms.schemaToTypeGraph : ((map<hydra.core.Name, hydra.core.Type> → either<hydra.errors.Error, hydra.paths.TypeGraph>))
+  hydra.subterms.synthesizeType : (forall t0,t1. (t0 → map<hydra.core.Name, hydra.core.Type> → map<hydra.core.Name, hydra.core.Type> → hydra.core.Name → optional<hydra.core.Type> → t1 → hydra.core.Term → either<hydra.errors.Error, hydra.core.Type>))
+  hydra.subterms.termAttributesOf : ((hydra.core.Term → list<hydra.paths.TermAttributeLink>))
+  hydra.subterms.termGraphNode : ((hydra.graph.Graph → map<hydra.core.Name, hydra.core.Type> → hydra.core.Name → map<hydra.core.Name, (hydra.paths.TermNodeId, hydra.core.Type)> → set<hydra.core.Name> → optional<hydra.core.Type> → hydra.paths.SubtermPath → hydra.core.Term → either<hydra.errors.Error, hydra.paths.TermNode>))
+  hydra.subterms.termReferenceFor : ((hydra.graph.Graph → map<hydra.core.Name, (hydra.paths.TermNodeId, hydra.core.Type)> → set<hydra.core.Name> → hydra.core.Name → either<hydra.errors.Error, hydra.paths.TermReference>))
+  hydra.subterms.typeAttributesOf : ((hydra.core.Type → list<hydra.paths.TypeAttributeLink>))
+  hydra.subterms.typeGraphNode : ((set<hydra.core.Name> → hydra.core.Name → map<hydra.core.Name, hydra.paths.TypeNodeId> → hydra.paths.SubtypePath → hydra.core.Type → either<hydra.errors.Error, hydra.paths.TypeNode>))
+  hydra.subterms.typeLinks : ((set<hydra.core.Name> → hydra.core.Name → map<hydra.core.Name, hydra.paths.TypeNodeId> → hydra.paths.SubtypePath → hydra.core.Type → either<hydra.errors.Error, list<hydra.paths.TypeLink>>))
+  hydra.subterms.typeReferenceFor : ((set<hydra.core.Name> → map<hydra.core.Name, hydra.paths.TypeNodeId> → hydra.core.Name → either<hydra.errors.Error, hydra.paths.TypeReference>))
   hydra.templates.graphToSchema : (forall t0. (t0 → hydra.graph.Graph → list<hydra.core.Binding> → either<hydra.errors.DecodingError, map<hydra.core.Name, hydra.core.Type>>))
   hydra.templates.instantiateTemplate : (forall t0. (t0 → boolean → map<hydra.core.Name, hydra.core.Type> → hydra.core.Name → hydra.core.Type → either<hydra.errors.Error, hydra.core.Term>))
   hydra.unification.joinTypes : (forall t0. (t0 → hydra.core.Type → hydra.core.Type → string → either<hydra.errors.UnificationError, list<hydra.typing.TypeConstraint>>))
@@ -2141,6 +2184,8 @@ Terms:
   hydra.validate.packaging.checkDuplicateDefinitionNames : ((hydra.packaging.Module → optional<hydra.error.packaging.InvalidModuleError>))
   hydra.validate.packaging.checkDuplicateModuleNames : ((hydra.packaging.Package → optional<hydra.error.packaging.InvalidPackageError>))
   hydra.validate.packaging.checkModuleNameConvention : ((hydra.packaging.Module → optional<hydra.error.packaging.InvalidModuleError>))
+  hydra.validate.packaging.checkModulePartition : ((list<(string, list<hydra.packaging.ModuleName>)> → list<hydra.error.packaging.InvalidPackageError>))
+  hydra.validate.packaging.checkNestedModuleNames : ((hydra.packaging.Package → optional<hydra.error.packaging.InvalidPackageError>))
   hydra.validate.packaging.checkPackageNameConvention : ((hydra.packaging.Package → optional<hydra.error.packaging.InvalidPackageError>))
   hydra.validate.packaging.checkUndeclaredDependencies : ((map<hydra.core.Name, hydra.packaging.ModuleName> → set<hydra.core.Name> → hydra.packaging.Module → list<hydra.error.packaging.InvalidPackageError>))
   hydra.validate.packaging.definitionName : ((hydra.packaging.Definition → hydra.core.Name))
@@ -2153,6 +2198,8 @@ Terms:
   hydra.validate.packaging.module : ((hydra.validation.ValidationProfile → (hydra.validation.ValidationResult @ hydra.error.packaging.InvalidModuleError) → hydra.packaging.Module → (hydra.validation.ValidationResult @ hydra.error.packaging.InvalidModuleError)))
   hydra.validate.packaging.package : ((hydra.validation.ValidationProfile → (hydra.validation.ValidationResult @ hydra.error.packaging.InvalidPackageError) → hydra.packaging.Package → (hydra.validation.ValidationResult @ hydra.error.packaging.InvalidPackageError)))
   hydra.validate.packaging.undeclaredDependencyOwners : ((list<hydra.packaging.Module> → map<hydra.core.Name, hydra.packaging.ModuleName>))
+  hydra.validate.paths.eraseSubtermPath : ((hydra.paths.SubtermPath → optional<hydra.paths.SubtypePath>))
+  hydra.validate.paths.eraseSubtermStep : ((hydra.paths.SubtermStep → optional<hydra.paths.SubtypeStep>))
   hydra.variables.freeTypeVariablesInTerm : ((hydra.core.Term → set<hydra.core.Name>))
   hydra.variables.freeVariablesInTerm : ((hydra.core.Term → set<hydra.core.Name>))
   hydra.variables.freeVariablesInType : ((hydra.core.Type → set<hydra.core.Name>))
