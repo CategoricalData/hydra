@@ -17,9 +17,9 @@
 #
 # WHAT THIS DOES NOT DO: it does not create the `external` worktree, does not
 # populate anything, does not touch other worktrees' config, and does not touch
-# the live hydra/wiki or hydra/coordination loose checkouts. Those are separate
-# steps (per-machine external setup; the fleet-wide opt-out sweep). See
-# 583-cutover-runbook.md.
+# the live hydra/wiki or hydra/coordination loose checkouts. Those are separate,
+# per-machine steps: see setup-external-worktree.sh (create + populate `external`)
+# and sweep-worktree-optout.sh (opt out every other worktree).
 #
 # Usage:
 #   bin/add-external-submodules.sh --dry-run   # print what it would do

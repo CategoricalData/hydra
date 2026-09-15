@@ -9,7 +9,19 @@
 # The `external` branch is LOCAL-ONLY and NEVER pushed — it exists only to be the
 # worktree where `submodule update` runs. Its dir name `external` is FIXED: the
 # hook paths in every worktree are `../../external/agents/...`; renaming this dir
-# silently breaks them (see 583-cutover-runbook.md).
+# silently breaks them.
+#
+# .gitmodules uses per-machine SSH host aliases (git@github-CategoricalData-hydra:,
+# git@github-CategoricalData-hydra-agents:) that exist in some contributors' ~/.ssh/config
+# (multi-identity key routing) but not others' — there is no single URL form that resolves
+# on every machine, so this is deliberately NOT "fixed" by editing .gitmodules. If `git
+# submodule update` below fails with a publickey/host-resolution error, override the URL
+# for THIS machine only (does not touch the committed file):
+#   git config submodule.agents.url git@github.com:CategoricalData/hydra-agents.git
+#   git config submodule.wiki.url git@github.com:CategoricalData/hydra.wiki.git
+#   git config submodule.coordination.url git@github.com:CategoricalData/hydra.wiki.git
+# then re-run this script (idempotent). Use whatever URL form actually resolves on your
+# machine — plain github.com above is just the common case for a single-identity SSH setup.
 #
 # Idempotent: if the external worktree already exists, re-runs submodule update.
 #
@@ -65,7 +77,20 @@ run git -C "$EXTERNAL_DIR" config --worktree core.bare false
 
 # 2. Populate the three submodules IN the external worktree.
 echo "Populating submodules in the external worktree..."
-run git -C "$EXTERNAL_DIR" submodule update --init agents wiki coordination
+if ! run git -C "$EXTERNAL_DIR" submodule update --init agents wiki coordination; then
+    cat <<'EOF'
+
+Submodule update failed — most likely the .gitmodules SSH host aliases
+(git@github-CategoricalData-hydra:, git@github-CategoricalData-hydra-agents:) don't
+resolve on this machine (they're per-machine ~/.ssh/config Host entries, not universal).
+Override the URL for THIS machine only, then re-run this script:
+  git config submodule.agents.url git@github.com:CategoricalData/hydra-agents.git
+  git config submodule.wiki.url git@github.com:CategoricalData/hydra.wiki.git
+  git config submodule.coordination.url git@github.com:CategoricalData/hydra.wiki.git
+(swap in whatever URL form actually resolves for your SSH setup)
+EOF
+    exit 1
+fi
 
 # 3. Report.
 echo

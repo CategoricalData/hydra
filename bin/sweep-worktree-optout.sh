@@ -8,8 +8,8 @@
 # POPULATES it is governed by that worktree's out-of-band `config.worktree`
 # (submodule.<name>.update = none). Without the opt-out, a stray `git submodule
 # update` in any worktree clones a full copy of the submodule store into a tree
-# whose layout/permissions assume it isn't there (see 583-cutover-runbook.md
-# Caution 2). So we opt out EVERY submodule in EVERY non-external worktree.
+# whose layout/permissions assume it isn't there. So we opt out EVERY submodule
+# in EVERY non-external worktree.
 #
 # THREE CAUTIONS baked in:
 #  1. `extensions.worktreeConfig true` is set FIRST (per worktree), before any
