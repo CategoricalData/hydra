@@ -1,11 +1,12 @@
-// Package equality implements the hydra.lib.equality primitives.
+// Package ordering implements the hydra.lib.ordering primitives.
 //
-// Every ordering/equality operation routes through util.Compare, the canonical
-// total order (docs/specification/ordering-and-equality.md); none lowers to
-// Go's native == or < (which mis-handle NaN and signed zero). The comparison
-// result is reported as the generated hydra.util.Comparison enum, which the
-// kernel type-switches on.
-package equality
+// Ordering routes through util.Compare, the canonical total order
+// (docs/specification/ordering-and-equality.md); it never lowers to Go's native
+// < or > (which mis-handle NaN and signed zero). `compare` reports its result as
+// the generated hydra.util.Comparison enum, which the kernel type-switches on.
+// These primitives were split out of hydra.lib.equality in #417/#566 (the
+// numeric type class); the implementations mirror the equality overlay.
+package ordering
 
 import (
 	"hydra.dev/hydra/overlay/go/util"
@@ -24,12 +25,6 @@ func Compare(a any, b any) any {
 	}
 }
 
-// Equal : x -> x -> boolean
-func Equal(a any, b any) any { return util.Compare(a, b) == 0 }
-
-// NotEqual : x -> x -> boolean
-func NotEqual(a any, b any) any { return util.Compare(a, b) != 0 }
-
 // Gt : x -> x -> boolean
 func Gt(a any, b any) any { return util.Compare(a, b) > 0 }
 
@@ -41,9 +36,6 @@ func Lt(a any, b any) any { return util.Compare(a, b) < 0 }
 
 // Lte : x -> x -> boolean
 func Lte(a any, b any) any { return util.Compare(a, b) <= 0 }
-
-// Identity : x -> x
-func Identity(a any) any { return a }
 
 // Max : x -> x -> x
 func Max(a any, b any) any {

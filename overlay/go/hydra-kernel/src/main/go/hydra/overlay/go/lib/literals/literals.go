@@ -1,410 +1,333 @@
-// Package literals provides literal type conversion functions for Hydra.
-// This corresponds to hydra.lib.literals in the Haskell implementation.
+// Package literals implements the hydra.lib.literals primitives: conversions
+// among Hydra's literal value spaces.
+//
+// Calling convention (Native Contract v1): every primitive takes and returns
+// `any`. Numeric representations: bigint = *big.Int, decimal = *big.Float,
+// binary = []byte, the fixed-width ints/uints and float32/64 as the matching Go
+// types. Parses (readX) and other partial conversions return util.Optional.
+//
+// The arbitrary-precision floating type is named "decimal" throughout, matching
+// the kernel/lexicon (the earlier Bigfloat* naming was wrong and is gone).
 package literals
 
 import (
 	"encoding/base64"
-	"math"
 	"math/big"
 	"strconv"
 	"strings"
+
+	"hydra.dev/hydra/overlay/go/util"
 )
 
-// BigfloatToBigint converts a big float to a big int (truncating toward zero).
-// hydra.lib.literals.bigfloatToBigint : Bigfloat -> Bigint
-func BigfloatToBigint(f *big.Float) *big.Int {
-	i, _ := f.Int(nil)
+// ---- bigint -> fixed width ----
+
+// BigintToInt8 : bigint -> int8
+func BigintToInt8(i any) any { return int8(i.(*big.Int).Int64()) }
+
+// BigintToInt16 : bigint -> int16
+func BigintToInt16(i any) any { return int16(i.(*big.Int).Int64()) }
+
+// BigintToInt32 : bigint -> int32
+func BigintToInt32(i any) any { return int32(i.(*big.Int).Int64()) }
+
+// BigintToInt64 : bigint -> int64
+func BigintToInt64(i any) any { return i.(*big.Int).Int64() }
+
+// BigintToUint8 : bigint -> uint8
+func BigintToUint8(i any) any { return uint8(i.(*big.Int).Uint64()) }
+
+// BigintToUint16 : bigint -> uint16
+func BigintToUint16(i any) any { return uint16(i.(*big.Int).Uint64()) }
+
+// BigintToUint32 : bigint -> uint32
+func BigintToUint32(i any) any { return uint32(i.(*big.Int).Uint64()) }
+
+// BigintToUint64 : bigint -> uint64
+func BigintToUint64(i any) any { return i.(*big.Int).Uint64() }
+
+// BigintToDecimal : bigint -> decimal
+func BigintToDecimal(i any) any { return new(big.Float).SetInt(i.(*big.Int)) }
+
+// ---- fixed width -> bigint ----
+
+// Int8ToBigint : int8 -> bigint
+func Int8ToBigint(i any) any { return big.NewInt(int64(i.(int8))) }
+
+// Int16ToBigint : int16 -> bigint
+func Int16ToBigint(i any) any { return big.NewInt(int64(i.(int16))) }
+
+// BinaryToBase64 : binary -> string (base64-encoded)
+func BinaryToBase64(b any) any {
+	return base64.StdEncoding.EncodeToString(b.([]byte))
+}
+
+// Int32ToBigint : int32 -> bigint
+func Int32ToBigint(i any) any { return big.NewInt(int64(i.(int32))) }
+
+// Int64ToBigint : int64 -> bigint
+func Int64ToBigint(i any) any { return big.NewInt(i.(int64)) }
+
+// Uint8ToBigint : uint8 -> bigint
+func Uint8ToBigint(i any) any { return new(big.Int).SetUint64(uint64(i.(uint8))) }
+
+// Uint16ToBigint : uint16 -> bigint
+func Uint16ToBigint(i any) any { return new(big.Int).SetUint64(uint64(i.(uint16))) }
+
+// Uint32ToBigint : uint32 -> bigint
+func Uint32ToBigint(i any) any { return new(big.Int).SetUint64(uint64(i.(uint32))) }
+
+// Uint64ToBigint : uint64 -> bigint
+func Uint64ToBigint(i any) any { return new(big.Int).SetUint64(i.(uint64)) }
+
+// ---- decimal / float conversions ----
+
+// DecimalToBigint : decimal -> bigint (truncates toward zero)
+func DecimalToBigint(f any) any {
+	i, _ := f.(*big.Float).Int(nil)
 	return i
 }
 
-// BigfloatToFloat32 converts a big float to float32.
-// hydra.lib.literals.bigfloatToFloat32 : Bigfloat -> Float32
-func BigfloatToFloat32(f *big.Float) float32 {
-	f64, _ := f.Float64()
-	return float32(f64)
+// DecimalToFloat32 : decimal -> float32
+func DecimalToFloat32(f any) any {
+	v, _ := f.(*big.Float).Float32()
+	return v
 }
 
-// BigfloatToFloat64 converts a big float to float64.
-// hydra.lib.literals.bigfloatToFloat64 : Bigfloat -> Float64
-func BigfloatToFloat64(f *big.Float) float64 {
-	f64, _ := f.Float64()
-	return f64
+// DecimalToFloat64 : decimal -> float64
+func DecimalToFloat64(f any) any {
+	v, _ := f.(*big.Float).Float64()
+	return v
 }
 
-// BigintToBigfloat converts a big int to a big float.
-// hydra.lib.literals.bigintToBigfloat : Bigint -> Bigfloat
-func BigintToBigfloat(i *big.Int) *big.Float {
-	return new(big.Float).SetInt(i)
+// Float32ToDecimal : float32 -> decimal
+func Float32ToDecimal(f any) any { return big.NewFloat(float64(f.(float32))) }
+
+// Float64ToDecimal : float64 -> decimal
+func Float64ToDecimal(f any) any { return big.NewFloat(f.(float64)) }
+
+// Float32ToFloat64 : float32 -> float64
+func Float32ToFloat64(f any) any { return float64(f.(float32)) }
+
+// Float64ToFloat32 : float64 -> float32
+func Float64ToFloat32(f any) any { return float32(f.(float64)) }
+
+// ---- binary <-> bytes/string ----
+
+// BinaryToBytes : binary -> list<int32> (each byte as an int32)
+func BinaryToBytes(b any) any {
+	bs := b.([]byte)
+	out := make([]any, len(bs))
+	for i, x := range bs {
+		out[i] = int32(x)
+	}
+	return out
 }
 
-// BigintToInt8 converts a big int to int8.
-// hydra.lib.literals.bigintToInt8 : Bigint -> Int8
-func BigintToInt8(i *big.Int) int8 {
-	return int8(i.Int64())
-}
-
-// BigintToInt16 converts a big int to int16.
-// hydra.lib.literals.bigintToInt16 : Bigint -> Int16
-func BigintToInt16(i *big.Int) int16 {
-	return int16(i.Int64())
-}
-
-// BigintToInt32 converts a big int to int32.
-// hydra.lib.literals.bigintToInt32 : Bigint -> Int32
-func BigintToInt32(i *big.Int) int32 {
-	return int32(i.Int64())
-}
-
-// BigintToInt64 converts a big int to int64.
-// hydra.lib.literals.bigintToInt64 : Bigint -> Int64
-func BigintToInt64(i *big.Int) int64 {
-	return i.Int64()
-}
-
-// BigintToUint8 converts a big int to uint8.
-// hydra.lib.literals.bigintToUint8 : Bigint -> Uint8
-func BigintToUint8(i *big.Int) uint8 {
-	return uint8(i.Uint64())
-}
-
-// BigintToUint16 converts a big int to uint16.
-// hydra.lib.literals.bigintToUint16 : Bigint -> Uint16
-func BigintToUint16(i *big.Int) uint16 {
-	return uint16(i.Uint64())
-}
-
-// BigintToUint32 converts a big int to uint32.
-// hydra.lib.literals.bigintToUint32 : Bigint -> Uint32
-func BigintToUint32(i *big.Int) uint32 {
-	return uint32(i.Uint64())
-}
-
-// BigintToUint64 converts a big int to uint64.
-// hydra.lib.literals.bigintToUint64 : Bigint -> Uint64
-func BigintToUint64(i *big.Int) uint64 {
-	return i.Uint64()
-}
-
-// BinaryToBase64 converts binary data to a base64-encoded string.
-// hydra.lib.literals.binaryToBase64 : Binary -> String
-func BinaryToBase64(b []byte) string {
-	return base64.StdEncoding.EncodeToString(b)
-}
-
-// Float32ToBigfloat converts float32 to big float.
-// hydra.lib.literals.float32ToBigfloat : Float32 -> Bigfloat
-func Float32ToBigfloat(f float32) *big.Float {
-	return big.NewFloat(float64(f))
-}
-
-// Float64ToBigfloat converts float64 to big float.
-// hydra.lib.literals.float64ToBigfloat : Float64 -> Bigfloat
-func Float64ToBigfloat(f float64) *big.Float {
-	return big.NewFloat(f)
-}
-
-// Int8ToBigint converts int8 to big int.
-// hydra.lib.literals.int8ToBigint : Int8 -> Bigint
-func Int8ToBigint(i int8) *big.Int {
-	return big.NewInt(int64(i))
-}
-
-// Int16ToBigint converts int16 to big int.
-// hydra.lib.literals.int16ToBigint : Int16 -> Bigint
-func Int16ToBigint(i int16) *big.Int {
-	return big.NewInt(int64(i))
-}
-
-// Int32ToBigint converts int32 to big int.
-// hydra.lib.literals.int32ToBigint : Int32 -> Bigint
-func Int32ToBigint(i int32) *big.Int {
-	return big.NewInt(int64(i))
-}
-
-// Int64ToBigint converts int64 to big int.
-// hydra.lib.literals.int64ToBigint : Int64 -> Bigint
-func Int64ToBigint(i int64) *big.Int {
-	return big.NewInt(i)
-}
-
-// Uint8ToBigint converts uint8 to big int.
-// hydra.lib.literals.uint8ToBigint : Uint8 -> Bigint
-func Uint8ToBigint(i uint8) *big.Int {
-	return new(big.Int).SetUint64(uint64(i))
-}
-
-// Uint16ToBigint converts uint16 to big int.
-// hydra.lib.literals.uint16ToBigint : Uint16 -> Bigint
-func Uint16ToBigint(i uint16) *big.Int {
-	return new(big.Int).SetUint64(uint64(i))
-}
-
-// Uint32ToBigint converts uint32 to big int.
-// hydra.lib.literals.uint32ToBigint : Uint32 -> Bigint
-func Uint32ToBigint(i uint32) *big.Int {
-	return new(big.Int).SetUint64(uint64(i))
-}
-
-// Uint64ToBigint converts uint64 to big int.
-// hydra.lib.literals.uint64ToBigint : Uint64 -> Bigint
-func Uint64ToBigint(i uint64) *big.Int {
-	return new(big.Int).SetUint64(i)
-}
-
-// Base64ToBinary converts a base64-encoded string to binary data.
-// hydra.lib.literals.base64ToBinary : String -> Binary
-func Base64ToBinary(s string) []byte {
-	b, err := base64.StdEncoding.DecodeString(s)
+// Base64ToBinary : string -> binary
+func Base64ToBinary(s any) any {
+	b, err := base64.StdEncoding.DecodeString(s.(string))
 	if err != nil {
-		return []byte(s) // fallback to raw bytes
+		panic("hydra.lib.literals.base64ToBinary: invalid base64: " + err.Error())
 	}
 	return b
 }
 
-// ReadBigfloat parses a string as a big float.
-// hydra.lib.literals.readBigfloat : String -> Maybe Bigfloat
-func ReadBigfloat(s string) **big.Float {
-	f, _, err := big.ParseFloat(strings.TrimSpace(s), 10, 256, big.ToNearestEven)
-	if err != nil {
-		return nil
-	}
-	return &f
+// ---- IntegerValue bridge (bigint <-> the canonical integer value) ----
+
+// BigintToIntegerValue : bigint -> IntegerValue (bigint variant). At the Go
+// value level the canonical integer value for a bigint is the bigint itself;
+// the coder wraps it into the IntegerValue union at construction sites, so this
+// is the identity on *big.Int.
+func BigintToIntegerValue(i any) any { return i }
+
+// IntegerValueToBigint : IntegerValue -> bigint. The kernel only feeds the
+// bigint-valued integer here; other widths are lifted first.
+func IntegerValueToBigint(v any) any { return v }
+
+// ---- parseX : string -> optional<T> ----
+//
+// The #691 rename replaced the readX family with parseX. These are the whole
+// hydra.lib.literals.parse* surface, on the same all-any Native Contract v1 as
+// every other primitive here: a failed parse is util.None(), never a nil pointer.
+
+func trimmed(s any) string { return strings.TrimSpace(s.(string)) }
+
+// parseSigned parses a signed integer of the given bit width.
+func parseSigned(s any, bits int) (int64, bool) {
+	v, err := strconv.ParseInt(trimmed(s), 10, bits)
+	return v, err == nil
 }
 
-// ParseBigint parses a string as a big int.
-// hydra.lib.literals.parseBigint : String -> Maybe Bigint
-func ParseBigint(s string) **big.Int {
-	i, ok := new(big.Int).SetString(strings.TrimSpace(s), 10)
-	if !ok {
-		return nil
-	}
-	return &i
+// parseUnsigned parses an unsigned integer of the given bit width.
+func parseUnsigned(s any, bits int) (uint64, bool) {
+	v, err := strconv.ParseUint(trimmed(s), 10, bits)
+	return v, err == nil
 }
 
-// ReadBoolean parses a string as a boolean.
-// hydra.lib.literals.readBoolean : String -> Maybe Boolean
-func ReadBoolean(s string) *bool {
-	s = strings.TrimSpace(strings.ToLower(s))
-	switch s {
+// ParseBigint : string -> optional<bigint>
+func ParseBigint(s any) any {
+	if i, ok := new(big.Int).SetString(trimmed(s), 10); ok {
+		return util.Some(i)
+	}
+	return util.None()
+}
+
+// ParseBoolean : string -> optional<boolean>
+func ParseBoolean(s any) any {
+	switch strings.ToLower(trimmed(s)) {
 	case "true":
-		b := true
-		return &b
+		return util.Some(true)
 	case "false":
-		b := false
-		return &b
-	default:
-		return nil
+		return util.Some(false)
 	}
+	return util.None()
 }
 
-// ParseFloat32 parses a string as a float32.
-// hydra.lib.literals.parseFloat32 : String -> Maybe Float32
-func ParseFloat32(s string) *float32 {
-	f, err := strconv.ParseFloat(strings.TrimSpace(s), 32)
+// ParseDecimal : string -> optional<decimal>
+func ParseDecimal(s any) any {
+	if f, ok := new(big.Float).SetString(trimmed(s)); ok {
+		return util.Some(f)
+	}
+	return util.None()
+}
+
+// ParseFloat32 : string -> optional<float32>
+func ParseFloat32(s any) any {
+	f, err := strconv.ParseFloat(trimmed(s), 32)
 	if err != nil {
-		return nil
+		return util.None()
 	}
-	f32 := float32(f)
-	return &f32
+	return util.Some(float32(f))
 }
 
-// ParseFloat64 parses a string as a float64.
-// hydra.lib.literals.parseFloat64 : String -> Maybe Float64
-func ParseFloat64(s string) *float64 {
-	f, err := strconv.ParseFloat(strings.TrimSpace(s), 64)
+// ParseFloat64 : string -> optional<float64>
+func ParseFloat64(s any) any {
+	f, err := strconv.ParseFloat(trimmed(s), 64)
 	if err != nil {
-		return nil
+		return util.None()
 	}
-	return &f
+	return util.Some(f)
 }
 
-// ParseInt8 parses a string as an int8.
-// hydra.lib.literals.parseInt8 : String -> Maybe Int8
-func ParseInt8(s string) *int8 {
-	i, err := strconv.ParseInt(strings.TrimSpace(s), 10, 8)
-	if err != nil {
-		return nil
+// ParseInt8 : string -> optional<int8>
+func ParseInt8(s any) any {
+	if v, ok := parseSigned(s, 8); ok {
+		return util.Some(int8(v))
 	}
-	i8 := int8(i)
-	return &i8
+	return util.None()
 }
 
-// ParseInt16 parses a string as an int16.
-// hydra.lib.literals.parseInt16 : String -> Maybe Int16
-func ParseInt16(s string) *int16 {
-	i, err := strconv.ParseInt(strings.TrimSpace(s), 10, 16)
-	if err != nil {
-		return nil
+// ParseInt16 : string -> optional<int16>
+func ParseInt16(s any) any {
+	if v, ok := parseSigned(s, 16); ok {
+		return util.Some(int16(v))
 	}
-	i16 := int16(i)
-	return &i16
+	return util.None()
 }
 
-// ParseInt32 parses a string as an int32.
-// hydra.lib.literals.parseInt32 : String -> Maybe Int32
-func ParseInt32(s string) *int32 {
-	i, err := strconv.ParseInt(strings.TrimSpace(s), 10, 32)
-	if err != nil {
-		return nil
+// ParseInt32 : string -> optional<int32>
+func ParseInt32(s any) any {
+	if v, ok := parseSigned(s, 32); ok {
+		return util.Some(int32(v))
 	}
-	i32 := int32(i)
-	return &i32
+	return util.None()
 }
 
-// ParseInt64 parses a string as an int64.
-// hydra.lib.literals.parseInt64 : String -> Maybe Int64
-func ParseInt64(s string) *int64 {
-	i, err := strconv.ParseInt(strings.TrimSpace(s), 10, 64)
-	if err != nil {
-		return nil
+// ParseInt64 : string -> optional<int64>
+func ParseInt64(s any) any {
+	if v, ok := parseSigned(s, 64); ok {
+		return util.Some(v)
 	}
-	return &i
+	return util.None()
 }
 
-// ReadString parses a string as a string (identity, always succeeds).
-// hydra.lib.literals.readString : String -> Maybe String
-func ReadString(s string) *string {
-	return &s
-}
-
-// ParseUint8 parses a string as a uint8.
-// hydra.lib.literals.parseUint8 : String -> Maybe Uint8
-func ParseUint8(s string) *uint8 {
-	i, err := strconv.ParseUint(strings.TrimSpace(s), 10, 8)
-	if err != nil {
-		return nil
+// ParseString : string -> optional<string>. Parses a quoted string-literal
+// token, decoding backslash escapes; the inverse of PrintString. Malformed
+// input (including an unquoted string) yields none.
+func ParseString(s any) any {
+	if v, err := strconv.Unquote(s.(string)); err == nil {
+		return util.Some(v)
 	}
-	u8 := uint8(i)
-	return &u8
+	return util.None()
 }
 
-// ParseUint16 parses a string as a uint16.
-// hydra.lib.literals.parseUint16 : String -> Maybe Uint16
-func ParseUint16(s string) *uint16 {
-	i, err := strconv.ParseUint(strings.TrimSpace(s), 10, 16)
-	if err != nil {
-		return nil
+// ParseUint8 : string -> optional<uint8>
+func ParseUint8(s any) any {
+	if v, ok := parseUnsigned(s, 8); ok {
+		return util.Some(uint8(v))
 	}
-	u16 := uint16(i)
-	return &u16
+	return util.None()
 }
 
-// ParseUint32 parses a string as a uint32.
-// hydra.lib.literals.parseUint32 : String -> Maybe Uint32
-func ParseUint32(s string) *uint32 {
-	i, err := strconv.ParseUint(strings.TrimSpace(s), 10, 32)
-	if err != nil {
-		return nil
+// ParseUint16 : string -> optional<uint16>
+func ParseUint16(s any) any {
+	if v, ok := parseUnsigned(s, 16); ok {
+		return util.Some(uint16(v))
 	}
-	u32 := uint32(i)
-	return &u32
+	return util.None()
 }
 
-// ParseUint64 parses a string as a uint64.
-// hydra.lib.literals.parseUint64 : String -> Maybe Uint64
-func ParseUint64(s string) *uint64 {
-	i, err := strconv.ParseUint(strings.TrimSpace(s), 10, 64)
-	if err != nil {
-		return nil
+// ParseUint32 : string -> optional<uint32>
+func ParseUint32(s any) any {
+	if v, ok := parseUnsigned(s, 32); ok {
+		return util.Some(uint32(v))
 	}
-	return &i
+	return util.None()
 }
 
-// ShowBigfloat converts a big float to its string representation.
-// hydra.lib.literals.showBigfloat : Bigfloat -> String
-func ShowBigfloat(f *big.Float) string {
-	return f.Text('g', -1)
+// ParseUint64 : string -> optional<uint64>
+func ParseUint64(s any) any {
+	if v, ok := parseUnsigned(s, 64); ok {
+		return util.Some(v)
+	}
+	return util.None()
 }
 
-// PrintBigint converts a big int to its string representation.
-// hydra.lib.literals.printBigint : Bigint -> String
-func PrintBigint(i *big.Int) string {
-	return i.String()
-}
+// ---- printX : T -> string ----
 
-// ShowBoolean converts a boolean to its string representation.
-// hydra.lib.literals.showBoolean : Boolean -> String
-func ShowBoolean(b bool) string {
-	if b {
+// PrintBigint : bigint -> string
+func PrintBigint(i any) any { return i.(*big.Int).String() }
+
+// PrintBoolean : boolean -> string
+func PrintBoolean(b any) any {
+	if b.(bool) {
 		return "true"
 	}
 	return "false"
 }
 
-// PrintFloat32 converts a float32 to its string representation.
-// hydra.lib.literals.printFloat32 : Float32 -> String
-func PrintFloat32(f float32) string {
-	return strconv.FormatFloat(float64(f), 'g', -1, 32)
-}
+// PrintDecimal : decimal -> string
+func PrintDecimal(f any) any { return f.(*big.Float).Text('g', -1) }
 
-// PrintFloat64 converts a float64 to its string representation.
-// hydra.lib.literals.printFloat64 : Float64 -> String
-func PrintFloat64(f float64) string {
-	return strconv.FormatFloat(f, 'g', -1, 64)
-}
+// PrintFloat32 : float32 -> string
+func PrintFloat32(f any) any { return strconv.FormatFloat(float64(f.(float32)), 'g', -1, 32) }
 
-// PrintInt8 converts an int8 to its string representation.
-// hydra.lib.literals.printInt8 : Int8 -> String
-func PrintInt8(i int8) string {
-	return strconv.FormatInt(int64(i), 10)
-}
+// PrintFloat64 : float64 -> string
+func PrintFloat64(f any) any { return strconv.FormatFloat(f.(float64), 'g', -1, 64) }
 
-// PrintInt16 converts an int16 to its string representation.
-// hydra.lib.literals.printInt16 : Int16 -> String
-func PrintInt16(i int16) string {
-	return strconv.FormatInt(int64(i), 10)
-}
+// PrintInt8 : int8 -> string
+func PrintInt8(i any) any { return strconv.FormatInt(int64(i.(int8)), 10) }
 
-// PrintInt32 converts an int32 to its string representation.
-// hydra.lib.literals.printInt32 : Int32 -> String
-func PrintInt32(i int32) string {
-	return strconv.FormatInt(int64(i), 10)
-}
+// PrintInt16 : int16 -> string
+func PrintInt16(i any) any { return strconv.FormatInt(int64(i.(int16)), 10) }
 
-// PrintInt64 converts an int64 to its string representation.
-// hydra.lib.literals.printInt64 : Int64 -> String
-func PrintInt64(i int64) string {
-	return strconv.FormatInt(i, 10)
-}
+// PrintInt32 : int32 -> string
+func PrintInt32(i any) any { return strconv.FormatInt(int64(i.(int32)), 10) }
 
-// PrintUint8 converts a uint8 to its string representation.
-// hydra.lib.literals.printUint8 : Uint8 -> String
-func PrintUint8(i uint8) string {
-	return strconv.FormatUint(uint64(i), 10)
-}
+// PrintInt64 : int64 -> string
+func PrintInt64(i any) any { return strconv.FormatInt(i.(int64), 10) }
 
-// PrintUint16 converts a uint16 to its string representation.
-// hydra.lib.literals.printUint16 : Uint16 -> String
-func PrintUint16(i uint16) string {
-	return strconv.FormatUint(uint64(i), 10)
-}
+// PrintUint8 : uint8 -> string
+func PrintUint8(i any) any { return strconv.FormatUint(uint64(i.(uint8)), 10) }
 
-// PrintUint32 converts a uint32 to its string representation.
-// hydra.lib.literals.printUint32 : Uint32 -> String
-func PrintUint32(i uint32) string {
-	return strconv.FormatUint(uint64(i), 10)
-}
+// PrintUint16 : uint16 -> string
+func PrintUint16(i any) any { return strconv.FormatUint(uint64(i.(uint16)), 10) }
 
-// PrintUint64 converts a uint64 to its string representation.
-// hydra.lib.literals.printUint64 : Uint64 -> String
-func PrintUint64(i uint64) string {
-	return strconv.FormatUint(i, 10)
-}
+// PrintUint32 : uint32 -> string
+func PrintUint32(i any) any { return strconv.FormatUint(uint64(i.(uint32)), 10) }
 
-// ShowString converts a string to its quoted representation.
-// hydra.lib.literals.showString : String -> String
-func ShowString(s string) string {
-	return strconv.Quote(s)
-}
+// PrintUint64 : uint64 -> string
+func PrintUint64(i any) any { return strconv.FormatUint(i.(uint64), 10) }
 
-// Helper math functions not in standard library
-
-// IsNaN checks if a float64 is NaN.
-func IsNaN(f float64) bool {
-	return math.IsNaN(f)
-}
-
-// IsInf checks if a float64 is infinite.
-func IsInf(f float64) bool {
-	return math.IsInf(f, 0)
-}
+// PrintString : string -> string (quoted)
+func PrintString(s any) any { return strconv.Quote(s.(string)) }
