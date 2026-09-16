@@ -425,7 +425,10 @@ encodeRecordType = def "encodeRecordType" $
 
 encodeScalarType :: TypedTermDefinition (PE.EncoderState -> LiteralType -> Either Error P3.ScalarType)
 encodeScalarType = def "encodeScalarType" $
-  doc "Encode a Hydra literal type as a Protobuf scalar type" $
+  doc ("Encode a Hydra literal type as a Protobuf scalar type. Protobuf has no int8/int16/uint8/"
+    <> "uint16/bigint scalar, so int8 and int16 widen (losslessly) to int32, uint8 and uint16 widen "
+    <> "(losslessly) to uint32, and bigint narrows (lossily, matching the Avro coder's fallback) to "
+    <> "int64.") $
   "cx" ~> "lt" ~>
     match _LiteralType (var "lt")
       (Just $ asTerm unexpectedE @@ var "cx" @@ string "supported literal type" @@ (PrintCore.literalType @@ var "lt")) [
@@ -438,16 +441,22 @@ encodeScalarType = def "encodeScalarType" $
           _FloatType_float64>>: constant $ right (inject P3._ScalarType P3._ScalarType_double unit)],
       _LiteralType_integer>>: "it" ~>
         match _IntegerType (var "it")
-          (Just $ asTerm unexpectedE @@ var "cx" @@ string "32-bit or 64-bit integer type" @@ (PrintCore.integerType @@ var "it")) [
+          (Just $ asTerm unexpectedE @@ var "cx" @@ string "supported integer type" @@ (PrintCore.integerType @@ var "it")) [
+          _IntegerType_bigint>>: constant $ right (inject P3._ScalarType P3._ScalarType_int64 unit),
+          _IntegerType_int8>>: constant $ right (inject P3._ScalarType P3._ScalarType_int32 unit),
+          _IntegerType_int16>>: constant $ right (inject P3._ScalarType P3._ScalarType_int32 unit),
           _IntegerType_int32>>: constant $ right (inject P3._ScalarType P3._ScalarType_int32 unit),
           _IntegerType_int64>>: constant $ right (inject P3._ScalarType P3._ScalarType_int64 unit),
+          _IntegerType_uint8>>: constant $ right (inject P3._ScalarType P3._ScalarType_uint32 unit),
+          _IntegerType_uint16>>: constant $ right (inject P3._ScalarType P3._ScalarType_uint32 unit),
           _IntegerType_uint32>>: constant $ right (inject P3._ScalarType P3._ScalarType_uint32 unit),
           _IntegerType_uint64>>: constant $ right (inject P3._ScalarType P3._ScalarType_uint64 unit)],
       _LiteralType_string>>: constant $ right (inject P3._ScalarType P3._ScalarType_string unit)]
 
 encodeScalarTypeWrapped :: TypedTermDefinition (PE.EncoderState -> LiteralType -> Either Error P3.SimpleType)
 encodeScalarTypeWrapped = def "encodeScalarTypeWrapped" $
-  doc "Encode a Hydra literal type as a wrapped Protobuf type (for optional scalars)" $
+  doc ("Encode a Hydra literal type as a wrapped Protobuf type (for optional scalars). Widths "
+    <> "without a dedicated Protobuf wrapper type widen/narrow the same way as encodeScalarType.") $
   "cx" ~> "lt" ~> lets [
     "toType">: "label" ~> right $
       inject P3._SimpleType P3._SimpleType_reference (wrap P3._TypeName (Strings.concat (list [string "google.protobuf.", var "label", string "Value"])))] $
@@ -462,9 +471,14 @@ encodeScalarTypeWrapped = def "encodeScalarTypeWrapped" $
           _FloatType_float64>>: constant $ var "toType" @@ string "Double"],
       _LiteralType_integer>>: "it" ~>
         match _IntegerType (var "it")
-          (Just $ asTerm unexpectedE @@ var "cx" @@ string "32-bit or 64-bit integer type" @@ (PrintCore.integerType @@ var "it")) [
+          (Just $ asTerm unexpectedE @@ var "cx" @@ string "supported integer type" @@ (PrintCore.integerType @@ var "it")) [
+          _IntegerType_bigint>>: constant $ var "toType" @@ string "Int64",
+          _IntegerType_int8>>: constant $ var "toType" @@ string "Int32",
+          _IntegerType_int16>>: constant $ var "toType" @@ string "Int32",
           _IntegerType_int32>>: constant $ var "toType" @@ string "Int32",
           _IntegerType_int64>>: constant $ var "toType" @@ string "Int64",
+          _IntegerType_uint8>>: constant $ var "toType" @@ string "UInt32",
+          _IntegerType_uint16>>: constant $ var "toType" @@ string "UInt32",
           _IntegerType_uint32>>: constant $ var "toType" @@ string "UInt32",
           _IntegerType_uint64>>: constant $ var "toType" @@ string "UInt64"],
       _LiteralType_string>>: constant $ var "toType" @@ string "String"]

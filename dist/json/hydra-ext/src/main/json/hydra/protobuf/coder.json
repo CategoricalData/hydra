@@ -2972,9 +2972,51 @@
                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.protobuf.coder.unexpectedE"}, "type": {"variable": "t0"}}},
                                                                 "type": {"variable": "hydra.protobuf.proto3.ScalarType"}}},
                                                             "argument": {"variable": "cx"}}},
-                                                        "argument": {"literal": {"string": "32-bit or 64-bit integer type"}}}},
+                                                        "argument": {"literal": {"string": "supported integer type"}}}},
                                                     "argument": {"application": {"function": {"variable": "hydra.print.core.integerType"}, "argument": {"variable": "it"}}}}},
                                                 "cases": [
+                                                  {
+                                                    "name": "bigint",
+                                                    "handler": {
+                                                      "lambda": {
+                                                        "parameter": "_",
+                                                        "domain": "unit",
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {"right": {"inject": {"typeName": "hydra.protobuf.proto3.ScalarType", "field": {"name": "int64", "term": "unit"}}}}},
+                                                                "type": {"variable": "hydra.errors.Error"}}},
+                                                            "type": {"variable": "hydra.protobuf.proto3.ScalarType"}}}}}},
+                                                  {
+                                                    "name": "int8",
+                                                    "handler": {
+                                                      "lambda": {
+                                                        "parameter": "_",
+                                                        "domain": "unit",
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {"right": {"inject": {"typeName": "hydra.protobuf.proto3.ScalarType", "field": {"name": "int32", "term": "unit"}}}}},
+                                                                "type": {"variable": "hydra.errors.Error"}}},
+                                                            "type": {"variable": "hydra.protobuf.proto3.ScalarType"}}}}}},
+                                                  {
+                                                    "name": "int16",
+                                                    "handler": {
+                                                      "lambda": {
+                                                        "parameter": "_",
+                                                        "domain": "unit",
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {"right": {"inject": {"typeName": "hydra.protobuf.proto3.ScalarType", "field": {"name": "int32", "term": "unit"}}}}},
+                                                                "type": {"variable": "hydra.errors.Error"}}},
+                                                            "type": {"variable": "hydra.protobuf.proto3.ScalarType"}}}}}},
                                                   {
                                                     "name": "int32",
                                                     "handler": {
@@ -3001,6 +3043,34 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {"right": {"inject": {"typeName": "hydra.protobuf.proto3.ScalarType", "field": {"name": "int64", "term": "unit"}}}}},
+                                                                "type": {"variable": "hydra.errors.Error"}}},
+                                                            "type": {"variable": "hydra.protobuf.proto3.ScalarType"}}}}}},
+                                                  {
+                                                    "name": "uint8",
+                                                    "handler": {
+                                                      "lambda": {
+                                                        "parameter": "_",
+                                                        "domain": "unit",
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {"right": {"inject": {"typeName": "hydra.protobuf.proto3.ScalarType", "field": {"name": "uint32", "term": "unit"}}}}},
+                                                                "type": {"variable": "hydra.errors.Error"}}},
+                                                            "type": {"variable": "hydra.protobuf.proto3.ScalarType"}}}}}},
+                                                  {
+                                                    "name": "uint16",
+                                                    "handler": {
+                                                      "lambda": {
+                                                        "parameter": "_",
+                                                        "domain": "unit",
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {"right": {"inject": {"typeName": "hydra.protobuf.proto3.ScalarType", "field": {"name": "uint32", "term": "unit"}}}}},
                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                             "type": {"variable": "hydra.protobuf.proto3.ScalarType"}}}}}},
                                                   {
@@ -3051,7 +3121,9 @@
                   "map": [
                     {
                       "key": {"variable": "description"},
-                      "value": {"literal": {"string": "Encode a Hydra literal type as a Protobuf scalar type"}}}]}}}}}}},
+                      "value": {
+                        "literal": {
+                          "string": "Encode a Hydra literal type as a Protobuf scalar type. Protobuf has no int8/int16/uint8/uint16/bigint scalar, so int8 and int16 widen (losslessly) to int32, uint8 and uint16 widen (losslessly) to uint32, and bigint narrows (lossily, matching the Avro coder's fallback) to int64."}}}]}}}}}}},
     {
       "term": {
         "name": "hydra.protobuf.coder.encodeScalarTypeWrapped",
@@ -3221,9 +3293,39 @@
                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.protobuf.coder.unexpectedE"}, "type": {"variable": "t0"}}},
                                                                     "type": {"variable": "hydra.protobuf.proto3.SimpleType"}}},
                                                                 "argument": {"variable": "cx"}}},
-                                                            "argument": {"literal": {"string": "32-bit or 64-bit integer type"}}}},
+                                                            "argument": {"literal": {"string": "supported integer type"}}}},
                                                         "argument": {"application": {"function": {"variable": "hydra.print.core.integerType"}, "argument": {"variable": "it"}}}}},
                                                     "cases": [
+                                                      {
+                                                        "name": "bigint",
+                                                        "handler": {
+                                                          "lambda": {
+                                                            "parameter": "_",
+                                                            "domain": "unit",
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {"typeApplication": {"body": {"variable": "toType"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                "argument": {"literal": {"string": "Int64"}}}}}}},
+                                                      {
+                                                        "name": "int8",
+                                                        "handler": {
+                                                          "lambda": {
+                                                            "parameter": "_",
+                                                            "domain": "unit",
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {"typeApplication": {"body": {"variable": "toType"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                "argument": {"literal": {"string": "Int32"}}}}}}},
+                                                      {
+                                                        "name": "int16",
+                                                        "handler": {
+                                                          "lambda": {
+                                                            "parameter": "_",
+                                                            "domain": "unit",
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {"typeApplication": {"body": {"variable": "toType"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                "argument": {"literal": {"string": "Int32"}}}}}}},
                                                       {
                                                         "name": "int32",
                                                         "handler": {
@@ -3244,6 +3346,26 @@
                                                               "application": {
                                                                 "function": {"typeApplication": {"body": {"variable": "toType"}, "type": {"variable": "hydra.errors.Error"}}},
                                                                 "argument": {"literal": {"string": "Int64"}}}}}}},
+                                                      {
+                                                        "name": "uint8",
+                                                        "handler": {
+                                                          "lambda": {
+                                                            "parameter": "_",
+                                                            "domain": "unit",
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {"typeApplication": {"body": {"variable": "toType"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                "argument": {"literal": {"string": "UInt32"}}}}}}},
+                                                      {
+                                                        "name": "uint16",
+                                                        "handler": {
+                                                          "lambda": {
+                                                            "parameter": "_",
+                                                            "domain": "unit",
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {"typeApplication": {"body": {"variable": "toType"}, "type": {"variable": "hydra.errors.Error"}}},
+                                                                "argument": {"literal": {"string": "UInt32"}}}}}}},
                                                       {
                                                         "name": "uint32",
                                                         "handler": {
@@ -3280,7 +3402,9 @@
                   "map": [
                     {
                       "key": {"variable": "description"},
-                      "value": {"literal": {"string": "Encode a Hydra literal type as a wrapped Protobuf type (for optional scalars)"}}}]}}}}}}},
+                      "value": {
+                        "literal": {
+                          "string": "Encode a Hydra literal type as a wrapped Protobuf type (for optional scalars). Widths without a dedicated Protobuf wrapper type widen/narrow the same way as encodeScalarType."}}}]}}}}}}},
     {
       "term": {
         "name": "hydra.protobuf.coder.encodeSimpleTypeForHelper",
