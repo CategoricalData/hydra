@@ -52,6 +52,7 @@
                     "name": "subgroups",
                     "term": {
                       "list": [
+                        {"variable": "hydra.test.validate.core.annotationTests"},
                         {"variable": "hydra.test.validate.core.duplicateBindingsTests"},
                         {"variable": "hydra.test.validate.core.duplicateFieldsTests"},
                         {"variable": "hydra.test.validate.core.emptyLetBindingsTests"},
@@ -65,6 +66,123 @@
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}]}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Test cases for core term and type validation"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.test.validate.core.annotationTests",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}},
+        "body": {
+          "record": {
+            "typeName": "hydra.testing.TestGroup",
+            "fields": [
+              {"name": "name", "term": {"literal": {"string": "annotations"}}},
+              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+              {
+                "name": "subgroups",
+                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestGroup"}}}},
+              {
+                "name": "cases",
+                "term": {
+                  "list": [
+                    {
+                      "record": {
+                        "typeName": "hydra.testing.TestCaseWithMetadata",
+                        "fields": [
+                          {"name": "name", "term": {"literal": {"string": "annotated term is valid"}}},
+                          {
+                            "name": "case",
+                            "term": {
+                              "inject": {
+                                "typeName": "hydra.testing.TestCase",
+                                "field": {
+                                  "name": "universal",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.testing.UniversalTestCase",
+                                      "fields": [
+                                        {
+                                          "name": "actual",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {
+                                                            "application": {
+                                                              "function": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.lists.head"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
+                                                              "argument": {
+                                                                "application": {
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"project": {"typeName": "hydra.validation.ValidationResult", "fieldName": "errors"}},
+                                                                      "type": {"variable": "hydra.error.core.InvalidTermError"}}},
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "function": {"variable": "hydra.validate.core.term"},
+                                                                                  "argument": {"variable": "hydra.validate.core.kernelDefaultCoreProfile"}}},
+                                                                              "argument": {"literal": {"boolean": false}}}},
+                                                                          "argument": {"variable": "hydra.test.testGraph.testGraph"}}},
+                                                                      "argument": {
+                                                                        "inject": {
+                                                                          "typeName": "hydra.core.Term",
+                                                                          "field": {
+                                                                            "name": "literal",
+                                                                            "term": {
+                                                                              "inject": {
+                                                                                "typeName": "hydra.core.Literal",
+                                                                                "field": {
+                                                                                  "name": "integer",
+                                                                                  "term": {
+                                                                                    "inject": {"typeName": "hydra.core.IntegerValue", "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}}}}}}}}}}}}}}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "body": {"application": {"function": {"variable": "hydra.print.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}},
+                                        {
+                                          "name": "expected",
+                                          "term": {
+                                            "lambda": {
+                                              "parameter": "_",
+                                              "domain": "unit",
+                                              "body": {
+                                                "application": {
+                                                  "function": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"variable": "hydra.error.core.InvalidTermError"}}},
+                                                              "type": {"literal": "string"}}},
+                                                          "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.error.core.InvalidTermError"}}}}},
+                                                      "argument": {"literal": {"string": "valid"}}}},
+                                                  "argument": {
+                                                    "lambda": {
+                                                      "parameter": "e",
+                                                      "domain": {"variable": "hydra.error.core.InvalidTermError"},
+                                                      "body": {"application": {"function": {"variable": "hydra.print.error.core.invalidTermError"}, "argument": {"variable": "e"}}}}}}}}}}]}}}}}},
+                          {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                          {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}},
+                          {"name": "provisions", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}}]}}]}}]}}}},
     {
       "term": {
         "name": "hydra.test.validate.core.duplicateBindingsTests",

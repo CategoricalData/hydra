@@ -1456,7 +1456,10 @@
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {"variable": "hydra.extract.core.decodeList"},
                                                                                                                     "type": {"application": {"function": {"variable": "hydra.pg.model.PropertyType"}, "argument": {"variable": "t"}}}}},
-                                                                                                                "argument": {"application": {"function": {"variable": "hydra.decode.pg.model.propertyType"}, "argument": {"variable": "t"}}}}}}},
+                                                                                                                "argument": {
+                                                                                                                  "application": {
+                                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.propertyType"}, "type": {"variable": "t"}}},
+                                                                                                                    "argument": {"variable": "t"}}}}}}},
                                                                                                         "argument": {"variable": "fieldMap"}}},
                                                                                                     "argument": {"variable": "cx"}}}}},
                                                                                             "argument": {
@@ -1647,7 +1650,10 @@
                                                                                           "application": {
                                                                                             "function": {
                                                                                               "application": {
-                                                                                                "function": {"application": {"function": {"variable": "hydra.decode.pg.model.vertex"}, "argument": {"variable": "v"}}},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.vertex"}, "type": {"variable": "v"}}},
+                                                                                                    "argument": {"variable": "v"}}},
                                                                                                 "argument": {"variable": "cx"}}},
                                                                                             "argument": {"variable": "input"}}}}}}}}},
                                                                             "type": {"variable": "hydra.core.Name"}}},
@@ -1692,7 +1698,10 @@
                                                                                           "application": {
                                                                                             "function": {
                                                                                               "application": {
-                                                                                                "function": {"application": {"function": {"variable": "hydra.decode.pg.model.edge"}, "argument": {"variable": "v"}}},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.edge"}, "type": {"variable": "v"}}},
+                                                                                                    "argument": {"variable": "v"}}},
                                                                                                 "argument": {"variable": "cx"}}},
                                                                                             "argument": {"variable": "input"}}}}}}}}},
                                                                             "type": {"variable": "hydra.core.Name"}}},
@@ -2197,7 +2206,10 @@
                                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                                     "type": {"application": {"function": {"variable": "hydra.pg.model.Element"}, "argument": {"variable": "v"}}}}},
                                                                                 "argument": {"literal": {"string": "self"}}}},
-                                                                            "argument": {"application": {"function": {"variable": "hydra.decode.pg.model.element"}, "argument": {"variable": "v"}}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.element"}, "type": {"variable": "v"}}},
+                                                                                "argument": {"variable": "v"}}}}},
                                                                         "argument": {"variable": "fieldMap"}}},
                                                                     "argument": {"variable": "cx"}}}}},
                                                             "argument": {
@@ -2239,7 +2251,10 @@
                                                                                           "typeApplication": {
                                                                                             "body": {"variable": "hydra.extract.core.decodeList"},
                                                                                             "type": {"application": {"function": {"variable": "hydra.pg.model.ElementTree"}, "argument": {"variable": "v"}}}}},
-                                                                                        "argument": {"application": {"function": {"variable": "hydra.decode.pg.model.elementTree"}, "argument": {"variable": "v"}}}}}}},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.elementTree"}, "type": {"variable": "v"}}},
+                                                                                            "argument": {"variable": "v"}}}}}}},
                                                                                 "argument": {"variable": "fieldMap"}}},
                                                                             "argument": {"variable": "cx"}}}}},
                                                                     "argument": {
@@ -2428,7 +2443,10 @@
                                                                                           "application": {
                                                                                             "function": {
                                                                                               "application": {
-                                                                                                "function": {"application": {"function": {"variable": "hydra.decode.pg.model.vertexType"}, "argument": {"variable": "t"}}},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.vertexType"}, "type": {"variable": "t"}}},
+                                                                                                    "argument": {"variable": "t"}}},
                                                                                                 "argument": {"variable": "cx"}}},
                                                                                             "argument": {"variable": "input"}}}}}}}}},
                                                                             "type": {"variable": "hydra.core.Name"}}},
@@ -2473,7 +2491,10 @@
                                                                                           "application": {
                                                                                             "function": {
                                                                                               "application": {
-                                                                                                "function": {"application": {"function": {"variable": "hydra.decode.pg.model.edgeType"}, "argument": {"variable": "t"}}},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.edgeType"}, "type": {"variable": "t"}}},
+                                                                                                    "argument": {"variable": "t"}}},
                                                                                                 "argument": {"variable": "cx"}}},
                                                                                             "argument": {"variable": "input"}}}}}}}}},
                                                                             "type": {"variable": "hydra.core.Name"}}},
@@ -2708,7 +2729,10 @@
                                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                                     "type": {"application": {"function": {"variable": "hydra.pg.model.ElementType"}, "argument": {"variable": "t"}}}}},
                                                                                 "argument": {"literal": {"string": "self"}}}},
-                                                                            "argument": {"application": {"function": {"variable": "hydra.decode.pg.model.elementType"}, "argument": {"variable": "t"}}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.elementType"}, "type": {"variable": "t"}}},
+                                                                                "argument": {"variable": "t"}}}}},
                                                                         "argument": {"variable": "fieldMap"}}},
                                                                     "argument": {"variable": "cx"}}}}},
                                                             "argument": {
@@ -2750,7 +2774,10 @@
                                                                                           "typeApplication": {
                                                                                             "body": {"variable": "hydra.extract.core.decodeList"},
                                                                                             "type": {"application": {"function": {"variable": "hydra.pg.model.ElementTypeTree"}, "argument": {"variable": "t"}}}}},
-                                                                                        "argument": {"application": {"function": {"variable": "hydra.decode.pg.model.elementTypeTree"}, "argument": {"variable": "t"}}}}}}},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.elementTypeTree"}, "type": {"variable": "t"}}},
+                                                                                            "argument": {"variable": "t"}}}}}}},
                                                                                 "argument": {"variable": "fieldMap"}}},
                                                                             "argument": {"variable": "cx"}}}}},
                                                                     "argument": {
@@ -2929,7 +2956,10 @@
                                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.extract.core.decodeMap"}, "type": {"variable": "v"}}},
                                                                                         "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "v"}}}}},
                                                                                     "argument": {"variable": "v"}}},
-                                                                                "argument": {"application": {"function": {"variable": "hydra.decode.pg.model.vertex"}, "argument": {"variable": "v"}}}}}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.vertex"}, "type": {"variable": "v"}}},
+                                                                                    "argument": {"variable": "v"}}}}}}},
                                                                         "argument": {"variable": "fieldMap"}}},
                                                                     "argument": {"variable": "cx"}}}}},
                                                             "argument": {
@@ -2983,7 +3013,10 @@
                                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.extract.core.decodeMap"}, "type": {"variable": "v"}}},
                                                                                                 "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "v"}}}}},
                                                                                             "argument": {"variable": "v"}}},
-                                                                                        "argument": {"application": {"function": {"variable": "hydra.decode.pg.model.edge"}, "argument": {"variable": "v"}}}}}}},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.edge"}, "type": {"variable": "v"}}},
+                                                                                            "argument": {"variable": "v"}}}}}}},
                                                                                 "argument": {"variable": "fieldMap"}}},
                                                                             "argument": {"variable": "cx"}}}}},
                                                                     "argument": {
@@ -3163,7 +3196,10 @@
                                                                                           "typeApplication": {"body": {"variable": "hydra.extract.core.decodeMap"}, "type": {"variable": "hydra.pg.model.VertexLabel"}}},
                                                                                         "type": {"application": {"function": {"variable": "hydra.pg.model.VertexType"}, "argument": {"variable": "t"}}}}},
                                                                                     "argument": {"variable": "hydra.decode.pg.model.vertexLabel"}}},
-                                                                                "argument": {"application": {"function": {"variable": "hydra.decode.pg.model.vertexType"}, "argument": {"variable": "t"}}}}}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.vertexType"}, "type": {"variable": "t"}}},
+                                                                                    "argument": {"variable": "t"}}}}}}},
                                                                         "argument": {"variable": "fieldMap"}}},
                                                                     "argument": {"variable": "cx"}}}}},
                                                             "argument": {
@@ -3218,7 +3254,10 @@
                                                                                                   "typeApplication": {"body": {"variable": "hydra.extract.core.decodeMap"}, "type": {"variable": "hydra.pg.model.EdgeLabel"}}},
                                                                                                 "type": {"application": {"function": {"variable": "hydra.pg.model.EdgeType"}, "argument": {"variable": "t"}}}}},
                                                                                             "argument": {"variable": "hydra.decode.pg.model.edgeLabel"}}},
-                                                                                        "argument": {"application": {"function": {"variable": "hydra.decode.pg.model.edgeType"}, "argument": {"variable": "t"}}}}}}},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.edgeType"}, "type": {"variable": "t"}}},
+                                                                                            "argument": {"variable": "t"}}}}}}},
                                                                                 "argument": {"variable": "fieldMap"}}},
                                                                             "argument": {"variable": "cx"}}}}},
                                                                     "argument": {
@@ -3631,7 +3670,10 @@
                                                                                   "typeApplication": {
                                                                                     "body": {"variable": "hydra.extract.core.decodeList"},
                                                                                     "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "v"}}}}},
-                                                                                "argument": {"application": {"function": {"variable": "hydra.decode.pg.model.vertex"}, "argument": {"variable": "v"}}}}}}},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.vertex"}, "type": {"variable": "v"}}},
+                                                                                    "argument": {"variable": "v"}}}}}}},
                                                                         "argument": {"variable": "fieldMap"}}},
                                                                     "argument": {"variable": "cx"}}}}},
                                                             "argument": {
@@ -3673,7 +3715,10 @@
                                                                                           "typeApplication": {
                                                                                             "body": {"variable": "hydra.extract.core.decodeList"},
                                                                                             "type": {"application": {"function": {"variable": "hydra.pg.model.Edge"}, "argument": {"variable": "v"}}}}},
-                                                                                        "argument": {"application": {"function": {"variable": "hydra.decode.pg.model.edge"}, "argument": {"variable": "v"}}}}}}},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.edge"}, "type": {"variable": "v"}}},
+                                                                                            "argument": {"variable": "v"}}}}}}},
                                                                                 "argument": {"variable": "fieldMap"}}},
                                                                             "argument": {"variable": "cx"}}}}},
                                                                     "argument": {
@@ -5051,7 +5096,10 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {"variable": "hydra.extract.core.decodeList"},
                                                                                                     "type": {"application": {"function": {"variable": "hydra.pg.model.PropertyType"}, "argument": {"variable": "t"}}}}},
-                                                                                                "argument": {"application": {"function": {"variable": "hydra.decode.pg.model.propertyType"}, "argument": {"variable": "t"}}}}}}},
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.propertyType"}, "type": {"variable": "t"}}},
+                                                                                                    "argument": {"variable": "t"}}}}}}},
                                                                                         "argument": {"variable": "fieldMap"}}},
                                                                                     "argument": {"variable": "cx"}}}}},
                                                                             "argument": {
@@ -5216,7 +5264,10 @@
                                                                                         "type": {"variable": "hydra.core.Term"}}},
                                                                                     "type": {"application": {"function": {"variable": "hydra.pg.model.Vertex"}, "argument": {"variable": "v"}}}}},
                                                                                 "argument": {"literal": {"string": "vertex"}}}},
-                                                                            "argument": {"application": {"function": {"variable": "hydra.decode.pg.model.vertex"}, "argument": {"variable": "v"}}}}},
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.vertex"}, "type": {"variable": "v"}}},
+                                                                                "argument": {"variable": "v"}}}}},
                                                                         "argument": {"variable": "fieldMap"}}},
                                                                     "argument": {"variable": "cx"}}}}},
                                                             "argument": {
@@ -5258,7 +5309,10 @@
                                                                                           "typeApplication": {
                                                                                             "body": {"variable": "hydra.extract.core.decodeList"},
                                                                                             "type": {"application": {"function": {"variable": "hydra.pg.model.AdjacentEdge"}, "argument": {"variable": "v"}}}}},
-                                                                                        "argument": {"application": {"function": {"variable": "hydra.decode.pg.model.adjacentEdge"}, "argument": {"variable": "v"}}}}}}},
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.adjacentEdge"}, "type": {"variable": "v"}}},
+                                                                                            "argument": {"variable": "v"}}}}}}},
                                                                                 "argument": {"variable": "fieldMap"}}},
                                                                             "argument": {"variable": "cx"}}}}},
                                                                     "argument": {
@@ -5300,7 +5354,10 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {"variable": "hydra.extract.core.decodeList"},
                                                                                                     "type": {"application": {"function": {"variable": "hydra.pg.model.AdjacentEdge"}, "argument": {"variable": "v"}}}}},
-                                                                                                "argument": {"application": {"function": {"variable": "hydra.decode.pg.model.adjacentEdge"}, "argument": {"variable": "v"}}}}}}},
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.decode.pg.model.adjacentEdge"}, "type": {"variable": "v"}}},
+                                                                                                    "argument": {"variable": "v"}}}}}}},
                                                                                         "argument": {"variable": "fieldMap"}}},
                                                                                     "argument": {"variable": "cx"}}}}},
                                                                             "argument": {

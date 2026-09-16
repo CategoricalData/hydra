@@ -51,6 +51,7 @@ import qualified Data.List as L
 import qualified Data.List.Split as LS
 import qualified Data.Map as M
 import qualified Data.Text as T
+import qualified Data.Text.IO as TIO
 import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 import Data.Char (isAlphaNum, toLower, toUpper)
@@ -122,15 +123,15 @@ generateSourcesWithTransform transform printDefinitions lang doInfer basePath un
         -- and comparing would be stricter but reading + comparing is
         -- adequate for generated source files under 1 MB.
         exists <- SD.doesFileExist fullPath
+        -- Data.Text.IO.readFile is STRICT: it reads the whole file and closes
+        -- the handle before returning, unlike Prelude.readFile (lazy String IO,
+        -- whose handle closes only on GC finalization -- not deterministically
+        -- on end-of-input).
         skip <- if exists
-                  then do old <- readFile fullPath
-                          -- Force the whole string so the handle closes before
-                          -- the subsequent writeFile reopens the path.
-                          -- Comparing via == is lazy and can leave the handle
-                          -- open, causing resource-busy errors on rewrite.
-                          length old `seq` return (old == withNewline)
+                  then do old <- TIO.readFile fullPath
+                          return (old == T.pack withNewline)
                   else return False
-        CM.unless skip $ writeFile fullPath withNewline
+        CM.unless skip $ TIO.writeFile fullPath (T.pack withNewline)
       where
         s = transform raw
         -- Trailing whitespace is the coder's responsibility. The Hydra
@@ -931,14 +932,14 @@ writeModuleJson schemaMap basePath mod = do
         -- runs unconditionally after a cache-hit main pass; without this,
         -- warm runs rewrite ~25 DSL-wrapper JSON files every time.
         exists <- SD.doesFileExist filePath
+        -- Data.Text.IO.readFile is STRICT (closes the handle before returning),
+        -- unlike Prelude.readFile's lazy String IO.
         skip <- if exists
-                  then do old <- readFile filePath
-                          -- Force the whole string so the handle closes
-                          -- before the subsequent writeFile reopens the path.
-                          length old `seq` return (old == newContent)
+                  then do old <- TIO.readFile filePath
+                          return (old == T.pack newContent)
                   else return False
         CM.unless skip $ do
-          writeFile filePath newContent
+          TIO.writeFile filePath (T.pack newContent)
           putStrLn $ "Wrote: " ++ filePath
 
 -- | Write multiple modules to JSON files.

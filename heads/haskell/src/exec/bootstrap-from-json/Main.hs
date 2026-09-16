@@ -85,6 +85,23 @@ moduleHasTypeDefinition m = any isType (moduleDefinitions m)
     isType (DefinitionType _) = True
     isType _ = False
 
+-- | Deduplicate a list of modules by namespace, keeping the first occurrence.
+-- baselineMods (loadPackageMain "hydra-kernel") loads manifest.json's mainModules
+-- verbatim, which already includes derived hydra.encode.*/hydra.decode.* namespaces
+-- (update-json-manifest's mainUniverse folds encMods/decMods in by design). dslMods
+-- (loadPackageDsl) independently re-derives those same namespaces from
+-- mainEncodingModules via encodeModuleName/decodeModuleName. Without a dedup here,
+-- allMods carries both copies through to generateSourceFiles, whose #649
+-- same-path merge then concatenates the (identical) content with itself.
+dedupModulesByNamespace :: [Module] -> [Module]
+dedupModulesByNamespace = go S.empty
+  where
+    go _ [] = []
+    go seen (m:ms)
+      | ns `S.member` seen = go seen ms
+      | otherwise          = m : go (S.insert ns seen) ms
+      where ns = moduleName m
+
 -- | Format elapsed time for display.
 formatTime :: Double -> String
 formatTime secs
@@ -505,7 +522,7 @@ main = do
       return mods
 
   -- Apply filters
-  let allMods = baselineMods ++ coderMods ++ extMods ++ dslMods
+  let allMods = dedupModulesByNamespace (baselineMods ++ coderMods ++ extMods ++ dslMods)
   let kernelNsStrings = fmap unModuleName allKernelNamespaces
   let filtered1 = if optKernelOnly opts
         then Prelude.filter (\m -> unModuleName (moduleName m) `elem` kernelNsStrings) allMods
