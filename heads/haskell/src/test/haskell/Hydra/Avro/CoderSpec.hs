@@ -1267,6 +1267,44 @@ lossyIntegerFloatSpec = H.describe "Lossy integer and float type mapping" $ do
               Left e -> H.expectationFailure $ "decode failed: " ++ show e
               Right term' -> term' `H.shouldBe` Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 42))
 
+  -- Documents the lossy fallback's overflow behavior: uint64/bigint values outside int64's range
+  -- (#744) wrap silently (mod 2^64, two's-complement), matching bigintToInt64's documented
+  -- "truncating" semantics. This is a known, accepted limitation of the lossy fallback, not a bug
+  -- fix -- the test exists so a future change to this behavior is deliberate, not accidental.
+  H.it "oversized uint64 term encoding wraps (silently) on decode, per documented truncation" $ do
+    let hydraType = Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeUint64)
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        -- 2^64 - 1: the maximum uint64 value, one past int64's maximum (2^63 - 1)
+        let maxUint64 = 18446744073709551615 :: Integer
+        let term = Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint64 maxUint64))
+        case coderEncode (adapterCoder adapter) term of
+          Left e -> H.expectationFailure $ "encode failed: " ++ show e
+          Right json -> do
+            json `H.shouldBe` Json.ValueNumber (fromInteger maxUint64)
+            case coderDecode (adapterCoder adapter) json of
+              Left e -> H.expectationFailure $ "decode failed: " ++ show e
+              -- 2^64 - 1 reduced modulo 2^64 and reinterpreted as signed two's-complement is -1
+              Right term' -> term' `H.shouldBe` Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (-1)))
+
+  H.it "oversized bigint term encoding wraps (silently) on decode, per documented truncation" $ do
+    let hydraType = Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeBigint)
+    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
+      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
+      Right adapter -> do
+        -- 2^63: one past int64's maximum (2^63 - 1)
+        let overflowBigint = 9223372036854775808 :: Integer
+        let term = Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueBigint overflowBigint))
+        case coderEncode (adapterCoder adapter) term of
+          Left e -> H.expectationFailure $ "encode failed: " ++ show e
+          Right json -> do
+            json `H.shouldBe` Json.ValueNumber (fromInteger overflowBigint)
+            case coderDecode (adapterCoder adapter) json of
+              Left e -> H.expectationFailure $ "decode failed: " ++ show e
+              -- 2^63 reduced modulo 2^64 and reinterpreted as signed two's-complement is -2^63
+              Right term' -> term' `H.shouldBe` Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 (-9223372036854775808)))
+
 
 -- ============================================================
 -- TypeWrap (newtype) tests
