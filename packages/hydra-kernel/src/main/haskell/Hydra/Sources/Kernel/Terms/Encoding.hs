@@ -113,6 +113,7 @@ module_ = Module {
       toDefinition encoderCollectTypeVarsFromType,
       toDefinition encoderFullResultType,
       toDefinition encoderFullResultTypeNamed,
+      toDefinition encoderStripForalls,
       toDefinition encoderType,
       toDefinition encoderTypeNamed,
       toDefinition encoderTypeScheme,
@@ -764,9 +765,11 @@ encoderFullResultType = define "encoderFullResultType" $
         (encoderFullResultType @@ Core.eitherTypeLeft (var "et"))
         (encoderFullResultType @@ Core.eitherTypeRight (var "et")),
     _Type_forall>>: "ft" ~>
-      Core.typeApplication $ Core.applicationType
-        (encoderFullResultType @@ Core.forallTypeBody (var "ft"))
-        (Core.typeVariable (Core.forallTypeParameter (var "ft"))),
+      "wholeType" <~ Core.typeForall (var "ft") $
+      Lists.foldl
+        ("acc" ~> "v" ~> Core.typeApplication $ Core.applicationType (var "acc") (Core.typeVariable (var "v")))
+        (encoderFullResultType @@ (encoderStripForalls @@ var "wholeType"))
+        (encoderCollectForallVariables @@ var "wholeType"),
     _Type_list>>: "elemType" ~>
       Core.typeList (encoderFullResultType @@ var "elemType"),
     -- A literal type's encoder input is that specific literal type (e.g. literal<string>),
@@ -818,9 +821,11 @@ encoderFullResultTypeNamed = define "encoderFullResultTypeNamed" $
         (encoderFullResultType @@ Core.eitherTypeLeft (var "et"))
         (encoderFullResultType @@ Core.eitherTypeRight (var "et")),
     _Type_forall>>: "ft" ~>
-      Core.typeApplication $ Core.applicationType
-        (encoderFullResultTypeNamed @@ var "ename" @@ Core.forallTypeBody (var "ft"))
-        (Core.typeVariable (Core.forallTypeParameter (var "ft"))),
+      "wholeType" <~ Core.typeForall (var "ft") $
+      Lists.foldl
+        ("acc" ~> "v" ~> Core.typeApplication $ Core.applicationType (var "acc") (Core.typeVariable (var "v")))
+        (encoderFullResultTypeNamed @@ var "ename" @@ (encoderStripForalls @@ var "wholeType"))
+        (encoderCollectForallVariables @@ var "wholeType"),
     _Type_list>>: "elemType" ~>
       Core.typeList (encoderFullResultType @@ var "elemType"),
     -- specific literal type (e.g. literal<string>), not generic Literal. (#476)
@@ -845,6 +850,17 @@ encoderFullResultTypeNamed = define "encoderFullResultTypeNamed" $
       Core.typeVariable (var "name"),
     _Type_void>>: constant Core.typeVoid,
     _Type_wrap>>: constant (Core.typeVariable (var "ename"))]
+
+-- | Strip any leading (possibly annotated) forall layers from a type, returning the innermost body
+encoderStripForalls :: TypedTermDefinition (Type -> Type)
+encoderStripForalls = define "encoderStripForalls" $
+  doc "Strip leading forall layers from a type, returning the innermost non-forall body" $
+  "typ" ~>
+  match _Type (var "typ") (Just $ var "typ") [
+    _Type_annotated>>: "at" ~>
+      encoderStripForalls @@ (Core.annotatedTypeBody (var "at")),
+    _Type_forall>>: "ft" ~>
+      encoderStripForalls @@ Core.forallTypeBody (var "ft")]
 
 -- | Build the encoder function type for a given type
 -- For monomorphic types: InputType -> Term
