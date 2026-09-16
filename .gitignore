@@ -151,3 +151,5 @@ finalized-task-plans/
 
 # Coordination-hook state: last surfaced coordination-branch SHA (per worktree)
 .coordination-seen
+# per-session scratch measurement scripts (#289); never part of the build
+.scratch-289/
