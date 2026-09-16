@@ -1138,9 +1138,37 @@
                             "name": "integer",
                             "handler": {
                               "lambda": {
-                                "parameter": "_",
+                                "parameter": "it",
                                 "domain": {"variable": "hydra.core.IntegerType"},
-                                "body": {"inject": {"typeName": "hydra.json.schema.model.TypeName", "field": {"name": "integer", "term": "unit"}}}}}},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "cases": {
+                                        "typeName": "hydra.core.IntegerType",
+                                        "default": {"inject": {"typeName": "hydra.json.schema.model.TypeName", "field": {"name": "integer", "term": "unit"}}},
+                                        "cases": [
+                                          {
+                                            "name": "bigint",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "_",
+                                                "domain": "unit",
+                                                "body": {"inject": {"typeName": "hydra.json.schema.model.TypeName", "field": {"name": "string", "term": "unit"}}}}}},
+                                          {
+                                            "name": "int64",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "_",
+                                                "domain": "unit",
+                                                "body": {"inject": {"typeName": "hydra.json.schema.model.TypeName", "field": {"name": "string", "term": "unit"}}}}}},
+                                          {
+                                            "name": "uint64",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "_",
+                                                "domain": "unit",
+                                                "body": {"inject": {"typeName": "hydra.json.schema.model.TypeName", "field": {"name": "string", "term": "unit"}}}}}}]}},
+                                    "argument": {"variable": "it"}}}}}},
                           {
                             "name": "string",
                             "handler": {
@@ -1153,7 +1181,9 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Map a Hydra literal type to a JSON Schema type name"}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Map a Hydra literal type to a JSON Schema type name. Integer widths beyond the JSON number safe-integer range (int64, uint64, bigint) map to \"string\", matching the value coder (Hydra.Sources.Json.Encode.encodeInteger), which writes those widths as JSON strings to preserve precision beyond 2^53-1."}}}]}}}}},
     {
       "term": {
         "name": "hydra.json.schema.coder.moduleToJsonSchema",

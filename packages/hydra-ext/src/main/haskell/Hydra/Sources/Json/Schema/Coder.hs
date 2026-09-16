@@ -270,14 +270,22 @@ jsonSchemaPhantomNs = ModuleName "hydra.json.schema.model"
 
 literalTypeName :: TypedTermDefinition (LiteralType -> JS.TypeName)
 literalTypeName = define "literalTypeName" $
-  doc "Map a Hydra literal type to a JSON Schema type name" $
+  doc ("Map a Hydra literal type to a JSON Schema type name. Integer widths beyond the JSON "
+    <> "number safe-integer range (int64, uint64, bigint) map to \"string\", matching the value "
+    <> "coder (Hydra.Sources.Json.Encode.encodeInteger), which writes those widths as JSON strings "
+    <> "to preserve precision beyond 2^53-1.") $
   lambda "lt" $
     match _LiteralType (var "lt")
       (Just (inject JS._TypeName JS._TypeName_string unit)) [
       _LiteralType_binary>>: constant (inject JS._TypeName JS._TypeName_string unit),
       _LiteralType_boolean>>: constant (inject JS._TypeName JS._TypeName_boolean unit),
       _LiteralType_float>>: constant (inject JS._TypeName JS._TypeName_number unit),
-      _LiteralType_integer>>: constant (inject JS._TypeName JS._TypeName_integer unit),
+      _LiteralType_integer>>: "it" ~>
+        match _IntegerType (var "it")
+          (Just (inject JS._TypeName JS._TypeName_integer unit)) [
+          _IntegerType_bigint>>: constant (inject JS._TypeName JS._TypeName_string unit),
+          _IntegerType_int64>>: constant (inject JS._TypeName JS._TypeName_string unit),
+          _IntegerType_uint64>>: constant (inject JS._TypeName JS._TypeName_string unit)],
       _LiteralType_string>>: constant (inject JS._TypeName JS._TypeName_string unit)]
 
 moduleToJsonSchema :: TypedTermDefinition (Module -> [Definition] -> InferenceContext -> Graph -> Either Error (M.Map FilePath String))
