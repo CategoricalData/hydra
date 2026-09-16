@@ -198,7 +198,10 @@ encodeStringValue = define "encodeStringValue" $
 -- | Encode a Literal value to GraphSON
 encodeLiteralValue :: TypedTermDefinition (Literal -> Either Error G.Value)
 encodeLiteralValue = define "encodeLiteralValue" $
-  doc "Encode a Hydra Literal as a GraphSON Value" $
+  doc ("Encode a Hydra Literal as a GraphSON Value. Every integer width and decimal maps to one "
+    <> "of the modeled Value slots (byte/short/integer/long/char/bigInteger/bigDecimal); int8 and "
+    <> "uint16 have no dedicated GraphSON slot and widen through bigint into short/char "
+    <> "respectively.") $
   "lit" ~>
     cases _Literal (Just $ left (Error.errorOther $ Error.otherError (string "unsupported literal type for GraphSON encoding"))) [
       _Literal_binary>>: "b" ~>
@@ -218,11 +221,25 @@ encodeLiteralValue = define "encodeLiteralValue" $
         cases _IntegerValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported integer type"))) [
           _IntegerValue_bigint>>: "i" ~>
             right $ inject G._Value G._Value_bigInteger (var "i"),
+          _IntegerValue_int8>>: "i" ~>
+            right $ inject G._Value G._Value_short (Literals.bigintToInt16 $ Literals.int8ToBigint $ var "i"),
+          _IntegerValue_int16>>: "i" ~>
+            right $ inject G._Value G._Value_short (var "i"),
           _IntegerValue_int32>>: "i" ~>
             right $ inject G._Value G._Value_integer (var "i"),
           _IntegerValue_int64>>: "i" ~>
-            right $ inject G._Value G._Value_long (var "i")]
+            right $ inject G._Value G._Value_long (var "i"),
+          _IntegerValue_uint8>>: "i" ~>
+            right $ inject G._Value G._Value_byte (var "i"),
+          _IntegerValue_uint16>>: "i" ~>
+            right $ inject G._Value G._Value_char (Literals.bigintToUint32 $ Literals.uint16ToBigint $ var "i"),
+          _IntegerValue_uint32>>: "i" ~>
+            right $ inject G._Value G._Value_char (var "i"),
+          _IntegerValue_uint64>>: "i" ~>
+            right $ inject G._Value G._Value_bigInteger (Literals.uint64ToBigint $ var "i")]
         @@ var "iv",
+      _Literal_decimal>>: "d" ~>
+        right $ inject G._Value G._Value_bigDecimal (wrap G._BigDecimalValue (Literals.printDecimal $ var "d")),
       _Literal_string>>: "s" ~>
         right $ inject G._Value G._Value_string (var "s")]
     @@ var "lit"

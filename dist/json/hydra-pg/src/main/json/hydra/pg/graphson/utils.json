@@ -851,6 +851,44 @@
                                                         "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}},
                                           {
+                                            "name": "int8",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "i",
+                                                "domain": {"literal": {"integer": "int8"}},
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "either": {
+                                                            "right": {
+                                                              "inject": {
+                                                                "typeName": "hydra.pg.graphson.syntax.Value",
+                                                                "field": {
+                                                                  "name": "short",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "function": {"variable": "hydra.lib.literals.bigintToInt16"},
+                                                                      "argument": {"application": {"function": {"variable": "hydra.lib.literals.int8ToBigint"}, "argument": {"variable": "i"}}}}}}}}}},
+                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                    "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}},
+                                          {
+                                            "name": "int16",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "i",
+                                                "domain": {"literal": {"integer": "int16"}},
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "either": {
+                                                            "right": {"inject": {"typeName": "hydra.pg.graphson.syntax.Value", "field": {"name": "short", "term": {"variable": "i"}}}}}},
+                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                    "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}},
+                                          {
                                             "name": "int32",
                                             "handler": {
                                               "lambda": {
@@ -879,8 +917,104 @@
                                                           "either": {
                                                             "right": {"inject": {"typeName": "hydra.pg.graphson.syntax.Value", "field": {"name": "long", "term": {"variable": "i"}}}}}},
                                                         "type": {"variable": "hydra.errors.Error"}}},
+                                                    "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}},
+                                          {
+                                            "name": "uint8",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "i",
+                                                "domain": {"literal": {"integer": "uint8"}},
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "either": {
+                                                            "right": {"inject": {"typeName": "hydra.pg.graphson.syntax.Value", "field": {"name": "byte", "term": {"variable": "i"}}}}}},
+                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                    "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}},
+                                          {
+                                            "name": "uint16",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "i",
+                                                "domain": {"literal": {"integer": "uint16"}},
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "either": {
+                                                            "right": {
+                                                              "inject": {
+                                                                "typeName": "hydra.pg.graphson.syntax.Value",
+                                                                "field": {
+                                                                  "name": "char",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "function": {"variable": "hydra.lib.literals.bigintToUint32"},
+                                                                      "argument": {"application": {"function": {"variable": "hydra.lib.literals.uint16ToBigint"}, "argument": {"variable": "i"}}}}}}}}}},
+                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                    "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}},
+                                          {
+                                            "name": "uint32",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "i",
+                                                "domain": {"literal": {"integer": "uint32"}},
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "either": {
+                                                            "right": {"inject": {"typeName": "hydra.pg.graphson.syntax.Value", "field": {"name": "char", "term": {"variable": "i"}}}}}},
+                                                        "type": {"variable": "hydra.errors.Error"}}},
+                                                    "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}},
+                                          {
+                                            "name": "uint64",
+                                            "handler": {
+                                              "lambda": {
+                                                "parameter": "i",
+                                                "domain": {"literal": {"integer": "uint64"}},
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "either": {
+                                                            "right": {
+                                                              "inject": {
+                                                                "typeName": "hydra.pg.graphson.syntax.Value",
+                                                                "field": {
+                                                                  "name": "bigInteger",
+                                                                  "term": {"application": {"function": {"variable": "hydra.lib.literals.uint64ToBigint"}, "argument": {"variable": "i"}}}}}}}},
+                                                        "type": {"variable": "hydra.errors.Error"}}},
                                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}}]}},
                                     "argument": {"variable": "iv"}}}}}},
+                          {
+                            "name": "decimal",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "d",
+                                "domain": {"literal": "decimal"},
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "either": {
+                                            "right": {
+                                              "inject": {
+                                                "typeName": "hydra.pg.graphson.syntax.Value",
+                                                "field": {
+                                                  "name": "bigDecimal",
+                                                  "term": {
+                                                    "wrap": {
+                                                      "typeName": "hydra.pg.graphson.syntax.BigDecimalValue",
+                                                      "body": {"application": {"function": {"variable": "hydra.lib.literals.printDecimal"}, "argument": {"variable": "d"}}}}}}}}}},
+                                        "type": {"variable": "hydra.errors.Error"}}},
+                                    "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}},
                           {
                             "name": "string",
                             "handler": {
@@ -898,7 +1032,12 @@
                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}}]}},
                     "argument": {"variable": "lit"}}}}},
             "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encode a Hydra Literal as a GraphSON Value"}}}]}}}}},
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Encode a Hydra Literal as a GraphSON Value. Every integer width and decimal maps to one of the modeled Value slots (byte/short/integer/long/char/bigInteger/bigDecimal); int8 and uint16 have no dedicated GraphSON slot and widen through bigint into short/char respectively."}}}]}}}}},
     {
       "term": {
         "name": "hydra.pg.graphson.utils.encodeStringValue",
