@@ -154,10 +154,6 @@ fi
 
 # Identify this holder. Prefer the git worktree name for human readability.
 WORKTREE="$(git rev-parse --show-toplevel 2>/dev/null | sed 's#.*/worktrees/##' || echo "$PWD")"
-# started= is recorded as BOTH a human-readable local timestamp and epoch seconds.
-# startedEpoch is what stale detection parses: `date -d` (GNU-only) is unavailable on
-# BSD/macOS, and `date -Is` is likewise GNU-only, so neither may be used here.
-HOLDER_DESC="pid=$$ worktree=${WORKTREE} label=${LABEL:-none} started=$(date '+%Y-%m-%dT%H:%M:%S%z') startedEpoch=$(date +%s) cmd=[$*]"
 
 # The metadata file sits next to the lock and records the current holder. It is
 # advisory (for humans + stale detection); the flock() on $LOCKFILE is the real mutex.
@@ -213,6 +209,15 @@ if ! _slot_flock -n 9; then
 fi
 
 # ---- we hold the slot -----------------------------------------------------
+# HOLDER_DESC's started/startedEpoch are stamped HERE, after acquisition, not at
+# script entry — a holder that waited hours in queue and just started building must
+# report an age of ~0s, not the full wait time. Stamping this before the blocking
+# _slot_flock call (the original bug) made the stale-holder warning above measure
+# queue-wait time instead of hold time, firing false "may be wedged" alerts on any
+# build that simply queued for a long time — exactly what a busy fleet does daily.
+# startedEpoch is what stale detection parses: `date -d` (GNU-only) is unavailable on
+# BSD/macOS, and `date -Is` is likewise GNU-only, so neither may be used here.
+HOLDER_DESC="pid=$$ worktree=${WORKTREE} label=${LABEL:-none} started=$(date '+%Y-%m-%dT%H:%M:%S%z') startedEpoch=$(date +%s) cmd=[$*]"
 printf '%s\n' "$HOLDER_DESC" > "$METAFILE"
 waited=$(( $(date +%s) - acquire_epoch ))
 echo "with-stack-slot: acquired build slot after ${waited}s — ${HOLDER_DESC}" >&2
