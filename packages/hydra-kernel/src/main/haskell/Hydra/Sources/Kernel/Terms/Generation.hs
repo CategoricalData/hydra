@@ -80,6 +80,7 @@ import qualified Hydra.Sources.Kernel.Terms.Environment     as Environment
 import qualified Hydra.Sources.Kernel.Terms.Strip           as Strip
 import qualified Hydra.Sources.Kernel.Terms.Print.Core       as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Print.Errors     as PrintError
+import qualified Hydra.Sources.Kernel.Terms.Print.Markdown   as PrintMarkdown
 
 -- Dependencies on secondary generated modules (decode/encode)
 
@@ -92,7 +93,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Adapt.ns, Annotations.ns, Constants.ns, Formatting.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns, Scoping.ns,
-     Environment.ns, PrintCore.ns, PrintError.ns, Strip.ns,
+     Environment.ns, PrintCore.ns, PrintError.ns, PrintMarkdown.ns, Strip.ns,
      ModuleName "hydra.decoding", ModuleName "hydra.encoding",
      ModuleName "hydra.json.decode", ModuleName "hydra.json.encode", ModuleName "hydra.json.writer",
      ModuleName "hydra.decode.core", ModuleName "hydra.decode.packaging", ModuleName "hydra.encode.packaging"] L.++ kernelTypesModuleNames),
@@ -107,6 +108,7 @@ module_ = Module {
       toDefinition formatTypeBinding,
       toDefinition generateCoderModules,
       toDefinition generateLexicon,
+      toDefinition generateModuleDoc,
       toDefinition generateSourceFiles,
       toDefinition inferAndGenerateLexicon,
       toDefinition inferModules,
@@ -283,6 +285,125 @@ generateLexicon = define "generateLexicon" $
     (string "Primitives:\n") ++ (Formatting.unlines @@ var "primitiveLines")
     ++ (string "\nTypes:\n") ++ (Formatting.unlines @@ var "typeLines")
     ++ (string "\nTerms:\n") ++ (Formatting.unlines @@ var "termLines")
+
+-- | Render a single Definition (primitive, term, or type) as a hydra.markdown Section: an H2
+-- heading (the definition's local name), a doc-string paragraph (or an undocumented-marker
+-- placeholder), a signature paragraph (inline code span), and one paragraph per provision (#725,
+-- now landed in this branch's lineage). Walks the Definition directly (not via graphToBindings,
+-- which discards the primitive/term/type distinction and doc strings -- see the TODO on
+-- generateLexicon above) so every definition kind's own EntityMetadata is available.
+definitionToSection :: TypedTerm Definition -> TypedTerm Term
+definitionToSection d = match _Definition d Nothing [
+  _Definition_primitive>>: "pd" ~>
+    "name" <~ Core.unName (Packaging.primitiveDefinitionName $ var "pd") $
+    "mdoc" <~ Optionals.bind (Packaging.primitiveDefinitionMetadata $ var "pd")
+      ("em" ~> Packaging.entityMetadataDescription (var "em")) $
+    "sig" <~ PrintCore.typeScheme @@ (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ var "pd")) $
+    "provisions" <~ Optionals.withDefault (list ([] :: [TypedTerm Provision]))
+      (Optionals.map ("em" ~> Packaging.entityMetadataProvisions (var "em")) (Packaging.primitiveDefinitionMetadata $ var "pd")) $
+    definitionSection (var "name") (var "mdoc") (var "sig") (var "provisions"),
+  _Definition_term>>: "td" ~>
+    "name" <~ Core.unName (Packaging.termDefinitionName $ var "td") $
+    "mdoc" <~ Optionals.bind (Packaging.termDefinitionMetadata $ var "td")
+      ("em" ~> Packaging.entityMetadataDescription (var "em")) $
+    "sig" <~ optCases (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature $ var "td")
+      (string "?")
+      ("ts" ~> PrintCore.typeScheme @@ var "ts") $
+    "provisions" <~ Optionals.withDefault (list ([] :: [TypedTerm Provision]))
+      (Optionals.map ("em" ~> Packaging.entityMetadataProvisions (var "em")) (Packaging.termDefinitionMetadata $ var "td")) $
+    definitionSection (var "name") (var "mdoc") (var "sig") (var "provisions"),
+  _Definition_type>>: "tyd" ~>
+    "name" <~ Core.unName (Packaging.typeDefinitionName $ var "tyd") $
+    "mdoc" <~ Optionals.bind (Packaging.typeDefinitionMetadata $ var "tyd")
+      ("em" ~> Packaging.entityMetadataDescription (var "em")) $
+    "sig" <~ PrintCore.typeScheme @@ (Packaging.typeDefinitionBody $ var "tyd") $
+    "provisions" <~ Optionals.withDefault (list ([] :: [TypedTerm Provision]))
+      (Optionals.map ("em" ~> Packaging.entityMetadataProvisions (var "em")) (Packaging.typeDefinitionMetadata $ var "tyd")) $
+    definitionSection (var "name") (var "mdoc") (var "sig") (var "provisions")]
+
+-- | Build a hydra.markdown Paragraph term from a list of Inline content, with no explicit anchor
+-- (anchors are for elements needing direct linkability -- see provisionParagraph below, which
+-- sets one).
+docParagraph :: TypedTerm [Term] -> TypedTerm Term
+docParagraph content =
+  record PrintMarkdown._Paragraph [
+    PrintMarkdown._Paragraph_content>>: content,
+    PrintMarkdown._Paragraph_anchor>>: nothing]
+
+-- | Render a single Provision as its own Paragraph: a bold `[UPPER-DASHED-NAME] (kind)` lead-in
+-- (matching the hand-authored spec convention's "bold bracketed name at the head of the
+-- statement" -- see docs/specification/index.md SS2 "Provisions" -- with an explicit kind word
+-- added since generated pages have no hand-authored connecting prose to carry it), followed by
+-- the statement text, and an explicit anchor (the UPPER-DASHED name) so spec prose can link
+-- directly to this provision (#579's anchor field). The provision's Name is ALREADY fully
+-- composed by authoring time (composeProvisionName is called upstream of this generator, per
+-- Provision's own doc comment) -- this function only renders it, never composes it.
+--
+-- _Provision_name/_kind/_statement and _ProvisionKind_requirement/_recommendation are used
+-- unqualified per this file's existing convention for kernel-generated Name constants (e.g.
+-- _Definition_primitive above) -- not individually grepped for a prior call site the way the
+-- hydra.markdown constants were (those needed hand-authoring since hydra.markdown itself is new;
+-- Provision/ProvisionKind are ordinary kernel types with the same generated-constant mechanism as
+-- every other kernel union/record already used in this file).
+provisionParagraph :: TypedTerm Provision -> TypedTerm Term
+provisionParagraph p =
+  "pname" <~ (project _Provision _Provision_name @@ p) $
+  "pkind" <~ (project _Provision _Provision_kind @@ p) $
+  "pstatement" <~ (project _Provision _Provision_statement @@ p) $
+  "kindStr" <~ match _ProvisionKind (var "pkind") Nothing [
+    _ProvisionKind_requirement>>: constant $ string "requirement",
+    _ProvisionKind_recommendation>>: constant $ string "recommendation"] $
+  "upperDashed" <~ (Names.nameToUpperDashed @@ var "pname") $
+  record PrintMarkdown._Paragraph [
+    PrintMarkdown._Paragraph_content>>: list [
+      inject PrintMarkdown._Inline PrintMarkdown._Inline_strong (list [
+        inject PrintMarkdown._Inline PrintMarkdown._Inline_text
+          (string "[" ++ var "upperDashed" ++ string "] (" ++ var "kindStr" ++ string ") ")]),
+      inject PrintMarkdown._Inline PrintMarkdown._Inline_text (var "pstatement")],
+    PrintMarkdown._Paragraph_anchor>>: just (var "upperDashed")]
+
+-- | Build a hydra.markdown Section term for one definition, given its local name, optional doc
+-- string, pre-rendered signature, and its provisions. Shared by all three definitionToSection
+-- branches, mirroring how formatPrimitive/formatTermBinding/formatTypeBinding share the lexicon's
+-- "  name : sig" shape.
+definitionSection :: TypedTerm String -> TypedTerm (Maybe String) -> TypedTerm String -> TypedTerm [Provision] -> TypedTerm Term
+definitionSection name mdoc sig provisions =
+  record PrintMarkdown._Section [
+    PrintMarkdown._Section_heading>>: record PrintMarkdown._Heading [
+      PrintMarkdown._Heading_level>>: int32 2,
+      PrintMarkdown._Heading_content>>: list [inject PrintMarkdown._Inline PrintMarkdown._Inline_text name],
+      PrintMarkdown._Heading_anchor>>: nothing],
+    PrintMarkdown._Section_content>>:
+      Lists.concat2
+        (list [
+          inject PrintMarkdown._Block PrintMarkdown._Block_paragraph (docParagraph (list [
+            inject PrintMarkdown._Inline PrintMarkdown._Inline_text (Optionals.withDefault (string "*(undocumented)*") mdoc)])),
+          inject PrintMarkdown._Block PrintMarkdown._Block_paragraph (docParagraph (list [
+            inject PrintMarkdown._Inline PrintMarkdown._Inline_code sig]))])
+        (Lists.map ("p" ~> inject PrintMarkdown._Block PrintMarkdown._Block_paragraph (provisionParagraph (var "p"))) provisions),
+    PrintMarkdown._Section_anchor>>: nothing]
+
+-- | The generated-file notice banner, prepended to every generated module page as a raw HTML
+-- comment block -- resolves the previously-open "generated-file notice wording" question now
+-- that hydra.markdown has a Block.raw passthrough variant (#579's addition) to carry it. Text
+-- matches CLAUDE.md's documented convention for generated source files verbatim, since no
+-- distinct wording has been specified for generated prose pages.
+generatedFileNoticeBlock :: TypedTerm Term
+generatedFileNoticeBlock = inject PrintMarkdown._Block PrintMarkdown._Block_raw
+  (string "<!-- Note: this is an automatically generated file. Do not edit. -->")
+
+-- | Generate a hydra.markdown Document describing a module's definitions: one Section per
+-- definition (name, doc string, signature, provisions -- see definitionToSection), prepended
+-- with a generated-file notice banner.
+generateModuleDoc :: TypedTermDefinition (Module -> Term)
+generateModuleDoc = define "generateModuleDoc" $
+  doc "Generate a hydra.markdown Document describing a module's definitions" $
+  "mod" ~>
+  "sections" <~ Lists.map ("d" ~> definitionToSection (var "d")) (Packaging.moduleDefinitions $ var "mod") $
+  record PrintMarkdown._Document [
+    PrintMarkdown._Document_title>>: Packaging.unModuleName (Packaging.moduleName $ var "mod"),
+    PrintMarkdown._Document_content>>: Lists.cons generatedFileNoticeBlock
+      (Lists.map ("s" ~> inject PrintMarkdown._Block PrintMarkdown._Block_section (var "s")) (var "sections"))]
 
 -- | Convert a Module to a JSON string.
 -- Encodes the Module as a Term, converts to JSON, then serializes to a string.

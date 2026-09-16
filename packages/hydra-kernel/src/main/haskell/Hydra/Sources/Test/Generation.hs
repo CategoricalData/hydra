@@ -17,6 +17,7 @@ import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms hidin
 import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
 import qualified Hydra.Dsl.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Lib.Lists     as Lists
+import qualified Hydra.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Lib.Optionals    as Optionals
 import qualified Hydra.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Packaging          as Packaging
@@ -27,6 +28,7 @@ import qualified Data.Map                     as M
 import qualified Hydra.Sources.Kernel.Terms.Generation as Generation
 import qualified Hydra.Sources.Kernel.Terms.Scoping    as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Print.Core  as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Print.Markdown as PrintMarkdown
 
 
 -- Local alias for polymorphic application.
@@ -41,7 +43,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Generation.ns, PrintCore.ns, TestGraph.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([Generation.ns, PrintCore.ns, PrintMarkdown.ns, TestGraph.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for code generation operations such as inferModules and inferModulesGiven"))}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -224,10 +226,275 @@ allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
     Phantoms.doc "Test cases for code generation operations" $
     supergroup "generation" [
+      subgroup "generateModuleDoc" [
+        generateModuleDocCase,
+        multiDefinitionCase,
+        primitiveDocCase,
+        typeDocCase,
+        undocumentedCase],
       subgroup "inferModulesGiven" [
         incrementalSubsetCase,
         incrementalFullCase,
         vacuousQuantifierCase]]
+
+----------------------------------------
+-- generateModuleDoc test input and case (#723).
+--
+-- A minimal hand-built module -- one documented term definition -- exercises
+-- generateModuleDoc end-to-end (Module -> hydra.markdown.Document) followed by
+-- PrintMarkdown.document (Document -> String), asserting the exact rendered
+-- Markdown. This is a shrunk stand-in for the eventual convergence test
+-- (regenerate + diff against the real committed spec pages), which needs a
+-- full sync to run; this test needs only the toy module below.
+
+-- forall a. a -> a
+docExampleScheme :: TypedTerm TypeScheme
+docExampleScheme = T.poly ["a"] (T.function (T.var "a") (T.var "a"))
+
+-- The single documented term definition under test: hydra.testInput.doc.identity,
+-- with a one-line doc string, so the rendered page exercises the doc-string
+-- paragraph (not the "*(undocumented)*" fallback -- that fallback path is
+-- simple enough to leave for the eventual convergence test to cover
+-- end-to-end against real undocumented kernel definitions, if any remain).
+docExampleDefinition :: TypedTerm Definition
+docExampleDefinition = Packaging.definitionTerm
+  (Packaging.termDefinition
+    nameDocExample
+    (Phantoms.just (Packaging.entityMetadata
+      (Phantoms.just (Phantoms.string "The identity function"))
+      (Phantoms.list ([] :: [TypedTerm String]))
+      (Phantoms.list ([] :: [TypedTerm EntityReference]))
+      Phantoms.nothing
+      (Phantoms.list ([] :: [TypedTerm Provision]))))
+    (Phantoms.just (Scoping.typeSchemeToTermSignature # docExampleScheme))
+    (Terms.lambda "x" (Terms.var "x")))
+
+nameDocExample :: TypedTerm Name
+nameDocExample = Core.name (Phantoms.string "hydra.testInput.doc.identity")
+
+nsDocExample :: TypedTerm ModuleName
+nsDocExample = Packaging.moduleName2 (Phantoms.string "hydra.testInput.doc")
+
+docExampleModule :: TypedTerm Module
+docExampleModule = Packaging.module_
+  nsDocExample
+  Phantoms.nothing
+  (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
+  (Phantoms.list [docExampleDefinition])
+
+-- | Property: generateModuleDoc renders one H2 section per definition, with
+-- the doc string as its own paragraph and the signature as a code-span
+-- paragraph, wrapped in an H1 titled after the module.
+generateModuleDocCase :: TypedTerm TestCaseWithMetadata
+generateModuleDocCase = universalCase
+    "generateModuleDoc renders a documented term definition's doc string and signature"
+    actual
+    expected
+  where
+    actual = PrintMarkdown.document # (Generation.generateModuleDoc # docExampleModule)
+    -- PrintCore.typeScheme renders the scheme's own quantifier as literal ASCII
+    -- "forall v1,v2. " (see Print/Core.hs's "fa" binding); only Type-level function
+    -- arrows and any NESTED Type-level foralls inside the scheme body render as
+    -- Unicode (confirmed against docs/hydra-lexicon.txt, e.g.
+    -- "hydra.lib.effects.apply : (forall x,y. (effect<(x → y)> → effect<x> → effect<y>))") --
+    -- so a simple `forall a. a -> a` scheme (no nested Type-level forall) renders
+    -- "(forall a. (a → a))", mixing ASCII (scheme header) and Unicode (body arrow).
+    expected = Phantoms.string $
+      "# hydra.testInput.doc\n\n" ++
+      "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
+      "## hydra.testInput.doc.identity\n\n" ++
+      "The identity function\n\n" ++
+      "`(forall a. (a → a))`"
+
+-- | Property: an undocumented definition (metadata = nothing) renders the
+-- "*(undocumented)*" placeholder paragraph rather than failing, per #723's
+-- "missing doc strings render as a visible marker, not a failure."
+undocumentedDefinition :: TypedTerm Definition
+undocumentedDefinition = Packaging.definitionTerm
+  (Packaging.termDefinition
+    nameUndocumented
+    Phantoms.nothing
+    (Phantoms.just (Scoping.typeSchemeToTermSignature # docExampleScheme))
+    (Terms.lambda "x" (Terms.var "x")))
+
+nameUndocumented :: TypedTerm Name
+nameUndocumented = Core.name (Phantoms.string "hydra.testInput.undoc.identity")
+
+nsUndocumented :: TypedTerm ModuleName
+nsUndocumented = Packaging.moduleName2 (Phantoms.string "hydra.testInput.undoc")
+
+undocumentedModule :: TypedTerm Module
+undocumentedModule = Packaging.module_
+  nsUndocumented
+  Phantoms.nothing
+  (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
+  (Phantoms.list [undocumentedDefinition])
+
+undocumentedCase :: TypedTerm TestCaseWithMetadata
+undocumentedCase = universalCase
+    "generateModuleDoc renders the undocumented-marker placeholder when metadata is absent"
+    actual
+    expected
+  where
+    actual = PrintMarkdown.document # (Generation.generateModuleDoc # undocumentedModule)
+    expected = Phantoms.string $
+      "# hydra.testInput.undoc\n\n" ++
+      "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
+      "## hydra.testInput.undoc.identity\n\n" ++
+      "*(undocumented)*\n\n" ++
+      "`(forall a. (a → a))`"
+
+-- | Property: a PrimitiveDefinition's signature always renders (never falls back to "?",
+-- unlike TermDefinition, since a primitive's signature is "always explicit, never inferred"
+-- per its own doc comment). Uses a trivial no-argument-domain, monomorphic signature so the
+-- rendered TypeScheme has no `forall` clause at all -- distinguishing this case from
+-- generateModuleDocCase's polymorphic one.
+-- | The provision under test: a single requirement, with its name already fully composed (as
+-- Provision.name always is by the time it reaches this generator -- see provisionParagraph's doc
+-- comment in Generation.hs). Uses Packaging.provision/provisionKindRequirement, the generated
+-- record/union constructors following this codebase's established <lowerType><Field> /
+-- <lowerType><Variant> naming convention (confirmed precedent: Core.typeForall,
+-- Packaging.entityMetadata) -- not directly grepped from a prior real call site, since no other
+-- code in the tree constructs a Provision term yet (#725 landed only the type shapes + the
+-- composeProvisionName helper, no term-level consumer). If this name is wrong, the eventual build
+-- will surface it immediately as a single "not in scope" error here.
+primitiveExampleProvision :: TypedTerm Provision
+primitiveExampleProvision = Packaging.provision
+  (Core.name (Phantoms.string "hydra.testInput.prim.example.constantValue"))
+  Packaging.provisionKindRequirement
+  (Phantoms.string "This primitive always returns the same string value.")
+
+primitiveExampleDefinition :: TypedTerm Definition
+primitiveExampleDefinition = Packaging.definitionPrimitive
+  (Packaging.primitiveDefinition
+    namePrimitiveExample
+    (Phantoms.just (Packaging.entityMetadata
+      (Phantoms.just (Phantoms.string "A trivial constant primitive"))
+      (Phantoms.list ([] :: [TypedTerm String]))
+      (Phantoms.list ([] :: [TypedTerm EntityReference]))
+      Phantoms.nothing
+      (Phantoms.list [primitiveExampleProvision])))
+    (Scoping.typeSchemeToTermSignature # Core.typeScheme (Phantoms.list ([] :: [TypedTerm Name])) T.string Maps.empty)
+    (Phantoms.boolean True)
+    (Phantoms.boolean True)
+    Phantoms.nothing)
+
+namePrimitiveExample :: TypedTerm Name
+namePrimitiveExample = Core.name (Phantoms.string "hydra.testInput.prim.example")
+
+nsPrimitiveExample :: TypedTerm ModuleName
+nsPrimitiveExample = Packaging.moduleName2 (Phantoms.string "hydra.testInput.prim")
+
+primitiveExampleModule :: TypedTerm Module
+primitiveExampleModule = Packaging.module_
+  nsPrimitiveExample
+  Phantoms.nothing
+  (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
+  (Phantoms.list [primitiveExampleDefinition])
+
+primitiveDocCase :: TypedTerm TestCaseWithMetadata
+primitiveDocCase = universalCase
+    "generateModuleDoc renders a primitive's monomorphic signature (no forall clause) and its provision"
+    actual
+    expected
+  where
+    actual = PrintMarkdown.document # (Generation.generateModuleDoc # primitiveExampleModule)
+    -- provisionParagraph bolds ONLY the "[NAME] (kind) " lead-in (a separate Inline.strong),
+    -- not the statement -- the statement is a sibling plain Inline.text, concatenated with no
+    -- separator (see Print/Markdown.hs's `inlines` -- Strings.concat with no join string).
+    expected = Phantoms.string $
+      "# hydra.testInput.prim\n\n" ++
+      "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
+      "## hydra.testInput.prim.example\n\n" ++
+      "A trivial constant primitive\n\n" ++
+      "`(string)`\n\n" ++
+      "**[HYDRA-TEST-INPUT-PRIM-EXAMPLE-CONSTANT-VALUE] (requirement) **" ++
+      "This primitive always returns the same string value."
+
+-- | Property: a TypeDefinition's body renders directly (no Optional-signature fallback,
+-- unlike TermDefinition -- a type's body is never absent).
+typeExampleDefinition :: TypedTerm Definition
+typeExampleDefinition = Packaging.definitionType
+  (Packaging.typeDefinition
+    nameTypeExample
+    (Phantoms.just (Packaging.entityMetadata
+      (Phantoms.just (Phantoms.string "A type alias for string"))
+      (Phantoms.list ([] :: [TypedTerm String]))
+      (Phantoms.list ([] :: [TypedTerm EntityReference]))
+      Phantoms.nothing
+      (Phantoms.list ([] :: [TypedTerm Provision]))))
+    (Core.typeScheme (Phantoms.list ([] :: [TypedTerm Name])) T.string Maps.empty))
+
+nameTypeExample :: TypedTerm Name
+nameTypeExample = Core.name (Phantoms.string "hydra.testInput.typ.Example")
+
+nsTypeExample :: TypedTerm ModuleName
+nsTypeExample = Packaging.moduleName2 (Phantoms.string "hydra.testInput.typ")
+
+typeExampleModule :: TypedTerm Module
+typeExampleModule = Packaging.module_
+  nsTypeExample
+  Phantoms.nothing
+  (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
+  (Phantoms.list [typeExampleDefinition])
+
+typeDocCase :: TypedTerm TestCaseWithMetadata
+typeDocCase = universalCase
+    "generateModuleDoc renders a type definition's body directly, with no Optional unwrap"
+    actual
+    expected
+  where
+    actual = PrintMarkdown.document # (Generation.generateModuleDoc # typeExampleModule)
+    expected = Phantoms.string $
+      "# hydra.testInput.typ\n\n" ++
+      "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
+      "## hydra.testInput.typ.Example\n\n" ++
+      "A type alias for string\n\n" ++
+      "`(string)`"
+
+-- | Property: a module with multiple definitions renders one Section per definition,
+-- joined by a blank line in the module's own definition order (Packaging.moduleDefinitions'
+-- order is preserved, not re-sorted -- unlike generateLexicon, which sorts for lexicon
+-- readability; generateModuleDoc is per-module, so declaration order is the natural order).
+--
+-- A second, undocumented sibling definition under the SAME hydra.testInput.doc namespace
+-- (real modules' definitions all share their module's namespace as prefix; reusing the
+-- separate hydra.testInput.undoc.identity definition here would test the same rendering
+-- logic but with an unrealistic cross-namespace module, so this case gets its own sibling).
+docExampleSiblingDefinition :: TypedTerm Definition
+docExampleSiblingDefinition = Packaging.definitionTerm
+  (Packaging.termDefinition
+    nameDocExampleSibling
+    Phantoms.nothing
+    (Phantoms.just (Scoping.typeSchemeToTermSignature # docExampleScheme))
+    (Terms.lambda "x" (Terms.var "x")))
+
+nameDocExampleSibling :: TypedTerm Name
+nameDocExampleSibling = Core.name (Phantoms.string "hydra.testInput.doc.identity2")
+
+multiDefinitionModule :: TypedTerm Module
+multiDefinitionModule = Packaging.module_
+  nsDocExample
+  Phantoms.nothing
+  (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
+  (Phantoms.list [docExampleDefinition, docExampleSiblingDefinition])
+
+multiDefinitionCase :: TypedTerm TestCaseWithMetadata
+multiDefinitionCase = universalCase
+    "generateModuleDoc renders multiple definitions as separate sections in declaration order"
+    actual
+    expected
+  where
+    actual = PrintMarkdown.document # (Generation.generateModuleDoc # multiDefinitionModule)
+    expected = Phantoms.string $
+      "# hydra.testInput.doc\n\n" ++
+      "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
+      "## hydra.testInput.doc.identity\n\n" ++
+      "The identity function\n\n" ++
+      "`(forall a. (a → a))`\n\n" ++
+      "## hydra.testInput.doc.identity2\n\n" ++
+      "*(undocumented)*\n\n" ++
+      "`(forall a. (a → a))`"
 
 -- | Property: when target = universe, `inferModulesGiven` is equivalent to
 -- `inferModules`.

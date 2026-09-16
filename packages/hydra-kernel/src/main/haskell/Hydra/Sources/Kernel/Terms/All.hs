@@ -61,6 +61,7 @@ import qualified Hydra.Sources.Kernel.Terms.Strip           as Strip
 import qualified Hydra.Sources.Kernel.Terms.Subterms        as Subterms
 import qualified Hydra.Sources.Kernel.Terms.Parse.Docs        as ParseDocs
 import qualified Hydra.Sources.Kernel.Terms.Print.Docs        as PrintDocs
+import qualified Hydra.Sources.Kernel.Terms.Print.Markdown    as PrintMarkdown
 import qualified Hydra.Sources.Kernel.Terms.Print.Paths      as PrintPaths
 import qualified Hydra.Sources.Kernel.Terms.Print.Core       as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Print.Errors      as PrintError
@@ -148,6 +149,7 @@ kernelPrimaryTermsModules = [
   Subterms.module_,
   ParseDocs.module_,
   PrintDocs.module_,
+  PrintMarkdown.module_,
   PrintPaths.module_,
   PrintCore.module_,
   PrintError.module_,
