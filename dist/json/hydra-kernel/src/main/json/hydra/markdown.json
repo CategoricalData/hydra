@@ -1,0 +1,388 @@
+{
+  "name": "hydra.markdown",
+  "metadata": {
+    "description": "A Markdown document model, used as the target representation for generated documentation",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
+  "dependencies": [],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.markdown.Block",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "codeBlock",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.markdown.CodeBlock"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A fenced code block"}}}]}}}},
+                  {
+                    "name": "list",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.markdown.List"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An ordered or unordered list"}}}]}}}},
+                  {
+                    "name": "paragraph",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.markdown.Paragraph"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A paragraph of inline content"}}}]}}}},
+                  {
+                    "name": "raw",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Raw, verbatim passthrough content (e.g. an HTML comment), emitted with no escaping or reformatting. Used for constructs the rest of the Block union cannot represent, such as the generated-file notice banner at the top of a generated page."}}}]}}}},
+                  {
+                    "name": "section",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.markdown.Section"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A heading followed by its own block content, nested to form a document outline"}}}]}}}},
+                  {
+                    "name": "table",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.markdown.Table"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A table"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A block-level Markdown element"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.markdown.CodeBlock",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "language",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The optional language tag used for syntax highlighting, e.g. \"haskell\""}}}]}}}},
+                  {
+                    "name": "content",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The literal text content of the code block"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A fenced code block"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.markdown.Document",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "title",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The document's top-level title, rendered as an H1 heading"}}}]}}}},
+                  {
+                    "name": "content",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.markdown.Block"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The block-level content of the document, following the title"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A complete Markdown document"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.markdown.Heading",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "level",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The heading level, where 1 corresponds to an H1 heading; levels increase with nesting depth"}}}]}}}},
+                  {
+                    "name": "content",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.markdown.Inline"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The inline content of the heading"}}}]}}}},
+                  {
+                    "name": "anchor",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "An optional explicit anchor identifier for linking directly to this heading. Headings can usually derive an anchor from their rendered text, but an explicit anchor is provided for cases (e.g. renderer-specific slug rules) where that derivation is ambiguous or undesired."}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A section heading"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.markdown.Inline",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "code",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An inline code span"}}}]}}}},
+                  {
+                    "name": "emphasis",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.markdown.Inline"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Emphasized (italicized) text"}}}]}}}},
+                  {
+                    "name": "link",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.markdown.Link"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A hyperlink"}}}]}}}},
+                  {
+                    "name": "strong",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.markdown.Inline"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Strongly emphasized (bolded) text"}}}]}}}},
+                  {
+                    "name": "text",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A raw text fragment"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An inline Markdown element"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.markdown.Link",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "text",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.markdown.Inline"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The visible link text"}}}]}}}},
+                  {
+                    "name": "target",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The link target, either a URL or a relative path"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A hyperlink"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.markdown.List",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "ordered",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether the list is numbered (ordered) rather than bulleted (unordered)"}}}]}}}},
+                  {
+                    "name": "items",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.markdown.ListItem"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The items of the list"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An ordered or unordered list"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.markdown.ListItem",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.markdown.Block"}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single item of a list"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.markdown.Paragraph",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "content",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.markdown.Inline"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The inline content of the paragraph"}}}]}}}},
+                  {
+                    "name": "anchor",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "An optional explicit anchor identifier for linking directly to this paragraph. Needed for elements such as rendered provisions, which are bold-led prose within a paragraph rather than a heading, so they carry no heading-derived anchor of their own."}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A paragraph of inline content"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.markdown.Section",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "heading",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.markdown.Heading"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The section's heading"}}}]}}}},
+                  {
+                    "name": "content",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.markdown.Block"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The block-level content of the section, following the heading"}}}]}}}},
+                  {
+                    "name": "anchor",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "An optional explicit anchor identifier for linking directly to this section, distinct from the heading's own anchor (a section's anchor identifies the section as a whole; a heading's identifies the heading line specifically)."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A heading followed by its own block content, nested to form a document outline"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.markdown.Table",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "header",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.markdown.TableRow"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The header row of the table"}}}]}}}},
+                  {
+                    "name": "rows",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.markdown.TableRow"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The data rows of the table"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A table, consisting of a header row and any number of data rows"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.markdown.TableCell",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.markdown.Inline"}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single cell of a table row"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.markdown.TableRow",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"list": {"variable": "hydra.markdown.TableCell"}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single row of a table"}}}]}}},
+          "constraints": []}}}]}

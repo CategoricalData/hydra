@@ -1,0 +1,853 @@
+{
+  "name": "hydra.print.markdown",
+  "metadata": {
+    "description": "Serialization of hydra.markdown documents to Markdown text",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
+  "dependencies": [
+    {"module": "hydra.formatting"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.core"},
+    {"module": "hydra.docs"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.file"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.error.system"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.file"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.markdown"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.query"},
+    {"module": "hydra.regex"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.system"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.time"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typed"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.print.markdown.block",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.markdown.Block"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "b",
+                "domain": {"variable": "hydra.markdown.Block"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.markdown.Block",
+                        "cases": [
+                          {
+                            "name": "codeBlock",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "cb",
+                                "domain": {"variable": "hydra.markdown.CodeBlock"},
+                                "body": {"application": {"function": {"variable": "hydra.print.markdown.codeBlock"}, "argument": {"variable": "cb"}}}}}},
+                          {
+                            "name": "list",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "l",
+                                "domain": {"variable": "hydra.markdown.List"},
+                                "body": {"application": {"function": {"variable": "hydra.print.markdown.list"}, "argument": {"variable": "l"}}}}}},
+                          {
+                            "name": "paragraph",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "p",
+                                "domain": {"variable": "hydra.markdown.Paragraph"},
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.print.markdown.inlines"},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"project": {"typeName": "hydra.markdown.Paragraph", "fieldName": "content"}},
+                                        "argument": {"variable": "p"}}}}}}}},
+                          {"name": "raw", "handler": {"lambda": {"parameter": "s", "domain": {"literal": "string"}, "body": {"variable": "s"}}}},
+                          {
+                            "name": "section",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "s",
+                                "domain": {"variable": "hydra.markdown.Section"},
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "h",
+                                        "term": {
+                                          "application": {"function": {"project": {"typeName": "hydra.markdown.Section", "fieldName": "heading"}}, "argument": {"variable": "s"}}},
+                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.markdown.Heading"}, "constraints": []}}],
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "content",
+                                            "term": {
+                                              "application": {"function": {"project": {"typeName": "hydra.markdown.Section", "fieldName": "content"}}, "argument": {"variable": "s"}}},
+                                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.markdown.Block"}}, "constraints": []}}],
+                                        "body": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "\n\n"}}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"literal": "string"}}},
+                                                    "argument": {"application": {"function": {"variable": "hydra.print.markdown.heading"}, "argument": {"variable": "h"}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.markdown.Block"}}},
+                                                            "type": {"literal": "string"}}},
+                                                        "argument": {"variable": "hydra.print.markdown.block"}}},
+                                                    "argument": {"variable": "content"}}}}}}}}}}}}}},
+                          {
+                            "name": "table",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "t",
+                                "domain": {"variable": "hydra.markdown.Table"},
+                                "body": {"application": {"function": {"variable": "hydra.print.markdown.table"}, "argument": {"variable": "t"}}}}}}]}},
+                    "argument": {"variable": "b"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a single Block to its Markdown text form"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.markdown.blocks",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.markdown.Block"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "bs",
+                "domain": {"list": {"variable": "hydra.markdown.Block"}},
+                "body": {
+                  "application": {
+                    "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "\n\n"}}}},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.markdown.Block"}}},
+                                "type": {"literal": "string"}}},
+                            "argument": {"variable": "hydra.print.markdown.block"}}},
+                        "argument": {"variable": "bs"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a list of Blocks, joined by a blank line"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.markdown.codeBlock",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.markdown.CodeBlock"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "cb",
+                "domain": {"variable": "hydra.markdown.CodeBlock"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "lang",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.markdown.CodeBlock", "fieldName": "language"}},
+                            "argument": {"variable": "cb"}}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}, "constraints": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "content",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.markdown.CodeBlock", "fieldName": "content"}},
+                                "argument": {"variable": "cb"}}},
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "fence",
+                                "term": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "```"}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.withDefault"}, "type": {"literal": "string"}}},
+                                            "argument": {"literal": {"string": ""}}}},
+                                        "argument": {"variable": "lang"}}}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                            "body": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "\n"}}}},
+                                "argument": {"list": [{"variable": "fence"}, {"variable": "content"}, {"literal": {"string": "```"}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Render a CodeBlock as a fenced code block, with the language tag on the opening fence if present"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.markdown.document",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.markdown.Document"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "d",
+                "domain": {"variable": "hydra.markdown.Document"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "title",
+                        "term": {
+                          "application": {"function": {"project": {"typeName": "hydra.markdown.Document", "fieldName": "title"}}, "argument": {"variable": "d"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "content",
+                            "term": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.markdown.Document", "fieldName": "content"}},
+                                "argument": {"variable": "d"}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.markdown.Block"}}, "constraints": []}}],
+                        "body": {
+                          "application": {
+                            "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "\n\n"}}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"literal": "string"}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "# "}}}},
+                                        "argument": {"variable": "title"}}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.markdown.Block"}}},
+                                            "type": {"literal": "string"}}},
+                                        "argument": {"variable": "hydra.print.markdown.block"}}},
+                                    "argument": {"variable": "content"}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a Document as its complete Markdown text, an H1 title followed by its blocks"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.markdown.heading",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.markdown.Heading"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "h",
+                "domain": {"variable": "hydra.markdown.Heading"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "level",
+                        "term": {
+                          "application": {"function": {"project": {"typeName": "hydra.markdown.Heading", "fieldName": "level"}}, "argument": {"variable": "h"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "content",
+                            "term": {
+                              "application": {"function": {"project": {"typeName": "hydra.markdown.Heading", "fieldName": "content"}}, "argument": {"variable": "h"}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.markdown.Inline"}}, "constraints": []}}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "hashes",
+                                "term": {
+                                  "application": {
+                                    "function": {"variable": "hydra.lib.strings.concat"},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.replicate"}, "type": {"literal": "string"}}},
+                                            "argument": {"variable": "level"}}},
+                                        "argument": {"literal": {"string": "#"}}}}}},
+                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                            "body": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {"variable": "hydra.lib.strings.concat2"},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "hashes"}}},
+                                        "argument": {"literal": {"string": " "}}}}}},
+                                "argument": {"application": {"function": {"variable": "hydra.print.markdown.inlines"}, "argument": {"variable": "content"}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a Heading, prefixing its inline content with the appropriate number of `#` characters"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.markdown.inline",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.markdown.Inline"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "i",
+                "domain": {"variable": "hydra.markdown.Inline"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.markdown.Inline",
+                        "cases": [
+                          {
+                            "name": "code",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "s",
+                                "domain": {"literal": "string"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"variable": "hydra.lib.strings.concat2"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "`"}}}},
+                                            "argument": {"variable": "s"}}}}},
+                                    "argument": {"literal": {"string": "`"}}}}}}},
+                          {
+                            "name": "emphasis",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "is",
+                                "domain": {"list": {"variable": "hydra.markdown.Inline"}},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"variable": "hydra.lib.strings.concat2"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "*"}}}},
+                                            "argument": {"application": {"function": {"variable": "hydra.print.markdown.inlines"}, "argument": {"variable": "is"}}}}}}},
+                                    "argument": {"literal": {"string": "*"}}}}}}},
+                          {
+                            "name": "link",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "lk",
+                                "domain": {"variable": "hydra.markdown.Link"},
+                                "body": {"application": {"function": {"variable": "hydra.print.markdown.link"}, "argument": {"variable": "lk"}}}}}},
+                          {
+                            "name": "strong",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "is",
+                                "domain": {"list": {"variable": "hydra.markdown.Inline"}},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"variable": "hydra.lib.strings.concat2"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "**"}}}},
+                                            "argument": {"application": {"function": {"variable": "hydra.print.markdown.inlines"}, "argument": {"variable": "is"}}}}}}},
+                                    "argument": {"literal": {"string": "**"}}}}}}},
+                          {"name": "text", "handler": {"lambda": {"parameter": "s", "domain": {"literal": "string"}, "body": {"variable": "s"}}}}]}},
+                    "argument": {"variable": "i"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a single Inline to its Markdown text form"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.markdown.inlines",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.markdown.Inline"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "is",
+                "domain": {"list": {"variable": "hydra.markdown.Inline"}},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.lib.strings.concat"},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.markdown.Inline"}}},
+                                "type": {"literal": "string"}}},
+                            "argument": {"variable": "hydra.print.markdown.inline"}}},
+                        "argument": {"variable": "is"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a list of Inlines, concatenated with no separator"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.markdown.link",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.markdown.Link"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "lk",
+                "domain": {"variable": "hydra.markdown.Link"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "text",
+                        "term": {
+                          "application": {"function": {"project": {"typeName": "hydra.markdown.Link", "fieldName": "text"}}, "argument": {"variable": "lk"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.markdown.Inline"}}, "constraints": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "target",
+                            "term": {
+                              "application": {"function": {"project": {"typeName": "hydra.markdown.Link", "fieldName": "target"}}, "argument": {"variable": "lk"}}},
+                            "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"variable": "hydra.lib.strings.concat2"},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"variable": "hydra.lib.strings.concat2"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"variable": "hydra.lib.strings.concat2"},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "["}}}},
+                                                    "argument": {"application": {"function": {"variable": "hydra.print.markdown.inlines"}, "argument": {"variable": "text"}}}}}}},
+                                            "argument": {"literal": {"string": "]("}}}}}},
+                                    "argument": {"variable": "target"}}}}},
+                            "argument": {"literal": {"string": ")"}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a Link in the standard `[text](target)` form"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.markdown.list",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.markdown.List"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "l",
+                "domain": {"variable": "hydra.markdown.List"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "ordered",
+                        "term": {
+                          "application": {"function": {"project": {"typeName": "hydra.markdown.List", "fieldName": "ordered"}}, "argument": {"variable": "l"}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "items",
+                            "term": {
+                              "application": {"function": {"project": {"typeName": "hydra.markdown.List", "fieldName": "items"}}, "argument": {"variable": "l"}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.markdown.ListItem"}}, "constraints": []}}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "itemContent",
+                                "term": {
+                                  "lambda": {
+                                    "parameter": "it",
+                                    "domain": {"variable": "hydra.markdown.ListItem"},
+                                    "body": {
+                                      "application": {
+                                        "function": {"variable": "hydra.print.markdown.blocks"},
+                                        "argument": {"application": {"function": {"unwrap": "hydra.markdown.ListItem"}, "argument": {"variable": "it"}}}}}}},
+                                "typeScheme": {
+                                  "variables": [],
+                                  "body": {"function": {"domain": {"variable": "hydra.markdown.ListItem"}, "codomain": {"literal": "string"}}},
+                                  "constraints": []}}],
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "indices",
+                                    "term": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.lib.math.range"}, "argument": {"literal": {"integer": {"int32": 0}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.markdown.ListItem"}}},
+                                            "argument": {"variable": "items"}}}}},
+                                    "typeScheme": {"variables": [], "body": {"list": {"literal": {"integer": "int32"}}}, "constraints": []}}],
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "indexedItems",
+                                        "term": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.zip"}, "type": {"literal": {"integer": "int32"}}}},
+                                                    "type": {"variable": "hydra.markdown.ListItem"}}},
+                                                "argument": {"variable": "indices"}}},
+                                            "argument": {"variable": "items"}}},
+                                        "typeScheme": {
+                                          "variables": [],
+                                          "body": {"list": {"pair": {"first": {"literal": {"integer": "int32"}}, "second": {"variable": "hydra.markdown.ListItem"}}}},
+                                          "constraints": []}}],
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "renderIndexed",
+                                            "term": {
+                                              "lambda": {
+                                                "parameter": "ip",
+                                                "domain": {"pair": {"first": {"literal": {"integer": "int32"}}, "second": {"variable": "hydra.markdown.ListItem"}}},
+                                                "body": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "idx",
+                                                        "term": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                "type": {"variable": "hydra.markdown.ListItem"}}},
+                                                            "argument": {"variable": "ip"}}},
+                                                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}}],
+                                                    "body": {
+                                                      "let": {
+                                                        "bindings": [
+                                                          {
+                                                            "name": "it",
+                                                            "term": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                    "type": {"variable": "hydra.markdown.ListItem"}}},
+                                                                "argument": {"variable": "ip"}}},
+                                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.markdown.ListItem"}, "constraints": []}}],
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "marker",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "string"}}},
+                                                                            "argument": {"variable": "ordered"}}},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "function": {"variable": "hydra.lib.strings.concat2"},
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "function": {"variable": "hydra.lib.literals.printInt32"},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                                                            "argument": {"variable": "idx"}}},
+                                                                                        "argument": {"literal": {"integer": {"int32": 1}}}}}}}}},
+                                                                            "argument": {"literal": {"string": "."}}}}}},
+                                                                    "argument": {"literal": {"string": "-"}}}},
+                                                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                                                            "body": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "application": {
+                                                                    "function": {"variable": "hydra.lib.strings.concat2"},
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"variable": "marker"}}},
+                                                                        "argument": {"literal": {"string": " "}}}}}},
+                                                                "argument": {"application": {"function": {"variable": "itemContent"}, "argument": {"variable": "it"}}}}}}}}}}}}},
+                                            "typeScheme": {
+                                              "variables": [],
+                                              "body": {
+                                                "function": {
+                                                  "domain": {"pair": {"first": {"literal": {"integer": "int32"}}, "second": {"variable": "hydra.markdown.ListItem"}}},
+                                                  "codomain": {"literal": "string"}}},
+                                              "constraints": []}}],
+                                        "body": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "\n"}}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.lib.lists.map"},
+                                                            "type": {"pair": {"first": {"literal": {"integer": "int32"}}, "second": {"variable": "hydra.markdown.ListItem"}}}}},
+                                                        "type": {"literal": "string"}}},
+                                                    "argument": {"variable": "renderIndexed"}}},
+                                                "argument": {"variable": "indexedItems"}}}}}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Render a List as bulleted (`-`) or numbered (`1.`, `2.`, ...) lines, one per item; item content is joined with a blank line for items spanning multiple blocks"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.markdown.table",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.markdown.Table"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "t",
+                "domain": {"variable": "hydra.markdown.Table"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "header",
+                        "term": {
+                          "application": {"function": {"project": {"typeName": "hydra.markdown.Table", "fieldName": "header"}}, "argument": {"variable": "t"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.markdown.TableRow"}, "constraints": []}}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "rows",
+                            "term": {
+                              "application": {"function": {"project": {"typeName": "hydra.markdown.Table", "fieldName": "rows"}}, "argument": {"variable": "t"}}},
+                            "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.markdown.TableRow"}}, "constraints": []}}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "headerCells",
+                                "term": {"application": {"function": {"unwrap": "hydra.markdown.TableRow"}, "argument": {"variable": "header"}}},
+                                "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.markdown.TableCell"}}, "constraints": []}}],
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "sepRow",
+                                    "term": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "|"}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"variable": "hydra.lib.strings.concat"},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.markdown.TableCell"}}},
+                                                        "type": {"literal": "string"}}},
+                                                    "argument": {
+                                                      "lambda": {"parameter": "_", "domain": {"variable": "hydra.markdown.TableCell"}, "body": {"literal": {"string": " --- |"}}}}}},
+                                                "argument": {"variable": "headerCells"}}}}}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                                "body": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "\n"}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"literal": "string"}}},
+                                            "argument": {"application": {"function": {"variable": "hydra.print.markdown.tableRow"}, "argument": {"variable": "header"}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"literal": "string"}}},
+                                                "argument": {"variable": "sepRow"}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.markdown.TableRow"}}},
+                                                        "type": {"literal": "string"}}},
+                                                    "argument": {"variable": "hydra.print.markdown.tableRow"}}},
+                                                "argument": {"variable": "rows"}}}}}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Render a Table in GitHub-flavored Markdown pipe-table form, with a `---` separator row after the header"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.markdown.tableCell",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.markdown.TableCell"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "c",
+                "domain": {"variable": "hydra.markdown.TableCell"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.print.markdown.inlines"},
+                    "argument": {"application": {"function": {"unwrap": "hydra.markdown.TableCell"}, "argument": {"variable": "c"}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Render a TableCell's inline content"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.print.markdown.tableRow",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.markdown.TableRow"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "r",
+                "domain": {"variable": "hydra.markdown.TableRow"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "cells",
+                        "term": {"application": {"function": {"unwrap": "hydra.markdown.TableRow"}, "argument": {"variable": "r"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.markdown.TableCell"}}, "constraints": []}}],
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {"variable": "hydra.lib.strings.concat2"},
+                            "argument": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.lib.strings.concat2"}, "argument": {"literal": {"string": "| "}}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": " | "}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.markdown.TableCell"}}},
+                                                "type": {"literal": "string"}}},
+                                            "argument": {"variable": "hydra.print.markdown.tableCell"}}},
+                                        "argument": {"variable": "cells"}}}}}}}}},
+                        "argument": {"literal": {"string": " |"}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Render a TableRow as a pipe-delimited line"}}}]}}}}}]}

@@ -804,10 +804,7 @@
                                                                       "typeApplication": {
                                                                         "body": {"variable": "hydra.extract.core.decodeList"},
                                                                         "type": {"application": {"function": {"variable": "hydra.relational.Row"}, "argument": {"variable": "v"}}}}},
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "function": {"typeApplication": {"body": {"variable": "hydra.decode.relational.row"}, "type": {"variable": "v"}}},
-                                                                        "argument": {"variable": "v"}}}}},
+                                                                    "argument": {"application": {"function": {"variable": "hydra.decode.relational.row"}, "argument": {"variable": "v"}}}}},
                                                                 "argument": {"variable": "cx"}}},
                                                             "argument": {
                                                               "application": {
@@ -1184,10 +1181,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {"variable": "hydra.extract.core.decodeList"},
                                                                                             "type": {"application": {"function": {"variable": "hydra.relational.ColumnSchema"}, "argument": {"variable": "t"}}}}},
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.decode.relational.columnSchema"}, "type": {"variable": "t"}}},
-                                                                                            "argument": {"variable": "t"}}}}}}},
+                                                                                        "argument": {"application": {"function": {"variable": "hydra.decode.relational.columnSchema"}, "argument": {"variable": "t"}}}}}}},
                                                                                 "argument": {"variable": "fieldMap"}}},
                                                                             "argument": {"variable": "cx"}}}}},
                                                                     "argument": {

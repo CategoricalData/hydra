@@ -683,10 +683,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {"variable": "hydra.extract.core.decodeList"},
                                                                                             "type": {"application": {"function": {"variable": "hydra.tabular.DataRow"}, "argument": {"variable": "v"}}}}},
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "function": {"typeApplication": {"body": {"variable": "hydra.decode.tabular.dataRow"}, "type": {"variable": "v"}}},
-                                                                                            "argument": {"variable": "v"}}}}}}},
+                                                                                        "argument": {"application": {"function": {"variable": "hydra.decode.tabular.dataRow"}, "argument": {"variable": "v"}}}}}}},
                                                                                 "argument": {"variable": "fieldMap"}}},
                                                                             "argument": {"variable": "cx"}}}}},
                                                                     "argument": {

@@ -533,10 +533,7 @@
                                                                                           "application": {
                                                                                             "function": {
                                                                                               "application": {
-                                                                                                "function": {
-                                                                                                  "application": {
-                                                                                                    "function": {"typeApplication": {"body": {"variable": "hydra.decode.parsing.parseSuccess"}, "type": {"variable": "a"}}},
-                                                                                                    "argument": {"variable": "a"}}},
+                                                                                                "function": {"application": {"function": {"variable": "hydra.decode.parsing.parseSuccess"}, "argument": {"variable": "a"}}},
                                                                                                 "argument": {"variable": "cx"}}},
                                                                                             "argument": {"variable": "input"}}}}}}}}},
                                                                             "type": {"variable": "hydra.core.Name"}}},
