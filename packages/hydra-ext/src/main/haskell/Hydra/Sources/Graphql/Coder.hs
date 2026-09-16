@@ -102,6 +102,7 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "GraphQL code generator: converts Hydra modules to GraphQL schema definitions")}
   where
     definitions = [
+      toDefinition checkMapKeyRepresentable,
       toDefinition descriptionFromType,
       toDefinition encodeEnumFieldName,
       toDefinition encodeEnumFieldType,
@@ -118,6 +119,23 @@ module_ = Module {
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
+
+-- | Check whether a map key type is representable in GraphQL. GraphQL has no anonymous/inline
+-- object type, so a Map(K, V) can only preserve K if K is a literal scalar (encodable as a
+-- GraphQL scalar reference); any other key type (record, union, pair, either, map, etc.) would
+-- require synthesizing a named {key, value} object type, which this coder does not yet do (#744).
+-- Stopgap: fail explicitly rather than silently drop the key type from the schema.
+checkMapKeyRepresentable :: TypedTermDefinition (Type -> Either Error ())
+checkMapKeyRepresentable = define "checkMapKeyRepresentable" $
+  doc ("Check whether a map key type is representable in GraphQL as of this coder. Only literal "
+    <> "scalar key types are supported; any other key type fails explicitly rather than being "
+    <> "silently dropped from the generated schema (#744).") $
+  lambda "kt" $
+    match _Type (Strip.deannotateType @@ var "kt")
+      (Just $ left (Error.errorOther $ Error.otherError $ Strings.concat2
+        (string "Map key types other than literals are not yet supported for GraphQL encoding (dropping the key type would silently corrupt the schema); found: ")
+        (PrintCore.type_ @@ var "kt"))) [
+      _Type_literal>>: constant $ right unit]
 
 -- | Get the description from a type as a GraphQL Description
 descriptionFromType :: TypedTermDefinition (InferenceContext -> Graph -> Type -> Either Error (Maybe G.Description))
@@ -287,8 +305,9 @@ encodeType = define "encodeType" $
             Eithers.map (lambda "gt" $ inject G._Type G._Type_list (wrap G._ListType (var "gt")))
               (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "st"),
           _Type_map>>: lambda "mt" $
-            Eithers.map (lambda "gt" $ inject G._Type G._Type_list (wrap G._ListType (var "gt")))
-              (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ (Core.mapTypeValues (var "mt"))),
+            Eithers.bind (checkMapKeyRepresentable @@ (Core.mapTypeKeys (var "mt")))
+              (constant $ Eithers.map (lambda "gt" $ inject G._Type G._Type_list (wrap G._ListType (var "gt")))
+                (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ (Core.mapTypeValues (var "mt")))),
           _Type_literal>>: lambda "lt_" $
             Eithers.map (lambda "nt" $ inject G._Type G._Type_named (var "nt"))
               (encodeLiteralType @@ var "cx" @@ var "lt_"),
@@ -320,8 +339,9 @@ encodeType = define "encodeType" $
         Eithers.map (lambda "gt" $ inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_list (wrap G._ListType (var "gt"))))
           (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "st"),
       _Type_map>>: lambda "mt" $
-        Eithers.map (lambda "gt" $ inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_list (wrap G._ListType (var "gt"))))
-          (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ (Core.mapTypeValues (var "mt"))),
+        Eithers.bind (checkMapKeyRepresentable @@ (Core.mapTypeKeys (var "mt")))
+          (constant $ Eithers.map (lambda "gt" $ inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_list (wrap G._ListType (var "gt"))))
+            (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ (Core.mapTypeValues (var "mt")))),
       _Type_literal>>: lambda "lt_" $
         Eithers.map (lambda "nt" $ inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_named (var "nt")))
           (encodeLiteralType @@ var "cx" @@ var "lt_"),

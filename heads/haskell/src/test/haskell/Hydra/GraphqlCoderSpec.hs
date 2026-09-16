@@ -41,6 +41,25 @@ spec = H.describe "Graphql.Coder.encodeNamedType on wrap-shaped types (#654 byte
       Left e -> H.expectationFailure $ "encodeNamedType failed: " ++ e
       Right def -> fieldNames def `H.shouldBe` ["value"]
 
+  -- #744: a Map's key type used to be silently discarded (only the value type was encoded,
+  -- producing a plain GraphQL list with no trace of the key). Until the coder can synthesize a
+  -- named {key, value} object type for non-trivial keys (deferred), a non-literal key type fails
+  -- explicitly instead of silently corrupting the schema.
+  H.describe "Graphql.Coder.encodeType on Map key representability (#744)" $ do
+
+    H.it "encodes Map(string, string) as a plain list, key type is a literal" $ do
+      case mapError $ GraphqlCoder.encodeType testContext testGraph M.empty
+             (TypeMap (MapType (TypeLiteral LiteralTypeString) (TypeLiteral LiteralTypeString))) of
+        Left e -> H.expectationFailure $ "encodeType failed unexpectedly: " ++ e
+        Right _ -> return ()
+
+    H.it "fails explicitly (not silently) encoding Map(record, string) -- non-literal key" $ do
+      let recordKeyType = TypeRecord []
+      case mapError $ GraphqlCoder.encodeType testContext testGraph M.empty
+             (TypeMap (MapType recordKeyType (TypeLiteral LiteralTypeString))) of
+        Left _ -> return ()
+        Right t -> H.expectationFailure $ "expected an explicit error for a non-literal map key, got: " ++ show t
+
   where
     testName = Name "test.Wrapped"
 
