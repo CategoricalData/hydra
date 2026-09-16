@@ -17,6 +17,7 @@ import qualified Hydra.Sources.Kernel.Types.Errors     as Error
 import qualified Hydra.Sources.Kernel.Types.File        as File
 import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
 import qualified Hydra.Sources.Json.Model               as JsonModel
+import qualified Hydra.Sources.Kernel.Types.Markdown    as Markdown
 import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
 import qualified Hydra.Sources.Kernel.Types.Packaging   as Packaging
 import qualified Hydra.Sources.Kernel.Types.Parsing     as Parsing
@@ -50,6 +51,7 @@ kernelTypesModules = [
   File.module_,
   Graph.module_,
   JsonModel.module_,
+  Markdown.module_,
   Packaging.module_,
   Parsing.module_,
   Query.module_,
