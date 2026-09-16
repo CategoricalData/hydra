@@ -430,6 +430,9 @@ Current commands:
   drafts, discuss, then file (+ usually spawn) or discard, per-item user-gated
 - `/lexicon` — regenerate `docs/hydra-lexicon.txt`
 - `/maintenance` — full maintenance pass
+- `/regenerate-spec` — regenerate the generated module-reference pages under
+  `docs/specification/{primitives,types}/` (Java-host; #723 — contrast `/lexicon`'s
+  Haskell-host `regenerate-lexicon.sh`)
 - `/save` — record session state in the branch plan, pruning history that is
   no longer relevant so the plan stays a lean, complete handoff
 - `/save-and-compact` — `/save`, then `/compact` the conversation and re-read
