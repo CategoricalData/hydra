@@ -1802,6 +1802,18 @@ writeDslJson basePath universeModules typeModules = do
 -- Hydra/Sources/Kernel/Terms/Dsls.hs re-emits a binding under a new name,
 -- the per-package input digest is unchanged and the .hs stays stale.
 -- See feature_347_merkle_trees for the broader transform-fingerprint story.
+--
+-- 'typeModules' (the DSL-wrapper inputs) may cover only a SUBSET of packages
+-- (the scoped single-package driver in transform-haskell-dsl-to-json passes
+-- just one package's inputs, while 'universeModules' is always the full
+-- cross-package universe used for type resolution). The #405 orphan-reconcile
+-- below must only run over packages whose DSL keep-set is actually complete
+-- this call; otherwise every OTHER package's real, untouched dsl/*.json files
+-- look orphaned (nothing in 'nonEmpty' represents them) and get deleted. Callers
+-- pass the exact set of packages this call's DSL generation is authoritative
+-- for via 'reconcilePackages' — batch callers (all packages) vs. the scoped
+-- single-package driver (one package) both derive it from their own inputs,
+-- so this stays correct without hardcoding "batch" vs. "scoped" here.
 writeDslJsonPackageSplit :: RoutingMap -> FilePath -> [Module] -> [Module] -> IO ()
 writeDslJsonPackageSplit routingMap distJsonRoot universeModules typeModules = do
     dslSources <- reloadTermSignatureSources routingMap distJsonRoot universeModules typeModules
@@ -1813,14 +1825,20 @@ writeDslJsonPackageSplit routingMap distJsonRoot universeModules typeModules = d
     -- per-package selfHash and depHashes that drive transitive
     -- invalidation. See finalizePerPackageDigests and #347.
     finalizePerPackageDigests distJsonRoot
-    -- #405: prune orphaned JSON. This is the last JSON-write step in the
-    -- update-json-main run, so every reconciled package's full emission
-    -- set (type/term from the main pass + these DSL wrappers) is now known.
-    -- The keep-set is the union of both passes' intended outputs; anything
-    -- else under the package's src/main/json is an orphan (e.g. a DSL/type
-    -- module dropped from the emission set, like the stale hydra.dsl.classes
-    -- left by the #397 rename — see #405).
-    reconcilePackageJsonOrphans routingMap distJsonRoot (writtenMainModules ++ nonEmpty)
+    -- #405: prune orphaned JSON, but ONLY for packages whose DSL-wrapper
+    -- inputs ('typeModules') this call actually covers. A package absent
+    -- from 'typeModules' had no DSL modules (re)generated this run, so its
+    -- existing dsl/*.json files are NOT known-complete here and must be left
+    -- alone — reconciling them would delete real files based on an
+    -- incomplete (main-only) keep-set. This is what let the scoped
+    -- single-package driver (transform-haskell-dsl-to-json --package X)
+    -- wipe every OTHER package's dsl/*.json on a cold checkout (#726-class).
+    let reconcilePackages = S.fromList
+          [ namespaceToPackageIn routingMap (moduleName m) | m <- typeModules ]
+        reconcilableMainModules = Prelude.filter
+          (\m -> namespaceToPackageIn routingMap (moduleName m) `S.member` reconcilePackages)
+          writtenMainModules
+    reconcilePackageJsonOrphans routingMap distJsonRoot (reconcilableMainModules ++ nonEmpty)
   where
     -- The main pass writes every universe module EXCEPT native-generator-owned
     -- hydra.jvm.*/hydra.java.*/hydra.python.* (#344, #505). Mirror that exclusion
