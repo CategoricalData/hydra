@@ -546,9 +546,9 @@ vacuousQuantifierCase = universalCase
     "incremental inference uses cached scheme verbatim on vacuous-quantifier universe"
     actual
     (Phantoms.string $
-      "hydra.testInput.w.useFunky :: (int32) = (" ++
+      "hydra.testInput.w.useFunky :: ∀.int32 := " ++
       "hydra.testInput.v.funky⟨string⟩⟨int32⟩⟨int32⟩" ++
-      " @ \"foo\" @ 7:int32 @ 100:int32)\n")
+      " \"foo\" 7:int32 100:int32\n")
   where
     target = Phantoms.list [modW]
     actual = showResult (Generation.inferModulesGiven
