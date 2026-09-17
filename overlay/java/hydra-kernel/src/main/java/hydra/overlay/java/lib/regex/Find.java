@@ -47,7 +47,11 @@ public class Find extends PrimitiveFunction {
     }
 
     public static Optional<String> apply(String pattern, String input) {
-        Matcher m = Pattern.compile(pattern).matcher(input);
+        Optional<String> native_ = Native.toNative(pattern);
+        if (native_.isNone()) {
+            return Optional.none();
+        }
+        Matcher m = Pattern.compile(native_.fromGiven()).matcher(input);
         if (m.find()) {
             return Optional.given(m.group());
         }

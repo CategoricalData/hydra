@@ -17,6 +17,7 @@ import static hydra.overlay.java.dsl.Types.scheme;
 import static hydra.overlay.java.dsl.Types.string;
 import hydra.errors.Error_;
 import hydra.overlay.java.util.Either;
+import hydra.overlay.java.util.Optional;
 
 /**
  * Checks whether an entire string matches a regex pattern.
@@ -45,6 +46,10 @@ public class Matches extends PrimitiveFunction {
     }
 
     public static boolean apply(String pattern, String input) {
-        return Pattern.matches(pattern, input);
+        Optional<String> native_ = Native.toNative(pattern);
+        if (native_.isNone()) {
+            return false;
+        }
+        return Pattern.matches(native_.fromGiven(), input);
     }
 }

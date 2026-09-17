@@ -17,6 +17,7 @@ import static hydra.overlay.java.dsl.Types.scheme;
 import static hydra.overlay.java.dsl.Types.string;
 import hydra.errors.Error_;
 import hydra.overlay.java.util.Either;
+import hydra.overlay.java.util.Optional;
 
 /**
  * Replaces the first occurrence of a regex pattern with a replacement string.
@@ -47,7 +48,11 @@ public class Replace extends PrimitiveFunction {
     }
 
     public static String apply(String pattern, String replacement, String input) {
-        Matcher m = Pattern.compile(pattern).matcher(input);
+        Optional<String> native_ = Native.toNative(pattern);
+        if (native_.isNone()) {
+            return input;
+        }
+        Matcher m = Pattern.compile(native_.fromGiven()).matcher(input);
         return m.replaceFirst(Matcher.quoteReplacement(replacement));
     }
 }

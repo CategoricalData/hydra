@@ -38,56 +38,57 @@ str3 result = Types.string Types.~> Types.string Types.~> Types.string Types.~> 
 find :: PrimitiveDefinition
 find = define "find" "Find the first regex match within a string, returning the matched substring if any."
   (sigWithParams [("pat", "the regex pattern to search for"), ("s", "the string to search within")] $ TypeScheme [] (str2 (Types.optional Types.string)) mempty)
-  ["find(pat, s) returns Just(t) where t is the leftmost substring of s matching pat, or Nothing if\
-  \ pat does not match anywhere in s.",
-   "Regex syntax is host-defined; behavior tends to converge on the intersection of ECMA-262 and\
-  \ POSIX-ERE features (literal characters, character classes, alternation, anchors ^ and $,\
-  \ repetition with ?/*/+/{n,m}, grouping with parentheses), but extension features (lookaround,\
-  \ backreferences, Unicode property classes, named groups, engine-specific flags) vary widely.\
-  \ For portable code, restrict patterns to the common subset.",
-   "Total in the sense that no error is raised at the kernel level; behavior on an ill-formed\
-  \ pattern is host-defined."]
+  ["find(pat, s) returns Just(t) where t is the leftmost-longest substring of s matching pat, or\
+  \ Nothing if pat does not match anywhere in s.",
+   "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
+   "Total; a pattern that does not parse under the Hydra regex grammar is treated as not matching\
+  \ anywhere, the same as a well-formed pattern with no match."]
 
 findAll :: PrimitiveDefinition
 findAll = define "findAll" "Find all non-overlapping regex matches within a string."
   (sigWithParams [("pat", "the regex pattern to search for"), ("s", "the string to search within")] $ TypeScheme [] (str2 (Types.list Types.string)) mempty)
-  ["findAll(pat, s) returns the list of all leftmost, non-overlapping matches of pat in s, in the\
-  \ order they appear. Returns the empty list if pat does not match anywhere.",
-   "Regex syntax is host-defined; see find for the common-subset caveat.",
-   "Total; ill-formed patterns are host-defined."]
+  ["findAll(pat, s) returns the list of all leftmost-longest, non-overlapping matches of pat in s, in\
+  \ the order they appear. Returns the empty list if pat does not match anywhere.",
+   "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
+   "Total; an unparseable pattern yields the empty list, the same as a well-formed pattern with no\
+  \ matches."]
 
 matches :: PrimitiveDefinition
-matches = define "matches" "Test whether a regex matches anywhere in a string."
+matches = define "matches" "Test whether a regex matches an entire string."
   (sigWithParams [("pat", "the regex pattern to test"), ("s", "the string to test against")] $ TypeScheme [] (str2 Types.boolean) mempty)
-  ["matches(pat, s) returns true iff pat matches somewhere in s (not anchored to the start or end;\
-  \ for whole-string matching, anchor the pattern explicitly with ^ and $).",
-   "Regex syntax is host-defined; see find for the common-subset caveat.",
-   "Total; ill-formed patterns are host-defined."]
+  ["matches(pat, s) returns true iff pat matches the whole of s (anchored at both ends; a match of a\
+  \ proper substring of s does not suffice). To test whether pat matches anywhere within s, use find.",
+   "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
+   "Total; an unparseable pattern yields false, the same as a well-formed pattern with no match."]
 
 replace :: PrimitiveDefinition
 replace = define "replace" "Replace the first regex match in a string with a replacement string."
   (sigWithParams [("pat", "the regex pattern to match"), ("repl", "the replacement string"), ("s", "the string to operate on")] $ TypeScheme [] (str3 Types.string) mempty)
-  ["replace(pat, repl, s) returns s with the first leftmost match of pat replaced by repl. If pat\
-  \ does not match, s is returned unchanged.",
+  ["replace(pat, repl, s) returns s with the first leftmost-longest match of pat replaced by repl. If\
+  \ pat does not match, s is returned unchanged.",
    "Replacement-string syntax (capture-group references such as $1 or \\\\1, literal escapes) is\
   \ host-defined.",
-   "Regex syntax is host-defined; see find for the common-subset caveat.",
-   "Total; ill-formed patterns and replacement strings are host-defined."]
+   "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
+   "Total; an unparseable pattern leaves s unchanged, the same as a well-formed pattern with no\
+  \ match."]
 
 replaceAll :: PrimitiveDefinition
 replaceAll = define "replaceAll" "Replace all non-overlapping regex matches in a string with a replacement string."
   (sigWithParams [("pat", "the regex pattern to match"), ("repl", "the replacement string"), ("s", "the string to operate on")] $ TypeScheme [] (str3 Types.string) mempty)
-  ["replaceAll(pat, repl, s) returns s with every leftmost, non-overlapping match of pat replaced\
-  \ by repl. If pat does not match anywhere, s is returned unchanged.",
-   "Replacement-string syntax is host-defined; see replace and find for the common-subset caveats.",
-   "Total; ill-formed patterns and replacement strings are host-defined."]
+  ["replaceAll(pat, repl, s) returns s with every leftmost-longest, non-overlapping match of pat\
+  \ replaced by repl. If pat does not match anywhere, s is returned unchanged.",
+   "Replacement-string syntax is host-defined; see replace for the caveat.",
+   "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
+   "Total; an unparseable pattern leaves s unchanged, the same as a well-formed pattern with no\
+  \ match."]
 
 split :: PrimitiveDefinition
 split = define "split" "Split a string by occurrences of a regex pattern."
   (sigWithParams [("pat", "the regex pattern to split on"), ("s", "the string to split")] $ TypeScheme [] (str2 (Types.list Types.string)) mempty)
-  ["split(pat, s) returns the list of substrings of s obtained by splitting on every leftmost,\
+  ["split(pat, s) returns the list of substrings of s obtained by splitting on every leftmost-longest,\
   \ non-overlapping match of pat.",
    "Trailing empty splits are host-defined (some engines retain them, some discard them; for\
   \ portable code, do not rely on the trailing-empty behavior).",
-   "Regex syntax is host-defined; see find for the common-subset caveat.",
-   "Total; ill-formed patterns are host-defined."]
+   "Pattern syntax and semantics are Hydra-defined and translingual; see docs/specification/regex.md.",
+   "Total; an unparseable pattern yields the single-element list containing s, the same as a\
+  \ well-formed pattern with no match."]

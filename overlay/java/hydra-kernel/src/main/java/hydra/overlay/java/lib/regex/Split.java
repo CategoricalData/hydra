@@ -17,6 +17,7 @@ import static hydra.overlay.java.dsl.Types.string;
 import hydra.errors.Error_;
 import hydra.overlay.java.util.ConsList;
 import hydra.overlay.java.util.Either;
+import hydra.overlay.java.util.Optional;
 
 /**
  * Splits a string by a regex pattern.
@@ -45,8 +46,12 @@ public class Split extends PrimitiveFunction {
     }
 
     public static List<String> apply(String pattern, String input) {
+        Optional<String> native_ = Native.toNative(pattern);
+        if (native_.isNone()) {
+            return ConsList.of(input);
+        }
         // Java's split with -1 preserves trailing empty strings
-        String[] parts = Pattern.compile(pattern).split(input, -1);
+        String[] parts = Pattern.compile(native_.fromGiven()).split(input, -1);
         ConsList<String> result = ConsList.empty();
         for (int i = parts.length - 1; i >= 0; i--) {
             result = ConsList.cons(parts[i], result);

@@ -18,6 +18,7 @@ import static hydra.overlay.java.dsl.Types.string;
 import hydra.errors.Error_;
 import hydra.overlay.java.util.ConsList;
 import hydra.overlay.java.util.Either;
+import hydra.overlay.java.util.Optional;
 
 /**
  * Finds all non-overlapping substrings matching a regex pattern.
@@ -46,7 +47,11 @@ public class FindAll extends PrimitiveFunction {
     }
 
     public static List<String> apply(String pattern, String input) {
-        Matcher m = Pattern.compile(pattern).matcher(input);
+        Optional<String> native_ = Native.toNative(pattern);
+        if (native_.isNone()) {
+            return ConsList.<String>empty();
+        }
+        Matcher m = Pattern.compile(native_.fromGiven()).matcher(input);
         ConsList<String> reversed = ConsList.empty();
         while (m.find()) {
             reversed = ConsList.cons(m.group(), reversed);
