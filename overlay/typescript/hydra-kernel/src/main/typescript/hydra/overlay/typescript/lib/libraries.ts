@@ -1073,8 +1073,8 @@ const regexPrimitives = (): readonly Primitive[] => [
         bind(need(args, 1, "find"), (a1) =>
           bind(dString(g, a0), (p) =>
             bind(dString(g, a1), (s) => {
-              const r = s.match(new RegExp(p));
-              return right(r ? tOptionalGiven(tString(r[0])) : tOptionalNone);
+              const r = libRegex.find(p, s);
+              return right(r === undefined ? tOptionalNone : tOptionalGiven(tString(r)));
             }))))),
   prim("hydra.lib.regex.findAll", scheme(tyFnCurried(tyString, tyString, tyList(tyString))),
     (g, args) =>
@@ -1082,7 +1082,7 @@ const regexPrimitives = (): readonly Primitive[] => [
         bind(need(args, 1, "findAll"), (a1) =>
           bind(dString(g, a0), (p) =>
             bind(dString(g, a1), (s) => {
-              const els = Array.from(s.matchAll(new RegExp(p, "g")), (m) => tString(m[0]));
+              const els = libRegex.findAll(p, s).map((x) => tString(x));
               return right({ tag: "list", value: els } as never);
             }))))),
   prim("hydra.lib.regex.replace", scheme(tyFnCurried(tyString, tyString, tyString, tyString)),
@@ -1092,7 +1092,7 @@ const regexPrimitives = (): readonly Primitive[] => [
           bind(need(args, 2, "replace"), (a2) =>
             bind(dString(g, a0), (p) =>
               bind(dString(g, a1), (r) =>
-                bind(dString(g, a2), (s) => right(tString(s.replace(new RegExp(p), r)))))))))),
+                bind(dString(g, a2), (s) => right(tString(libRegex.replace(p, r, s)))))))))),
   prim("hydra.lib.regex.replaceAll", scheme(tyFnCurried(tyString, tyString, tyString, tyString)),
     (g, args) =>
       bind(need(args, 0, "replaceAll"), (a0) =>
@@ -1100,14 +1100,14 @@ const regexPrimitives = (): readonly Primitive[] => [
           bind(need(args, 2, "replaceAll"), (a2) =>
             bind(dString(g, a0), (p) =>
               bind(dString(g, a1), (r) =>
-                bind(dString(g, a2), (s) => right(tString(s.replace(new RegExp(p, "g"), r)))))))))),
+                bind(dString(g, a2), (s) => right(tString(libRegex.replaceAll(p, r, s)))))))))),
   prim("hydra.lib.regex.split", scheme(tyFnCurried(tyString, tyString, tyList(tyString))),
     (g, args) =>
       bind(need(args, 0, "split"), (a0) =>
         bind(need(args, 1, "split"), (a1) =>
           bind(dString(g, a0), (p) =>
             bind(dString(g, a1), (s) => {
-              const parts = s.split(new RegExp(p)).map((x) => tString(x));
+              const parts = libRegex.split(p, s).map((x) => tString(x));
               return right({ tag: "list", value: parts } as never);
             }))))),
 ];

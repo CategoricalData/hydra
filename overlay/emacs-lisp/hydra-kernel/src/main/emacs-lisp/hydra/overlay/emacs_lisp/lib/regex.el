@@ -1,65 +1,21 @@
 ;;; regex.el --- Hydra regex primitives -*- lexical-binding: t; -*-
 
-;; Convert a POSIX ERE pattern to Emacs regex syntax.
-;; In POSIX ERE: |, (, ) are special; \|, \(, \) are literal.
-;; In Emacs:     |, (, ) are literal; \|, \(, \) are special.
-;; So we swap the escaping convention for these three characters,
-;; while leaving everything else (including character classes) alone.
-(defun hydra--posix-to-emacs-regex (pattern)
-  (let ((i 0)
-        (len (length pattern))
-        (result nil)
-        (in-bracket nil))
-    (while (< i len)
-      (let ((ch (aref pattern i)))
-        (cond
-         ;; Track character class brackets (don't transform inside them)
-         ((and (not in-bracket) (= ch ?\[))
-          (push ch result)
-          (setq i (1+ i))
-          (setq in-bracket t)
-          ;; Handle ] as first char in class (literal)
-          (when (and (< i len) (= (aref pattern i) ?\]))
-            (push (aref pattern i) result)
-            (setq i (1+ i)))
-          ;; Handle ^ then ] as first chars
-          (when (and (< i len) (= (aref pattern i) ?^))
-            (push (aref pattern i) result)
-            (setq i (1+ i))
-            (when (and (< i len) (= (aref pattern i) ?\]))
-              (push (aref pattern i) result)
-              (setq i (1+ i)))))
-         ((and in-bracket (= ch ?\]))
-          (push ch result)
-          (setq i (1+ i))
-          (setq in-bracket nil))
-         ;; Inside brackets, pass through unchanged
-         (in-bracket
-          (push ch result)
-          (setq i (1+ i)))
-         ;; Backslash escape: check next char
-         ((and (= ch ?\\) (< (1+ i) len))
-          (let ((next (aref pattern (1+ i))))
-            (cond
-             ;; \| \( \) in POSIX ERE are literal -> emit the char without backslash
-             ((memq next '(?| ?\( ?\)))
-              (push next result)
-              (setq i (+ i 2)))
-             ;; Other escapes pass through as-is
-             (t
-              (push ch result)
-              (push next result)
-              (setq i (+ i 2))))))
-         ;; Unescaped | ( ) in POSIX ERE are special -> add backslash for Emacs
-         ((memq ch '(?| ?\( ?\)))
-          (push ?\\ result)
-          (push ch result)
-          (setq i (1+ i)))
-         ;; Everything else passes through
-         (t
-          (push ch result)
-          (setq i (1+ i))))))
-    (concat (nreverse result))))
+(require 'hydra.parse.regex)
+(require 'hydra.print.emacs.regex)
+
+;; Patterns are Hydra-defined and translingual (docs/specification/regex.md). Each primitive first
+;; runs the pattern through hydra.parse.regex, then renders the AST to Emacs regexp syntax via
+;; hydra.print.emacs.regex (which supersedes the old ad-hoc hydra--posix-to-emacs-regex string shim,
+;; including its {n,m}-quantifier gap), before handing the rendered pattern to the native engine. An
+;; ill-formed pattern (rejected by hydra.parse.regex) is treated as "no match" -- the same portable-
+;; failure convention as an empty match. See issue #603.
+
+;; Returns (given . <native-pattern-string>), or 'none if the pattern does not parse.
+(defun hydra--regex-to-native (pattern)
+  (let ((parsed (funcall hydra_parse_regex_parse_regex pattern)))
+    (if (eq (car parsed) 'given)
+        (cons 'given (funcall hydra_print_emacs_regex_print_regex (cadr parsed)))
+      'none)))
 
 ;; All regex primitives bind case-fold-search to nil. POSIX ERE semantics
 ;; (which the rest of Hydra follows) treat character classes like [a-z]
@@ -69,36 +25,43 @@
 (defvar hydra_overlay_emacs_lisp_lib_regex_matches
   (lambda (pattern)
     (lambda (input)
-      (let* ((emacs-pat (hydra--posix-to-emacs-regex pattern))
-             (full-pattern (concat "\\`\\(?:" emacs-pat "\\)\\'"))
-             (case-fold-search nil))
-        (if (string-match-p full-pattern input) t nil)))))
+      (let ((native (hydra--regex-to-native pattern)))
+        (if (eq native 'none)
+            nil
+          (let* ((full-pattern (concat "\\`\\(?:" (cdr native) "\\)\\'"))
+                 (case-fold-search nil))
+            (if (string-match-p full-pattern input) t nil)))))))
 
 ;; find :: String -> String -> Maybe String
 (defvar hydra_overlay_emacs_lisp_lib_regex_find
   (lambda (pattern)
     (lambda (input)
-      (let ((emacs-pat (hydra--posix-to-emacs-regex pattern))
-            (case-fold-search nil))
-        (if (string-match emacs-pat input)
-            (match-string 0 input)
-          nil)))))
+      (let ((native (hydra--regex-to-native pattern)))
+        (if (eq native 'none)
+            nil
+          (let ((case-fold-search nil))
+            (if (string-match (cdr native) input)
+                (match-string 0 input)
+              nil)))))))
 
 ;; find_all :: String -> String -> [String]
 (defvar hydra_overlay_emacs_lisp_lib_regex_find_all
   (lambda (pattern)
     (lambda (input)
-      (let ((emacs-pat (hydra--posix-to-emacs-regex pattern))
-            (start 0)
-            (results nil)
-            (case-fold-search nil))
-        (while (string-match emacs-pat input start)
-          (push (match-string 0 input) results)
-          (setq start (match-end 0))
-          ;; Avoid infinite loop on zero-length matches
-          (when (= start (match-beginning 0))
-            (setq start (1+ start))))
-        (nreverse results)))))
+      (let ((native (hydra--regex-to-native pattern)))
+        (if (eq native 'none)
+            nil
+          (let ((emacs-pat (cdr native))
+                (start 0)
+                (results nil)
+                (case-fold-search nil))
+            (while (string-match emacs-pat input start)
+              (push (match-string 0 input) results)
+              (setq start (match-end 0))
+              ;; Avoid infinite loop on zero-length matches
+              (when (= start (match-beginning 0))
+                (setq start (1+ start))))
+            (nreverse results)))))))
 
 ;; replace :: String -> String -> String -> String
 ;; Replace only the first occurrence
@@ -106,29 +69,35 @@
   (lambda (pattern)
     (lambda (replacement)
       (lambda (input)
-        (let ((emacs-pat (hydra--posix-to-emacs-regex pattern))
-              (case-fold-search nil))
-          (if (string-match emacs-pat input)
-              (concat (substring input 0 (match-beginning 0))
-                      replacement
-                      (substring input (match-end 0)))
-            input))))))
+        (let ((native (hydra--regex-to-native pattern)))
+          (if (eq native 'none)
+              input
+            (let ((case-fold-search nil))
+              (if (string-match (cdr native) input)
+                  (concat (substring input 0 (match-beginning 0))
+                          replacement
+                          (substring input (match-end 0)))
+                input))))))))
 
 ;; replace_all :: String -> String -> String -> String
 (defvar hydra_overlay_emacs_lisp_lib_regex_replace_all
   (lambda (pattern)
     (lambda (replacement)
       (lambda (input)
-        (let ((emacs-pat (hydra--posix-to-emacs-regex pattern))
-              (case-fold-search nil))
-          (replace-regexp-in-string emacs-pat replacement input t t))))))
+        (let ((native (hydra--regex-to-native pattern)))
+          (if (eq native 'none)
+              input
+            (let ((case-fold-search nil))
+              (replace-regexp-in-string (cdr native) replacement input t t))))))))
 
 ;; split :: String -> String -> [String]
 (defvar hydra_overlay_emacs_lisp_lib_regex_split
   (lambda (pattern)
     (lambda (input)
-      (let ((emacs-pat (hydra--posix-to-emacs-regex pattern))
-            (case-fold-search nil))
-        (split-string input emacs-pat)))))
+      (let ((native (hydra--regex-to-native pattern)))
+        (if (eq native 'none)
+            (list input)
+          (let ((case-fold-search nil))
+            (split-string input (cdr native))))))))
 
 (provide 'hydra.lib.regex)
