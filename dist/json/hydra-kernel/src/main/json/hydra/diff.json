@@ -1,0 +1,566 @@
+{
+  "name": "hydra.diff",
+  "metadata": {
+    "description": "A generic, domain-agnostic framework for diffs, patches, and migrations over any 'type'/'value' grammar (hydra.core.Type/Term, property-graph types, RDF shapes, ...). Fully parameterized: no Type/Term/Name/step type is hardcoded. Type parameters: a = the thing being edited (a type or a value); t = a 'type' type; v = a value/instance type; s = a step into a value; n = a name/key. Fill and Migrator hold host functions and are runtime-only (not serialized).",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
+  "dependencies": [{"module": "hydra.core"}],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.diff.Edit",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "a",
+                  "body": {
+                    "forall": {
+                      "parameter": "s",
+                      "body": {
+                        "union": [
+                          {
+                            "name": "retain",
+                            "type": {
+                              "annotated": {
+                                "body": "unit",
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Leave this position unchanged"}}}]}}}},
+                          {
+                            "name": "set",
+                            "type": {
+                              "annotated": {
+                                "body": {"variable": "a"},
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "Set this position to the given value (upsert: prior presence is irrelevant)"}}}]}}}},
+                          {
+                            "name": "delete",
+                            "type": {
+                              "annotated": {
+                                "body": "unit",
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {
+                                        "literal": {"string": "Remove this position (valid only at a removable position, e.g. a record field or collection element)"}}}]}}}},
+                          {
+                            "name": "descend",
+                            "type": {
+                              "annotated": {
+                                "body": {
+                                  "list": {
+                                    "application": {
+                                      "function": {"application": {"function": {"variable": "hydra.diff.StepEdit"}, "argument": {"variable": "a"}}},
+                                      "argument": {"variable": "s"}}}},
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "Edit specific immediate children, one StepEdit per changed step"}}}]}}}}]}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A base-relative edit (delta) transforming a value into a new value. Applied forward against a base; a symmetric before/after 'diff' is derived from (base, Edit), not stored here. Canonical by construction: descend carries single-step StepEdits, so there is exactly one encoding of any change."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.diff.Fill",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "v",
+                  "body": {
+                    "union": [
+                      {
+                        "name": "fillNow",
+                        "type": {
+                          "annotated": {
+                            "body": {"function": {"domain": {"variable": "v"}, "codomain": {"variable": "v"}}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Fill the hole here: a function from the old value (context) to the filled value"}}}]}}}},
+                      {
+                        "name": "defer",
+                        "type": {
+                          "annotated": {
+                            "body": "unit",
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "Leave the hole open, to be supplied by an enclosing context where this value is embedded"}}}]}}}}]}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A user's answer to a hole. RUNTIME-ONLY (holds a host function; not serialized). fillNow supplies the value here (a constant is a function ignoring its input); defer leaves the hole open for an enclosing context to supply."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.diff.Hole",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "t",
+                  "body": {
+                    "forall": {
+                      "parameter": "s",
+                      "body": {
+                        "record": [
+                          {
+                            "name": "path",
+                            "type": {
+                              "annotated": {
+                                "body": {"list": {"variable": "s"}},
+                                "annotation": {
+                                  "map": [
+                                    {
+                                      "key": {"variable": "description"},
+                                      "value": {"literal": {"string": "The value-path (sequence of steps) to the position needing a value"}}}]}}}},
+                          {
+                            "name": "type",
+                            "type": {
+                              "annotated": {
+                                "body": {"variable": "t"},
+                                "annotation": {
+                                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The 'type' a fill must produce at this hole"}}}]}}}}]}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A demand the migration cannot satisfy from the old value alone: at a value-path, a value of the given 'type' must be supplied."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.diff.HoleFiller",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "v",
+                  "body": {
+                    "forall": {
+                      "parameter": "s",
+                      "body": {
+                        "record": [
+                          {
+                            "name": "path",
+                            "type": {
+                              "annotated": {
+                                "body": {"list": {"variable": "s"}},
+                                "annotation": {
+                                  "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The path of the residual hole being supplied"}}}]}}}},
+                          {
+                            "name": "value",
+                            "type": {
+                              "annotated": {
+                                "body": {"variable": "v"},
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The value supplied for that hole"}}}]}}}}]}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A value supplied for a residual (deferred) hole, identified by its path (engine-internal)"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.diff.InvalidFillError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "t",
+                  "body": {
+                    "forall": {
+                      "parameter": "v",
+                      "body": {
+                        "forall": {
+                          "parameter": "s",
+                          "body": {
+                            "union": [
+                              {
+                                "name": "illTyped",
+                                "type": {
+                                  "annotated": {
+                                    "body": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.diff.Hole"}, "argument": {"variable": "t"}}},
+                                        "argument": {"variable": "s"}}},
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "A fillNow produced a value that does not inhabit the hole's type"}}}]}}}},
+                              {
+                                "name": "missingFill",
+                                "type": {
+                                  "annotated": {
+                                    "body": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.diff.Hole"}, "argument": {"variable": "t"}}},
+                                        "argument": {"variable": "s"}}},
+                                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A hole received no fill"}}}]}}}},
+                              {
+                                "name": "extraFill",
+                                "type": {
+                                  "annotated": {
+                                    "body": {"literal": {"integer": "int32"}},
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "A surplus fill at this index, with no hole to answer"}}}]}}}}]}}}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A validation-time failure: the user's fills do not correctly answer the plan's holes"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.diff.MigrationError",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "t",
+                  "body": {
+                    "forall": {
+                      "parameter": "v",
+                      "body": {
+                        "forall": {
+                          "parameter": "s",
+                          "body": {
+                            "union": [
+                              {
+                                "name": "notAnInstance",
+                                "type": {
+                                  "annotated": {
+                                    "body": {"variable": "v"},
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "The input value is not a valid instance of the old type"}}}]}}}},
+                              {
+                                "name": "outOfRange",
+                                "type": {
+                                  "annotated": {
+                                    "body": {"variable": "v"},
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "A value failed a narrowing conversion (e.g. numeric overflow); fail-fast rather than truncate"}}}]}}}},
+                              {
+                                "name": "rejectedVariant",
+                                "type": {
+                                  "annotated": {
+                                    "body": {"variable": "v"},
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "An instance of a removed union variant whose handler is reject"}}}]}}}},
+                              {
+                                "name": "illTypedResult",
+                                "type": {
+                                  "annotated": {
+                                    "body": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.diff.Mistyped"}, "argument": {"variable": "t"}}},
+                                        "argument": {"variable": "v"}}},
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "A fill or resolver produced a value that does not inhabit the hole's type"}}}]}}}},
+                              {
+                                "name": "unfilledHole",
+                                "type": {
+                                  "annotated": {
+                                    "body": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.diff.Hole"}, "argument": {"variable": "t"}}},
+                                        "argument": {"variable": "s"}}},
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "A deferred hole reached application time still unanswered"}}}]}}}}]}}}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An application-time failure: a specific instance could not be migrated by a valid Migrator"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.diff.MigrationPlan",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "n",
+                  "body": {
+                    "forall": {
+                      "parameter": "t",
+                      "body": {
+                        "forall": {
+                          "parameter": "s",
+                          "body": {
+                            "record": [
+                              {
+                                "name": "edits",
+                                "type": {
+                                  "annotated": {
+                                    "body": {
+                                      "map": {
+                                        "keys": {"variable": "n"},
+                                        "values": {
+                                          "application": {
+                                            "function": {"application": {"function": {"variable": "hydra.diff.Edit"}, "argument": {"variable": "t"}}},
+                                            "argument": {"variable": "s"}}}}},
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "The schema diff: an edit per changed type, keyed by type name"}}}]}}}},
+                              {
+                                "name": "holes",
+                                "type": {
+                                  "annotated": {
+                                    "body": {
+                                      "list": {
+                                        "application": {
+                                          "function": {
+                                            "application": {
+                                              "function": {"application": {"function": {"variable": "hydra.diff.SchemaHole"}, "argument": {"variable": "n"}}},
+                                              "argument": {"variable": "t"}}},
+                                          "argument": {"variable": "s"}}}},
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "The ordered holes across all changed types, for the user to answer"}}}]}}}}]}}}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "The result of diffing two schemas: the per-type edits (which drive the transform) bundled with the ordered holes the user must answer. Supplied once to constructMigrator so the diff is never re-passed."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.diff.Migrator",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "t",
+                  "body": {
+                    "forall": {
+                      "parameter": "v",
+                      "body": {
+                        "forall": {
+                          "parameter": "s",
+                          "body": {
+                            "record": [
+                              {
+                                "name": "residualHoles",
+                                "type": {
+                                  "annotated": {
+                                    "body": {
+                                      "list": {
+                                        "application": {
+                                          "function": {"application": {"function": {"variable": "hydra.diff.Hole"}, "argument": {"variable": "t"}}},
+                                          "argument": {"variable": "s"}}}},
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "Deferred holes that an enclosing context must supply when composing this migrator"}}}]}}}},
+                              {
+                                "name": "apply",
+                                "type": {
+                                  "annotated": {
+                                    "body": {
+                                      "function": {
+                                        "domain": {
+                                          "list": {
+                                            "application": {
+                                              "function": {"application": {"function": {"variable": "hydra.diff.HoleFiller"}, "argument": {"variable": "v"}}},
+                                              "argument": {"variable": "s"}}}},
+                                        "codomain": {
+                                          "function": {
+                                            "domain": {"variable": "v"},
+                                            "codomain": {
+                                              "either": {
+                                                "left": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"application": {"function": {"variable": "hydra.diff.MigrationError"}, "argument": {"variable": "t"}}},
+                                                        "argument": {"variable": "v"}}},
+                                                    "argument": {"variable": "s"}}},
+                                                "right": {"variable": "v"}}}}}}},
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {
+                                            "literal": {"string": "Migrate a value, given values for the residual holes; fails with a MigrationError per instance"}}}]}}}}]}}}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A constructed instance migrator. RUNTIME-ONLY (apply is a host function; not serialized). Carries the residual (deferred) holes an enclosing context must supply, and applies to a value given values for those residual holes."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.diff.Mistyped",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "t",
+                  "body": {
+                    "forall": {
+                      "parameter": "v",
+                      "body": {
+                        "record": [
+                          {
+                            "name": "value",
+                            "type": {
+                              "annotated": {
+                                "body": {"variable": "v"},
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The offending value"}}}]}}}},
+                          {
+                            "name": "type",
+                            "type": {
+                              "annotated": {
+                                "body": {"variable": "t"},
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type the value did not inhabit"}}}]}}}}]}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A value together with the 'type' it failed to inhabit"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.diff.SchemaHole",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "n",
+                  "body": {
+                    "forall": {
+                      "parameter": "t",
+                      "body": {
+                        "forall": {
+                          "parameter": "s",
+                          "body": {
+                            "record": [
+                              {
+                                "name": "typeName",
+                                "type": {
+                                  "annotated": {
+                                    "body": {"variable": "n"},
+                                    "annotation": {
+                                      "map": [
+                                        {
+                                          "key": {"variable": "description"},
+                                          "value": {"literal": {"string": "The name of the type (a schema entry) containing this hole"}}}]}}}},
+                              {
+                                "name": "hole",
+                                "type": {
+                                  "annotated": {
+                                    "body": {
+                                      "application": {
+                                        "function": {"application": {"function": {"variable": "hydra.diff.Hole"}, "argument": {"variable": "t"}}},
+                                        "argument": {"variable": "s"}}},
+                                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The hole within that type"}}}]}}}}]}}}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A hole located within a named type of a schema. A type with several holes yields several SchemaHoles sharing a typeName."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.diff.StepEdit",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "a",
+                  "body": {
+                    "forall": {
+                      "parameter": "s",
+                      "body": {
+                        "record": [
+                          {
+                            "name": "step",
+                            "type": {
+                              "annotated": {
+                                "body": {"variable": "s"},
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The immediate step to descend into"}}}]}}}},
+                          {
+                            "name": "edit",
+                            "type": {
+                              "annotated": {
+                                "body": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.diff.Edit"}, "argument": {"variable": "a"}}},
+                                    "argument": {"variable": "s"}}},
+                                "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The edit to apply at that step"}}}]}}}}]}}}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An edit applied at a single immediate step of a value"}}}]}}},
+          "constraints": []}}}]}

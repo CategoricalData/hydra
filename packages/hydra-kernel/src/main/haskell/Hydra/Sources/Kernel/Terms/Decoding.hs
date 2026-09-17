@@ -87,6 +87,7 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for generating term decoders from type modules")}
   where
     definitions = [
+      toDefinition applyForallParamsInOrder,
       toDefinition collectForallVariables,
       toDefinition collectOrdConstrainedVariables,
       toDefinition collectTypeVariables,
@@ -116,14 +117,14 @@ module_ = Module {
       toDefinition decoderFullResultType,
       toDefinition decoderFullResultTypeNamed,
       toDefinition decoderResultType,
-      toDefinition decoderStripForalls,
       toDefinition decoderType,
       toDefinition decoderTypeNamed,
       toDefinition decoderTypeScheme,
       toDefinition decoderTypeSchemeNamed,
       toDefinition filterTypeBindings,
       toDefinition isDecodableBinding,
-      toDefinition prependForallDecoders]
+      toDefinition prependForallDecoders,
+      toDefinition stripForalls]
 
 define :: String -> TypedTerm x -> TypedTermDefinition x
 define = definitionInModule module_
@@ -886,6 +887,26 @@ decodeWrappedTypeNamed = define "decodeWrappedTypeNamed" $
 -- | Get the full result type for a decoder, preserving type applications
 -- For forall t. ColumnSchema<t>, returns ColumnSchema<t> (as a Type, not just a Name)
 -- Note: Uses 'cases' instead of 'match' to avoid variable shadowing from eta expansion
+-- | Strip all leading forall quantifiers from a type, returning the quantified body.
+stripForalls :: TypedTermDefinition (Type -> Type)
+stripForalls = define "stripForalls" $
+  doc "Remove all leading forall quantifiers, returning the quantified body" $
+  "typ" ~>
+  match _Type (var "typ") (Just $ var "typ") [
+    _Type_annotated>>: "at" ~> stripForalls @@ (Core.annotatedTypeBody (var "at")),
+    _Type_forall>>: "ft" ~> stripForalls @@ (Core.forallTypeBody (var "ft"))]
+
+-- | Left-apply a list of type-variable params to a base type, in binder order.
+-- e.g. base=Edit, params=[a,s] -> ((Edit a) s), matching collectForallVariables order.
+applyForallParamsInOrder :: TypedTermDefinition (Type -> [Name] -> Type)
+applyForallParamsInOrder = define "applyForallParamsInOrder" $
+  doc "Left-apply type-variable params to a base type in binder order (fixes param reversal)" $
+  "base" ~> "params" ~>
+  Lists.foldl
+    ("acc" ~> "p" ~> Core.typeApplication (Core.applicationType (var "acc") (Core.typeVariable (var "p"))))
+    (var "base")
+    (var "params")
+
 decoderFullResultType :: TypedTermDefinition (Type -> Type)
 decoderFullResultType = define "decoderFullResultType" $
   doc "Get full result type for decoder" $
@@ -905,16 +926,13 @@ decoderFullResultType = define "decoderFullResultType" $
       Core.typeEither $ Core.eitherType
         (decoderFullResultType @@ Core.eitherTypeLeft (var "et"))
         (decoderFullResultType @@ Core.eitherTypeRight (var "et")),
+    -- For `forall a. forall s. Base`, the decoded input type must be `Base a s` (params in binder
+    -- order). Strip foralls, recurse for the base, left-apply params — the naive per-param wrap
+    -- reversed the order for 2+ params (yielding `Base s a`).
     _Type_forall>>: "ft" ~>
-      -- For forall a. forall s. Body, apply the collected parameters in outer-first
-      -- order (matching collectForallVariables/prependForallDecoders), not the
-      -- per-level wrap-outward order that reverses them for 2+ parameters.
-      -- e.g., forall t. RecordType{name=ColumnSchema} -> ColumnSchema t
-      "wholeType" <~ Core.typeForall (var "ft") $
-      Lists.foldl
-        ("acc" ~> "v" ~> Core.typeApplication $ Core.applicationType (var "acc") (Core.typeVariable (var "v")))
-        (decoderFullResultType @@ (decoderStripForalls @@ var "wholeType"))
-        (collectForallVariables @@ var "wholeType"),
+      applyForallParamsInOrder
+        @@ (decoderFullResultType @@ (stripForalls @@ Core.forallTypeBody (var "ft")))
+        @@ (collectForallVariables @@ var "typ"),
     _Type_list>>: "elemType" ~>
       -- [a] -> [decoded a]
       Core.typeList (decoderFullResultType @@ var "elemType"),
@@ -962,11 +980,9 @@ decoderFullResultTypeNamed = define "decoderFullResultTypeNamed" $
     _Type_annotated>>: "at" ~>
       decoderFullResultTypeNamed @@ var "ename" @@ (Core.annotatedTypeBody (var "at")),
     _Type_forall>>: "ft" ~>
-      "wholeType" <~ Core.typeForall (var "ft") $
-      Lists.foldl
-        ("acc" ~> "v" ~> Core.typeApplication $ Core.applicationType (var "acc") (Core.typeVariable (var "v")))
-        (decoderFullResultTypeNamed @@ var "ename" @@ (decoderStripForalls @@ var "wholeType"))
-        (collectForallVariables @@ var "wholeType"),
+      applyForallParamsInOrder
+        @@ (decoderFullResultTypeNamed @@ var "ename" @@ (stripForalls @@ Core.forallTypeBody (var "ft")))
+        @@ (collectForallVariables @@ var "typ"),
     _Type_record>>: constant (Core.typeVariable (var "ename")),
     _Type_union>>: constant (Core.typeVariable (var "ename")),
     _Type_wrap>>: constant (Core.typeVariable (var "ename")),
@@ -1024,17 +1040,6 @@ decoderResultType = define "decoderResultType" $
     _Type_record>>: constant (Core.nameLift _Term),
     _Type_union>>: constant (Core.nameLift _Term),
     _Type_wrap>>: constant (Core.nameLift _Term)]
-
--- | Strip any leading (possibly annotated) forall layers from a type, returning the innermost body
-decoderStripForalls :: TypedTermDefinition (Type -> Type)
-decoderStripForalls = define "decoderStripForalls" $
-  doc "Strip leading forall layers from a type, returning the innermost non-forall body" $
-  "typ" ~>
-  match _Type (var "typ") (Just $ var "typ") [
-    _Type_annotated>>: "at" ~>
-      decoderStripForalls @@ (Core.annotatedTypeBody (var "at")),
-    _Type_forall>>: "ft" ~>
-      decoderStripForalls @@ Core.forallTypeBody (var "ft")]
 
 -- | Build a decoder type scheme: Term -> Either DecodingError ResultType
 -- For polymorphic types, adds extra arguments for the decoders of type parameters

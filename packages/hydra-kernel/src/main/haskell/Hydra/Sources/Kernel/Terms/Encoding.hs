@@ -83,6 +83,7 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for generating term encoders from type modules")}
   where
     definitions = [
+      toDefinition applyForallParamsInOrder,
       toDefinition encodeBinding,
       toDefinition encodeBindingName,
       toDefinition encodeEitherType,
@@ -113,7 +114,6 @@ module_ = Module {
       toDefinition encoderCollectTypeVarsFromType,
       toDefinition encoderFullResultType,
       toDefinition encoderFullResultTypeNamed,
-      toDefinition encoderStripForalls,
       toDefinition encoderType,
       toDefinition encoderTypeNamed,
       toDefinition encoderTypeScheme,
@@ -121,7 +121,8 @@ module_ = Module {
       toDefinition filterTypeBindings,
       toDefinition isEncodableBinding,
       toDefinition isUnitType_,
-      toDefinition prependForallEncoders]
+      toDefinition prependForallEncoders,
+      toDefinition stripForalls]
 
 define :: String -> TypedTerm x -> TypedTermDefinition x
 define = definitionInModule module_
@@ -747,6 +748,26 @@ encoderCollectTypeVarsFromType = define "encoderCollectTypeVarsFromType" $
 -- Maps structural types to their nominal names, preserving type applications.
 -- | Get the full result type for an encoder (the input type of the encoder function)
 -- Maps structural types to their nominal names, preserving type applications.
+-- | Strip all leading forall quantifiers from a type, returning the quantified body.
+stripForalls :: TypedTermDefinition (Type -> Type)
+stripForalls = define "stripForalls" $
+  doc "Remove all leading forall quantifiers, returning the quantified body" $
+  "typ" ~>
+  match _Type (var "typ") (Just $ var "typ") [
+    _Type_annotated>>: "at" ~> stripForalls @@ (Core.annotatedTypeBody (var "at")),
+    _Type_forall>>: "ft" ~> stripForalls @@ (Core.forallTypeBody (var "ft"))]
+
+-- | Left-apply a list of type-variable params to a base type, in binder order.
+-- e.g. base=Edit, params=[a,s] -> ((Edit a) s), matching encoderCollectForallVariables order.
+applyForallParamsInOrder :: TypedTermDefinition (Type -> [Name] -> Type)
+applyForallParamsInOrder = define "applyForallParamsInOrder" $
+  doc "Left-apply type-variable params to a base type in binder order (fixes param reversal)" $
+  "base" ~> "params" ~>
+  Lists.foldl
+    ("acc" ~> "p" ~> Core.typeApplication (Core.applicationType (var "acc") (Core.typeVariable (var "p"))))
+    (var "base")
+    (var "params")
+
 encoderFullResultType :: TypedTermDefinition (Type -> Type)
 encoderFullResultType = define "encoderFullResultType" $
   doc "Get full result type for encoder input" $
@@ -764,12 +785,15 @@ encoderFullResultType = define "encoderFullResultType" $
       Core.typeEither $ Core.eitherType
         (encoderFullResultType @@ Core.eitherTypeLeft (var "et"))
         (encoderFullResultType @@ Core.eitherTypeRight (var "et")),
+    -- For a polymorphic type `forall a. forall s. Base`, the encoder's input type must be
+    -- `Base a s` (params applied in binder order, matching encoderCollectForallVariables). The
+    -- naive recursion `typeApplication (recurse body) param` applies the OUTER param outermost,
+    -- yielding the REVERSED `Base s a` for 2+ params. Instead: strip all foralls, recurse on the
+    -- inner body for the base, then left-apply the params in binder order.
     _Type_forall>>: "ft" ~>
-      "wholeType" <~ Core.typeForall (var "ft") $
-      Lists.foldl
-        ("acc" ~> "v" ~> Core.typeApplication $ Core.applicationType (var "acc") (Core.typeVariable (var "v")))
-        (encoderFullResultType @@ (encoderStripForalls @@ var "wholeType"))
-        (encoderCollectForallVariables @@ var "wholeType"),
+      applyForallParamsInOrder
+        @@ (encoderFullResultType @@ (stripForalls @@ Core.forallTypeBody (var "ft")))
+        @@ (encoderCollectForallVariables @@ var "typ"),
     _Type_list>>: "elemType" ~>
       Core.typeList (encoderFullResultType @@ var "elemType"),
     -- A literal type's encoder input is that specific literal type (e.g. literal<string>),
@@ -820,12 +844,12 @@ encoderFullResultTypeNamed = define "encoderFullResultTypeNamed" $
       Core.typeEither $ Core.eitherType
         (encoderFullResultType @@ Core.eitherTypeLeft (var "et"))
         (encoderFullResultType @@ Core.eitherTypeRight (var "et")),
+    -- Same param-order fix as encoderFullResultType (strip foralls, recurse for base, left-apply
+    -- params in binder order) — but the base uses the nominal element name at record/union leaves.
     _Type_forall>>: "ft" ~>
-      "wholeType" <~ Core.typeForall (var "ft") $
-      Lists.foldl
-        ("acc" ~> "v" ~> Core.typeApplication $ Core.applicationType (var "acc") (Core.typeVariable (var "v")))
-        (encoderFullResultTypeNamed @@ var "ename" @@ (encoderStripForalls @@ var "wholeType"))
-        (encoderCollectForallVariables @@ var "wholeType"),
+      applyForallParamsInOrder
+        @@ (encoderFullResultTypeNamed @@ var "ename" @@ (stripForalls @@ Core.forallTypeBody (var "ft")))
+        @@ (encoderCollectForallVariables @@ var "typ"),
     _Type_list>>: "elemType" ~>
       Core.typeList (encoderFullResultType @@ var "elemType"),
     -- specific literal type (e.g. literal<string>), not generic Literal. (#476)
@@ -850,17 +874,6 @@ encoderFullResultTypeNamed = define "encoderFullResultTypeNamed" $
       Core.typeVariable (var "name"),
     _Type_void>>: constant Core.typeVoid,
     _Type_wrap>>: constant (Core.typeVariable (var "ename"))]
-
--- | Strip any leading (possibly annotated) forall layers from a type, returning the innermost body
-encoderStripForalls :: TypedTermDefinition (Type -> Type)
-encoderStripForalls = define "encoderStripForalls" $
-  doc "Strip leading forall layers from a type, returning the innermost non-forall body" $
-  "typ" ~>
-  match _Type (var "typ") (Just $ var "typ") [
-    _Type_annotated>>: "at" ~>
-      encoderStripForalls @@ (Core.annotatedTypeBody (var "at")),
-    _Type_forall>>: "ft" ~>
-      encoderStripForalls @@ Core.forallTypeBody (var "ft")]
 
 -- | Build the encoder function type for a given type
 -- For monomorphic types: InputType -> Term
