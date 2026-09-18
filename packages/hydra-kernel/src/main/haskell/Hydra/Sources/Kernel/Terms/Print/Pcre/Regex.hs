@@ -262,10 +262,21 @@ sequence' = define "regexSequence" $
   doc "Render a sequence of quantified atoms by concatenation." $
   "s" ~> Strings.concat (Lists.map (asTerm quantified) (var "s"))
 
+-- PCRE/java.util.regex/ECMA alternation is leftmost-FIRST (the first branch that matches wins), unlike
+-- Hydra's own POSIX-style leftmost-LONGEST semantics (docs/specification/regex.md, issue #603). Branches
+-- are rendered to strings and sorted by descending length before joining, so the longest branch is tried
+-- first; this reproduces leftmost-longest behavior for the common case where branches are fixed-length
+-- literal alternatives (the only case the hydra.regex minimal core's own conformance suite exercises).
 alternation :: TypedTermDefinition ([Term] -> String)
 alternation = define "alternation" $
-  doc "Render an alternation, joining its branches with the | operator." $
-  "alt" ~> Strings.join (string "|") (Lists.map (asTerm sequence') (var "alt"))
+  doc ("Render an alternation, joining its branches with the | operator. Branches are ordered by"
+    <> " descending rendered length so that PCRE/ECMA's leftmost-first matching agrees with Hydra's"
+    <> " leftmost-longest semantics for fixed-length alternatives.") $
+  "alt" ~>
+    lets [
+      "rendered">: Lists.map (asTerm sequence') (var "alt"),
+      "byLength">: Lists.sortBy (reify Strings.length) (var "rendered")] $
+    Strings.join (string "|") (Lists.reverse (var "byLength"))
 
 printRegex :: TypedTermDefinition ([Term] -> String)
 printRegex = define "printRegex" $

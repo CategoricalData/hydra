@@ -51,24 +51,49 @@
                 "parameter": "alt",
                 "domain": {"list": {"list": {"variable": "hydra.regex.Quantified"}}},
                 "body": {
-                  "application": {
-                    "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "|"}}}},
-                    "argument": {
-                      "application": {
-                        "function": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "rendered",
+                        "term": {
                           "application": {
                             "function": {
-                              "typeApplication": {
-                                "body": {
-                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"list": {"variable": "hydra.regex.Quantified"}}}},
-                                "type": {"literal": "string"}}},
-                            "argument": {"variable": "hydra.print.pcre.regex.regexSequence"}}},
-                        "argument": {"variable": "alt"}}}}}}},
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"list": {"variable": "hydra.regex.Quantified"}}}},
+                                    "type": {"literal": "string"}}},
+                                "argument": {"variable": "hydra.print.pcre.regex.regexSequence"}}},
+                            "argument": {"variable": "alt"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
+                      {
+                        "name": "byLength",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.sortBy"}, "type": {"literal": "string"}}},
+                                    "type": {"literal": {"integer": "int32"}}}},
+                                "argument": {"variable": "hydra.lib.strings.length"}}},
+                            "argument": {"variable": "rendered"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
+                    "body": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.lib.strings.join"}, "argument": {"literal": {"string": "|"}}}},
+                        "argument": {
+                          "application": {
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.reverse"}, "type": {"literal": "string"}}},
+                            "argument": {"variable": "byLength"}}}}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Render an alternation, joining its branches with the | operator."}}}]}}}}},
+                  "value": {
+                    "literal": {
+                      "string": "Render an alternation, joining its branches with the | operator. Branches are ordered by descending rendered length so that PCRE/ECMA's leftmost-first matching agrees with Hydra's leftmost-longest semantics for fixed-length alternatives."}}}]}}}}},
     {
       "term": {
         "name": "hydra.print.pcre.regex.atom",
