@@ -18,6 +18,7 @@
     {"module": "hydra.ast"},
     {"module": "hydra.coders"},
     {"module": "hydra.core"},
+    {"module": "hydra.diff"},
     {"module": "hydra.docs"},
     {"module": "hydra.error.checking"},
     {"module": "hydra.error.core"},
@@ -45,6 +46,63 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "definitions": [
+    {
+      "term": {
+        "name": "hydra.encoding.applyForallParamsInOrder",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.core.Type"}, "isLazy": false},
+            {"name": "arg1", "type": {"list": {"variable": "hydra.core.Name"}}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Type"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "base",
+                "domain": {"variable": "hydra.core.Type"},
+                "body": {
+                  "lambda": {
+                    "parameter": "params",
+                    "domain": {"list": {"variable": "hydra.core.Name"}},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"variable": "hydra.core.Type"}}},
+                                    "type": {"variable": "hydra.core.Name"}}},
+                                "argument": {
+                                  "lambda": {
+                                    "parameter": "acc",
+                                    "domain": {"variable": "hydra.core.Type"},
+                                    "body": {
+                                      "lambda": {
+                                        "parameter": "p",
+                                        "domain": {"variable": "hydra.core.Name"},
+                                        "body": {
+                                          "inject": {
+                                            "typeName": "hydra.core.Type",
+                                            "field": {
+                                              "name": "application",
+                                              "term": {
+                                                "record": {
+                                                  "typeName": "hydra.core.ApplicationType",
+                                                  "fields": [
+                                                    {"name": "function", "term": {"variable": "acc"}},
+                                                    {
+                                                      "name": "argument",
+                                                      "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "variable", "term": {"variable": "p"}}}}}]}}}}}}}}}}},
+                            "argument": {"variable": "base"}}},
+                        "argument": {"variable": "params"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Left-apply type-variable params to a base type in binder order (fixes param reversal)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.encoding.encodeBinding",
@@ -4324,49 +4382,20 @@
                                 "parameter": "ft",
                                 "domain": {"variable": "hydra.core.ForallType"},
                                 "body": {
-                                  "let": {
-                                    "bindings": [
-                                      {
-                                        "name": "wholeType",
-                                        "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "forall", "term": {"variable": "ft"}}}},
-                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}, "constraints": []}}],
-                                    "body": {
+                                  "application": {
+                                    "function": {
                                       "application": {
-                                        "function": {
+                                        "function": {"variable": "hydra.encoding.applyForallParamsInOrder"},
+                                        "argument": {
                                           "application": {
-                                            "function": {
-                                              "application": {
-                                                "function": {
-                                                  "typeApplication": {
-                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"variable": "hydra.core.Type"}}},
-                                                    "type": {"variable": "hydra.core.Name"}}},
-                                                "argument": {
-                                                  "lambda": {
-                                                    "parameter": "acc",
-                                                    "domain": {"variable": "hydra.core.Type"},
-                                                    "body": {
-                                                      "lambda": {
-                                                        "parameter": "v",
-                                                        "domain": {"variable": "hydra.core.Name"},
-                                                        "body": {
-                                                          "inject": {
-                                                            "typeName": "hydra.core.Type",
-                                                            "field": {
-                                                              "name": "application",
-                                                              "term": {
-                                                                "record": {
-                                                                  "typeName": "hydra.core.ApplicationType",
-                                                                  "fields": [
-                                                                    {"name": "function", "term": {"variable": "acc"}},
-                                                                    {
-                                                                      "name": "argument",
-                                                                      "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "variable", "term": {"variable": "v"}}}}}]}}}}}}}}}}},
+                                            "function": {"variable": "hydra.encoding.encoderFullResultType"},
                                             "argument": {
                                               "application": {
-                                                "function": {"variable": "hydra.encoding.encoderFullResultType"},
-                                                "argument": {"application": {"function": {"variable": "hydra.encoding.encoderStripForalls"}, "argument": {"variable": "wholeType"}}}}}}},
-                                        "argument": {
-                                          "application": {"function": {"variable": "hydra.encoding.encoderCollectForallVariables"}, "argument": {"variable": "wholeType"}}}}}}}}}},
+                                                "function": {"variable": "hydra.encoding.stripForalls"},
+                                                "argument": {
+                                                  "application": {"function": {"project": {"typeName": "hydra.core.ForallType", "fieldName": "body"}}, "argument": {"variable": "ft"}}}}}}}}},
+                                    "argument": {
+                                      "application": {"function": {"variable": "hydra.encoding.encoderCollectForallVariables"}, "argument": {"variable": "typ"}}}}}}}},
                           {
                             "name": "list",
                             "handler": {
@@ -4648,50 +4677,21 @@
                                     "parameter": "ft",
                                     "domain": {"variable": "hydra.core.ForallType"},
                                     "body": {
-                                      "let": {
-                                        "bindings": [
-                                          {
-                                            "name": "wholeType",
-                                            "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "forall", "term": {"variable": "ft"}}}},
-                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.Type"}, "constraints": []}}],
-                                        "body": {
+                                      "application": {
+                                        "function": {
                                           "application": {
-                                            "function": {
+                                            "function": {"variable": "hydra.encoding.applyForallParamsInOrder"},
+                                            "argument": {
                                               "application": {
                                                 "function": {
-                                                  "application": {
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"variable": "hydra.core.Type"}}},
-                                                        "type": {"variable": "hydra.core.Name"}}},
-                                                    "argument": {
-                                                      "lambda": {
-                                                        "parameter": "acc",
-                                                        "domain": {"variable": "hydra.core.Type"},
-                                                        "body": {
-                                                          "lambda": {
-                                                            "parameter": "v",
-                                                            "domain": {"variable": "hydra.core.Name"},
-                                                            "body": {
-                                                              "inject": {
-                                                                "typeName": "hydra.core.Type",
-                                                                "field": {
-                                                                  "name": "application",
-                                                                  "term": {
-                                                                    "record": {
-                                                                      "typeName": "hydra.core.ApplicationType",
-                                                                      "fields": [
-                                                                        {"name": "function", "term": {"variable": "acc"}},
-                                                                        {
-                                                                          "name": "argument",
-                                                                          "term": {"inject": {"typeName": "hydra.core.Type", "field": {"name": "variable", "term": {"variable": "v"}}}}}]}}}}}}}}}}},
+                                                  "application": {"function": {"variable": "hydra.encoding.encoderFullResultTypeNamed"}, "argument": {"variable": "ename"}}},
                                                 "argument": {
                                                   "application": {
-                                                    "function": {
-                                                      "application": {"function": {"variable": "hydra.encoding.encoderFullResultTypeNamed"}, "argument": {"variable": "ename"}}},
-                                                    "argument": {"application": {"function": {"variable": "hydra.encoding.encoderStripForalls"}, "argument": {"variable": "wholeType"}}}}}}},
-                                            "argument": {
-                                              "application": {"function": {"variable": "hydra.encoding.encoderCollectForallVariables"}, "argument": {"variable": "wholeType"}}}}}}}}}},
+                                                    "function": {"variable": "hydra.encoding.stripForalls"},
+                                                    "argument": {
+                                                      "application": {"function": {"project": {"typeName": "hydra.core.ForallType", "fieldName": "body"}}, "argument": {"variable": "ft"}}}}}}}}},
+                                        "argument": {
+                                          "application": {"function": {"variable": "hydra.encoding.encoderCollectForallVariables"}, "argument": {"variable": "typ"}}}}}}}},
                               {
                                 "name": "list",
                                 "handler": {
@@ -4844,54 +4844,6 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Get full result type for encoder input, using element name for nominal types"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.encoding.encoderStripForalls",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.Type"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.core.Type"}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "typ",
-                "domain": {"variable": "hydra.core.Type"},
-                "body": {
-                  "application": {
-                    "function": {
-                      "cases": {
-                        "typeName": "hydra.core.Type",
-                        "default": {"variable": "typ"},
-                        "cases": [
-                          {
-                            "name": "annotated",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "at",
-                                "domain": {"variable": "hydra.core.AnnotatedType"},
-                                "body": {
-                                  "application": {
-                                    "function": {"variable": "hydra.encoding.encoderStripForalls"},
-                                    "argument": {
-                                      "application": {"function": {"project": {"typeName": "hydra.core.AnnotatedType", "fieldName": "body"}}, "argument": {"variable": "at"}}}}}}}},
-                          {
-                            "name": "forall",
-                            "handler": {
-                              "lambda": {
-                                "parameter": "ft",
-                                "domain": {"variable": "hydra.core.ForallType"},
-                                "body": {
-                                  "application": {
-                                    "function": {"variable": "hydra.encoding.encoderStripForalls"},
-                                    "argument": {
-                                      "application": {"function": {"project": {"typeName": "hydra.core.ForallType", "fieldName": "body"}}, "argument": {"variable": "ft"}}}}}}}}]}},
-                    "argument": {"variable": "typ"}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Strip leading forall layers from a type, returning the innermost non-forall body"}}}]}}}}},
     {
       "term": {
         "name": "hydra.encoding.encoderType",
@@ -5494,4 +5446,52 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Prepend encoder types for forall parameters to base type"}}}]}}}}}]}
+                  "value": {"literal": {"string": "Prepend encoder types for forall parameters to base type"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.encoding.stripForalls",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.Type"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.Type"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "typ",
+                "domain": {"variable": "hydra.core.Type"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.Type",
+                        "default": {"variable": "typ"},
+                        "cases": [
+                          {
+                            "name": "annotated",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "at",
+                                "domain": {"variable": "hydra.core.AnnotatedType"},
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.encoding.stripForalls"},
+                                    "argument": {
+                                      "application": {"function": {"project": {"typeName": "hydra.core.AnnotatedType", "fieldName": "body"}}, "argument": {"variable": "at"}}}}}}}},
+                          {
+                            "name": "forall",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "ft",
+                                "domain": {"variable": "hydra.core.ForallType"},
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.encoding.stripForalls"},
+                                    "argument": {
+                                      "application": {"function": {"project": {"typeName": "hydra.core.ForallType", "fieldName": "body"}}, "argument": {"variable": "ft"}}}}}}}}]}},
+                    "argument": {"variable": "typ"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Remove all leading forall quantifiers, returning the quantified body"}}}]}}}}}]}
