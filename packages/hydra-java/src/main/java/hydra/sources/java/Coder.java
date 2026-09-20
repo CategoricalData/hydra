@@ -4920,6 +4920,19 @@ public class Coder {
                                                                                             TypeArgument.TYPE_,
                                                                                             TypeArgument.REFERENCE,
                                                                                             var("rt"))))),
+                                                                            // The visit()/otherwise() override parameter types must carry the
+                                                                            // union's OWN declared type parameters (e.g. Edit.Set<A, S>), not
+                                                                            // domArgs derived from the encode-site domain — which is empty when
+                                                                            // `dom` is not a type-application spine, producing a RAW case-class type
+                                                                            // (Edit.Set) that fails to override the generic interface method (#327).
+                                                                            // The constructor call above keeps the diamond (typeArgsOrDiamond).
+                                                                            Eithers.bind(
+                                                                                apply(
+                                                                                    ref(Coder.javaTypeArgumentsForNamedType),
+                                                                                    var("tname"),
+                                                                                    var("cx"),
+                                                                                    var("g")),
+                                                                                lambda("unionArgs",
                                                                             Eithers.bind(
                                                                                 Optionals.match(
                                                                                     var("def_"),
@@ -4934,7 +4947,7 @@ public class Coder {
                                                                                                 var("cod"),
                                                                                                 var("tname"),
                                                                                                 var("jcod"),
-                                                                                                var("domArgs"),
+                                                                                                var("unionArgs"),
                                                                                                 var("d"),
                                                                                                 var("cx"),
                                                                                                 var("g")),
@@ -4956,7 +4969,7 @@ public class Coder {
                                                                                                     var("dom"),
                                                                                                     var("tname"),
                                                                                                     var("jcod"),
-                                                                                                    var("domArgs"),
+                                                                                                    var("unionArgs"),
                                                                                                     var("f"),
                                                                                                     var("cx"),
                                                                                                     var("g"))),
@@ -4995,7 +5008,7 @@ public class Coder {
                                                                                                                 Identifier.TYPE_,
                                                                                                                 ref(Names.acceptMethodName)),
                                                                                                             list(
-                                                                                                                var("visitor"))))))))))))))))))))))),
+                                                                                                                var("visitor"))))))))))))))))))))))))),
                         field(
                             Term.UNWRAP,
                             constant(
