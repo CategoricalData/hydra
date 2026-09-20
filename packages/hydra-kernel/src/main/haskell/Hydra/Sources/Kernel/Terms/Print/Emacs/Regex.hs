@@ -133,10 +133,18 @@ module_ = Module {
               <> " inverts several escaping conventions relative to POSIX ERE (probe-verified, Emacs"
               <> " 28.2): alternation is \\| (bare | is literal), grouping is \\( \\) (bare ( ) are"
               <> " literal), and bounded quantifiers are \\{n,m\\} (bare braces are literal). The"
-              <> " quantifiers * + ? are bare as usual, and character classes are POSIX-like. Hydra's ."
-              <> " (any incl. newline) renders as [^z-a] — an empty negated range that matches every"
-              <> " character including newline (Emacs . excludes newline). See docs/specification/regex.md"
-              <> " and issue #567.")}
+              <> " quantifiers * + ? are bare as usual. Hydra's . (any incl. newline) renders as"
+              <> " [^z-a] — an empty negated range that matches every character including newline"
+              <> " (Emacs . excludes newline). Three further divergences, each probe-verified (issue"
+              <> " #603): (1) anchors ^ and $ (whole-STRING boundaries in Hydra) render as the"
+              <> " GNU whole-buffer anchors \\` and \\', because Emacs's native ^ and $ are"
+              <> " line-oriented; (2) character-class metacharacters ] ^ - are disambiguated"
+              <> " POSITIONALLY (] first, - last, ^ never first) rather than by backslash-escaping,"
+              <> " because Emacs bracket expressions are POSIX-like and have no escape mechanism"
+              <> " inside [...] (a backslash there is an ordinary character); (3) alternation branches"
+              <> " are ordered by descending rendered length, because Emacs's alternation is"
+              <> " leftmost-FIRST, unlike Hydra's leftmost-LONGEST semantics. See"
+              <> " docs/specification/regex.md and issue #567/#603.")}
   where
    definitions = [
      toDefinition alternation,
@@ -144,7 +152,7 @@ module_ = Module {
      toDefinition atom,
      toDefinition characterClass,
      toDefinition classItem,
-     toDefinition escapeClassChar,
+     toDefinition classItemIsLiteral,
      toDefinition escapeLiteral,
      toDefinition printCodePoint,
      toDefinition printRegex,
@@ -192,43 +200,66 @@ escapeLiteral = define "escapeLiteral" $
       (Strings.concat2 (string "\\") (printCodePoint @@ var "c"))
       (printCodePoint @@ var "c")
 
--- Inside a character class, Emacs is POSIX-like: escape the class metacharacters \ ] ^ - uniformly.
-escapeClassChar :: TypedTermDefinition (Int -> String)
-escapeClassChar = define "escapeClassChar" $
-  doc "Render a code point inside a character class, uniformly escaping the class metacharacters \\ ] ^ -." $
-  "c" ~>
-    lets [
-      "isMeta">: Lists.foldl
-        ("acc" ~> "m" ~> Logic.or (var "acc") (Equality.equal (var "c") (var "m")))
-        false
-        (list [cp '\\', cp ']', cp '^', cp '-'])] $
-    Logic.ifElse (var "isMeta")
-      (Strings.concat2 (string "\\") (printCodePoint @@ var "c"))
-      (printCodePoint @@ var "c")
+-- | True if the item is exactly the single literal character code point c (not a range).
+classItemIsLiteral :: TypedTermDefinition (Int -> Term -> Bool)
+classItemIsLiteral = define "classItemIsLiteral" $
+  doc "True if a ClassItem is the single literal character code point c (not a range)." $
+  "c" ~> "item" ~>
+    match _ClassItem (var "item") (Just false) [
+      _ClassItem_character>>: "ic" ~> Equality.equal (var "ic") (var "c")]
 
 classItem :: TypedTermDefinition (Term -> String)
 classItem = define "classItem" $
-  doc "Render one character-class member (a single character or an inclusive range)." $
+  doc ("Render one character-class member (a single character or an inclusive range). Emacs bracket"
+    <> " expressions do NOT support backslash escaping (probe-verified: \\- and \\] inside [...] are"
+    <> " two literal characters, not an escape); the metacharacters ] ^ - are instead disambiguated"
+    <> " positionally by characterClass (] first, - last, ^ never first), so a plain character or"
+    <> " range here never needs an escape.") $
   "item" ~>
     match _ClassItem (var "item") Nothing [
-      _ClassItem_character>>: "c" ~> escapeClassChar @@ var "c",
+      _ClassItem_character>>: "c" ~> printCodePoint @@ var "c",
       _ClassItem_range>>: "r" ~> Strings.concat $ list [
-        escapeClassChar @@ (project _CharacterRange _CharacterRange_from @@ var "r"),
+        printCodePoint @@ (project _CharacterRange _CharacterRange_from @@ var "r"),
         string "-",
-        escapeClassChar @@ (project _CharacterRange _CharacterRange_to @@ var "r")]]
+        printCodePoint @@ (project _CharacterRange _CharacterRange_to @@ var "r")]]
 
 characterClass :: TypedTermDefinition (Term -> String)
 characterClass = define "characterClass" $
-  doc "Render a character class, including the leading ^ for a negated class (POSIX-like in Emacs)." $
+  doc ("Render a character class, including the leading ^ for a negated class. Reorders items"
+    <> " positionally for Emacs (which has no bracket-expression escaping): a literal ] is moved"
+    <> " to the front (immediately after the optional negating ^), a literal - is moved to the back,"
+    <> " and (only when there is no literal ] item to occupy the first slot) a literal ^ is moved"
+    <> " after the first non-^ item -- Emacs treats a leading ^ as the negation marker regardless of"
+    <> " Hydra's negated flag. The one residual gap: a class whose only member is a literal ^ has no"
+    <> " safe position on Emacs; this is an extreme corner case (single-item classes are otherwise"
+    <> " unremarkable) and is left unhandled here.") $
   "cc" ~>
+    lets [
+      "items">: project _CharacterClass _CharacterClass_items @@ var "cc",
+      "bracketAndRest">: Lists.partition (classItemIsLiteral @@ cp ']') (var "items"),
+      "bracketItems">: Pairs.first (var "bracketAndRest"),
+      "afterBracket">: Pairs.second (var "bracketAndRest"),
+      "dashAndRest">: Lists.partition (classItemIsLiteral @@ cp '-') (var "afterBracket"),
+      "dashItems">: Pairs.first (var "dashAndRest"),
+      "rest">: Pairs.second (var "dashAndRest"),
+      "caretAndNonCaret">: Lists.partition (classItemIsLiteral @@ cp '^') (var "rest"),
+      "caretItems">: Pairs.first (var "caretAndNonCaret"),
+      "nonCaretItems">: Pairs.second (var "caretAndNonCaret"),
+      -- If a literal ] already occupies the first slot, ^ is safe anywhere in 'rest' (original
+      -- order is fine). Otherwise, any literal ^ must be moved after at least one non-^ item.
+      "safeRest">: Logic.ifElse
+        (Logic.or (Logic.not (Lists.isEmpty (var "bracketItems"))) (Lists.isEmpty (var "nonCaretItems")))
+        (var "rest")
+        (Lists.concat2 (var "nonCaretItems") (var "caretItems")),
+      "ordered">: Lists.concat (list [var "bracketItems", var "safeRest", var "dashItems"])] $
     Strings.concat $ list [
       string "[",
       Logic.ifElse (project _CharacterClass _CharacterClass_negated @@ var "cc") (string "^") (string ""),
-      Strings.concat (Lists.map (asTerm classItem) (project _CharacterClass _CharacterClass_items @@ var "cc")),
+      Strings.concat (Lists.map (asTerm classItem) (var "ordered")),
       string "]"]
 
--- The Emacs divergences: . -> [^z-a] (newline-inclusive any); group -> \( \); everything else per the
--- escaping rules above.
+-- The Emacs divergences: . -> [^z-a] (newline-inclusive any); group -> \( \); anchors -> \` \' (see
+-- below); everything else per the escaping rules above.
 atom :: TypedTermDefinition (Term -> String)
 atom = define "atom" $
   doc "Render a single atom; . -> [^z-a], and groups use Emacs's \\( \\) escaping." $
@@ -236,8 +267,12 @@ atom = define "atom" $
     match _Atom (var "a") Nothing [
       _Atom_literal>>: "c" ~> escapeLiteral @@ var "c",
       _Atom_any>>: constant (asTerm anyClass),
-      _Atom_anchorStart>>: constant (string "^"),
-      _Atom_anchorEnd>>: constant (string "$"),
+      -- Hydra anchors are whole-STRING boundaries (docs/specification/regex.md), but Emacs's native ^
+      -- and $ are line-oriented (probe-confirmed: ^b$ matches "b" inside "a\nb\nc"). The GNU whole-
+      -- buffer anchors \` and \' give the correct whole-string semantics on Emacs (probe-confirmed:
+      -- \`b\' does NOT match "b" inside "a\nb\nc").
+      _Atom_anchorStart>>: constant (string "\\`"),
+      _Atom_anchorEnd>>: constant (string "\\'"),
       _Atom_group>>: "g" ~> Strings.concat $ list [
         string "\\(",
         alternation @@ var "g",
@@ -278,11 +313,23 @@ sequence' = define "regexSequence" $
   doc "Render a sequence of quantified atoms by concatenation." $
   "s" ~> Strings.concat (Lists.map (asTerm quantified) (var "s"))
 
--- Alternation uses Emacs's escaped pipe \| (bare | is literal in Emacs).
+-- Alternation uses Emacs's escaped pipe \| (bare | is literal in Emacs). Emacs's regex engine is
+-- leftmost-FIRST (the first branch that matches wins), unlike Hydra's own POSIX-style leftmost-LONGEST
+-- semantics (docs/specification/regex.md, issue #603). Branches are rendered to strings and sorted by
+-- descending length before joining, so the longest branch is tried first; this reproduces leftmost-longest
+-- behavior for the common case where branches are fixed-length literal alternatives (the only case the
+-- hydra.regex minimal core's own conformance suite exercises). See print.pcre.regex.alternation, the same
+-- fix for PCRE/java.util.regex/ECMA's identical leftmost-first semantics.
 alternation :: TypedTermDefinition ([Term] -> String)
 alternation = define "alternation" $
-  doc "Render an alternation, joining its branches with Emacs's \\| operator." $
-  "alt" ~> Strings.join (string "\\|") (Lists.map (asTerm sequence') (var "alt"))
+  doc ("Render an alternation, joining its branches with Emacs's \\| operator. Branches are ordered by"
+    <> " descending rendered length so that Emacs's leftmost-first matching agrees with Hydra's"
+    <> " leftmost-longest semantics for fixed-length alternatives.") $
+  "alt" ~>
+    lets [
+      "rendered">: Lists.map (asTerm sequence') (var "alt"),
+      "byLength">: Lists.sortBy (reify Strings.length) (var "rendered")] $
+    Strings.join (string "\\|") (Lists.reverse (var "byLength"))
 
 printRegex :: TypedTermDefinition ([Term] -> String)
 printRegex = define "printRegex" $

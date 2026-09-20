@@ -1,19 +1,23 @@
 ;;; regex.el --- Hydra regex primitives -*- lexical-binding: t; -*-
 
-(require 'hydra.parse.regex)
-(require 'hydra.print.emacs.regex)
-
 ;; Patterns are Hydra-defined and translingual (docs/specification/regex.md). Each primitive first
 ;; runs the pattern through hydra.parse.regex, then renders the AST to Emacs regexp syntax via
 ;; hydra.print.emacs.regex (which supersedes the old ad-hoc hydra--posix-to-emacs-regex string shim,
 ;; including its {n,m}-quantifier gap), before handing the rendered pattern to the native engine. An
 ;; ill-formed pattern (rejected by hydra.parse.regex) is treated as "no match" -- the same portable-
 ;; failure convention as an empty match. See issue #603.
+;; No (require ...) for these: they are generated kernel modules, loaded via the rewriting
+;; hydra-load-file (hydra-load-gen-main), which strips require/provide forms -- kernel modules are
+;; never real Emacs features. Their functions (hydra_parse_regex_parse_regex,
+;; hydra_print_emacs_regex_print_regex) are globally defined by gen-main load time, before this file's
+;; functions are ever called (see libraries.el's comment on this same guarantee).
 
 ;; Returns (given . <native-pattern-string>), or 'none if the pattern does not parse.
+;; hydra_parse_regex_parse_regex returns an Optional tagged with the keyword :given (Hydra's native
+;; Optional convention; see libraries.el's optional-to-native), not the symbol 'given.
 (defun hydra--regex-to-native (pattern)
   (let ((parsed (funcall hydra_parse_regex_parse_regex pattern)))
-    (if (eq (car parsed) 'given)
+    (if (eq (car parsed) :given)
         (cons 'given (funcall hydra_print_emacs_regex_print_regex (cadr parsed)))
       'none)))
 
