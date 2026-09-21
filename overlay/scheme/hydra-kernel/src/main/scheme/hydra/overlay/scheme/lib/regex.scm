@@ -93,7 +93,7 @@
                         (if (or (not m) (= (match:start m) (match:end m)))
                             (string-append acc remaining)
                             (loop (match:suffix m)
-                                  (string-append acc (match:prefix m) replacement)))))))))))
+                                  (string-append acc (match:prefix m) replacement))))))))))))
 
     ;; split :: String -> String -> [String]
     (define hydra_overlay_scheme_lib_regex_split
