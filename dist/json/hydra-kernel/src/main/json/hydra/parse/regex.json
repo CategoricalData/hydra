@@ -70,7 +70,11 @@
                                 "body": {
                                   "typeApplication": {"body": {"variable": "hydra.parsers.sepBy1"}, "type": {"list": {"variable": "hydra.regex.Quantified"}}}},
                                 "type": {"literal": {"integer": "int32"}}}},
-                            "argument": {"variable": "hydra.parse.regex.regexSequence"}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {"body": {"variable": "hydra.parsers.lazy"}, "type": {"list": {"variable": "hydra.regex.Quantified"}}}},
+                                "argument": {"lambda": {"parameter": "_", "domain": "unit", "body": {"variable": "hydra.parse.regex.regexSequence"}}}}}}},
                         "argument": {"application": {"function": {"variable": "hydra.parsers.char"}, "argument": {"literal": {"integer": {"int32": 124}}}}}}}}},
                 "argument": {
                   "lambda": {
