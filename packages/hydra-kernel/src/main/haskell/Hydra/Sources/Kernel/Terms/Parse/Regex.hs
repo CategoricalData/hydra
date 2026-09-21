@@ -315,7 +315,7 @@ alternation = define "alternation" $
   doc ("Parse an alternation of sequences separated by |. When there is more than one branch, each"
     <> " branch must be non-empty; empty branches (a|, |b, a||b, and the nested (a|)) are rejected at"
     <> " every level. A single empty branch is the legal empty case (empty whole pattern / empty group).") $
-  Parsers.bind @@ (Parsers.sepBy1 @@ (asTerm sequence') @@ (Parsers.char @@ cp '|')) @@ ("branches" ~>
+  Parsers.bind @@ (Parsers.sepBy1 @@ (Parsers.lazy @@ (constant $ asTerm sequence')) @@ (Parsers.char @@ cp '|')) @@ ("branches" ~>
     lets [
       "hasEmpty">: Lists.foldl
         ("acc" ~> "b" ~> Logic.or (var "acc") (Lists.isEmpty (var "b")))
