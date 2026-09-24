@@ -1,0 +1,246 @@
+{
+  "name": "hydra.core.graph",
+  "metadata": {
+    "description": "The extension to graphs of Hydra's core type system (hydra.core.model)",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.typing"}],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.core.graph.Graph",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "boundTerms",
+                    "type": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.model.Term"}}},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The terms bound by all term variables in scope"}}}]}}}},
+                  {
+                    "name": "boundTypes",
+                    "type": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.model.TypeScheme"}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The type schemes of all term variables in scope"}}}]}}}},
+                  {
+                    "name": "classConstraints",
+                    "type": {
+                      "annotated": {
+                        "body": {
+                          "map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.model.TypeVariableConstraints"}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."}}}]}}}},
+                  {
+                    "name": "lambdaVariables",
+                    "type": {
+                      "annotated": {
+                        "body": {"set": {"variable": "hydra.core.model.Name"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The set of term variables introduced by specifically by lambdas"}}}]}}}},
+                  {
+                    "name": "metadata",
+                    "type": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.model.Term"}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Any additional metadata bound to term variables in scope"}}}]}}}},
+                  {
+                    "name": "primitives",
+                    "type": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.graph.Primitive"}}},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "All primitive functions and constants by name"}}}]}}}},
+                  {
+                    "name": "schemaTypes",
+                    "type": {
+                      "annotated": {
+                        "body": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.model.TypeScheme"}}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All schema types (type schemes) in scope"}}}]}}}},
+                  {
+                    "name": "typeVariables",
+                    "type": {
+                      "annotated": {
+                        "body": {"set": {"variable": "hydra.core.model.Name"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The set of type variables introduced specifically by type lambdas"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A graph, or lexical environment which binds names to terms, types, primitives, and metadata"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.graph.Library",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.ModuleName"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}]}}}},
+                  {
+                    "name": "prefix",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}]}}}},
+                  {
+                    "name": "primitives",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.graph.Primitive"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The primitives defined in this library"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A library of primitive functions"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.graph.Primitive",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "definition",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.PrimitiveDefinition"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."}}}]}}}},
+                  {
+                    "name": "implementation",
+                    "type": {
+                      "annotated": {
+                        "body": {
+                          "function": {
+                            "domain": {"variable": "hydra.core.graph.Graph"},
+                            "codomain": {
+                              "function": {
+                                "domain": {"list": {"variable": "hydra.core.model.Term"}},
+                                "codomain": {"either": {"left": {"variable": "hydra.core.errors.Error"}, "right": {"variable": "hydra.core.model.Term"}}}}}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A concrete, host-specific implementation of the primitive function: given the current graph, a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive whose result shape is fixed by its data argument can return an unreduced applicative term and let the outer reducer fold it (no graph needed). The graph is retained for the higher-order primitives that must evaluate a function argument mid-computation (e.g. lists.filter): evaluating that function resolves primitive names against the graph's primitive table. The legacy `InferenceContext` parameter was vestigial and has been removed (https://github.com/CategoricalData/hydra/issues/446)."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A built-in function or constant, consisting of the host-independent PrimitiveDefinition (name, signature, metadata) plus a host-specific implementation."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.graph.TermCoder",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "a",
+                  "body": {
+                    "record": [
+                      {
+                        "name": "type",
+                        "type": {
+                          "annotated": {
+                            "body": {"variable": "hydra.core.model.Type"},
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The Hydra type of encoded terms"}}}]}}}},
+                      {
+                        "name": "encode",
+                        "type": {
+                          "annotated": {
+                            "body": {
+                              "function": {
+                                "domain": {"variable": "hydra.core.typing.InferenceContext"},
+                                "codomain": {
+                                  "function": {
+                                    "domain": {"variable": "hydra.core.graph.Graph"},
+                                    "codomain": {
+                                      "function": {
+                                        "domain": {"variable": "hydra.core.model.Term"},
+                                        "codomain": {"either": {"left": {"variable": "hydra.core.errors.Error"}, "right": {"variable": "a"}}}}}}}}},
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "An encode function from terms to native values"}}}]}}}},
+                      {
+                        "name": "decode",
+                        "type": {
+                          "annotated": {
+                            "body": {
+                              "function": {
+                                "domain": {"variable": "hydra.core.typing.InferenceContext"},
+                                "codomain": {
+                                  "function": {
+                                    "domain": {"variable": "a"},
+                                    "codomain": {"either": {"left": {"variable": "hydra.core.errors.Error"}, "right": {"variable": "hydra.core.model.Term"}}}}}}},
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "A decode function from native values to terms"}}}]}}}}]}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms."}}}]}}},
+          "constraints": []}}}]}

@@ -1,0 +1,792 @@
+{
+  "name": "hydra.core.print.emacs.regex",
+  "metadata": {
+    "description": "Per-dialect printer rendering the hydra.core.regex AST into GNU Emacs regexp syntax. Emacs inverts several escaping conventions relative to POSIX ERE (probe-verified, Emacs 28.2): alternation is \\| (bare | is literal), grouping is \\( \\) (bare ( ) are literal), and bounded quantifiers are \\{n,m\\} (bare braces are literal). The quantifiers * + ? are bare as usual. Hydra's . (any incl. newline) renders as [^z-a] — an empty negated range that matches every character including newline (Emacs . excludes newline). Three further divergences, each probe-verified (issue #603): (1) anchors ^ and $ (whole-STRING boundaries in Hydra) render as the GNU whole-buffer anchors \\` and \\', because Emacs's native ^ and $ are line-oriented; (2) character-class metacharacters ] ^ - are disambiguated POSITIONALLY (] first, - last, ^ never first) rather than by backslash-escaping, because Emacs bracket expressions are POSIX-like and have no escape mechanism inside [...] (a backslash there is an ordinary character); (3) alternation branches are ordered by descending rendered length, because Emacs's alternation is leftmost-FIRST, unlike Hydra's leftmost-LONGEST semantics. See docs/specification/regex.md and issue #567/#603.",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.core.print.emacs.regex.alternation",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "alt",
+                "domain": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "rendered",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"list": {"variable": "hydra.core.regex.Quantified"}}}},
+                                    "type": {"literal": "string"}}},
+                                "argument": {"variable": "hydra.core.print.emacs.regex.regexSequence"}}},
+                            "argument": {"variable": "alt"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}},
+                      {
+                        "name": "byLength",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.sortBy"}, "type": {"literal": "string"}}},
+                                    "type": {"literal": {"integer": "int32"}}}},
+                                "argument": {"variable": "hydra.core.lib.strings.length"}}},
+                            "argument": {"variable": "rendered"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
+                    "body": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "\\|"}}}},
+                        "argument": {
+                          "application": {
+                            "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.reverse"}, "type": {"literal": "string"}}},
+                            "argument": {"variable": "byLength"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Render an alternation, joining its branches with Emacs's \\| operator. Branches are ordered by descending rendered length so that Emacs's leftmost-first matching agrees with Hydra's leftmost-longest semantics for fixed-length alternatives."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.emacs.regex.anyClass",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {"literal": {"string": "[^z-a]"}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "The Emacs rendering of Hydra's . (any character incl. newline): the empty-negated-range [^z-a]."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.emacs.regex.atom",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.regex.Atom"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "a",
+                "domain": {"variable": "hydra.core.regex.Atom"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.regex.Atom",
+                        "cases": [
+                          {
+                            "name": "literal",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "c",
+                                "domain": {"literal": {"integer": "int32"}},
+                                "body": {"application": {"function": {"variable": "hydra.core.print.emacs.regex.escapeLiteral"}, "argument": {"variable": "c"}}}}}},
+                          {
+                            "name": "any",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"variable": "hydra.core.print.emacs.regex.anyClass"}}}},
+                          {
+                            "name": "anchorStart",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "\\`"}}}}},
+                          {
+                            "name": "anchorEnd",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "\\'"}}}}},
+                          {
+                            "name": "group",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "g",
+                                "domain": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}},
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.core.lib.strings.concat"},
+                                    "argument": {
+                                      "list": [
+                                        {"literal": {"string": "\\("}},
+                                        {"application": {"function": {"variable": "hydra.core.print.emacs.regex.alternation"}, "argument": {"variable": "g"}}},
+                                        {"literal": {"string": "\\)"}}]}}}}}},
+                          {
+                            "name": "class",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "cc",
+                                "domain": {"variable": "hydra.core.regex.CharacterClass"},
+                                "body": {
+                                  "application": {"function": {"variable": "hydra.core.print.emacs.regex.characterClass"}, "argument": {"variable": "cc"}}}}}}]}},
+                    "argument": {"variable": "a"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a single atom; . -> [^z-a], and groups use Emacs's \\( \\) escaping."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.emacs.regex.characterClass",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.regex.CharacterClass"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "cc",
+                "domain": {"variable": "hydra.core.regex.CharacterClass"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "items",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.core.regex.CharacterClass", "fieldName": "items"}},
+                            "argument": {"variable": "cc"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.regex.ClassItem"}}, "constraints": []}},
+                      {
+                        "name": "bracketAndRest",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.lists.partition"}, "type": {"variable": "hydra.core.regex.ClassItem"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {"variable": "hydra.core.print.emacs.regex.classItemIsLiteral"},
+                                    "argument": {"literal": {"integer": {"int32": 93}}}}}}},
+                            "argument": {"variable": "items"}}},
+                        "typeScheme": {
+                          "variables": [],
+                          "body": {
+                            "pair": {
+                              "first": {"list": {"variable": "hydra.core.regex.ClassItem"}},
+                              "second": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                          "constraints": []}},
+                      {
+                        "name": "bracketItems",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.first"}, "type": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                                "type": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                            "argument": {"variable": "bracketAndRest"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.regex.ClassItem"}}, "constraints": []}},
+                      {
+                        "name": "afterBracket",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.second"}, "type": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                                "type": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                            "argument": {"variable": "bracketAndRest"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.regex.ClassItem"}}, "constraints": []}},
+                      {
+                        "name": "dashAndRest",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.lists.partition"}, "type": {"variable": "hydra.core.regex.ClassItem"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {"variable": "hydra.core.print.emacs.regex.classItemIsLiteral"},
+                                    "argument": {"literal": {"integer": {"int32": 45}}}}}}},
+                            "argument": {"variable": "afterBracket"}}},
+                        "typeScheme": {
+                          "variables": [],
+                          "body": {
+                            "pair": {
+                              "first": {"list": {"variable": "hydra.core.regex.ClassItem"}},
+                              "second": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                          "constraints": []}},
+                      {
+                        "name": "dashItems",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.first"}, "type": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                                "type": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                            "argument": {"variable": "dashAndRest"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.regex.ClassItem"}}, "constraints": []}},
+                      {
+                        "name": "rest",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.second"}, "type": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                                "type": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                            "argument": {"variable": "dashAndRest"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.regex.ClassItem"}}, "constraints": []}},
+                      {
+                        "name": "caretAndNonCaret",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.lists.partition"}, "type": {"variable": "hydra.core.regex.ClassItem"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {"variable": "hydra.core.print.emacs.regex.classItemIsLiteral"},
+                                    "argument": {"literal": {"integer": {"int32": 94}}}}}}},
+                            "argument": {"variable": "rest"}}},
+                        "typeScheme": {
+                          "variables": [],
+                          "body": {
+                            "pair": {
+                              "first": {"list": {"variable": "hydra.core.regex.ClassItem"}},
+                              "second": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                          "constraints": []}},
+                      {
+                        "name": "caretItems",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.first"}, "type": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                                "type": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                            "argument": {"variable": "caretAndNonCaret"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.regex.ClassItem"}}, "constraints": []}},
+                      {
+                        "name": "nonCaretItems",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.second"}, "type": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                                "type": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                            "argument": {"variable": "caretAndNonCaret"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.regex.ClassItem"}}, "constraints": []}},
+                      {
+                        "name": "safeRest",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"list": {"variable": "hydra.core.regex.ClassItem"}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"variable": "hydra.core.lib.logic.or"},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"variable": "hydra.core.lib.logic.not"},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.lists.isEmpty"}, "type": {"variable": "hydra.core.regex.ClassItem"}}},
+                                                    "argument": {"variable": "bracketItems"}}}}}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {"body": {"variable": "hydra.core.lib.lists.isEmpty"}, "type": {"variable": "hydra.core.regex.ClassItem"}}},
+                                            "argument": {"variable": "nonCaretItems"}}}}}}},
+                                "argument": {"variable": "rest"}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat2"}, "type": {"variable": "hydra.core.regex.ClassItem"}}},
+                                    "argument": {"variable": "nonCaretItems"}}},
+                                "argument": {"variable": "caretItems"}}}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.regex.ClassItem"}}, "constraints": []}},
+                      {
+                        "name": "ordered",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.core.regex.ClassItem"}}},
+                            "argument": {"list": [{"variable": "bracketItems"}, {"variable": "safeRest"}, {"variable": "dashItems"}]}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.core.regex.ClassItem"}}, "constraints": []}}],
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.core.lib.strings.concat"},
+                        "argument": {
+                          "list": [
+                            {"literal": {"string": "["}},
+                            {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"literal": "string"}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.regex.CharacterClass", "fieldName": "negated"}},
+                                            "argument": {"variable": "cc"}}}}},
+                                    "argument": {"literal": {"string": "^"}}}},
+                                "argument": {"literal": {"string": ""}}}},
+                            {
+                              "application": {
+                                "function": {"variable": "hydra.core.lib.strings.concat"},
+                                "argument": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.core.regex.ClassItem"}}},
+                                            "type": {"literal": "string"}}},
+                                        "argument": {"variable": "hydra.core.print.emacs.regex.classItem"}}},
+                                    "argument": {"variable": "ordered"}}}}},
+                            {"literal": {"string": "]"}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Render a character class, including the leading ^ for a negated class. Reorders items positionally for Emacs (which has no bracket-expression escaping): a literal ] is moved to the front (immediately after the optional negating ^), a literal - is moved to the back, and (only when there is no literal ] item to occupy the first slot) a literal ^ is moved after the first non-^ item -- Emacs treats a leading ^ as the negation marker regardless of Hydra's negated flag. The one residual gap: a class whose only member is a literal ^ has no safe position on Emacs; this is an extreme corner case (single-item classes are otherwise unremarkable) and is left unhandled here."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.emacs.regex.classItem",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.regex.ClassItem"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "item",
+                "domain": {"variable": "hydra.core.regex.ClassItem"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.regex.ClassItem",
+                        "cases": [
+                          {
+                            "name": "character",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "c",
+                                "domain": {"literal": {"integer": "int32"}},
+                                "body": {
+                                  "application": {"function": {"variable": "hydra.core.print.emacs.regex.printCodePoint"}, "argument": {"variable": "c"}}}}}},
+                          {
+                            "name": "range",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "r",
+                                "domain": {"variable": "hydra.core.regex.CharacterRange"},
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.core.lib.strings.concat"},
+                                    "argument": {
+                                      "list": [
+                                        {
+                                          "application": {
+                                            "function": {"variable": "hydra.core.print.emacs.regex.printCodePoint"},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"project": {"typeName": "hydra.core.regex.CharacterRange", "fieldName": "from"}},
+                                                "argument": {"variable": "r"}}}}},
+                                        {"literal": {"string": "-"}},
+                                        {
+                                          "application": {
+                                            "function": {"variable": "hydra.core.print.emacs.regex.printCodePoint"},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"project": {"typeName": "hydra.core.regex.CharacterRange", "fieldName": "to"}},
+                                                "argument": {"variable": "r"}}}}}]}}}}}}]}},
+                    "argument": {"variable": "item"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Render one character-class member (a single character or an inclusive range). Emacs bracket expressions do NOT support backslash escaping (probe-verified: \\- and \\] inside [...] are two literal characters, not an escape); the metacharacters ] ^ - are instead disambiguated positionally by characterClass (] first, - last, ^ never first), so a plain character or range here never needs an escape."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.emacs.regex.classItemIsLiteral",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "hydra.core.regex.ClassItem"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "c",
+                "domain": {"literal": {"integer": "int32"}},
+                "body": {
+                  "lambda": {
+                    "parameter": "item",
+                    "domain": {"variable": "hydra.core.regex.ClassItem"},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "cases": {
+                            "typeName": "hydra.core.regex.ClassItem",
+                            "default": {"literal": {"boolean": false}},
+                            "cases": [
+                              {
+                                "name": "character",
+                                "handler": {
+                                  "lambda": {
+                                    "parameter": "ic",
+                                    "domain": {"literal": {"integer": "int32"}},
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.equality.equal"}, "type": {"literal": {"integer": "int32"}}}},
+                                            "argument": {"variable": "ic"}}},
+                                        "argument": {"variable": "c"}}}}}}]}},
+                        "argument": {"variable": "item"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "True if a ClassItem is the single literal character code point c (not a range)."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.emacs.regex.escapeLiteral",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "c",
+                "domain": {"literal": {"integer": "int32"}},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "isMeta",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "application": {
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.foldl"}, "type": {"literal": "boolean"}}},
+                                        "type": {"literal": {"integer": "int32"}}}},
+                                    "argument": {
+                                      "lambda": {
+                                        "parameter": "acc",
+                                        "domain": {"literal": "boolean"},
+                                        "body": {
+                                          "lambda": {
+                                            "parameter": "m",
+                                            "domain": {"literal": {"integer": "int32"}},
+                                            "body": {
+                                              "application": {
+                                                "function": {"application": {"function": {"variable": "hydra.core.lib.logic.or"}, "argument": {"variable": "acc"}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.equality.equal"}, "type": {"literal": {"integer": "int32"}}}},
+                                                        "argument": {"variable": "c"}}},
+                                                    "argument": {"variable": "m"}}}}}}}}}}},
+                                "argument": {"literal": {"boolean": false}}}},
+                            "argument": {
+                              "list": [
+                                {"literal": {"integer": {"int32": 46}}},
+                                {"literal": {"integer": {"int32": 42}}},
+                                {"literal": {"integer": {"int32": 43}}},
+                                {"literal": {"integer": {"int32": 63}}},
+                                {"literal": {"integer": {"int32": 91}}},
+                                {"literal": {"integer": {"int32": 93}}},
+                                {"literal": {"integer": {"int32": 94}}},
+                                {"literal": {"integer": {"int32": 36}}},
+                                {"literal": {"integer": {"int32": 92}}}]}}},
+                        "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}}],
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"literal": "string"}}},
+                                "argument": {"variable": "isMeta"}}},
+                            "argument": {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "\\"}}}},
+                                "argument": {
+                                  "application": {"function": {"variable": "hydra.core.print.emacs.regex.printCodePoint"}, "argument": {"variable": "c"}}}}}}},
+                        "argument": {
+                          "application": {"function": {"variable": "hydra.core.print.emacs.regex.printCodePoint"}, "argument": {"variable": "c"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Render a literal code point in top-level context under Emacs regexp, escaping only the characters that are special bare in Emacs: . * + ? [ ] ^ $ \\. Note | ( ) { } are literal in Emacs and are NOT escaped here."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.emacs.regex.printCodePoint",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": {"integer": "int32"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "c",
+                "domain": {"literal": {"integer": "int32"}},
+                "body": {
+                  "application": {"function": {"variable": "hydra.core.lib.strings.fromList"}, "argument": {"list": [{"variable": "c"}]}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a single Unicode code point as a one-character string."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.emacs.regex.printRegex",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "r",
+                "domain": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}},
+                "body": {"application": {"function": {"variable": "hydra.core.print.emacs.regex.alternation"}, "argument": {"variable": "r"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Render a hydra.core.regex AST into GNU Emacs regexp syntax (escaped \\| \\( \\) \\{..\\}, . as [^z-a])."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.emacs.regex.quantified",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.regex.Quantified"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "qa",
+                "domain": {"variable": "hydra.core.regex.Quantified"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {"variable": "hydra.core.lib.strings.concat2"},
+                        "argument": {
+                          "application": {
+                            "function": {"variable": "hydra.core.print.emacs.regex.atom"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.core.regex.Quantified", "fieldName": "atom"}},
+                                "argument": {"variable": "qa"}}}}}}},
+                    "argument": {
+                      "application": {
+                        "function": {"variable": "hydra.core.print.emacs.regex.quantifier"},
+                        "argument": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.core.regex.Quantified", "fieldName": "quantifier"}},
+                            "argument": {"variable": "qa"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render an atom followed by its quantifier suffix."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.emacs.regex.quantifier",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.regex.Quantifier"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "q",
+                "domain": {"variable": "hydra.core.regex.Quantifier"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.regex.Quantifier",
+                        "cases": [
+                          {"name": "one", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": ""}}}}},
+                          {"name": "zeroOrOne", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "?"}}}}},
+                          {
+                            "name": "zeroOrMore",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "*"}}}}},
+                          {"name": "oneOrMore", "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "+"}}}}},
+                          {
+                            "name": "exactly",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "n",
+                                "domain": {"literal": {"integer": "int32"}},
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.core.lib.strings.concat"},
+                                    "argument": {
+                                      "list": [
+                                        {"literal": {"string": "\\{"}},
+                                        {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}},
+                                        {"literal": {"string": "\\}"}}]}}}}}},
+                          {
+                            "name": "atLeast",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "n",
+                                "domain": {"literal": {"integer": "int32"}},
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.core.lib.strings.concat"},
+                                    "argument": {
+                                      "list": [
+                                        {"literal": {"string": "\\{"}},
+                                        {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "n"}}},
+                                        {"literal": {"string": ",\\}"}}]}}}}}},
+                          {
+                            "name": "range",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "r",
+                                "domain": {"variable": "hydra.core.regex.QuantifierRange"},
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.core.lib.strings.concat"},
+                                    "argument": {
+                                      "list": [
+                                        {"literal": {"string": "\\{"}},
+                                        {
+                                          "application": {
+                                            "function": {"variable": "hydra.core.lib.literals.printInt32"},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"project": {"typeName": "hydra.core.regex.QuantifierRange", "fieldName": "min"}},
+                                                "argument": {"variable": "r"}}}}},
+                                        {"literal": {"string": ","}},
+                                        {
+                                          "application": {
+                                            "function": {"variable": "hydra.core.lib.literals.printInt32"},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"project": {"typeName": "hydra.core.regex.QuantifierRange", "fieldName": "max"}},
+                                                "argument": {"variable": "r"}}}}},
+                                        {"literal": {"string": "\\}"}}]}}}}}}]}},
+                    "argument": {"variable": "q"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a quantifier suffix; bounded {..} forms use Emacs's escaped braces \\{..\\}."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.emacs.regex.regexSequence",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.core.regex.Quantified"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "s",
+                "domain": {"list": {"variable": "hydra.core.regex.Quantified"}},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.core.lib.strings.concat"},
+                    "argument": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.core.regex.Quantified"}}},
+                                "type": {"literal": "string"}}},
+                            "argument": {"variable": "hydra.core.print.emacs.regex.quantified"}}},
+                        "argument": {"variable": "s"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Render a sequence of quantified atoms by concatenation."}}}]}}}}}]}

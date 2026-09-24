@@ -1,0 +1,89 @@
+{
+  "name": "hydra.core.encode.docs",
+  "metadata": {"description": "Term encoders for hydra.core.docs", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [{"module": "hydra.core.encode.packaging"}, {"module": "hydra.core.docs"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.core.encode.docs.docSegment",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.docs.DocSegment"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.model.Term"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "cases": {
+                "typeName": "hydra.core.docs.DocSegment",
+                "cases": [
+                  {
+                    "name": "ref",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "y",
+                        "domain": {"variable": "hydra.core.packaging.EntityReference"},
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.model.Term",
+                            "field": {
+                              "name": "inject",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Injection",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.docs.DocSegment"}}}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.model.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "ref"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {"function": {"variable": "hydra.core.encode.packaging.entityReference"}, "argument": {"variable": "y"}}}}]}}}]}}}}}}}},
+                  {
+                    "name": "text",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "y",
+                        "domain": {"literal": "string"},
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.model.Term",
+                            "field": {
+                              "name": "inject",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Injection",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.docs.DocSegment"}}}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.model.Field",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "text"}}}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "parameter": "x",
+                                                      "domain": {"literal": "string"},
+                                                      "body": {
+                                                        "inject": {
+                                                          "typeName": "hydra.core.model.Term",
+                                                          "field": {
+                                                            "name": "literal",
+                                                            "term": {"inject": {"typeName": "hydra.core.model.Literal", "field": {"name": "string", "term": {"variable": "x"}}}}}}}}},
+                                                  "argument": {"variable": "y"}}}}]}}}]}}}}}}}}]}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.core.docs.DocSegment"}}}]}}}}}]}

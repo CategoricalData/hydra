@@ -1,0 +1,446 @@
+{
+  "name": "hydra.core.test.testGraph",
+  "metadata": {"description": "A module defining the graph used in the test suite.", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.test.testTerms"},
+    {"module": "hydra.core.test.testTypes"},
+    {"module": "hydra.core.test.testEnv"},
+    {"module": "hydra.core.lexical"},
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.core.test.testGraph.testTerms",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {"type": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.model.Term"}}}}},
+        "body": {
+          "application": {
+            "function": {
+              "typeApplication": {
+                "body": {
+                  "typeApplication": {"body": {"variable": "hydra.core.lib.maps.fromList"}, "type": {"variable": "hydra.core.model.Name"}}},
+                "type": {"variable": "hydra.core.model.Term"}}},
+            "argument": {
+              "list": [
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "testDataArthur"}}}},
+                            "second": {"variable": "hydra.core.test.testTerms.testDataArthur"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Term"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.test.testGraph.testTypes",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {"type": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.model.Type"}}}}},
+        "body": {
+          "application": {
+            "function": {
+              "typeApplication": {
+                "body": {
+                  "typeApplication": {"body": {"variable": "hydra.core.lib.maps.fromList"}, "type": {"variable": "hydra.core.model.Name"}}},
+                "type": {"variable": "hydra.core.model.Type"}}},
+            "argument": {
+              "list": [
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.error.file.FileError"}}}},
+                            "second": {
+                              "inject": {
+                                "typeName": "hydra.core.model.Type",
+                                "field": {
+                                  "name": "union",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.model.FieldType",
+                                          "fields": [
+                                            {
+                                              "name": "name",
+                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "invalidPath"}}}}},
+                                            {
+                                              "name": "type",
+                                              "term": {
+                                                "inject": {
+                                                  "typeName": "hydra.core.model.Type",
+                                                  "field": {
+                                                    "name": "literal",
+                                                    "term": {"inject": {"typeName": "hydra.core.model.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}]}},
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.model.FieldType",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "notFound"}}}}},
+                                            {
+                                              "name": "type",
+                                              "term": {
+                                                "inject": {
+                                                  "typeName": "hydra.core.model.Type",
+                                                  "field": {
+                                                    "name": "variable",
+                                                    "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.file.FilePath"}}}}}}}}]}},
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.model.FieldType",
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "other"}}}}},
+                                            {
+                                              "name": "type",
+                                              "term": {
+                                                "inject": {
+                                                  "typeName": "hydra.core.model.Type",
+                                                  "field": {
+                                                    "name": "literal",
+                                                    "term": {"inject": {"typeName": "hydra.core.model.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}]}},
+                                      {
+                                        "record": {
+                                          "typeName": "hydra.core.model.FieldType",
+                                          "fields": [
+                                            {
+                                              "name": "name",
+                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "permissionDenied"}}}}},
+                                            {
+                                              "name": "type",
+                                              "term": {
+                                                "inject": {
+                                                  "typeName": "hydra.core.model.Type",
+                                                  "field": {
+                                                    "name": "variable",
+                                                    "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.file.FilePath"}}}}}}}}]}}]}}}}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.file.FilePath"}}}},
+                            "second": {
+                              "inject": {
+                                "typeName": "hydra.core.model.Type",
+                                "field": {
+                                  "name": "wrap",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.model.Type",
+                                      "field": {
+                                        "name": "literal",
+                                        "term": {"inject": {"typeName": "hydra.core.model.LiteralType", "field": {"name": "string", "term": "unit"}}}}}}}}}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeBuddyListAName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeBuddyListA"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeBuddyListBName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeBuddyListB"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeComparisonName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeComparison"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeEitherName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeEither"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeHydraLiteralTypeName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeHydraLiteralType"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeHydraTypeName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeHydraType"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeIntListName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeIntList"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeLatLonName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeLatLon"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeLatLonPolyName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeLatLonPoly"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeListName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeList"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeNumberName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeNumber"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypePersonName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypePerson"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypePersonOrSomethingName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypePersonOrSomething"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypePointName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypePoint"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypePolymorphicWrapperName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypePolymorphicWrapper"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeSimpleNumberName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeSimpleNumber"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeStringAliasName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeStringAlias"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeSymmetricTripleName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeSymmetricTriple"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeTimestampName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeTimestamp"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeTripleName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeTriple"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeUnionMonomorphicName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeUnionMonomorphic"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeUnionPolymorphicRecursiveName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeUnionPolymorphicRecursive"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeUnionPolymorphicRecursiveListWrappedName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeUnionPolymorphicRecursiveListWrapped"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}},
+                {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {
+                          "pair": {
+                            "first": {"variable": "hydra.core.test.testTypes.testTypeUnitName"},
+                            "second": {"variable": "hydra.core.test.testTypes.testTypeUnit"}}},
+                        "type": {"variable": "hydra.core.model.Name"}}},
+                    "type": {"variable": "hydra.core.model.Type"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.test.testGraph.testModuleName",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.packaging.ModuleName"}}},
+        "body": {"wrap": {"typeName": "hydra.core.packaging.ModuleName", "body": {"literal": {"string": "testGraph"}}}}}},
+    {
+      "term": {
+        "name": "hydra.core.test.testGraph.testSchemaModuleName",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.packaging.ModuleName"}}},
+        "body": {"wrap": {"typeName": "hydra.core.packaging.ModuleName", "body": {"literal": {"string": "testSchemaGraph"}}}}}},
+    {
+      "term": {
+        "name": "hydra.core.test.testGraph.testGraph",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.graph.Graph"}}},
+        "body": {
+          "application": {
+            "function": {
+              "application": {
+                "function": {
+                  "typeApplication": {
+                    "body": {
+                      "typeApplication": {
+                        "body": {"variable": "hydra.core.test.testEnv.testGraph"},
+                        "type": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.model.Type"}}}}},
+                    "type": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.model.Term"}}}}},
+                "argument": {"variable": "hydra.core.test.testGraph.testTypes"}}},
+            "argument": {"variable": "hydra.core.test.testGraph.testTerms"}}}}},
+    {
+      "term": {
+        "name": "hydra.core.test.testGraph.testContext",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.typing.InferenceContext"}}},
+        "body": {"variable": "hydra.core.test.testEnv.testContext"}}}]}

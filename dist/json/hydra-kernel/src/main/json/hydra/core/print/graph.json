@@ -1,0 +1,79 @@
+{
+  "name": "hydra.core.print.graph",
+  "metadata": {"description": "String representations of hydra.core.graph types", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.print.model"},
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.core.print.graph.graph",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.core.model.Binding"}}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "elements",
+                "domain": {"list": {"variable": "hydra.core.model.Binding"}},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "elementStrs",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.core.model.Binding"}}},
+                                    "type": {"literal": "string"}}},
+                                "argument": {"variable": "hydra.core.print.model.binding"}}},
+                            "argument": {"variable": "elements"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.core.lib.strings.concat"},
+                        "argument": {
+                          "list": [
+                            {"literal": {"string": "{"}},
+                            {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": ", "}}}},
+                                "argument": {"variable": "elementStrs"}}},
+                            {"literal": {"string": "}"}}]}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a list of bindings as a string"}}}]}}}}}]}

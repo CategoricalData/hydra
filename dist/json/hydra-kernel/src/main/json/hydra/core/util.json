@@ -1,0 +1,129 @@
+{
+  "name": "hydra.core.util",
+  "metadata": {"description": "General-purpose utility types used across Hydra.", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [{"module": "hydra.core.model"}, {"module": "hydra.core.packaging"}],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.core.util.CaseConvention",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "camel", "type": "unit"},
+                  {"name": "pascal", "type": "unit"},
+                  {"name": "lowerSnake", "type": "unit"},
+                  {"name": "upperSnake", "type": "unit"},
+                  {"name": "upperDashed", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A naming convention for symbols, such as camelCase or snake_case"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.util.Comparison",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [{"name": "lessThan", "type": "unit"}, {"name": "equalTo", "type": "unit"}, {"name": "greaterThan", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "An equality judgement: less than, equal to, or greater than"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.util.ModuleNames",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "forall": {
+                  "parameter": "n",
+                  "body": {
+                    "record": [
+                      {
+                        "name": "focus",
+                        "type": {
+                          "annotated": {
+                            "body": {"pair": {"first": {"variable": "hydra.core.packaging.ModuleName"}, "second": {"variable": "n"}}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {"literal": {"string": "The module name in focus, together with its associated value"}}}]}}}},
+                      {
+                        "name": "mapping",
+                        "type": {
+                          "annotated": {
+                            "body": {"map": {"keys": {"variable": "hydra.core.packaging.ModuleName"}, "values": {"variable": "n"}}},
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A mapping of module names to values"}}}]}}}}]}}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A mapping from module names to values of type n, with a focus on one module name"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.util.Precision",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "arbitrary",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Arbitrary precision"}}}]}}}},
+                  {
+                    "name": "bits",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int32"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Precision to a specified number of bits"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Numeric precision: arbitrary precision, or precision to a specified number of bits"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.util.QualifiedName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "moduleName",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.packaging.ModuleName"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The optional module name"}}}]}}}},
+                  {
+                    "name": "local",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The local name"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A qualified name consisting of an optional module name together with a mandatory local name"}}}]}}},
+          "constraints": []}}}]}

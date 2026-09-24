@@ -1,0 +1,157 @@
+{
+  "name": "hydra.core.dsl.docs",
+  "metadata": {"description": "DSL functions for hydra.core.docs", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.encode.docs"},
+    {"module": "hydra.core.decode.docs"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.dsl.packaging"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.core.dsl.docs.docSegmentDocSegment",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedName"}, "argument": {"variable": "hydra.core.docs.DocSegment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.docs.DocSegment"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.core.docs.DocSegment"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.docs.docSegmentRef",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"variable": "hydra.core.packaging.EntityReference"},
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An inline reference to a Hydra entity"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.docs.DocSegment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.EntityReference"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An inline reference to a Hydra entity"}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.docs.DocSegment"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.model.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "ref"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the ref variant of hydra.core.docs.DocSegment"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.docs.docSegmentText",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": "string"},
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "A raw prose fragment, passed through verbatim"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.docs.DocSegment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "A raw prose fragment, passed through verbatim"}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.docs.DocSegment"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.model.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "text"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the text variant of hydra.core.docs.DocSegment"}}}]}}}}}]}

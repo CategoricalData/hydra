@@ -1,0 +1,521 @@
+{
+  "name": "hydra.core.dsl.time",
+  "metadata": {"description": "DSL functions for hydra.core.time", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.encode.time"},
+    {"module": "hydra.core.decode.time"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.dsl.model"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.core.dsl.time.timespecTimespec",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedName"}, "argument": {"variable": "hydra.core.time.Timespec"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.time.Timespec"}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.core.time.Timespec"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.time.timespec",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": {"integer": "int64"}},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "Whole seconds since the Unix Epoch; signed, so instants in the far past or distant future are representable"}}}]}}}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": {"integer": "uint32"}},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {"string": "Nanoseconds within the second, in the range [0, 999999999]; unsigned, as the value is never negative"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.time.Timespec"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "seconds",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"literal": {"integer": "int64"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Whole seconds since the Unix Epoch; signed, so instants in the far past or distant future are representable"}}}]}}}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "nanoseconds",
+                    "domain": {
+                      "application": {
+                        "function": {"variable": "hydra.core.typed.TypedTerm"},
+                        "argument": {
+                          "annotated": {
+                            "body": {"literal": {"integer": "uint32"}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {"string": "Nanoseconds within the second, in the range [0, 999999999]; unsigned, as the value is never negative"}}}]}}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.core.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.model.Term",
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Record",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.time.Timespec"}}}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "seconds"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "seconds"}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "nanoseconds"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "nanoseconds"}}}}]}}]}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.core.time.Timespec"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.time.timespecSeconds",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.time.Timespec"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {
+                  "annotated": {
+                    "body": {"literal": {"integer": "int64"}},
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {
+                              "string": "Whole seconds since the Unix Epoch; signed, so instants in the far past or distant future are representable"}}}]}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.time.Timespec"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.model.Term",
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "typeName": "hydra.core.model.Projection",
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.time.Timespec"}}}}},
+                                              {
+                                                "name": "fieldName",
+                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "seconds"}}}}}]}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the seconds field of hydra.core.time.Timespec"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.time.timespecNanoseconds",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.time.Timespec"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {
+                  "annotated": {
+                    "body": {"literal": {"integer": "uint32"}},
+                    "annotation": {
+                      "map": [
+                        {
+                          "key": {"variable": "description"},
+                          "value": {
+                            "literal": {"string": "Nanoseconds within the second, in the range [0, 999999999]; unsigned, as the value is never negative"}}}]}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.time.Timespec"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.model.Term",
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "typeName": "hydra.core.model.Projection",
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.time.Timespec"}}}}},
+                                              {
+                                                "name": "fieldName",
+                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "nanoseconds"}}}}}]}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the nanoseconds field of hydra.core.time.Timespec"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.time.timespecWithSeconds",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.time.Timespec"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": {"integer": "int64"}},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "Whole seconds since the Unix Epoch; signed, so instants in the far past or distant future are representable"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.time.Timespec"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "original",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.time.Timespec"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "newVal",
+                    "domain": {
+                      "application": {
+                        "function": {"variable": "hydra.core.typed.TypedTerm"},
+                        "argument": {
+                          "annotated": {
+                            "body": {"literal": {"integer": "int64"}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {
+                                      "string": "Whole seconds since the Unix Epoch; signed, so instants in the far past or distant future are representable"}}}]}}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.core.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.model.Term",
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Record",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.time.Timespec"}}}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "seconds"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "nanoseconds"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.model.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.model.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.model.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.model.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.time.Timespec"}}}}},
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "nanoseconds"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}}]}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the seconds field of hydra.core.time.Timespec"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.time.timespecWithNanoseconds",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.time.Timespec"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": {"integer": "uint32"}},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {"string": "Nanoseconds within the second, in the range [0, 999999999]; unsigned, as the value is never negative"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.time.Timespec"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "original",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.time.Timespec"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "newVal",
+                    "domain": {
+                      "application": {
+                        "function": {"variable": "hydra.core.typed.TypedTerm"},
+                        "argument": {
+                          "annotated": {
+                            "body": {"literal": {"integer": "uint32"}},
+                            "annotation": {
+                              "map": [
+                                {
+                                  "key": {"variable": "description"},
+                                  "value": {
+                                    "literal": {"string": "Nanoseconds within the second, in the range [0, 999999999]; unsigned, as the value is never negative"}}}]}}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.core.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.model.Term",
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Record",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.time.Timespec"}}}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "seconds"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.model.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.model.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.model.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.model.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.time.Timespec"}}}}},
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "seconds"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "nanoseconds"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}}]}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the nanoseconds field of hydra.core.time.Timespec"}}}]}}}}}]}

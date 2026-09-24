@@ -2,750 +2,750 @@
   "name": "hydra.rust.operators",
   "metadata": {"description": "AST operators for Rust serialization", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
-    {"module": "hydra.serialization"},
-    {"module": "hydra.paths"},
-    {"module": "hydra.ast"},
-    {"module": "hydra.coders"},
-    {"module": "hydra.core"},
-    {"module": "hydra.diff"},
-    {"module": "hydra.docs"},
-    {"module": "hydra.error.checking"},
-    {"module": "hydra.error.core"},
-    {"module": "hydra.error.file"},
-    {"module": "hydra.error.packaging"},
-    {"module": "hydra.error.system"},
-    {"module": "hydra.errors"},
-    {"module": "hydra.file"},
-    {"module": "hydra.graph"},
-    {"module": "hydra.json.model"},
-    {"module": "hydra.markdown"},
-    {"module": "hydra.packaging"},
-    {"module": "hydra.parsing"},
-    {"module": "hydra.query"},
-    {"module": "hydra.regex"},
-    {"module": "hydra.relational"},
-    {"module": "hydra.system"},
-    {"module": "hydra.tabular"},
-    {"module": "hydra.testing"},
-    {"module": "hydra.time"},
-    {"module": "hydra.topology"},
-    {"module": "hydra.typed"},
-    {"module": "hydra.typing"},
-    {"module": "hydra.util"},
-    {"module": "hydra.validation"},
-    {"module": "hydra.variants"}],
+    {"module": "hydra.core.serialization"},
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
   "definitions": [
     {
       "term": {
         "name": "hydra.rust.operators.addAssignOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "+="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "+="}}}},
                     "argument": {"literal": {"integer": {"int32": 1}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Add-assign operator (+=)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.addOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "+"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "+"}}}},
                     "argument": {"literal": {"integer": {"int32": 10}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Addition operator (+)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.andOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "&&"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "&&"}}}},
                     "argument": {"literal": {"integer": {"int32": 4}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical AND operator (&&)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.appOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "record": {
-                "typeName": "hydra.ast.Op",
+                "typeName": "hydra.core.ast.Op",
                 "fields": [
-                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.ast.Symbol", "body": {"literal": {"string": ""}}}}},
+                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.core.ast.Symbol", "body": {"literal": {"string": ""}}}}},
                   {
                     "name": "padding",
                     "term": {
                       "record": {
-                        "typeName": "hydra.ast.Padding",
+                        "typeName": "hydra.core.ast.Padding",
                         "fields": [
-                          {"name": "left", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
-                          {"name": "right", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "space", "term": "unit"}}}}]}}},
+                          {"name": "left", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
+                          {"name": "right", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "space", "term": "unit"}}}}]}}},
                   {
                     "name": "precedence",
-                    "term": {"wrap": {"typeName": "hydra.ast.Precedence", "body": {"literal": {"integer": {"int32": 0}}}}}},
+                    "term": {"wrap": {"typeName": "hydra.core.ast.Precedence", "body": {"literal": {"integer": {"int32": 0}}}}}},
                   {
                     "name": "associativity",
-                    "term": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}]}},
+                    "term": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}]}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Function application operator (whitespace)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.arrowOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "->"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "->"}}}},
                     "argument": {"literal": {"integer": {"int32": 0}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Return type arrow (->)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.asOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "as"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "as"}}}},
                     "argument": {"literal": {"integer": {"int32": 12}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type cast operator (as)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.assignOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "="}}}},
                     "argument": {"literal": {"integer": {"int32": 1}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Assignment operator (=)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.bitAndAssignOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "&="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "&="}}}},
                     "argument": {"literal": {"integer": {"int32": 1}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Bitwise and-assign operator (&=)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.bitAndOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "&"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "&"}}}},
                     "argument": {"literal": {"integer": {"int32": 8}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Bitwise AND operator (&)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.bitOrAssignOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "|="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "|="}}}},
                     "argument": {"literal": {"integer": {"int32": 1}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Bitwise or-assign operator (|=)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.bitOrOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "|"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "|"}}}},
                     "argument": {"literal": {"integer": {"int32": 6}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Bitwise OR operator (|)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.bitXorAssignOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "^="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "^="}}}},
                     "argument": {"literal": {"integer": {"int32": 1}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Bitwise xor-assign operator (^=)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.bitXorOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "^"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "^"}}}},
                     "argument": {"literal": {"integer": {"int32": 7}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Bitwise XOR operator (^)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.colonColonOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": ":"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": ":"}}}},
                     "argument": {"literal": {"integer": {"int32": 0}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type annotation (::) for let statements"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.colonOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": ":"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": ":"}}}},
                     "argument": {"literal": {"integer": {"int32": 12}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type ascription operator (:)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.derefOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "record": {
-                "typeName": "hydra.ast.Op",
+                "typeName": "hydra.core.ast.Op",
                 "fields": [
-                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.ast.Symbol", "body": {"literal": {"string": "*"}}}}},
+                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.core.ast.Symbol", "body": {"literal": {"string": "*"}}}}},
                   {
                     "name": "padding",
                     "term": {
                       "record": {
-                        "typeName": "hydra.ast.Padding",
+                        "typeName": "hydra.core.ast.Padding",
                         "fields": [
-                          {"name": "left", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
-                          {"name": "right", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "none", "term": "unit"}}}}]}}},
+                          {"name": "left", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
+                          {"name": "right", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}}]}}},
                   {
                     "name": "precedence",
-                    "term": {"wrap": {"typeName": "hydra.ast.Precedence", "body": {"literal": {"integer": {"int32": 13}}}}}},
+                    "term": {"wrap": {"typeName": "hydra.core.ast.Precedence", "body": {"literal": {"integer": {"int32": 13}}}}}},
                   {
                     "name": "associativity",
-                    "term": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}]}},
+                    "term": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}]}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Dereference operator (*)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.divAssignOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "/="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "/="}}}},
                     "argument": {"literal": {"integer": {"int32": 1}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Div-assign operator (/=)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.divOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "/"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "/"}}}},
                     "argument": {"literal": {"integer": {"int32": 11}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Division operator (/)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.doubleColonOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "record": {
-                "typeName": "hydra.ast.Op",
+                "typeName": "hydra.core.ast.Op",
                 "fields": [
-                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.ast.Symbol", "body": {"literal": {"string": "::"}}}}},
+                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.core.ast.Symbol", "body": {"literal": {"string": "::"}}}}},
                   {
                     "name": "padding",
                     "term": {
                       "record": {
-                        "typeName": "hydra.ast.Padding",
+                        "typeName": "hydra.core.ast.Padding",
                         "fields": [
-                          {"name": "left", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
-                          {"name": "right", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "none", "term": "unit"}}}}]}}},
+                          {"name": "left", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
+                          {"name": "right", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}}]}}},
                   {
                     "name": "precedence",
-                    "term": {"wrap": {"typeName": "hydra.ast.Precedence", "body": {"literal": {"integer": {"int32": 15}}}}}},
+                    "term": {"wrap": {"typeName": "hydra.core.ast.Precedence", "body": {"literal": {"integer": {"int32": 15}}}}}},
                   {
                     "name": "associativity",
-                    "term": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}]}},
+                    "term": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}]}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Path separator (::)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.eqOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "=="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "=="}}}},
                     "argument": {"literal": {"integer": {"int32": 5}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Equality operator (==)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.fatArrowOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "=>"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "=>"}}}},
                     "argument": {"literal": {"integer": {"int32": 0}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Match arm arrow (=>)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.fieldOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "record": {
-                "typeName": "hydra.ast.Op",
+                "typeName": "hydra.core.ast.Op",
                 "fields": [
-                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.ast.Symbol", "body": {"literal": {"string": "."}}}}},
+                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.core.ast.Symbol", "body": {"literal": {"string": "."}}}}},
                   {
                     "name": "padding",
                     "term": {
                       "record": {
-                        "typeName": "hydra.ast.Padding",
+                        "typeName": "hydra.core.ast.Padding",
                         "fields": [
-                          {"name": "left", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
-                          {"name": "right", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "none", "term": "unit"}}}}]}}},
+                          {"name": "left", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
+                          {"name": "right", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}}]}}},
                   {
                     "name": "precedence",
-                    "term": {"wrap": {"typeName": "hydra.ast.Precedence", "body": {"literal": {"integer": {"int32": 14}}}}}},
+                    "term": {"wrap": {"typeName": "hydra.core.ast.Precedence", "body": {"literal": {"integer": {"int32": 14}}}}}},
                   {
                     "name": "associativity",
-                    "term": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}]}},
+                    "term": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}]}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Field access operator (.)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.geOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": ">="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": ">="}}}},
                     "argument": {"literal": {"integer": {"int32": 5}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Greater-than-or-equal operator (>=)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.gtOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": ">"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": ">"}}}},
                     "argument": {"literal": {"integer": {"int32": 5}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Greater-than operator (>)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.leOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "<="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "<="}}}},
                     "argument": {"literal": {"integer": {"int32": 5}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Less-than-or-equal operator (<=)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.ltOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "<"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "<"}}}},
                     "argument": {"literal": {"integer": {"int32": 5}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Less-than operator (<)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.methodOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "record": {
-                "typeName": "hydra.ast.Op",
+                "typeName": "hydra.core.ast.Op",
                 "fields": [
-                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.ast.Symbol", "body": {"literal": {"string": "."}}}}},
+                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.core.ast.Symbol", "body": {"literal": {"string": "."}}}}},
                   {
                     "name": "padding",
                     "term": {
                       "record": {
-                        "typeName": "hydra.ast.Padding",
+                        "typeName": "hydra.core.ast.Padding",
                         "fields": [
-                          {"name": "left", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
-                          {"name": "right", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "none", "term": "unit"}}}}]}}},
+                          {"name": "left", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
+                          {"name": "right", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}}]}}},
                   {
                     "name": "precedence",
-                    "term": {"wrap": {"typeName": "hydra.ast.Precedence", "body": {"literal": {"integer": {"int32": 14}}}}}},
+                    "term": {"wrap": {"typeName": "hydra.core.ast.Precedence", "body": {"literal": {"integer": {"int32": 14}}}}}},
                   {
                     "name": "associativity",
-                    "term": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}]}},
+                    "term": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}]}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Method call operator (.)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.mulAssignOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "*="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "*="}}}},
                     "argument": {"literal": {"integer": {"int32": 1}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Mul-assign operator (*=)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.mulOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "*"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "*"}}}},
                     "argument": {"literal": {"integer": {"int32": 11}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Multiplication operator (*)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.neOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "!="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "!="}}}},
                     "argument": {"literal": {"integer": {"int32": 5}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Not-equal operator (!=)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.negOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "record": {
-                "typeName": "hydra.ast.Op",
+                "typeName": "hydra.core.ast.Op",
                 "fields": [
-                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.ast.Symbol", "body": {"literal": {"string": "-"}}}}},
+                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.core.ast.Symbol", "body": {"literal": {"string": "-"}}}}},
                   {
                     "name": "padding",
                     "term": {
                       "record": {
-                        "typeName": "hydra.ast.Padding",
+                        "typeName": "hydra.core.ast.Padding",
                         "fields": [
-                          {"name": "left", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
-                          {"name": "right", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "none", "term": "unit"}}}}]}}},
+                          {"name": "left", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
+                          {"name": "right", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}}]}}},
                   {
                     "name": "precedence",
-                    "term": {"wrap": {"typeName": "hydra.ast.Precedence", "body": {"literal": {"integer": {"int32": 13}}}}}},
+                    "term": {"wrap": {"typeName": "hydra.core.ast.Precedence", "body": {"literal": {"integer": {"int32": 13}}}}}},
                   {
                     "name": "associativity",
-                    "term": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}]}},
+                    "term": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}]}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Unary negation operator (-)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.notOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "record": {
-                "typeName": "hydra.ast.Op",
+                "typeName": "hydra.core.ast.Op",
                 "fields": [
-                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.ast.Symbol", "body": {"literal": {"string": "!"}}}}},
+                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.core.ast.Symbol", "body": {"literal": {"string": "!"}}}}},
                   {
                     "name": "padding",
                     "term": {
                       "record": {
-                        "typeName": "hydra.ast.Padding",
+                        "typeName": "hydra.core.ast.Padding",
                         "fields": [
-                          {"name": "left", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
-                          {"name": "right", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "none", "term": "unit"}}}}]}}},
+                          {"name": "left", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
+                          {"name": "right", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}}]}}},
                   {
                     "name": "precedence",
-                    "term": {"wrap": {"typeName": "hydra.ast.Precedence", "body": {"literal": {"integer": {"int32": 13}}}}}},
+                    "term": {"wrap": {"typeName": "hydra.core.ast.Precedence", "body": {"literal": {"integer": {"int32": 13}}}}}},
                   {
                     "name": "associativity",
-                    "term": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}]}},
+                    "term": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}]}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Unary logical not operator (!)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.orOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "||"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "||"}}}},
                     "argument": {"literal": {"integer": {"int32": 3}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Logical OR operator (||)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.rangeInclusiveOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "..="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "..="}}}},
                     "argument": {"literal": {"integer": {"int32": 2}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Inclusive range operator (..=)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.rangeOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": ".."}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": ".."}}}},
                     "argument": {"literal": {"integer": {"int32": 2}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Range operator (..)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.refOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "record": {
-                "typeName": "hydra.ast.Op",
+                "typeName": "hydra.core.ast.Op",
                 "fields": [
-                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.ast.Symbol", "body": {"literal": {"string": "&"}}}}},
+                  {"name": "symbol", "term": {"wrap": {"typeName": "hydra.core.ast.Symbol", "body": {"literal": {"string": "&"}}}}},
                   {
                     "name": "padding",
                     "term": {
                       "record": {
-                        "typeName": "hydra.ast.Padding",
+                        "typeName": "hydra.core.ast.Padding",
                         "fields": [
-                          {"name": "left", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
-                          {"name": "right", "term": {"inject": {"typeName": "hydra.ast.Ws", "field": {"name": "none", "term": "unit"}}}}]}}},
+                          {"name": "left", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
+                          {"name": "right", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}}]}}},
                   {
                     "name": "precedence",
-                    "term": {"wrap": {"typeName": "hydra.ast.Precedence", "body": {"literal": {"integer": {"int32": 13}}}}}},
+                    "term": {"wrap": {"typeName": "hydra.core.ast.Precedence", "body": {"literal": {"integer": {"int32": 13}}}}}},
                   {
                     "name": "associativity",
-                    "term": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}]}},
+                    "term": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}]}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Reference operator (&)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.remAssignOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "%="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "%="}}}},
                     "argument": {"literal": {"integer": {"int32": 1}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Rem-assign operator (%=)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.remOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "%"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "%"}}}},
                     "argument": {"literal": {"integer": {"int32": 11}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Remainder operator (%)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.shlAssignOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "<<="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "<<="}}}},
                     "argument": {"literal": {"integer": {"int32": 1}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Shift-left assign operator (<<=)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.shlOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "<<"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "<<"}}}},
                     "argument": {"literal": {"integer": {"int32": 9}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Shift-left operator (<<)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.shrAssignOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": ">>="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": ">>="}}}},
                     "argument": {"literal": {"integer": {"int32": 1}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Shift-right assign operator (>>=)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.shrOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": ">>"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": ">>"}}}},
                     "argument": {"literal": {"integer": {"int32": 9}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Shift-right operator (>>)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.subAssignOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "-="}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "-="}}}},
                     "argument": {"literal": {"integer": {"int32": 1}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "right", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Sub-assign operator (-=)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.operators.subOp",
-        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.ast.Op"}}},
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.ast.Op"}}},
         "body": {
           "annotated": {
             "body": {
               "application": {
                 "function": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.serialization.op"}, "argument": {"literal": {"string": "-"}}}},
+                    "function": {"application": {"function": {"variable": "hydra.core.serialization.op"}, "argument": {"literal": {"string": "-"}}}},
                     "argument": {"literal": {"integer": {"int32": 10}}}}},
-                "argument": {"inject": {"typeName": "hydra.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
+                "argument": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "left", "term": "unit"}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Subtraction operator (-)"}}}]}}}}}]}

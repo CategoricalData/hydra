@@ -1,0 +1,372 @@
+{
+  "name": "hydra.core.dsl.error.file",
+  "metadata": {"description": "DSL functions for hydra.core.error.file", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.encode.error.file"},
+    {"module": "hydra.core.decode.error.file"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.dsl.file"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.core.dsl.error.file.fileErrorFileError",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedName"}, "argument": {"variable": "hydra.core.error.file.FileError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.error.file.FileError"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.core.error.file.FileError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.error.file.fileErrorAlreadyExists",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"variable": "hydra.core.file.FilePath"},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {
+                              "literal": {
+                                "string": "A path already exists where one was required not to (POSIX EEXIST), e.g. creating a directory that is already present"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.error.file.FileError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.file.FilePath"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A path already exists where one was required not to (POSIX EEXIST), e.g. creating a directory that is already present"}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.error.file.FileError"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.model.Field",
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "alreadyExists"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the alreadyExists variant of hydra.core.error.file.FileError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.error.file.fileErrorInvalidPath",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": "string"},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "The path is syntactically invalid or cannot be represented by the host file system"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.error.file.FileError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The path is syntactically invalid or cannot be represented by the host file system"}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.error.file.FileError"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.model.Field",
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "invalidPath"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the invalidPath variant of hydra.core.error.file.FileError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.error.file.fileErrorNotFound",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"variable": "hydra.core.file.FilePath"},
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The requested path does not exist"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.error.file.FileError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.file.FilePath"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The requested path does not exist"}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.error.file.FileError"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.model.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "notFound"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the notFound variant of hydra.core.error.file.FileError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.error.file.fileErrorOther",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": "string"},
+                      "annotation": {
+                        "map": [
+                          {
+                            "key": {"variable": "description"},
+                            "value": {"literal": {"string": "Any other file-system error, represented as a host-provided message"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.error.file.FileError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Any other file-system error, represented as a host-provided message"}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.error.file.FileError"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.model.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "other"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the other variant of hydra.core.error.file.FileError"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.dsl.error.file.fileErrorPermissionDenied",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"variable": "hydra.core.file.FilePath"},
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The host denied access to the requested path"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.error.file.FileError"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.file.FilePath"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The host denied access to the requested path"}}}]}}}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.error.file.FileError"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.model.Field",
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "permissionDenied"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the permissionDenied variant of hydra.core.error.file.FileError"}}}]}}}}}]}

@@ -1,0 +1,372 @@
+{
+  "name": "hydra.core.arity",
+  "metadata": {"description": "Functions dealing with arguments and arity.", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.core.arity.primitiveArity",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.graph.Primitive"}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "int32"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "prim",
+                "domain": {"variable": "hydra.core.graph.Primitive"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "typeApplication": {"body": {"variable": "hydra.core.lib.lists.length"}, "type": {"variable": "hydra.core.typing.Parameter"}}},
+                    "argument": {
+                      "application": {
+                        "function": {"project": {"typeName": "hydra.core.typing.TermSignature", "fieldName": "parameters"}},
+                        "argument": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.core.packaging.PrimitiveDefinition", "fieldName": "signature"}},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.core.graph.Primitive", "fieldName": "definition"}},
+                                "argument": {"variable": "prim"}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the arity (expected number of arguments) of a primitive constant or function"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.arity.termArity",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.model.Term"}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "int32"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "cases": {
+                "typeName": "hydra.core.model.Term",
+                "default": {"literal": {"integer": {"int32": 0}}},
+                "cases": [
+                  {
+                    "name": "application",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "arg_",
+                        "domain": {"variable": "hydra.core.model.Application"},
+                        "body": {
+                          "application": {
+                            "function": {
+                              "lambda": {
+                                "parameter": "arg_",
+                                "domain": {"variable": "hydra.core.model.Term"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "lambda": {
+                                        "parameter": "xapp",
+                                        "domain": {"literal": {"integer": "int32"}},
+                                        "body": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.sub"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "argument": {"variable": "xapp"}}},
+                                            "argument": {"literal": {"integer": {"int32": 1}}}}}}},
+                                    "argument": {"application": {"function": {"variable": "hydra.core.arity.termArity"}, "argument": {"variable": "arg_"}}}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.core.model.Application", "fieldName": "function"}},
+                                "argument": {"variable": "arg_"}}}}}}}},
+                  {
+                    "name": "cases",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "_",
+                        "domain": {"variable": "hydra.core.model.CaseStatement"},
+                        "body": {"literal": {"integer": {"int32": 1}}}}}},
+                  {
+                    "name": "lambda",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "arg_",
+                        "domain": {"variable": "hydra.core.model.Lambda"},
+                        "body": {
+                          "application": {
+                            "function": {
+                              "lambda": {
+                                "parameter": "i",
+                                "domain": {"literal": {"integer": "int32"}},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                        "argument": {"literal": {"integer": {"int32": 1}}}}},
+                                    "argument": {"variable": "i"}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "lambda": {
+                                    "parameter": "arg_",
+                                    "domain": {"variable": "hydra.core.model.Lambda"},
+                                    "body": {
+                                      "application": {
+                                        "function": {"variable": "hydra.core.arity.termArity"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.model.Lambda", "fieldName": "body"}},
+                                            "argument": {"variable": "arg_"}}}}}}},
+                                "argument": {"variable": "arg_"}}}}}}}},
+                  {
+                    "name": "project",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "_",
+                        "domain": {"variable": "hydra.core.model.Projection"},
+                        "body": {"literal": {"integer": {"int32": 1}}}}}},
+                  {
+                    "name": "unwrap",
+                    "handler": {
+                      "lambda": {"parameter": "_", "domain": {"variable": "hydra.core.model.Name"}, "body": {"literal": {"integer": {"int32": 1}}}}}}]}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the arity (expected number of arguments) of a term"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.arity.typeArity",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.model.Type"}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "int32"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "cases": {
+                "typeName": "hydra.core.model.Type",
+                "default": {"literal": {"integer": {"int32": 0}}},
+                "cases": [
+                  {
+                    "name": "annotated",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "arg_",
+                        "domain": {"variable": "hydra.core.model.AnnotatedType"},
+                        "body": {
+                          "application": {
+                            "function": {"variable": "hydra.core.arity.typeArity"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.core.model.AnnotatedType", "fieldName": "body"}},
+                                "argument": {"variable": "arg_"}}}}}}}},
+                  {
+                    "name": "application",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "arg_",
+                        "domain": {"variable": "hydra.core.model.ApplicationType"},
+                        "body": {
+                          "application": {
+                            "function": {"variable": "hydra.core.arity.typeArity"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.core.model.ApplicationType", "fieldName": "function"}},
+                                "argument": {"variable": "arg_"}}}}}}}},
+                  {
+                    "name": "forall",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "arg_",
+                        "domain": {"variable": "hydra.core.model.ForallType"},
+                        "body": {
+                          "application": {
+                            "function": {"variable": "hydra.core.arity.typeArity"},
+                            "argument": {
+                              "application": {
+                                "function": {"project": {"typeName": "hydra.core.model.ForallType", "fieldName": "body"}},
+                                "argument": {"variable": "arg_"}}}}}}}},
+                  {
+                    "name": "function",
+                    "handler": {
+                      "lambda": {
+                        "parameter": "f",
+                        "domain": {"variable": "hydra.core.model.FunctionType"},
+                        "body": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                "argument": {"literal": {"integer": {"int32": 1}}}}},
+                            "argument": {
+                              "application": {
+                                "function": {
+                                  "lambda": {
+                                    "parameter": "arg_",
+                                    "domain": {"variable": "hydra.core.model.FunctionType"},
+                                    "body": {
+                                      "application": {
+                                        "function": {"variable": "hydra.core.arity.typeArity"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.model.FunctionType", "fieldName": "codomain"}},
+                                            "argument": {"variable": "arg_"}}}}}}},
+                                "argument": {"variable": "f"}}}}}}}}]}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the arity (expected number of arguments) of a type"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.arity.typeSchemeArity",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.model.TypeScheme"}, "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "int32"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "arg_",
+                "domain": {"variable": "hydra.core.model.TypeScheme"},
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.core.arity.typeArity"},
+                    "argument": {
+                      "application": {
+                        "function": {"project": {"typeName": "hydra.core.model.TypeScheme", "fieldName": "body"}},
+                        "argument": {"variable": "arg_"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Find the arity (expected number of arguments) of a type scheme"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.arity.uncurryType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.model.Type"}, "isLazy": false}],
+          "result": {"type": {"list": {"variable": "hydra.core.model.Type"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "t",
+                "domain": {"variable": "hydra.core.model.Type"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.model.Type",
+                        "default": {"list": [{"variable": "t"}]},
+                        "cases": [
+                          {
+                            "name": "annotated",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "arg_",
+                                "domain": {"variable": "hydra.core.model.AnnotatedType"},
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.core.arity.uncurryType"},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"project": {"typeName": "hydra.core.model.AnnotatedType", "fieldName": "body"}},
+                                        "argument": {"variable": "arg_"}}}}}}}},
+                          {
+                            "name": "application",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "arg_",
+                                "domain": {"variable": "hydra.core.model.ApplicationType"},
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.core.arity.uncurryType"},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"project": {"typeName": "hydra.core.model.ApplicationType", "fieldName": "function"}},
+                                        "argument": {"variable": "arg_"}}}}}}}},
+                          {
+                            "name": "forall",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "arg_",
+                                "domain": {"variable": "hydra.core.model.ForallType"},
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.core.arity.uncurryType"},
+                                    "argument": {
+                                      "application": {
+                                        "function": {"project": {"typeName": "hydra.core.model.ForallType", "fieldName": "body"}},
+                                        "argument": {"variable": "arg_"}}}}}}}},
+                          {
+                            "name": "function",
+                            "handler": {
+                              "lambda": {
+                                "parameter": "ft",
+                                "domain": {"variable": "hydra.core.model.FunctionType"},
+                                "body": {
+                                  "application": {
+                                    "function": {
+                                      "application": {
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.cons"}, "type": {"variable": "hydra.core.model.Type"}}},
+                                        "argument": {
+                                          "application": {
+                                            "function": {"project": {"typeName": "hydra.core.model.FunctionType", "fieldName": "domain"}},
+                                            "argument": {"variable": "ft"}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "lambda": {
+                                            "parameter": "arg_",
+                                            "domain": {"variable": "hydra.core.model.FunctionType"},
+                                            "body": {
+                                              "application": {
+                                                "function": {"variable": "hydra.core.arity.uncurryType"},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"project": {"typeName": "hydra.core.model.FunctionType", "fieldName": "codomain"}},
+                                                    "argument": {"variable": "arg_"}}}}}}},
+                                        "argument": {"variable": "ft"}}}}}}}}]}},
+                    "argument": {"variable": "t"}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {"string": "Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)"}}}]}}}}}]}

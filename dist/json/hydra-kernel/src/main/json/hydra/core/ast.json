@@ -1,0 +1,391 @@
+{
+  "name": "hydra.core.ast",
+  "metadata": {
+    "description": "A model which provides a common syntax tree for Hydra serializers",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
+  "dependencies": [{"module": "hydra.core.model"}],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.core.ast.Associativity",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "none", "type": "unit"},
+                  {"name": "left", "type": "unit"},
+                  {"name": "right", "type": "unit"},
+                  {"name": "both", "type": "unit"}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Operator associativity"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.ast.BlockStyle",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "indent",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An optional indentation string"}}}]}}}},
+                  {
+                    "name": "newlineBeforeContent",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether to place a newline before the content"}}}]}}}},
+                  {
+                    "name": "newlineAfterContent",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Whether to place a newline after the content"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Formatting option for code blocks"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.ast.BracketExpr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "brackets",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Brackets"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The bracket pair enclosing the expression"}}}]}}}},
+                  {
+                    "name": "enclosed",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Expr"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The expression within the brackets"}}}]}}}},
+                  {
+                    "name": "style",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.BlockStyle"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The formatting style for the bracketed block"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An expression enclosed by brackets"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.ast.Brackets",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "open",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Symbol"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The opening bracket symbol"}}}]}}}},
+                  {
+                    "name": "close",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Symbol"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The closing bracket symbol"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Matching open and close bracket symbols"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.ast.Expr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "const",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Symbol"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A constant symbol"}}}]}}}},
+                  {
+                    "name": "indent",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.IndentedExpression"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An indented expression"}}}]}}}},
+                  {
+                    "name": "op",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.OpExpr"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An operator expression"}}}]}}}},
+                  {
+                    "name": "brackets",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.BracketExpr"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A bracketed expression"}}}]}}}},
+                  {
+                    "name": "seq",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.SeqExpr"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A sequence of expressions joined by a separator, treated as structural layout (not subject to parenthesization)"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An abstract expression"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.ast.IndentStyle",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "allLines",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Indent all lines with the given string"}}}]}}}},
+                  {
+                    "name": "subsequentLines",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Indent only lines after the first with the given string"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Any of several indentation styles"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.ast.IndentedExpression",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "style",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.IndentStyle"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The indentation style"}}}]}}}},
+                  {
+                    "name": "expr",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Expr"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The expression to be indented"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An expression indented in a certain style"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.ast.Op",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "symbol",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Symbol"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The operator symbol"}}}]}}}},
+                  {
+                    "name": "padding",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Padding"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The padding around the operator"}}}]}}}},
+                  {
+                    "name": "precedence",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Precedence"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The precedence of the operator"}}}]}}}},
+                  {
+                    "name": "associativity",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Associativity"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The associativity of the operator"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An operator symbol"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.ast.OpExpr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "op",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Op"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The operator"}}}]}}}},
+                  {
+                    "name": "lhs",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Expr"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The left-hand side operand"}}}]}}}},
+                  {
+                    "name": "rhs",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Expr"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The right-hand side operand"}}}]}}}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An operator expression"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.ast.Padding",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "left",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Ws"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Padding to the left of the operator"}}}]}}}},
+                  {
+                    "name": "right",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Ws"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Padding to the right of the operator"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Left and right padding for an operator"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.ast.Precedence",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": {"integer": "int32"}}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Operator precedence"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.ast.SeqExpr",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "op",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.ast.Op"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The separator operator"}}}]}}}},
+                  {
+                    "name": "elements",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.ast.Expr"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The expressions to join"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A sequence of expressions joined by a separator operator. Unlike OpExpr, parenthesize ignores SeqExpr boundaries."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.ast.Symbol",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Any symbol"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.ast.Ws",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "none",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "No whitespace"}}}]}}}},
+                  {
+                    "name": "space",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A single space"}}}]}}}},
+                  {
+                    "name": "break",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A line break"}}}]}}}},
+                  {
+                    "name": "breakAndIndent",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A line break followed by indentation"}}}]}}}},
+                  {
+                    "name": "doubleBreak",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Two line breaks"}}}]}}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "One of several classes of whitespace"}}}]}}},
+          "constraints": []}}}]}

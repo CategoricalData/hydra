@@ -5,12 +5,12 @@
     "comments": [],
     "seeAlso": [],
     "provisions": []},
-  "dependencies": [{"module": "hydra.packaging"}],
+  "dependencies": [{"module": "hydra.core.packaging"}],
   "definitions": [
     {
       "type": {
         "name": "hydra.python.pyproject.PyProjectBuildConfiguration",
         "body": {
           "variables": [],
-          "body": {"record": [{"name": "dependencies", "type": {"list": {"variable": "hydra.packaging.PackageDependency"}}}]},
+          "body": {"record": [{"name": "dependencies", "type": {"list": {"variable": "hydra.core.packaging.PackageDependency"}}}]},
           "constraints": []}}}]}

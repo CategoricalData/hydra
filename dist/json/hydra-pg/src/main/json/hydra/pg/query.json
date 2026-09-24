@@ -5,7 +5,7 @@
     "comments": [],
     "seeAlso": [],
     "provisions": []},
-  "dependencies": [{"module": "hydra.pg.model"}, {"module": "hydra.core"}],
+  "dependencies": [{"module": "hydra.pg.model"}, {"module": "hydra.core.model"}],
   "definitions": [
     {
       "type": {

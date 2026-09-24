@@ -1,0 +1,863 @@
+{
+  "name": "hydra.core.packaging",
+  "metadata": {
+    "description": "A model for Hydra module names, modules, and packages",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
+  "dependencies": [{"module": "hydra.core.model"}, {"module": "hydra.core.typing"}],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.core.packaging.Definition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "primitive",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.PrimitiveDefinition"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A primitive definition"}}}]}}}},
+                  {
+                    "name": "term",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.TermDefinition"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A term definition"}}}]}}}},
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.TypeDefinition"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A type definition"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A definition, which may be either a term, type, or primitive definition"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.DefinitionReference",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "primitive",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Name"},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a primitive definition, by name"}}}]}}}},
+                  {
+                    "name": "term",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Name"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a term definition, by name"}}}]}}}},
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Name"},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a type definition, by name"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A typed reference to a definition: a type, a term, or a primitive, identified by name"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.DependencyScope",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "api",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A dependency exported transitively to consumers of this package (e.g. Gradle `api`, Cabal `build-depends`): present at both compile time and runtime, and visible downstream"}}}]}}}},
+                  {
+                    "name": "runtime",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A dependency required at runtime but not at compile time"}}}]}}}},
+                  {
+                    "name": "test",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A dependency required only to compile and run the package's tests"}}}]}}}},
+                  {
+                    "name": "tool",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A build-tool-only dependency, used to generate or process sources at build time but not present in the compiled artifact (e.g. an ANTLR tool jar or an annotation processor)"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "The scope in which a package dependency is required. Relevant mainly to dependencies on third-party (non-Hydra) artifacts, where build systems distinguish compile-time, runtime, test-only, and build-tool-only dependencies. Hydra inter-package dependencies normally leave the scope unspecified."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.EntityMetadata",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "description",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": "string"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "An optional, concise one-line human-readable summary of the entity."}}}]}}}},
+                  {
+                    "name": "comments",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"literal": "string"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and references that would otherwise be repeated across the entity's constituents."}}}]}}}},
+                  {
+                    "name": "seeAlso",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.packaging.EntityReference"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Typed cross-references to related entities, for navigation and documentation."}}}]}}}},
+                  {
+                    "name": "lifecycle",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.packaging.LifecycleInfo"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Optional version-lifecycle milestones for the entity."}}}]}}}},
+                  {
+                    "name": "provisions",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.packaging.Provision"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "Named normative provisions (requirements and recommendations) concerning this entity. Empty when the entity states none."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "Documentation, lifecycle, and normative metadata attachable to a packaging entity (package, module, or definition). Bundling these fields in one type lets future metadata be added without changing the field shape of the entities that carry it."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.EntityReference",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "definition",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.DefinitionReference"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A reference to a definition (type, term, or primitive), by name"}}}]}}}},
+                  {
+                    "name": "module",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.ModuleName"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a module, by name"}}}]}}}},
+                  {
+                    "name": "package",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.PackageName"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A reference to a package, by name"}}}]}}}},
+                  {
+                    "name": "termExpr",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "An inline term expression in Hydra textual syntax"}}}]}}}},
+                  {
+                    "name": "typeExpr",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "An inline type expression in Hydra textual syntax"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A typed reference to a Hydra entity: a package, a module, a definition (by name), or an inline type or term expression in Hydra textual syntax."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.LifecycleInfo",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "availableSince",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.packaging.Version"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The version in which the entity was introduced, if known."}}}]}}}},
+                  {
+                    "name": "deprecatedSince",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.packaging.Version"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The version in which the entity was deprecated, if applicable."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "Version-lifecycle milestones for a packaging entity. Each milestone is independently optional; further milestones (e.g. stableSince, removedSince) may be added without changing dependent types."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.Module",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.ModuleName"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the module, which is also the common prefix for all element names in the module"}}}]}}}},
+                  {
+                    "name": "metadata",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.packaging.EntityMetadata"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the module"}}}]}}}},
+                  {
+                    "name": "dependencies",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.packaging.ModuleDependency"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Any modules which this module directly depends on"}}}]}}}},
+                  {
+                    "name": "definitions",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.packaging.Definition"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The definitions in this module"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A logical collection of elements sharing a common module name, having dependencies on zero or more other modules"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.ModuleDependency",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "module",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.ModuleName"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the depended-on module"}}}]}}}},
+                  {
+                    "name": "package",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.packaging.PackageName"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A dependency on another module, identified by its name and (optionally) the package which provides it. When the package is omitted, the resolver searches all packages in scope; a duplicate module name across packages is a resolution error which can be disambiguated by naming the intended package explicitly."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.ModuleName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The unique name of a module; a prefix for the names of elements defined in the module."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.Package",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.PackageName"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the package"}}}]}}}},
+                  {
+                    "name": "metadata",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.packaging.EntityMetadata"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the package"}}}]}}}},
+                  {
+                    "name": "dependencies",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.packaging.PackageDependency"}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The packages which this package depends on"}}}]}}}},
+                  {
+                    "name": "modules",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.packaging.Module"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The modules in this package"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A package, which is a named collection of modules with metadata and dependencies"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.PackageDependency",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.PackageName"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the depended-on package"}}}]}}}},
+                  {
+                    "name": "version",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.VersionSpecifier"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The version-range constraint on the depended-on package"}}}]}}}},
+                  {
+                    "name": "scope",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.packaging.DependencyScope"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The scope in which the dependency is required, if specified. Normally absent for Hydra inter-package dependencies; specified for third-party dependencies whose build scope (compile/runtime/test/tool) is significant."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {"string": "A dependency on another package, identified by name and constrained by an optional version specifier"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.PackageName",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\". For dependencies on third-party artifacts in ecosystems with a group/namespace component (notably Maven), the group and artifact are carried in a single name separated by a colon, e.g. \"org.eclipse.rdf4j:rdf4j-rio-ntriples\"; the consuming host splits on the colon to recover the group when emitting build configuration. Hydra package names contain no colon."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.PrimitiveDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Name"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the primitive"}}}]}}}},
+                  {
+                    "name": "metadata",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.packaging.EntityMetadata"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the primitive."}}}]}}}},
+                  {
+                    "name": "signature",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.typing.TermSignature"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The signature of the primitive. Always explicit, never inferred."}}}]}}}},
+                  {
+                    "name": "isPure",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "Whether the primitive is pure (referentially transparent, no observable side effects). Normally true."}}}]}}}},
+                  {
+                    "name": "isTotal",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "Whether the primitive is total (terminates on every input of its declared type). Normally true."}}}]}}}},
+                  {
+                    "name": "defaultImplementation",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.model.Term"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A primitive definition: the universal, host-independent declarative metadata for a primitive, including name, signature, documentation and lifecycle metadata, totality and purity flags, and an optional default implementation expressed as a Hydra term."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.Provision",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Name"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The fully-qualified name of the provision: the enclosing entity's name extended by one segment (e.g. hydra.core.lib.lists.concat.emptyLists). Composed at definition time by a helper that prefixes the entity's name, exactly as a definition's name is composed from its module's name -- so the author writes only the final segment, but the stored value is the full name."}}}]}}}},
+                  {
+                    "name": "kind",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.ProvisionKind"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Whether this provision is a requirement or a recommendation."}}}]}}}},
+                  {
+                    "name": "statement",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "string"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The normative statement itself, as markdown prose: the falsifiable claim."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A named normative statement concerning an entity: a single falsifiable condition a conforming implementation is measured against. Tests reference provisions by name."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.ProvisionKind",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "requirement",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A requirement: no deviation is permitted if conformance is to be claimed (MUST)."}}}]}}}},
+                  {
+                    "name": "recommendation",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A recommendation: observed strictly by the Hydra kernel and codebase, but a downstream project may opt out (SHOULD)."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "Whether a provision is a requirement (a MUST: no deviation permitted for conformance) or a recommendation (a SHOULD: observed by the Hydra kernel, but a downstream project may opt out)."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.TermDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Name"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the term"}}}]}}}},
+                  {
+                    "name": "metadata",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.packaging.EntityMetadata"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the term definition"}}}]}}}},
+                  {
+                    "name": "signature",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.typing.TermSignature"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The optional signature of the term. When absent, the signature has yet to be inferred."}}}]}}}},
+                  {
+                    "name": "body",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Term"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The term being defined"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A term-level definition, including a name, an optional signature, and a term"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.TypeDefinition",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Name"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the type"}}}]}}}},
+                  {
+                    "name": "metadata",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.packaging.EntityMetadata"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Optional documentation and lifecycle metadata for the type definition"}}}]}}}},
+                  {
+                    "name": "body",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.TypeScheme"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The type scheme being defined"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A type-level definition, including a name and the type scheme"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.Version",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"wrap": {"literal": "string"}},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "A version string, e.g. \"0.15\" or \"1.0.0\"."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.VersionRange",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "lowerInclusive",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.packaging.Version"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The inclusive lower bound, if any (the minimum acceptable version)."}}}]}}}},
+                  {
+                    "name": "upperExclusive",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.packaging.Version"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The exclusive upper bound, if any (versions strictly below this are acceptable)."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A version range with an optional inclusive lower bound and an optional exclusive upper bound."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.packaging.VersionSpecifier",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "any",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Any version satisfies the dependency"}}}]}}}},
+                  {
+                    "name": "exact",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.Version"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Exactly the given version satisfies the dependency; used to pin a specific release"}}}]}}}},
+                  {
+                    "name": "atLeast",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.Version"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Any version greater than or equal to the given version (e.g. PyPI \">=7.0\")"}}}]}}}},
+                  {
+                    "name": "range",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.packaging.VersionRange"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A version range with an optional inclusive lower bound and optional exclusive upper bound (e.g. \">=3.7,<4.0\")"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A specifier constraining acceptable versions of a dependency. Build systems render each variant into their own syntax (e.g. a range becomes \">=3.7,<4.0\" for PyPI or \"[3.7,4.0)\" for Maven). Further variants such as `caret` may be added without breaking consumers of the existing forms."}}}]}}},
+          "constraints": []}}}]}

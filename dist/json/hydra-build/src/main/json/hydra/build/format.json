@@ -1,11 +1,11 @@
 {
   "name": "hydra.build.format",
   "metadata": {
-    "description": "Type-level specifications of the JSON formats used by Hydra's build system: the repository descriptor (hydra.json), per-package descriptors (package.json), per-source-set input and output digests (digest.json), generated-source manifests (manifest.json), and per-package validation configuration. Each on-disk file is the canonical JSON encoding of the corresponding type. Overlay build configuration (overlay/<lang>/<pkg>/build.json) is specified separately, by hydra.gradle and hydra.python.pyproject. See https://github.com/CategoricalData/hydra/issues/512",
+    "description": "Type-level specifications of the JSON formats used by Hydra's build system: the repository descriptor (hydra.json), per-package descriptors (package.json), per-source-set input and output digests (digest.json), generated-source manifests (manifest.json), and per-package validation configuration. Each on-disk file is the canonical JSON encoding of the corresponding type. Overlay build configuration (overlay/<lang>/<pkg>/build.json) is specified separately, by hydra.java.gradle and hydra.python.pyproject. See https://github.com/CategoricalData/hydra/issues/512",
     "comments": [],
     "seeAlso": [],
     "provisions": []},
-  "dependencies": [{"module": "hydra.packaging"}],
+  "dependencies": [{"module": "hydra.core.packaging"}],
   "definitions": [
     {
       "type": {
@@ -266,7 +266,7 @@
                     "name": "hydraVersion",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"variable": "hydra.packaging.Version"}},
+                        "body": {"optional": {"variable": "hydra.core.packaging.Version"}},
                         "annotation": {
                           "map": [
                             {
@@ -355,7 +355,7 @@
                     "name": "version",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.packaging.Version"},
+                        "body": {"variable": "hydra.core.packaging.Version"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Pin the host to a specific published version"}}}]}}}}]},
               "annotation": {
@@ -406,7 +406,8 @@
                     "name": "dependencyHashes",
                     "type": {
                       "annotated": {
-                        "body": {"map": {"keys": {"variable": "hydra.packaging.PackageName"}, "values": {"variable": "hydra.build.format.Sha256Hash"}}},
+                        "body": {
+                          "map": {"keys": {"variable": "hydra.core.packaging.PackageName"}, "values": {"variable": "hydra.build.format.Sha256Hash"}}},
                         "annotation": {
                           "map": [
                             {
@@ -416,7 +417,8 @@
                     "name": "moduleHashes",
                     "type": {
                       "annotated": {
-                        "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.build.format.Sha256Hash"}}},
+                        "body": {
+                          "map": {"keys": {"variable": "hydra.core.packaging.ModuleName"}, "values": {"variable": "hydra.build.format.Sha256Hash"}}},
                         "annotation": {
                           "map": [
                             {
@@ -599,7 +601,8 @@
                     "name": "dependencyHashes",
                     "type": {
                       "annotated": {
-                        "body": {"map": {"keys": {"variable": "hydra.packaging.PackageName"}, "values": {"variable": "hydra.build.format.Sha256Hash"}}},
+                        "body": {
+                          "map": {"keys": {"variable": "hydra.core.packaging.PackageName"}, "values": {"variable": "hydra.build.format.Sha256Hash"}}},
                         "annotation": {
                           "map": [
                             {
@@ -653,7 +656,7 @@
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.packaging.PackageName"},
+                        "body": {"variable": "hydra.core.packaging.PackageName"},
                         "annotation": {
                           "map": [
                             {
@@ -695,7 +698,7 @@
                     "name": "dependencies",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"variable": "hydra.packaging.PackageName"}},
+                        "body": {"list": {"variable": "hydra.core.packaging.PackageName"}},
                         "annotation": {
                           "map": [
                             {
@@ -750,7 +753,7 @@
                     "name": "package",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.packaging.PackageName"},
+                        "body": {"variable": "hydra.core.packaging.PackageName"},
                         "annotation": {
                           "map": [
                             {
@@ -760,21 +763,21 @@
                     "name": "mainModules",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"variable": "hydra.packaging.ModuleName"}},
+                        "body": {"list": {"variable": "hydra.core.packaging.ModuleName"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All main-source-set modules in the package"}}}]}}}},
                   {
                     "name": "testModules",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"variable": "hydra.packaging.ModuleName"}},
+                        "body": {"list": {"variable": "hydra.core.packaging.ModuleName"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "All test-source-set modules in the package"}}}]}}}},
                   {
                     "name": "mainDslModules",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"variable": "hydra.packaging.ModuleName"}},
+                        "body": {"list": {"variable": "hydra.core.packaging.ModuleName"}},
                         "annotation": {
                           "map": [
                             {
@@ -785,7 +788,7 @@
                     "name": "mainEncodingModules",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"variable": "hydra.packaging.ModuleName"}},
+                        "body": {"list": {"variable": "hydra.core.packaging.ModuleName"}},
                         "annotation": {
                           "map": [
                             {
@@ -913,14 +916,14 @@
                     "name": "currentVersion",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.packaging.Version"},
+                        "body": {"variable": "hydra.core.packaging.Version"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The version currently under development"}}}]}}}},
                   {
                     "name": "hostVersion",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.packaging.Version"},
+                        "body": {"variable": "hydra.core.packaging.Version"},
                         "annotation": {
                           "map": [
                             {
@@ -975,7 +978,7 @@
                     "name": "packages",
                     "type": {
                       "annotated": {
-                        "body": {"list": {"variable": "hydra.packaging.PackageName"}},
+                        "body": {"list": {"variable": "hydra.core.packaging.PackageName"}},
                         "annotation": {
                           "map": [
                             {"key": {"variable": "description"}, "value": {"literal": {"string": "The names of the repository's source packages"}}}]}}}}]},

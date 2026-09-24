@@ -1,0 +1,88 @@
+{
+  "name": "hydra.core.lib.equality",
+  "metadata": {"description": "Primitives in the hydra.core.lib.equality module.", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
+  "definitions": [
+    {
+      "primitive": {
+        "name": "hydra.core.lib.equality.equal",
+        "metadata": {
+          "description": "Check whether two values are equal.",
+          "comments": [
+            "equal(x, y) returns true if x and y are structurally equal under the type's notion of equality.",
+            "Requires an 'equality' type-class constraint on the argument type, which is the closest Hydra equivalent to Haskell's Eq instance.",
+            "Equality is reflexive, symmetric, and transitive (no NaN-style exception on floating-point: floating-point equality is provided per the underlying host's IEEE 754 comparison rules, so NaN /= NaN at the level of float64/float32).",
+            "Total. Corresponds to Haskell's (==) :: Eq a => a -> a -> Bool."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
+          "parameters": [
+            {"name": "x", "description": "the first value to compare", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "y", "description": "the second value to compare", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.equality.notEqual",
+        "metadata": {
+          "description": "Check whether two values are unequal.",
+          "comments": [
+            "notEqual(x, y) = logic.not(equal(x, y)); this defining equation is the specification, and the default implementation.",
+            "Requires an 'equality' type-class constraint on the argument type.",
+            "Total. Corresponds to Haskell's (/=) :: Eq a => a -> a -> Bool."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "equality"}]}],
+          "parameters": [
+            {"name": "x", "description": "the first value to compare", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "y", "description": "the second value to compare", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "isPure": true,
+        "isTotal": true,
+        "defaultImplementation": {
+          "lambda": {
+            "parameter": "x",
+            "body": {
+              "lambda": {
+                "parameter": "y",
+                "body": {
+                  "application": {
+                    "function": {"variable": "hydra.core.lib.logic.not"},
+                    "argument": {
+                      "application": {
+                        "function": {"application": {"function": {"variable": "hydra.core.lib.equality.equal"}, "argument": {"variable": "x"}}},
+                        "argument": {"variable": "y"}}}}}}}}}}}]}

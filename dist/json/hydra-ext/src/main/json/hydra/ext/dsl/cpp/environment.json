@@ -1,0 +1,538 @@
+{
+  "name": "hydra.ext.dsl.cpp.environment",
+  "metadata": {"description": "DSL functions for hydra.ext.cpp.environment", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [
+    {"module": "hydra.ext.cpp.environment"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.ext.encode.cpp.environment"},
+    {"module": "hydra.ext.decode.cpp.environment"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.dsl.model"},
+    {"module": "hydra.core.dsl.packaging"},
+    {"module": "hydra.core.dsl.util"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.ext.dsl.cpp.environment.cppEnvironmentCppEnvironment",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedName"},
+                "argument": {"variable": "hydra.ext.cpp.environment.CppEnvironment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedName",
+                "body": {
+                  "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.cpp.environment.CppEnvironment"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.ext.cpp.environment.CppEnvironment"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.cpp.environment.cppEnvironment",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"application": {"function": {"variable": "hydra.core.util.ModuleNames"}, "argument": {"literal": "string"}}},
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for code generation"}}}]}}}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {
+                        "pair": {
+                          "first": {"list": {"variable": "hydra.core.model.Name"}},
+                          "second": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"literal": "string"}}}}},
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {"variable": "hydra.ext.cpp.environment.CppEnvironment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "namespaces",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"application": {"function": {"variable": "hydra.core.util.ModuleNames"}, "argument": {"literal": "string"}}},
+                        "annotation": {
+                          "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for code generation"}}}]}}}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "boundTypeVariables",
+                    "domain": {
+                      "application": {
+                        "function": {"variable": "hydra.core.typed.TypedTerm"},
+                        "argument": {
+                          "annotated": {
+                            "body": {
+                              "pair": {
+                                "first": {"list": {"variable": "hydra.core.model.Name"}},
+                                "second": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"literal": "string"}}}}},
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}]}}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.core.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.model.Term",
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Record",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.cpp.environment.CppEnvironment"}}}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "namespaces"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "namespaces"}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "boundTypeVariables"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "boundTypeVariables"}}}}]}}]}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL constructor for hydra.ext.cpp.environment.CppEnvironment"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.cpp.environment.cppEnvironmentNamespaces",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {"variable": "hydra.ext.cpp.environment.CppEnvironment"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {
+                  "annotated": {
+                    "body": {"application": {"function": {"variable": "hydra.core.util.ModuleNames"}, "argument": {"literal": "string"}}},
+                    "annotation": {
+                      "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for code generation"}}}]}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {"variable": "hydra.ext.cpp.environment.CppEnvironment"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.model.Term",
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "typeName": "hydra.core.model.Projection",
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {
+                                                  "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.cpp.environment.CppEnvironment"}}}}},
+                                              {
+                                                "name": "fieldName",
+                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "namespaces"}}}}}]}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the namespaces field of hydra.ext.cpp.environment.CppEnvironment"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.cpp.environment.cppEnvironmentBoundTypeVariables",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {"variable": "hydra.ext.cpp.environment.CppEnvironment"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {
+                  "annotated": {
+                    "body": {
+                      "pair": {
+                        "first": {"list": {"variable": "hydra.core.model.Name"}},
+                        "second": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"literal": "string"}}}}},
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}]}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {"variable": "hydra.ext.cpp.environment.CppEnvironment"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.model.Term",
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "typeName": "hydra.core.model.Projection",
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {
+                                                  "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.cpp.environment.CppEnvironment"}}}}},
+                                              {
+                                                "name": "fieldName",
+                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "boundTypeVariables"}}}}}]}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the boundTypeVariables field of hydra.ext.cpp.environment.CppEnvironment"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.cpp.environment.cppEnvironmentWithNamespaces",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {"variable": "hydra.ext.cpp.environment.CppEnvironment"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"application": {"function": {"variable": "hydra.core.util.ModuleNames"}, "argument": {"literal": "string"}}},
+                      "annotation": {
+                        "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for code generation"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {"variable": "hydra.ext.cpp.environment.CppEnvironment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "original",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {"variable": "hydra.ext.cpp.environment.CppEnvironment"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "newVal",
+                    "domain": {
+                      "application": {
+                        "function": {"variable": "hydra.core.typed.TypedTerm"},
+                        "argument": {
+                          "annotated": {
+                            "body": {"application": {"function": {"variable": "hydra.core.util.ModuleNames"}, "argument": {"literal": "string"}}},
+                            "annotation": {
+                              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for code generation"}}}]}}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.core.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.model.Term",
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Record",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.cpp.environment.CppEnvironment"}}}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "namespaces"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "boundTypeVariables"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.model.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.model.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.model.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.model.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {
+                                                                                "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.cpp.environment.CppEnvironment"}}}}},
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "boundTypeVariables"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}}]}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the namespaces field of hydra.ext.cpp.environment.CppEnvironment"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.cpp.environment.cppEnvironmentWithBoundTypeVariables",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {"variable": "hydra.ext.cpp.environment.CppEnvironment"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {
+                        "pair": {
+                          "first": {"list": {"variable": "hydra.core.model.Name"}},
+                          "second": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"literal": "string"}}}}},
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {"variable": "hydra.ext.cpp.environment.CppEnvironment"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "original",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {"variable": "hydra.ext.cpp.environment.CppEnvironment"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "newVal",
+                    "domain": {
+                      "application": {
+                        "function": {"variable": "hydra.core.typed.TypedTerm"},
+                        "argument": {
+                          "annotated": {
+                            "body": {
+                              "pair": {
+                                "first": {"list": {"variable": "hydra.core.model.Name"}},
+                                "second": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"literal": "string"}}}}},
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables in scope, with their C++ names"}}}]}}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.core.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.model.Term",
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Record",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.cpp.environment.CppEnvironment"}}}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "namespaces"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.model.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.model.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.model.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.model.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {
+                                                                                "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.cpp.environment.CppEnvironment"}}}}},
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "namespaces"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {
+                                                  "name": "name",
+                                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "boundTypeVariables"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}}]}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the boundTypeVariables field of hydra.ext.cpp.environment.CppEnvironment"}}}]}}}}}]}

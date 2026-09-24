@@ -1,0 +1,189 @@
+{
+  "name": "hydra.core.print.typing",
+  "metadata": {"description": "String representations of hydra.core.typing types", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.print.model"},
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.core.print.typing.typeConstraint",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.typing.TypeConstraint"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "tc",
+                "domain": {"variable": "hydra.core.typing.TypeConstraint"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "ltyp",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.core.typing.TypeConstraint", "fieldName": "left"}},
+                            "argument": {"variable": "tc"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.model.Type"}, "constraints": []}},
+                      {
+                        "name": "rtyp",
+                        "term": {
+                          "application": {
+                            "function": {"project": {"typeName": "hydra.core.typing.TypeConstraint", "fieldName": "right"}},
+                            "argument": {"variable": "tc"}}},
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.model.Type"}, "constraints": []}}],
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.core.lib.strings.concat"},
+                        "argument": {
+                          "list": [
+                            {"application": {"function": {"variable": "hydra.core.print.model.type"}, "argument": {"variable": "ltyp"}}},
+                            {"literal": {"string": "≡"}},
+                            {"application": {"function": {"variable": "hydra.core.print.model.type"}, "argument": {"variable": "rtyp"}}}]}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a type constraint as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.typing.typeSubst",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.typing.TypeSubst"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "ts",
+                "domain": {"variable": "hydra.core.typing.TypeSubst"},
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "subst",
+                        "term": {"application": {"function": {"unwrap": "hydra.core.typing.TypeSubst"}, "argument": {"variable": "ts"}}},
+                        "typeScheme": {
+                          "variables": [],
+                          "body": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.model.Type"}}},
+                          "constraints": []}},
+                      {
+                        "name": "pairs",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.maps.toList"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                "type": {"variable": "hydra.core.model.Type"}}},
+                            "argument": {"variable": "subst"}}},
+                        "typeScheme": {
+                          "variables": [],
+                          "body": {"list": {"pair": {"first": {"variable": "hydra.core.model.Name"}, "second": {"variable": "hydra.core.model.Type"}}}},
+                          "constraints": []}},
+                      {
+                        "name": "showPair",
+                        "term": {
+                          "lambda": {
+                            "parameter": "pair",
+                            "domain": {"pair": {"first": {"variable": "hydra.core.model.Name"}, "second": {"variable": "hydra.core.model.Type"}}},
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "name",
+                                    "term": {
+                                      "application": {
+                                        "function": {"unwrap": "hydra.core.model.Name"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.pairs.first"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                                "type": {"variable": "hydra.core.model.Type"}}},
+                                            "argument": {"variable": "pair"}}}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
+                                  {
+                                    "name": "typ",
+                                    "term": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.second"}, "type": {"variable": "hydra.core.model.Name"}}},
+                                            "type": {"variable": "hydra.core.model.Type"}}},
+                                        "argument": {"variable": "pair"}}},
+                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.model.Type"}, "constraints": []}}],
+                                "body": {
+                                  "application": {
+                                    "function": {"variable": "hydra.core.lib.strings.concat"},
+                                    "argument": {
+                                      "list": [
+                                        {"variable": "name"},
+                                        {"literal": {"string": "↦"}},
+                                        {"application": {"function": {"variable": "hydra.core.print.model.type"}, "argument": {"variable": "typ"}}}]}}}}}}},
+                        "typeScheme": {
+                          "variables": [],
+                          "body": {
+                            "function": {
+                              "domain": {"pair": {"first": {"variable": "hydra.core.model.Name"}, "second": {"variable": "hydra.core.model.Type"}}},
+                              "codomain": {"literal": "string"}}},
+                          "constraints": []}},
+                      {
+                        "name": "pairStrs",
+                        "term": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.core.lib.lists.map"},
+                                        "type": {"pair": {"first": {"variable": "hydra.core.model.Name"}, "second": {"variable": "hydra.core.model.Type"}}}}},
+                                    "type": {"literal": "string"}}},
+                                "argument": {"variable": "showPair"}}},
+                            "argument": {"variable": "pairs"}}},
+                        "typeScheme": {"variables": [], "body": {"list": {"literal": "string"}}, "constraints": []}}],
+                    "body": {
+                      "application": {
+                        "function": {"variable": "hydra.core.lib.strings.concat"},
+                        "argument": {
+                          "list": [
+                            {"literal": {"string": "{"}},
+                            {
+                              "application": {
+                                "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": ","}}}},
+                                "argument": {"variable": "pairStrs"}}},
+                            {"literal": {"string": "}"}}]}}}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a type substitution as a string"}}}]}}}}}]}

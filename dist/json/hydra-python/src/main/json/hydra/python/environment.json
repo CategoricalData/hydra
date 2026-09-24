@@ -3,11 +3,11 @@
   "metadata": {"description": "Environment types for Python code generation", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.python.syntax"},
-    {"module": "hydra.util"},
-    {"module": "hydra.core"},
-    {"module": "hydra.graph"},
-    {"module": "hydra.packaging"},
-    {"module": "hydra.typing"}],
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.typing"}],
   "definitions": [
     {
       "type": {
@@ -34,7 +34,7 @@
                     "type": {
                       "annotated": {
                         "body": {
-                          "application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "hydra.python.syntax.DottedName"}}},
+                          "application": {"function": {"variable": "hydra.core.util.ModuleNames"}, "argument": {"variable": "hydra.python.syntax.DottedName"}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for imports"}}}]}}}},
                   {
                     "name": "boundTypeVariables",
@@ -42,8 +42,8 @@
                       "annotated": {
                         "body": {
                           "pair": {
-                            "first": {"list": {"variable": "hydra.core.Name"}},
-                            "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.python.syntax.Name"}}}}},
+                            "first": {"list": {"variable": "hydra.core.model.Name"}},
+                            "second": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.python.syntax.Name"}}}}},
                         "annotation": {
                           "map": [
                             {
@@ -53,13 +53,13 @@
                     "name": "graph",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.graph.Graph"},
+                        "body": {"variable": "hydra.core.graph.Graph"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Graph context for type inference"}}}]}}}},
                   {
                     "name": "nullaryBindings",
                     "type": {
                       "annotated": {
-                        "body": {"set": {"variable": "hydra.core.Name"}},
+                        "body": {"set": {"variable": "hydra.core.model.Name"}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Set of nullary bindings (need call syntax)"}}}]}}}},
                   {
@@ -82,7 +82,7 @@
                     "name": "inlineVariables",
                     "type": {
                       "annotated": {
-                        "body": {"set": {"variable": "hydra.core.Name"}},
+                        "body": {"set": {"variable": "hydra.core.model.Name"}},
                         "annotation": {
                           "map": [
                             {
@@ -99,7 +99,7 @@
                               "key": {"variable": "description"},
                               "value": {
                                 "literal": {
-                                  "string": "hydra.lib.<sub> sub-namespaces that have an overlay implementation on this host (#630) -- the on-disk existence signal driving emission-time redirect of primitive references to hydra.overlay.python.lib.<sub>"}}}]}}}}]},
+                                  "string": "hydra.lib.<sub> sub-namespaces that have an overlay implementation on this host (#630) -- the on-disk existence signal driving emission-time redirect of primitive references to hydra.core.overlay.python.lib.<sub>"}}}]}}}}]},
               "annotation": {
                 "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Environment for Python code generation"}}}]}}},
           "constraints": []}}},
@@ -117,13 +117,13 @@
                     "type": {
                       "annotated": {
                         "body": {
-                          "application": {"function": {"variable": "hydra.util.ModuleNames"}, "argument": {"variable": "hydra.python.syntax.DottedName"}}},
+                          "application": {"function": {"variable": "hydra.core.util.ModuleNames"}, "argument": {"variable": "hydra.python.syntax.DottedName"}}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "ModuleName mapping for imports"}}}]}}}},
                   {
                     "name": "typeVariables",
                     "type": {
                       "annotated": {
-                        "body": {"set": {"variable": "hydra.core.Name"}},
+                        "body": {"set": {"variable": "hydra.core.model.Name"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Type variables used in the module"}}}]}}}},
                   {"name": "usesAnnotated", "type": {"literal": "boolean"}},
                   {"name": "usesCallable", "type": {"literal": "boolean"}},
@@ -165,7 +165,7 @@
                     "name": "graph",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.graph.Graph"},
+                        "body": {"variable": "hydra.core.graph.Graph"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The Hydra graph being processed"}}}]}}}},
                   {
                     "name": "metadata",

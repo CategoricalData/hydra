@@ -3,29 +3,29 @@
   "metadata": {"description": "Java naming constants and package name utilities", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
     {"module": "hydra.java.syntax"},
-    {"module": "hydra.paths"},
-    {"module": "hydra.ast"},
-    {"module": "hydra.classes"},
-    {"module": "hydra.coders"},
-    {"module": "hydra.core"},
-    {"module": "hydra.error.checking"},
-    {"module": "hydra.error.core"},
-    {"module": "hydra.error.packaging"},
-    {"module": "hydra.errors"},
-    {"module": "hydra.graph"},
-    {"module": "hydra.json.model"},
-    {"module": "hydra.packaging"},
-    {"module": "hydra.parsing"},
-    {"module": "hydra.query"},
-    {"module": "hydra.relational"},
-    {"module": "hydra.tabular"},
-    {"module": "hydra.testing"},
-    {"module": "hydra.topology"},
-    {"module": "hydra.typed"},
-    {"module": "hydra.typing"},
-    {"module": "hydra.util"},
-    {"module": "hydra.validation"},
-    {"module": "hydra.variants"}],
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.classes"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
   "definitions": [
     {
       "term": {
@@ -71,7 +71,7 @@
                 "application": {
                   "function": {"variable": "hydra.java.names.javaPackageName"},
                   "argument": {"list": [{"literal": {"string": "hydra"}}, {"literal": {"string": "core"}}]}}}},
-            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The hydra.core package name"}}}]}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The hydra.core.model package name"}}}]}}}}},
     {
       "term": {
         "name": "hydra.java.names.hydraOrdinalMethodName",
@@ -106,7 +106,7 @@
                       {"literal": {"string": "java"}},
                       {"literal": {"string": "util"}}]}}}},
             "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The hydra.overlay.java.util package name"}}}]}}}}},
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The hydra.core.overlay.java.util package name"}}}]}}}}},
     {
       "term": {
         "name": "hydra.java.names.instanceName",
@@ -149,7 +149,7 @@
                           "application": {
                             "function": {
                               "typeApplication": {
-                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": "string"}}},
+                                "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"literal": "string"}}},
                                 "type": {"variable": "hydra.java.syntax.Identifier"}}},
                             "argument": {
                               "lambda": {

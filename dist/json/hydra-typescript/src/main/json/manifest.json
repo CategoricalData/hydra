@@ -1,12 +1,12 @@
 {
-  "mainDslModules": ["hydra.typeScript.syntax"],
+  "mainDslModules": ["hydra.typescript.syntax"],
   "mainEncodingModules": [],
   "mainModules": [
-    "hydra.typeScript.coder",
-    "hydra.typeScript.language",
-    "hydra.typeScript.operators",
-    "hydra.typeScript.serde",
-    "hydra.typeScript.syntax"],
+    "hydra.typescript.coder",
+    "hydra.typescript.language",
+    "hydra.typescript.operators",
+    "hydra.typescript.serde",
+    "hydra.typescript.syntax"],
   "manifestFormatVersion": 1,
   "moduleFormatVersion": 1,
   "package": "hydra-typescript",

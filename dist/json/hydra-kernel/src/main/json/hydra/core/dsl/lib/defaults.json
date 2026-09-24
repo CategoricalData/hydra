@@ -1,0 +1,59 @@
+{
+  "name": "hydra.core.dsl.lib.defaults",
+  "metadata": {"description": "DSL functions for hydra.core.lib.defaults", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.lib.defaults"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.encode.lib.defaults"},
+    {"module": "hydra.core.decode.lib.defaults"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.lib.eithers"},
+    {"module": "hydra.core.lib.equality"},
+    {"module": "hydra.core.lib.functions"},
+    {"module": "hydra.core.lib.lists"},
+    {"module": "hydra.core.lib.logic"},
+    {"module": "hydra.core.lib.maps"},
+    {"module": "hydra.core.lib.math"},
+    {"module": "hydra.core.lib.optionals"},
+    {"module": "hydra.core.lib.pairs"},
+    {"module": "hydra.core.lib.sets"},
+    {"module": "hydra.core.dsl.model"},
+    {"module": "hydra.core.dsl.lib.eithers"},
+    {"module": "hydra.core.dsl.lib.equality"},
+    {"module": "hydra.core.dsl.lib.functions"},
+    {"module": "hydra.core.dsl.lib.lists"},
+    {"module": "hydra.core.dsl.lib.logic"},
+    {"module": "hydra.core.dsl.lib.maps"},
+    {"module": "hydra.core.dsl.lib.math"},
+    {"module": "hydra.core.dsl.lib.optionals"},
+    {"module": "hydra.core.dsl.lib.pairs"},
+    {"module": "hydra.core.dsl.lib.sets"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.core.dsl.lib.defaults.defaultImplementations",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {"map": {"keys": {"variable": "hydra.core.model.Name"}, "values": {"variable": "hydra.core.model.Term"}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.model.Term",
+                    "field": {
+                      "name": "variable",
+                      "term": {
+                        "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.lib.defaults.defaultImplementations"}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL reference to hydra.core.lib.defaults.defaultImplementations"}}}]}}}}}]}

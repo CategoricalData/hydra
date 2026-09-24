@@ -1,0 +1,74 @@
+{
+  "name": "hydra.core.test.inference.all",
+  "metadata": {"description": "Hydra's inference test suite", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.test.inference.algebraicTypes"},
+    {"module": "hydra.core.test.inference.algorithmW"},
+    {"module": "hydra.core.test.inference.annotations"},
+    {"module": "hydra.core.test.inference.classes"},
+    {"module": "hydra.core.test.inference.failures"},
+    {"module": "hydra.core.test.inference.fundamentals"},
+    {"module": "hydra.core.test.inference.idempotence"},
+    {"module": "hydra.core.test.inference.kernelExamples"},
+    {"module": "hydra.core.test.inference.nominalTypes"},
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.core.test.inference.all.allTests",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.testing.TestGroup"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "record": {
+                "typeName": "hydra.core.testing.TestGroup",
+                "fields": [
+                  {"name": "name", "term": {"literal": {"string": "inference"}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                  {
+                    "name": "subgroups",
+                    "term": {
+                      "list": [
+                        {"variable": "hydra.core.test.inference.algebraicTypes.allTests"},
+                        {"variable": "hydra.core.test.inference.algorithmW.allTests"},
+                        {"variable": "hydra.core.test.inference.annotations.allTests"},
+                        {"variable": "hydra.core.test.inference.classes.allTests"},
+                        {"variable": "hydra.core.test.inference.failures.allTests"},
+                        {"variable": "hydra.core.test.inference.fundamentals.allTests"},
+                        {"variable": "hydra.core.test.inference.idempotence.allTests"},
+                        {"variable": "hydra.core.test.inference.kernelExamples.allTests"},
+                        {"variable": "hydra.core.test.inference.nominalTypes.allTests"}]}},
+                  {
+                    "name": "cases",
+                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestCaseWithMetadata"}}}}]}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The group of all inference tests"}}}]}}}}}]}

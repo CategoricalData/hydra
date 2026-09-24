@@ -1,0 +1,225 @@
+{
+  "name": "hydra.core.lib.chars",
+  "metadata": {
+    "description": "Primitives in the hydra.core.lib.chars module.",
+    "comments": [
+      "Characters are represented as Unicode code points carried in an int32. Each primitive interprets its argument as a code point; arguments outside the valid range [0, 0x10FFFF] yield an implementation-defined result (typically false for the predicates).",
+      "All classification predicates in this module are total functions: every int32 argument maps to a defined Boolean result, with no partiality or exceptions.",
+      "Character classification follows the Unicode general categories, matching the behaviour of Haskell's Data.Char functions of the same names. Hosts are expected to reproduce these categories rather than a locale- or ASCII-only notion of letter, digit, or whitespace."],
+    "seeAlso": [],
+    "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
+  "definitions": [
+    {
+      "primitive": {
+        "name": "hydra.core.lib.chars.isAlpha",
+        "metadata": {
+          "description": "Check whether a character is alphabetic.",
+          "comments": [
+            "True if the argument is a Unicode letter — any of the general categories L* (Lu, Ll, Lt, Lm, Lo) — and false otherwise.",
+            "The argument is interpreted as a Unicode code point: arguments outside the valid code-point range [0, 0x10FFFF] yield an implementation-defined result (typically false).",
+            "Alphabetic is broader than cased: letters in scripts without a case distinction are included. isAlphaNum is true whenever isAlpha is true.",
+            "Total. Corresponds to Haskell's Data.Char.isAlpha :: Char -> Bool."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to test, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.chars.isAlphaNum",
+        "metadata": {
+          "description": "Check whether a character is alphanumeric.",
+          "comments": [
+            "True if the argument is a Unicode letter or digit, false otherwise.",
+            "The argument is interpreted as a Unicode code point: arguments outside the valid code-point range [0, 0x10FFFF] yield an implementation-defined result (typically false).",
+            "The classification is based on Unicode general categories (any of L*, Nd, Nl, No).",
+            "Total. Corresponds to Haskell's Data.Char.isAlphaNum :: Char -> Bool."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to test, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.chars.isDigit",
+        "metadata": {
+          "description": "Check whether a character is an ASCII decimal digit.",
+          "comments": [
+            "True if the argument is one of the ten code points '0' through '9' (U+0030 to U+0039), and false otherwise.",
+            "Unlike the other predicates in this module, this one is deliberately ASCII-only: decimal digits outside the ASCII range (general category Nd) are rejected here, though isAlphaNum accepts them.",
+            "Total. Corresponds to Haskell's Data.Char.isDigit :: Char -> Bool."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to test, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.chars.isLower",
+        "metadata": {
+          "description": "Check whether a character is lowercase.",
+          "comments": [
+            "True if the argument is a Unicode lowercase letter (general category Ll), false otherwise.",
+            "The argument is interpreted as a Unicode code point: arguments outside [0, 0x10FFFF] yield an implementation-defined result (typically false).",
+            "Note that not every letter is classified as uppercase or lowercase (e.g. titlecase letters, modifier letters, and letters in scripts without a case distinction are neither).",
+            "Total. Corresponds to Haskell's Data.Char.isLower :: Char -> Bool."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to test, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.chars.isSpace",
+        "metadata": {
+          "description": "Check whether a character is a whitespace character.",
+          "comments": [
+            "True if the argument is a Unicode whitespace character, false otherwise.",
+            "The whitespace set follows Haskell's Data.Char.isSpace, which recognises U+0020 (space), U+0009 (tab), U+000A (line feed), U+000B (vertical tab), U+000C (form feed), U+000D (carriage return), U+00A0 (no-break space), and other Unicode characters with general category Zs, Zl, or Zp.",
+            "Total. Corresponds to Haskell's Data.Char.isSpace :: Char -> Bool."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to test, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.chars.isUpper",
+        "metadata": {
+          "description": "Check whether a character is uppercase.",
+          "comments": [
+            "True if the argument is a Unicode uppercase letter (general category Lu), false otherwise.",
+            "The argument is interpreted as a Unicode code point: arguments outside [0, 0x10FFFF] yield an implementation-defined result (typically false).",
+            "Note that titlecase letters (Lt) are not classified as uppercase by this predicate.",
+            "Total. Corresponds to Haskell's Data.Char.isUpper :: Char -> Bool."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to test, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
+          "result": {"type": {"literal": "boolean"}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.chars.toLower",
+        "metadata": {
+          "description": "Convert a character to lowercase.",
+          "comments": [
+            "Return the simple (one-to-one) Unicode lowercase mapping of the argument, or the argument itself if it has no lowercase mapping.",
+            "This is a code-point-to-code-point mapping, so it does not handle the string-changing match of full Unicode case folding (e.g. U+00DF \"ß\" does not lowercase to \"ss\"; it returns itself).",
+            "The argument is interpreted as a Unicode code point.",
+            "Total. Corresponds to Haskell's Data.Char.toLower :: Char -> Char."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to convert, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "int32"}}}},
+        "isPure": true,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.chars.toUpper",
+        "metadata": {
+          "description": "Convert a character to uppercase.",
+          "comments": [
+            "Return the simple (one-to-one) Unicode uppercase mapping of the argument, or the argument itself if it has no uppercase mapping.",
+            "This is a code-point-to-code-point mapping, so it does not handle the string-changing match of full Unicode case folding (e.g. U+00DF \"ß\" does not uppercase to \"SS\"; it returns itself).",
+            "The argument is interpreted as a Unicode code point.",
+            "Total. Corresponds to Haskell's Data.Char.toUpper :: Char -> Char."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "char",
+              "description": "the character to convert, as a Unicode code point",
+              "type": {"literal": {"integer": "int32"}},
+              "isLazy": false}],
+          "result": {"type": {"literal": {"integer": "int32"}}}},
+        "isPure": true,
+        "isTotal": true}}]}

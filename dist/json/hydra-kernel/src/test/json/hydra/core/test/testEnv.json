@@ -1,0 +1,66 @@
+{
+  "name": "hydra.core.test.testEnv",
+  "metadata": {
+    "description": "Type-level declarations for the hand-written Hydra.Core.Test.TestEnv module.",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.lexical"},
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.core.test.testEnv.testContext",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.typing.InferenceContext"}}},
+        "body": {"variable": "hydra.core.lexical.emptyInferenceContext"}}},
+    {
+      "term": {
+        "name": "hydra.core.test.testEnv.testGraph",
+        "signature": {
+          "typeParameters": [{"name": "t0", "constraints": []}, {"name": "t1", "constraints": []}],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "t0"}, "isLazy": false},
+            {"name": "arg1", "type": {"variable": "t1"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.graph.Graph"}}},
+        "body": {
+          "typeLambda": {
+            "parameter": "t0",
+            "body": {
+              "typeLambda": {
+                "parameter": "t1",
+                "body": {
+                  "lambda": {
+                    "parameter": "tys",
+                    "domain": {"variable": "t0"},
+                    "body": {"lambda": {"parameter": "tms", "domain": {"variable": "t1"}, "body": {"variable": "hydra.core.lexical.emptyGraph"}}}}}}}}}}}]}

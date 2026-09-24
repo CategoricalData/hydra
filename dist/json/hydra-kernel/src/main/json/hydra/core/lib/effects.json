@@ -1,0 +1,232 @@
+{
+  "name": "hydra.core.lib.effects",
+  "metadata": {"description": "Primitives in the hydra.core.lib.effects module.", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
+  "definitions": [
+    {
+      "primitive": {
+        "name": "hydra.core.lib.effects.apply",
+        "metadata": {
+          "description": "Applicative apply for effects.",
+          "comments": [
+            "apply(ef, ex) describes an effectful computation which first interprets ef to produce a function, then interprets ex to produce an argument, and returns the result of applying the function to the argument."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "ef",
+              "description": "the effect producing the function to apply",
+              "type": {"effect": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}}},
+              "isLazy": false},
+            {
+              "name": "ex",
+              "description": "the effect producing the argument",
+              "type": {"effect": {"variable": "x"}},
+              "isLazy": false}],
+          "result": {"type": {"effect": {"variable": "y"}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.effects.bind",
+        "metadata": {
+          "description": "Sequence two effectful computations.",
+          "comments": [
+            "bind(e, f) describes an effectful computation which first interprets e, then passes its result to f to obtain the next effect.",
+            "Host interpreters provide the operational meaning; Hydra uses the type effect<t> to keep the effect boundary explicit."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {"name": "e", "description": "the effect to interpret first", "type": {"effect": {"variable": "x"}}, "isLazy": false},
+            {
+              "name": "f",
+              "description": "the function producing the next effect from e's result",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
+              "isLazy": false}],
+          "result": {"type": {"effect": {"variable": "y"}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.effects.compose",
+        "metadata": {
+          "description": "Kleisli composition for effects.",
+          "comments": ["compose(f, g, x) describes an effectful computation equivalent to bind(f(x), g)."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}, {"name": "z", "constraints": []}],
+          "parameters": [
+            {
+              "name": "f",
+              "description": "the first effect-returning function",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
+              "isLazy": false},
+            {
+              "name": "g",
+              "description": "the second effect-returning function",
+              "type": {"function": {"domain": {"variable": "y"}, "codomain": {"effect": {"variable": "z"}}}},
+              "isLazy": false},
+            {"name": "x", "description": "the input to the composed computation", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"effect": {"variable": "z"}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.effects.foldList",
+        "metadata": {
+          "description": "Left-fold over a list with an effect-returning function.",
+          "comments": ["foldList(f, acc0, xs) describes an effectful left fold over xs, sequencing applications of f from left to right."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "f",
+              "description": "the effect-returning combining function",
+              "type": {
+                "function": {
+                  "domain": {"variable": "x"},
+                  "codomain": {"function": {"domain": {"variable": "y"}, "codomain": {"effect": {"variable": "x"}}}}}},
+              "isLazy": false},
+            {"name": "acc0", "description": "the initial accumulator value", "type": {"variable": "x"}, "isLazy": false},
+            {"name": "xs", "description": "the list to fold over", "type": {"list": {"variable": "y"}}, "isLazy": false}],
+          "result": {"type": {"effect": {"variable": "x"}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.effects.map",
+        "metadata": {
+          "description": "Map a pure function over the result of an effect.",
+          "comments": [
+            "map(f, e) describes an effectful computation which interprets e and applies f to its result.",
+            "Equivalent to bind(e, \\x -> pure(f x))."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "f",
+              "description": "the pure function to apply to the effect's result",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"variable": "y"}}},
+              "isLazy": false},
+            {"name": "e", "description": "the effect to interpret", "type": {"effect": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"effect": {"variable": "y"}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.effects.mapList",
+        "metadata": {
+          "description": "Map an effect-returning function over a list.",
+          "comments": [
+            "mapList(f, xs) describes an effectful computation which applies f to each element of xs from left to right and collects the results."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "f",
+              "description": "the effect-returning function to apply to each element",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
+              "isLazy": false},
+            {"name": "xs", "description": "the list to map over", "type": {"list": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"effect": {"list": {"variable": "y"}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.effects.mapOptional",
+        "metadata": {
+          "description": "Map an effect-returning function over an optional.",
+          "comments": [
+            "mapOptional(f, m) describes an effectful computation which returns none when m is none, or applies f to the contained value and wraps the result in given."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}, {"name": "y", "constraints": []}],
+          "parameters": [
+            {
+              "name": "f",
+              "description": "the effect-returning function to apply to the contained value",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
+              "isLazy": false},
+            {"name": "m", "description": "the optional to map over", "type": {"optional": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"effect": {"optional": {"variable": "y"}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.effects.mapSet",
+        "metadata": {
+          "description": "Map an effect-returning function over a set.",
+          "comments": [
+            "mapSet(f, s) describes an effectful computation which applies f to each element of s, sequencing the effects in ascending element order (the order is normative, since the effects are observable), and collects the results as a set, deduplicated by the result type's ordering.",
+            "Requires 'ordering' constraints on both element types (the set type contract)."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": [{"simple": "ordering"}]}, {"name": "y", "constraints": [{"simple": "ordering"}]}],
+          "parameters": [
+            {
+              "name": "f",
+              "description": "the effect-returning function to apply to each element",
+              "type": {"function": {"domain": {"variable": "x"}, "codomain": {"effect": {"variable": "y"}}}},
+              "isLazy": false},
+            {"name": "s", "description": "the set to map over", "type": {"set": {"variable": "x"}}, "isLazy": false}],
+          "result": {"type": {"effect": {"set": {"variable": "y"}}}}},
+        "isPure": false,
+        "isTotal": true}},
+    {
+      "primitive": {
+        "name": "hydra.core.lib.effects.pure",
+        "metadata": {
+          "description": "Lift a pure value into an effect.",
+          "comments": ["pure(x) describes an effectful computation which succeeds with x without requiring host interaction."],
+          "seeAlso": [],
+          "provisions": []},
+        "signature": {
+          "typeParameters": [{"name": "x", "constraints": []}],
+          "parameters": [{"name": "x", "description": "the pure value to lift into an effect", "type": {"variable": "x"}, "isLazy": false}],
+          "result": {"type": {"effect": {"variable": "x"}}}},
+        "isPure": false,
+        "isTotal": true}}]}

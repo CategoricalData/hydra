@@ -8,39 +8,39 @@
   "dependencies": [
     {"module": "hydra.rdf.serde"},
     {"module": "hydra.rdf.utils"},
-    {"module": "hydra.shacl.model"},
+    {"module": "hydra.rdf.shacl.model"},
     {"module": "hydra.rdf.syntax"},
-    {"module": "hydra.paths"},
-    {"module": "hydra.ast"},
-    {"module": "hydra.coders"},
-    {"module": "hydra.core"},
-    {"module": "hydra.diff"},
-    {"module": "hydra.docs"},
-    {"module": "hydra.error.checking"},
-    {"module": "hydra.error.core"},
-    {"module": "hydra.error.file"},
-    {"module": "hydra.error.packaging"},
-    {"module": "hydra.error.system"},
-    {"module": "hydra.errors"},
-    {"module": "hydra.file"},
-    {"module": "hydra.graph"},
-    {"module": "hydra.json.model"},
-    {"module": "hydra.markdown"},
-    {"module": "hydra.packaging"},
-    {"module": "hydra.parsing"},
-    {"module": "hydra.query"},
-    {"module": "hydra.regex"},
-    {"module": "hydra.relational"},
-    {"module": "hydra.system"},
-    {"module": "hydra.tabular"},
-    {"module": "hydra.testing"},
-    {"module": "hydra.time"},
-    {"module": "hydra.topology"},
-    {"module": "hydra.typed"},
-    {"module": "hydra.typing"},
-    {"module": "hydra.util"},
-    {"module": "hydra.validation"},
-    {"module": "hydra.variants"}],
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
   "definitions": [
     {
       "term": {
@@ -72,7 +72,7 @@
                                     "application": {
                                       "function": {
                                         "application": {
-                                          "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": "string"}}},
+                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"literal": "string"}}},
                                           "argument": {"variable": "b"}}},
                                       "argument": {"literal": {"string": "true"}}}},
                                   "argument": {"literal": {"string": "false"}}}}},
@@ -90,7 +90,7 @@
           "typeParameters": [],
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.rdf.syntax.Resource"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.shacl.model.CommonConstraint"}, "isLazy": false}],
+            {"name": "arg1", "type": {"variable": "hydra.rdf.shacl.model.CommonConstraint"}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
         "body": {
           "annotated": {
@@ -101,12 +101,12 @@
                 "body": {
                   "lambda": {
                     "parameter": "cc",
-                    "domain": {"variable": "hydra.shacl.model.CommonConstraint"},
+                    "domain": {"variable": "hydra.rdf.shacl.model.CommonConstraint"},
                     "body": {
                       "application": {
                         "function": {
                           "cases": {
-                            "typeName": "hydra.shacl.model.CommonConstraint",
+                            "typeName": "hydra.rdf.shacl.model.CommonConstraint",
                             "cases": [
                               {
                                 "name": "datatype",
@@ -135,7 +135,7 @@
                                 "handler": {
                                   "lambda": {
                                     "parameter": "nk",
-                                    "domain": {"variable": "hydra.shacl.model.NodeKind"},
+                                    "domain": {"variable": "hydra.rdf.shacl.model.NodeKind"},
                                     "body": {
                                       "list": [
                                         {
@@ -152,10 +152,13 @@
                                     "parameter": "refs",
                                     "domain": {
                                       "set": {
-                                        "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.PropertyShape"}}}},
+                                        "application": {
+                                          "function": {"variable": "hydra.rdf.shacl.model.Reference"},
+                                          "argument": {"variable": "hydra.rdf.shacl.model.PropertyShape"}}}},
                                     "body": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                        "function": {
+                                          "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                         "argument": {
                                           "application": {
                                             "function": {
@@ -164,18 +167,22 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.map"},
+                                                        "body": {"variable": "hydra.core.lib.lists.map"},
                                                         "type": {
-                                                          "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.PropertyShape"}}}}},
+                                                          "application": {
+                                                            "function": {"variable": "hydra.rdf.shacl.model.Reference"},
+                                                            "argument": {"variable": "hydra.rdf.shacl.model.PropertyShape"}}}}},
                                                     "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                                                 "argument": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.propertyRefToTriples"}, "argument": {"variable": "subj"}}}}},
                                             "argument": {
                                               "application": {
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.sets.toList"},
+                                                    "body": {"variable": "hydra.core.lib.sets.toList"},
                                                     "type": {
-                                                      "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.PropertyShape"}}}}},
+                                                      "application": {
+                                                        "function": {"variable": "hydra.rdf.shacl.model.Reference"},
+                                                        "argument": {"variable": "hydra.rdf.shacl.model.PropertyShape"}}}}},
                                                 "argument": {"variable": "refs"}}}}}}}}}},
                               {
                                 "name": "maxInclusive",
@@ -276,7 +283,7 @@
                                 "handler": {
                                   "lambda": {
                                     "parameter": "pat",
-                                    "domain": {"variable": "hydra.shacl.model.Pattern"},
+                                    "domain": {"variable": "hydra.rdf.shacl.model.Pattern"},
                                     "body": {
                                       "let": {
                                         "bindings": [
@@ -284,19 +291,20 @@
                                             "name": "regex_",
                                             "term": {
                                               "application": {
-                                                "function": {"project": {"typeName": "hydra.shacl.model.Pattern", "fieldName": "regex"}},
+                                                "function": {"project": {"typeName": "hydra.rdf.shacl.model.Pattern", "fieldName": "regex"}},
                                                 "argument": {"variable": "pat"}}},
                                             "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}},
                                           {
                                             "name": "flags_",
                                             "term": {
                                               "application": {
-                                                "function": {"project": {"typeName": "hydra.shacl.model.Pattern", "fieldName": "flags"}},
+                                                "function": {"project": {"typeName": "hydra.rdf.shacl.model.Pattern", "fieldName": "flags"}},
                                                 "argument": {"variable": "pat"}}},
                                             "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}, "constraints": []}}],
                                         "body": {
                                           "application": {
-                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                            "function": {
+                                              "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                             "argument": {
                                               "list": [
                                                 {
@@ -316,7 +324,7 @@
                                                           "application": {
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "string"}}},
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.optionals.match"}, "type": {"literal": "string"}}},
                                                                 "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                                                             "argument": {"variable": "flags_"}}},
                                                         "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}},
@@ -338,7 +346,7 @@
                                 "handler": {
                                   "lambda": {
                                     "parameter": "cl",
-                                    "domain": {"variable": "hydra.shacl.model.Closed"},
+                                    "domain": {"variable": "hydra.rdf.shacl.model.Closed"},
                                     "body": {
                                       "list": [
                                         {
@@ -352,7 +360,7 @@
                                                 "function": {"variable": "hydra.rdf.shaclRdf.booleanNode"},
                                                 "argument": {
                                                   "application": {
-                                                    "function": {"project": {"typeName": "hydra.shacl.model.Closed", "fieldName": "isClosed"}},
+                                                    "function": {"project": {"typeName": "hydra.rdf.shacl.model.Closed", "fieldName": "isClosed"}},
                                                     "argument": {"variable": "cl"}}}}}}}]}}}},
                               {
                                 "name": "hasValue",
@@ -366,7 +374,7 @@
                                           "application": {
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.Node"}}},
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.Node"}}},
                                                 "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                             "argument": {
                                               "lambda": {
@@ -381,7 +389,7 @@
                                                     "argument": {"variable": "n"}}}}}}},
                                         "argument": {
                                           "application": {
-                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.rdf.syntax.Node"}}},
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.sets.toList"}, "type": {"variable": "hydra.rdf.syntax.Node"}}},
                                             "argument": {"variable": "nodes"}}}}}}}},
                               {
                                 "name": "in",
@@ -395,7 +403,7 @@
                                           "application": {
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.Node"}}},
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.Node"}}},
                                                 "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                             "argument": {
                                               "lambda": {
@@ -416,10 +424,13 @@
                                     "parameter": "refs",
                                     "domain": {
                                       "set": {
-                                        "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.NodeShape"}}}},
+                                        "application": {
+                                          "function": {"variable": "hydra.rdf.shacl.model.Reference"},
+                                          "argument": {"variable": "hydra.rdf.shacl.model.NodeShape"}}}},
                                     "body": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                        "function": {
+                                          "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                         "argument": {
                                           "application": {
                                             "function": {
@@ -428,22 +439,26 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.map"},
+                                                        "body": {"variable": "hydra.core.lib.lists.map"},
                                                         "type": {
-                                                          "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.NodeShape"}}}}},
+                                                          "application": {
+                                                            "function": {"variable": "hydra.rdf.shacl.model.Reference"},
+                                                            "argument": {"variable": "hydra.rdf.shacl.model.NodeShape"}}}}},
                                                     "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                                                 "argument": {
                                                   "lambda": {
                                                     "parameter": "ref",
                                                     "domain": {
-                                                      "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.NodeShape"}}},
+                                                      "application": {
+                                                        "function": {"variable": "hydra.rdf.shacl.model.Reference"},
+                                                        "argument": {"variable": "hydra.rdf.shacl.model.NodeShape"}}},
                                                     "body": {
                                                       "application": {
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
                                                               "cases": {
-                                                                "typeName": "hydra.shacl.model.Reference",
+                                                                "typeName": "hydra.rdf.shacl.model.Reference",
                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                                                 "cases": [
                                                                   {
@@ -461,15 +476,17 @@
                                                                                     "function": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.tripleRII"}, "argument": {"variable": "subj"}}},
                                                                                     "argument": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.sh"}, "argument": {"literal": {"string": "node"}}}}}},
                                                                                 "argument": {"variable": "i"}}}]}}}}]}},
-                                                            "type": {"variable": "hydra.shacl.model.NodeShape"}}},
+                                                            "type": {"variable": "hydra.rdf.shacl.model.NodeShape"}}},
                                                         "argument": {"variable": "ref"}}}}}}},
                                             "argument": {
                                               "application": {
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.sets.toList"},
+                                                    "body": {"variable": "hydra.core.lib.sets.toList"},
                                                     "type": {
-                                                      "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.NodeShape"}}}}},
+                                                      "application": {
+                                                        "function": {"variable": "hydra.rdf.shacl.model.Reference"},
+                                                        "argument": {"variable": "hydra.rdf.shacl.model.NodeShape"}}}}},
                                                 "argument": {"variable": "refs"}}}}}}}}}},
                               {
                                 "name": "not",
@@ -478,10 +495,11 @@
                                     "parameter": "refs",
                                     "domain": {
                                       "set": {
-                                        "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}}},
+                                        "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}}},
                                     "body": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                        "function": {
+                                          "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                         "argument": {
                                           "application": {
                                             "function": {
@@ -490,22 +508,22 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.map"},
+                                                        "body": {"variable": "hydra.core.lib.lists.map"},
                                                         "type": {
-                                                          "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}}}},
+                                                          "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}}}},
                                                     "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                                                 "argument": {
                                                   "lambda": {
                                                     "parameter": "ref",
                                                     "domain": {
-                                                      "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}},
+                                                      "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}},
                                                     "body": {
                                                       "application": {
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
                                                               "cases": {
-                                                                "typeName": "hydra.shacl.model.Reference",
+                                                                "typeName": "hydra.rdf.shacl.model.Reference",
                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                                                 "cases": [
                                                                   {
@@ -523,15 +541,15 @@
                                                                                     "function": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.tripleRII"}, "argument": {"variable": "subj"}}},
                                                                                     "argument": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.sh"}, "argument": {"literal": {"string": "not"}}}}}},
                                                                                 "argument": {"variable": "i"}}}]}}}}]}},
-                                                            "type": {"variable": "hydra.shacl.model.Shape"}}},
+                                                            "type": {"variable": "hydra.rdf.shacl.model.Shape"}}},
                                                         "argument": {"variable": "ref"}}}}}}},
                                             "argument": {
                                               "application": {
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.sets.toList"},
+                                                    "body": {"variable": "hydra.core.lib.sets.toList"},
                                                     "type": {
-                                                      "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}}}},
+                                                      "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}}}},
                                                 "argument": {"variable": "refs"}}}}}}}}}},
                               {
                                 "name": "and",
@@ -540,10 +558,11 @@
                                     "parameter": "refs",
                                     "domain": {
                                       "set": {
-                                        "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}}},
+                                        "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}}},
                                     "body": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                        "function": {
+                                          "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                         "argument": {
                                           "application": {
                                             "function": {
@@ -552,22 +571,22 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.map"},
+                                                        "body": {"variable": "hydra.core.lib.lists.map"},
                                                         "type": {
-                                                          "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}}}},
+                                                          "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}}}},
                                                     "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                                                 "argument": {
                                                   "lambda": {
                                                     "parameter": "ref",
                                                     "domain": {
-                                                      "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}},
+                                                      "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}},
                                                     "body": {
                                                       "application": {
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
                                                               "cases": {
-                                                                "typeName": "hydra.shacl.model.Reference",
+                                                                "typeName": "hydra.rdf.shacl.model.Reference",
                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                                                 "cases": [
                                                                   {
@@ -585,15 +604,15 @@
                                                                                     "function": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.tripleRII"}, "argument": {"variable": "subj"}}},
                                                                                     "argument": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.sh"}, "argument": {"literal": {"string": "and"}}}}}},
                                                                                 "argument": {"variable": "i"}}}]}}}}]}},
-                                                            "type": {"variable": "hydra.shacl.model.Shape"}}},
+                                                            "type": {"variable": "hydra.rdf.shacl.model.Shape"}}},
                                                         "argument": {"variable": "ref"}}}}}}},
                                             "argument": {
                                               "application": {
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.sets.toList"},
+                                                    "body": {"variable": "hydra.core.lib.sets.toList"},
                                                     "type": {
-                                                      "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}}}},
+                                                      "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}}}},
                                                 "argument": {"variable": "refs"}}}}}}}}}},
                               {
                                 "name": "or",
@@ -602,10 +621,11 @@
                                     "parameter": "refs",
                                     "domain": {
                                       "set": {
-                                        "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}}},
+                                        "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}}},
                                     "body": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                        "function": {
+                                          "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                         "argument": {
                                           "application": {
                                             "function": {
@@ -614,22 +634,22 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.map"},
+                                                        "body": {"variable": "hydra.core.lib.lists.map"},
                                                         "type": {
-                                                          "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}}}},
+                                                          "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}}}},
                                                     "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                                                 "argument": {
                                                   "lambda": {
                                                     "parameter": "ref",
                                                     "domain": {
-                                                      "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}},
+                                                      "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}},
                                                     "body": {
                                                       "application": {
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
                                                               "cases": {
-                                                                "typeName": "hydra.shacl.model.Reference",
+                                                                "typeName": "hydra.rdf.shacl.model.Reference",
                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                                                 "cases": [
                                                                   {
@@ -647,15 +667,15 @@
                                                                                     "function": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.tripleRII"}, "argument": {"variable": "subj"}}},
                                                                                     "argument": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.sh"}, "argument": {"literal": {"string": "or"}}}}}},
                                                                                 "argument": {"variable": "i"}}}]}}}}]}},
-                                                            "type": {"variable": "hydra.shacl.model.Shape"}}},
+                                                            "type": {"variable": "hydra.rdf.shacl.model.Shape"}}},
                                                         "argument": {"variable": "ref"}}}}}}},
                                             "argument": {
                                               "application": {
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.sets.toList"},
+                                                    "body": {"variable": "hydra.core.lib.sets.toList"},
                                                     "type": {
-                                                      "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}}}},
+                                                      "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}}}},
                                                 "argument": {"variable": "refs"}}}}}}}}}},
                               {
                                 "name": "xone",
@@ -664,10 +684,11 @@
                                     "parameter": "refs",
                                     "domain": {
                                       "set": {
-                                        "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}}},
+                                        "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}}},
                                     "body": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                        "function": {
+                                          "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                         "argument": {
                                           "application": {
                                             "function": {
@@ -676,22 +697,22 @@
                                                   "typeApplication": {
                                                     "body": {
                                                       "typeApplication": {
-                                                        "body": {"variable": "hydra.lib.lists.map"},
+                                                        "body": {"variable": "hydra.core.lib.lists.map"},
                                                         "type": {
-                                                          "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}}}},
+                                                          "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}}}},
                                                     "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                                                 "argument": {
                                                   "lambda": {
                                                     "parameter": "ref",
                                                     "domain": {
-                                                      "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}},
+                                                      "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}},
                                                     "body": {
                                                       "application": {
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
                                                               "cases": {
-                                                                "typeName": "hydra.shacl.model.Reference",
+                                                                "typeName": "hydra.rdf.shacl.model.Reference",
                                                                 "default": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                                                 "cases": [
                                                                   {
@@ -709,15 +730,15 @@
                                                                                     "function": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.tripleRII"}, "argument": {"variable": "subj"}}},
                                                                                     "argument": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.sh"}, "argument": {"literal": {"string": "xone"}}}}}},
                                                                                 "argument": {"variable": "i"}}}]}}}}]}},
-                                                            "type": {"variable": "hydra.shacl.model.Shape"}}},
+                                                            "type": {"variable": "hydra.rdf.shacl.model.Shape"}}},
                                                         "argument": {"variable": "ref"}}}}}}},
                                             "argument": {
                                               "application": {
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"variable": "hydra.lib.sets.toList"},
+                                                    "body": {"variable": "hydra.core.lib.sets.toList"},
                                                     "type": {
-                                                      "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.Shape"}}}}},
+                                                      "application": {"function": {"variable": "hydra.rdf.shacl.model.Reference"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}}}},
                                                 "argument": {"variable": "refs"}}}}}}}}}},
                               {
                                 "name": "equals",
@@ -750,7 +771,7 @@
           "typeParameters": [],
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.rdf.syntax.Resource"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.shacl.model.CommonProperties"}, "isLazy": false}],
+            {"name": "arg1", "type": {"variable": "hydra.rdf.shacl.model.CommonProperties"}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
         "body": {
           "annotated": {
@@ -761,15 +782,17 @@
                 "body": {
                   "lambda": {
                     "parameter": "cp",
-                    "domain": {"variable": "hydra.shacl.model.CommonProperties"},
+                    "domain": {"variable": "hydra.rdf.shacl.model.CommonProperties"},
                     "body": {
                       "application": {
-                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                        "function": {
+                          "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                         "argument": {
                           "list": [
                             {
                               "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                "function": {
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                 "argument": {
                                   "application": {
                                     "function": {
@@ -777,17 +800,17 @@
                                         "function": {
                                           "typeApplication": {
                                             "body": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.shacl.model.CommonConstraint"}}},
+                                              "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.rdf.shacl.model.CommonConstraint"}}},
                                             "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                                         "argument": {
                                           "application": {"function": {"variable": "hydra.rdf.shaclRdf.commonConstraintToTriples"}, "argument": {"variable": "subj"}}}}},
                                     "argument": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.shacl.model.CommonConstraint"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.core.lib.sets.toList"}, "type": {"variable": "hydra.rdf.shacl.model.CommonConstraint"}}},
                                         "argument": {
                                           "application": {
-                                            "function": {"project": {"typeName": "hydra.shacl.model.CommonProperties", "fieldName": "constraints"}},
+                                            "function": {"project": {"typeName": "hydra.rdf.shacl.model.CommonProperties", "fieldName": "constraints"}},
                                             "argument": {"variable": "cp"}}}}}}}}},
                             {
                               "application": {
@@ -797,11 +820,11 @@
                                       "application": {
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": "boolean"}}},
+                                            "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.optionals.match"}, "type": {"literal": "boolean"}}},
                                             "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                                         "argument": {
                                           "application": {
-                                            "function": {"project": {"typeName": "hydra.shacl.model.CommonProperties", "fieldName": "deactivated"}},
+                                            "function": {"project": {"typeName": "hydra.rdf.shacl.model.CommonProperties", "fieldName": "deactivated"}},
                                             "argument": {"variable": "cp"}}}}},
                                     "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}},
                                 "argument": {
@@ -819,7 +842,8 @@
                                             "argument": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.booleanNode"}, "argument": {"variable": "b"}}}}}]}}}}},
                             {
                               "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                "function": {
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                 "argument": {
                                   "application": {
                                     "function": {
@@ -827,7 +851,7 @@
                                         "function": {
                                           "typeApplication": {
                                             "body": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}},
+                                              "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}},
                                             "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                                         "argument": {
                                           "lambda": {
@@ -845,10 +869,10 @@
                                     "argument": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.core.lib.sets.toList"}, "type": {"variable": "hydra.rdf.syntax.IriOrLiteral"}}},
                                         "argument": {
                                           "application": {
-                                            "function": {"project": {"typeName": "hydra.shacl.model.CommonProperties", "fieldName": "targetNode"}},
+                                            "function": {"project": {"typeName": "hydra.rdf.shacl.model.CommonProperties", "fieldName": "targetNode"}},
                                             "argument": {"variable": "cp"}}}}}}}}}]}}}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize CommonProperties to triples"}}}]}}}}},
@@ -861,7 +885,7 @@
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.shacl.model.Definition"}, "argument": {"variable": "hydra.shacl.model.Shape"}}},
+                "application": {"function": {"variable": "hydra.rdf.shacl.model.Definition"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}},
               "isLazy": false}],
           "result": {"type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
         "body": {
@@ -870,7 +894,7 @@
               "lambda": {
                 "parameter": "d",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.shacl.model.Definition"}, "argument": {"variable": "hydra.shacl.model.Shape"}}},
+                  "application": {"function": {"variable": "hydra.rdf.shacl.model.Definition"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}},
                 "body": {
                   "let": {
                     "bindings": [
@@ -880,8 +904,8 @@
                           "application": {
                             "function": {
                               "typeApplication": {
-                                "body": {"project": {"typeName": "hydra.shacl.model.Definition", "fieldName": "iri"}},
-                                "type": {"variable": "hydra.shacl.model.Shape"}}},
+                                "body": {"project": {"typeName": "hydra.rdf.shacl.model.Definition", "fieldName": "iri"}},
+                                "type": {"variable": "hydra.rdf.shacl.model.Shape"}}},
                             "argument": {"variable": "d"}}},
                         "typeScheme": {"variables": [], "body": {"variable": "hydra.rdf.syntax.Iri"}, "constraints": []}},
                       {
@@ -890,22 +914,22 @@
                           "application": {
                             "function": {
                               "typeApplication": {
-                                "body": {"project": {"typeName": "hydra.shacl.model.Definition", "fieldName": "target"}},
-                                "type": {"variable": "hydra.shacl.model.Shape"}}},
+                                "body": {"project": {"typeName": "hydra.rdf.shacl.model.Definition", "fieldName": "target"}},
+                                "type": {"variable": "hydra.rdf.shacl.model.Shape"}}},
                             "argument": {"variable": "d"}}},
-                        "typeScheme": {"variables": [], "body": {"variable": "hydra.shacl.model.Shape"}, "constraints": []}}],
+                        "typeScheme": {"variables": [], "body": {"variable": "hydra.rdf.shacl.model.Shape"}, "constraints": []}}],
                     "body": {
                       "application": {
                         "function": {
                           "cases": {
-                            "typeName": "hydra.shacl.model.Shape",
+                            "typeName": "hydra.rdf.shacl.model.Shape",
                             "cases": [
                               {
                                 "name": "node",
                                 "handler": {
                                   "lambda": {
                                     "parameter": "ns_",
-                                    "domain": {"variable": "hydra.shacl.model.NodeShape"},
+                                    "domain": {"variable": "hydra.rdf.shacl.model.NodeShape"},
                                     "body": {
                                       "application": {
                                         "function": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.nodeShapeToTriples"}, "argument": {"variable": "iri_"}}},
@@ -915,7 +939,7 @@
                                 "handler": {
                                   "lambda": {
                                     "parameter": "ps",
-                                    "domain": {"variable": "hydra.shacl.model.PropertyShape"},
+                                    "domain": {"variable": "hydra.rdf.shacl.model.PropertyShape"},
                                     "body": {
                                       "application": {
                                         "function": {
@@ -950,7 +974,7 @@
                           "fields": [
                             {
                               "name": "lexicalForm",
-                              "term": {"application": {"function": {"variable": "hydra.lib.literals.printBigint"}, "argument": {"variable": "n"}}}},
+                              "term": {"application": {"function": {"variable": "hydra.core.lib.literals.printBigint"}, "argument": {"variable": "n"}}}},
                             {
                               "name": "datatypeIri",
                               "term": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.xsd"}, "argument": {"literal": {"string": "integer"}}}}},
@@ -1029,19 +1053,19 @@
         "name": "hydra.rdf.shaclRdf.nodeKindToIri",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.shacl.model.NodeKind"}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.rdf.shacl.model.NodeKind"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.rdf.syntax.Iri"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "nk",
-                "domain": {"variable": "hydra.shacl.model.NodeKind"},
+                "domain": {"variable": "hydra.rdf.shacl.model.NodeKind"},
                 "body": {
                   "application": {
                     "function": {
                       "cases": {
-                        "typeName": "hydra.shacl.model.NodeKind",
+                        "typeName": "hydra.rdf.shacl.model.NodeKind",
                         "cases": [
                           {
                             "name": "blankNode",
@@ -1097,7 +1121,7 @@
           "typeParameters": [],
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.rdf.syntax.Iri"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.shacl.model.NodeShape"}, "isLazy": false}],
+            {"name": "arg1", "type": {"variable": "hydra.rdf.shacl.model.NodeShape"}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
         "body": {
           "annotated": {
@@ -1108,10 +1132,11 @@
                 "body": {
                   "lambda": {
                     "parameter": "ns_",
-                    "domain": {"variable": "hydra.shacl.model.NodeShape"},
+                    "domain": {"variable": "hydra.rdf.shacl.model.NodeShape"},
                     "body": {
                       "application": {
-                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                        "function": {
+                          "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                         "argument": {
                           "list": [
                             {
@@ -1138,7 +1163,7 @@
                                     "argument": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.iriResource"}, "argument": {"variable": "iri_"}}}}},
                                 "argument": {
                                   "application": {
-                                    "function": {"project": {"typeName": "hydra.shacl.model.NodeShape", "fieldName": "common"}},
+                                    "function": {"project": {"typeName": "hydra.rdf.shacl.model.NodeShape", "fieldName": "common"}},
                                     "argument": {"variable": "ns_"}}}}}]}}}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Serialize a NodeShape to triples"}}}]}}}}},
     {
@@ -1151,7 +1176,9 @@
             {
               "name": "arg1",
               "type": {
-                "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.PropertyShape"}}},
+                "application": {
+                  "function": {"variable": "hydra.rdf.shacl.model.Reference"},
+                  "argument": {"variable": "hydra.rdf.shacl.model.PropertyShape"}}},
               "isLazy": false}],
           "result": {"type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
         "body": {
@@ -1164,14 +1191,16 @@
                   "lambda": {
                     "parameter": "ref",
                     "domain": {
-                      "application": {"function": {"variable": "hydra.shacl.model.Reference"}, "argument": {"variable": "hydra.shacl.model.PropertyShape"}}},
+                      "application": {
+                        "function": {"variable": "hydra.rdf.shacl.model.Reference"},
+                        "argument": {"variable": "hydra.rdf.shacl.model.PropertyShape"}}},
                     "body": {
                       "application": {
                         "function": {
                           "typeApplication": {
                             "body": {
                               "cases": {
-                                "typeName": "hydra.shacl.model.Reference",
+                                "typeName": "hydra.rdf.shacl.model.Reference",
                                 "cases": [
                                   {
                                     "name": "named",
@@ -1194,7 +1223,9 @@
                                       "lambda": {
                                         "parameter": "def",
                                         "domain": {
-                                          "application": {"function": {"variable": "hydra.shacl.model.Definition"}, "argument": {"variable": "hydra.shacl.model.PropertyShape"}}},
+                                          "application": {
+                                            "function": {"variable": "hydra.rdf.shacl.model.Definition"},
+                                            "argument": {"variable": "hydra.rdf.shacl.model.PropertyShape"}}},
                                         "body": {
                                           "let": {
                                             "bindings": [
@@ -1204,8 +1235,8 @@
                                                   "application": {
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {"project": {"typeName": "hydra.shacl.model.Definition", "fieldName": "iri"}},
-                                                        "type": {"variable": "hydra.shacl.model.PropertyShape"}}},
+                                                        "body": {"project": {"typeName": "hydra.rdf.shacl.model.Definition", "fieldName": "iri"}},
+                                                        "type": {"variable": "hydra.rdf.shacl.model.PropertyShape"}}},
                                                     "argument": {"variable": "def"}}},
                                                 "typeScheme": {"variables": [], "body": {"variable": "hydra.rdf.syntax.Iri"}, "constraints": []}},
                                               {
@@ -1214,13 +1245,14 @@
                                                   "application": {
                                                     "function": {
                                                       "typeApplication": {
-                                                        "body": {"project": {"typeName": "hydra.shacl.model.Definition", "fieldName": "target"}},
-                                                        "type": {"variable": "hydra.shacl.model.PropertyShape"}}},
+                                                        "body": {"project": {"typeName": "hydra.rdf.shacl.model.Definition", "fieldName": "target"}},
+                                                        "type": {"variable": "hydra.rdf.shacl.model.PropertyShape"}}},
                                                     "argument": {"variable": "def"}}},
-                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.shacl.model.PropertyShape"}, "constraints": []}}],
+                                                "typeScheme": {"variables": [], "body": {"variable": "hydra.rdf.shacl.model.PropertyShape"}, "constraints": []}}],
                                             "body": {
                                               "application": {
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                                "function": {
+                                                  "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                                 "argument": {
                                                   "list": [
                                                     {
@@ -1244,9 +1276,9 @@
                                     "handler": {
                                       "lambda": {
                                         "parameter": "_",
-                                        "domain": {"variable": "hydra.shacl.model.PropertyShape"},
+                                        "domain": {"variable": "hydra.rdf.shacl.model.PropertyShape"},
                                         "body": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}}}]}},
-                            "type": {"variable": "hydra.shacl.model.PropertyShape"}}},
+                            "type": {"variable": "hydra.rdf.shacl.model.PropertyShape"}}},
                         "argument": {"variable": "ref"}}}}}}},
             "annotation": {
               "map": [
@@ -1260,7 +1292,7 @@
           "typeParameters": [],
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.rdf.syntax.Resource"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}, "isLazy": false}],
+            {"name": "arg1", "type": {"variable": "hydra.rdf.shacl.model.PropertyShapeConstraint"}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
         "body": {
           "annotated": {
@@ -1271,12 +1303,12 @@
                 "body": {
                   "lambda": {
                     "parameter": "psc",
-                    "domain": {"variable": "hydra.shacl.model.PropertyShapeConstraint"},
+                    "domain": {"variable": "hydra.rdf.shacl.model.PropertyShapeConstraint"},
                     "body": {
                       "application": {
                         "function": {
                           "cases": {
-                            "typeName": "hydra.shacl.model.PropertyShapeConstraint",
+                            "typeName": "hydra.rdf.shacl.model.PropertyShapeConstraint",
                             "cases": [
                               {
                                 "name": "minCount",
@@ -1342,7 +1374,7 @@
                                 "handler": {
                                   "lambda": {
                                     "parameter": "_",
-                                    "domain": {"variable": "hydra.shacl.model.QualifiedValueShape"},
+                                    "domain": {"variable": "hydra.rdf.shacl.model.QualifiedValueShape"},
                                     "body": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}}}]}},
                         "argument": {"variable": "psc"}}}}}}},
             "annotation": {
@@ -1355,7 +1387,7 @@
           "typeParameters": [],
           "parameters": [
             {"name": "arg0", "type": {"variable": "hydra.rdf.syntax.Resource"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.shacl.model.PropertyShape"}, "isLazy": false}],
+            {"name": "arg1", "type": {"variable": "hydra.rdf.shacl.model.PropertyShape"}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
         "body": {
           "annotated": {
@@ -1366,10 +1398,11 @@
                 "body": {
                   "lambda": {
                     "parameter": "ps",
-                    "domain": {"variable": "hydra.shacl.model.PropertyShape"},
+                    "domain": {"variable": "hydra.rdf.shacl.model.PropertyShape"},
                     "body": {
                       "application": {
-                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                        "function": {
+                          "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                         "argument": {
                           "list": [
                             {
@@ -1390,7 +1423,7 @@
                                         "argument": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.sh"}, "argument": {"literal": {"string": "path"}}}}}},
                                     "argument": {
                                       "application": {
-                                        "function": {"project": {"typeName": "hydra.shacl.model.PropertyShape", "fieldName": "path"}},
+                                        "function": {"project": {"typeName": "hydra.rdf.shacl.model.PropertyShape", "fieldName": "path"}},
                                         "argument": {"variable": "ps"}}}}}]},
                             {
                               "application": {
@@ -1398,11 +1431,12 @@
                                   "application": {"function": {"variable": "hydra.rdf.shaclRdf.commonPropertiesToTriples"}, "argument": {"variable": "subj"}}},
                                 "argument": {
                                   "application": {
-                                    "function": {"project": {"typeName": "hydra.shacl.model.PropertyShape", "fieldName": "common"}},
+                                    "function": {"project": {"typeName": "hydra.rdf.shacl.model.PropertyShape", "fieldName": "common"}},
                                     "argument": {"variable": "ps"}}}}},
                             {
                               "application": {
-                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                "function": {
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                 "argument": {
                                   "application": {
                                     "function": {
@@ -1410,17 +1444,21 @@
                                         "function": {
                                           "typeApplication": {
                                             "body": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}},
+                                              "typeApplication": {
+                                                "body": {"variable": "hydra.core.lib.lists.map"},
+                                                "type": {"variable": "hydra.rdf.shacl.model.PropertyShapeConstraint"}}},
                                             "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                                         "argument": {
                                           "application": {"function": {"variable": "hydra.rdf.shaclRdf.propertyShapeConstraintToTriples"}, "argument": {"variable": "subj"}}}}},
                                     "argument": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.shacl.model.PropertyShapeConstraint"}}},
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.core.lib.sets.toList"},
+                                            "type": {"variable": "hydra.rdf.shacl.model.PropertyShapeConstraint"}}},
                                         "argument": {
                                           "application": {
-                                            "function": {"project": {"typeName": "hydra.shacl.model.PropertyShape", "fieldName": "constraints"}},
+                                            "function": {"project": {"typeName": "hydra.rdf.shacl.model.PropertyShape", "fieldName": "constraints"}},
                                             "argument": {"variable": "ps"}}}}}}}}},
                             {
                               "application": {
@@ -1430,11 +1468,12 @@
                                       "application": {
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.match"}, "type": {"literal": {"integer": "bigint"}}}},
+                                            "body": {
+                                              "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.match"}, "type": {"literal": {"integer": "bigint"}}}},
                                             "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                                         "argument": {
                                           "application": {
-                                            "function": {"project": {"typeName": "hydra.shacl.model.PropertyShape", "fieldName": "order"}},
+                                            "function": {"project": {"typeName": "hydra.rdf.shacl.model.PropertyShape", "fieldName": "order"}},
                                             "argument": {"variable": "ps"}}}}},
                                     "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}},
                                 "argument": {
@@ -1496,14 +1535,14 @@
         "name": "hydra.rdf.shaclRdf.shapesGraphToNtriples",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.shacl.model.ShapesGraph"}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.rdf.shacl.model.ShapesGraph"}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "sg",
-                "domain": {"variable": "hydra.shacl.model.ShapesGraph"},
+                "domain": {"variable": "hydra.rdf.shacl.model.ShapesGraph"},
                 "body": {
                   "let": {
                     "bindings": [
@@ -1519,7 +1558,7 @@
                               "application": {
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                     "type": {"variable": "hydra.rdf.syntax.Description"}}},
                                 "argument": {
                                   "lambda": {
@@ -1539,17 +1578,18 @@
         "name": "hydra.rdf.shaclRdf.shapesGraphToTriples",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.shacl.model.ShapesGraph"}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.rdf.shacl.model.ShapesGraph"}, "isLazy": false}],
           "result": {"type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "sg",
-                "domain": {"variable": "hydra.shacl.model.ShapesGraph"},
+                "domain": {"variable": "hydra.rdf.shacl.model.ShapesGraph"},
                 "body": {
                   "application": {
-                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                    "function": {
+                      "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                     "argument": {
                       "application": {
                         "function": {
@@ -1558,24 +1598,24 @@
                               "typeApplication": {
                                 "body": {
                                   "typeApplication": {
-                                    "body": {"variable": "hydra.lib.lists.map"},
+                                    "body": {"variable": "hydra.core.lib.lists.map"},
                                     "type": {
-                                      "application": {"function": {"variable": "hydra.shacl.model.Definition"}, "argument": {"variable": "hydra.shacl.model.Shape"}}}}},
+                                      "application": {"function": {"variable": "hydra.rdf.shacl.model.Definition"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}}}},
                                 "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
                             "argument": {
                               "lambda": {
                                 "parameter": "d",
                                 "domain": {
-                                  "application": {"function": {"variable": "hydra.shacl.model.Definition"}, "argument": {"variable": "hydra.shacl.model.Shape"}}},
+                                  "application": {"function": {"variable": "hydra.rdf.shacl.model.Definition"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}},
                                 "body": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.definitionToTriples"}, "argument": {"variable": "d"}}}}}}},
                         "argument": {
                           "application": {
                             "function": {
                               "typeApplication": {
-                                "body": {"variable": "hydra.lib.sets.toList"},
+                                "body": {"variable": "hydra.core.lib.sets.toList"},
                                 "type": {
-                                  "application": {"function": {"variable": "hydra.shacl.model.Definition"}, "argument": {"variable": "hydra.shacl.model.Shape"}}}}},
-                            "argument": {"application": {"function": {"unwrap": "hydra.shacl.model.ShapesGraph"}, "argument": {"variable": "sg"}}}}}}}}}}},
+                                  "application": {"function": {"variable": "hydra.rdf.shacl.model.Definition"}, "argument": {"variable": "hydra.rdf.shacl.model.Shape"}}}}},
+                            "argument": {"application": {"function": {"unwrap": "hydra.rdf.shacl.model.ShapesGraph"}, "argument": {"variable": "sg"}}}}}}}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a ShapesGraph to RDF triples"}}}]}}}}},
     {
@@ -1797,7 +1837,8 @@
                                 "typeName": "hydra.rdf.syntax.Graph",
                                 "body": {
                                   "application": {
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.singleton"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                    "function": {
+                                      "typeApplication": {"body": {"variable": "hydra.core.lib.sets.singleton"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
                                     "argument": {"variable": "t"}}}}}}]}}}}}},
             "annotation": {
               "map": [

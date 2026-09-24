@@ -1,0 +1,103 @@
+{
+  "name": "hydra.core.print.util",
+  "metadata": {"description": "String representations of hydra.core.util types", "comments": [], "seeAlso": [], "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.core.print.util.caseConvention",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.util.CaseConvention"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "c",
+                "domain": {"variable": "hydra.core.util.CaseConvention"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.util.CaseConvention",
+                        "cases": [
+                          {
+                            "name": "lowerSnake",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "lower_snake_case"}}}}},
+                          {
+                            "name": "upperSnake",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "UPPER_SNAKE_CASE"}}}}},
+                          {
+                            "name": "camel",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "camelCase"}}}}},
+                          {
+                            "name": "pascal",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "PascalCase"}}}}},
+                          {
+                            "name": "upperDashed",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "UPPER-DASHED-CASE"}}}}}]}},
+                    "argument": {"variable": "c"}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a case convention as a string"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.print.util.comparison",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.util.Comparison"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "c",
+                "domain": {"variable": "hydra.core.util.Comparison"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "cases": {
+                        "typeName": "hydra.core.util.Comparison",
+                        "cases": [
+                          {
+                            "name": "lessThan",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "lessThan"}}}}},
+                          {
+                            "name": "equalTo",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "equalTo"}}}}},
+                          {
+                            "name": "greaterThan",
+                            "handler": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "greaterThan"}}}}}]}},
+                    "argument": {"variable": "c"}}}}},
+            "annotation": {
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Show a comparison result as a string"}}}]}}}}}]}

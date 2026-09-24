@@ -6,39 +6,39 @@
     "seeAlso": [],
     "provisions": []},
   "dependencies": [
-    {"module": "hydra.paths"},
-    {"module": "hydra.ast"},
-    {"module": "hydra.coders"},
-    {"module": "hydra.core"},
-    {"module": "hydra.diff"},
-    {"module": "hydra.docs"},
-    {"module": "hydra.error.checking"},
-    {"module": "hydra.error.core"},
-    {"module": "hydra.error.file"},
-    {"module": "hydra.error.packaging"},
-    {"module": "hydra.error.system"},
-    {"module": "hydra.errors"},
-    {"module": "hydra.file"},
-    {"module": "hydra.graph"},
-    {"module": "hydra.json.model"},
-    {"module": "hydra.markdown"},
-    {"module": "hydra.packaging"},
-    {"module": "hydra.parsing"},
-    {"module": "hydra.query"},
-    {"module": "hydra.regex"},
-    {"module": "hydra.relational"},
-    {"module": "hydra.system"},
-    {"module": "hydra.tabular"},
-    {"module": "hydra.testing"},
-    {"module": "hydra.time"},
-    {"module": "hydra.topology"},
-    {"module": "hydra.typed"},
-    {"module": "hydra.typing"},
-    {"module": "hydra.util"},
-    {"module": "hydra.validation"},
-    {"module": "hydra.variants"},
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"},
     {"module": "hydra.pg.graphson.syntax"},
-    {"module": "hydra.json.model"}],
+    {"module": "hydra.core.json.model"}],
   "definitions": [
     {
       "term": {
@@ -48,7 +48,7 @@
           "parameters": [
             {"name": "arg0", "type": {"literal": "boolean"}, "isLazy": false},
             {"name": "arg1", "type": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}}},
+          "result": {"type": {"variable": "hydra.core.json.model.Value"}}},
         "body": {
           "annotated": {
             "body": {
@@ -80,7 +80,7 @@
                                                   "function": {"project": {"typeName": "hydra.pg.graphson.syntax.AdjacentEdge", "fieldName": "id"}},
                                                   "argument": {"variable": "ae"}}}}}}}},
                                     "type": {"literal": "string"}}},
-                                "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                                "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                             {
                               "typeApplication": {
                                 "body": {
@@ -95,7 +95,7 @@
                                                 "function": {
                                                   "application": {
                                                     "function": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                                                     "argument": {"variable": "out"}}},
                                                 "argument": {
                                                   "optional": {
@@ -105,9 +105,9 @@
                                                         "application": {
                                                           "function": {"project": {"typeName": "hydra.pg.graphson.syntax.AdjacentEdge", "fieldName": "vertexId"}},
                                                           "argument": {"variable": "ae"}}}}}}}},
-                                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.json.model.Value"}}}}}}},
+                                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.json.model.Value"}}}}}}},
                                     "type": {"literal": "string"}}},
-                                "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                                "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                             {
                               "typeApplication": {
                                 "body": {
@@ -122,9 +122,9 @@
                                                 "function": {
                                                   "application": {
                                                     "function": {
-                                                      "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                                                     "argument": {"variable": "out"}}},
-                                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.json.model.Value"}}}}},
+                                                "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.json.model.Value"}}}}},
                                             "argument": {
                                               "optional": {
                                                 "application": {
@@ -134,7 +134,7 @@
                                                       "function": {"project": {"typeName": "hydra.pg.graphson.syntax.AdjacentEdge", "fieldName": "vertexId"}},
                                                       "argument": {"variable": "ae"}}}}}}}}}},
                                     "type": {"literal": "string"}}},
-                                "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                                "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                             {
                               "typeApplication": {
                                 "body": {
@@ -150,7 +150,7 @@
                                                 "function": {"project": {"typeName": "hydra.pg.graphson.syntax.AdjacentEdge", "fieldName": "properties"}},
                                                 "argument": {"variable": "ae"}}}}}}},
                                     "type": {"literal": "string"}}},
-                                "type": {"optional": {"variable": "hydra.json.model.Value"}}}}]}}}}}}},
+                                "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -163,7 +163,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.DoubleValue"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}}},
+          "result": {"type": {"variable": "hydra.core.json.model.Value"}}},
         "body": {
           "annotated": {
             "body": {
@@ -178,10 +178,10 @@
                         "domain": {"literal": {"float": "float64"}},
                         "body": {
                           "inject": {
-                            "typeName": "hydra.json.model.Value",
+                            "typeName": "hydra.core.json.model.Value",
                             "field": {
                               "name": "number",
-                              "term": {"application": {"function": {"variable": "hydra.lib.literals.float64ToDecimal"}, "argument": {"variable": "d"}}}}}}}}},
+                              "term": {"application": {"function": {"variable": "hydra.core.lib.literals.float64ToDecimal"}, "argument": {"variable": "d"}}}}}}}}},
                   {
                     "name": "infinity",
                     "handler": {
@@ -189,7 +189,7 @@
                         "parameter": "_",
                         "domain": "unit",
                         "body": {
-                          "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "Infinity"}}}}}}}},
+                          "inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "Infinity"}}}}}}}},
                   {
                     "name": "negativeInfinity",
                     "handler": {
@@ -197,14 +197,15 @@
                         "parameter": "_",
                         "domain": "unit",
                         "body": {
-                          "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "-Infinity"}}}}}}}},
+                          "inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "-Infinity"}}}}}}}},
                   {
                     "name": "notANumber",
                     "handler": {
                       "lambda": {
                         "parameter": "_",
                         "domain": "unit",
-                        "body": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "NaN"}}}}}}}}]}},
+                        "body": {
+                          "inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "NaN"}}}}}}}}]}},
             "annotation": {
               "map": [
                 {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphSON DoubleValue to a JSON Value"}}}]}}}}},
@@ -222,7 +223,7 @@
                   "keys": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"},
                   "values": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}},
               "isLazy": false}],
-          "result": {"type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+          "result": {"type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
         "body": {
           "annotated": {
             "body": {
@@ -243,20 +244,20 @@
                             "function": {
                               "application": {
                                 "function": {
-                                  "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                                 "argument": {
                                   "application": {
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.maps.isEmpty"}, "type": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.core.lib.maps.isEmpty"}, "type": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"}}},
                                         "type": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}},
                                     "argument": {"variable": "m"}}}}},
-                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.json.model.Value"}}}}},
+                            "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.json.model.Value"}}}}},
                         "argument": {
                           "optional": {
                             "inject": {
-                              "typeName": "hydra.json.model.Value",
+                              "typeName": "hydra.core.json.model.Value",
                               "field": {
                                 "name": "object",
                                 "term": {
@@ -267,12 +268,12 @@
                                           "typeApplication": {
                                             "body": {
                                               "typeApplication": {
-                                                "body": {"variable": "hydra.lib.lists.map"},
+                                                "body": {"variable": "hydra.core.lib.lists.map"},
                                                 "type": {
                                                   "pair": {
                                                     "first": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"},
                                                     "second": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}}}},
-                                            "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}},
+                                            "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.core.json.model.Value"}}}}},
                                         "argument": {
                                           "lambda": {
                                             "parameter": "p",
@@ -294,12 +295,12 @@
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"}}},
+                                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.first"}, "type": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"}}},
                                                                     "type": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}},
                                                                 "argument": {"variable": "p"}}}}},
                                                         "second": {
                                                           "inject": {
-                                                            "typeName": "hydra.json.model.Value",
+                                                            "typeName": "hydra.core.json.model.Value",
                                                             "field": {
                                                               "name": "array",
                                                               "term": {
@@ -309,8 +310,8 @@
                                                                       "function": {
                                                                         "typeApplication": {
                                                                           "body": {
-                                                                            "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}},
-                                                                          "type": {"variable": "hydra.json.model.Value"}}},
+                                                                            "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}},
+                                                                          "type": {"variable": "hydra.core.json.model.Value"}}},
                                                                       "argument": {
                                                                         "application": {"function": {"variable": "hydra.pg.graphson.coder.adjacentEdgeToJson"}, "argument": {"variable": "out"}}}}},
                                                                   "argument": {
@@ -318,17 +319,17 @@
                                                                       "function": {
                                                                         "typeApplication": {
                                                                           "body": {
-                                                                            "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"}}},
+                                                                            "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.second"}, "type": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"}}},
                                                                           "type": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}},
                                                                       "argument": {"variable": "p"}}}}}}}}}},
                                                     "type": {"literal": "string"}}},
-                                                "type": {"variable": "hydra.json.model.Value"}}}}}}},
+                                                "type": {"variable": "hydra.core.json.model.Value"}}}}}}},
                                     "argument": {
                                       "application": {
                                         "function": {
                                           "typeApplication": {
                                             "body": {
-                                              "typeApplication": {"body": {"variable": "hydra.lib.maps.toList"}, "type": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"}}},
+                                              "typeApplication": {"body": {"variable": "hydra.core.lib.maps.toList"}, "type": {"variable": "hydra.pg.graphson.syntax.EdgeLabel"}}},
                                             "type": {"list": {"variable": "hydra.pg.graphson.syntax.AdjacentEdge"}}}},
                                         "argument": {"variable": "m"}}}}}}}}}}}}}}},
             "annotation": {
@@ -347,7 +348,7 @@
               "type": {
                 "map": {"keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}, "values": {"variable": "hydra.pg.graphson.syntax.Value"}}},
               "isLazy": false}],
-          "result": {"type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+          "result": {"type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
         "body": {
           "annotated": {
             "body": {
@@ -362,20 +363,20 @@
                         "function": {
                           "application": {
                             "function": {
-                              "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                              "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                             "argument": {
                               "application": {
                                 "function": {
                                   "typeApplication": {
                                     "body": {
-                                      "typeApplication": {"body": {"variable": "hydra.lib.maps.isEmpty"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
+                                      "typeApplication": {"body": {"variable": "hydra.core.lib.maps.isEmpty"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                     "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                 "argument": {"variable": "m"}}}}},
-                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.json.model.Value"}}}}},
+                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.json.model.Value"}}}}},
                     "argument": {
                       "optional": {
                         "inject": {
-                          "typeName": "hydra.json.model.Value",
+                          "typeName": "hydra.core.json.model.Value",
                           "field": {
                             "name": "object",
                             "term": {
@@ -386,12 +387,12 @@
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"variable": "hydra.lib.lists.map"},
+                                            "body": {"variable": "hydra.core.lib.lists.map"},
                                             "type": {
                                               "pair": {
                                                 "first": {"variable": "hydra.pg.graphson.syntax.PropertyKey"},
                                                 "second": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
-                                        "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}},
+                                        "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.core.json.model.Value"}}}}},
                                     "argument": {
                                       "lambda": {
                                         "parameter": "p",
@@ -413,7 +414,7 @@
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {
-                                                                  "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
+                                                                  "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.first"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                                                 "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                             "argument": {"variable": "p"}}}}},
                                                     "second": {
@@ -424,17 +425,17 @@
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {
-                                                                  "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
+                                                                  "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.second"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                                                 "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                                             "argument": {"variable": "p"}}}}}}},
                                                 "type": {"literal": "string"}}},
-                                            "type": {"variable": "hydra.json.model.Value"}}}}}}},
+                                            "type": {"variable": "hydra.core.json.model.Value"}}}}}}},
                                 "argument": {
                                   "application": {
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.maps.toList"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.core.lib.maps.toList"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                         "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
                                     "argument": {"variable": "m"}}}}}}}}}}}}},
             "annotation": {
@@ -448,7 +449,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.FloatValue"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}}},
+          "result": {"type": {"variable": "hydra.core.json.model.Value"}}},
         "body": {
           "annotated": {
             "body": {
@@ -463,10 +464,10 @@
                         "domain": {"literal": {"float": "float32"}},
                         "body": {
                           "inject": {
-                            "typeName": "hydra.json.model.Value",
+                            "typeName": "hydra.core.json.model.Value",
                             "field": {
                               "name": "number",
-                              "term": {"application": {"function": {"variable": "hydra.lib.literals.float32ToDecimal"}, "argument": {"variable": "f"}}}}}}}}},
+                              "term": {"application": {"function": {"variable": "hydra.core.lib.literals.float32ToDecimal"}, "argument": {"variable": "f"}}}}}}}}},
                   {
                     "name": "infinity",
                     "handler": {
@@ -474,7 +475,7 @@
                         "parameter": "_",
                         "domain": "unit",
                         "body": {
-                          "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "Infinity"}}}}}}}},
+                          "inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "Infinity"}}}}}}}},
                   {
                     "name": "negativeInfinity",
                     "handler": {
@@ -482,14 +483,15 @@
                         "parameter": "_",
                         "domain": "unit",
                         "body": {
-                          "inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "-Infinity"}}}}}}}},
+                          "inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "-Infinity"}}}}}}}},
                   {
                     "name": "notANumber",
                     "handler": {
                       "lambda": {
                         "parameter": "_",
                         "domain": "unit",
-                        "body": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "NaN"}}}}}}}}]}},
+                        "body": {
+                          "inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "string", "term": {"literal": {"string": "NaN"}}}}}}}}]}},
             "annotation": {
               "map": [
                 {"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphSON FloatValue to a JSON Value"}}}]}}}}},
@@ -499,7 +501,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.Map"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}}},
+          "result": {"type": {"variable": "hydra.core.json.model.Value"}}},
         "body": {
           "annotated": {
             "body": {
@@ -508,12 +510,13 @@
                 "domain": {"variable": "hydra.pg.graphson.syntax.Map"},
                 "body": {
                   "inject": {
-                    "typeName": "hydra.json.model.Value",
+                    "typeName": "hydra.core.json.model.Value",
                     "field": {
                       "name": "array",
                       "term": {
                         "application": {
-                          "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"variable": "hydra.json.model.Value"}}},
+                          "function": {
+                            "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.core.json.model.Value"}}},
                           "argument": {
                             "application": {
                               "function": {
@@ -521,8 +524,8 @@
                                   "function": {
                                     "typeApplication": {
                                       "body": {
-                                        "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.pg.graphson.syntax.ValuePair"}}},
-                                      "type": {"list": {"variable": "hydra.json.model.Value"}}}},
+                                        "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.pg.graphson.syntax.ValuePair"}}},
+                                      "type": {"list": {"variable": "hydra.core.json.model.Value"}}}},
                                   "argument": {
                                     "lambda": {
                                       "parameter": "vp",
@@ -557,26 +560,28 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"list": {"pair": {"first": {"literal": "string"}, "second": {"optional": {"variable": "hydra.json.model.Value"}}}}},
+              "type": {
+                "list": {"pair": {"first": {"literal": "string"}, "second": {"optional": {"variable": "hydra.core.json.model.Value"}}}}},
               "isLazy": false}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}}},
+          "result": {"type": {"variable": "hydra.core.json.model.Value"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "pairs",
-                "domain": {"list": {"pair": {"first": {"literal": "string"}, "second": {"optional": {"variable": "hydra.json.model.Value"}}}}},
+                "domain": {
+                  "list": {"pair": {"first": {"literal": "string"}, "second": {"optional": {"variable": "hydra.core.json.model.Value"}}}}},
                 "body": {
                   "inject": {
-                    "typeName": "hydra.json.model.Value",
+                    "typeName": "hydra.core.json.model.Value",
                     "field": {
                       "name": "object",
                       "term": {
                         "application": {
                           "function": {
                             "typeApplication": {
-                              "body": {"variable": "hydra.lib.optionals.givens"},
-                              "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}},
+                              "body": {"variable": "hydra.core.lib.optionals.givens"},
+                              "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.core.json.model.Value"}}}}},
                           "argument": {
                             "application": {
                               "function": {
@@ -585,25 +590,26 @@
                                     "typeApplication": {
                                       "body": {
                                         "typeApplication": {
-                                          "body": {"variable": "hydra.lib.lists.map"},
-                                          "type": {"pair": {"first": {"literal": "string"}, "second": {"optional": {"variable": "hydra.json.model.Value"}}}}}},
-                                      "type": {"optional": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}}},
+                                          "body": {"variable": "hydra.core.lib.lists.map"},
+                                          "type": {"pair": {"first": {"literal": "string"}, "second": {"optional": {"variable": "hydra.core.json.model.Value"}}}}}},
+                                      "type": {"optional": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.core.json.model.Value"}}}}}},
                                   "argument": {
                                     "lambda": {
                                       "parameter": "p",
-                                      "domain": {"pair": {"first": {"literal": "string"}, "second": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                                      "domain": {"pair": {"first": {"literal": "string"}, "second": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                                       "body": {
                                         "application": {
                                           "function": {
                                             "application": {
                                               "function": {
                                                 "typeApplication": {
-                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.json.model.Value"}}},
-                                                  "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}},
+                                                  "body": {
+                                                    "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.map"}, "type": {"variable": "hydra.core.json.model.Value"}}},
+                                                  "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.core.json.model.Value"}}}}},
                                               "argument": {
                                                 "lambda": {
                                                   "parameter": "v",
-                                                  "domain": {"variable": "hydra.json.model.Value"},
+                                                  "domain": {"variable": "hydra.core.json.model.Value"},
                                                   "body": {
                                                     "typeApplication": {
                                                       "body": {
@@ -614,18 +620,18 @@
                                                                 "application": {
                                                                   "function": {
                                                                     "typeApplication": {
-                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"literal": "string"}}},
-                                                                      "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.pairs.first"}, "type": {"literal": "string"}}},
+                                                                      "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                                                                   "argument": {"variable": "p"}}},
                                                               "second": {"variable": "v"}}},
                                                           "type": {"literal": "string"}}},
-                                                      "type": {"variable": "hydra.json.model.Value"}}}}}}},
+                                                      "type": {"variable": "hydra.core.json.model.Value"}}}}}}},
                                           "argument": {
                                             "application": {
                                               "function": {
                                                 "typeApplication": {
-                                                  "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"literal": "string"}}},
-                                                  "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                                                  "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.pairs.second"}, "type": {"literal": "string"}}},
+                                                  "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                                               "argument": {"variable": "p"}}}}}}}}},
                               "argument": {"variable": "pairs"}}}}}}}}}},
             "annotation": {
@@ -640,8 +646,8 @@
           "typeParameters": [],
           "parameters": [
             {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
-            {"name": "arg1", "type": {"variable": "hydra.json.model.Value"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}}},
+            {"name": "arg1", "type": {"variable": "hydra.core.json.model.Value"}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.json.model.Value"}}},
         "body": {
           "annotated": {
             "body": {
@@ -651,7 +657,7 @@
                 "body": {
                   "lambda": {
                     "parameter": "valueJson",
-                    "domain": {"variable": "hydra.json.model.Value"},
+                    "domain": {"variable": "hydra.core.json.model.Value"},
                     "body": {
                       "application": {
                         "function": {"variable": "hydra.pg.graphson.coder.toJsonObject"},
@@ -665,16 +671,16 @@
                                       "pair": {
                                         "first": {"literal": {"string": "@type"}},
                                         "second": {
-                                          "optional": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"variable": "typeName"}}}}}}},
+                                          "optional": {"inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "string", "term": {"variable": "typeName"}}}}}}},
                                     "type": {"literal": "string"}}},
-                                "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                                "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                             {
                               "typeApplication": {
                                 "body": {
                                   "typeApplication": {
                                     "body": {"pair": {"first": {"literal": {"string": "@value"}}, "second": {"optional": {"variable": "valueJson"}}}},
                                     "type": {"literal": "string"}}},
-                                "type": {"optional": {"variable": "hydra.json.model.Value"}}}}]}}}}}}},
+                                "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}}]}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -686,7 +692,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.Value"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}}},
+          "result": {"type": {"variable": "hydra.core.json.model.Value"}}},
         "body": {
           "annotated": {
             "body": {
@@ -707,7 +713,7 @@
                                 "argument": {"literal": {"string": "g:BigDecimal"}}}},
                             "argument": {
                               "inject": {
-                                "typeName": "hydra.json.model.Value",
+                                "typeName": "hydra.core.json.model.Value",
                                 "field": {
                                   "name": "string",
                                   "term": {"application": {"function": {"unwrap": "hydra.pg.graphson.syntax.BigDecimalValue"}, "argument": {"variable": "bd"}}}}}}}}}}},
@@ -725,10 +731,10 @@
                                 "argument": {"literal": {"string": "g:BigInteger"}}}},
                             "argument": {
                               "inject": {
-                                "typeName": "hydra.json.model.Value",
+                                "typeName": "hydra.core.json.model.Value",
                                 "field": {
                                   "name": "number",
-                                  "term": {"application": {"function": {"variable": "hydra.lib.literals.bigintToDecimal"}, "argument": {"variable": "i"}}}}}}}}}}},
+                                  "term": {"application": {"function": {"variable": "hydra.core.lib.literals.bigintToDecimal"}, "argument": {"variable": "i"}}}}}}}}}}},
                   {
                     "name": "binary",
                     "handler": {
@@ -739,14 +745,14 @@
                           "application": {
                             "function": {
                               "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:Binary"}}}},
-                            "argument": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"variable": "b"}}}}}}}}},
+                            "argument": {"inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "string", "term": {"variable": "b"}}}}}}}}},
                   {
                     "name": "boolean",
                     "handler": {
                       "lambda": {
                         "parameter": "b",
                         "domain": {"literal": "boolean"},
-                        "body": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "boolean", "term": {"variable": "b"}}}}}}},
+                        "body": {"inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "boolean", "term": {"variable": "b"}}}}}}},
                   {
                     "name": "byte",
                     "handler": {
@@ -759,13 +765,13 @@
                               "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:Byte"}}}},
                             "argument": {
                               "inject": {
-                                "typeName": "hydra.json.model.Value",
+                                "typeName": "hydra.core.json.model.Value",
                                 "field": {
                                   "name": "number",
                                   "term": {
                                     "application": {
-                                      "function": {"variable": "hydra.lib.literals.bigintToDecimal"},
-                                      "argument": {"application": {"function": {"variable": "hydra.lib.literals.uint8ToBigint"}, "argument": {"variable": "b"}}}}}}}}}}}}},
+                                      "function": {"variable": "hydra.core.lib.literals.bigintToDecimal"},
+                                      "argument": {"application": {"function": {"variable": "hydra.core.lib.literals.uint8ToBigint"}, "argument": {"variable": "b"}}}}}}}}}}}}},
                   {
                     "name": "char",
                     "handler": {
@@ -778,19 +784,19 @@
                               "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:Char"}}}},
                             "argument": {
                               "inject": {
-                                "typeName": "hydra.json.model.Value",
+                                "typeName": "hydra.core.json.model.Value",
                                 "field": {
                                   "name": "string",
                                   "term": {
                                     "application": {
-                                      "function": {"variable": "hydra.lib.strings.fromList"},
+                                      "function": {"variable": "hydra.core.lib.strings.fromList"},
                                       "argument": {
                                         "application": {
-                                          "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.singleton"}, "type": {"literal": {"integer": "int32"}}}},
+                                          "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.singleton"}, "type": {"literal": {"integer": "int32"}}}},
                                           "argument": {
                                             "application": {
-                                              "function": {"variable": "hydra.lib.literals.bigintToInt32"},
-                                              "argument": {"application": {"function": {"variable": "hydra.lib.literals.uint32ToBigint"}, "argument": {"variable": "c"}}}}}}}}}}}}}}}}},
+                                              "function": {"variable": "hydra.core.lib.literals.bigintToInt32"},
+                                              "argument": {"application": {"function": {"variable": "hydra.core.lib.literals.uint32ToBigint"}, "argument": {"variable": "c"}}}}}}}}}}}}}}}}},
                   {
                     "name": "composite",
                     "handler": {
@@ -830,7 +836,7 @@
                                 "argument": {"literal": {"string": "g:DateTime"}}}},
                             "argument": {
                               "inject": {
-                                "typeName": "hydra.json.model.Value",
+                                "typeName": "hydra.core.json.model.Value",
                                 "field": {
                                   "name": "string",
                                   "term": {"application": {"function": {"unwrap": "hydra.pg.graphson.syntax.DateTime"}, "argument": {"variable": "dt"}}}}}}}}}}},
@@ -859,7 +865,7 @@
                                 "argument": {"literal": {"string": "g:Duration"}}}},
                             "argument": {
                               "inject": {
-                                "typeName": "hydra.json.model.Value",
+                                "typeName": "hydra.core.json.model.Value",
                                 "field": {
                                   "name": "string",
                                   "term": {"application": {"function": {"unwrap": "hydra.pg.graphson.syntax.Duration"}, "argument": {"variable": "dur"}}}}}}}}}}},
@@ -886,13 +892,13 @@
                               "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:Int32"}}}},
                             "argument": {
                               "inject": {
-                                "typeName": "hydra.json.model.Value",
+                                "typeName": "hydra.core.json.model.Value",
                                 "field": {
                                   "name": "number",
                                   "term": {
                                     "application": {
-                                      "function": {"variable": "hydra.lib.literals.bigintToDecimal"},
-                                      "argument": {"application": {"function": {"variable": "hydra.lib.literals.int32ToBigint"}, "argument": {"variable": "i"}}}}}}}}}}}}},
+                                      "function": {"variable": "hydra.core.lib.literals.bigintToDecimal"},
+                                      "argument": {"application": {"function": {"variable": "hydra.core.lib.literals.int32ToBigint"}, "argument": {"variable": "i"}}}}}}}}}}}}},
                   {
                     "name": "list",
                     "handler": {
@@ -905,7 +911,7 @@
                               "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:List"}}}},
                             "argument": {
                               "inject": {
-                                "typeName": "hydra.json.model.Value",
+                                "typeName": "hydra.core.json.model.Value",
                                 "field": {
                                   "name": "array",
                                   "term": {
@@ -915,8 +921,8 @@
                                           "function": {
                                             "typeApplication": {
                                               "body": {
-                                                "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
-                                              "type": {"variable": "hydra.json.model.Value"}}},
+                                                "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
+                                              "type": {"variable": "hydra.core.json.model.Value"}}},
                                           "argument": {"variable": "hydra.pg.graphson.coder.valueToJson"}}},
                                       "argument": {"variable": "vals"}}}}}}}}}}},
                   {
@@ -931,13 +937,13 @@
                               "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:Long"}}}},
                             "argument": {
                               "inject": {
-                                "typeName": "hydra.json.model.Value",
+                                "typeName": "hydra.core.json.model.Value",
                                 "field": {
                                   "name": "number",
                                   "term": {
                                     "application": {
-                                      "function": {"variable": "hydra.lib.literals.bigintToDecimal"},
-                                      "argument": {"application": {"function": {"variable": "hydra.lib.literals.int64ToBigint"}, "argument": {"variable": "l"}}}}}}}}}}}}},
+                                      "function": {"variable": "hydra.core.lib.literals.bigintToDecimal"},
+                                      "argument": {"application": {"function": {"variable": "hydra.core.lib.literals.int64ToBigint"}, "argument": {"variable": "l"}}}}}}}}}}}}},
                   {
                     "name": "map",
                     "handler": {
@@ -955,7 +961,7 @@
                       "lambda": {
                         "parameter": "_",
                         "domain": "unit",
-                        "body": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "null", "term": "unit"}}}}}},
+                        "body": {"inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "null", "term": "unit"}}}}}},
                   {
                     "name": "primitive",
                     "handler": {
@@ -970,7 +976,7 @@
                                 "argument": {"literal": {"string": "g:PrimitivePdt"}}}},
                             "argument": {
                               "inject": {
-                                "typeName": "hydra.json.model.Value",
+                                "typeName": "hydra.core.json.model.Value",
                                 "field": {
                                   "name": "string",
                                   "term": {
@@ -989,7 +995,7 @@
                               "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:Set"}}}},
                             "argument": {
                               "inject": {
-                                "typeName": "hydra.json.model.Value",
+                                "typeName": "hydra.core.json.model.Value",
                                 "field": {
                                   "name": "array",
                                   "term": {
@@ -999,8 +1005,8 @@
                                           "function": {
                                             "typeApplication": {
                                               "body": {
-                                                "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
-                                              "type": {"variable": "hydra.json.model.Value"}}},
+                                                "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
+                                              "type": {"variable": "hydra.core.json.model.Value"}}},
                                           "argument": {"variable": "hydra.pg.graphson.coder.valueToJson"}}},
                                       "argument": {"variable": "vals"}}}}}}}}}}},
                   {
@@ -1015,20 +1021,20 @@
                               "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:Int16"}}}},
                             "argument": {
                               "inject": {
-                                "typeName": "hydra.json.model.Value",
+                                "typeName": "hydra.core.json.model.Value",
                                 "field": {
                                   "name": "number",
                                   "term": {
                                     "application": {
-                                      "function": {"variable": "hydra.lib.literals.bigintToDecimal"},
-                                      "argument": {"application": {"function": {"variable": "hydra.lib.literals.int16ToBigint"}, "argument": {"variable": "i"}}}}}}}}}}}}},
+                                      "function": {"variable": "hydra.core.lib.literals.bigintToDecimal"},
+                                      "argument": {"application": {"function": {"variable": "hydra.core.lib.literals.int16ToBigint"}, "argument": {"variable": "i"}}}}}}}}}}}}},
                   {
                     "name": "string",
                     "handler": {
                       "lambda": {
                         "parameter": "s",
                         "domain": {"literal": "string"},
-                        "body": {"inject": {"typeName": "hydra.json.model.Value", "field": {"name": "string", "term": {"variable": "s"}}}}}}},
+                        "body": {"inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "string", "term": {"variable": "s"}}}}}}},
                   {
                     "name": "uuid",
                     "handler": {
@@ -1041,7 +1047,7 @@
                               "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:UUID"}}}},
                             "argument": {
                               "inject": {
-                                "typeName": "hydra.json.model.Value",
+                                "typeName": "hydra.core.json.model.Value",
                                 "field": {
                                   "name": "string",
                                   "term": {"application": {"function": {"unwrap": "hydra.pg.graphson.syntax.Uuid"}, "argument": {"variable": "u"}}}}}}}}}}}]}},
@@ -1060,7 +1066,7 @@
                   "keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"},
                   "values": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}},
               "isLazy": false}],
-          "result": {"type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+          "result": {"type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
         "body": {
           "annotated": {
             "body": {
@@ -1077,20 +1083,20 @@
                         "function": {
                           "application": {
                             "function": {
-                              "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                              "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                             "argument": {
                               "application": {
                                 "function": {
                                   "typeApplication": {
                                     "body": {
-                                      "typeApplication": {"body": {"variable": "hydra.lib.maps.isEmpty"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
+                                      "typeApplication": {"body": {"variable": "hydra.core.lib.maps.isEmpty"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                     "type": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}},
                                 "argument": {"variable": "m"}}}}},
-                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.json.model.Value"}}}}},
+                        "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.json.model.Value"}}}}},
                     "argument": {
                       "optional": {
                         "inject": {
-                          "typeName": "hydra.json.model.Value",
+                          "typeName": "hydra.core.json.model.Value",
                           "field": {
                             "name": "object",
                             "term": {
@@ -1101,12 +1107,12 @@
                                       "typeApplication": {
                                         "body": {
                                           "typeApplication": {
-                                            "body": {"variable": "hydra.lib.lists.map"},
+                                            "body": {"variable": "hydra.core.lib.lists.map"},
                                             "type": {
                                               "pair": {
                                                 "first": {"variable": "hydra.pg.graphson.syntax.PropertyKey"},
                                                 "second": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}}}},
-                                        "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.json.model.Value"}}}}},
+                                        "type": {"pair": {"first": {"literal": "string"}, "second": {"variable": "hydra.core.json.model.Value"}}}}},
                                     "argument": {
                                       "lambda": {
                                         "parameter": "p",
@@ -1128,12 +1134,12 @@
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {
-                                                                  "typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
+                                                                  "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.first"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                                                 "type": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}},
                                                             "argument": {"variable": "p"}}}}},
                                                     "second": {
                                                       "inject": {
-                                                        "typeName": "hydra.json.model.Value",
+                                                        "typeName": "hydra.core.json.model.Value",
                                                         "field": {
                                                           "name": "array",
                                                           "term": {
@@ -1143,25 +1149,25 @@
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {
-                                                                        "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}},
-                                                                      "type": {"variable": "hydra.json.model.Value"}}},
+                                                                        "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}},
+                                                                      "type": {"variable": "hydra.core.json.model.Value"}}},
                                                                   "argument": {"variable": "hydra.pg.graphson.coder.vertexPropertyValueToJson"}}},
                                                               "argument": {
                                                                 "application": {
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {
-                                                                        "typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
+                                                                        "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.second"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                                                       "type": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}},
                                                                   "argument": {"variable": "p"}}}}}}}}}},
                                                 "type": {"literal": "string"}}},
-                                            "type": {"variable": "hydra.json.model.Value"}}}}}}},
+                                            "type": {"variable": "hydra.core.json.model.Value"}}}}}}},
                                 "argument": {
                                   "application": {
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.lib.maps.toList"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.core.lib.maps.toList"}, "type": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}}},
                                         "type": {"list": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}},
                                     "argument": {"variable": "m"}}}}}}}}}}}}},
             "annotation": {
@@ -1175,7 +1181,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.VertexPropertyValue"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}}},
+          "result": {"type": {"variable": "hydra.core.json.model.Value"}}},
         "body": {
           "annotated": {
             "body": {
@@ -1201,15 +1207,15 @@
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
-                                                "type": {"variable": "hydra.json.model.Value"}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.map"}, "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
+                                                "type": {"variable": "hydra.core.json.model.Value"}}},
                                             "argument": {"variable": "hydra.pg.graphson.coder.valueToJson"}}},
                                         "argument": {
                                           "application": {
                                             "function": {"project": {"typeName": "hydra.pg.graphson.syntax.VertexPropertyValue", "fieldName": "id"}},
                                             "argument": {"variable": "vpv"}}}}}}},
                                 "type": {"literal": "string"}}},
-                            "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                            "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                         {
                           "typeApplication": {
                             "body": {
@@ -1226,7 +1232,7 @@
                                               "function": {"project": {"typeName": "hydra.pg.graphson.syntax.VertexPropertyValue", "fieldName": "value"}},
                                               "argument": {"variable": "vpv"}}}}}}}},
                                 "type": {"literal": "string"}}},
-                            "type": {"optional": {"variable": "hydra.json.model.Value"}}}}]}}}}},
+                            "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}}]}}}}},
             "annotation": {
               "map": [
                 {
@@ -1238,7 +1244,7 @@
         "signature": {
           "typeParameters": [],
           "parameters": [{"name": "arg0", "type": {"variable": "hydra.pg.graphson.syntax.Vertex"}, "isLazy": false}],
-          "result": {"type": {"variable": "hydra.json.model.Value"}}},
+          "result": {"type": {"variable": "hydra.core.json.model.Value"}}},
         "body": {
           "annotated": {
             "body": {
@@ -1266,7 +1272,7 @@
                                               "function": {"project": {"typeName": "hydra.pg.graphson.syntax.Vertex", "fieldName": "id"}},
                                               "argument": {"variable": "v"}}}}}}}},
                                 "type": {"literal": "string"}}},
-                            "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                            "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                         {
                           "typeApplication": {
                             "body": {
@@ -1281,15 +1287,15 @@
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.optionals.map"}, "type": {"variable": "hydra.pg.graphson.syntax.VertexLabel"}}},
-                                                "type": {"variable": "hydra.json.model.Value"}}},
+                                                  "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.map"}, "type": {"variable": "hydra.pg.graphson.syntax.VertexLabel"}}},
+                                                "type": {"variable": "hydra.core.json.model.Value"}}},
                                             "argument": {
                                               "lambda": {
                                                 "parameter": "lbl",
                                                 "domain": {"variable": "hydra.pg.graphson.syntax.VertexLabel"},
                                                 "body": {
                                                   "inject": {
-                                                    "typeName": "hydra.json.model.Value",
+                                                    "typeName": "hydra.core.json.model.Value",
                                                     "field": {
                                                       "name": "string",
                                                       "term": {"application": {"function": {"unwrap": "hydra.pg.graphson.syntax.VertexLabel"}, "argument": {"variable": "lbl"}}}}}}}}}},
@@ -1298,7 +1304,7 @@
                                             "function": {"project": {"typeName": "hydra.pg.graphson.syntax.Vertex", "fieldName": "label"}},
                                             "argument": {"variable": "v"}}}}}}},
                                 "type": {"literal": "string"}}},
-                            "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                            "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                         {
                           "typeApplication": {
                             "body": {
@@ -1315,7 +1321,7 @@
                                             "function": {"project": {"typeName": "hydra.pg.graphson.syntax.Vertex", "fieldName": "inEdges"}},
                                             "argument": {"variable": "v"}}}}}}},
                                 "type": {"literal": "string"}}},
-                            "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                            "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                         {
                           "typeApplication": {
                             "body": {
@@ -1332,7 +1338,7 @@
                                             "function": {"project": {"typeName": "hydra.pg.graphson.syntax.Vertex", "fieldName": "outEdges"}},
                                             "argument": {"variable": "v"}}}}}}},
                                 "type": {"literal": "string"}}},
-                            "type": {"optional": {"variable": "hydra.json.model.Value"}}}},
+                            "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}},
                         {
                           "typeApplication": {
                             "body": {
@@ -1348,6 +1354,6 @@
                                             "function": {"project": {"typeName": "hydra.pg.graphson.syntax.Vertex", "fieldName": "properties"}},
                                             "argument": {"variable": "v"}}}}}}},
                                 "type": {"literal": "string"}}},
-                            "type": {"optional": {"variable": "hydra.json.model.Value"}}}}]}}}}},
+                            "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}}]}}}}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Convert a GraphSON Vertex to a JSON Value"}}}]}}}}}]}
