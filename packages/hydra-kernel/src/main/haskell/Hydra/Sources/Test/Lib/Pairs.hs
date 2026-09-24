@@ -4,13 +4,13 @@ module Hydra.Sources.Test.Lib.Pairs where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -18,22 +18,22 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
-import Hydra.Testing
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Math as Math
-import qualified Hydra.Dsl.Lib.Pairs as Pairs
-import qualified Hydra.Dsl.Lib.Strings as Strings
+import Hydra.Core.Testing
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Math as Math
+import qualified Hydra.Core.Dsl.Lib.Pairs as Pairs
+import qualified Hydra.Core.Dsl.Lib.Strings as Strings
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.lib.pairs"
+ns = ModuleName "hydra.core.test.lib.pairs"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ModuleName "hydra.print.core"] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.pairs primitives")}
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.core.reduction", ModuleName "hydra.core.print.model"] ++ kernelTypesModuleNames),
+            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.core.lib.pairs primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -58,12 +58,12 @@ showIntStrPair = Phantoms.lambda "p" $ Strings.concat (Phantoms.list [
   Pairs.second (Phantoms.var "p"),
   Phantoms.string ")"])
 
--- Test groups for hydra.lib.pairs primitives
+-- Test groups for hydra.core.lib.pairs primitives
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for hydra.lib.pairs primitives" $
-    supergroup "hydra.lib.pairs primitives" [
+    Phantoms.doc "Test cases for hydra.core.lib.pairs primitives" $
+    supergroup "hydra.core.lib.pairs primitives" [
       pairsBimap,
       pairsFirst,
       pairsPair,

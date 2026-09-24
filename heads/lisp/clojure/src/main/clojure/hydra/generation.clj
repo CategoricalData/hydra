@@ -4,7 +4,7 @@
 
    IMPORTANT: This module must be loaded AFTER preload/load-gen-main! has been called,
    so that all generated kernel symbols are globalized into clojure.core."
-  (:require [hydra.overlay.clojure.libraries :as libraries]
+  (:require [hydra.core.overlay.clojure.libraries :as libraries]
             [clojure.data.json :as json])
   (:import [java.io File]))
 
@@ -19,14 +19,14 @@
   []
   (into {}
     (map (fn [[name typ]]
-           (let [ts ((r 'hydra_scoping_f_type_to_type_scheme) typ)]
-             [name ((r 'hydra_strip_deannotate_type_recursive) (:body ts))]))
-         (r 'hydra_json_bootstrap_types_by_name))))
+           (let [ts ((r 'hydra_core_scoping_f_type_to_type_scheme) typ)]
+             [name ((r 'hydra_core_strip_deannotate_type_recursive) (:body ts))]))
+         (r 'hydra_core_json_bootstrap_types_by_name))))
 
 (defn bootstrap-graph
   "Create an empty graph with standard primitives (the bootstrap graph)."
   []
-  ((r '->hydra_graph_graph)
+  ((r '->hydra_core_graph_graph)
     {}       ; bound_terms
     {}       ; bound_types
     {}       ; class_constraints
@@ -39,7 +39,7 @@
 (defn empty-context
   "Create an empty InferenceContext."
   []
-  ((r '->hydra_typing_inference_context) 0 (list)))
+  ((r '->hydra_core_typing_inference_context) 0 (list)))
 
 (defn unwrap-either
   "Unwrap an Either value, throwing on Left."
@@ -81,12 +81,12 @@
 (defn decode-module
   "Decode a single module from a JSON value."
   [bs-graph schema-map json-val]
-  (let [mod-type (list :variable "hydra.packaging.Module")
-        json-result ((((((r 'hydra_json_decode_from_json) schema-map) false) "hydra.packaging.Module") mod-type) json-val)]
+  (let [mod-type (list :variable "hydra.core.packaging.Module")
+        json-result ((((((r 'hydra_core_json_decode_from_json) schema-map) false) "hydra.core.packaging.Module") mod-type) json-val)]
     (when (= (first json-result) :left)
       (throw (RuntimeException. (str "Module JSON decode error: " (second json-result)))))
     (let [term (second json-result)
-          mod-result (((r 'hydra_decode_packaging_module) bs-graph) term)]
+          mod-result (((r 'hydra_core_decode_packaging_module) bs-graph) term)]
       (when (= (first mod-result) :left)
         (throw (RuntimeException. (str "Module decode error: " (second mod-result)))))
       (second mod-result))))
@@ -98,7 +98,7 @@
         schema-map (bootstrap-schema-map)]
     (mapv (fn [ns]
             (let [ns-str (if (string? ns) ns (:value ns))
-                  file-path (str base-path "/" ((r 'hydra_codegen_module_name_to_path) ns-str) ".json")
+                  file-path (str base-path "/" ((r 'hydra_core_codegen_module_name_to_path) ns-str) ".json")
                   json-val (parse-json-file file-path)
                   mod (decode-module bs-graph schema-map json-val)]
               (println (str "  Loaded: " ns-str))
@@ -123,7 +123,7 @@
         t0 (System/currentTimeMillis)
         _ (println (str "  [gen] Starting generate_source_files at " (java.time.Instant/now)))
         _ (flush)
-        result ((((((((r 'hydra_codegen_generate_source_files)
+        result ((((((((r 'hydra_core_codegen_generate_source_files)
                       coder) language) do-infer)
                  bs-graph) universe) modules-to-generate) cx)
         files (unwrap-either result)
@@ -155,5 +155,5 @@
   "Filter modules to only those containing type-defining bindings."
   [modules]
   (filterv (fn [m]
-             (some (r 'hydra_annotations_is_native_type) (:definitions m)))
+             (some (r 'hydra_core_annotations_is_native_type) (:definitions m)))
            modules))

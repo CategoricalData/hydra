@@ -11,7 +11,7 @@
 module Hydra.ManifestSpec where
 
 import Hydra.Generation (currentModuleFormatVersion, parseManifestModuleFormatVersion)
-import qualified Hydra.Json.Model as Json
+import qualified Hydra.Core.Json.Model as Json
 
 import qualified Data.Scientific as SC
 import qualified Test.Hspec as H

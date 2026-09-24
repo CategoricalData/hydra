@@ -155,10 +155,10 @@
 ;; and compile+run successfully.
 (fset 'hydra-byte-compile-all
   (lambda ()
-    (let ((skip-prefixes '("hydra_codegen_" "hydra_reduction_"
-                           "hydra_adapt_" "hydra_checking_" "hydra_inference_"
-                           "hydra_hoisting_" "hydra_encoding_" "hydra_decoding_"
-                           "hydra_rewriting_" "hydra_schemas_")))
+    (let ((skip-prefixes '("hydra_core_codegen_" "hydra_core_reduction_"
+                           "hydra_core_adapt_" "hydra_core_checking_" "hydra_core_inference_"
+                           "hydra_core_hoisting_" "hydra_core_encoding_" "hydra_core_decoding_"
+                           "hydra_core_rewriting_" "hydra_schemas_")))
       (let ((compiled 0) (skipped 0))
         (mapatoms
           (lambda (sym)
@@ -218,7 +218,7 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
    ((stringp obj) (list :string obj))
    ((hash-table-p obj)
     ;; JSON object → Hydra object (list of (key value) pairs, matching the
-    ;; Hydra `Pair k v` term shape that hydra.lib.maps.from_list expects —
+    ;; Hydra `Pair k v` term shape that hydra.core.lib.maps.from_list expects —
     ;; NOT a dotted cons cell, which shifts every downstream field lookup by
     ;; one level (#586).
     (let ((pairs nil))
@@ -237,25 +237,25 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
 
 (defun bootstrap-graph ()
   "Create a minimal bootstrap graph."
-  (funcall 'make-hydra_graph_graph nil nil nil nil nil
+  (funcall 'make-hydra_core_graph_graph nil nil nil nil nil
            (standard-library)
            nil nil))
 
 (defun bootstrap-schema-map ()
-  "Build the schema map from hydra_json_bootstrap_types_by_name."
+  "Build the schema map from hydra_core_json_bootstrap_types_by_name."
   (let ((result nil))
-    (dolist (pair (symbol-value 'hydra_json_bootstrap_types_by_name))
+    (dolist (pair (symbol-value 'hydra_core_json_bootstrap_types_by_name))
       (let* ((name (car pair))
              (typ (cdr pair))
-             (ts (funcall (symbol-value 'hydra_scoping_f_type_to_type_scheme) typ))
-             (stripped (funcall (symbol-value 'hydra_strip_deannotate_type_recursive)
-                                (funcall 'hydra_core_type_scheme-body ts))))
+             (ts (funcall (symbol-value 'hydra_core_scoping_f_type_to_type_scheme) typ))
+             (stripped (funcall (symbol-value 'hydra_core_strip_deannotate_type_recursive)
+                                (funcall 'hydra_core_model_type_scheme-body ts))))
         (push (cons name stripped) result)))
     (nreverse result)))
 
 (defun bootstrap-namespace-to-path (ns)
   "Convert a namespace string to a file path."
-  (funcall (symbol-value 'hydra_codegen_module_name_to_path) ns))
+  (funcall (symbol-value 'hydra_core_codegen_module_name_to_path) ns))
 
 ;; ============================================================================
 ;; Module loading from JSON
@@ -266,15 +266,15 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
   (let* ((file-path (format "%s/%s.json" json-dir (bootstrap-namespace-to-path ns-str)))
          (json-obj (bootstrap-read-json-file file-path))
          (hydra-json (bootstrap-json-to-hydra json-obj))
-         (mod-type (list :variable "hydra.packaging.Module"))
+         (mod-type (list :variable "hydra.core.packaging.Module"))
          (json-result (funcall (funcall (funcall (funcall (funcall
-                        (symbol-value 'hydra_json_decode_from_json) schema-map)
-                        nil) "hydra.packaging.Module") mod-type) hydra-json)))
+                        (symbol-value 'hydra_core_json_decode_from_json) schema-map)
+                        nil) "hydra.core.packaging.Module") mod-type) hydra-json)))
     (when (eq (car json-result) :left)
       (error "JSON decode error for %s: %s" ns-str (cadr json-result)))
     (let* ((term (cadr json-result))
            (mod-result (funcall (funcall
-                         (symbol-value 'hydra_decode_packaging_module) bs-graph) term)))
+                         (symbol-value 'hydra_core_decode_packaging_module) bs-graph) term)))
       (when (eq (car mod-result) :left)
         (error "Module decode error for %s: %s" ns-str (cadr mod-result)))
       (cadr mod-result))))
@@ -349,11 +349,11 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
                       (if (eq (car result) :left)
                           result
                         (let* ((program (cadr result))
-                               (code (funcall 'hydra_serialization_print_expr
-                                       (funcall 'hydra_serialization_parenthesize
+                               (code (funcall 'hydra_core_serialization_print_expr
+                                       (funcall 'hydra_core_serialization_parenthesize
                                          (funcall pte program))))
-                               (ns-val (let ((mn (hydra_packaging_module-name mod)))
-                                         (if (stringp mn) mn (hydra_packaging_module_name-value mn))))
+                               (ns-val (let ((mn (hydra_core_packaging_module-name mod)))
+                                         (if (stringp mn) mn (hydra_core_packaging_module_name-value mn))))
                                (fp (format "%s%s" (bootstrap-namespace-to-path ns-val) ext)))
                           (list :right (list (cons fp code))))))))))
             (symbol-value 'hydra_lisp_language_lisp_language)
@@ -370,7 +370,7 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
   "Generate source files using the full generate_source_files pipeline.
 Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the subset to generate."
   (let* ((bs-graph (bootstrap-graph))
-         (cx (funcall 'make-hydra_typing_inference_context 0 nil))
+         (cx (funcall 'make-hydra_core_typing_inference_context 0 nil))
          (do-infer (nth 0 flags))
          (t0 (float-time))
          ;; generateSourceFiles takes 7 curried args (printDefinitions lang doInfer
@@ -380,7 +380,7 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
          ;; funcalling its (fully-evaluated) Either result as if it were a function (#586).
          (result (condition-case err
                      (funcall (funcall (funcall (funcall (funcall (funcall
-                       (funcall (symbol-value 'hydra_codegen_generate_source_files)
+                       (funcall (symbol-value 'hydra_core_codegen_generate_source_files)
                          coder) language) do-infer)
                        bs-graph) universe-mods) mods-to-generate) cx)
                    (error (princ (format "  GENERATE ERROR: %s\n" err)) (list :left (format "%s" err)))))
@@ -458,8 +458,8 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
       (let* ((mods-to-generate
               (if bootstrap-kernel-only
                   (cl-remove-if (lambda (m)
-                                  (let ((mn (hydra_packaging_module-name m)))
-                                    (let ((ns-str (if (stringp mn) mn (hydra_packaging_module_name-value mn))))
+                                  (let ((mn (hydra_core_packaging_module-name m)))
+                                    (let ((ns-str (if (stringp mn) mn (hydra_core_packaging_module_name-value mn))))
                                       (or (string-match-p "hydra\\.ext\\." ns-str)
                                           (string-match-p "hydra\\.json\\.yaml\\." ns-str)))))
                                 all-mods)
@@ -492,7 +492,7 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
                    (test-mods (bootstrap-load-modules-from-json test-json-dir2 test-ns))
                    (all-universe (append all-mods test-mods))
                    ;; Filter skip-emit test namespaces (e.g.
-                   ;; hydra.test.testEnv): these are type-only stubs whose
+                   ;; hydra.core.test.testEnv): these are type-only stubs whose
                    ;; hand-written per-language counterparts are the source
                    ;; of truth. Mirrors testSkipEmitModuleNames in
                    ;; Hydra.Sources.Test.All and the equivalent filter in
@@ -500,10 +500,10 @@ Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the 
                    (test-mods-to-emit
                      (cl-remove-if
                        (lambda (m)
-                         (let* ((mn (hydra_packaging_module-name m))
+                         (let* ((mn (hydra_core_packaging_module-name m))
                                 (ns-str (if (stringp mn) mn
-                                            (hydra_packaging_module_name-value mn))))
-                           (string= ns-str "hydra.test.testEnv")))
+                                            (hydra_core_packaging_module_name-value mn))))
+                           (string= ns-str "hydra.core.test.testEnv")))
                        test-mods))
                    (out-test (format "%s/emacs-lisp-to-%s/src/test/%s"
                                      bootstrap-output-base bootstrap-target subdir)))

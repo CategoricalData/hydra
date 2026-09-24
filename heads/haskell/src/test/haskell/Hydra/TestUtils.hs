@@ -1,16 +1,16 @@
 module Hydra.TestUtils (
   module Hydra.TestUtils,
-  module Hydra.Overlay.Haskell.Libraries,
-  module Hydra.Test.TestGraph,
-  module Hydra.Test.TestTypes,
-  module Hydra.Test.TestTerms,
+  module Hydra.Core.Overlay.Haskell.Libraries,
+  module Hydra.Core.Test.TestGraph,
+  module Hydra.Core.Test.TestTypes,
+  module Hydra.Core.Test.TestTerms,
 ) where
 
 import Hydra.Kernel
 import Hydra.Generation (moduleAsBindings, showError, generateDecoderModulesPure, generateEncoderModulesPure)
 import Hydra.ArbitraryCore()
-import Hydra.Overlay.Haskell.Bootstrap
-import Hydra.Overlay.Haskell.Dsl.Terms
+import Hydra.Core.Overlay.Haskell.Bootstrap
+import Hydra.Core.Overlay.Haskell.Dsl.Terms
 import qualified Hydra.Sources.Kernel.Types.All as KernelTypesAll
 import qualified Hydra.Sources.Kernel.Types.Coders as TypeCoders
 import qualified Hydra.Sources.Kernel.Types.Core as TypeCore
@@ -27,14 +27,14 @@ import qualified Hydra.Sources.Kernel.Terms.Strip as TermStrip
 import qualified Hydra.Sources.Kernel.Terms.Variables as TermVariables
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as TermShowCore
 import Hydra.Sources.Kernel.Types.Core
-import Hydra.Overlay.Haskell.Libraries
-import Hydra.Test.TestGraph hiding (testGraph, testContext)
-import Hydra.Test.TestTypes
-import Hydra.Test.TestTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
-import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Print.Core as PrintCore
+import Hydra.Core.Overlay.Haskell.Libraries
+import Hydra.Core.Test.TestGraph hiding (testGraph, testContext)
+import Hydra.Core.Test.TestTypes
+import Hydra.Core.Test.TestTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as Types
+import qualified Hydra.Core.Encode.Model as EncodeCore
+import qualified Hydra.Core.Print.Model as PrintCore
 
 import qualified Test.Hspec as H
 import qualified Test.HUnit.Lang as HL
@@ -53,8 +53,8 @@ testGraph :: Graph
 testGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes testSchemaGraph) (kernelTermBindings ++ dataBindings)
   where
     -- Include only essential kernel term definitions for interpreter tests.
-    -- The evaluator needs hydra.annotations (and its dependencies).
-    -- hydra.decode.core and hydra.encode.core are synthesized in-memory from
+    -- The evaluator needs hydra.core.annotations (and its dependencies).
+    -- hydra.core.decode.model and hydra.core.encode.model are synthesized in-memory from
     -- kernel type modules (#448: no longer imported from dist/haskell/.hs).
     kernelTermBindings = L.concat $ fmap moduleAsBindings
       ( [ TermAnnotations.module_
@@ -71,16 +71,16 @@ testGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes testSchemaGraph) (
         ++ synthesizedDecodeCoreModules
         ++ synthesizedEncodeCoreModules
       )
-    -- Synthesize hydra.decode.core and hydra.encode.core from kernel type modules.
+    -- Synthesize hydra.core.decode.model and hydra.core.encode.model from kernel type modules.
     -- Uses kernelTypesModules as the universe for cross-reference resolution.
     -- error on failure: synthesis of core modules should always succeed.
-    synthesizedDecodeCoreModules = filterByNs "hydra.decode.core" $
+    synthesizedDecodeCoreModules = filterByNs "hydra.core.decode.model" $
       case generateDecoderModulesPure KernelTypesAll.kernelTypesModules [TypeCore.module_] of
-        Left err -> error $ "Synthesizing hydra.decode.core in testGraph failed: " ++ err
+        Left err -> error $ "Synthesizing hydra.core.decode.model in testGraph failed: " ++ err
         Right ms  -> ms
-    synthesizedEncodeCoreModules = filterByNs "hydra.encode.core" $
+    synthesizedEncodeCoreModules = filterByNs "hydra.core.encode.model" $
       case generateEncoderModulesPure KernelTypesAll.kernelTypesModules [TypeCore.module_] of
-        Left err -> error $ "Synthesizing hydra.encode.core in testGraph failed: " ++ err
+        Left err -> error $ "Synthesizing hydra.core.encode.model in testGraph failed: " ++ err
         Right ms  -> ms
     filterByNs ns = filter (\m -> unModuleName (moduleName m) == ns)
     dataBindings = (\(name, term) -> Binding name term Nothing) <$> M.toList testTerms
@@ -88,7 +88,7 @@ testGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes testSchemaGraph) (
 testSchemaGraph :: Graph
 testSchemaGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes hydraCoreGraph)
     -- Only the kernel type modules that define types referenced by the test suite schema graph:
-    -- CoderDirection (hydra.coders), Coder (hydra.util), and Type/Name/ForallType (hydra.core).
+    -- CoderDirection (hydra.core.coders), Coder (hydra.core.util), and Type/Name/ForallType (hydra.core.model).
     (kernelElements ++ testElements)
   where
     kernelElements = L.concat $ fmap moduleAsBindings

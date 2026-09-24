@@ -1,4 +1,4 @@
-(* Hydra primitive library: hydra.lib.lists *)
+(* Hydra primitive library: hydra.core.lib.lists *)
 
 Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith hydra.lib.base.
 Import ListNotations.

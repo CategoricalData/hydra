@@ -126,7 +126,7 @@ lisp_assemble_main() {
     # overlay/<dialect>/hydra-kernel/src/{main,test}/<dialect>/ — this copy is
     # the ONLY reader of overlay/; the head's test runner then loads the runtime
     # from dist/, never from heads/ or overlay/. The generated test_graph.<ext>
-    # imports hydra.test.testEnv (filtered from emitted output via
+    # imports hydra.core.test.testEnv (filtered from emitted output via
     # testSkipEmitModuleNames), which the copied test bridge satisfies.
     if [ "$PACKAGE" = "hydra-kernel" ]; then
         lisp_copy_overlay "$OUT_DIR"

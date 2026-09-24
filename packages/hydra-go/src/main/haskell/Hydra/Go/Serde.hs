@@ -4,10 +4,10 @@
 -- using Hydra's Ast.Expr representation as an intermediate form.
 module Hydra.Go.Serde where
 
-import Hydra.Constants
+import Hydra.Core.Constants
 import Hydra.Kernel
-import Hydra.Serialization
-import qualified Hydra.Ast as Ast
+import Hydra.Core.Serialization
+import qualified Hydra.Core.Ast as Ast
 import qualified Hydra.Go.Syntax as Go
 
 import qualified Data.List as L

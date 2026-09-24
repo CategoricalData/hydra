@@ -3,16 +3,16 @@
 module Hydra.Sources.Avro.Environment where
 
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types                 ((>:))
-import qualified Hydra.Overlay.Haskell.Dsl.Types                 as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types                 ((>:))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 import qualified Hydra.Sources.Kernel.Types.Coders as Coders
 import qualified Hydra.Sources.Kernel.Types.Errors as Errors
 
 ns :: ModuleName
-ns = ModuleName "hydra.avro.environment"
+ns = ModuleName "hydra.ext.avro.environment"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns
@@ -21,7 +21,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
-            moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, Coders.ns, Errors.ns, ModuleName "hydra.avro.schema", ModuleName "hydra.json.model"],
+            moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, Coders.ns, Errors.ns, ModuleName "hydra.ext.avro.schema", ModuleName "hydra.core.json.model"],
             moduleMetadata = descriptionMetadata (Just "Type definitions for the Avro code generation environment")}
   where
     definitions = [
@@ -87,7 +87,7 @@ avroQualifiedNameType = define "AvroQualifiedName" $
       T.string]
 
 avroSchemaType :: Type
-avroSchemaType = typeref (ModuleName "hydra.avro.schema") "Schema"
+avroSchemaType = typeref (ModuleName "hydra.ext.avro.schema") "Schema"
 
 computeType :: String -> Type
 computeType = typeref Coders.ns
@@ -115,7 +115,7 @@ hydraAvroAdapterType :: Type
 hydraAvroAdapterType = T.apply (T.apply (T.apply (T.apply (T.apply (computeType "Adapter") (coreType "Type")) avroSchemaType) (coreType "Term")) jsonValueType) (errorsType "Error")
 
 jsonValueType :: Type
-jsonValueType = typeref (ModuleName "hydra.json.model") "Value"
+jsonValueType = typeref (ModuleName "hydra.core.json.model") "Value"
 
 localType :: String -> Type
 localType = typeref ns

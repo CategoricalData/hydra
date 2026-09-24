@@ -2,15 +2,15 @@ module Hydra.Sources.Kernel.Types.Ast where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel hiding (op, brackets)
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.ast"
+ns = ModuleName "hydra.core.ast"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns

@@ -3,45 +3,45 @@ module Hydra.Sources.Shacl.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations                     as Annotations
-import qualified Hydra.Overlay.Haskell.Bootstrap                       as Bootstrap
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes                    as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Literals                        as Literals
-import qualified Hydra.Dsl.Paths                      as Paths
-import qualified Hydra.Dsl.Ast                        as Ast
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base                       as MetaBase
-import qualified Hydra.Dsl.Coders                     as Coders
-import qualified Hydra.Dsl.Util                    as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
-import qualified Hydra.Dsl.Errors                      as Error
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph                      as Graph
-import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Math                   as Math
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Packaging                     as Packaging
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms                      as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing                    as Testing
-import qualified Hydra.Dsl.Topology                   as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types                      as MetaTypes
-import qualified Hydra.Dsl.Typing                     as Typing
-import qualified Hydra.Dsl.Util                       as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants                   as Variants
-import qualified Hydra.Overlay.Haskell.Dsl.Prims                           as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular                         as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Terms                           as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Tests                           as Tests
-import qualified Hydra.Overlay.Haskell.Dsl.Types                           as Types
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations                     as Annotations
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap                       as Bootstrap
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes                    as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals                        as Literals
+import qualified Hydra.Core.Dsl.Paths                      as Paths
+import qualified Hydra.Core.Dsl.Ast                        as Ast
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base                       as MetaBase
+import qualified Hydra.Core.Dsl.Coders                     as Coders
+import qualified Hydra.Core.Dsl.Util                    as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
+import qualified Hydra.Core.Dsl.Errors                      as Error
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph                      as Graph
+import qualified Hydra.Core.Dsl.Json.Model                       as Json
+import qualified Hydra.Core.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Math                   as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Core.Dsl.Packaging                     as Packaging
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                      as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                    as Testing
+import qualified Hydra.Core.Dsl.Topology                   as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types                      as MetaTypes
+import qualified Hydra.Core.Dsl.Typing                     as Typing
+import qualified Hydra.Core.Dsl.Util                       as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants                   as Variants
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims                           as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular                         as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms                           as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests                           as Tests
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                           as Types
 import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.All            as KernelTerms
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
@@ -80,7 +80,7 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import qualified Hydra.Rdf.Syntax as Rdf
-import qualified Hydra.Shacl.Model as Shacl
+import qualified Hydra.Rdf.Shacl.Model as Shacl
 import qualified Hydra.Sources.Shacl.Model as ShaclModel
 import qualified Hydra.Sources.Rdf.Syntax as RdfSyntax
 import qualified Hydra.Sources.Rdf.Utils as RdfUtils
@@ -90,13 +90,13 @@ define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 ns :: ModuleName
-ns = ModuleName "hydra.shacl.coder"
+ns = ModuleName "hydra.rdf.shacl.coder"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Strip.ns, Annotations.ns, Constants.ns, ModuleName "hydra.decode.core", ExtractCore.ns, Formatting.ns, Lexical.ns, RdfUtils.ns, Rewriting.ns] L.++ (ShaclModel.ns:RdfSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Strip.ns, Annotations.ns, Constants.ns, ModuleName "hydra.core.decode.model", ExtractCore.ns, Formatting.ns, Lexical.ns, RdfUtils.ns, Rewriting.ns] L.++ (ShaclModel.ns:RdfSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions")}
   where
     definitions = [

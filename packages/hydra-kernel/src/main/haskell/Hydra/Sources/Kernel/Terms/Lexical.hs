@@ -4,48 +4,48 @@ module Hydra.Sources.Kernel.Terms.Lexical where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (buildGraph, chooseUniqueName, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyGraph, emptyInferenceContext, fieldsOf, getField, graphToBindings, graphWithPrimitives, lookupBinding, lookupPrimitive, lookupTerm, matchEnum, matchRecord, matchUnion, matchUnitField, requireBinding, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, stripAndDereferenceTerm, stripAndDereferenceTermEither)
-import qualified Hydra.Dsl.Paths    as Paths
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
-import qualified Hydra.Dsl.Ast          as Ast
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Coders       as Coders
-import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph        as Graph
-import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Literals     as MetaLiterals
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Lib.Math     as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Literals          as Literals
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base         as MetaBase
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms        as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types        as MetaTypes
-import qualified Hydra.Dsl.Packaging       as Packaging
-import qualified Hydra.Dsl.Parsing      as Parsing
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Prims             as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular           as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing      as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Terms             as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Tests             as Tests
-import qualified Hydra.Dsl.Topology     as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
-import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Util         as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
-import qualified Hydra.Dsl.Errors       as Error
+import qualified Hydra.Core.Dsl.Paths    as Paths
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations       as Annotations
+import qualified Hydra.Core.Dsl.Ast          as Ast
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Coders       as Coders
+import qualified Hydra.Core.Dsl.Util      as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph        as Graph
+import qualified Hydra.Core.Dsl.Json.Model         as Json
+import qualified Hydra.Core.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Literals     as MetaLiterals
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Math     as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals          as Literals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base         as MetaBase
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms        as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types        as MetaTypes
+import qualified Hydra.Core.Dsl.Packaging       as Packaging
+import qualified Hydra.Core.Dsl.Parsing      as Parsing
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims             as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular           as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing      as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms             as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests             as Tests
+import qualified Hydra.Core.Dsl.Topology     as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Dsl.Typing       as Typing
+import qualified Hydra.Core.Dsl.Util         as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants     as Variants
+import qualified Hydra.Core.Dsl.Errors       as Error
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -62,7 +62,7 @@ import qualified Hydra.Sources.Kernel.Terms.Print.Errors as PrintError
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lexical"
+ns = ModuleName "hydra.core.lexical"
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
@@ -288,7 +288,7 @@ matchRecord = define "matchRecord" $
         (Core.recordFields (var "record"))) :: TypedTerm (M.Map Name Term))]
 
 -- The `forall b.` (with no constraint) exists only to bring `b` into scope for an in-body
--- `:: TypedTerm (M.Map ... b)` annotation, needed now that the generated `Hydra.Dsl.Lib.Maps`
+-- `:: TypedTerm (M.Map ... b)` annotation, needed now that the generated `Hydra.Core.Dsl.Lib.Maps`
 -- requires the map type to be pinned. See #467.
 matchUnion :: forall b. TypedTermDefinition (Graph -> Name -> [(Name, Term -> Either Error b)] -> Term -> Either Error b)
 matchUnion = define "matchUnion" $

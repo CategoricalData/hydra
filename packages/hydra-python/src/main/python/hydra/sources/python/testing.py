@@ -5,22 +5,22 @@ Host-native DSL source (authoritative; the former Haskell copy was removed in #3
 
 import sys
 
-from hydra.core import Name
-from hydra.overlay.python.dsl.python import Given, None_
-from hydra.packaging import EntityMetadata, Module, ModuleName
+from hydra.core.model import Name
+from hydra.core.overlay.python.dsl.python import Given, None_
+from hydra.core.packaging import EntityMetadata, Module, ModuleName
 
-import hydra.dsl.lib.chars as Chars
-import hydra.dsl.lib.eithers as Eithers
-import hydra.dsl.lib.equality as Equality
-import hydra.dsl.lib.lists as Lists
-import hydra.dsl.lib.logic as Logic
-import hydra.dsl.lib.optionals as Optionals
-import hydra.dsl.lib.strings as Strings
-from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
-from hydra.overlay.python.dsl.meta.defs import check_complete
-import hydra.dsl.constants
-import hydra.dsl.core as Core
-import hydra.dsl.packaging as Packaging
+import hydra.core.dsl.lib.chars as Chars
+import hydra.core.dsl.lib.eithers as Eithers
+import hydra.core.dsl.lib.equality as Equality
+import hydra.core.dsl.lib.lists as Lists
+import hydra.core.dsl.lib.logic as Logic
+import hydra.core.dsl.lib.optionals as Optionals
+import hydra.core.dsl.lib.strings as Strings
+from hydra.core.overlay.python.dsl.phantoms import *  # noqa: F401,F403
+from hydra.core.overlay.python.dsl.meta.defs import check_complete
+import hydra.core.dsl.constants
+import hydra.core.dsl.model as Core
+import hydra.core.dsl.packaging as Packaging
 
 
 # ----------------------------------------------------------------------
@@ -41,11 +41,11 @@ from hydra.sources.python._source_dsl import (
 #   [SerializationSource.ns, Formatting.ns, Names.ns, TestUtils.ns, Constants.ns] L.++
 #   (PySyntax.ns:KernelTypes.kernelTypesNamespaces)
 DEPENDENCIES = [
-    unqualified_dep(ModuleName("hydra.serialization")),
-    unqualified_dep(ModuleName("hydra.formatting")),
-    unqualified_dep(ModuleName("hydra.names")),
-    unqualified_dep(ModuleName("hydra.test.utils")),
-    unqualified_dep(ModuleName("hydra.constants")),
+    unqualified_dep(ModuleName("hydra.core.serialization")),
+    unqualified_dep(ModuleName("hydra.core.formatting")),
+    unqualified_dep(ModuleName("hydra.core.names")),
+    unqualified_dep(ModuleName("hydra.core.test.utils")),
+    unqualified_dep(ModuleName("hydra.core.constants")),
     unqualified_dep(ModuleName("hydra.python.syntax")),
 ] + KERNEL_TYPES_NAMESPACES
 
@@ -66,11 +66,11 @@ _PLACEHOLDER = Module(
 _def = make_def(_PLACEHOLDER)
 _local = make_local_str("hydra.python.testing")
 # Frequently used type names
-_TEST_GROUP = Name("hydra.testing.TestGroup")
-_TEST_CASE = Name("hydra.testing.TestCase")
-_TEST_CASE_WITH_METADATA = Name("hydra.testing.TestCaseWithMetadata")
-_UNIVERSAL_TEST_CASE = Name("hydra.testing.UniversalTestCase")
-_NAMESPACE = Name("hydra.packaging.ModuleName")
+_TEST_GROUP = Name("hydra.core.testing.TestGroup")
+_TEST_CASE = Name("hydra.core.testing.TestCase")
+_TEST_CASE_WITH_METADATA = Name("hydra.core.testing.TestCaseWithMetadata")
+_UNIVERSAL_TEST_CASE = Name("hydra.core.testing.UniversalTestCase")
+_NAMESPACE = Name("hydra.core.packaging.ModuleName")
 
 
 # ----------------------------------------------------------------------
@@ -86,7 +86,7 @@ def _build_python_test_module():
             ),
             field("header",
                 Strings.concat(list_([
-                    Strings.concat2(string("# "), hydra.dsl.constants.warning_auto_generated_file),
+                    Strings.concat2(string("# "), hydra.core.dsl.constants.warning_auto_generated_file),
                     string("\n"),
                     Strings.concat2(string("# "), var("groupName_")),
                     string("\n\n"),

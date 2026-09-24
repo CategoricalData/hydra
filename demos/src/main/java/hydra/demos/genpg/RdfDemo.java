@@ -1,23 +1,23 @@
 package hydra.demos.genpg;
 
-import hydra.overlay.java.build.Generation;
-import hydra.typing.InferenceContext;
-import hydra.core.*;
-import hydra.errors.Error_;
-import hydra.errors.OtherError;
+import hydra.build.overlay.java.Generation;
+import hydra.core.typing.InferenceContext;
+import hydra.core.model.*;
+import hydra.core.errors.Error_;
+import hydra.core.errors.OtherError;
 import hydra.rdf.syntax.*;
-import hydra.shacl.model.*;
+import hydra.rdf.shacl.model.*;
 import hydra.rdf.Utils;
-import hydra.graph.Graph;
+import hydra.core.graph.Graph;
 import hydra.pg.model.*;
 import hydra.pg.rdf.Mappings;
 import hydra.pg.rdf.environment.PgRdfEnvironment;
-import hydra.relational.RelationName;
-import hydra.tabular.Table;
-import hydra.tabular.TableType;
-import hydra.util.Either;
-import hydra.util.Maybe;
-import hydra.util.Pair;
+import hydra.core.relational.RelationName;
+import hydra.core.tabular.Table;
+import hydra.core.tabular.TableType;
+import hydra.core.util.Either;
+import hydra.core.util.Maybe;
+import hydra.core.util.Pair;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -59,11 +59,11 @@ public class RdfDemo {
 
     private static Iri termToIri(String prefix, Term term) {
         if (term instanceof Term.Literal) {
-            hydra.core.Literal lit = ((Term.Literal) term).value;
-            if (lit instanceof hydra.core.Literal.String_) {
-                return new Iri(DEMO_NS + prefix + ((hydra.core.Literal.String_) lit).value);
-            } else if (lit instanceof hydra.core.Literal.Integer_) {
-                IntegerValue iv = ((hydra.core.Literal.Integer_) lit).value;
+            hydra.core.model.Literal lit = ((Term.Literal) term).value;
+            if (lit instanceof hydra.core.model.Literal.String_) {
+                return new Iri(DEMO_NS + prefix + ((hydra.core.model.Literal.String_) lit).value);
+            } else if (lit instanceof hydra.core.model.Literal.Integer_) {
+                IntegerValue iv = ((hydra.core.model.Literal.Integer_) lit).value;
                 if (iv instanceof IntegerValue.Int32) {
                     return new Iri(DEMO_NS + prefix + ((IntegerValue.Int32) iv).value);
                 }

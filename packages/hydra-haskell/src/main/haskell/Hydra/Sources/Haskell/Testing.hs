@@ -7,23 +7,23 @@ module Hydra.Sources.Haskell.Testing where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import Hydra.File (_FileExtension)
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
-import qualified Hydra.Dsl.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Math                   as Math
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Packaging                     as Packaging
-import qualified Hydra.Dsl.Util                       as Util
+import Hydra.Core.File (_FileExtension)
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
+import qualified Hydra.Core.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Math                   as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Core.Dsl.Packaging                     as Packaging
+import qualified Hydra.Core.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Constants      as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
@@ -57,7 +57,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([HaskellUtilsSource.ns, Formatting.ns, Names.ns, Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, Scoping.ns, PrintError.ns, Lexical.ns, Strip.ns, ModuleName "hydra.decode.core"] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = unqualifiedDep <$> ([HaskellUtilsSource.ns, Formatting.ns, Names.ns, Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, Scoping.ns, PrintError.ns, Lexical.ns, Strip.ns, ModuleName "hydra.core.decode.model"] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "Haskell test code generation for HSpec-based generation tests")}
   where
     definitions = [
@@ -209,7 +209,7 @@ findHaskellImports = define "findHaskellImports" $
     "filtered">: Maps.filterWithKey
       (lambda "ns_" $ lambda "_v" $
         Logic.not (Equality.equal
-          (Optionals.withDefault (string "") (Lists.head (Strings.splitOn (string "hydra.test.") (unwrap _ModuleName @@ var "ns_"))))
+          (Optionals.withDefault (string "") (Lists.head (Strings.splitOn (string "hydra.core.test.") (unwrap _ModuleName @@ var "ns_"))))
           (string "")))
       (var "mapping_" :: TypedTerm (M.Map ModuleName H.ModuleName))] $
     Lists.map

@@ -21,7 +21,7 @@
 (include "src/test/scheme/hydra/test_runner_body.scm")
 
 (let* ((t0 (current-jiffy))
-       (results (run-test-group "" hydra_test_test_suite_all_tests))
+       (results (run-test-group "" hydra_core_test_test_suite_all_tests))
        (total-ms (* 1000.0 (/ (- (current-jiffy) t0) (jiffies-per-second))))
        (pass (car results))
        (fail (cadr results))

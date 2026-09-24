@@ -1,55 +1,55 @@
 module Hydra.Sources.Kernel.Terms.Print.Markdown where
 
 -- Standard imports for kernel terms modules
--- _Table/_Table_header/_Table_rows are hidden: hydra.tabular already defines a Table type,
--- and this module defines its own hydra.markdown Table renderer/name-constants -- same
+-- _Table/_Table_header/_Table_rows are hidden: hydra.core.tabular already defines a Table type,
+-- and this module defines its own hydra.core.markdown Table renderer/name-constants -- same
 -- resolution idiom used throughout Terms/*.hs for a local binding shadowing a Hydra.Kernel
 -- re-export (e.g. Environment.hs, Checking.hs).
 import Hydra.Kernel hiding (_Table, _Table_header, _Table_rows)
-import qualified Hydra.Dsl.Paths    as Paths
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
-import qualified Hydra.Dsl.Ast          as Ast
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Coders       as Coders
-import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph        as Graph
-import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Lib.Math     as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Dsl.Paths    as Paths
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations       as Annotations
+import qualified Hydra.Core.Dsl.Ast          as Ast
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Coders       as Coders
+import qualified Hydra.Core.Dsl.Util      as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph        as Graph
+import qualified Hydra.Core.Dsl.Json.Model         as Json
+import qualified Hydra.Core.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Math     as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
-import qualified Hydra.Overlay.Haskell.Dsl.Literals          as Literals
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base         as MetaBase
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms        as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types        as MetaTypes
-import qualified Hydra.Dsl.Packaging       as Packaging
-import qualified Hydra.Dsl.Parsing      as Parsing
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (list)
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals          as Literals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base         as MetaBase
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms        as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types        as MetaTypes
+import qualified Hydra.Core.Dsl.Packaging       as Packaging
+import qualified Hydra.Core.Dsl.Parsing      as Parsing
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms hiding (list)
 -- Separate QUALIFIED-ONLY import for the one Phantoms name this module's own `list` renderer
 -- collides with: `hiding` on an unqualified import removes the name from ALL access (including
 -- qualified `Phantoms.list`), not just unqualified use, so a second qualified-only import is
 -- needed to keep `Phantoms.list` callable at its one genuine call site below.
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms (list)
-import qualified Hydra.Overlay.Haskell.Dsl.Prims             as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular           as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing      as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Terms             as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Tests             as Tests
-import qualified Hydra.Dsl.Topology     as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
-import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms (list)
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims             as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular           as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing      as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms             as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests             as Tests
+import qualified Hydra.Core.Dsl.Topology     as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Dsl.Typing       as Typing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -60,14 +60,14 @@ import qualified Data.Maybe                  as Y
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.print.markdown"
+ns = ModuleName "hydra.core.print.markdown"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns] L.++ kernelTypesModuleNames),
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Serialization of hydra.markdown documents to Markdown text")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Serialization of hydra.core.markdown documents to Markdown text")}
   where
    definitions = [
      toDefinition block,
@@ -86,13 +86,13 @@ module_ = Module {
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
--- Name constants for hydra.markdown types and fields (not yet in generated dist).
+-- Name constants for hydra.core.markdown types and fields (not yet in generated dist).
 -- Field-name constants follow the codebase's `_<TypeName>_<fieldName>` convention for
 -- `project`, confirmed against existing usage (e.g. `project _TypeDefinition
 -- _TypeDefinition_name` in Environment.hs) -- distinct from the `_<TypeName>_<variantName>`
 -- convention used for union variants with `cases`/`match` (e.g. `_Inline_text` below).
 _Block :: Name
-_Block = Name "hydra.markdown.Block"
+_Block = Name "hydra.core.markdown.Block"
 _Block_codeBlock :: Name
 _Block_codeBlock = Name "codeBlock"
 _Block_list :: Name
@@ -107,21 +107,21 @@ _Block_table :: Name
 _Block_table = Name "table"
 
 _CodeBlock :: Name
-_CodeBlock = Name "hydra.markdown.CodeBlock"
+_CodeBlock = Name "hydra.core.markdown.CodeBlock"
 _CodeBlock_language :: Name
 _CodeBlock_language = Name "language"
 _CodeBlock_content :: Name
 _CodeBlock_content = Name "content"
 
 _Document :: Name
-_Document = Name "hydra.markdown.Document"
+_Document = Name "hydra.core.markdown.Document"
 _Document_title :: Name
 _Document_title = Name "title"
 _Document_content :: Name
 _Document_content = Name "content"
 
 _Heading :: Name
-_Heading = Name "hydra.markdown.Heading"
+_Heading = Name "hydra.core.markdown.Heading"
 _Heading_level :: Name
 _Heading_level = Name "level"
 _Heading_content :: Name
@@ -130,7 +130,7 @@ _Heading_anchor :: Name
 _Heading_anchor = Name "anchor"
 
 _Inline :: Name
-_Inline = Name "hydra.markdown.Inline"
+_Inline = Name "hydra.core.markdown.Inline"
 _Inline_code :: Name
 _Inline_code = Name "code"
 _Inline_emphasis :: Name
@@ -143,31 +143,31 @@ _Inline_text :: Name
 _Inline_text = Name "text"
 
 _Link :: Name
-_Link = Name "hydra.markdown.Link"
+_Link = Name "hydra.core.markdown.Link"
 _Link_text :: Name
 _Link_text = Name "text"
 _Link_target :: Name
 _Link_target = Name "target"
 
 _List :: Name
-_List = Name "hydra.markdown.List"
+_List = Name "hydra.core.markdown.List"
 _List_ordered :: Name
 _List_ordered = Name "ordered"
 _List_items :: Name
 _List_items = Name "items"
 
 _ListItem :: Name
-_ListItem = Name "hydra.markdown.ListItem"
+_ListItem = Name "hydra.core.markdown.ListItem"
 
 _Paragraph :: Name
-_Paragraph = Name "hydra.markdown.Paragraph"
+_Paragraph = Name "hydra.core.markdown.Paragraph"
 _Paragraph_content :: Name
 _Paragraph_content = Name "content"
 _Paragraph_anchor :: Name
 _Paragraph_anchor = Name "anchor"
 
 _Section :: Name
-_Section = Name "hydra.markdown.Section"
+_Section = Name "hydra.core.markdown.Section"
 _Section_heading :: Name
 _Section_heading = Name "heading"
 _Section_content :: Name
@@ -176,17 +176,17 @@ _Section_anchor :: Name
 _Section_anchor = Name "anchor"
 
 _Table :: Name
-_Table = Name "hydra.markdown.Table"
+_Table = Name "hydra.core.markdown.Table"
 _Table_header :: Name
 _Table_header = Name "header"
 _Table_rows :: Name
 _Table_rows = Name "rows"
 
 _TableCell :: Name
-_TableCell = Name "hydra.markdown.TableCell"
+_TableCell = Name "hydra.core.markdown.TableCell"
 
 _TableRow :: Name
-_TableRow = Name "hydra.markdown.TableRow"
+_TableRow = Name "hydra.core.markdown.TableRow"
 
 block :: TypedTermDefinition (Term -> String)
 block = define "block" $

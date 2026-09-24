@@ -9,21 +9,21 @@
 module Hydra.Sources.Coq.Utils where
 
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Math                   as Math
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
-import qualified Hydra.Dsl.Packaging                       as Packaging
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Math                   as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
+import qualified Hydra.Core.Dsl.Packaging                       as Packaging
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
@@ -496,8 +496,8 @@ eraseUnboundTypeVarDomains = define "eraseUnboundTypeVarDomains" $
   Rewriting.rewriteTermWithContext @@ var "f" @@ var "initialBound" @@ var "term0"
 
 -- | Extract the qualified-namespace part of a Hydra Name string.
--- `"hydra.core.Term_Literal"` -> `"hydra.core"`.
--- `"hydra.lib.strings.concat"` -> `"hydra.lib.strings"`.
+-- `"hydra.core.model.Term_Literal"` -> `"hydra.core.model"`.
+-- `"hydra.core.lib.strings.concat"` -> `"hydra.core.lib.strings"`.
 -- Names without at least one dot are returned unchanged.
 extractQualifiedNamespace :: TypedTermDefinition (String -> String)
 extractQualifiedNamespace = define "extractQualifiedNamespace" $

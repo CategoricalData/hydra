@@ -53,7 +53,7 @@ def _lib_subs_for_target(repo_root, target):
     checking which overlay/<target>/hydra-kernel/.../hydra/overlay/<seg>/lib/ files actually
     exist, rather than maintaining a hand-written allowlist. Existence on disk IS the signal for
     "this host ships a native impl for this sub" -- correct by construction for any future
-    hydra.lib.<sub> module whether or not it has a relocated overlay impl (hydra.lib.defaults has
+    hydra.lib.<sub> module whether or not it has a relocated overlay impl (hydra.core.lib.defaults has
     none and is therefore never redirected, replacing the old by-name exclusion). Falls back to
     _LIB_SUBS_FALLBACK if the overlay source tree isn't reachable from repo_root.
     """
@@ -80,7 +80,7 @@ def _overlay_lib_dir(repo_root, target):
     Getting this wrong is silent on case-insensitive filesystems (macOS): isdir() matches, listdir()
     then returns capitalized names that never equal the lowercase subs the coder tests against, so
     every hydra.lib.* redirect is skipped and the generated Haskell imports Hydra.Lib.* instead of
-    Hydra.Overlay.Haskell.Lib.* (#630).
+    Hydra.Core.Overlay.Haskell.Lib.* (#630).
     """
     base = os.path.join(repo_root, "overlay", target, "hydra-kernel", "src", "main")
     if target == "haskell":
@@ -109,15 +109,15 @@ def _run_lib_pass(target, lang_dir, all_main_mods, mods_to_generate):
     default-implementation referencing another primitive resolves to the primitive, not a lowered
     binding.
     """
-    import hydra.codegen
+    import hydra.core.codegen
     from hydra.generation import (write_java, write_python, write_scala,
                                   write_typescript, write_lisp_dialect)
 
-    lib_mods = [hydra.codegen.lower_primitive_definitions(m)
+    lib_mods = [hydra.core.codegen.lower_primitive_definitions(m)
                 for m in mods_to_generate if _is_lib_module(m)]
     if not lib_mods:
         return
-    lib_universe = [hydra.codegen.lower_primitive_definitions(m) if _is_lib_module(m) else m
+    lib_universe = [hydra.core.codegen.lower_primitive_definitions(m) if _is_lib_module(m) else m
                     for m in all_main_mods]
 
     print(f"Lib pass: emitting {len(lib_mods)} hydra.lib.* definition modules to {target}...",
@@ -190,7 +190,7 @@ def _redirect_lisp_flat(s, subs, lang_seg):
 
 def _redirect_lib_calls(repo_root, target, lang_dir):
     """#473/#568 redirect: rewrite generated CONSUMER call-sites so they resolve to the relocated
-    native hydra.overlay.<lang>.lib.* impls instead of the hydra.lib.* def-modules
+    native hydra.core.overlay.<lang>.lib.* impls instead of the hydra.lib.* def-modules
     (PrimitiveDefinition data, not callable). Dispatches per target's actual reference shape,
     mirroring redirectFor / redirectSchemeFor / redirectLispFlat in bootstrap-from-json/Main.hs:
     dotted (python/scala/clojure), R7RS sexp (scheme), flat identifier (common-lisp/emacs-lisp).
@@ -285,7 +285,7 @@ def _read_manifest_field_or_empty(pkg_dir, field_name):
     if field_name not in manifest:
         return []
     # Reuse Namespace-wrapping behavior from read_manifest_field.
-    from hydra.packaging import ModuleName
+    from hydra.core.packaging import ModuleName
     return [ModuleName(ns) for ns in manifest[field_name]]
 
 
@@ -410,10 +410,10 @@ def main():
     # Keep full module list for test universe
     full_mods = baseline_mods + coder_mods
 
-    # #546/#547: the kernel test suite references hydra.test.build.* -> hydra.build.*
+    # #546/#547: the kernel test suite references hydra.core.test.build.* -> hydra.build.*
     # (Option A). When emitting tests, hydra-build's main modules must be in the
     # universe so those refs type-check; otherwise cross-host generation fails with
-    # "Unknown variable: hydra.test.build.modules.allTests". Mirrors the Haskell
+    # "Unknown variable: hydra.build.test.modules.allTests". Mirrors the Haskell
     # bootstrap-from-json + Java Bootstrap fix.
     if args.include_tests:
         full_mods = full_mods + _load_package_main(dist_json_root, "hydra-build")
@@ -445,7 +445,7 @@ def main():
                            all_main_mods, mods_to_generate)
 
     # #473 Step 0 — lib pass + redirect. The hydra.lib.* primitive IMPLEMENTATIONS live at
-    # hydra.overlay.<lang>.lib.* (the analog of Haskell's Hydra.Overlay.Haskell.Lib.*), so hydra.lib.* is free for
+    # hydra.core.overlay.<lang>.lib.* (the analog of Haskell's Hydra.Core.Overlay.Haskell.Lib.*), so hydra.lib.* is free for
     # the generated PrimitiveDefinition def-modules. Mirrors the Haskell driver's twoPassLib logic in
     # bootstrap-from-json/Main.hs: when the Python host generates a target that consumes def-modules
     # (everything except haskell, which uses the registry), it must (1) emit the hydra.lib.* def-modules
@@ -484,7 +484,7 @@ def main():
         step_start = time.time()
         test_namespaces = read_manifest_field(kernel_main_dir, "testModules")
         test_mods = load_modules_from_json(test_json_dir, test_namespaces)
-        # #546/#547: also load hydra-build's OWN test modules (hydra.test.build.*),
+        # #546/#547: also load hydra-build's OWN test modules (hydra.core.test.build.*),
         # imported by the kernel test suite (Option A) but living in hydra-build's
         # test tree, not hydra-kernel's.
         build_main_dir = _package_main_dir(dist_json_root, "hydra-build")
@@ -500,18 +500,18 @@ def main():
 
         all_universe = full_mods + test_mods
 
-        # Filter skip-emit test namespaces (e.g. hydra.test.testEnv): these are
+        # Filter skip-emit test namespaces (e.g. hydra.core.test.testEnv): these are
         # type-only stubs in the DSL whose hand-written per-language
         # counterparts are the source of truth. Emitting them would overwrite
         # hand-written code that registers primitives for the test graph.
         # Mirrors testSkipEmitModuleNames in Hydra.Sources.Test.All.
-        _test_skip_emit = {"hydra.test.testEnv"}
+        _test_skip_emit = {"hydra.core.test.testEnv"}
         test_mods = [m for m in test_mods if m.name.value not in _test_skip_emit]
         out_test = os.path.join(out_dir, "src/test")
 
         # When --kernel-only is active, ext modules are excluded from the main
         # generation targets. But test modules may depend on ext modules (e.g.
-        # hydra.test.serialization depends on hydra.haskell.operators).
+        # hydra.core.test.serialization depends on hydra.haskell.operators).
         # Generate those ext modules to outMain so test code can reference them.
         if args.kernel_only:
             test_ext_deps = set()

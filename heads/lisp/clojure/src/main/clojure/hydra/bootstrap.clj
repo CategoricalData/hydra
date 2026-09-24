@@ -11,7 +11,7 @@
      --include-tests        Also load and generate kernel test modules
      --kernel-only          Only generate kernel modules (those listed in the kernel JSON manifest)
      --types-only           Only generate type-defining modules"
-  (:require [hydra.overlay.clojure.preload :as preload])
+  (:require [hydra.core.overlay.clojure.preload :as preload])
   (:gen-class))
 
 (defn- format-time [millis]
@@ -45,7 +45,7 @@
    checking which overlay/<target>/hydra-kernel/.../hydra/overlay/<seg>/lib/ files actually exist,
    rather than maintaining a hand-written allowlist. Existence on disk IS the signal for \"this
    host ships a native impl for this sub\" — correct by construction for any future
-   hydra.lib.<sub> module whether or not it has a relocated overlay impl (hydra.lib.defaults has
+   hydra.lib.<sub> module whether or not it has a relocated overlay impl (hydra.core.lib.defaults has
    none and is therefore never redirected, replacing the old by-name exclusion). Falls back to
    lib-subs-fallback if the overlay source tree isn't reachable from repo-root."
   [repo-root target]
@@ -54,7 +54,7 @@
   ;; wrong is silent on case-insensitive filesystems (macOS): isDirectory matches, listFiles then
   ;; returns capitalized names that never equal the lowercase subs the coder tests against, so
   ;; every hydra.lib.* redirect is skipped and generated Haskell imports Hydra.Lib.* instead of
-  ;; Hydra.Overlay.Haskell.Lib.* (#630).
+  ;; Hydra.Core.Overlay.Haskell.Lib.* (#630).
   (let [lib-dir (java.io.File. ^String (clojure.string/join java.io.File/separator
                   (if (= target "haskell")
                     [repo-root "overlay" "haskell" "hydra-kernel" "src" "main" "haskell"
@@ -86,7 +86,7 @@
    genForDirLib: lib modules lowered; universe lowers ONLY lib modules."
   [gen-sources coder-info do-infer out-main all-main-mods mods-to-generate]
   ;; The lowering fn is a generated kernel var globalized into clojure.core (same resolution as `rc`).
-  (let [lower @(ns-resolve 'clojure.core 'hydra_codegen_lower_primitive_definitions)
+  (let [lower @(ns-resolve 'clojure.core 'hydra_core_codegen_lower_primitive_definitions)
         lib-mods (mapv lower (filterv lib-module? mods-to-generate))]
     (when (seq lib-mods)
       (let [lib-universe (mapv #(if (lib-module? %) (lower %) %) all-main-mods)]
@@ -96,7 +96,7 @@
 
 ;; The Clojure coder emits consumer `(:require [hydra.lib.<sub> :refer :all])` and flat call sites
 ;; `hydra_lib_<sub>_<fn>` (resolved via that :refer). The relocation is driver-side: rewrite the require
-;; namespace hydra.lib.<sub> -> hydra.overlay.clojure.lib.<sub> (the relocated impls). The flat call identifiers
+;; namespace hydra.lib.<sub> -> hydra.core.overlay.clojure.lib.<sub> (the relocated impls). The flat call identifiers
 ;; stay (resolved via the relocated :refer :all). Def-modules at hydra/lib/ keep canonical hydra.lib.*.
 (defn- all-files-under [^java.io.File dir]
   (if (.isDirectory dir)
@@ -117,12 +117,12 @@
                  (re-find #"/hydra/overlay/[^/]+/[Ll]ibraries\.[^/]+$" p)))))
 
 (defn- redirect-dotted
-  "Rewrite consumer references from the un-relocated hydra.lib.<sub> / hydra.test.testEnv namespaces to
-   their relocated impls under hydra.overlay.<lang-seg>.* for the TARGET language (lang-seg is
+  "Rewrite consumer references from the un-relocated hydra.lib.<sub> / hydra.core.test.testEnv namespaces to
+   their relocated impls under hydra.core.overlay.<lang-seg>.* for the TARGET language (lang-seg is
    e.g. \"overlay.clojure\" or \"overlay.python\"). Protects quoted primitive-NAME strings. Mirrors the
    Scala host's redirectDotted; needed for cross-host targets (e.g. clojure->python) as well as
    clojure self-host — without it the target's generated consumers call the def-modules
-   (\"'PrimitiveDefinition' object is not callable\") and import the pre-#501 hydra.test.test_env path
+   (\"'PrimitiveDefinition' object is not callable\") and import the pre-#501 hydra.core.test.test_env path
    (ModuleNotFoundError)."
   [^String s ^String lang-seg subs]
   (let [sentinel "@@HYDRA_LIB_NAME@@"
@@ -131,11 +131,11 @@
                             (.replace acc (str "hydra.lib." sub) (str "hydra." lang-seg ".lib." sub)))
                           protected
                           subs)
-        ;; #501: the hand-written testEnv module lives at hydra.overlay.<lang>.testEnv (test_env). The
-        ;; DSL emits references to the un-relocated hydra.test.testEnv; relocate them for the target.
+        ;; #501: the hand-written testEnv module lives at hydra.core.overlay.<lang>.testEnv (test_env). The
+        ;; DSL emits references to the un-relocated hydra.core.test.testEnv; relocate them for the target.
         with-testenv (-> rewritten
-                         (.replace "hydra.test.test_env" (str "hydra." lang-seg ".test_env"))
-                         (.replace "hydra.test.testEnv" (str "hydra." lang-seg ".testEnv")))]
+                         (.replace "hydra.core.test.test_env" (str "hydra." lang-seg ".test_env"))
+                         (.replace "hydra.core.test.testEnv" (str "hydra." lang-seg ".testEnv")))]
     (.replace with-testenv sentinel "hydra.lib.")))
 
 (defn- redirect-scheme
@@ -149,11 +149,11 @@
 
 (defn- redirect-lisp-flat
   "Common Lisp / Emacs Lisp redirect: rename consumer call sites
-   hydra_lib_<sub>_ -> hydra_overlay_<lang-seg>_lib_<sub>_, and drop the def-module
+   hydra_lib_<sub>_ -> hydra_core_overlay_<lang-seg>_lib_<sub>_, and drop the def-module
    \":hydra.lib.<sub>\" token from consumer defpackage (:use ...) clauses."
   [^String s subs lang-seg]
   (let [renamed (reduce (fn [^String acc sub]
-                          (.replace acc (str "hydra_lib_" sub "_") (str "hydra_overlay_" lang-seg "_lib_" sub "_")))
+                          (.replace acc (str "hydra_lib_" sub "_") (str "hydra_core_overlay_" lang-seg "_lib_" sub "_")))
                         s subs)]
     (reduce (fn [^String acc sub]
               (.replace acc (str " :hydra.lib." sub) ""))
@@ -161,7 +161,7 @@
 
 (defn- redirect-lib-calls
   "#473/#568 redirect over a generated dir, rewriting generated CONSUMER call-sites so they
-   resolve to the relocated native hydra.overlay.<lang>.lib.* impls (+ hydra.test.testEnv for
+   resolve to the relocated native hydra.core.overlay.<lang>.lib.* impls (+ hydra.core.test.testEnv for
    dotted targets). Dispatches per TARGET's actual reference shape, mirroring redirectFor /
    redirectSchemeFor / redirectLispFlat in bootstrap-from-json/Main.hs: dotted
    (python/scala/clojure), R7RS sexp (scheme), flat identifier (common-lisp/emacs-lisp). No-op for
@@ -183,7 +183,7 @@
               (let [s (slurp f)]
                 (cond
                   (some? dotted-seg)
-                  (when (or (.contains s "hydra.lib.") (.contains s "hydra.test.test"))
+                  (when (or (.contains s "hydra.lib.") (.contains s "hydra.core.test.test"))
                     (let [out (redirect-dotted s dotted-seg subs)]
                       (when (not= out s) (spit f out))))
 
@@ -321,10 +321,10 @@
     ;; Namespace is hydra.typeScript (camelCase S); the lisp coder lowers
     ;; identifier segments to snake_case, so vars are hydra_type_script_*.
     ;; CLI target stays "typescript".
-    (do (load-coder-modules! ["hydra.typeScript.coder"])
-        {:coder (let [c @(rc 'hydra_type_script_coder_module_to_type_script)]
+    (do (load-coder-modules! ["hydra.typescript.coder"])
+        {:coder (let [c @(rc 'hydra_typescript_coder_module_to_type_script)]
                   (fn [mod] (fn [defs] (fn [cx] (fn [g] (((((c known-subs) mod) defs) cx) g))))))
-         :language @(rc 'hydra_type_script_language_type_script_language)
+         :language @(rc 'hydra_typescript_language_type_script_language)
          :flags [false false false false]
          :subdir "typescript"})
     ("clojure" "scheme" "common-lisp" "emacs-lisp")
@@ -355,20 +355,20 @@
                         (if (= (first result) :left)
                           result
                           (let [program (second result)
-                                code (@(rc 'hydra_serialization_print_expr)
-                                       (@(rc 'hydra_serialization_parenthesize)
+                                code (@(rc 'hydra_core_serialization_print_expr)
+                                       (@(rc 'hydra_core_serialization_parenthesize)
                                          (program-to-expr program)))
                                 ns-val (let [ns (:name mod)]
                                          (if (string? ns) ns (:value ns)))
                                 case-conv (if (= target "clojure")
                                            (list :camel nil)
                                            (list :lower_snake nil))
-                                file-path (((@(rc 'hydra_names_module_name_to_file_path)
+                                file-path (((@(rc 'hydra_core_names_module_name_to_file_path)
                                               case-conv) ext) ns-val)]
                             (list :right {file-path code}))))))))]
           {:coder coder
            :language lang
-           ;; do_infer=false to avoid hydra.adapt mutual recursion issue in Clojure
+           ;; do_infer=false to avoid hydra.core.adapt mutual recursion issue in Clojure
            :flags [false false false false]
            :subdir subdir}))
     ;; Default: unsupported
@@ -466,7 +466,7 @@
                                    (:kernel-only opts) (filterv (fn [m]
                                      (contains? kernel-ns-set (ns-str-of m))))
                                    (:types-only opts) (filterv (fn [m]
-                                     (some (ns-resolve (find-ns 'hydra.annotations) 'hydra_annotations_is_native_type) (:definitions m)))))]
+                                     (some (ns-resolve (find-ns 'hydra.core.annotations) 'hydra_core_annotations_is_native_type) (:definitions m)))))]
 
             (when (:kernel-only opts)
               (println (str "Filtering to kernel modules: " (count mods-to-generate) " of " (count all-main-mods)))
@@ -502,12 +502,12 @@
                               _ (println "Loading test modules from JSON...")
                               _ (flush)
                               test-ns (read-manifest json-dir "testModules")
-                              ;; #546/#547: the kernel test suite references hydra.test.build.* ->
+                              ;; #546/#547: the kernel test suite references hydra.core.test.build.* ->
                               ;; hydra.build.* (Option A). Load hydra-build's main modules into the
-                              ;; universe and its OWN test modules (hydra.test.build.*, which live in
+                              ;; universe and its OWN test modules (hydra.core.test.build.*, which live in
                               ;; the hydra-build package's test tree, not hydra-kernel's), else
                               ;; cross-host gen fails with "Unknown variable:
-                              ;; hydra.test.build.modules.allTests". Mirrors the Java/Scala/CL fix (#553).
+                              ;; hydra.build.test.modules.allTests". Mirrors the Java/Scala/CL fix (#553).
                               build-main-mods (load-package-main dist-json-root "hydra-build" read-manifest load-mods)
                               build-main-dir (str dist-json-root "/hydra-build/src/main/json")
                               build-test-dir (str dist-json-root "/hydra-build/src/test/json")
@@ -518,14 +518,14 @@
                               test-mods (into (load-mods test-json-dir test-ns) build-test-mods)
                               all-universe (into (into (vec main-mods) build-main-mods) test-mods)
                               ;; Filter skip-emit test namespaces (e.g.
-                              ;; hydra.test.testEnv): these are type-only stubs
+                              ;; hydra.core.test.testEnv): these are type-only stubs
                               ;; whose hand-written per-language counterparts
                               ;; are the source of truth. Mirrors
                               ;; testSkipEmitModuleNames in
                               ;; Hydra.Sources.Test.All and the equivalent
                               ;; filter in heads/python/.../bootstrap.py.
                               ns-of (fn [m] (let [n (:name m)] (if (string? n) n (:value n))))
-                              test-skip-emit #{"hydra.test.testEnv"}
+                              test-skip-emit #{"hydra.core.test.testEnv"}
                               test-mods-to-emit (filterv (fn [m] (not (contains? test-skip-emit (ns-of m)))) test-mods)
                               out-test (str out-dir "/src/test/" (:subdir coder-info))]
                           (println (str "  Loaded " (count test-mods) " test modules."))
@@ -544,7 +544,7 @@
                             count))
                         0)
                       ;; #473/#568 redirect — run LAST over every generated dir (main + test) so
-                      ;; consumer references hydra.lib.* (+ hydra.test.testEnv for dotted targets)
+                      ;; consumer references hydra.lib.* (+ hydra.core.test.testEnv for dotted targets)
                       ;; are rewritten to the TARGET language's relocated namespace. Dispatches per
                       ;; target inside redirect-lib-calls; no-ops for java/typescript/haskell.
                       _ (do

@@ -33,22 +33,22 @@ main = do
   let writeMods = kernelModules
 
   -- The INFERENCE universe must additionally include the synthesized
-  -- hydra.encode.*/hydra.decode.* modules. Several kernel modules reference
-  -- decoder bindings (e.g. hydra.decoding's decodeType, since #740, pulls in
-  -- hydra.decode.core.type via decoderFullResultType), and inference of the
+  -- hydra.core.encode.*/hydra.core.decode.* modules. Several kernel modules reference
+  -- decoder bindings (e.g. hydra.core.decoding's decodeType, since #740, pulls in
+  -- hydra.core.decode.model.type via decoderFullResultType), and inference of the
   -- kernel write set cannot resolve those references unless the derived
   -- decode modules are present in the universe. update-json-main resolves the
   -- identical references by synthesizing these modules in-memory and adding
   -- them to its universe; this driver must do the same or inference fails with
-  -- "no such binding: hydra.decode.core.type".
+  -- "no such binding: hydra.core.decode.model.type".
   --
   -- The synthesizer resolves each source module's type references against its
   -- universe argument, so that universe must cover every encoding-source
   -- module (kernelEncodingSourceModules = kernelTypesModules ++ jsonModules ++
-  -- otherModules). kernelModules omits otherModules (e.g. hydra.yaml.model),
+  -- otherModules). kernelModules omits otherModules (e.g. hydra.core.yaml.model),
   -- so pass kernelModules ++ kernelEncodingSourceModules (deduped) as the
   -- synthesizer universe, otherwise encoder synthesis fails with e.g.
-  -- "no such element: hydra.yaml.model.Node".
+  -- "no such element: hydra.core.yaml.model.Node".
   let synthUniverse = dedupByNamespace (writeMods ++ kernelEncodingSourceModules)
   encMods <- generateEncoderModules synthUniverse kernelEncodingSourceModules
   decMods <- generateDecoderModules synthUniverse kernelEncodingSourceModules

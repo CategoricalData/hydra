@@ -5,33 +5,33 @@ module Hydra.Sources.Neo4j.Pg where
 import Hydra.Kernel hiding (
   Node(..), _Node, Relationship(..), _Relationship, Path(..), _Path,
   Element(..), _Element)
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import qualified Hydra.Dsl.Util                       as Util
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Core.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import qualified Hydra.Core.Dsl.Util                       as Util
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
 import           Prelude hiding ((++))
 import qualified Data.List                                 as L
 import qualified Data.Map                                  as M
 import qualified Data.Set                                  as S
 
 -- Additional imports
-import Hydra.Neo4j.Model as N4
+import Hydra.Pg.Neo4j.Model as N4
 import qualified Hydra.Pg.Model                            as PG
 import qualified Hydra.Sources.Neo4j.Model                 as Neo4jModel
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.neo4j.pg"
+ns = ModuleName "hydra.pg.neo4j.core"
 
 mappingDefinition :: String -> TypedTerm a -> TypedTermDefinition a
 mappingDefinition = definitionInModule module_
@@ -40,8 +40,8 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [Neo4jModel.ns, ModuleName "hydra.pg.model", ModuleName "hydra.core", Formatting.ns, ModuleName "hydra.util"],
-            moduleMetadata = descriptionMetadata (Just "A mapping between Hydra's property-graph model (hydra.pg.model, TinkerPop-shaped) and the Neo4j model (hydra.neo4j.model). It is not an isomorphism and not invertible: ids and values are bridged by caller-supplied conversions (Neo4jMapping); a Neo4j relationship type expands into a property-graph edge label conditionally on the schema; and multi-label nodes, which Hydra's single-label vertices cannot represent, are rejected.")}
+            moduleDependencies = unqualifiedDep <$> [Neo4jModel.ns, ModuleName "hydra.pg.model", ModuleName "hydra.core.model", Formatting.ns, ModuleName "hydra.core.util"],
+            moduleMetadata = descriptionMetadata (Just "A mapping between Hydra's property-graph model (hydra.pg.model, TinkerPop-shaped) and the Neo4j model (hydra.pg.neo4j.model). It is not an isomorphism and not invertible: ids and values are bridged by caller-supplied conversions (Neo4jMapping); a Neo4j relationship type expands into a property-graph edge label conditionally on the schema; and multi-label nodes, which Hydra's single-label vertices cannot represent, are rejected.")}
   where
    definitions = [
      toDefinition edgeLabelForRelationship,

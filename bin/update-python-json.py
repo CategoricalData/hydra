@@ -12,7 +12,7 @@ packages/hydra-python/src/main/python/hydra/sources/python/*.py.
 The driver:
   1. Loads the kernel universe from dist/json/hydra-kernel/.
   2. Imports each hydra.sources.python.* module and pulls its module_.
-  3. Runs hydra.codegen.infer_modules_given over (universe + python_sources).
+  3. Runs hydra.core.codegen.infer_modules_given over (universe + python_sources).
   4. Builds a schemaMap from the inferred graph.
   5. Encodes each python source module to JSON via codegen.module_to_json.
   6. Writes each output to dist/json/hydra-python/<namespace-path>.json.
@@ -69,7 +69,7 @@ for sub in _subs:
 # it may already be imported (and its __path__ fixed) via the venv's editable
 # install of heads/python before these sys.path inserts take effect — so the
 # namespace never merges in the dist/python/hydra-{kernel,python} trees and
-# `import hydra.codegen` (a generated kernel module that lives ONLY under
+# `import hydra.core.codegen` (a generated kernel module that lives ONLY under
 # dist/python/hydra-kernel) fails. This bit CI under `uv run`, where the editable
 # .pth resolves `hydra` to heads/python alone (#472 local-host shim). Re-extend
 # hydra.__path__ over every sys.path entry that carries a hydra/ dir so the merge
@@ -79,8 +79,8 @@ if not _PUBLISHED and "hydra" in sys.modules:
     sys.modules["hydra"].__path__ = pkgutil.extend_path(
         sys.modules["hydra"].__path__, "hydra")
 
-import hydra.codegen as codegen
-from hydra.overlay.python.dsl.python import Left, Right
+import hydra.core.codegen as codegen
+from hydra.core.overlay.python.dsl.python import Left, Right
 from hydra.generation import (
     bootstrap_graph,
     infer_and_write_by_package,
@@ -219,7 +219,7 @@ def main():
             seed_acc=tuple(universe),
         )
         # #370/#346: also synthesize the DSL-wrapper modules
-        # (hydra.dsl.python.{environment,syntax}) that the legacy Haskell
+        # (hydra.python.dsl.{environment,syntax}) that the legacy Haskell
         # update-json-main DSL pass used to write. Now that hydra-python is
         # single-writer (no Haskell DSL fallback), the native driver owns its
         # full emission set. The DSL-type source modules are the type-defining

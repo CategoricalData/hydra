@@ -1,9 +1,9 @@
 package hydra.sources.scala
 
-import hydra.core.Type
-import hydra.overlay.scala.dsl.{Helpers, Types}
-import hydra.overlay.scala.dsl.meta.Defs
-import hydra.packaging.{Definition, EntityMetadata, Module, ModuleName}
+import hydra.core.model.Type
+import hydra.core.overlay.scala.dsl.{Helpers, Types}
+import hydra.core.overlay.scala.dsl.meta.Defs
+import hydra.core.packaging.{Definition, EntityMetadata, Module, ModuleName}
 
 /**
  * Scala syntax — Hydra type definitions for a Scala AST anchored on Scalameta.
@@ -15,7 +15,7 @@ import hydra.packaging.{Definition, EntityMetadata, Module, ModuleName}
 object Syntax:
 
   val NS: ModuleName = "hydra.scala.syntax"
-  private val CORE_NS: ModuleName = "hydra.core"
+  private val CORE_NS: ModuleName = "hydra.core.model"
 
   /** Reference a type defined in this module. */
   private def meta(local: String): Type = Helpers.typeref(NS, local)

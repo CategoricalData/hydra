@@ -50,7 +50,7 @@ OVERLAY_DIR="$HYDRA_ROOT_DIR/overlay/python/hydra-kernel/src/main/python"
 OUT_DIR="$DIST_ROOT/hydra-kernel/src/main/python"
 
 # The test bridge (hydra/test/test_env.py) is the runtime counterpart of the
-# generated hydra.test.test_graph module, which imports hydra.test.test_env and
+# generated hydra.core.test.test_graph module, which imports hydra.core.test.test_env and
 # must resolve under the dist tree at test time. Per #434 it lives in the overlay
 # test tree (overlay/python/hydra-kernel/src/test/python/), so this one copy step
 # is the only thing that reads overlay/ — the old heads/ Step 0a special-case in

@@ -2,15 +2,15 @@ module Hydra.Sources.Error.Pg where
 
 -- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types                 ((>:))
-import qualified Hydra.Overlay.Haskell.Dsl.Types                 as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types                 ((>:))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                 as T
 import qualified Hydra.Sources.Pg.Model      as PgModel
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.error.pg"
+ns = ModuleName "hydra.pg.error.model"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns

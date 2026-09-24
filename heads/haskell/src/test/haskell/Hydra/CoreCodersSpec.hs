@@ -7,11 +7,11 @@ Test.Hspec.hspec Hydra.CoreCodersSpec.spec
 module Hydra.CoreCodersSpec where
 
 import Hydra.Kernel
-import Hydra.Overlay.Haskell.Dsl.Terms as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
-import qualified Hydra.Decode.Core as DecodeCore
-import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Errors as Error
+import Hydra.Core.Overlay.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as Types
+import qualified Hydra.Core.Decode.Model as DecodeCore
+import qualified Hydra.Core.Encode.Model as EncodeCore
+import qualified Hydra.Core.Errors as Error
 
 import Hydra.TestData
 import Hydra.TestUtils

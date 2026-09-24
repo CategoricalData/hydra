@@ -132,8 +132,8 @@ Line 6: ['5', '3', '2', '2025-05-01', '', '0.05', '', 'Credit', '4', '']
 
 module Hydra.Ext.Demos.GenPG.ExampleDatabaseSchema where
 
-import Hydra.Dsl.Tabular (TableType, tableType, columnType)
-import Hydra.Dsl.Types (binary, boolean, float32, float64, int32, int64, string)
+import Hydra.Core.Dsl.Tabular (TableType, tableType, columnType)
+import Hydra.Core.Dsl.Types (binary, boolean, float32, float64, int32, int64, string)
 
 employeesTableType :: TableType
 employeesTableType = tableType "employees.csv" [
@@ -248,7 +248,7 @@ salesTableSchemas = [
 module Hydra.Ext.Demos.GenPG.ExampleGraphSchema where
 
 import Hydra.Ext.Dsl.Pg.Schemas (propertyType, required, schema, simpleEdgeType, vertexType)
-import Hydra.Dsl.Types (binary, boolean, float32, float64, int32, int64, string)
+import Hydra.Core.Dsl.Types (binary, boolean, float32, float64, int32, int64, string)
 
 dateType = string
 decimalType = float64
@@ -362,15 +362,15 @@ salesGraphSchema = schema vertexTypes edgeTypes
 
 module Hydra.Ext.Demos.GenPG.ExampleMapping where
 
-import Hydra.Core (Term)
+import Hydra.Core.Model (Term)
 import Hydra.Pg.Model (Edge, Vertex)
-import Hydra.Formatting (decapitalize)
+import Hydra.Core.Formatting (decapitalize)
 import Hydra.Phantoms (TTerm)
-import Hydra.Dsl.Phantoms ((@@), constant, just, lambda, nothing, string, var)
+import Hydra.Core.Dsl.Phantoms ((@@), constant, just, lambda, nothing, string, var)
 import Hydra.Ext.Dsl.Pg.Mappings (LazyGraph, column, edge, edgeNoId, graph, property, vertex)
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
-import qualified Hydra.Dsl.Lib.Strings as Strings
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Core.Dsl.Lib.Strings as Strings
 import Hydra.Ext.Demos.GenPG.ExampleGraphSchema
 
 -- Helpers -----------------------

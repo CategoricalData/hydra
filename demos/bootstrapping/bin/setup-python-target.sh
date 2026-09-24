@@ -56,7 +56,7 @@ cp -r "$PY_OVERLAY/." "$PY_DST/"
 find "$PY_DST" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 
 # Copy generated kernel modules from baseline.
-# Test infrastructure imports generated modules like hydra.annotations, hydra.core, etc.
+# Test infrastructure imports generated modules like hydra.core.annotations, hydra.core.model, etc.
 echo "  Copying generated kernel modules from baseline..."
 PY_GEN="$OUTPUT_DIR/src/main/python"
 PY_BASELINE="$HYDRA_ROOT/dist/python/hydra-kernel/src/main/python"
@@ -112,8 +112,8 @@ for f in test_suite_runner.py test_python.py test_generated_code.py test_grammar
     fi
 done
 
-# #546: hydra-build owns hydra.build.* (main) + hydra.test.build.* (test), relocated out of
-# hydra-kernel. The kernel's generated testSuite imports hydra.test.build.*, which import
+# #546: hydra-build owns hydra.build.* (main) + hydra.core.test.build.* (test), relocated out of
+# hydra-kernel. The kernel's generated testSuite imports hydra.core.test.build.*, which import
 # hydra.build.*; neither is emitted into the cell under --kernel-only. Copy both from the
 # hydra-build baseline (else: "ModuleNotFoundError: No module named 'hydra.build'").
 PY_BUILD_BASELINE="$HYDRA_ROOT/dist/python/hydra-build/src"
@@ -136,7 +136,7 @@ if [ ! -e "$OUTPUT_DIR/../hydra-kernel" ]; then
 fi
 
 # Copy overlay test files (provides test_env.py and related overlay modules) from overlay tree.
-# After #501, test_env lives at hydra.overlay.python.test_env, so we copy the entire
+# After #501, test_env lives at hydra.core.overlay.python.test_env, so we copy the entire
 # overlay test tree rather than a single hardcoded file.
 echo "  Copying overlay test modules..."
 PY_OVERLAY_TEST="$HYDRA_ROOT/overlay/python/hydra-kernel/src/test/python"

@@ -172,7 +172,7 @@ public final class Probe {
     public static void main(String[] args) {
         // Reference a stable, public kernel class. Name resolution at compile
         // time is enough; we do not run anything.
-        Class<?> c = hydra.core.Name.class;
+        Class<?> c = hydra.core.model.Name.class;
         System.out.println("hydra-kernel class on classpath: " + c.getName());
     }
 }

@@ -106,7 +106,7 @@ if [ "${#PUBLISH_SET[@]}" -eq 0 ]; then
     exit 1
 fi
 # hydra-ext: TEMPORARILY EXCLUDED as of 0.17.4 (#643 — the visitor-pattern inner
-# interface collides with the enclosing `Visitor` type in hydra.cpp.syntax), even
+# interface collides with the enclosing `Visitor` type in hydra.ext.cpp.syntax), even
 # though its targetLanguages/registries metadata says it qualifies for Java (#636).
 # This is a per-registry compile-time exception the registry metadata has no field
 # for yet (targetLanguages says "eligible for codegen," which is still true; the

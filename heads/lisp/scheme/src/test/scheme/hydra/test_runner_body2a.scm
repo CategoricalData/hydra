@@ -1,52 +1,52 @@
 (define (run-lift-lambda-test path tc)
   (run-simple-test path
-    (hydra_testing_lift_lambda_above_let_test_case-output tc)
+    (hydra_core_testing_lift_lambda_above_let_test_case-output tc)
     (lambda ()
-      (hydra_rewriting_lift_lambda_above_let
-        (hydra_testing_lift_lambda_above_let_test_case-input tc)))))
+      (hydra_core_rewriting_lift_lambda_above_let
+        (hydra_core_testing_lift_lambda_above_let_test_case-input tc)))))
 
 (define (run-simplify-term-test path tc)
   (run-simple-test path
-    (hydra_testing_simplify_term_test_case-output tc)
+    (hydra_core_testing_simplify_term_test_case-output tc)
     (lambda ()
-      (hydra_rewriting_simplify_term
-        (hydra_testing_simplify_term_test_case-input tc)))))
+      (hydra_core_rewriting_simplify_term
+        (hydra_core_testing_simplify_term_test_case-input tc)))))
 
 (define (run-normalize-type-vars-test path tc)
   (run-simple-test path
-    (hydra_testing_normalize_type_variables_test_case-output tc)
+    (hydra_core_testing_normalize_type_variables_test_case-output tc)
     (lambda ()
-      (hydra_rewriting_normalize_type_variables_in_term
-        (hydra_testing_normalize_type_variables_test_case-input tc)))))
+      (hydra_core_rewriting_normalize_type_variables_in_term
+        (hydra_core_testing_normalize_type_variables_test_case-input tc)))))
 
 (define (run-topological-sort-test path tc)
   (run-simple-test path
-    (hydra_testing_topological_sort_test_case-expected tc)
+    (hydra_core_testing_topological_sort_test_case-expected tc)
     (lambda ()
-      (hydra_sorting_topological_sort
-        (hydra_testing_topological_sort_test_case-adjacency_list tc)))))
+      (hydra_core_sorting_topological_sort
+        (hydra_core_testing_topological_sort_test_case-adjacency_list tc)))))
 
 (define (run-topological-sort-scc-test path tc)
   (run-simple-test path
-    (hydra_testing_topological_sort_s_c_c_test_case-expected tc)
+    (hydra_core_testing_topological_sort_s_c_c_test_case-expected tc)
     (lambda ()
-      (hydra_sorting_topological_sort_components
-        (hydra_testing_topological_sort_s_c_c_test_case-adjacency_list tc)))))
+      (hydra_core_sorting_topological_sort_components
+        (hydra_core_testing_topological_sort_s_c_c_test_case-adjacency_list tc)))))
 
 (define (run-serialization-test path tc)
   (run-simple-test path
-    (hydra_testing_serialization_test_case-output tc)
+    (hydra_core_testing_serialization_test_case-output tc)
     (lambda ()
-      (hydra_serialization_print_expr
-        (hydra_serialization_parenthesize
-          (hydra_testing_serialization_test_case-input tc))))))
+      (hydra_core_serialization_print_expr
+        (hydra_core_serialization_parenthesize
+          (hydra_core_testing_serialization_test_case-input tc))))))
 
 (define (run-unshadow-variables-test path tc)
   (run-simple-test path
-    (hydra_testing_unshadow_variables_test_case-output tc)
+    (hydra_core_testing_unshadow_variables_test_case-output tc)
     (lambda ()
-      (hydra_rewriting_unshadow_variables
-        (hydra_testing_unshadow_variables_test_case-input tc)))))
+      (hydra_core_rewriting_unshadow_variables
+        (hydra_core_testing_unshadow_variables_test_case-input tc)))))
 
 ;; ---- Medium test runners (need graph/context, Either results) ----
 
@@ -54,17 +54,17 @@
   (let ((cx (empty-context))
         (graph (get-test-graph)))
     (run-either-test path
-      (hydra_testing_type_reduction_test_case-output tc)
-      (((hydra_reduction_beta_reduce_type cx) graph)
-       (hydra_testing_type_reduction_test_case-input tc)))))
+      (hydra_core_testing_type_reduction_test_case-output tc)
+      (((hydra_core_reduction_beta_reduce_type cx) graph)
+       (hydra_core_testing_type_reduction_test_case-input tc)))))
 
 (define (run-eta-expansion-test path tc)
   (let ((cx (empty-context))
         (graph (get-test-graph)))
     (run-either-test path
-      (hydra_testing_eta_expansion_test_case-output tc)
-      (((hydra_reduction_eta_expand_typed_term cx) graph)
-       (hydra_testing_eta_expansion_test_case-input tc)))))
+      (hydra_core_testing_eta_expansion_test_case-output tc)
+      (((hydra_core_reduction_eta_expand_typed_term cx) graph)
+       (hydra_core_testing_eta_expansion_test_case-input tc)))))
 
 ;; ---- Inference tests ----
 
@@ -75,8 +75,8 @@
                  (display (string-append "FAIL: " path "\n"))
                  (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                  (list 0 1 0)))
-      (let ((result (((hydra_inference_infer_type_of cx) graph)
-                      (hydra_testing_inference_test_case-input tc))))
+      (let ((result (((hydra_core_inference_infer_type_of cx) graph)
+                      (hydra_core_testing_inference_test_case-input tc))))
         (if (eq? (car result) 'left)
             (begin
               (display (string-append "FAIL: " path "\n"))
@@ -86,7 +86,7 @@
             (let* ((pair-val (cadr result))
                    (inner-pair (car pair-val))
                    (result-scheme (cadr inner-pair))
-                   (expected-ts (hydra_testing_inference_test_case-output tc))
+                   (expected-ts (hydra_core_testing_inference_test_case-output tc))
                    (expected-str (show-type-scheme expected-ts))
                    (actual-str (show-type-scheme result-scheme)))
               (run-string-comparison-test path expected-str actual-str)))))))
@@ -97,8 +97,8 @@
     (guard (exn (#t
                  ;; Exception counts as failure (expected)
                  (list 1 0 0)))
-      (let ((result (((hydra_inference_infer_type_of cx) graph)
-                      (hydra_testing_inference_failure_test_case-input tc))))
+      (let ((result (((hydra_core_inference_infer_type_of cx) graph)
+                      (hydra_core_testing_inference_failure_test_case-input tc))))
         (if (eq? (car result) 'left)
             (list 1 0 0)  ;; Expected failure
             (begin
@@ -110,11 +110,11 @@
 
 (define (type-scheme-to-type ts)
   "Convert a TypeScheme back to a Type by wrapping forall binders around the body."
-  (let ((vars (hydra_core_type_scheme-variables ts))
-        (body (hydra_core_type_scheme-body ts)))
+  (let ((vars (hydra_core_model_type_scheme-variables ts))
+        (body (hydra_core_model_type_scheme-body ts)))
     (let loop ((vs (reverse vars)) (t body))
       (if (null? vs) t
-          (loop (cdr vs) (list 'forall (make-hydra_core_forall_type (car vs) t)))))))
+          (loop (cdr vs) (list 'forall (make-hydra_core_model_forall_type (car vs) t)))))))
 
 (define (run-type-checking-test path tc)
   (let ((cx (empty-context))
@@ -124,8 +124,8 @@
                  (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                  (list 0 1 0)))
       ;; Step 1: Infer type
-      (let ((infer-result (((hydra_inference_infer_type_of cx) graph)
-                            (hydra_testing_type_checking_test_case-input tc))))
+      (let ((infer-result (((hydra_core_inference_infer_type_of cx) graph)
+                            (hydra_core_testing_type_checking_test_case-input tc))))
         (if (eq? (car infer-result) 'left)
             (begin
               (display (string-append "FAIL: " path "\n"))
@@ -138,7 +138,7 @@
                    (infer-cx (cadr pair-val))
                    (inferred-type (type-scheme-to-type result-scheme))
                    ;; Step 2: Reconstruct type using typeOf
-                   (type-of-result ((((hydra_checking_type_of infer-cx) graph) '()) inferred-term)))
+                   (type-of-result ((((hydra_core_checking_type_of infer-cx) graph) '()) inferred-term)))
               (if (eq? (car type-of-result) 'left)
                   (begin
                     (display (string-append "FAIL: " path "\n"))
@@ -146,8 +146,8 @@
                     (list 0 1 0))
                   (let* ((reconstructed-type (car (cadr type-of-result)))
                          ;; Compare using alpha-equivalence
-                         (expected-term (hydra_testing_type_checking_test_case-output_term tc))
-                         (expected-type (hydra_testing_type_checking_test_case-output_type tc))
+                         (expected-term (hydra_core_testing_type_checking_test_case-output_term tc))
+                         (expected-type (hydra_core_testing_type_checking_test_case-output_type tc))
                          (term-ok? (alpha-equivalent-terms? expected-term inferred-term))
                          (type-ok? (alpha-equivalent-types? expected-type inferred-type))
                          (recon-ok? (alpha-equivalent-types? expected-type reconstructed-type)))
@@ -177,38 +177,38 @@
 
 (define (run-variable-occurs-in-type-test path tc)
   (run-simple-test path
-    (hydra_testing_variable_occurs_in_type_test_case-expected tc)
+    (hydra_core_testing_variable_occurs_in_type_test_case-expected tc)
     (lambda ()
-      ((hydra_unification_variable_occurs_in_type
-         (hydra_testing_variable_occurs_in_type_test_case-variable tc))
-       (hydra_testing_variable_occurs_in_type_test_case-type tc)))))
+      ((hydra_core_unification_variable_occurs_in_type
+         (hydra_core_testing_variable_occurs_in_type_test_case-variable tc))
+       (hydra_core_testing_variable_occurs_in_type_test_case-type tc)))))
 
 ;; ---- Subst in type ----
 
 (define (run-subst-in-type-test path tc)
   (let* (;; Build TypeSubst from list of (name, type) pairs
          ;; Note: TypeSubst is transparent (bare alist map, not a record)
-         (subst-alist (hydra_lib_maps_from_list
-                        (hydra_testing_subst_in_type_test_case-substitution tc))))
+         (subst-alist (hydra_core_lib_maps_from_list
+                        (hydra_core_testing_subst_in_type_test_case-substitution tc))))
     (run-simple-test path
-      (hydra_testing_subst_in_type_test_case-output tc)
+      (hydra_core_testing_subst_in_type_test_case-output tc)
       (lambda ()
-        ((hydra_substitution_subst_in_type subst-alist)
-         (hydra_testing_subst_in_type_test_case-input tc))))))
+        ((hydra_core_substitution_subst_in_type subst-alist)
+         (hydra_core_testing_subst_in_type_test_case-input tc))))))
 
 ;; ---- Unify types ----
 
 (define (run-unify-types-test path tc)
   (let* ((cx (empty-context))
          ;; Build schema types as Hydra alist map from the list of names
-         (schema-entries (map (lambda (n) (list n (make-hydra_core_type_scheme '() (list 'variable n) '())))
-                              (hydra_testing_unify_types_test_case-schema_types tc)))
-         (schema-types (hydra_lib_maps_from_list schema-entries))
-         (result (((((hydra_unification_unify_types cx) schema-types)
-                     (hydra_testing_unify_types_test_case-left tc))
-                    (hydra_testing_unify_types_test_case-right tc))
+         (schema-entries (map (lambda (n) (list n (make-hydra_core_model_type_scheme '() (list 'variable n) '())))
+                              (hydra_core_testing_unify_types_test_case-schema_types tc)))
+         (schema-types (hydra_core_lib_maps_from_list schema-entries))
+         (result (((((hydra_core_unification_unify_types cx) schema-types)
+                     (hydra_core_testing_unify_types_test_case-left tc))
+                    (hydra_core_testing_unify_types_test_case-right tc))
                    "test"))
-         (expected (hydra_testing_unify_types_test_case-expected tc)))
+         (expected (hydra_core_testing_unify_types_test_case-expected tc)))
     (guard (exn (#t
                  (display (string-append "FAIL: " path "\n"))
                  (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
@@ -237,7 +237,7 @@
                     (normalize-subst (lambda (ts)
                                        (my-list-sort
                                          (lambda (a b) (string<? (car a) (car b)))
-                                         (hydra_lib_maps_to_list ts)))))
+                                         (hydra_core_lib_maps_to_list ts)))))
                (if (equal? (normalize-subst expected-subst) (normalize-subst actual-subst))
                    (list 1 0 0)
                    (begin
@@ -254,11 +254,11 @@
 
 (define (run-join-types-test path tc)
   (let* ((cx (empty-context))
-         (result ((((hydra_unification_join_types cx)
-                     (hydra_testing_join_types_test_case-left tc))
-                    (hydra_testing_join_types_test_case-right tc))
+         (result ((((hydra_core_unification_join_types cx)
+                     (hydra_core_testing_join_types_test_case-left tc))
+                    (hydra_core_testing_join_types_test_case-right tc))
                    "test"))
-         (expected (hydra_testing_join_types_test_case-expected tc)))
+         (expected (hydra_core_testing_join_types_test_case-expected tc)))
     (guard (exn (#t
                  (display (string-append "FAIL: " path "\n"))
                  (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
@@ -298,13 +298,13 @@
 ;; ---- Topological sort bindings ----
 
 (define (run-topological-sort-bindings-test path tc)
-  (let* ((binding-map (hydra_lib_maps_from_list
-                        (hydra_testing_topological_sort_bindings_test_case-bindings tc)))
-         (result (hydra_dependencies_topological_sort_binding_map binding-map))
+  (let* ((binding-map (hydra_core_lib_maps_from_list
+                        (hydra_core_testing_topological_sort_bindings_test_case-bindings tc)))
+         (result (hydra_core_dependencies_topological_sort_binding_map binding-map))
          ;; Compare as sets of sets (order within SCCs doesn't matter)
          (result-sets (map (lambda (scc) (my-list-sort string<? scc)) result))
          (expected-sets (map (lambda (scc) (my-list-sort string<? scc))
-                             (hydra_testing_topological_sort_bindings_test_case-expected tc)))
+                             (hydra_core_testing_topological_sort_bindings_test_case-expected tc)))
          (result-sorted (my-list-sort (lambda (a b)
                                         (string<? (if (null? a) "" (car a))
                                                   (if (null? b) "" (car b))))
@@ -326,10 +326,10 @@
 (define (run-hoist-case-statements-test path tc)
   (let ((eg (empty-graph)))
     (run-simple-test path
-      (hydra_testing_hoist_case_statements_test_case-output tc)
+      (hydra_core_testing_hoist_case_statements_test_case-output tc)
       (lambda ()
-        ((hydra_hoisting_hoist_case_statements eg)
-         (hydra_testing_hoist_case_statements_test_case-input tc))))))
+        ((hydra_core_hoisting_hoist_case_statements eg)
+         (hydra_core_testing_hoist_case_statements_test_case-input tc))))))
 
 ;; ---- Hoist subterms ----
 
@@ -362,11 +362,11 @@
                (display (string-append "FAIL: " path "\n"))
                (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                (list 0 1 0)))
-    (let* ((empty-types hydra_lib_maps_empty)
-           (tc-type (hydra_testing_json_coder_test_case-type tc))
-           (tc-term (hydra_testing_json_coder_test_case-term tc))
-           (tc-json (hydra_testing_json_coder_test_case-json tc))
-           (encode-result (hydra_json_encode_to_json tc-term)))
+    (let* ((empty-types hydra_core_lib_maps_empty)
+           (tc-type (hydra_core_testing_json_coder_test_case-type tc))
+           (tc-term (hydra_core_testing_json_coder_test_case-term tc))
+           (tc-json (hydra_core_testing_json_coder_test_case-json tc))
+           (encode-result (hydra_core_json_encode_to_json tc-term)))
       (if (eq? (car encode-result) 'left)
           (begin
             (display (string-append "FAIL: " path "\n"))
@@ -380,8 +380,8 @@
                   (display "  Expected (raw): ") (write tc-json) (newline)
                   (display "  Actual (raw):   ") (write encoded) (newline)
                   (list 0 1 0))
-                (let ((decode-result ((((hydra_json_decode_from_json empty-types)
-                                        (make-hydra_core_name "test"))
+                (let ((decode-result ((((hydra_core_json_decode_from_json empty-types)
+                                        (make-hydra_core_model_name "test"))
                                        tc-type)
                                       encoded)))
                   (if (eq? (car decode-result) 'left)
@@ -404,18 +404,18 @@
                (display (string-append "FAIL: " path "\n"))
                (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                (list 0 1 0)))
-    (let* ((empty-types hydra_lib_maps_empty)
-           (tc-type (hydra_testing_json_roundtrip_test_case-type tc))
-           (tc-term (hydra_testing_json_roundtrip_test_case-term tc))
-           (encode-result (hydra_json_encode_to_json tc-term)))
+    (let* ((empty-types hydra_core_lib_maps_empty)
+           (tc-type (hydra_core_testing_json_roundtrip_test_case-type tc))
+           (tc-term (hydra_core_testing_json_roundtrip_test_case-term tc))
+           (encode-result (hydra_core_json_encode_to_json tc-term)))
       (if (eq? (car encode-result) 'left)
           (begin
             (display (string-append "FAIL: " path "\n"))
             (display (string-append "  JSON encode failed: " (obj->string (cadr encode-result)) "\n"))
             (list 0 1 0))
           (let* ((encoded (cadr encode-result))
-                 (decode-result ((((hydra_json_decode_from_json empty-types)
-                                   (make-hydra_core_name "test"))
+                 (decode-result ((((hydra_core_json_decode_from_json empty-types)
+                                   (make-hydra_core_model_name "test"))
                                   tc-type)
                                  encoded)))
             (if (eq? (car decode-result) 'left)
@@ -438,12 +438,12 @@
                (display (string-append "FAIL: " path "\n"))
                (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                (list 0 1 0)))
-    (let* ((empty-types hydra_lib_maps_empty)
-           (tc-type (hydra_testing_json_decode_test_case-type tc))
-           (tc-json (hydra_testing_json_decode_test_case-json tc))
-           (expected (hydra_testing_json_decode_test_case-expected tc))
-           (decode-result ((((hydra_json_decode_from_json empty-types)
-                              (make-hydra_core_name "test"))
+    (let* ((empty-types hydra_core_lib_maps_empty)
+           (tc-type (hydra_core_testing_json_decode_test_case-type tc))
+           (tc-json (hydra_core_testing_json_decode_test_case-json tc))
+           (expected (hydra_core_testing_json_decode_test_case-expected tc))
+           (decode-result ((((hydra_core_json_decode_from_json empty-types)
+                              (make-hydra_core_model_name "test"))
                              tc-type)
                             tc-json)))
       (cond
@@ -475,15 +475,15 @@
 (define (run-test-case path tcase)
   (guard (exn (#t
                (let ((full (string-append path " > "
-                             (hydra_testing_test_case_with_metadata-name tcase))))
+                             (hydra_core_testing_test_case_with_metadata-name tcase))))
                  (display (string-append "FAIL: " full "\n"))
                  (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                  (list 0 1 0))))
-    (let* ((tname (hydra_testing_test_case_with_metadata-name tcase))
+    (let* ((tname (hydra_core_testing_test_case_with_metadata-name tcase))
            (full (string-append path " > " tname))
-           (tags (hydra_testing_test_case_with_metadata-tags tcase))
+           (tags (hydra_core_testing_test_case_with_metadata-tags tcase))
            (disabled? (member "disabled" tags))
-           (tc (hydra_testing_test_case_with_metadata-case tcase)))
+           (tc (hydra_core_testing_test_case_with_metadata-case tcase)))
       (if disabled?
           (list 0 0 1)
           (let ((case-type (car tc))
@@ -532,18 +532,18 @@
 
 (define (run-test-group path group)
   (guard (exn (#t
-               (let* ((gname (hydra_testing_test_group-name group))
+               (let* ((gname (hydra_core_testing_test_group-name group))
                       (full (if (string=? path "") gname
                                 (string-append path " > " gname))))
                  (display (string-append "GROUP FAIL: " full "\n"))
                  (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                  (list 0 1 0))))
-    (let* ((gname (hydra_testing_test_group-name group))
+    (let* ((gname (hydra_core_testing_test_group-name group))
            (full (if (string=? path "") gname (string-append path " > " gname)))
            (sub-results (map (lambda (sg) (run-test-group full sg))
-                             (hydra_testing_test_group-subgroups group)))
+                             (hydra_core_testing_test_group-subgroups group)))
            (case-results (map (lambda (tc) (run-test-case full tc))
-                              (hydra_testing_test_group-cases group)))
+                              (hydra_core_testing_test_group-cases group)))
            (all (append sub-results case-results)))
       (list (apply + (map car all))
             (apply + (map cadr all))

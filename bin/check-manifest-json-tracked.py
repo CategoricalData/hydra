@@ -10,7 +10,7 @@ check catches that class of defect directly: declared-but-untracked is a hard
 failure, independent of whether the file happens to exist on the machine
 running the check.
 
-Path resolution (matches hydra.codegen.moduleNameToPath, the single DSL-defined
+Path resolution (matches hydra.core.codegen.moduleNameToPath, the single DSL-defined
 source of truth generated into every host — see
 packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Generation.hs):
   namespace "a.b.c" -> "a/b/c" (dot-to-slash, no stripping) -> "<dir>/a/b/c.json"
@@ -24,17 +24,17 @@ Manifest module-list keys, all resolved under <pkg>/src/main/json/ unless noted:
   mainDslModules
       -> each entry is a SOURCE namespace; the generated file is the DSL WRAPPER,
          at a DERIVED namespace, per Hydra.Sources.Kernel.Terms.Dsls.dslModuleName:
-           hydra.X.Y   -> hydra.dsl.X.Y   (strip leading "hydra.", insert "dsl.")
-           other.X.Y   -> hydra.dsl.other.X.Y  (non-hydra.* namespaces keep full path)
+           hydra.X.Y   -> hydra.core.dsl.X.Y   (strip leading "hydra.", insert "dsl.")
+           other.X.Y   -> hydra.core.dsl.other.X.Y  (non-hydra.* namespaces keep full path)
   dslModules
       -> a distinct LEGACY key (predates the #474 mainDslModules migration,
-         kept for backward-compat) that stores ALREADY-DERIVED hydra.dsl.*
+         kept for backward-compat) that stores ALREADY-DERIVED hydra.core.dsl.*
          names directly -- resolved as a literal path, no re-derivation.
   mainEncodingModules
       -> each entry is a SOURCE namespace; TWO generated wrapper files exist, per
          Hydra.Sources.Kernel.Terms.{Encoding.encodeModuleName,Decoding.decodeModuleName}:
-           hydra.X.Y -> hydra.encode.X.Y  (drop first segment, insert "encode")
-           hydra.X.Y -> hydra.decode.X.Y  (drop first segment, insert "decode")
+           hydra.X.Y -> hydra.core.encode.X.Y  (drop first segment, insert "encode")
+           hydra.X.Y -> hydra.core.decode.X.Y  (drop first segment, insert "decode")
 These derivation functions are DSL-defined once and generated identically into
 every host; this script reimplements them in Python to check the committed
 dist/json tree without invoking any host toolchain.
@@ -73,7 +73,7 @@ TEST_KEY = "testModules"
 # mainDslModules lists SOURCE namespaces needing derivation (dslModuleName).
 # dslModules is a distinct legacy key (kept for backward-compat through the
 # #474 manifest migration, see Generation.hs) that stores ALREADY-DERIVED
-# hydra.dsl.* names directly -- resolve those as literal paths, not through
+# hydra.core.dsl.* names directly -- resolve those as literal paths, not through
 # dslModuleName again.
 DSL_SOURCE_KEY = "mainDslModules"
 DSL_LITERAL_KEY = "dslModules"
@@ -88,20 +88,20 @@ def dsl_module_name(ns: str) -> str:
     """Mirrors Hydra.Sources.Kernel.Terms.Dsls.dslModuleName."""
     parts = ns.split(".")
     if parts and parts[0] == "hydra":
-        return "hydra.dsl." + ".".join(parts[1:])
-    return "hydra.dsl." + ns
+        return "hydra.core.dsl." + ".".join(parts[1:])
+    return "hydra.core.dsl." + ns
 
 
 def encode_module_name(ns: str) -> str:
     """Mirrors Hydra.Sources.Kernel.Terms.Encoding.encodeModuleName."""
     parts = ns.split(".")
-    return "hydra.encode." + ".".join(parts[1:])
+    return "hydra.core.encode." + ".".join(parts[1:])
 
 
 def decode_module_name(ns: str) -> str:
     """Mirrors Hydra.Sources.Kernel.Terms.Decoding.decodeModuleName."""
     parts = ns.split(".")
-    return "hydra.decode." + ".".join(parts[1:])
+    return "hydra.core.decode." + ".".join(parts[1:])
 
 
 def is_tracked(repo_root: Path, path: Path) -> bool:

@@ -12,7 +12,7 @@
 -- | The surface here is deliberately small. Everything else in the kernel and
 -- | the Haskell coder remains available by direct, qualified import — e.g.
 -- | @import qualified Hydra.Haskell.Syntax as H@ for the Haskell AST types, or
--- | @import Hydra.Ast@ for the modules "Hydra.Kernel" omits to avoid name
+-- | @import Hydra.Core.Ast@ for the modules "Hydra.Kernel" omits to avoid name
 -- | clashes. Depend on @hydra-kernel@ / @hydra-haskell@ directly for
 -- | finer-grained APIs.
 --

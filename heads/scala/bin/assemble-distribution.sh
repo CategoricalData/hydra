@@ -84,7 +84,7 @@ else
 fi
 
 # (testGraph.scala emptyGraph-to-buildTestGraph patch eliminated: the DSL now
-# emits `hydra.test.testEnv.testGraph(testTypes)` directly, and the hand-written
+# emits `hydra.core.test.testEnv.testGraph(testTypes)` directly, and the hand-written
 # testEnv.scala resolves the call to TestSuiteRunner.buildTestGraph.)
 #
 # Step 3 (hydra-kernel only): copy the hand-written runtime + test runner from

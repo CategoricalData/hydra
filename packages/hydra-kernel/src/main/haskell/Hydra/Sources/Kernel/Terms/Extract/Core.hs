@@ -5,48 +5,48 @@ module Hydra.Sources.Kernel.Terms.Extract.Core where
 
 -- Standard imports for kernel terms modules (slightly modified for conflict avoidance)
 import Hydra.Kernel hiding (lambdaBody, map, setType)
-import qualified Hydra.Dsl.Paths    as Paths
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
-import qualified Hydra.Dsl.Ast          as Ast
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Coders       as Coders
-import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph        as Graph
-import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Lib.Math     as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Literals          as Literals
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base         as MetaBase
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms        as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types        as MetaTypes
-import qualified Hydra.Dsl.Packaging       as Packaging
-import qualified Hydra.Dsl.Parsing      as Parsing
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms hiding (
+import qualified Hydra.Core.Dsl.Paths    as Paths
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations       as Annotations
+import qualified Hydra.Core.Dsl.Ast          as Ast
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Coders       as Coders
+import qualified Hydra.Core.Dsl.Util      as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph        as Graph
+import qualified Hydra.Core.Dsl.Json.Model         as Json
+import qualified Hydra.Core.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Math     as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals          as Literals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base         as MetaBase
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms        as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types        as MetaTypes
+import qualified Hydra.Core.Dsl.Packaging       as Packaging
+import qualified Hydra.Core.Dsl.Parsing      as Parsing
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms hiding (
   bigint, binary, boolean, cases, decimal, field, float32, float64, floatValue, injection, int8, int16, int32, int64,
   integerValue, lambda, list, literal, map, pair, set, record, string, unit, wrap, uint8, uint16, uint32, uint64)
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Prims             as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular           as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing      as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Terms             as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Tests             as Tests
-import qualified Hydra.Dsl.Topology     as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
-import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Util         as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims             as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular           as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing      as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms             as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests             as Tests
+import qualified Hydra.Core.Dsl.Topology     as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Dsl.Typing       as Typing
+import qualified Hydra.Core.Dsl.Util         as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), map)
 import qualified Data.Int                    as I
@@ -56,25 +56,25 @@ import qualified Data.Scientific             as Sci
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
-import qualified Hydra.Dsl.Errors       as Error
+import qualified Hydra.Core.Dsl.Errors       as Error
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.DeepCore as DeepCore
-import           Hydra.Overlay.Haskell.Dsl.Typed.DeepCore ((@@@))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Deep.Core as DeepCore
+import           Hydra.Core.Overlay.Haskell.Dsl.Deep.Core ((@@@))
 
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Print.Errors as PrintError
 
 ns :: ModuleName
-ns = ModuleName "hydra.extract.core"
+ns = ModuleName "hydra.core.extract.model"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Strip.ns, PrintCore.ns, PrintError.ns] L.++ kernelTypesModuleNames),
-            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Extraction and validation for hydra.core types"))}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just ("Extraction and validation for hydra.core.model types"))}
   where
    definitions = [
      toDefinition bigint,
@@ -271,7 +271,7 @@ decodeList = define "decodeList" $
 
 -- | Decode a Map using the provided key and value decoders
 -- The generic decoders below (decodeMap/decodeSet/map/setOf) carry an `Ord` constraint and a `forall`
--- because the generated `Hydra.Dsl.Lib.{Maps,Sets}` expose the primitive's `Ord` key/element
+-- because the generated `Hydra.Core.Dsl.Lib.{Maps,Sets}` expose the primitive's `Ord` key/element
 -- constraint (the old hand-written `Meta.Lib.*` did not). This also forces the otherwise-bare builder
 -- `reify Maps.fromList` to be spelled out as `reify (Maps.fromList :: TypedTerm [(k,v)] -> TypedTerm
 -- (M.Map k v))` so GHC can see the `Ord k`, and a placeholder concrete type at registration. See #467.
@@ -878,7 +878,7 @@ wrappedType = define "wrappedType" $
     _Type_wrap>>: "innerType" ~> right (var "innerType")]
 
 --------------------------------------------------------------------------------
--- Helper functions (merged from hydra.extract.helpers)
+-- Helper functions (merged from hydra.core.extract.helpers)
 --------------------------------------------------------------------------------
 
 -- | Strip annotations and dereference, converting Error to DecodingError

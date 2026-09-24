@@ -2,19 +2,19 @@ module Hydra.Sources.Test.TestTerms where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import qualified Hydra.Dsl.Lib.Maps         as Maps
-import qualified Hydra.Dsl.Packaging        as DPackaging
+import qualified Hydra.Core.Dsl.Lib.Maps         as Maps
+import qualified Hydra.Core.Dsl.Packaging        as DPackaging
 import           Prelude hiding ((++))
 
 
@@ -22,13 +22,13 @@ import           Prelude hiding ((++))
 type HydraModule = Module
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.testTerms"
+ns = ModuleName "hydra.core.test.testTerms"
 
 module_ :: HydraModule
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [TestTypes.ns, ModuleName "hydra.core"],
+            moduleDependencies = unqualifiedDep <$> [TestTypes.ns, ModuleName "hydra.core.model"],
             moduleMetadata = descriptionMetadata ((Just "Term definitions for the test suite"))}
   where
     definitions = [

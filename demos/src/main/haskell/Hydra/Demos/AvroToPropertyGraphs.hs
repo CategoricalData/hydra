@@ -1,7 +1,7 @@
 module Hydra.Demos.AvroToPropertyGraphs where
 
 import Hydra.Kernel
-import Hydra.Workflow
+import Hydra.Ext.Workflow
 import Hydra.Tools.AvroWorkflows
 
 import qualified System.FilePath as FP

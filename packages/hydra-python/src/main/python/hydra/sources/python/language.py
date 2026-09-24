@@ -1,31 +1,31 @@
 """Language constraints and reserved words for Python 3.
 
 Host-native DSL source (authoritative; the former Haskell copy was removed in #346).
-Builds the same Module value; serializing it via hydra.dsl.core's module-to-JSON
+Builds the same Module value; serializing it via hydra.core.dsl.model's module-to-JSON
 path produces JSON byte-equivalent to the Haskell-generated language.json.
 """
 
 import sys
 
-from hydra.core import Name
-from hydra.overlay.python.dsl.python import Given
-from hydra.packaging import EntityMetadata, Module, ModuleName
+from hydra.core.model import Name
+from hydra.core.overlay.python.dsl.python import Given
+from hydra.core.packaging import EntityMetadata, Module, ModuleName
 
-import hydra.dsl.lib.lists as Lists
-import hydra.dsl.lib.sets as Sets
-from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
-from hydra.overlay.python.dsl.meta.defs import check_complete
-import hydra.dsl.core as Core
-import hydra.dsl.variants as Variants
-import hydra.dsl.coders as Coders
-import hydra.dsl.util as Util
+import hydra.core.dsl.lib.lists as Lists
+import hydra.core.dsl.lib.sets as Sets
+from hydra.core.overlay.python.dsl.phantoms import *  # noqa: F401,F403
+from hydra.core.overlay.python.dsl.meta.defs import check_complete
+import hydra.core.dsl.model as Core
+import hydra.core.dsl.variants as Variants
+import hydra.core.dsl.coders as Coders
+import hydra.core.dsl.util as Util
 
 
 # Namespaces we depend on. Hardcoded here to mirror the Haskell:
 #   moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces
 # kernelTypesNamespaces is the list of all hydra.* type module namespaces in the
 # canonical order from packages/hydra-kernel/.../Hydra/Sources/Kernel/Types/All.hs.
-LEXICAL_NS = ModuleName("hydra.lexical")
+LEXICAL_NS = ModuleName("hydra.core.lexical")
 from hydra.sources.python._source_dsl import KERNEL_TYPES_NAMESPACES, unqualified_dep
 
 
@@ -125,7 +125,7 @@ def _python_language_term():
                     Util.case_convention_lower_snake, Util.case_convention_lower_snake, Util.case_convention_pascal,
                     Util.case_convention_pascal,
                 ),
-                wrap("hydra.file.FileExtension", string("py")),
+                wrap("hydra.core.file.FileExtension", string("py")),
             ),
         ),
     )

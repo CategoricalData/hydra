@@ -7,10 +7,10 @@ module Hydra.Sources.Coq.Environment where
 
 -- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types                           ((>:))
-import qualified Hydra.Overlay.Haskell.Dsl.Types                           as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types                           ((>:))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                           as T
 import qualified Hydra.Sources.Kernel.Types.Core           as Core
 
 
@@ -37,7 +37,7 @@ coqEnvironment = def "CoqEnvironment" $
   doc "Cross-module state threaded through the Coq encoder" $
   T.record [
     "currentNamespace">:
-      doc "The Hydra namespace of the module currently being encoded (e.g. \"hydra.core\"). Used by the name resolver to decide whether a cross-namespace reference needs to stay qualified." $
+      doc "The Hydra namespace of the module currently being encoded (e.g. \"hydra.core.model\"). Used by the name resolver to decide whether a cross-namespace reference needs to stay qualified." $
       T.string,
     "constructorCounts">:
       doc "Number of constructors in each union type, keyed by local type name (e.g. \"Term\" -> 14). Used to decide whether a match is exhaustive." $

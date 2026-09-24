@@ -2,10 +2,10 @@ module Hydra.Sources.Kernel.Types.Graph where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Errors as Error
 import qualified Hydra.Sources.Kernel.Types.Packaging as Packaging
@@ -13,7 +13,7 @@ import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.graph"
+ns = ModuleName "hydra.core.graph"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns
@@ -23,7 +23,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, Error.ns, Packaging.ns, Typing.ns],
-            moduleMetadata = descriptionMetadata (Just "The extension to graphs of Hydra's core type system (hydra.core)")}
+            moduleMetadata = descriptionMetadata (Just "The extension to graphs of Hydra's core type system (hydra.core.model)")}
   where
     definitions = [
       graph,

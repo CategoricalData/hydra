@@ -47,7 +47,7 @@ symlink_hydra_tree() {
             dest="$dest_hydra/$rel"
             # Link when the dest is absent or a DANGLING symlink. `-e` follows symlinks (false for a
             # broken link), so `! -e` reattaches a stale link whose target has since been
-            # (re)generated — e.g. hydra.test.build.modules.ts linked before hydra-build emitted it,
+            # (re)generated — e.g. hydra.build.test.modules.ts linked before hydra-build emitted it,
             # which otherwise leaves testSuite.ts's `../test/build/modules.js` import unresolved
             # under tsc --strict. Own real files and already-valid symlinks are left untouched.
             if [ ! -e "$dest" ]; then
@@ -102,8 +102,8 @@ case "$PKG" in
         PKG_HYDRA="$HYDRA_ROOT/dist/typescript/$PKG/src/main/typescript/hydra"
         KERNEL_HYDRA="$HYDRA_ROOT/dist/typescript/hydra-kernel/src/main/typescript/hydra"
         symlink_hydra_tree "$KERNEL_HYDRA" "$PKG_HYDRA"
-        # hydra-kernel's own testSuite.ts imports hydra.test.build.* by relative
-        # path (hydra.test.testSuite is kernel-owned per #546/#547 and still
+        # hydra-kernel's own testSuite.ts imports hydra.core.test.build.* by relative
+        # path (hydra.core.test.testSuite is kernel-owned per #546/#547 and still
         # references these test groups), expecting them alongside its own test
         # tree. Symlink hydra-build's test/build subtree into hydra-kernel's test
         # tree so that import resolves. hydra-kernel is assembled before

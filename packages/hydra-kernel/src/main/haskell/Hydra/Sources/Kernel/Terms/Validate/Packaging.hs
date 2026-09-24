@@ -4,8 +4,8 @@ module Hydra.Sources.Kernel.Terms.Validate.Packaging where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Error.Packaging (
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Error.Packaging (
   InvalidModuleError, InvalidPackageError,
   _InvalidModuleError,
   _InvalidModuleError_conflictingVariantName,
@@ -22,24 +22,24 @@ import Hydra.Error.Packaging (
   _InvalidPackageError_moduleInMultiplePackages,
   _InvalidPackageError_nestedModuleName,
   _InvalidPackageError_undeclaredDependency)
-import Hydra.Packaging (Package)
-import qualified Hydra.Dsl.Error.Packaging       as ErrorPackaging
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core             as Core
-import qualified Hydra.Dsl.Lib.Equality     as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Lists        as Lists
-import qualified Hydra.Dsl.Lib.Logic        as Logic
-import qualified Hydra.Dsl.Lib.Maps         as Maps
-import qualified Hydra.Dsl.Lib.Optionals       as Optionals
-import qualified Hydra.Dsl.Lib.Pairs        as Pairs
-import qualified Hydra.Dsl.Lib.Regex        as Regex
-import qualified Hydra.Dsl.Lib.Sets         as Sets
-import qualified Hydra.Dsl.Lib.Strings      as Strings
-import qualified Hydra.Dsl.Packaging                as Packaging
-import qualified Hydra.Dsl.Packaging             as Packaging
-import qualified Hydra.Dsl.Util                  as Util
-import qualified Hydra.Dsl.Validation            as Validation
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms         as Phantoms
+import Hydra.Core.Packaging (Package)
+import qualified Hydra.Core.Dsl.Error.Packaging       as ErrorPackaging
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core             as Core
+import qualified Hydra.Core.Dsl.Lib.Equality     as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Lists        as Lists
+import qualified Hydra.Core.Dsl.Lib.Logic        as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps         as Maps
+import qualified Hydra.Core.Dsl.Lib.Optionals       as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs        as Pairs
+import qualified Hydra.Core.Dsl.Lib.Regex        as Regex
+import qualified Hydra.Core.Dsl.Lib.Sets         as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings      as Strings
+import qualified Hydra.Core.Dsl.Packaging                as Packaging
+import qualified Hydra.Core.Dsl.Packaging             as Packaging
+import qualified Hydra.Core.Dsl.Util                  as Util
+import qualified Hydra.Core.Dsl.Validation            as Validation
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms         as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants  as Constants
@@ -55,7 +55,7 @@ import qualified Data.Set                        as S
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.validate.packaging"
+ns = ModuleName "hydra.core.validate.packaging"
 
 module_ :: Module
 module_ = Module {
@@ -347,7 +347,7 @@ checkDefinitionNameConvention = define "checkDefinitionNameConvention" $
 -- Fails on the first out-of-order pair found.
 --
 -- This check is appropriate only for hand-written Source modules. Generator-derived
--- modules (e.g. 'hydra.dsl.*', 'hydra.encode.*', 'hydra.decode.*') deliberately use
+-- modules (e.g. 'hydra.core.dsl.*', 'hydra.core.encode.*', 'hydra.core.decode.*') deliberately use
 -- a semantic grouping by source type and would always fail this check; do not run
 -- it against them.
 checkDefinitionOrdering :: TypedTermDefinition (Module -> Maybe InvalidModuleError)
@@ -499,10 +499,10 @@ checkModuleNameConvention = define "checkModuleNameConvention" $
 
 -- | Check for module namespaces that nest: no module namespace may be a strict
 -- dotted-prefix of another module namespace in the same package, e.g.
--- hydra.codegen and hydra.codegen.docs must not coexist. A dotted prefix means
+-- hydra.core.codegen and hydra.core.codegen.docs must not coexist. A dotted prefix means
 -- the shorter namespace followed by "." is a literal prefix of the longer one
 -- -- hydra.foo is NOT a dotted prefix of hydra.foobar, only of hydra.foo.bar.
--- When both exist, a definition like hydra.codegen.docs.foo is prefix-valid
+-- When both exist, a definition like hydra.core.codegen.docs.foo is prefix-valid
 -- for both modules, so checkDefinitionModuleNames cannot unambiguously assign
 -- ownership. Fails on the first nesting pair found (namespaces compared in
 -- package module-list order).
@@ -673,7 +673,7 @@ definitionName = define "definitionName" $
 
 -- | An empty ValidationResult (no errors, no warnings) parameterized by 'e'.
 -- Used as the initial accumulator. Defined locally to avoid a cross-module
--- term dependency on hydra.validate.core.
+-- term dependency on hydra.core.validate.model.
 emptyResult :: TypedTerm (ValidationResult e)
 emptyResult = Validation.validationResult
   (list ([] :: [TypedTerm e]))
@@ -696,7 +696,7 @@ enabledPackaging = define "enabledPackaging" $
     (Sets.member (var "ruleName") (Validation.validationProfileErrorRules $ var "p"))
     (Sets.member (var "ruleName") (Validation.validationProfileWarningRules $ var "p"))
 
--- | The default validation profile for hydra.validate.packaging — i.e. the
+-- | The default validation profile for hydra.core.validate.packaging — i.e. the
 -- kernel-strict packaging profile. Every per-module and per-package check
 -- shipped by this module is classified as an error; no warnings;
 -- 'maxErrors = 1' preserves the legacy 'first error wins' behaviour;
@@ -723,7 +723,7 @@ kernelDefaultPackagingProfile = define "kernelDefaultPackagingProfile" $
 --
 -- Intended for hand-written Source modules only (the ones that contribute
 -- to 'Sources.kernelModules'). Do not apply to generator-derived modules
--- such as the 'hydra.dsl.*', 'hydra.encode.*', or 'hydra.decode.*'
+-- such as the 'hydra.core.dsl.*', 'hydra.core.encode.*', or 'hydra.core.decode.*'
 -- families: their 'definitions' lists follow a semantic grouping which
 -- would fail 'checkDefinitionOrdering'. Callers wanting custom rule
 -- sets, multi-error accumulation, or warnings should use 'module'' with
@@ -962,7 +962,7 @@ package = define "package" $
 -- name and a variant local name, joined with '.'. Mirrors the
 -- 'qualifiedRule' helper in Validate/Core.hs. Used at profile-construction
 -- time to derive rule IDs like
--- 'hydra.error.packaging.InvalidModuleError.duplicateDefinitionName' from
+-- 'hydra.core.error.packaging.InvalidModuleError.duplicateDefinitionName' from
 -- the generated _InvalidModuleError and _InvalidModuleError_duplicateDefinitionName
 -- constants.
 qualifiedRule :: Name -> Name -> Name

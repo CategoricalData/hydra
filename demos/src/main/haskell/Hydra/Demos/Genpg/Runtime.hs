@@ -1,13 +1,13 @@
 module Hydra.Demos.Genpg.Runtime where
 
 import Hydra.Kernel hiding (Result)
-import qualified Hydra.Print.Errors as PrintError
+import qualified Hydra.Core.Print.Errors as PrintError
 import qualified Hydra.Pg.Model as Pg
-import Hydra.Overlay.Haskell.Dsl.Pg.Mappings
-import Hydra.Overlay.Haskell.Lib.Literals
-import qualified Hydra.Extract.Core as ExtractCore
-import qualified Hydra.Print.Core as PrintCore
-import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
+import Hydra.Pg.Overlay.Haskell.Dsl.Mappings
+import Hydra.Core.Overlay.Haskell.Lib.Literals
+import qualified Hydra.Core.Extract.Model as ExtractCore
+import qualified Hydra.Core.Print.Model as PrintCore
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms as Terms
 import Hydra.Sources.Kernel.Types.Core (hydraCoreGraph)
 
 import qualified Control.Monad as CM

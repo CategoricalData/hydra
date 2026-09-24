@@ -1,20 +1,20 @@
 package hydra.sources.java;
-import hydra.core.Type;
-import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
-import hydra.overlay.java.dsl.Types;
-import hydra.packaging.Definition;
-import hydra.packaging.EntityMetadata;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleName;
-import hydra.packaging.ModuleDependency;
-import hydra.overlay.java.util.Optional;
+import hydra.core.model.Type;
+import static hydra.core.overlay.java.dsl.meta.Defs.unqualifiedDeps;
+import hydra.core.overlay.java.dsl.Types;
+import hydra.core.packaging.Definition;
+import hydra.core.packaging.EntityMetadata;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleName;
+import hydra.core.packaging.ModuleDependency;
+import hydra.core.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static hydra.overlay.java.dsl.Helpers.doc;
-import static hydra.overlay.java.dsl.Helpers.typeDef;
-import static hydra.overlay.java.dsl.Helpers.typeref;
+import static hydra.core.overlay.java.dsl.Helpers.doc;
+import static hydra.core.overlay.java.dsl.Helpers.typeDef;
+import static hydra.core.overlay.java.dsl.Helpers.typeref;
 
 /**
  * Build configuration for a Gradle-built distribution package: the host-specific information needed
@@ -32,14 +32,14 @@ import static hydra.overlay.java.dsl.Helpers.typeref;
  * Gradle's idioms. Nothing here is specific to Hydra: it describes the build of an arbitrary
  * translingual project's Gradle package.</p>
  *
- * <p>Provisional home: the module name {@code hydra.gradle} is build-system-keyed, but this source
+ * <p>Provisional home: the module name {@code hydra.java.gradle} is build-system-keyed, but this source
  * currently lives in the hydra-java package because Java is the only Gradle-built language at
  * present. When a second Gradle-built language appears, it should move to a shared home.</p>
  */
 public class Gradle {
-    public static final ModuleName NS = new ModuleName("hydra.gradle");
-    private static final ModuleName PACKAGING_NS = new ModuleName("hydra.packaging");
-    private static final ModuleName FILE_NS = new ModuleName("hydra.file");
+    public static final ModuleName NS = new ModuleName("hydra.java.gradle");
+    private static final ModuleName PACKAGING_NS = new ModuleName("hydra.core.packaging");
+    private static final ModuleName FILE_NS = new ModuleName("hydra.core.file");
 
     private static Type packaging(String local) { return typeref(PACKAGING_NS, local); }
     private static Type file(String local) { return typeref(FILE_NS, local); }

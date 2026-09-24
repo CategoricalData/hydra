@@ -1,17 +1,17 @@
 module Hydra.Sources.Kernel.Types.Error.Core where
 
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Paths as Paths
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.error.core"
+ns = ModuleName "hydra.core.error.model"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns

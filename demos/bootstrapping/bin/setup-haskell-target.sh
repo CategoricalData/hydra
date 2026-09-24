@@ -112,7 +112,7 @@ mkdir -p "$OUTPUT_DIR/src/main/haskell"
 cp -r "$HYDRA_HASKELL_HEAD_DIR/src/main/haskell/Hydra" "$OUTPUT_DIR/src/main/haskell/"
 # Overlay the hand-written kernel runtime that was relocated out of the head into
 # the top-level overlay/ tree (#418): Hydra.Settings, Hydra.Kernel,
-# Hydra.Haskell.Lib.*, Hydra.Dsl.{Terms,Literals,Meta.Common}. The bootstrap
+# Hydra.Haskell.Lib.*, Hydra.Core.Dsl.{Terms,Literals,Meta.Common}. The bootstrap
 # output is a single flat tree, so these must be stitched in here just as
 # sync-haskell.sh overlays them onto dist/haskell/hydra-kernel/.
 cp -r "$HYDRA_ROOT/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/." "$OUTPUT_DIR/src/main/haskell/Hydra/"
@@ -152,7 +152,7 @@ HS_GEN="$OUTPUT_DIR/src/main/haskell"
 HS_KERNEL_BASELINE="$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell"
 HS_HASKELL_BASELINE="$HYDRA_ROOT/dist/haskell/hydra-haskell/src/main/haskell"
 HS_BUILD_BASELINE="$HYDRA_ROOT/dist/haskell/hydra-build/src/main/haskell"
-# #546: the generated test modules Hydra.Test.Build.* import the generated runtime
+# #546: the generated test modules Hydra.Core.Test.Build.* import the generated runtime
 # Hydra.Build.{Modules,Reconcile,Routing}, which live in the hydra-build baseline (not
 # hydra-kernel) and aren't emitted into the cell under --kernel-only. Copy them so the
 # generated Test/Build/*.hs resolve (else: "Could not find module 'Hydra.Build.Modules'").
@@ -183,9 +183,9 @@ for src_dir in Decode Encode; do
         echo "    Copied Hydra/Sources/$src_dir from hydra-kernel baseline"
     fi
 done
-# Copy generated DSL modules (Hydra.Dsl.Core, Hydra.Dsl.Graph, etc.) imported by
-# hand-written Hydra.Dsl.Meta.* modules. Overlay on top of heads/haskell Dsl
-# (not replacing it) so hand-written Dsl files like Hydra.Dsl.Terms are preserved.
+# Copy generated DSL modules (Hydra.Core.Dsl.Model, Hydra.Core.Dsl.Graph, etc.) imported by
+# hand-written Hydra.Core.Dsl.Meta.* modules. Overlay on top of heads/haskell Dsl
+# (not replacing it) so hand-written Dsl files like Hydra.Core.Dsl.Terms are preserved.
 if [ -d "$HS_KERNEL_BASELINE/Hydra/Dsl" ]; then
     mkdir -p "$HS_GEN/Hydra/Dsl"
     cp -r "$HS_KERNEL_BASELINE/Hydra/Dsl/." "$HS_GEN/Hydra/Dsl/"
@@ -196,9 +196,9 @@ if [ -d "$HS_HASKELL_BASELINE/Hydra/Dsl" ]; then
     cp -r "$HS_HASKELL_BASELINE/Hydra/Dsl/." "$HS_GEN/Hydra/Dsl/"
     echo "    Overlaid Hydra/Dsl (Haskell coder wrappers) from hydra-haskell baseline"
 fi
-# Copy generated Hydra.Lib.* modules (Hydra.Lib.Eithers, Hydra.Lib.Lists, ...).
+# Copy generated Hydra.Lib.* modules (Hydra.Core.Lib.Eithers, Hydra.Core.Lib.Lists, ...).
 # Since #473 relocated the Haskell authoring DSL cluster into overlay/, the
-# hand-written Hydra.Dsl.{Libraries,Meta.Phantoms,Meta.Lib.*} modules import
+# hand-written Hydra.Core.Dsl.{Libraries,Meta.Phantoms,Meta.Lib.*} modules import
 # these generated definition modules. They live in the kernel baseline alongside
 # Hydra/Dsl, but were never stitched into the single-tree bootstrap output, so
 # GHC failed with "Could not find module 'Hydra.Lib.Eithers'". Copy them in,
@@ -208,7 +208,7 @@ if [ -d "$HS_KERNEL_BASELINE/Hydra/Lib" ]; then
     cp -r "$HS_KERNEL_BASELINE/Hydra/Lib" "$HS_GEN/Hydra/"
     echo "    Copied Hydra/Lib from hydra-kernel baseline"
 fi
-# Copy Hydra.Dsls (DSL source generator module). It is generated separately from
+# Copy Hydra.Core.Dsls (DSL source generator module). It is generated separately from
 # mainModules due to stack overflow issues, so it won't be produced by the bootstrap
 # code generator. It is imported by hand-written Generation.hs.
 if [ -f "$HS_KERNEL_BASELINE/Hydra/Dsls.hs" ]; then

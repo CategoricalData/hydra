@@ -2,12 +2,12 @@ module Hydra.Sources.Test.Names where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms hiding ((++))
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms hiding ((++))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -16,11 +16,11 @@ import qualified Data.Map                     as M
 
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 
-import Hydra.Testing
+import Hydra.Core.Testing
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.names"
+ns = ModuleName "hydra.core.test.names"
 
 module_ :: Module
 module_ = Module {
@@ -38,7 +38,7 @@ define = definitionInModule module_
 
 allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
-    doc "Test cases for hydra.names" $
+    doc "Test cases for hydra.core.names" $
     Testing.testGroup (string "names") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
     subgroups = [
@@ -51,18 +51,18 @@ composeProvisionNameTests = define "composeProvisionNameTests" $
   where
     match = [
       testCase "definition with namespace"
-        (Core.name $ string "hydra.lib.lists.concat") (string "emptyLists")
-        (string "hydra.lib.lists.concat.emptyLists"),
+        (Core.name $ string "hydra.core.lib.lists.concat") (string "emptyLists")
+        (string "hydra.core.lib.lists.concat.emptyLists"),
       testCase "local name with no namespace"
         (Core.name $ string "concat") (string "emptyLists")
         (string "concat.emptyLists"),
       testCase "module name as the enclosing entity"
-        (Core.name $ string "hydra.core") (string "termOrdering")
-        (string "hydra.core.termOrdering"),
+        (Core.name $ string "hydra.core.model") (string "termOrdering")
+        (string "hydra.core.model.termOrdering"),
       testCase "composing onto an already-composed provision name (module > definition > provision)"
-        (Names.composeProvisionName @@ Core.name (string "hydra.lib.lists") @@ string "concat")
+        (Names.composeProvisionName @@ Core.name (string "hydra.core.lib.lists") @@ string "concat")
         (string "emptyLists")
-        (string "hydra.lib.lists.concat.emptyLists")]
+        (string "hydra.core.lib.lists.concat.emptyLists")]
 
 -- Helpers
 

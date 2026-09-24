@@ -1,18 +1,18 @@
 module Hydra.Sources.Kernel.Types.Core where
 
--- Special "bootstrapping" imports for hydra.core
+-- Special "bootstrapping" imports for hydra.core.model
 import Hydra.Kernel hiding (literalType)
-import Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import Hydra.Overlay.Haskell.Bootstrap
-import Hydra.Overlay.Haskell.Dsl.Types ((>:))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
-import qualified Hydra.Encode.Core as EncodeCore
+import Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import Hydra.Core.Overlay.Haskell.Bootstrap
+import Hydra.Core.Overlay.Haskell.Dsl.Types ((>:))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
+import qualified Hydra.Core.Encode.Model as EncodeCore
 
 import qualified Data.Map as M
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.core"
+ns = ModuleName "hydra.core.model"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns
@@ -22,7 +22,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
             moduleDependencies = unqualifiedDep <$> [ns],
-            moduleMetadata = descriptionMetadata (Just "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies.")}
+            moduleMetadata = descriptionMetadata (Just "Hydra's core data model, consisting of the fundamental hydra.core.model.Term type and all of its dependencies.")}
   where
     definitions = [
       annotatedTerm,
@@ -70,8 +70,8 @@ hydraCoreGraph = elementsToGraph bootstrapGraph M.empty
         bindingTerm = TermAnnotated $ AnnotatedTerm {
           annotatedTermBody = EncodeCore.type_ (typeSchemeBody (typeDefinitionBody td)),
           annotatedTermAnnotation = TermMap $ M.fromList [
-            (TermVariable (Name "type"), TermVariable (Name "hydra.core.Type"))]},
-        bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) M.empty)}
+            (TermVariable (Name "type"), TermVariable (Name "hydra.core.model.Type"))]},
+        bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.model.Type")) M.empty)}
 
 annotatedTerm :: TypeDefinition
 annotatedTerm = define "AnnotatedTerm" $

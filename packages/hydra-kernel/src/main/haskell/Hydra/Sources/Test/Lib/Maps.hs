@@ -4,14 +4,14 @@ module Hydra.Sources.Test.Lib.Maps where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms hiding ((@@))
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                ((@@))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -19,27 +19,27 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
-import Hydra.Testing
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Maps as Maps
-import qualified Hydra.Dsl.Lib.Math as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
-import qualified Hydra.Dsl.Lib.Strings as Strings
-import qualified Hydra.Dsl.Lib.Chars as Chars
+import Hydra.Core.Testing
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Maps as Maps
+import qualified Hydra.Core.Dsl.Lib.Math as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Core.Dsl.Lib.Strings as Strings
+import qualified Hydra.Core.Dsl.Lib.Chars as Chars
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.lib.maps"
+ns = ModuleName "hydra.core.test.lib.maps"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", PrintCore.ns] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.maps primitives")}
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.core.reduction", PrintCore.ns] ++ kernelTypesModuleNames),
+            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.core.lib.maps primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -79,8 +79,8 @@ showStringList = Phantoms.lambda "xs" $ PrintCore.list_ @@ showString' @@ Phanto
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for hydra.lib.maps primitives" $
-    supergroup "hydra.lib.maps primitives" [
+    Phantoms.doc "Test cases for hydra.core.lib.maps primitives" $
+    supergroup "hydra.core.lib.maps primitives" [
       mapsAlter,
       mapsBimap,
       mapsElems,

@@ -16,10 +16,10 @@ module Hydra.Demos.GraphqlJson (
 import Hydra.Kernel
 import Hydra.ExtGeneration
 import Hydra.Generation (moduleAsBindings)
-import Hydra.Overlay.Haskell.Bootstrap (bootstrapGraph)
+import Hydra.Core.Overlay.Haskell.Bootstrap (bootstrapGraph)
 
-import qualified Hydra.Graphql.Coder as GraphqlCoder
-import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Ext.Graphql.Coder as GraphqlCoder
+import qualified Hydra.Core.Lexical as Lexical
 
 import qualified Data.Map as M
 import qualified System.Directory as SD
@@ -27,9 +27,9 @@ import qualified System.FilePath as FP
 
 
 -- | The kernel type modules that define the schema we want to query.
--- Includes hydra.util for the Pair/Either fallback types referenced by other types.
+-- Includes hydra.core.util for the Pair/Either fallback types referenced by other types.
 schemaModules :: [Module]
-schemaModules = filterModulesByNamespace ["hydra.module", "hydra.util"] kernelTypesModules
+schemaModules = filterModulesByNamespace ["hydra.module", "hydra.core.util"] kernelTypesModules
 
 filterModulesByNamespace :: [String] -> [Module] -> [Module]
 filterModulesByNamespace names mods =

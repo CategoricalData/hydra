@@ -16,45 +16,45 @@ import Hydra.Kernel hiding (
   withLambdaContext,
   withLetContext,
   withTypeLambdaContext)
-import qualified Hydra.Dsl.Paths    as Paths
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
-import qualified Hydra.Dsl.Ast          as Ast
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Coders       as Coders
-import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph        as Graph
-import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Lib.Math     as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Literals          as Literals
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base         as MetaBase
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms        as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types        as MetaTypes
-import qualified Hydra.Dsl.Packaging       as Packaging
-import qualified Hydra.Dsl.Parsing      as Parsing
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Prims             as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular           as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing      as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Terms             as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Tests             as Tests
-import qualified Hydra.Dsl.Topology     as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
-import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Errors       as Error
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
+import qualified Hydra.Core.Dsl.Paths    as Paths
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations       as Annotations
+import qualified Hydra.Core.Dsl.Ast          as Ast
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Coders       as Coders
+import qualified Hydra.Core.Dsl.Util      as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph        as Graph
+import qualified Hydra.Core.Dsl.Json.Model         as Json
+import qualified Hydra.Core.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Math     as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals          as Literals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base         as MetaBase
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms        as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types        as MetaTypes
+import qualified Hydra.Core.Dsl.Packaging       as Packaging
+import qualified Hydra.Core.Dsl.Parsing      as Parsing
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims             as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular           as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing      as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms             as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests             as Tests
+import qualified Hydra.Core.Dsl.Topology     as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Dsl.Typing       as Typing
+import qualified Hydra.Core.Dsl.Errors       as Error
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -72,7 +72,7 @@ import qualified Hydra.Sources.Kernel.Terms.Variables    as Variables
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.environment"
+ns = ModuleName "hydra.core.environment"
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
@@ -81,7 +81,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, ModuleName "hydra.decode.core", ModuleName "hydra.encode.core", Scoping.ns, Sorting.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, ModuleName "hydra.core.decode.model", ModuleName "hydra.core.encode.model", Scoping.ns, Sorting.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just ("Graph to type environment conversions"))}
   where
     definitions = [
@@ -145,7 +145,7 @@ partitionDefinitions = define "partitionDefinitions" $
 
 reorderDefs :: TypedTermDefinition ([Definition] -> [Definition])
 reorderDefs = define "reorderDefs" $
-  doc "Reorder definitions: types first (with hydra.core.Name first among types), then topologically sorted terms" $
+  doc "Reorder definitions: types first (with hydra.core.model.Name first among types), then topologically sorted terms" $
   "defs" ~>
     "partitioned" <~ (partitionDefinitions @@ var "defs") $
     "typeDefsRaw" <~ Pairs.first (var "partitioned") $
@@ -153,12 +153,12 @@ reorderDefs = define "reorderDefs" $
     "nameFirst" <~ Lists.filter
       ("td" ~> Equality.equal
         (project _TypeDefinition _TypeDefinition_name @@ var "td")
-        (wrap _Name $ string "hydra.core.Name"))
+        (wrap _Name $ string "hydra.core.model.Name"))
       (var "typeDefsRaw") $
     "nameRest" <~ Lists.filter
       ("td" ~> Logic.not $ Equality.equal
         (project _TypeDefinition _TypeDefinition_name @@ var "td")
-        (wrap _Name $ string "hydra.core.Name"))
+        (wrap _Name $ string "hydra.core.model.Name"))
       (var "typeDefsRaw") $
     "typeDefs" <~ Lists.concat (list [
       Lists.map ("td" ~> inject _Definition _Definition_type (var "td")) (var "nameFirst"),

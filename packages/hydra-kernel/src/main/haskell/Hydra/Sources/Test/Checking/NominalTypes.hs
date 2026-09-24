@@ -4,38 +4,38 @@ module Hydra.Sources.Test.Checking.NominalTypes where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
-import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
-import qualified Hydra.Lib.Equality as DefEquality
-import qualified Hydra.Lib.Ordering as DefOrdering
-import qualified Hydra.Lib.Lists as DefLists
-import qualified Hydra.Lib.Literals as DefLiterals
-import qualified Hydra.Lib.Maps as DefMaps
-import qualified Hydra.Lib.Math as DefMath
-import qualified Hydra.Lib.Optionals as DefOptionals
-import qualified Hydra.Lib.Sets as DefSets
-import qualified Hydra.Lib.Strings as DefStrings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims as Prims
+import qualified Hydra.Core.Lib.Equality as DefEquality
+import qualified Hydra.Core.Lib.Ordering as DefOrdering
+import qualified Hydra.Core.Lib.Lists as DefLists
+import qualified Hydra.Core.Lib.Literals as DefLiterals
+import qualified Hydra.Core.Lib.Maps as DefMaps
+import qualified Hydra.Core.Lib.Math as DefMath
+import qualified Hydra.Core.Lib.Optionals as DefOptionals
+import qualified Hydra.Core.Lib.Sets as DefSets
+import qualified Hydra.Core.Lib.Strings as DefStrings
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.checking.nominalTypes"
+ns = ModuleName "hydra.core.test.checking.nominalTypes"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.rewriting", ModuleName "hydra.inference", ModuleName "hydra.scoping", ModuleName "hydra.print.core", ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.core.rewriting", ModuleName "hydra.core.inference", ModuleName "hydra.core.scoping", ModuleName "hydra.core.print.model", ModuleName "hydra.core.test.testTypes"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Nominal type checking test cases: records, unions, field access, injection, projection"))}
   where
     definitions = [
@@ -1181,35 +1181,35 @@ usingKernelTypesTests = define "usingKernelTypesTests" $
   checkTest "case statement on CoderDirection applied to argument" []
     (lambda "dir" $
       lambda "coder" $
-        match (name "hydra.coders.CoderDirection")
+        match (name "hydra.core.coders.CoderDirection")
           nothing [
           "encode">: lambda "_" $
             lambda "v12" $
-              project (name "hydra.coders.Coder") (name "encode")
+              project (name "hydra.core.coders.Coder") (name "encode")
                 @@ var "coder" @@ var "v12",
           "decode">: lambda "_" $
             lambda "v12" $
-              project (name "hydra.coders.Coder") (name "decode")
+              project (name "hydra.core.coders.Coder") (name "decode")
                 @@ var "coder" @@ var "v12"]
           @@ var "dir")
     (tylams ["t0", "t1"] $
-      lambdaTyped "dir" (T.var "hydra.coders.CoderDirection") $
-        lambdaTyped "coder" (T.applys (T.var "hydra.coders.Coder") (T.var <$> ["t0", "t0", "t1"])) $
-          match (name "hydra.coders.CoderDirection")
+      lambdaTyped "dir" (T.var "hydra.core.coders.CoderDirection") $
+        lambdaTyped "coder" (T.applys (T.var "hydra.core.coders.Coder") (T.var <$> ["t0", "t0", "t1"])) $
+          match (name "hydra.core.coders.CoderDirection")
             nothing [
             "encode">: lambdaTyped "_" T.unit $
               lambdaTyped "v12" (T.var "t0") $
-                tyapps (project (name "hydra.coders.Coder") (name "encode")) (T.var <$> ["t0", "t0", "t1"])
+                tyapps (project (name "hydra.core.coders.Coder") (name "encode")) (T.var <$> ["t0", "t0", "t1"])
                   @@ var "coder" @@ var "v12",
             "decode">: lambdaTyped "_" T.unit $
               lambdaTyped "v12" (T.var "t0") $
-                tyapps (project (name "hydra.coders.Coder") (name "decode")) (T.var <$> ["t0", "t0", "t1"])
+                tyapps (project (name "hydra.core.coders.Coder") (name "decode")) (T.var <$> ["t0", "t0", "t1"])
                   @@ var "coder" @@ var "v12"]
           @@ var "dir")
     (T.forAll "t0" $ T.forAll "t1" $
       T.functionMany [
-        T.var "hydra.coders.CoderDirection",
-        T.applys (T.var "hydra.coders.Coder") (T.var <$> ["t0", "t0", "t1"]),
+        T.var "hydra.core.coders.CoderDirection",
+        T.applys (T.var "hydra.core.coders.Coder") (T.var <$> ["t0", "t0", "t1"]),
         T.var "t0",
         T.either_ (T.var "t1") (T.var "t0")])]
 

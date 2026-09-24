@@ -1,25 +1,25 @@
--- | Primitive declarations for the hydra.lib.system namespace.
+-- | Primitive declarations for the hydra.core.lib.system namespace.
 
 module Hydra.Sources.Kernel.Lib.System where
 
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap     as Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms hiding (exit)
-import qualified Hydra.Overlay.Haskell.Dsl.Types         as Types
-import           Hydra.Overlay.Haskell.Dsl.Types         (effect)
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap     as Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms as Phantoms hiding (exit)
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types         as Types
+import           Hydra.Core.Overlay.Haskell.Dsl.Types         (effect)
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), exit)
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lib.system"
+ns = ModuleName "hydra.core.lib.system"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.system module.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.system module.")}
   where
     definitions = [execute, exit, getEnvironment, getEnvironmentVariable, getTime, getWorkingDirectory,
       readStdin, writeStderr, writeStdout]
@@ -29,13 +29,13 @@ define = impurePrimitiveInModule module_
 
 -- Named type aliases
 command, environmentVariable, filePath, processResult, statusCode, systemError, timespec :: Type
-command            = TypeVariable (Name "hydra.system.Command")
-environmentVariable = TypeVariable (Name "hydra.system.EnvironmentVariable")
-filePath           = TypeVariable (Name "hydra.file.FilePath")
-processResult      = TypeVariable (Name "hydra.system.ProcessResult")
-statusCode         = TypeVariable (Name "hydra.system.StatusCode")
-systemError        = TypeVariable (Name "hydra.error.system.SystemError")
-timespec           = TypeVariable (Name "hydra.time.Timespec")
+command            = TypeVariable (Name "hydra.core.system.Command")
+environmentVariable = TypeVariable (Name "hydra.core.system.EnvironmentVariable")
+filePath           = TypeVariable (Name "hydra.core.file.FilePath")
+processResult      = TypeVariable (Name "hydra.core.system.ProcessResult")
+statusCode         = TypeVariable (Name "hydra.core.system.StatusCode")
+systemError        = TypeVariable (Name "hydra.core.error.system.SystemError")
+timespec           = TypeVariable (Name "hydra.core.time.Timespec")
 
 result :: Type -> Type
 result t = effect (Types.either_ systemError t)
@@ -51,7 +51,7 @@ execute = define "execute" "Run a program to completion and capture its result."
   \ https://pubs.opengroup.org/onlinepubs/9799919799/functions/system.html): the child is spawned,\
   \ Hydra waits for it (POSIX waitpid), and standard output and standard error are captured as raw\
   \ bytes. Output is byte-oriented, with no character decoding or newline translation; decode it to\
-  \ text via hydra.lib.text.decodeUtf8. A child that runs and exits with a non-zero status (POSIX\
+  \ text via hydra.core.lib.text.decodeUtf8. A child that runs and exits with a non-zero status (POSIX\
   \ WEXITSTATUS) is returned as right(result) with that StatusCode, following the XCU section 2.8.2\
   \ exit-status convention. Only a failure to launch -- for example POSIX ENOENT, EACCES, or a bad\
   \ working directory -- is returned as left(error). Unlike the shell system(), no intermediate\
@@ -117,7 +117,7 @@ readStdin = define "readStdin" "Read the complete contents of standard input as 
   \ or newline translation -- the POSIX read() function (XSH,\
   \ https://pubs.opengroup.org/onlinepubs/9799919799/functions/read.html) applied repeatedly to fd 0\
   \ until it signals end-of-file. To interpret the result as text, decode it (e.g. via\
-  \ hydra.lib.text.decodeUtf8). A recoverable I/O failure is returned as left(error); success is\
+  \ hydra.core.lib.text.decodeUtf8). A recoverable I/O failure is returned as left(error); success is\
   \ returned as right(contents), including the empty byte string if stdin is closed or empty."]
 
 writeStderr :: PrimitiveDefinition
@@ -129,7 +129,7 @@ writeStderr = define "writeStderr" "Write raw bytes to standard error."
   \ write() function (XSH,\
   \ https://pubs.opengroup.org/onlinepubs/9799919799/functions/write.html) applied repeatedly to fd\
   \ 2 until all bytes are written. To write text, encode it first (e.g. via\
-  \ hydra.lib.text.encodeUtf8). A recoverable I/O failure (for example a closed pipe, POSIX EPIPE)\
+  \ hydra.core.lib.text.encodeUtf8). A recoverable I/O failure (for example a closed pipe, POSIX EPIPE)\
   \ is returned as left(error); success is returned as right(unit)."]
 
 writeStdout :: PrimitiveDefinition
@@ -141,5 +141,5 @@ writeStdout = define "writeStdout" "Write raw bytes to standard output."
   \ write() function (XSH,\
   \ https://pubs.opengroup.org/onlinepubs/9799919799/functions/write.html) applied repeatedly to fd\
   \ 1 until all bytes are written. To write text, encode it first (e.g. via\
-  \ hydra.lib.text.encodeUtf8). A recoverable I/O failure (for example a closed pipe, POSIX EPIPE)\
+  \ hydra.core.lib.text.encodeUtf8). A recoverable I/O failure (for example a closed pipe, POSIX EPIPE)\
   \ is returned as left(error); success is returned as right(unit)."]

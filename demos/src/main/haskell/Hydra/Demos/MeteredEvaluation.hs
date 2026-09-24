@@ -6,17 +6,17 @@
 module Hydra.Demos.MeteredEvaluation (demoMeteredEvaluation) where
 
 import Hydra.Kernel
-import qualified Hydra.Print.Errors as PrintError
-import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
-import Hydra.Dsl.Lib.Lists as Lists
-import qualified Hydra.Dsl.Lib.Strings as Strings
-import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Core.Print.Errors as PrintError
+import Hydra.Core.Overlay.Haskell.Dsl.Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as Types
+import Hydra.Core.Dsl.Lib.Lists as Lists
+import qualified Hydra.Core.Dsl.Lib.Strings as Strings
+import qualified Hydra.Core.Encode.Model as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import Hydra.ExtGeneration
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Math as Math
-import qualified Hydra.Dsl.Lib.Strings as Strings
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Math as Math
+import qualified Hydra.Core.Dsl.Lib.Strings as Strings
 
 import System.IO
 import qualified Control.Monad as CM

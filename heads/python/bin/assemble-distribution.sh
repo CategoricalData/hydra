@@ -9,7 +9,7 @@
 #   2. Calling Layer 1 run_layer1_transform python for test modules
 #   3. Applying package-specific post-processing:
 #      - hydra-kernel: copy test_env.py (the runtime counterpart of
-#        hydra.test.testEnv, filtered from emitted output) and the
+#        hydra.core.test.testEnv, filtered from emitted output) and the
 #        hand-written runtime support (lib/, dsl/, sources/, tools.py,
 #        py.typed) so the published wheel is self-contained.
 #   4. Generating a per-package pyproject.toml so each dist/python/<pkg>/

@@ -7,35 +7,35 @@ module Hydra.Generation (
 ) where
 
 import Hydra.Kernel
-import Hydra.Overlay.Haskell.Dsl.Annotations
-import Hydra.Overlay.Haskell.Bootstrap
+import Hydra.Core.Overlay.Haskell.Dsl.Annotations
+import Hydra.Core.Overlay.Haskell.Bootstrap
 import Hydra.PackageRouting (RoutingMap, groupByPackageIn, namespaceToPackageIn, namespaceToPackageMaybeIn)
-import Hydra.Packaging (_Module, unPackageName)
-import Hydra.Testing (TestGroup(..))
-import qualified Hydra.Json.Model as Json
-import qualified Hydra.Json.Writer as JsonWriter
-import qualified Hydra.Decoding as Decoding
+import Hydra.Core.Packaging (_Module, unPackageName)
+import Hydra.Core.Testing (TestGroup(..))
+import qualified Hydra.Core.Json.Model as Json
+import qualified Hydra.Core.Json.Writer as JsonWriter
+import qualified Hydra.Core.Decoding as Decoding
 import qualified Hydra.Build.Walk as GenWalk
 import qualified Hydra.Build.PackagingProfile as PackagingProfile
 import qualified Hydra.Digest as Digest
 import qualified Hydra.DigestFormat as DigestFormat
-import qualified Hydra.Dsls as Dsls
-import qualified Hydra.Encoding as Encoding
-import qualified Hydra.Errors as Error
-import qualified Hydra.Print.Errors as PrintError
-import qualified Hydra.Codegen as CodeGeneration
-import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Inference as Inference
-import qualified Hydra.Validate.Packaging as ValidatePackaging
-import qualified Hydra.Validate.Core as ValidateCore
+import qualified Hydra.Core.Dsls as Dsls
+import qualified Hydra.Core.Encoding as Encoding
+import qualified Hydra.Core.Errors as Error
+import qualified Hydra.Core.Print.Errors as PrintError
+import qualified Hydra.Core.Codegen as CodeGeneration
+import qualified Hydra.Core.Encode.Model as EncodeCore
+import qualified Hydra.Core.Inference as Inference
+import qualified Hydra.Core.Validate.Packaging as ValidatePackaging
+import qualified Hydra.Core.Validate.Model as ValidateCore
 import qualified Hydra.Sources.Kernel.Types.Error.File as TypesErrorFile
 import qualified Hydra.Sources.Kernel.Types.Error.System as TypesErrorSystem
 import qualified Hydra.Sources.Kernel.Types.File as TypesFile
 import qualified Hydra.Sources.Kernel.Types.System as TypesSystem
 import qualified Hydra.Sources.Kernel.Types.Time as TypesTime
--- Hydra.Kernel re-exports Hydra.Error.Core (InvalidTypeError, InvalidTermError)
--- but NOT Hydra.Error.Packaging (InvalidPackageError) -- import it explicitly.
-import Hydra.Error.Packaging (InvalidPackageError)
+-- Hydra.Kernel re-exports Hydra.Core.Error.Model (InvalidTypeError, InvalidTermError)
+-- but NOT Hydra.Core.Error.Packaging (InvalidPackageError) -- import it explicitly.
+import Hydra.Core.Error.Packaging (InvalidPackageError)
 
 import qualified Control.Exception as E
 import qualified Control.Monad as CM
@@ -62,7 +62,7 @@ showError :: Error.Error -> String
 showError = PrintError.error
 
 -- | An initial InferenceContext (fresh-variable counter at 0, empty subterm-path trace).
--- Note: emptyInferenceContext is now re-exported from Hydra.Kernel via Hydra.Lexical.
+-- Note: emptyInferenceContext is now re-exported from Hydra.Kernel via Hydra.Core.Lexical.
 
 -- | Generate source files and write them to disk.
 -- Returns the relative paths the run wrote (joinable with the basePath argument
@@ -135,7 +135,7 @@ generateSourcesWithTransform transform printDefinitions lang doInfer basePath un
       where
         s = transform raw
         -- Trailing whitespace is the coder's responsibility. The Hydra
-        -- serialization layer in `hydra.serialization` and per-coder
+        -- serialization layer in `hydra.core.serialization` and per-coder
         -- writers (e.g. the Haskell `toHaskellComments` formatter)
         -- avoid emitting trailing whitespace at the source. This
         -- writer just adds the final newline.
@@ -147,8 +147,8 @@ modulesToGraph :: [Module] -> [Module] -> Graph
 modulesToGraph = CodeGeneration.modulesToGraph bootstrapGraph
 
 -- | The kernel type modules that back primitives outside a caller's own module
--- dependencies -- e.g. hydra.lib.files.readFile references hydra.error.file.FileError
--- without requiring the caller to declare hydra.lib.files as a dependency, since
+-- dependencies -- e.g. hydra.core.lib.files.readFile references hydra.core.error.file.FileError
+-- without requiring the caller to declare hydra.core.lib.files as a dependency, since
 -- primitives resolve globally (see #637's graphPrimitives/graphSchemaTypes asymmetry).
 -- A downstream caller can pass these modules as (part of) generateSourceFiles's/
 -- modulesToGraph's universeModules argument to make such nominal types resolvable,
@@ -167,7 +167,7 @@ kernelTypeUniverse = [
 -- ============================================================================
 --
 -- 'overlayLibSubs' drives emission-time redirect of hydra.lib.<sub> references
--- to hydra.overlay.<lang>.lib.<sub> directly inside each coder (Haskell,
+-- to hydra.core.overlay.<lang>.lib.<sub> directly inside each coder (Haskell,
 -- TypeScript, Scala, Python, Lisp family), consulted at coding time via an
 -- explicit overlaySubs parameter threaded through each coder's entry point
 -- (#630).
@@ -196,7 +196,7 @@ kernelTypeUniverse = [
 -- than a hand-maintained allowlist. Existence on disk IS the signal for "this host
 -- ships a native impl for this sub" -- correct by construction for any future
 -- @hydra.lib.\<sub\>@ module whether or not it has a relocated overlay
--- implementation (@hydra.lib.defaults@ has none and is therefore never redirected).
+-- implementation (@hydra.core.lib.defaults@ has none and is therefore never redirected).
 -- Mirrors @_lib_subs_for_target@ in heads/python/src/main/python/hydra/bootstrap.py,
 -- the reference implementation ported from #569's fix for the other six host
 -- drivers (bootstrap.py, Bootstrap.java, Bootstrap.scala, bootstrap.clj,
@@ -226,21 +226,21 @@ overlayLibSubs libDir = do
 -- directory that every sync/bootstrap driver runs from.
 haskellOverlayLibDir :: FilePath
 haskellOverlayLibDir =
-  "../../overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib"
+  "../../overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib"
 
 -- | The TypeScript-host overlay lib directory, relative to the heads/haskell/
 -- working directory that every sync/bootstrap driver runs from.
 typeScriptOverlayLibDir :: FilePath
 typeScriptOverlayLibDir =
-  "../../overlay/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib"
+  "../../overlay/typescript/hydra-core/src/main/typescript/hydra/core/overlay/typescript/lib"
 
 -- | The Scala-host overlay lib directory, relative to the heads/haskell/
 -- working directory that every sync/bootstrap driver runs from.
 scalaOverlayLibDir :: FilePath
 scalaOverlayLibDir =
-  "../../overlay/scala/hydra-kernel/src/main/scala/hydra/overlay/scala/lib"
+  "../../overlay/scala/hydra-core/src/main/scala/hydra/core/overlay/scala/lib"
 
--- | #568/#630: rewrite a generated Haskell source file's @Hydra.Overlay.Haskell.Lib.\<Sub\>@
+-- | #568/#630: rewrite a generated Haskell source file's @Hydra.Core.Overlay.Haskell.Lib.\<Sub\>@
 -- import back to the canonical @Hydra.Lib.\<Sub\>@ kernel-module name for any sub
 -- that has NO overlay implementation on disk. Used ONLY by the published-host cold
 -- seeder (ColdSeedMain.hs, see the block comment above): that driver links the
@@ -248,23 +248,23 @@ scalaOverlayLibDir =
 -- @hydra.lib.\<sub\>@ reference unconditionally (shape-only, no existence check --
 -- the DSL has no I/O and cannot check); this driver-level correction narrows that
 -- to only the subs that actually have a host-native implementation, so an
--- overlay-less module like @hydra.lib.defaults@ ends up pointing at the kernel
+-- overlay-less module like @hydra.core.lib.defaults@ ends up pointing at the kernel
 -- module instead of a dangling overlay path. No-op (returns input unchanged) for
 -- every sub that DOES have an overlay -- those stay redirected, as intended. The
 -- Haskell coder capitalizes every dotted segment when building the qualified
 -- import name (@importName@ in Hydra.Haskell.Coder), so the on-the-wire text is
--- PascalCase (@Hydra.Overlay.Haskell.Lib.Defaults@); this only affects the
+-- PascalCase (@Hydra.Core.Overlay.Haskell.Lib.Defaults@); this only affects the
 -- prefix strings matched below, not 'overlayLibSubs' (which already lowercases
 -- both the directory listing and each matched sub before comparing).
 correctHaskellLibRedirect :: S.Set String -> String -> String
-correctHaskellLibRedirect knownSubs = redirectLibBack knownSubs "Hydra.Overlay.Haskell.Lib." "Hydra.Lib."
+correctHaskellLibRedirect knownSubs = redirectLibBack knownSubs "Hydra.Core.Overlay.Haskell.Lib." "Hydra.Lib."
 
 -- | #568/#630: TypeScript analog of 'correctHaskellLibRedirect', for the same
 -- published-host cold-seeder use (the TS coder linked there also redirects
--- unconditionally). The TS coder (Hydra.TypeScript.Coder.importsToText) redirects
+-- unconditionally). The TS coder (Hydra.Typescript.Coder.importsToText) redirects
 -- any import whose first post-@hydra.@ segment is @lib@ to @overlay/typescript/...@
 -- unconditionally (shape-only); this narrows that to subs with an actual overlay
--- file, so @hydra.lib.defaults@ (and any future overlay-less module) resolves back
+-- file, so @hydra.core.lib.defaults@ (and any future overlay-less module) resolves back
 -- to its generated def-module path instead of a dangling overlay path.
 correctTypeScriptLibRedirect :: S.Set String -> String -> String
 correctTypeScriptLibRedirect knownSubs = redirectLibBack knownSubs "overlay/typescript/lib/" "lib/"
@@ -300,18 +300,27 @@ redirectLibBack knownSubs old new = go
 -- hand-authored, and which is therefore exempt from structural/packaging
 -- validation rules (their definitions lists follow a semantic grouping, not
 -- the alphabetical convention 'checkDefinitionOrdering' enforces on
--- hand-written modules). Covers the DSL wrapper (hydra.dsl.*) and
--- encode/decode (hydra.encode.*/hydra.decode.*) families. This is the single
+-- hand-written modules). Covers the DSL wrapper (hydra.core.dsl.*) and
+-- encode/decode (hydra.core.encode.*/hydra.core.decode.*) families. This is the single
 -- source of truth for the derived-module exemption; callers that need to
 -- distinguish structural exemption from semantic-check applicability should
 -- use this predicate to gate 'ValidatePackaging' rules only, not
 -- 'ValidateCore' rules (derived modules remain subject to those — a broken
 -- synthesizer output should still surface as a validation failure).
+-- #729: under the uniform grammar a derived module is hydra.<pkgroot>.<category>.<...>, i.e. the
+-- derived category (dsl/encode/decode) is the segment AFTER the 2-segment package root, for ANY
+-- package -- not only the kernel (hydra.core.model.<category>.*). The pre-rename form had the category as
+-- the leading segment (hydra.<category>.*); the reorder moved it after the package root, so a
+-- hardcoded "hydra.core.model.<category>." prefix silently stops recognizing ext-package derived modules
+-- (hydra.pg.decode.model, hydra.build.encode.format, hydra.java.dsl.syntax, ...), which then wrongly
+-- fail the undeclared-dependency check (their deps are synthesizer-computed and intentionally partial).
 isDerivedModule :: Module -> Bool
-isDerivedModule m =
-  L.isPrefixOf "hydra.dsl." ns || L.isPrefixOf "hydra.encode." ns || L.isPrefixOf "hydra.decode." ns
+isDerivedModule m = case LS.splitOn "." ns of
+    ("hydra" : _pkgroot : category : _rest) -> category `elem` derivedCategories
+    _ -> False
   where
     ns = unModuleName (moduleName m)
+    derivedCategories = ["dsl", "encode", "decode"]
 
 -- | Build a 'Package' value for each package in a routing map, wrapping the
 -- given modules under that package's name. Metadata and dependencies are
@@ -372,7 +381,7 @@ validationFindingsNull (ValidationFindings pkgs types terms) =
 -- "Hydra.PackagingGeneration".
 
 -- | Semantic (core) type/term-tree validation against a list of packages,
--- INCLUDING derived modules (hydra.dsl.*/encode.*/decode.*) — a broken
+-- INCLUDING derived modules (hydra.core.dsl.*/encode.*/decode.*) — a broken
 -- synthesizer output is a real bug and must still surface; #575's accepted
 -- policy is structural-exempt, semantic-accountable.
 --
@@ -425,7 +434,7 @@ validatePackagesSemantic profile typed exemptTypeNames exemptTermNames pkgs =
            []    -> Nothing
            err:_ -> Just err
     -- Every type-definition name across all packages, used as the in-scope
-    -- vocabulary so nominal references (e.g. hydra.core.Name) aren't
+    -- vocabulary so nominal references (e.g. hydra.core.model.Name) aren't
     -- mistaken for undefined type variables. Mirrors the kernel-only
     -- version's kernelTypeNames, generalized across every validated package.
     allTypeNames = S.fromList
@@ -439,7 +448,7 @@ validatePackagesSemantic profile typed exemptTypeNames exemptTermNames pkgs =
 -- | Convert a Definition to the Binding shape that elementsToGraph (and other
 -- Binding-based kernel APIs) expects. A DefinitionTerm carries directly across;
 -- a DefinitionType has its body re-encoded as a term and tagged with the
--- "type -> hydra.core.Type" annotation that downstream code uses to recognise
+-- "type -> hydra.core.model.Type" annotation that downstream code uses to recognise
 -- native types.
 definitionAsBinding :: Definition -> Binding
 definitionAsBinding (DefinitionTerm td) = Binding {
@@ -451,8 +460,8 @@ definitionAsBinding (DefinitionType td) = Binding {
     bindingTerm = TermAnnotated $ AnnotatedTerm {
       annotatedTermBody = EncodeCore.type_ (typeSchemeBody (typeDefinitionBody td)),
       annotatedTermAnnotation = TermMap $ M.fromList [
-        (TermVariable (Name "type"), TermVariable (Name "hydra.core.Type"))]},
-    bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) M.empty)}
+        (TermVariable (Name "type"), TermVariable (Name "hydra.core.model.Type"))]},
+    bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.model.Type")) M.empty)}
 -- TODO(#156): Implement DefinitionPrimitive handling once primitive modules land. For now, primitives don't appear in modules that go through this function.
 definitionAsBinding (DefinitionPrimitive pd) = Binding {
     bindingName = primitiveDefinitionName pd,
@@ -627,7 +636,7 @@ inferAndWriteByPackageSeededFor
   -- Build the JSON-write schemaMap ONCE, up front, from the full module
   -- universe (schemaContextMods + universeMods). The encoder needs every
   -- universe type reachable from this map — in particular
-  -- hydra.packaging.Module, without which Maybe String fields encode as
+  -- hydra.core.packaging.Module, without which Maybe String fields encode as
   -- single-element arrays (see comment on writePackageSplitJson).
   --
   -- After this point, schemaContextMods is unreferenced and can be GC'd.
@@ -651,7 +660,7 @@ inferAndWriteByPackageSeededFor
   -- dependencies (#546). package.json deps alone are insufficient when a module
   -- in package A references (via moduleDependencies) a module owned by package
   -- B that does NOT sit above A in the package.json graph. The canonical case:
-  -- the kernel's hydra.test.testSuite aggregate references hydra.test.build.*
+  -- the kernel's hydra.core.test.testSuite aggregate references hydra.core.test.build.*
   -- (owned by hydra-build), yet hydra-build depends on hydra-kernel — so the
   -- package graph would infer hydra-kernel first and fail to resolve the
   -- build-test allTests bindings. Projecting each module's moduleDependencies
@@ -725,7 +734,7 @@ inferAndWriteByPackageSeededFor
             -- inferred here. Their canonical JSON is produced by the native
             -- generators, and their full universe includes the native coder
             -- module (e.g. hydra.java.coder), which references kernel term
-            -- bindings by name (hydra.annotations.commentsFromFieldType) that
+            -- bindings by name (hydra.core.annotations.commentsFromFieldType) that
             -- are not in this pass's by-name accumulator — re-inferring it
             -- fails with "no such binding". Their existing JSON TypeSchemes are
             -- still harvested below (free, no inference), so downstream by-name
@@ -787,7 +796,7 @@ inferAndWriteByPackageSeededFor
         CM.when (not (null toWrite)) $ do
           -- Write each module using the pre-built schemaMap. The schemaMap
           -- covers the full universe (built once at the top of this
-          -- function), so encoder lookups for hydra.packaging.Module and
+          -- function), so encoder lookups for hydra.core.packaging.Module and
           -- other cross-package schema types resolve correctly. Without
           -- this, prior packages' types are absent from the per-iteration
           -- schemaMap and Maybe String fields mis-serialize as arrays.
@@ -1159,7 +1168,7 @@ writeTestModulesJson routingMap distJsonRoot mainMods testMods = do
           -- Driver iteration universe = testMods only; the seed Maps carry
           -- the main types so cross-package refs resolve. mainLoaded is the
           -- schema-context-only set so the JSON-write schemaMap (built once)
-          -- covers main types like hydra.packaging.Module.
+          -- covers main types like hydra.core.packaging.Module.
           inferAndWriteByPackageSeededFor routingMap "test" distJsonRoot
             seedBindingSchemes seedSchemaSchemes
             mainLoaded testMods testMods
@@ -1202,8 +1211,8 @@ data IncrementalResult
 -- and write the subset that needs to hit disk. 'universeForSchema' is
 -- the complete post-inference module set used to seed the schema's
 -- type-dependency closure; passing a narrow set (e.g. only DSL
--- wrappers, which don't declare hydra.packaging as a type dep) produces
--- a schemaMap missing hydra.packaging.Module and causes the encoder to
+-- wrappers, which don't declare hydra.core.packaging as a type dep) produces
+-- a schemaMap missing hydra.core.packaging.Module and causes the encoder to
 -- mis-serialize outer module frames (e.g. Maybe String as nested Maybe).
 -- Callers should pass the full universe here for a complete schemaMap.
 -- 'toWrite' is the subset that actually needs its JSON rewritten
@@ -1217,7 +1226,7 @@ writePackageSplitJson routingMap = writePackageSplitJsonFor routingMap "main"
 writePackageSplitJsonFor :: RoutingMap -> String -> FilePath -> [Module] -> [Module] -> [Module] -> IO ()
 writePackageSplitJsonFor routingMap srcSet distJsonRoot universeMods universeForSchema toWrite = do
   -- Seed the graph's schema with the broader of the two inputs so
-  -- hydra.packaging.Module (and every other universe type) is always
+  -- hydra.core.packaging.Module (and every other universe type) is always
   -- reachable from the schemaMap, even when 'toWrite' is a narrow set
   -- like DSL wrappers whose declared type-deps omit packaging.
   let graph = modulesToGraph universeMods (universeMods ++ universeForSchema)
@@ -1437,8 +1446,8 @@ ensurePerPackageDigests routingMap distJsonRoot universeMods = do
 -- #701: 'moduleDependencies' is hand-declared per DSL module and routinely
 -- omits primitive-library modules reached only through a generated
 -- 'Hydra.Dsl.Lib.*' wrapper call (an ordinary Haskell import, invisible to
--- the DSL-level dependency system) — e.g. 'hydra.extract.core' calls
--- 'Eithers.mapSet' in its 'setOf' body but never declares 'hydra.lib.eithers'
+-- the DSL-level dependency system) — e.g. 'hydra.core.extract.model' calls
+-- 'Eithers.mapSet' in its 'setOf' body but never declares 'hydra.core.lib.eithers'
 -- as a dependency. A hand-declared graph can never be exhaustively
 -- maintained by construction (a DSL author adding a primitive call has no
 -- structural reason to also edit a separate dependency list), so this
@@ -1642,7 +1651,7 @@ tryIncrementalInference routingMap distJsonRoot universeMods targetMods = do
                   -- resolve during inference. cleanLoaded is also passed
                   -- as the schema-context-only set so the JSON-write
                   -- schemaMap (built once up front) covers prior-package
-                  -- types like hydra.packaging.Module — without that,
+                  -- types like hydra.core.packaging.Module — without that,
                   -- Maybe String fields encode as single-element arrays.
                   inferAndWriteByPackageSeeded routingMap distJsonRoot
                     seedBindingSchemes seedSchemaSchemes
@@ -1875,7 +1884,7 @@ writeDerivedJsonPackageSplit routingMap distJsonRoot universeModules dslSourceMo
     -- modules' in-term annotations (lambda domains, type-applications, result-type
     -- signatures) — it fully populates them at construction, mirroring the DSL
     -- wrapper synthesis. Running inference over them is at best redundant and at
-    -- worst incorrect: for polymorphic decoders (e.g. hydra.decode.parsing.parseResult,
+    -- worst incorrect: for polymorphic decoders (e.g. hydra.core.decode.parsing.parseResult,
     -- result type either<DecodingError, ParseResult @ a>) HM's occurs-check rejects
     -- the saturated nominal self-application that the synthesizer emits, so inference
     -- cannot even reproduce its own prior committed output. The synthesizer's nominal
@@ -1896,7 +1905,7 @@ writeDerivedJsonPackageSplit routingMap distJsonRoot universeModules dslSourceMo
 -- so must NOT be reconciled by the Haskell JSON write path. hydra-jvm, hydra-java,
 -- and hydra-python receive their canonical JSON from the native Java/Python
 -- generators (#344, #505); during the transition the Haskell DSL pass
--- ALSO writes their hydra.dsl.<lang>.* wrappers into the same dir, so neither
+-- ALSO writes their hydra.core.dsl.<lang>.* wrappers into the same dir, so neither
 -- generator alone holds the complete keep-set. Rather than coordinate two
 -- generators over one dir, the Haskell side simply skips them; the native
 -- generators own their own reconcile. Once the legacy Haskell DSL sources for
@@ -2168,7 +2177,7 @@ loadModulesFromJson basePath universeModules namespaces = do
 -- (#511). Returns one @(package, [Module])@ row per native package so callers can
 -- build routing input directly from where each module was LOADED, rather than
 -- re-deriving the package from a namespace prefix — the latter drops modules whose
--- namespace lacks the package's prefix segment (e.g. hydra.gradle, owned by
+-- namespace lacks the package's prefix segment (e.g. hydra.java.gradle, owned by
 -- hydra-java but with no @java@ segment).
 --
 -- Reads the current rich manifest schema (mainModules + mainDslModules +

@@ -1,15 +1,15 @@
--- | Primitive declarations for the hydra.lib.lists namespace.
+-- | Primitive declarations for the hydra.core.lib.lists namespace.
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Lib.Lists where
 
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, compose, map)
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms hiding (apply, compose, map)
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), concat, drop, dropWhile, elem, filter, foldl, foldr,
                                head, init, last, length, map, replicate, reverse,
@@ -17,14 +17,14 @@ import           Prelude hiding ((++), concat, drop, dropWhile, elem, filter, fo
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lib.lists"
+ns = ModuleName "hydra.core.lib.lists"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.lists module.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.lists module.")}
   where
     definitions = [apply, at, bind, compose, concat, concat2, cons, distinct, drop, dropWhile,
                    filter, find, foldList, foldl, foldr, group, head, init, intersperse,

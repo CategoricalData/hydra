@@ -1,13 +1,13 @@
 package hydra.sources.scala
 
-import hydra.overlay.scala.dsl.{Helpers, Phantoms}
-import hydra.overlay.scala.dsl.meta.Defs
-import hydra.overlay.scala.dsl.Phantoms.{`var` => v, prim, applyP, lambda, let, field, string, int32, bool, list, nothing, just, doc, matchWithDefault, project, unwrap, wrap, makeLocal, define, cat2}
-import hydra.packaging.{Definition, EntityMetadata, Module, ModuleName}
-import hydra.typed.TypedTerm
+import hydra.core.overlay.scala.dsl.{Helpers, Phantoms}
+import hydra.core.overlay.scala.dsl.meta.Defs
+import hydra.core.overlay.scala.dsl.Phantoms.{`var` => v, prim, applyP, lambda, let, field, string, int32, bool, list, nothing, just, doc, matchWithDefault, project, unwrap, wrap, makeLocal, define, cat2}
+import hydra.core.packaging.{Definition, EntityMetadata, Module, ModuleName}
+import hydra.core.typed.TypedTerm
 
-import hydra.dsl.scala.syntax as ScalaSyntax
-import hydra.dsl.{core => CoreDsl, packaging => PackagingDsl, util => UtilDsl}
+import hydra.scala.dsl.syntax as ScalaSyntax
+import hydra.core.dsl.{core => CoreDsl, packaging => PackagingDsl, util => UtilDsl}
 
 /**
  * Utility functions for constructing Scala AST nodes.
@@ -18,7 +18,7 @@ object Utils:
 
   /** Dependencies: matches Haskell `[scalaLanguage, names, formatting] ++ (scalaSyntax : kernelTypesModuleNames)`. */
   private val DEPS: Seq[ModuleName] =
-    Seq("hydra.scala.language", "hydra.names", "hydra.formatting", "hydra.scala.syntax")
+    Seq("hydra.scala.language", "hydra.core.names", "hydra.core.formatting", "hydra.scala.syntax")
       ++ Helpers.kernelTypesModuleNames
 
   // ===== Local helpers — shorthand FQN references =====
@@ -37,8 +37,8 @@ object Utils:
   lazy val nameOfTypeDef: Definition =
     define(NS, "nameOfType").doc("Extract the name from a type, if it is a named type")
       .lam("cx").lam("t").to(
-        matchWithDefault("hydra.core.Type",
-          applyP("hydra.strip.deannotateType", v("t")),
+        matchWithDefault("hydra.core.model.Type",
+          applyP("hydra.core.strip.deannotateType", v("t")),
           nothing,
           field("variable", lambda("name", just(v("name")))),
           field("forall", lambda("ft",
@@ -50,7 +50,7 @@ object Utils:
     define(NS, "qualifyUnionFieldName").doc("Qualify a union field name, optionally prefixing with the Scala type name")
       .lam("dlft").lam("sname").lam("fname").to(
         cat2(
-          applyP("hydra.lib.optionals.match",
+          applyP("hydra.core.lib.optionals.match",
             v("sname"),
             v("dlft"),
             lambda("n",
@@ -68,19 +68,19 @@ object Utils:
   lazy val sapplyTypesDef: Definition =
     define(NS, "sapplyTypes").doc("Apply explicit type parameters to a Scala expression (e.g. f[A, B]); a no-op for an empty type-arg list (#589)")
       .lam("fun").lam("typeArgs").to(
-      applyP("hydra.lib.logic.ifElse",
-        applyP("hydra.lib.lists.isEmpty", v("typeArgs")),
+      applyP("hydra.core.lib.logic.ifElse",
+        applyP("hydra.core.lib.lists.isEmpty", v("typeArgs")),
         v("fun"),
         let(Seq(
           field("typeToStr", lambda("t",
             applyP(local("typeToString"), v("t")))),
           field("typeStrings",
-            applyP("hydra.lib.lists.map", v("typeToStr"), v("typeArgs"))),
+            applyP("hydra.core.lib.lists.map", v("typeToStr"), v("typeArgs"))),
           field("typeArgStr",
-            applyP("hydra.lib.strings.concat",
+            applyP("hydra.core.lib.strings.concat",
               list(
                 string("["),
-                applyP("hydra.lib.strings.join", string(", "), v("typeStrings")),
+                applyP("hydra.core.lib.strings.join", string(", "), v("typeStrings")),
                 string("]"))))),
           matchWithDefault("hydra.scala.syntax.Data",
             v("fun"), v("fun"),
@@ -116,8 +116,8 @@ object Utils:
       .lam("s").to(
         let(Seq(
           field("renamed",
-            applyP("hydra.lib.logic.ifElse",
-              applyP("hydra.lib.equality.equal", v("s"), string("values")),
+            applyP("hydra.core.lib.logic.ifElse",
+              applyP("hydra.core.lib.equality.equal", v("s"), string("values")),
               string("values_"),
               v("s")))),
           applyP(local("scalaEscapeName"), v("renamed"))))
@@ -125,47 +125,47 @@ object Utils:
   lazy val scalaEscapeNameDef: Definition =
     // Compose intermediate sub-expressions with vals to keep the structure readable.
     val sanitized: TypedTerm[String] =
-      applyP("hydra.lib.strings.fromList",
-        applyP("hydra.lib.lists.map",
+      applyP("hydra.core.lib.strings.fromList",
+        applyP("hydra.core.lib.lists.map",
           lambda("c",
-            applyP("hydra.lib.logic.ifElse",
-              applyP("hydra.lib.equality.equal", v("c"), int32(39)),
+            applyP("hydra.core.lib.logic.ifElse",
+              applyP("hydra.core.lib.equality.equal", v("c"), int32(39)),
               int32(95),
               v("c"))),
-          applyP("hydra.lib.strings.toList", v("s"))))
+          applyP("hydra.core.lib.strings.toList", v("s"))))
 
     val sanitized2: TypedTerm[String] =
-      applyP("hydra.lib.logic.ifElse",
-        applyP("hydra.lib.equality.equal", v("sanitized"), string("_")),
+      applyP("hydra.core.lib.logic.ifElse",
+        applyP("hydra.core.lib.equality.equal", v("sanitized"), string("_")),
         string("_x"),
         v("sanitized"))
 
     val sanitized3: TypedTerm[String] =
-      applyP("hydra.lib.logic.ifElse",
-        applyP("hydra.lib.equality.equal", v("sanitized2"), string("toString")),
+      applyP("hydra.core.lib.logic.ifElse",
+        applyP("hydra.core.lib.equality.equal", v("sanitized2"), string("toString")),
         string("toString_"),
         v("sanitized2"))
 
     // lastChar = optionals.withDefault 0 (charAt (length s3 - 1) s3)
     val lastChar: TypedTerm[Int] =
-      applyP("hydra.lib.optionals.withDefault",
+      applyP("hydra.core.lib.optionals.withDefault",
         int32(0),
-        applyP("hydra.lib.strings.charAt",
-          applyP("hydra.lib.math.sub",
-            applyP("hydra.lib.strings.length", v("sanitized3")),
+        applyP("hydra.core.lib.strings.charAt",
+          applyP("hydra.core.lib.math.sub",
+            applyP("hydra.core.lib.strings.length", v("sanitized3")),
             int32(1)),
           v("sanitized3")))
 
     val endsWithUnderscore: TypedTerm[Boolean] =
-      applyP("hydra.lib.logic.and",
-        applyP("hydra.lib.ordering.gt",
-          applyP("hydra.lib.strings.length", v("sanitized3")),
+      applyP("hydra.core.lib.logic.and",
+        applyP("hydra.core.lib.ordering.gt",
+          applyP("hydra.core.lib.strings.length", v("sanitized3")),
           int32(0)),
-        applyP("hydra.lib.equality.equal", lastChar, int32(95)))
+        applyP("hydra.core.lib.equality.equal", lastChar, int32(95)))
 
     val needsBackticks: TypedTerm[Boolean] =
-      applyP("hydra.lib.logic.or",
-        applyP("hydra.lib.sets.member", v("sanitized3"), scalaReservedWordsRefVar),
+      applyP("hydra.core.lib.logic.or",
+        applyP("hydra.core.lib.sets.member", v("sanitized3"), scalaReservedWordsRefVar),
         endsWithUnderscore)
 
     define(NS, "scalaEscapeName").doc("Sanitize a name for Scala: escape reserved words, replace invalid characters")
@@ -175,9 +175,9 @@ object Utils:
           field("sanitized2", sanitized2),
           field("sanitized3", sanitized3),
           field("needsBackticks", needsBackticks)),
-          applyP("hydra.lib.logic.ifElse",
+          applyP("hydra.core.lib.logic.ifElse",
             v("needsBackticks"),
-            applyP("hydra.lib.strings.concat",
+            applyP("hydra.core.lib.strings.concat",
               list(string("`"), v("sanitized3"), string("`"))),
             v("sanitized3"))))
 
@@ -188,14 +188,14 @@ object Utils:
   lazy val scalaTypeNameDef: Definition =
     define(NS, "scalaTypeName").doc("Convert a Hydra name to a Scala type name")
       .lam("qualify").lam("name").to(
-        applyP("hydra.lib.logic.ifElse",
-          applyP("hydra.lib.logic.or",
+        applyP("hydra.core.lib.logic.ifElse",
+          applyP("hydra.core.lib.logic.or",
             v("qualify"),
-            applyP("hydra.lib.sets.member",
-              applyP("hydra.names.localNameOf", v("name")),
+            applyP("hydra.core.lib.sets.member",
+              applyP("hydra.core.names.localNameOf", v("name")),
               scalaReservedWordsRefVar)),
           CoreDsl.unName(v("name")),
-          applyP("hydra.names.localNameOf", v("name"))))
+          applyP("hydra.core.names.localNameOf", v("name"))))
 
   lazy val slambdaDef: Definition =
     define(NS, "slambda").doc("Create a Scala lambda (function) expression")
@@ -216,38 +216,38 @@ object Utils:
 
   lazy val sprimDef: Definition =
     define(NS, "sprim").doc("Create a Scala primitive reference from a Hydra name, redirecting"
-      + " hydra.lib.<sub>.<local> to hydra.overlay.scala.lib.<sub>.<local> when <sub> has an overlay"
+      + " hydra.core.lib.<sub>.<local> to hydra.core.overlay.scala.lib.<sub>.<local> when <sub> has an overlay"
       + " implementation on this host (#630 -- the on-disk overlaySubs existence signal). Unlike"
-      + " toPrimImport (which redirects a bare hydra.lib.<sub> MODULE name, always exactly 3"
-      + " segments), a primitive reference is hydra.lib.<sub>.<local> -- at least 4 segments, since"
-      + " it also carries the primitive's own local name -- so the sub to check against overlaySubs"
-      + " is parts[2] alone, not the whole post-prefix tail (#635).")
+      + " toPrimImport (which redirects a bare hydra.core.lib.<sub> MODULE name, always exactly 4"
+      + " segments post-#729), a primitive reference is hydra.core.lib.<sub>.<local> -- at least 5 segments,"
+      + " since it also carries the primitive's own local name -- so the sub to check against overlaySubs"
+      + " is parts[3] alone, not the whole post-prefix tail (#635, #729).")
       .lam("overlaySubs").lam("name").to(
         let(Seq(
           field("raw", CoreDsl.unName(v("name"))),
-          field("parts", applyP("hydra.lib.strings.splitOn", string("."), v("raw"))),
-          field("sub", applyP("hydra.lib.strings.join", string("."),
-            applyP("hydra.lib.lists.drop", int32(2), v("parts")))),
+          field("parts", applyP("hydra.core.lib.strings.splitOn", string("."), v("raw"))),
+          field("sub", applyP("hydra.core.lib.strings.join", string("."),
+            applyP("hydra.core.lib.lists.drop", int32(3), v("parts")))),
           field("subHead",
-            applyP("hydra.lib.optionals.withDefault", string(""),
-              applyP("hydra.lib.lists.at", int32(2), v("parts")))),
+            applyP("hydra.core.lib.optionals.withDefault", string(""),
+              applyP("hydra.core.lib.lists.at", int32(3), v("parts")))),
           field("redirectedRaw",
-            applyP("hydra.lib.logic.ifElse",
-              applyP("hydra.lib.logic.and",
-                applyP("hydra.lib.logic.and",
-                  applyP("hydra.lib.ordering.gte", applyP("hydra.lib.lists.length", v("parts")), int32(4)),
-                  applyP("hydra.lib.equality.equal",
-                    applyP("hydra.lib.lists.take", int32(2), v("parts")),
-                    list(string("hydra"), string("lib")))),
-                applyP("hydra.lib.sets.member", v("subHead"), v("overlaySubs"))),
-              applyP("hydra.lib.strings.concat2", string("hydra.overlay.scala.lib."), v("sub")),
+            applyP("hydra.core.lib.logic.ifElse",
+              applyP("hydra.core.lib.logic.and",
+                applyP("hydra.core.lib.logic.and",
+                  applyP("hydra.core.lib.ordering.gte", applyP("hydra.core.lib.lists.length", v("parts")), int32(5)),
+                  applyP("hydra.core.lib.equality.equal",
+                    applyP("hydra.core.lib.lists.take", int32(3), v("parts")),
+                    list(string("hydra"), string("core"), string("lib")))),
+                applyP("hydra.core.lib.sets.member", v("subHead"), v("overlaySubs"))),
+              applyP("hydra.core.lib.strings.concat2", string("hydra.core.overlay.scala.lib."), v("sub")),
               v("raw"))),
-          field("redirectedName", wrap("hydra.core.Name", v("redirectedRaw"))),
-          field("qname", applyP("hydra.names.qualifyName", v("redirectedName"))),
+          field("redirectedName", wrap("hydra.core.model.Name", v("redirectedRaw"))),
+          field("qname", applyP("hydra.core.names.qualifyName", v("redirectedName"))),
           field("prefix",
             PackagingDsl.unModuleName(
-              applyP("hydra.lib.optionals.withDefault",
-                wrap("hydra.packaging.ModuleName", string("")),
+              applyP("hydra.core.lib.optionals.withDefault",
+                wrap("hydra.core.packaging.ModuleName", string("")),
                 UtilDsl.qualifiedNameModuleName(v("qname"))))),
           field("local",
             applyP(local("scalaEscapeName"),
@@ -275,7 +275,7 @@ object Utils:
       .lam("name").to(
         let(Seq(
           field("v",
-            applyP("hydra.formatting.capitalize",
+            applyP("hydra.core.formatting.capitalize",
               CoreDsl.unName(v("name"))))),
           ScalaSyntax.paramType(
             list[Any]())(  // mods
@@ -316,16 +316,16 @@ object Utils:
           field("function", lambda("fn",
             let(Seq(
               field("params",
-                applyP("hydra.lib.lists.map",
+                applyP("hydra.core.lib.lists.map",
                   v(local("typeToString")),
                   ScalaSyntax.functionTypeParams(v("fn")))),
               field("res",
                 applyP(local("typeToString"),
                   ScalaSyntax.functionTypeRes(v("fn"))))),
-              applyP("hydra.lib.strings.concat",
+              applyP("hydra.core.lib.strings.concat",
                 list(
                   string("("),
-                  applyP("hydra.lib.strings.join", string(", "), v("params")),
+                  applyP("hydra.core.lib.strings.join", string(", "), v("params")),
                   string(") => "),
                   v("res")))))),
           field("apply", lambda("ta",
@@ -334,14 +334,14 @@ object Utils:
                 applyP(local("typeToString"),
                   ScalaSyntax.applyTypeTpe(v("ta")))),
               field("argStrs",
-                applyP("hydra.lib.lists.map",
+                applyP("hydra.core.lib.lists.map",
                   v(local("typeToString")),
                   ScalaSyntax.applyTypeArgs(v("ta"))))),
-              applyP("hydra.lib.strings.concat",
+              applyP("hydra.core.lib.strings.concat",
                 list(
                   v("base"),
                   string("["),
-                  applyP("hydra.lib.strings.join", string(", "), v("argStrs")),
+                  applyP("hydra.core.lib.strings.join", string(", "), v("argStrs")),
                   string("]"))))))))
 
   // ===== Module assembly =====

@@ -1,5 +1,5 @@
-;; #546: hydra-build main+test paths. The kernel hydra.test.testSuite (required
-;; by the runner) transitively requires hydra.test.build.* -> hydra.build.*,
+;; #546: hydra-build main+test paths. The kernel hydra.core.test.testSuite (required
+;; by the runner) transitively requires hydra.core.test.build.* -> hydra.build.*,
 ;; which moved to the hydra-build package's dist tree. `require` resolves them
 ;; from these paths; no preload.clj entry is needed (require auto-loads deps).
 {:paths ["../../../dist/clojure/hydra-kernel/src/main/clojure"

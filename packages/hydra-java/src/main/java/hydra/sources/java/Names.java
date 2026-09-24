@@ -1,41 +1,41 @@
 package hydra.sources.java;
-import hydra.core.Field;
-import hydra.core.Name;
-import hydra.core.Type;
-import hydra.dsl.Core;
-import hydra.dsl.Packaging;
-import hydra.overlay.java.dsl.Types;
-import hydra.dsl.java.Environment;
-import hydra.dsl.java.Syntax;
-import hydra.dsl.lib.Eithers;
-import hydra.dsl.lib.Equality;
-import hydra.dsl.lib.Lists;
-import hydra.dsl.lib.Literals;
-import hydra.dsl.lib.Logic;
-import hydra.dsl.lib.Maps;
-import hydra.dsl.lib.Math_;
-import hydra.dsl.lib.Optionals;
-import hydra.dsl.lib.Pairs;
-import hydra.dsl.lib.Sets;
-import hydra.dsl.lib.Strings;
-import hydra.packaging.Definition;
-import hydra.packaging.EntityMetadata;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleDependency;
-import hydra.packaging.ModuleName;
-import hydra.typed.TypedTerm;
-import hydra.overlay.java.util.Optional;
+import hydra.core.model.Field;
+import hydra.core.model.Name;
+import hydra.core.model.Type;
+import hydra.core.dsl.Core;
+import hydra.core.dsl.Packaging;
+import hydra.core.overlay.java.dsl.Types;
+import hydra.java.dsl.Environment;
+import hydra.java.dsl.Syntax;
+import hydra.core.dsl.lib.Eithers;
+import hydra.core.dsl.lib.Equality;
+import hydra.core.dsl.lib.Lists;
+import hydra.core.dsl.lib.Literals;
+import hydra.core.dsl.lib.Logic;
+import hydra.core.dsl.lib.Maps;
+import hydra.core.dsl.lib.Math_;
+import hydra.core.dsl.lib.Optionals;
+import hydra.core.dsl.lib.Pairs;
+import hydra.core.dsl.lib.Sets;
+import hydra.core.dsl.lib.Strings;
+import hydra.core.packaging.Definition;
+import hydra.core.packaging.EntityMetadata;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleDependency;
+import hydra.core.packaging.ModuleName;
+import hydra.core.typed.TypedTerm;
+import hydra.core.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static hydra.overlay.java.dsl.meta.Phantoms.*;
-import hydra.overlay.java.dsl.meta.Defs;
-import hydra.overlay.java.dsl.meta.Defs.Def;
-import static hydra.overlay.java.dsl.meta.Defs.define;
-import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
-import static hydra.overlay.java.dsl.meta.Defs.ref;
-import static hydra.overlay.java.dsl.meta.Defs.definitionsOf;
+import static hydra.core.overlay.java.dsl.Phantoms.*;
+import hydra.core.overlay.java.dsl.meta.Defs;
+import hydra.core.overlay.java.dsl.meta.Defs.Def;
+import static hydra.core.overlay.java.dsl.meta.Defs.define;
+import static hydra.core.overlay.java.dsl.meta.Defs.unqualifiedDeps;
+import static hydra.core.overlay.java.dsl.meta.Defs.ref;
+import static hydra.core.overlay.java.dsl.meta.Defs.definitionsOf;
 import java.util.function.Supplier;
 import hydra.java.syntax.Identifier;
 import hydra.java.syntax.PackageName;
@@ -85,7 +85,7 @@ public class Names {
                 string("hashCode"));
 
     public static final Def hydraCorePackageName = def("hydraCorePackageName")
-        .doc("The hydra.core package name")
+        .doc("The hydra.core.model package name")
         .to(() ->
                 just(apply(ref(Names.javaPackageName), list(string("hydra"), string("core")))));
 
@@ -96,9 +96,9 @@ public class Names {
                 string("hydraOrdinal"));
 
     public static final Def hydraUtilPackageName = def("hydraUtilPackageName")
-        .doc("The hydra.overlay.java.util package name")
+        .doc("The hydra.core.overlay.java.util package name")
         .to(() ->
-                just(apply(ref(Names.javaPackageName), list(string("hydra"), string("overlay"), string("java"), string("util")))));
+                just(apply(ref(Names.javaPackageName), list(string("hydra"), string("core"), string("overlay"), string("java"), string("util")))));
 
     public static final Def instanceName = def("instanceName")
         .to(() ->
@@ -200,29 +200,29 @@ public class Names {
 
     private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(
         new ModuleName("hydra.java.syntax"),
-        new ModuleName("hydra.paths"),
-        new ModuleName("hydra.ast"),
-        new ModuleName("hydra.classes"),
-        new ModuleName("hydra.coders"),
-        new ModuleName("hydra.core"),
-        new ModuleName("hydra.error.checking"),
-        new ModuleName("hydra.error.core"),
-        new ModuleName("hydra.error.packaging"),
-        new ModuleName("hydra.errors"),
-        new ModuleName("hydra.graph"),
-        new ModuleName("hydra.json.model"),
-        new ModuleName("hydra.packaging"),
-        new ModuleName("hydra.parsing"),
-        new ModuleName("hydra.query"),
-        new ModuleName("hydra.relational"),
-        new ModuleName("hydra.tabular"),
-        new ModuleName("hydra.testing"),
-        new ModuleName("hydra.topology"),
-        new ModuleName("hydra.typed"),
-        new ModuleName("hydra.typing"),
-        new ModuleName("hydra.util"),
-        new ModuleName("hydra.validation"),
-        new ModuleName("hydra.variants"));
+        new ModuleName("hydra.core.paths"),
+        new ModuleName("hydra.core.ast"),
+        new ModuleName("hydra.core.classes"),
+        new ModuleName("hydra.core.coders"),
+        new ModuleName("hydra.core.model"),
+        new ModuleName("hydra.core.error.checking"),
+        new ModuleName("hydra.core.error.model"),
+        new ModuleName("hydra.core.error.packaging"),
+        new ModuleName("hydra.core.errors"),
+        new ModuleName("hydra.core.graph"),
+        new ModuleName("hydra.core.json.model"),
+        new ModuleName("hydra.core.packaging"),
+        new ModuleName("hydra.core.parsing"),
+        new ModuleName("hydra.core.query"),
+        new ModuleName("hydra.core.relational"),
+        new ModuleName("hydra.core.tabular"),
+        new ModuleName("hydra.core.testing"),
+        new ModuleName("hydra.core.topology"),
+        new ModuleName("hydra.core.typed"),
+        new ModuleName("hydra.core.typing"),
+        new ModuleName("hydra.core.util"),
+        new ModuleName("hydra.core.validation"),
+        new ModuleName("hydra.core.variants"));
 
     public static final Module module_ = new Module(
         NS,

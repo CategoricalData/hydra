@@ -53,7 +53,7 @@ RESOLVER = "lts-24.7"
 EXTERNAL_DEPS: dict[str, list[str]] = {
     # hydra-kernel ships the generated kernel runtime PLUS the hand-written
     # Haskell primitive library (Hydra.Haskell.Lib.*) + DSL term support
-    # (Hydra.Dsl.{Terms,Literals,Meta.Common}) it calls — the Haskell analog of
+    # (Hydra.Core.Dsl.{Terms,Literals,Meta.Common}) it calls — the Haskell analog of
     # Java's copied kernel runtime. Those add base64-bytestring/split/text/
     # regex-tdfa beyond the generated tree's base/bytestring/containers/
     # scientific. Verified by transitive import closure of the kernel dist.

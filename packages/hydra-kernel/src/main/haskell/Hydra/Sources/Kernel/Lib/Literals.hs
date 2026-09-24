@@ -1,24 +1,24 @@
--- | Primitive declarations for the hydra.lib.literals namespace.
+-- | Primitive declarations for the hydra.core.lib.literals namespace.
 
 module Hydra.Sources.Kernel.Lib.Literals where
 
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lib.literals"
+ns = ModuleName "hydra.core.lib.literals"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.literals module.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.literals module.")}
   where
     definitions = [base64ToBinary,
                    bigintToDecimal, bigintToInt16, bigintToInt32, bigintToInt64, bigintToInt8,
@@ -112,7 +112,7 @@ binaryToBase64 = define "binaryToBase64" "Encode binary data as a base64 ASCII s
   \ as an ASCII string.",
    "Total and round-trippable: base64ToBinary(binaryToBase64(b)) is b for every binary value. Use this\
   \ to embed arbitrary binary data in a string context (e.g. a JSON value). For interpreting bytes as\
-  \ text, use hydra.lib.text.decodeUtf8 instead."]
+  \ text, use hydra.core.lib.text.decodeUtf8 instead."]
 
 binaryToBytes :: PrimitiveDefinition
 binaryToBytes = define "binaryToBytes" "Convert binary data to a list of byte values."

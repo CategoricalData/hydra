@@ -1,0 +1,626 @@
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+
+-- | Meta-DSL for constructing test-related terms
+-- TODO: merge with Hydra.Core.Dsl.Tests
+
+module Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing (
+  module Hydra.Core.Dsl.Testing,
+  module Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing,
+) where
+
+import Hydra.Core.Dsl.Testing hiding (
+  effectfulTestCase,
+  tag, testCaseEffectful, testCaseUniversal, testCaseWithMetadata,
+  testCaseWithMetadataCase, testCaseWithMetadataDescription,
+  testCaseWithMetadataName, testCaseWithMetadataProvisions, testCaseWithMetadataTags, testGroup,
+  universalTestCase, unTag)
+import Hydra.Kernel
+import Hydra.Core.Error.Model (InvalidTermError)
+import Hydra.Core.Error.Packaging (InvalidModuleError, InvalidPackageError)
+import Hydra.Core.Testing as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Phantoms as Phantoms hiding ((++))
+import qualified Hydra.Core.Dsl.Lib.Eithers as Eithers
+import qualified Hydra.Core.Dsl.Lib.Lists as Lists
+import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs as Pairs
+import qualified Hydra.Core.Dsl.Lib.Strings as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms as MetaTerms
+import Hydra.Core.Overlay.Haskell.Dsl.Terms (ToPrimName)
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types as T
+import qualified Data.Set as S
+import qualified Hydra.Core.Dsl.Validation as Validation
+
+import qualified Data.Int as I
+import qualified Data.List as L
+import qualified Data.Map as M
+
+type Int32 = I.Int32
+
+
+tag_disabled = Tag "disabled"
+tag_disabledForScala = Tag "disabledForScala"
+-- | Marks a test case as scale-distinct-sensitive (e.g. "1.10" != "1.1"): it only passes
+-- on hosts whose Literal.decimal carries a real scale field. Read by the JSON->target
+-- drivers (bootstrap-from-json/Main.hs, TransformJsonToTarget.java) together with the
+-- target Language's literalVariants to decide whether to drop the case for that target.
+tag_scaleDistinct = Tag "scaleDistinct"
+
+alphaConvertRef :: TypedTerm (Name -> Name -> Term -> Term)
+alphaConvertRef = TypedTerm $ TermVariable $ Name "hydra.core.reduction.alphaConvert"
+
+betaReduceTypeRef :: TypedTerm (InferenceContext -> Graph -> Type -> Either Error Type)
+betaReduceTypeRef = TypedTerm $ TermVariable $ Name "hydra.core.reduction.betaReduceType"
+
+-- | Refs for hydra.core.validate.packaging validators and their show functions.
+checkConflictingModuleNamesRef :: TypedTerm (Package -> Maybe InvalidPackageError)
+checkConflictingModuleNamesRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.checkConflictingModuleNames"
+
+checkConflictingVariantNamesRef :: TypedTerm (Module -> Maybe InvalidModuleError)
+checkConflictingVariantNamesRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.checkConflictingVariantNames"
+
+checkDefinitionDocumentationRef :: TypedTerm (Module -> Maybe InvalidModuleError)
+checkDefinitionDocumentationRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.checkDefinitionDocumentation"
+
+checkDefinitionModuleNamesRef :: TypedTerm (Module -> Maybe InvalidModuleError)
+checkDefinitionModuleNamesRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.checkDefinitionModuleNames"
+
+checkDefinitionNameConventionRef :: TypedTerm (Module -> Maybe InvalidModuleError)
+checkDefinitionNameConventionRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.checkDefinitionNameConvention"
+
+checkDefinitionOrderingRef :: TypedTerm (Module -> Maybe InvalidModuleError)
+checkDefinitionOrderingRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.checkDefinitionOrdering"
+
+checkDuplicateDefinitionNamesRef :: TypedTerm (Module -> Maybe InvalidModuleError)
+checkDuplicateDefinitionNamesRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.checkDuplicateDefinitionNames"
+
+checkDuplicateModuleNamesRef :: TypedTerm (Package -> Maybe InvalidPackageError)
+checkDuplicateModuleNamesRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.checkDuplicateModuleNames"
+
+checkModuleNameConventionRef :: TypedTerm (Module -> Maybe InvalidModuleError)
+checkModuleNameConventionRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.checkModuleNameConvention"
+
+checkModulePartitionRef :: TypedTerm ([(String, [ModuleName])] -> [InvalidPackageError])
+checkModulePartitionRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.checkModulePartition"
+
+checkNestedModuleNamesRef :: TypedTerm (Package -> Maybe InvalidPackageError)
+checkNestedModuleNamesRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.checkNestedModuleNames"
+
+checkPackageNameConventionRef :: TypedTerm (Package -> Maybe InvalidPackageError)
+checkPackageNameConventionRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.checkPackageNameConvention"
+
+checkUndeclaredDependenciesRef :: TypedTerm (M.Map Name ModuleName -> S.Set Name -> Module -> [InvalidPackageError])
+checkUndeclaredDependenciesRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.checkUndeclaredDependencies"
+
+undeclaredDependencyOwnersRef :: TypedTerm ([Module] -> M.Map Name ModuleName)
+undeclaredDependencyOwnersRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.undeclaredDependencyOwners"
+
+-- | Type checking test: infers the type and compares with expected.
+checkTest :: String -> [Tag] -> TypedTerm Term -> TypedTerm Term -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
+checkTest name tags input _outputTerm outputType = testCaseWithMetadata (Phantoms.string name)
+  (testCaseUniversal $ universalTestCase
+    (retype $ Eithers.either
+      (Phantoms.lambda "e" (Phantoms.string "<<inference error>>"))
+      (Phantoms.lambda "result"
+        (showTypeRef @@ (typeSchemeToFTypeRef @@ Pairs.second (Pairs.first (Phantoms.var "result")))))
+      (inferTypeOfRef @@ testContextRef @@ testGraphRef @@ input))
+    (retype $ showTypeRef @@ outputType))
+  nothing (Phantoms.list $ tag . unTag <$> tags)
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+evalCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+evalCase cname input output = evalCaseWithTags cname [] input output
+
+-- | Create a universal test case that evaluates a Term via reduceTerm and compares the result.
+evalCaseWithTags :: String -> [Tag] -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+evalCaseWithTags cname tags input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseUniversal $ universalTestCase
+    (retype $ Eithers.either
+      (Phantoms.lambda "e" (Phantoms.string "<<eval error>>"))
+      (Phantoms.lambda "t" (showTermRef @@ Phantoms.var "t"))
+      (reduceTermRef @@ testContextRef @@ testGraphRef @@ true @@ input))
+    (retype $ showTermRef @@ output))
+  nothing (Phantoms.list $ tag . unTag <$> tags)
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+-- | Create a universal test case for an expression with a show function
+evalPair :: String -> TypedTerm (t -> String) -> TypedTerm t -> TypedTerm t -> TypedTerm TestCaseWithMetadata
+evalPair cname showFn logicalActual logicalExpected = universalCase cname
+  (retype $ showFn @@ logicalActual) (retype $ showFn @@ logicalExpected)
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+-- | evalPair with tags
+evalPairWithTags :: String -> [Tag] -> TypedTerm (t -> String) -> TypedTerm t -> TypedTerm t -> TypedTerm TestCaseWithMetadata
+evalPairWithTags cname tags showFn logicalActual logicalExpected = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseUniversal $ universalTestCase (retype $ showFn @@ logicalActual) (retype $ showFn @@ logicalExpected))
+  nothing (Phantoms.list $ tag . unTag <$> tags)
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+expectFailure :: AsTerm t Term => Int -> [Tag] -> t -> TypedTerm TestCaseWithMetadata
+expectFailure i tags term = infFailureTest ("#" ++ show i) tags (asTerm term)
+
+expectMono :: AsTerm t Term => Int -> [Tag] -> t -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
+expectMono i tags term typ = infTest ("#" ++ show i) tags (asTerm term) $ T.mono typ
+
+expectPoly :: AsTerm t Term => Int -> [Tag] -> t -> [String] -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
+expectPoly i tags term params typ = infTest ("#" ++ show i) tags (asTerm term) $ T.poly params typ
+
+expectPolyConstrained :: AsTerm t Term => Int -> [Tag] -> t -> [String] -> [(String, [String])] -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
+expectPolyConstrained i tags term params constraints typ = infTest ("#" ++ show i) tags (asTerm term) $ T.polyConstrained params constraints typ
+
+groupRef = MetaTerms.varNamePhantom . bindingName
+
+-- | Inference failure test: expects inference to fail.
+infFailureTest :: String -> [Tag] -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+infFailureTest name tags term = testCaseWithMetadata (Phantoms.string name)
+  (testCaseUniversal $ universalTestCase
+    (retype $ Eithers.either
+      (Phantoms.lambda "e" (Phantoms.string "FAIL"))
+      (Phantoms.lambda "result" (Strings.concat2 (Phantoms.string "unexpected: ")
+        (showTypeSchemeRef @@ Pairs.second (Pairs.first (Phantoms.var "result")))))
+      (inferTypeOfRef @@ testContextRef @@ testGraphRef @@ term))
+    (Phantoms.string "FAIL"))
+  nothing (Phantoms.list $ tag . unTag <$> tags)
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+-- | Inference test: infer type and compare with expected type scheme.
+infTest :: String -> [Tag] -> TypedTerm Term -> TypedTerm TypeScheme -> TypedTerm TestCaseWithMetadata
+infTest name tags term ts = testCaseWithMetadata (Phantoms.string name)
+  (testCaseUniversal $ universalTestCase
+    (retype $ Eithers.either
+      (Phantoms.lambda "e" (Strings.concat2 (Phantoms.string "INFERENCE ERROR: ") (Phantoms.string "failed")))
+      (Phantoms.lambda "result"
+        (showTypeSchemeRef @@ Pairs.second (Pairs.first (Phantoms.var "result"))))
+      (inferTypeOfRef @@ testContextRef @@ testGraphRef @@ term))
+    (retype $ showTypeSchemeRef @@ ts))
+  nothing (Phantoms.list $ tag . unTag <$> tags)
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+isDisabled tcase = tag_disabled `L.elem` Testing.testCaseWithMetadataTags tcase
+
+-- | Idempotence test: infer the type of a term twice in succession (infer . infer), and assert that
+--   the second pass reproduces the same elaborated term and type as the first. Both passes are already
+--   normalized by 'inferTypeOf' (via 'finalizeInferredTerm'), so a plain string comparison of the two
+--   (term, type scheme) pairs is sufficient -- no additional alpha-equivalence step is needed.
+idempotenceCase :: AsTerm t Term => String -> [Tag] -> t -> TypedTerm TestCaseWithMetadata
+idempotenceCase name tags term = testCaseWithMetadata (Phantoms.string name)
+  (testCaseUniversal $ universalTestCase (retype secondPassDescription) (retype firstPassDescription))
+  nothing (Phantoms.list $ tag . unTag <$> tags)
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+    infer1 = inferTypeOfRef @@ testContextRef @@ testGraphRef @@ (asTerm term)
+
+    describeResult = Phantoms.lambda "result" (describeInferenceOutput
+      (Pairs.first (Pairs.first (Phantoms.var "result")))
+      (Pairs.second (Pairs.first (Phantoms.var "result"))))
+
+    onFailure msg = Phantoms.lambda "e" (Strings.concat2 (Phantoms.string msg) (Phantoms.string "failed"))
+
+    firstPassDescription = Eithers.either (onFailure "INFERENCE ERROR (pass 1): ") describeResult infer1
+
+    secondPassDescription = Eithers.either (onFailure "INFERENCE ERROR (pass 1): ") (Phantoms.lambda "result"
+      (Eithers.either (onFailure "INFERENCE ERROR (pass 2): ") describeResult
+        (inferTypeOfRef @@ testContextRef @@ testGraphRef @@ Pairs.first (Pairs.first (Phantoms.var "result")))))
+      infer1
+
+    describeInferenceOutput :: TypedTerm Term -> TypedTerm TypeScheme -> TypedTerm String
+    describeInferenceOutput t ts = Strings.concat $ Phantoms.list [
+      showTermRef @@ t,
+      Phantoms.string " :: ",
+      showTypeSchemeRef @@ ts]
+
+inferTypeOfRef :: TypedTerm (InferenceContext -> Graph -> Term -> Either Error ((Term, TypeScheme), InferenceContext))
+inferTypeOfRef = TypedTerm $ TermVariable $ Name "hydra.core.inference.inferTypeOf"
+
+-- | Reference to the kernel-default core validation profile (term + type
+-- rules; 'singleVariantUnion' classified as a warning, everything else
+-- as an error; maxErrors=1).
+kernelDefaultCoreProfileRef :: TypedTerm ValidationProfile
+kernelDefaultCoreProfileRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.model.kernelDefaultCoreProfile"
+
+-- | Reference to the kernel-default packaging validation profile (every
+-- per-module and per-package check classified as an error; maxErrors=1).
+kernelDefaultPackagingProfileRef :: TypedTerm ValidationProfile
+kernelDefaultPackagingProfileRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.kernelDefaultPackagingProfile"
+
+-- | Reference to the kernel-strict 'kernelModule' convenience wrapper
+-- (Maybe-returning, applies 'kernelDefaultPackagingProfile' internally).
+-- Used by the kernelModule orchestrator tests in
+-- 'Sources/Test/Validate/Packaging.hs'.
+kernelModuleRef :: TypedTerm (Module -> Maybe InvalidModuleError)
+kernelModuleRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.kernelModule"
+
+-- | Reference to the kernel-strict 'kernelPackage' convenience wrapper.
+kernelPackageRef :: TypedTerm (Package -> Maybe InvalidPackageError)
+kernelPackageRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.kernelPackage"
+
+mapTerm :: [(TypedTerm Term, TypedTerm Term)] -> TypedTerm Term
+mapTerm pairs = TypedTerm $ TermInject $ Injection _Term $ Field _Term_map $ TermMap $ M.fromList [(unTypedTerm k, unTypedTerm v) | (k, v) <- pairs]
+
+mapTermEmpty :: TypedTerm (M.Map k v)
+mapTermEmpty = TypedTerm $ TermMap M.empty
+
+-- | Type checking test where term doesn't change (just check the inferred type)
+noChange :: String -> TypedTerm Term -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
+noChange name term typ = checkTest name [] term term typ
+
+noTags :: TypedTerm [Tag]
+noTags = Phantoms.list ([] :: [TypedTerm Tag])
+
+primCase :: ToPrimName n => String -> n -> [TypedTerm Term] -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+primCase cname prim args output = primCaseWithTags cname [] prim args output
+
+primCaseWithTags :: ToPrimName n => String -> [Tag] -> n -> [TypedTerm Term] -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+primCaseWithTags cname tags prim args output = evalCaseWithTags cname tags input output
+  where
+    input = L.foldl (MetaTerms.@@) (MetaTerms.primitive prim) args
+
+reduceTermRef :: TypedTerm (InferenceContext -> Graph -> Bool -> Term -> Either Error Term)
+reduceTermRef = TypedTerm $ TermVariable $ Name "hydra.core.reduction.reduceTerm"
+
+removeTypesFromTermRef :: TypedTerm (Term -> Term)
+removeTypesFromTermRef = TypedTerm $ TermVariable $ Name "hydra.core.strip.removeTypesFromTerm"
+
+showInvalidModuleErrorRef :: TypedTerm (InvalidModuleError -> String)
+showInvalidModuleErrorRef = TypedTerm $ TermVariable $ Name "hydra.core.print.error.packaging.invalidModuleError"
+
+showInvalidPackageErrorRef :: TypedTerm (InvalidPackageError -> String)
+showInvalidPackageErrorRef = TypedTerm $ TermVariable $ Name "hydra.core.print.error.packaging.invalidPackageError"
+
+showInvalidTermErrorRef :: TypedTerm (InvalidTermError -> String)
+showInvalidTermErrorRef = TypedTerm $ TermVariable $ Name "hydra.core.print.error.model.invalidTermError"
+
+showTermRef :: TypedTerm (Term -> String)
+showTermRef = TypedTerm $ TermVariable $ Name "hydra.core.print.model.term"
+
+showTypeRef :: TypedTerm (Type -> String)
+showTypeRef = TypedTerm $ TermVariable $ Name "hydra.core.print.model.type"
+
+showTypeSchemeRef :: TypedTerm (TypeScheme -> String)
+showTypeSchemeRef = TypedTerm $ TermVariable $ Name "hydra.core.print.model.typeScheme"
+
+-- | evalPair for String-typed expressions (identity show)
+stringEvalPair :: String -> TypedTerm String -> TypedTerm String -> TypedTerm TestCaseWithMetadata
+stringEvalPair cname = evalPair cname (Phantoms.lambda "s" (Phantoms.var "s"))
+
+subgroup :: AsTerm t TestCaseWithMetadata => String -> [t] -> TypedTerm TestGroup
+subgroup name match = tgroup name Nothing [] (asTerm <$> match)
+
+supergroup :: AsTerm t TestGroup => String -> [t] -> TypedTerm TestGroup
+supergroup name subgroups = tgroup name Nothing (asTerm <$> subgroups) []
+
+tag :: String -> TypedTerm Tag
+tag = Phantoms.wrap _Tag . Phantoms.string
+
+testContextRef :: TypedTerm InferenceContext
+testContextRef = TypedTerm $ TermVariable $ Name "hydra.core.test.testGraph.testContext"
+
+-- | References to kernel functions (avoids circular imports)
+testGraphRef :: TypedTerm Graph
+testGraphRef = TypedTerm $ TermVariable $ Name "hydra.core.test.testGraph.testGraph"
+
+tgroup :: String -> Maybe String -> [TypedTerm TestGroup] -> [TypedTerm TestCaseWithMetadata] -> TypedTerm TestGroup
+tgroup name mdesc subgroups match = testGroup (Phantoms.string name) (opt (Phantoms.string <$> mdesc)) (Phantoms.list subgroups) (Phantoms.list match)
+
+typeSchemeToFTypeRef :: TypedTerm (TypeScheme -> Type)
+typeSchemeToFTypeRef = TypedTerm $ TermVariable $ Name "hydra.core.scoping.typeSchemeToFType"
+
+universalCase :: String -> TypedTerm a -> TypedTerm b -> TypedTerm TestCaseWithMetadata
+universalCase cname actual expected = universalCaseWithTags cname [] actual expected
+
+universalCaseWithTags :: String -> [Tag] -> TypedTerm a -> TypedTerm b -> TypedTerm TestCaseWithMetadata
+universalCaseWithTags cname tags actual expected = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseUniversal $ universalTestCase (retype actual) (retype expected))
+  nothing (Phantoms.list $ tag . unTag <$> tags)
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+-- | Create an effectful test case: 'actual' is an effect<string>-typed term that the test runner
+-- interprets (within a per-case empty temporary directory) to a result string; 'expected' is a
+-- string-typed term. As with universalCase, both are passed bare and codegen wraps them as the
+-- unit-thunk fields of EffectfulTestCase.
+effectfulCase :: String -> TypedTerm a -> TypedTerm b -> TypedTerm TestCaseWithMetadata
+effectfulCase cname actual expected = effectfulCaseWithTags cname [] actual expected
+
+effectfulCaseWithTags :: String -> [Tag] -> TypedTerm a -> TypedTerm b -> TypedTerm TestCaseWithMetadata
+effectfulCaseWithTags cname tags actual expected = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseEffectful $ effectfulTestCase (retype actual) (retype expected))
+  nothing (Phantoms.list $ tag . unTag <$> tags)
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+-- | Reference to the profile-aware core term validator. Used by
+-- 'validateCoreTermCase' (with 'kernelDefaultCoreProfileRef'-applied,
+-- head-extracted to preserve the legacy 'Maybe E' shape) and by
+-- 'validateCoreTermCaseWithProfile' (with an explicit profile).
+validateCoreTermProfiledRef :: TypedTerm (ValidationProfile -> Bool -> Graph -> Term -> ValidationResult InvalidTermError)
+validateCoreTermProfiledRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.model.term"
+
+-- | Reference to the profile-aware packaging module validator. Used by
+-- 'validatePackagingModuleCaseWithProfile' directly.
+validatePackagingModuleProfiledRef :: TypedTerm (ValidationProfile -> ValidationResult InvalidModuleError -> Module -> ValidationResult InvalidModuleError)
+validatePackagingModuleProfiledRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.module"
+
+-- | Reference to the profile-aware packaging package validator. Returns a
+-- 'ValidationResult InvalidPackageError'; used by
+-- 'validatePackagingPackageCaseWithProfile'.
+validatePackagingPackageProfiledRef :: TypedTerm (ValidationProfile -> ValidationResult InvalidPackageError -> Package -> ValidationResult InvalidPackageError)
+validatePackagingPackageProfiledRef = TypedTerm $ TermVariable $ Name "hydra.core.validate.packaging.package"
+
+----------------------------------------
+
+-- | Convenience function for creating alpha conversion test cases
+alphaCase :: String -> TypedTerm Term -> TypedTerm Name -> TypedTerm Name -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+alphaCase cname term oldVar newVar result = universalCase cname
+  (retype $ showTermRef @@ (alphaConvertRef @@ oldVar @@ newVar @@ term))
+  (retype $ showTermRef @@ result)
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+encodedTestGroupToBinding :: ModuleName -> String -> TypedTerm TestGroup -> Binding
+encodedTestGroupToBinding ns lname group = Binding name (unTypedTerm group)
+    $ Just $ TypeScheme [] typ M.empty
+  where
+    name = unqualifyName $ QualifiedName (Just ns) lname
+    typ = TypeVariable _TestGroup
+
+-- | Render a 'ValidationResult InvalidModuleError' as a string of the form
+-- "errors=[s1;s2] warnings=[w1]". Counterpart of 'showValidationResultTerm'
+-- for module-level findings.
+showValidationResultModule :: TypedTerm (ValidationResult InvalidModuleError) -> TypedTerm String
+showValidationResultModule vr = retype $
+  Strings.concat2
+    (Strings.concat2 (Phantoms.string "errors=[") $
+      Strings.concat2 (Strings.join (Phantoms.string ";") $
+        Lists.map (Phantoms.lambda "e" $ showInvalidModuleErrorRef @@ Phantoms.var "e")
+          (Validation.validationResultErrors vr))
+        (Phantoms.string "]"))
+    (Strings.concat2 (Phantoms.string " warnings=[") $
+      Strings.concat2 (Strings.join (Phantoms.string ";") $
+        Lists.map (Phantoms.lambda "w" $ showInvalidModuleErrorRef @@ Phantoms.var "w")
+          (Validation.validationResultWarnings vr))
+        (Phantoms.string "]"))
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+-- | Render a 'ValidationResult InvalidPackageError' as a string. Package-level
+-- counterpart of 'showValidationResultTerm'.
+showValidationResultPackage :: TypedTerm (ValidationResult InvalidPackageError) -> TypedTerm String
+showValidationResultPackage vr = retype $
+  Strings.concat2
+    (Strings.concat2 (Phantoms.string "errors=[") $
+      Strings.concat2 (Strings.join (Phantoms.string ";") $
+        Lists.map (Phantoms.lambda "e" $ showInvalidPackageErrorRef @@ Phantoms.var "e")
+          (Validation.validationResultErrors vr))
+        (Phantoms.string "]"))
+    (Strings.concat2 (Phantoms.string " warnings=[") $
+      Strings.concat2 (Strings.join (Phantoms.string ";") $
+        Lists.map (Phantoms.lambda "w" $ showInvalidPackageErrorRef @@ Phantoms.var "w")
+          (Validation.validationResultWarnings vr))
+        (Phantoms.string "]"))
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+-- | Profile-aware variant of 'validatePackagingModuleCase'. Calls
+-- 'hydra.core.validate.packaging.module'' (the new orchestrator) starting from
+-- an empty 'ValidationResult' and compares the full result shape against
+-- the expected.
+validatePackagingModuleCaseWithProfile
+  :: String
+  -> TypedTerm ValidationProfile
+  -> TypedTerm Module
+  -> TypedTerm (ValidationResult InvalidModuleError)
+  -> TypedTerm TestCaseWithMetadata
+validatePackagingModuleCaseWithProfile cname profile input expected = universalCase cname
+  (showValidationResultModule
+    (validatePackagingModuleProfiledRef @@ profile @@ emptyResultModule @@ input))
+  (showValidationResultModule expected)
+  where
+    emptyResultModule :: TypedTerm (ValidationResult InvalidModuleError)
+    emptyResultModule = Validation.validationResult
+      (Phantoms.list ([] :: [TypedTerm InvalidModuleError]))
+      (Phantoms.list ([] :: [TypedTerm InvalidModuleError]))
+
+-- | Profile-aware variant of 'validatePackagingPackageCase'.
+validatePackagingPackageCaseWithProfile
+  :: String
+  -> TypedTerm ValidationProfile
+  -> TypedTerm Package
+  -> TypedTerm (ValidationResult InvalidPackageError)
+  -> TypedTerm TestCaseWithMetadata
+validatePackagingPackageCaseWithProfile cname profile input expected = universalCase cname
+  (showValidationResultPackage
+    (validatePackagingPackageProfiledRef @@ profile @@ emptyResultPackage @@ input))
+  (showValidationResultPackage expected)
+  where
+    emptyResultPackage :: TypedTerm (ValidationResult InvalidPackageError)
+    emptyResultPackage = Validation.validationResult
+      (Phantoms.list ([] :: [TypedTerm InvalidPackageError]))
+      (Phantoms.list ([] :: [TypedTerm InvalidPackageError]))
+
+-- | Render a 'ValidationResult InvalidTermError' as a string of the form
+-- "errors=[s1;s2] warnings=[w1]". Used to compare actual vs expected
+-- 'ValidationResult' values in profile-aware test cases.
+showValidationResultTerm :: TypedTerm (ValidationResult InvalidTermError) -> TypedTerm String
+showValidationResultTerm vr = retype $
+  Strings.concat2
+    (Strings.concat2 (Phantoms.string "errors=[") $
+      Strings.concat2 (Strings.join (Phantoms.string ";") $
+        Lists.map (Phantoms.lambda "e" $ showInvalidTermErrorRef @@ Phantoms.var "e")
+          (Validation.validationResultErrors vr))
+        (Phantoms.string "]"))
+    (Strings.concat2 (Phantoms.string " warnings=[") $
+      Strings.concat2 (Strings.join (Phantoms.string ";") $
+        Lists.map (Phantoms.lambda "w" $ showInvalidTermErrorRef @@ Phantoms.var "w")
+          (Validation.validationResultWarnings vr))
+        (Phantoms.string "]"))
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+-- | Profile-aware variant of 'validateCoreTermCase'. Compares the full
+-- 'ValidationResult' shape — both errors and warnings — against the
+-- expected, allowing the caller to specify any profile (not just the
+-- kernel default). Use for tests that exercise multi-error
+-- accumulation, warning vs error classification, or rule disabling.
+validateCoreTermCaseWithProfile
+  :: String
+  -> TypedTerm ValidationProfile
+  -> TypedTerm Bool
+  -> TypedTerm Term
+  -> TypedTerm (ValidationResult InvalidTermError)
+  -> TypedTerm TestCaseWithMetadata
+validateCoreTermCaseWithProfile cname profile typed input expected = universalCase cname
+  (showValidationResultTerm
+    (validateCoreTermProfiledRef @@ profile @@ typed @@ testGraphRef @@ input))
+  (showValidationResultTerm expected)
+
+testCaseEffectful :: TypedTerm EffectfulTestCase -> TypedTerm TestCase
+testCaseEffectful = inject _TestCase _TestCase_effectful
+
+testCaseUniversal :: TypedTerm UniversalTestCase -> TypedTerm TestCase
+testCaseUniversal = inject _TestCase _TestCase_universal
+
+testCaseWithMetadata :: TypedTerm String -> TypedTerm TestCase -> TypedTerm (Maybe String) -> TypedTerm [Tag] -> TypedTerm TestCaseWithMetadata
+testCaseWithMetadata name tcase description tags = testCaseWithMetadataAndProvisions name tcase description tags (list ([] :: [TypedTerm Name]))
+
+testCaseWithMetadataAndProvisions :: TypedTerm String -> TypedTerm TestCase -> TypedTerm (Maybe String) -> TypedTerm [Tag] -> TypedTerm [Name] -> TypedTerm TestCaseWithMetadata
+testCaseWithMetadataAndProvisions name tcase description tags provisions = Phantoms.record _TestCaseWithMetadata [
+  _TestCaseWithMetadata_name>>: name,
+  _TestCaseWithMetadata_case>>: tcase,
+  _TestCaseWithMetadata_description>>: description,
+  _TestCaseWithMetadata_tags>>: tags,
+  _TestCaseWithMetadata_provisions>>: provisions]
+
+testCaseWithMetadataCase :: TypedTerm (TestCaseWithMetadata -> TestCase)
+testCaseWithMetadataCase = Phantoms.project _TestCaseWithMetadata _TestCaseWithMetadata_case
+
+testCaseWithMetadataDescription :: TypedTerm (TestCaseWithMetadata -> Maybe String)
+testCaseWithMetadataDescription = Phantoms.project _TestCaseWithMetadata _TestCaseWithMetadata_description
+
+testCaseWithMetadataName :: TypedTerm (TestCaseWithMetadata -> String)
+testCaseWithMetadataName = Phantoms.project _TestCaseWithMetadata _TestCaseWithMetadata_name
+
+testCaseWithMetadataProvisions :: TypedTerm (TestCaseWithMetadata -> [Name])
+testCaseWithMetadataProvisions = Phantoms.project _TestCaseWithMetadata _TestCaseWithMetadata_provisions
+
+testCaseWithMetadataTags :: TypedTerm (TestCaseWithMetadata -> [Tag])
+testCaseWithMetadataTags = Phantoms.project _TestCaseWithMetadata _TestCaseWithMetadata_tags
+
+testGroup :: TypedTerm String -> TypedTerm (Maybe String) -> TypedTerm [TestGroup] -> TypedTerm [TestCaseWithMetadata] -> TypedTerm TestGroup
+testGroup name description subgroups match = Phantoms.record _TestGroup [
+  _TestGroup_name>>: name,
+  _TestGroup_description>>: description,
+  _TestGroup_subgroups>>: subgroups,
+  _TestGroup_cases>>: match]
+
+-- | Convenience function for creating type reduction test cases
+typeRedCase :: String -> TypedTerm Type -> TypedTerm Type -> TypedTerm TestCaseWithMetadata
+typeRedCase cname input output = universalCase cname
+  (retype $ Eithers.either
+    (Phantoms.lambda "e" (Phantoms.string "<<type reduction error>>"))
+    (Phantoms.lambda "t" (showTypeRef @@ Phantoms.var "t"))
+    (betaReduceTypeRef @@ testContextRef @@ testGraphRef @@ input))
+  (retype $ showTypeRef @@ output)
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+-- | Build a 'UniversalTestCase' from two string-producing expressions.
+-- Each expression is wrapped in a unit-lambda so its evaluation is deferred
+-- until the runner forces the thunk inside its per-test timing bracket. See
+-- issue #311: without thunking, eagerly-evaluated hosts (Scala, the four
+-- complete Lisps) compute 'actual'/'expected' at test-data load time, before
+-- any timer starts, and report zero elapsed time.
+universalTestCase :: TypedTerm String -> TypedTerm String -> TypedTerm UniversalTestCase
+universalTestCase actual expected = Phantoms.record _UniversalTestCase [
+  _UniversalTestCase_actual Phantoms.>>: thunk actual,
+  _UniversalTestCase_expected Phantoms.>>: thunk expected]
+  where
+    thunk :: TypedTerm String -> TypedTerm (() -> String)
+    thunk body = Phantoms.lambda "_" body
+
+-- | Build an EffectfulTestCase from a bare effect<string> term (the action) and a bare string term
+-- (the expected value); both are wrapped as unit-thunk fields, mirroring universalTestCase.
+effectfulTestCase :: TypedTerm String -> TypedTerm String -> TypedTerm EffectfulTestCase
+effectfulTestCase actual expected = Phantoms.record _EffectfulTestCase [
+  _EffectfulTestCase_actual Phantoms.>>: thunk actual,
+  _EffectfulTestCase_expected Phantoms.>>: thunk expected]
+  where
+    thunk :: TypedTerm String -> TypedTerm (() -> String)
+    thunk body = Phantoms.lambda "_" body
+
+-- | Convenience function for creating validation test cases. Drives the
+-- profile-aware 'hydra.core.validate.model.term' with the kernel-default core
+-- profile and head-extracts the resulting errors list — preserving the
+-- legacy 'Maybe InvalidTermError' shape that existing test data uses.
+-- Tests that need to assert multi-error accumulation, warning
+-- classification, or rule disabling should use
+-- 'validateCoreTermCaseWithProfile' instead.
+validateCoreTermCase :: String -> TypedTerm Bool -> TypedTerm Term -> TypedTerm (Maybe InvalidTermError) -> TypedTerm TestCaseWithMetadata
+validateCoreTermCase cname typed input expected = universalCase cname
+  (retype $ Optionals.match
+    (Lists.head $ Validation.validationResultErrors $
+      validateCoreTermProfiledRef @@ kernelDefaultCoreProfileRef @@ typed @@ testGraphRef @@ input)
+    (Phantoms.string "valid")
+    (Phantoms.lambda "e" (showInvalidTermErrorRef @@ Phantoms.var "e")))
+  (retype $ Optionals.match
+    expected
+    (Phantoms.string "valid")
+    (Phantoms.lambda "e" (showInvalidTermErrorRef @@ Phantoms.var "e")))
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+-- | Convenience function for creating module-validation test cases.
+-- Applies a packaging-level Module validator to an input module and compares
+-- the result against the expected Maybe InvalidModuleError.
+validatePackagingModuleCase :: String -> TypedTerm (Module -> Maybe InvalidModuleError) -> TypedTerm Module -> TypedTerm (Maybe InvalidModuleError) -> TypedTerm TestCaseWithMetadata
+validatePackagingModuleCase cname validator input expected = universalCase cname
+  (retype $ Optionals.match
+    (validator @@ input)
+    (Phantoms.string "valid")
+    (Phantoms.lambda "e" (showInvalidModuleErrorRef @@ Phantoms.var "e")))
+  (retype $ Optionals.match
+    expected
+    (Phantoms.string "valid")
+    (Phantoms.lambda "e" (showInvalidModuleErrorRef @@ Phantoms.var "e")))
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t
+
+-- | Convenience function for creating package-validation test cases.
+-- Applies a packaging-level Package validator to an input package and compares
+-- the result against the expected Maybe InvalidPackageError.
+validatePackagingPackageCase :: String -> TypedTerm (Package -> Maybe InvalidPackageError) -> TypedTerm Package -> TypedTerm (Maybe InvalidPackageError) -> TypedTerm TestCaseWithMetadata
+validatePackagingPackageCase cname validator input expected = universalCase cname
+  (retype $ Optionals.match
+    (validator @@ input)
+    (Phantoms.string "valid")
+    (Phantoms.lambda "e" (showInvalidPackageErrorRef @@ Phantoms.var "e")))
+  (retype $ Optionals.match
+    expected
+    (Phantoms.string "valid")
+    (Phantoms.lambda "e" (showInvalidPackageErrorRef @@ Phantoms.var "e")))
+  where
+    retype :: TypedTerm x -> TypedTerm String
+    retype (TypedTerm t) = TypedTerm t

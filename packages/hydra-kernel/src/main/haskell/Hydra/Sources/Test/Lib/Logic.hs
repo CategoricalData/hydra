@@ -2,13 +2,13 @@ module Hydra.Sources.Test.Lib.Logic where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -16,29 +16,29 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
-import Hydra.Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
-import qualified Hydra.Lib.Logic as DefLogic
+import Hydra.Core.Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims as Prims
+import qualified Hydra.Core.Lib.Logic as DefLogic
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.lib.logic"
+ns = ModuleName "hydra.core.test.lib.logic"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.reduction", ModuleName "hydra.print.core", ModuleName "hydra.core", ModuleName "hydra.errors", ModuleName "hydra.test.testGraph", ModuleName "hydra.testing"],
-            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.logic primitives")}
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core.reduction", ModuleName "hydra.core.print.model", ModuleName "hydra.core.model", ModuleName "hydra.core.errors", ModuleName "hydra.core.test.testGraph", ModuleName "hydra.core.testing"],
+            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.core.lib.logic primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
--- Test groups for hydra.lib.logic primitives
+-- Test groups for hydra.core.lib.logic primitives
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for hydra.lib.logic primitives" $
-    supergroup "hydra.lib.logic primitives" [
+    Phantoms.doc "Test cases for hydra.core.lib.logic primitives" $
+    supergroup "hydra.core.lib.logic primitives" [
       logicAnd,
       logicIfElse,
       logicNot,

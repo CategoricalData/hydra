@@ -5,10 +5,10 @@ module Hydra.Sources.Cpp.Syntax where
 
 -- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types                 ((>:))
-import qualified Hydra.Overlay.Haskell.Dsl.Types                 as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types                 ((>:))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Data.List                       as L
 import qualified Data.Map                        as M
@@ -17,7 +17,7 @@ import qualified Data.Maybe                      as Y
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.cpp.syntax"
+ns = ModuleName "hydra.ext.cpp.syntax"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns

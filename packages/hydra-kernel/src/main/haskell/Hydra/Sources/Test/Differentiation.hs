@@ -5,40 +5,40 @@ module Hydra.Sources.Test.Differentiation where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
-import Hydra.Overlay.Haskell.Dsl.Terms (ToPrimName(..))
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Terms (ToPrimName(..))
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms hiding ((++))
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms hiding ((++))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import Hydra.Testing
+import Hydra.Core.Testing
 import qualified Hydra.Sources.Kernel.Terms.Differentiation as Diff
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
-import qualified Hydra.Dsl.Lib.Eithers as Eithers
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms         as Terms
-import qualified Hydra.Overlay.Haskell.Lib.Math              as Math
-import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
-import qualified Hydra.Lib.Math as DefMath
+import qualified Hydra.Core.Dsl.Lib.Eithers as Eithers
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms         as Terms
+import qualified Hydra.Core.Overlay.Haskell.Lib.Math              as Math
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims as Prims
+import qualified Hydra.Core.Lib.Math as DefMath
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.differentiation"
+ns = ModuleName "hydra.core.test.differentiation"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Diff.ns, Variables.ns, PrintCore.ns, ModuleName "hydra.reduction", ModuleName "hydra.test.testGraph"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([Diff.ns, Variables.ns, PrintCore.ns, ModuleName "hydra.core.reduction", ModuleName "hydra.core.test.testGraph"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for automatic differentiation"))}
   where
     definitions = [Phantoms.toDefinition allTests]

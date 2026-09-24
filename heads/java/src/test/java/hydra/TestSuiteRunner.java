@@ -1,15 +1,15 @@
 package hydra;
 
-import hydra.core.*;
-import hydra.graph.Graph;
-import hydra.graph.Primitive;
-import hydra.test.TestSuite;
-import hydra.test.TestGraph;
-import hydra.testing.*;
-import hydra.overlay.java.lib.Libraries;
-import hydra.overlay.java.tools.PrimitiveFunction;
-import hydra.overlay.java.util.ConsList;
-import hydra.overlay.java.util.Optional;
+import hydra.core.model.*;
+import hydra.core.graph.Graph;
+import hydra.core.graph.Primitive;
+import hydra.core.test.TestSuite;
+import hydra.core.test.TestGraph;
+import hydra.core.testing.*;
+import hydra.core.overlay.java.lib.Libraries;
+import hydra.core.overlay.java.tools.PrimitiveFunction;
+import hydra.core.overlay.java.util.ConsList;
+import hydra.core.overlay.java.util.Optional;
 
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.TestFactory;
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.TestFactory;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static hydra.overlay.java.dsl.Terms.*;
+import static hydra.core.overlay.java.dsl.Terms.*;
 
 
 /**
@@ -45,7 +45,7 @@ public class TestSuiteRunner {
 
     /**
      * Returns the cached, USE_DEFAULT_IMPLS-aware test graph, building it on first call.
-     * This is public because hydra.test.TestEnv delegates to it.
+     * This is public because hydra.core.test.TestEnv delegates to it.
      */
     public static synchronized Graph getTestGraph() {
         if (testGraph == null) {
@@ -54,8 +54,8 @@ public class TestSuiteRunner {
         return testGraph;
     }
 
-    private static hydra.typing.InferenceContext emptyContext() {
-        return new hydra.typing.InferenceContext(0, new java.util.ArrayList<>());
+    private static hydra.core.typing.InferenceContext emptyContext() {
+        return new hydra.core.typing.InferenceContext(0, new java.util.ArrayList<>());
     }
 
     /**
@@ -67,13 +67,13 @@ public class TestSuiteRunner {
         Map<Name, Primitive> patched = new HashMap<>();
         for (Map.Entry<Name, Primitive> entry : primitives.entrySet()) {
             Primitive prim = entry.getValue();
-            hydra.overlay.java.util.Optional<hydra.core.Term> defImpl = prim.definition.defaultImplementation;
+            hydra.core.overlay.java.util.Optional<hydra.core.model.Term> defImpl = prim.definition.defaultImplementation;
             if (defImpl.isGiven()) {
-                hydra.core.Term implTerm = defImpl.fromGiven();
+                hydra.core.model.Term implTerm = defImpl.fromGiven();
                 patched.put(entry.getKey(), prim.withImplementation(g -> args -> {
-                    hydra.core.Term applied = implTerm;
-                    for (hydra.core.Term arg : args) {
-                        applied = new hydra.core.Term.Application(new hydra.core.Application(applied, arg));
+                    hydra.core.model.Term applied = implTerm;
+                    for (hydra.core.model.Term arg : args) {
+                        applied = new hydra.core.model.Term.Application(new hydra.core.model.Application(applied, arg));
                     }
                     return hydra.Reduction.reduceTerm(emptyContext(), nativeGraph, true, applied);
                 }));
@@ -98,7 +98,7 @@ public class TestSuiteRunner {
      */
     public static Graph buildTestGraph(boolean useDefaultImpls) {
         // Build primitives map
-        hydra.overlay.java.util.PersistentMap<Name, Primitive> primitives = hydra.overlay.java.util.PersistentMap.empty();
+        hydra.core.overlay.java.util.PersistentMap<Name, Primitive> primitives = hydra.core.overlay.java.util.PersistentMap.empty();
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
             primitives = primitives.insert(prim.name(), prim.toNative());
         }
@@ -108,7 +108,7 @@ public class TestSuiteRunner {
         Map<Name, Type> kernelTypes = buildKernelTypes();
         Map<Name, Type> allTypes = new HashMap<>(kernelTypes);
         allTypes.putAll(testTypes); // test types override kernel types if any overlap
-        hydra.overlay.java.util.PersistentMap<Name, TypeScheme> schemaTypes = hydra.overlay.java.util.PersistentMap.empty();
+        hydra.core.overlay.java.util.PersistentMap<Name, TypeScheme> schemaTypes = hydra.core.overlay.java.util.PersistentMap.empty();
         for (Map.Entry<Name, Type> entry : allTypes.entrySet()) {
             schemaTypes = schemaTypes.insert(entry.getKey(), hydra.Resolution.typeToTypeScheme(entry.getValue()));
         }
@@ -120,21 +120,21 @@ public class TestSuiteRunner {
         // No need to bridge them as term bindings.
 
         // Add non-primitive kernel constants needed by annotation source module
-        boundTerms.put(new Name("hydra.constants.keyClasses"),
-            new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
-                new Term.Literal(new hydra.core.Literal.String_("classes")))));
-        boundTerms.put(new Name("hydra.constants.keyDescription"),
-            new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
-                new Term.Literal(new hydra.core.Literal.String_("description")))));
-        boundTerms.put(new Name("hydra.constants.keyType"),
-            new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
-                new Term.Literal(new hydra.core.Literal.String_("type")))));
-        boundTerms.put(new Name("hydra.constants.keyDebugId"),
-            new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
-                new Term.Literal(new hydra.core.Literal.String_("debugId")))));
-        boundTerms.put(new Name("hydra.constants.keyFirstClassType"),
-            new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
-                new Term.Literal(new hydra.core.Literal.String_("firstClassType")))));
+        boundTerms.put(new Name("hydra.core.constants.keyClasses"),
+            new Term.Wrap(new hydra.core.model.WrappedTerm(new Name("hydra.core.model.Name"),
+                new Term.Literal(new hydra.core.model.Literal.String_("classes")))));
+        boundTerms.put(new Name("hydra.core.constants.keyDescription"),
+            new Term.Wrap(new hydra.core.model.WrappedTerm(new Name("hydra.core.model.Name"),
+                new Term.Literal(new hydra.core.model.Literal.String_("description")))));
+        boundTerms.put(new Name("hydra.core.constants.keyType"),
+            new Term.Wrap(new hydra.core.model.WrappedTerm(new Name("hydra.core.model.Name"),
+                new Term.Literal(new hydra.core.model.Literal.String_("type")))));
+        boundTerms.put(new Name("hydra.core.constants.keyDebugId"),
+            new Term.Wrap(new hydra.core.model.WrappedTerm(new Name("hydra.core.model.Name"),
+                new Term.Literal(new hydra.core.model.Literal.String_("debugId")))));
+        boundTerms.put(new Name("hydra.core.constants.keyFirstClassType"),
+            new Term.Wrap(new hydra.core.model.WrappedTerm(new Name("hydra.core.model.Name"),
+                new Term.Literal(new hydra.core.model.Literal.String_("firstClassType")))));
 
         // Add kernel constant term bindings (hand-written since generated sources exceed JVM method size limits)
         List<Binding> constantBindings = new ArrayList<>();
@@ -156,23 +156,23 @@ public class TestSuiteRunner {
 
         // Add type element terms to boundTerms (encoded types)
         for (Map.Entry<Name, Type> entry : allTypes.entrySet()) {
-            boundTerms.put(entry.getKey(), hydra.encode.Core.type(entry.getValue()));
+            boundTerms.put(entry.getKey(), hydra.core.encode.Core.type(entry.getValue()));
         }
 
-        hydra.overlay.java.util.PersistentMap<Name, Term> persistentBoundTerms = hydra.overlay.java.util.PersistentMap.empty();
+        hydra.core.overlay.java.util.PersistentMap<Name, Term> persistentBoundTerms = hydra.core.overlay.java.util.PersistentMap.empty();
         for (Map.Entry<Name, Term> entry : boundTerms.entrySet()) {
             persistentBoundTerms = persistentBoundTerms.insert(entry.getKey(), entry.getValue());
         }
 
         Graph nativeGraph = new Graph(
             persistentBoundTerms,
-            hydra.overlay.java.util.PersistentMap.empty(), // boundTypes (TypeSchemes for term bindings — not populated for test graph)
-            hydra.overlay.java.util.PersistentMap.empty(), // classConstraints
-            hydra.overlay.java.util.PersistentSet.empty(), // lambdaVariables
-            hydra.overlay.java.util.PersistentMap.empty(), // metadata
+            hydra.core.overlay.java.util.PersistentMap.empty(), // boundTypes (TypeSchemes for term bindings — not populated for test graph)
+            hydra.core.overlay.java.util.PersistentMap.empty(), // classConstraints
+            hydra.core.overlay.java.util.PersistentSet.empty(), // lambdaVariables
+            hydra.core.overlay.java.util.PersistentMap.empty(), // metadata
             primitives,
             schemaTypes,
-            hydra.overlay.java.util.PersistentSet.empty()  // typeVariables
+            hydra.core.overlay.java.util.PersistentSet.empty()  // typeVariables
         );
 
         if (!useDefaultImpls) return nativeGraph;
@@ -189,16 +189,16 @@ public class TestSuiteRunner {
      * These are hand-written because the generated source modules exceed JVM method size limits.
      */
     private static void addConstantBindings(List<Binding> bindings) {
-        addConstantBinding(bindings, "hydra.lexical.emptyGraph",
-            record("hydra.graph.Graph",
-                field("boundTerms", new Term.Map(hydra.overlay.java.util.PersistentMap.empty())),
-                field("boundTypes", new Term.Map(hydra.overlay.java.util.PersistentMap.empty())),
-                field("classConstraints", new Term.Map(hydra.overlay.java.util.PersistentMap.empty())),
-                field("lambdaVariables", new Term.Set(hydra.overlay.java.util.PersistentSet.empty())),
-                field("metadata", new Term.Map(hydra.overlay.java.util.PersistentMap.empty())),
-                field("primitives", new Term.Map(hydra.overlay.java.util.PersistentMap.empty())),
-                field("schemaTypes", new Term.Map(hydra.overlay.java.util.PersistentMap.empty())),
-                field("typeVariables", new Term.Set(hydra.overlay.java.util.PersistentSet.empty()))));
+        addConstantBinding(bindings, "hydra.core.lexical.emptyGraph",
+            record("hydra.core.graph.Graph",
+                field("boundTerms", new Term.Map(hydra.core.overlay.java.util.PersistentMap.empty())),
+                field("boundTypes", new Term.Map(hydra.core.overlay.java.util.PersistentMap.empty())),
+                field("classConstraints", new Term.Map(hydra.core.overlay.java.util.PersistentMap.empty())),
+                field("lambdaVariables", new Term.Set(hydra.core.overlay.java.util.PersistentSet.empty())),
+                field("metadata", new Term.Map(hydra.core.overlay.java.util.PersistentMap.empty())),
+                field("primitives", new Term.Map(hydra.core.overlay.java.util.PersistentMap.empty())),
+                field("schemaTypes", new Term.Map(hydra.core.overlay.java.util.PersistentMap.empty())),
+                field("typeVariables", new Term.Set(hydra.core.overlay.java.util.PersistentSet.empty()))));
     }
 
     /**
@@ -206,161 +206,161 @@ public class TestSuiteRunner {
      * These are hand-written because the generated source modules exceed JVM method size limits.
      */
     private static void addAnnotationsBindings(List<Binding> bindings) {
-        // hydra.annotations.getAnnotationMap (#386):
+        // hydra.core.annotations.getAnnotationMap (#386):
         //   getAnnotationMap :: Term -> Map<Name, Term>
         //   Project the (Name, value) entries from a TermMap-with-TermVariable-keys
         //   annotation; return Maps.empty for any other shape.
-        addConstantBinding(bindings, "hydra.annotations.getAnnotationMap",
+        addConstantBinding(bindings, "hydra.core.annotations.getAnnotationMap",
             lambda("t",
                 apply(
-                    match("hydra.core.Term", Optional.given(apply(primitive("hydra.lib.maps.empty"), var("t"))),
+                    match("hydra.core.model.Term", Optional.given(apply(primitive("hydra.core.lib.maps.empty"), var("t"))),
                         field("map", lambda("m",
-                            apply(primitive("hydra.lib.maps.fromList"),
-                                apply(apply(primitive("hydra.lib.lists.foldl"),
+                            apply(primitive("hydra.core.lib.maps.fromList"),
+                                apply(apply(primitive("hydra.core.lib.lists.foldl"),
                                     lambda("acc", "pair",
                                         apply(
-                                            match("hydra.core.Term",
+                                            match("hydra.core.model.Term",
                                                 Optional.given(var("acc")),
                                                 field("variable", lambda("n",
-                                                    apply(apply(primitive("hydra.lib.lists.cons"),
+                                                    apply(apply(primitive("hydra.core.lib.lists.cons"),
                                                         pair(
                                                             var("n"),
-                                                            apply(primitive("hydra.lib.pairs.second"), var("pair")))),
+                                                            apply(primitive("hydra.core.lib.pairs.second"), var("pair")))),
                                                         var("acc"))))),
-                                            apply(primitive("hydra.lib.pairs.first"), var("pair")))),
+                                            apply(primitive("hydra.core.lib.pairs.first"), var("pair")))),
                                     list()),
-                                    apply(primitive("hydra.lib.maps.toList"), var("m"))))))),
+                                    apply(primitive("hydra.core.lib.maps.toList"), var("m"))))))),
                     var("t"))));
 
-        // hydra.annotations.wrapAnnotationMap (#386):
+        // hydra.core.annotations.wrapAnnotationMap (#386):
         //   wrapAnnotationMap :: Map<Name, Term> -> Term
         //   Encode each Name key as a TermVariable, then wrap as a TermMap.
-        addConstantBinding(bindings, "hydra.annotations.wrapAnnotationMap",
+        addConstantBinding(bindings, "hydra.core.annotations.wrapAnnotationMap",
             lambda("m",
-                inject("hydra.core.Term", field("map",
-                    apply(primitive("hydra.lib.maps.fromList"),
-                        apply(apply(primitive("hydra.lib.lists.map"),
+                inject("hydra.core.model.Term", field("map",
+                    apply(primitive("hydra.core.lib.maps.fromList"),
+                        apply(apply(primitive("hydra.core.lib.lists.map"),
                             lambda("pair",
                                 pair(
-                                    inject("hydra.core.Term", field("variable",
-                                        apply(primitive("hydra.lib.pairs.first"), var("pair")))),
-                                    apply(primitive("hydra.lib.pairs.second"), var("pair"))))),
-                            apply(primitive("hydra.lib.maps.toList"), var("m"))))))));
+                                    inject("hydra.core.model.Term", field("variable",
+                                        apply(primitive("hydra.core.lib.pairs.first"), var("pair")))),
+                                    apply(primitive("hydra.core.lib.pairs.second"), var("pair"))))),
+                            apply(primitive("hydra.core.lib.maps.toList"), var("m"))))))));
 
-        addConstantBinding(bindings, "hydra.rewriting.deannotateTerm",
+        addConstantBinding(bindings, "hydra.core.rewriting.deannotateTerm",
             lambda("t",
                 apply(
-                    match("hydra.core.Term", Optional.given(var("t")),
+                    match("hydra.core.model.Term", Optional.given(var("t")),
                         field("annotated", lambda("at",
-                            apply(var("hydra.rewriting.deannotateTerm"),
-                                apply(project("hydra.core.AnnotatedTerm", "body"), var("at")))))),
+                            apply(var("hydra.core.rewriting.deannotateTerm"),
+                                apply(project("hydra.core.model.AnnotatedTerm", "body"), var("at")))))),
                     var("t"))));
 
         // After #386: project the map payload out of the Term annotation via getAnnotationMap.
-        addConstantBinding(bindings, "hydra.annotations.termAnnotationInternal",
+        addConstantBinding(bindings, "hydra.core.annotations.termAnnotationInternal",
             lambda("term",
                 let_("toPairs",
                     lambda("rest", "t",
                         apply(
-                            match("hydra.core.Term",
+                            match("hydra.core.model.Term",
                                 Optional.given(var("rest")),
                                 field("annotated", lambda("at",
                                     apply(apply(var("toPairs"),
-                                        apply(apply(primitive("hydra.lib.lists.cons"),
-                                            apply(primitive("hydra.lib.maps.toList"),
-                                                apply(var("hydra.annotations.getAnnotationMap"),
-                                                    apply(project("hydra.core.AnnotatedTerm", "annotation"), var("at"))))),
+                                        apply(apply(primitive("hydra.core.lib.lists.cons"),
+                                            apply(primitive("hydra.core.lib.maps.toList"),
+                                                apply(var("hydra.core.annotations.getAnnotationMap"),
+                                                    apply(project("hydra.core.model.AnnotatedTerm", "annotation"), var("at"))))),
                                             var("rest"))),
-                                        apply(project("hydra.core.AnnotatedTerm", "body"), var("at")))))),
+                                        apply(project("hydra.core.model.AnnotatedTerm", "body"), var("at")))))),
                             var("t"))),
-                    apply(primitive("hydra.lib.maps.fromList"),
-                        apply(primitive("hydra.lib.lists.concat"),
+                    apply(primitive("hydra.core.lib.maps.fromList"),
+                        apply(primitive("hydra.core.lib.lists.concat"),
                             apply(apply(var("toPairs"), list()), var("term")))))));
 
-        addConstantBinding(bindings, "hydra.annotations.setAnnotation",
+        addConstantBinding(bindings, "hydra.core.annotations.setAnnotation",
             lambda("key",
                 lambda("val",
                     lambda("m",
-                        apply(apply(apply(primitive("hydra.lib.optionals.match"),
+                        apply(apply(apply(primitive("hydra.core.lib.optionals.match"),
                             var("val")),
-                            apply(apply(primitive("hydra.lib.maps.delete"), var("key")), var("m"))),
+                            apply(apply(primitive("hydra.core.lib.maps.delete"), var("key")), var("m"))),
                             lambda("v",
-                                apply(apply(apply(primitive("hydra.lib.maps.insert"),
+                                apply(apply(apply(primitive("hydra.core.lib.maps.insert"),
                                     var("key")), var("v")), var("m"))))))));
 
         // After #386: wrap the resulting map via wrapAnnotationMap before storing in AnnotatedTerm.annotation.
-        addConstantBinding(bindings, "hydra.annotations.setTermAnnotation",
+        addConstantBinding(bindings, "hydra.core.annotations.setTermAnnotation",
             lambda("key",
                 lambda("val",
                     lambda("term",
-                        let_("stripped", apply(var("hydra.rewriting.deannotateTerm"), var("term")),
+                        let_("stripped", apply(var("hydra.core.rewriting.deannotateTerm"), var("term")),
                             let_("anns",
-                                apply(apply(apply(var("hydra.annotations.setAnnotation"), var("key")), var("val")),
-                                    apply(var("hydra.annotations.termAnnotationInternal"), var("term"))),
-                                apply(apply(apply(primitive("hydra.lib.logic.ifElse"),
-                                    apply(primitive("hydra.lib.maps.isEmpty"), var("anns"))),
+                                apply(apply(apply(var("hydra.core.annotations.setAnnotation"), var("key")), var("val")),
+                                    apply(var("hydra.core.annotations.termAnnotationInternal"), var("term"))),
+                                apply(apply(apply(primitive("hydra.core.lib.logic.ifElse"),
+                                    apply(primitive("hydra.core.lib.maps.isEmpty"), var("anns"))),
                                     var("stripped")),
-                                    inject("hydra.core.Term", "annotated",
-                                        record("hydra.core.AnnotatedTerm",
+                                    inject("hydra.core.model.Term", "annotated",
+                                        record("hydra.core.model.AnnotatedTerm",
                                             field("body", var("stripped")),
                                             field("annotation",
-                                                apply(var("hydra.annotations.wrapAnnotationMap"), var("anns"))))))))))));
+                                                apply(var("hydra.core.annotations.wrapAnnotationMap"), var("anns"))))))))))));
 
-        addConstantBinding(bindings, "hydra.annotations.setTermDescription",
+        addConstantBinding(bindings, "hydra.core.annotations.setTermDescription",
             lambda("d",
-                apply(apply(var("hydra.annotations.setTermAnnotation"),
-                    var("hydra.constants.keyDescription")),
-                    apply(apply(primitive("hydra.lib.optionals.map"),
+                apply(apply(var("hydra.core.annotations.setTermAnnotation"),
+                    var("hydra.core.constants.keyDescription")),
+                    apply(apply(primitive("hydra.core.lib.optionals.map"),
                         lambda("s",
-                            inject("hydra.core.Term", "literal",
-                                inject("hydra.core.Literal", "string", var("s"))))),
+                            inject("hydra.core.model.Term", "literal",
+                                inject("hydra.core.model.Literal", "string", var("s"))))),
                         var("d")))));
 
-        addConstantBinding(bindings, "hydra.annotations.getDescription",
+        addConstantBinding(bindings, "hydra.core.annotations.getDescription",
             lambda("cx",
                 lambda("g",
                     lambda("anns",
-                        apply(apply(apply(primitive("hydra.lib.optionals.match"),
-                            apply(apply(primitive("hydra.lib.maps.lookup"),
-                                var("hydra.constants.keyDescription")),
+                        apply(apply(apply(primitive("hydra.core.lib.optionals.match"),
+                            apply(apply(primitive("hydra.core.lib.maps.lookup"),
+                                var("hydra.core.constants.keyDescription")),
                                 var("anns"))),
                             right(nothing())),
                             lambda("descTerm",
                                 apply(
-                                    match("hydra.core.Term", Optional.given(
-                                        left(inject("hydra.errors.Error", field("other", wrap("hydra.errors.OtherError", string("Expected string literal")))))),
+                                    match("hydra.core.model.Term", Optional.given(
+                                        left(inject("hydra.core.errors.Error", field("other", wrap("hydra.core.errors.OtherError", string("Expected string literal")))))),
                                         field("literal", lambda("lit",
                                             apply(
-                                                match("hydra.core.Literal", Optional.given(
-                                                    left(inject("hydra.errors.Error", field("other", wrap("hydra.errors.OtherError", string("Expected string literal")))))),
+                                                match("hydra.core.model.Literal", Optional.given(
+                                                    left(inject("hydra.core.errors.Error", field("other", wrap("hydra.core.errors.OtherError", string("Expected string literal")))))),
                                                     field("string", lambda("s", right(just(var("s")))))),
                                                 var("lit"))))),
                                     var("descTerm"))))))));
 
-        addConstantBinding(bindings, "hydra.annotations.getTermDescription",
+        addConstantBinding(bindings, "hydra.core.annotations.getTermDescription",
             lambda("cx",
                 lambda("g",
                     lambda("term",
                         let_("peel",
                             lambda("t",
                                 apply(
-                                    match("hydra.core.Term", Optional.given(var("t")),
+                                    match("hydra.core.model.Term", Optional.given(var("t")),
                                         field("typeLambda", lambda("tl",
                                             apply(var("peel"),
-                                                apply(project("hydra.core.TypeLambda", "body"), var("tl"))))),
+                                                apply(project("hydra.core.model.TypeLambda", "body"), var("tl"))))),
                                         field("typeApplication", lambda("ta",
                                             apply(var("peel"),
-                                                apply(project("hydra.core.TypeApplicationTerm", "body"), var("ta")))))),
+                                                apply(project("hydra.core.model.TypeApplicationTerm", "body"), var("ta")))))),
                                     var("t"))),
-                            apply(apply(apply(var("hydra.annotations.getDescription"), var("cx")), var("g")),
-                                apply(var("hydra.annotations.termAnnotationInternal"),
+                            apply(apply(apply(var("hydra.core.annotations.getDescription"), var("cx")), var("g")),
+                                apply(var("hydra.core.annotations.termAnnotationInternal"),
                                     apply(var("peel"), var("term")))))))));
 
-        addConstantBinding(bindings, "hydra.annotations.getTermAnnotation",
+        addConstantBinding(bindings, "hydra.core.annotations.getTermAnnotation",
             lambda("key",
                 lambda("term",
-                    apply(apply(primitive("hydra.lib.maps.lookup"), var("key")),
-                        apply(var("hydra.annotations.termAnnotationInternal"), var("term"))))));
+                    apply(apply(primitive("hydra.core.lib.maps.lookup"), var("key")),
+                        apply(var("hydra.core.annotations.termAnnotationInternal"), var("term"))))));
     }
 
     /**
@@ -371,13 +371,13 @@ public class TestSuiteRunner {
         Map<Name, Type> types = new HashMap<>();
 
         // CoderDirection: enum with encode, decode
-        types.put(new Name("hydra.coders.CoderDirection"),
+        types.put(new Name("hydra.core.coders.CoderDirection"),
             new Type.Union(ConsList.of(
                 new FieldType(new Name("encode"), new Type.Unit()),
                 new FieldType(new Name("decode"), new Type.Unit()))));
 
-        Name contextName = new Name("hydra.typing.InferenceContext");
-        Name errorName = new Name("hydra.errors.Error");
+        Name contextName = new Name("hydra.core.typing.InferenceContext");
+        Name errorName = new Name("hydra.core.errors.Error");
         java.util.function.Function<Type, Type> eitherError = v ->
             new Type.Either(new EitherType(new Type.Variable(new Name("e")), v));
 
@@ -391,7 +391,7 @@ public class TestSuiteRunner {
         Type coderBody = new Type.Record(ConsList.of(
             new FieldType(new Name("encode"), encodeType),
             new FieldType(new Name("decode"), decodeType)));
-        types.put(new Name("hydra.coders.Coder"),
+        types.put(new Name("hydra.core.coders.Coder"),
             new Type.Forall(new ForallType(new Name("v1"),
                 new Type.Forall(new ForallType(new Name("v2"),
                     new Type.Forall(new ForallType(new Name("e"), coderBody)))))));
@@ -402,19 +402,19 @@ public class TestSuiteRunner {
                 new FieldType(new Name("trace"), new Type.List(new Type.Literal(new LiteralType.String_()))),
                 new FieldType(new Name("messages"), new Type.List(new Type.Literal(new LiteralType.String_()))),
                 new FieldType(new Name("other"), new Type.Map(new MapType(
-                    new Type.Variable(new Name("hydra.core.Name")),
-                    new Type.Variable(new Name("hydra.core.Term"))))))));
+                    new Type.Variable(new Name("hydra.core.model.Name")),
+                    new Type.Variable(new Name("hydra.core.model.Term"))))))));
 
         // Error types
-        Name otherErrorName = new Name("hydra.errors.OtherError");
+        Name otherErrorName = new Name("hydra.core.errors.OtherError");
         types.put(otherErrorName,
             new Type.Wrap(new Type.Literal(new LiteralType.String_())));
         types.put(errorName,
             new Type.Union(ConsList.of(
                 new FieldType(new Name("other"), new Type.Variable(otherErrorName)))));
 
-        // Type (hydra.core.Type)
-        Name typeName = new Name("hydra.core.Type");
+        // Type (hydra.core.model.Type)
+        Name typeName = new Name("hydra.core.model.Type");
         types.put(typeName,
             new Type.Union(ConsList.of(
                 new FieldType(new Name("annotated"), new Type.Variable(new Name("annotatedType"))),
@@ -435,24 +435,24 @@ public class TestSuiteRunner {
                 new FieldType(new Name("wrap"), new Type.Variable(new Name("wrappedType"))))));
 
         // Name
-        types.put(new Name("hydra.core.Name"),
+        types.put(new Name("hydra.core.model.Name"),
             new Type.Wrap(new Type.Literal(new LiteralType.String_())));
 
         // ForallType
-        types.put(new Name("hydra.core.ForallType"),
+        types.put(new Name("hydra.core.model.ForallType"),
             new Type.Record(ConsList.of(
-                new FieldType(new Name("parameter"), new Type.Variable(new Name("hydra.core.Name"))),
+                new FieldType(new Name("parameter"), new Type.Variable(new Name("hydra.core.model.Name"))),
                 new FieldType(new Name("body"), new Type.Variable(typeName)))));
 
         // Comparison
-        types.put(new Name("hydra.util.Comparison"),
+        types.put(new Name("hydra.core.util.Comparison"),
             new Type.Union(ConsList.of(
                 new FieldType(new Name("lessThan"), new Type.Unit()),
                 new FieldType(new Name("equalTo"), new Type.Unit()),
                 new FieldType(new Name("greaterThan"), new Type.Unit()))));
 
         // CaseConvention
-        types.put(new Name("hydra.util.CaseConvention"),
+        types.put(new Name("hydra.core.util.CaseConvention"),
             new Type.Union(ConsList.of(
                 new FieldType(new Name("camel"), new Type.Unit()),
                 new FieldType(new Name("pascal"), new Type.Unit()),
@@ -460,7 +460,7 @@ public class TestSuiteRunner {
                 new FieldType(new Name("upperSnake"), new Type.Unit()))));
 
         // Precision
-        types.put(new Name("hydra.util.Precision"),
+        types.put(new Name("hydra.core.util.Precision"),
             new Type.Union(ConsList.of(
                 new FieldType(new Name("arbitrary"), new Type.Unit()),
                 new FieldType(new Name("bits"), new Type.Literal(new LiteralType.Integer_(new IntegerType.Int32()))))));

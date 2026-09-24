@@ -8,21 +8,21 @@ module Hydra.Sources.Coq.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Libraries
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Libraries
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import qualified Hydra.Sources.Coq.Syntax                  as CoqSyntax
@@ -37,7 +37,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports for Coq AST
-import Hydra.Ast
+import Hydra.Core.Ast
 import qualified Hydra.Coq.Syntax as C
 import qualified Hydra.Coq.Environment as CE
 
@@ -193,7 +193,7 @@ coqTypeTerm = define "coqTypeTerm" $
 
 -- | Encode a (name, Type) pair as a Coq Sentence containing an Axiom declaration.
 -- Used for modules whose definitions cannot practically compile under coqc (e.g.
--- hydra.hoisting, hydra.inference) — their term definitions are replaced by
+-- hydra.core.hoisting, hydra.core.inference) — their term definitions are replaced by
 -- axioms of the same type, which the rest of the Coq build can still consume.
 encodeAxiomDefinitionPair :: TypedTermDefinition (CE.CoqEnvironment -> (String, Type) -> C.Sentence)
 encodeAxiomDefinitionPair = define "encodeAxiomDefinitionPair" $
@@ -393,7 +393,7 @@ encodeTerm = define "encodeTerm" $
         (var "xs"),
     _Term_literal>>: "l" ~> encodeLiteral @@ var "l",
     -- Maps are encoded as Coq association lists `list (k * v)`, matching
-    -- the representation used by `hydra.lib.maps.*`. An empty map becomes
+    -- the representation used by `hydra.core.lib.maps.*`. An empty map becomes
     -- bare `nil`; a non-empty map becomes `cons (pair k1 v1) (cons (pair k2 v2) ... nil)`.
     -- Coq can infer the element type from surrounding context in almost all
     -- cases; bare-`nil` cases that need an explicit cast go through
@@ -425,7 +425,7 @@ encodeTerm = define "encodeTerm" $
             (lambda "f" $ encodeTerm @@ var "env" @@ (Core.fieldTerm $ var "f"))
             (var "rfields")),
     -- Sets are encoded as deduplicated Coq `list x`, matching the
-    -- representation used by `hydra.lib.sets.*`. An empty set becomes
+    -- representation used by `hydra.core.lib.sets.*`. An empty set becomes
     -- bare `nil`; a non-empty set becomes `cons v1 (cons v2 ... nil)`.
     _Term_set>>: "st" ~>
       Lists.foldr
@@ -798,7 +798,7 @@ isUnitLambda = define "isUnitLambda" $
 listAny :: TypedTerm (a -> Bool) -> TypedTerm [a] -> TypedTerm Bool
 listAny pred xs = Optionals.isGiven (Lists.find pred xs)
 
--- | Given a possibly-qualified name (e.g. "hydra.core.Term"), return its local
+-- | Given a possibly-qualified name (e.g. "hydra.core.model.Term"), return its local
 -- part sanitized to avoid Coq reserved words. Used as the lookup key for the
 -- constructor-count map in encodeUnionElim.
 localTypeName :: TypedTermDefinition (String -> String)

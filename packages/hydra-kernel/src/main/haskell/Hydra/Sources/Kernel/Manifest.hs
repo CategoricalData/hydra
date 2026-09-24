@@ -84,11 +84,11 @@ otherModules = [
 mainModules :: [Module]
 mainModules = kernelTypesModules ++ kernelTermsModules ++ jsonModules ++ otherModules
 
--- | Kernel term modules whose definitions project to hydra.dsl.<x> reference
+-- | Kernel term modules whose definitions project to hydra.core.dsl.<x> reference
 -- wrappers (#467). Demand-driven curation: exactly the modules the native
 -- Java/Python DSL sources reference today via stringly-typed var("hydra....")
 -- strings. Extend as consumers need more; the non-kernel and derived-category
--- (hydra.encode.*/show.*/decode.*) demand is deferred.
+-- (hydra.core.encode.*/show.*/decode.*) demand is deferred.
 dslTermModules :: [Module]
 dslTermModules = [
   Analysis.module_,
@@ -113,22 +113,22 @@ dslTermModules = [
   Strip.module_,
   Variables.module_]
 
--- | Source modules from which DSL wrapper modules (hydra.dsl.<x>) are derived.
+-- | Source modules from which DSL wrapper modules (hydra.core.dsl.<x>) are derived.
 -- Every type-defining module in the package (#474), the primitive-defining
--- hydra.lib.* modules (#467; each primitive projects to a hydra.dsl.lib.<x>
+-- hydra.lib.* modules (#467; each primitive projects to a hydra.core.dsl.lib.<x>
 -- reference wrapper via the term/primitive DSL ref path), and the demand-curated
--- term modules above. The Hydra.Dsl.{Annotations,Literals} collisions that once
+-- term modules above. The Hydra.Core.Dsl.{Annotations,Literals} collisions that once
 -- blocked term-module widening were resolved by the #501 namespace migration
--- (hand-written authoring DSLs live at Hydra.Overlay.Haskell.Dsl.*), so the
--- generated hydra.dsl.<term-module> names are free.
+-- (hand-written authoring DSLs live at Hydra.Core.Overlay.Haskell.Dsl.*), so the
+-- generated hydra.core.dsl.<term-module> names are free.
 mainDslModules :: [Module]
 mainDslModules = kernelTypesModules ++ jsonModules ++ otherModules ++ kernelLibModules ++ dslTermModules
 
 -- | Source modules from which term encoder + decoder modules
--- (hydra.encode.<x> / hydra.decode.<x>) are derived. Broad: every
+-- (hydra.core.encode.<x> / hydra.core.decode.<x>) are derived. Broad: every
 -- type-defining module in the package. (#475 unblock — the previous
--- narrowing excluded hydra.validation, hydra.error.packaging,
--- hydra.yaml.model; restored here as part of the #475 fix.)
+-- narrowing excluded hydra.core.validation, hydra.core.error.packaging,
+-- hydra.core.yaml.model; restored here as part of the #475 fix.)
 --
 -- Decoupled from mainDslModules (#467): the primitive-defining hydra.lib.*
 -- modules belong in the DSL set but NOT here — encode/decode synthesis applies

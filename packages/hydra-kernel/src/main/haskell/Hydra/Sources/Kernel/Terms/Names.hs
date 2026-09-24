@@ -7,47 +7,47 @@ import Hydra.Kernel hiding (
   derivedModuleName, freshName, freshNames, localNameOf, moduleNameOf, moduleNameToFilePath,
   nameToFilePath, nameToUpperDashed, normalTypeVariable, pushSubtermStep, qname, qualifyName,
   restoreTrace, unqualifyName)
-import qualified Hydra.Dsl.Paths    as Paths
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
-import qualified Hydra.Dsl.Ast          as Ast
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Coders       as Coders
-import qualified Hydra.Dsl.File      as DslFile
-import           Hydra.File (FileExtension)
-import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph        as Graph
-import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Lib.Math     as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Literals          as Literals
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base         as MetaBase
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms        as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types        as MetaTypes
-import qualified Hydra.Dsl.Packaging       as Packaging
-import qualified Hydra.Dsl.Parsing      as Parsing
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Prims             as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular           as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing      as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Terms             as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Tests             as Tests
-import qualified Hydra.Dsl.Topology     as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
-import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Util         as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
+import qualified Hydra.Core.Dsl.Paths    as Paths
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations       as Annotations
+import qualified Hydra.Core.Dsl.Ast          as Ast
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Coders       as Coders
+import qualified Hydra.Core.Dsl.File      as DslFile
+import           Hydra.Core.File (FileExtension)
+import qualified Hydra.Core.Dsl.Util      as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph        as Graph
+import qualified Hydra.Core.Dsl.Json.Model         as Json
+import qualified Hydra.Core.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Math     as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals          as Literals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base         as MetaBase
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms        as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types        as MetaTypes
+import qualified Hydra.Core.Dsl.Packaging       as Packaging
+import qualified Hydra.Core.Dsl.Parsing      as Parsing
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims             as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular           as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing      as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms             as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests             as Tests
+import qualified Hydra.Core.Dsl.Topology     as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Dsl.Typing       as Typing
+import qualified Hydra.Core.Dsl.Util         as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -62,7 +62,7 @@ import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.names"
+ns = ModuleName "hydra.core.names"
 
 module_ :: Module
 module_ = Module {
@@ -121,11 +121,11 @@ compactName = define "compactName" $
 -- | Compose a provision's fully-qualified name from the name of its enclosing entity (a
 -- definition, module, or package) and the provision's local segment, mirroring how a
 -- definition's own name is composed from its module's name. This is the single shared
--- composition rule used by both the spec generator (hydra.lib.lists.concat + "emptyLists"
--- -> hydra.lib.lists.concat.emptyLists) and the test harness (matching a test case's
+-- composition rule used by both the spec generator (hydra.core.lib.lists.concat + "emptyLists"
+-- -> hydra.core.lib.lists.concat.emptyLists) and the test harness (matching a test case's
 -- provisions reference against a Provision's stored name).
--- For example, composeProvisionName "hydra.lib.lists.concat" "emptyLists" ->
---   "hydra.lib.lists.concat.emptyLists"
+-- For example, composeProvisionName "hydra.core.lib.lists.concat" "emptyLists" ->
+--   "hydra.core.lib.lists.concat.emptyLists"
 composeProvisionName :: TypedTermDefinition (Name -> String -> Name)
 composeProvisionName = define "composeProvisionName" $
   doc "Compose a provision's fully-qualified name from its enclosing entity's name and its local segment" $
@@ -139,7 +139,7 @@ composeProvisionName = define "composeProvisionName" $
 -- and otherwise keep the full original namespace (DSL category convention). A name with
 -- no namespace yields the bare local name, unprefixed (encode/decode/dslBindingName
 -- convention).
--- For example, derivedBindingName ["hydra", "encode"] True "hydra.core.Name" -> "hydra.encode.core.name"
+-- For example, derivedBindingName ["hydra", "encode"] True "hydra.core.model.Name" -> "hydra.core.encode.model.name"
 derivedBindingName :: TypedTermDefinition ([String] -> Bool -> Name -> Name)
 derivedBindingName = define "derivedBindingName" $
   doc "Generate a binding name for a derived function from a type/term name, given the category's namespace segments" $
@@ -151,51 +151,56 @@ derivedBindingName = define "derivedBindingName" $
 -- the category's namespace segments, drop-first-segment convention (see
 -- 'derivedBindingName'), and whether a namespace-less source name still gets the category
 -- prefix (dslDefinitionName convention: True) or yields the bare local name (False).
--- For example, derivedDefinitionName ["hydra", "dsl"] False True "hydra.core.AnnotatedTerm" "annotatedTermBody"
---   -> "hydra.dsl.core.annotatedTermBody"
+-- For example, derivedDefinitionName ["hydra", "dsl"] False True "hydra.core.model.AnnotatedTerm" "annotatedTermBody"
+--   -> "hydra.core.dsl.model.annotatedTermBody"
 derivedDefinitionName :: TypedTermDefinition ([String] -> Bool -> Bool -> Name -> String -> Name)
 derivedDefinitionName = define "derivedDefinitionName" $
   doc "Generate a derived element name from a source name's namespace and an explicit local name" $
-  "categoryPrefix" ~> "alwaysDropFirst" ~> "prefixWhenNoNamespace" ~> "n" ~> "localName" ~>
+  -- #729 uniform grammar: the derived def name must sit in the SAME reordered module as derivedModuleName
+  -- produces (else a derived module's defs get names that disagree with references to them). A source name
+  -- is hydra.<pkgroot>.<tail...>.<TypeLocal>; the derived def is
+  -- hydra.<pkgroot>.<category...>.<tail...>.<localName> — i.e. insert the category after the 2-segment
+  -- package root, same as derivedModuleName, then append the derived localName. The alwaysDropFirst /
+  -- keep-full-namespace (DSL) distinction collapses post-rename (every source name is hydra-rooted), so
+  -- the Bool is inert here; kept for signature stability. No-namespace names still honor prefixWhenNoNamespace.
+  "categoryPrefix" ~> "_alwaysDropFirst" ~> "prefixWhenNoNamespace" ~> "n" ~> "localName" ~>
   "localResult" <~ (Core.name (var "localName")) $
   "prefixedResult" <~ (Core.name (Strings.join (string ".")
     (Lists.concat2 (var "categoryPrefix") (list [var "localName"])))) $
   "noNamespaceResult" <~ (Logic.ifElse (var "prefixWhenNoNamespace") (var "prefixedResult") (var "localResult")) $
   -- nsParts = parts minus the last element (the namespace components).
-  -- Nothing means parts was empty (unreachable for a valid name);
-  -- Just [] means the name has no namespace (local type).
   Optionals.match (Lists.init (Strings.splitOn (string ".") (Core.unName (var "n")))) (var "noNamespaceResult") ("nsParts" ~>
       Optionals.match
         (Lists.uncons (var "nsParts"))
         -- single-element parts: local type, no namespace
         (var "noNamespaceResult")
-        ("nsHeadTail" ~>
-          "categoryPrefixResolved" <~ (Logic.ifElse
-            (Logic.or (var "alwaysDropFirst") (Equality.equal (Pairs.first (var "nsHeadTail")) (string "hydra")))
-            -- drop the leading segment (always, or because it is "hydra")
-            (Lists.concat2 (var "categoryPrefix") (Pairs.second (var "nsHeadTail")))
-            -- keep the full original namespace (non-"hydra", DSL category convention)
-            (Lists.concat2 (var "categoryPrefix") (var "nsParts"))) $
+        ("_nsHeadTail" ~>
+          -- REORDER: root = first 2 segments (hydra.<pkgroot>), insert categoryPrefix after it, then rest.
+          "root" <~ (Lists.take (int32 2) (var "nsParts")) $
+          "rest" <~ (Lists.drop (int32 2) (var "nsParts")) $
           Core.name (Strings.join (string ".")
-            (Lists.concat2 (var "categoryPrefixResolved") (list [var "localName"])))))
+            (Lists.concat2 (var "root") (Lists.concat2 (var "categoryPrefix")
+              (Lists.concat2 (var "rest") (list [var "localName"])))))))
 
 -- | Generate a derived module name (encoder, decoder, DSL, etc.) from a source module
--- name, given the category's namespace segments and drop-first-segment convention.
--- See 'derivedBindingName' for the convention parameter.
--- For example, derivedModuleName ["hydra", "encode"] True "hydra.util" -> "hydra.encode.util"
+-- name, given the category's namespace segments.
+-- #729 uniform grammar: the derived name is a REORDER, not a prepend. A source module is
+-- package-rooted as hydra.<pkgroot>.<tail...>; the category is inserted BETWEEN the 2-segment
+-- package root and the tail, giving hydra.<pkgroot>.<category...>.<tail...>.
+-- For example, derivedModuleName ["encode"] _ "hydra.core.model" -> "hydra.core.encode.model"
+--          and derivedModuleName ["dsl"]    _ "hydra.pg.model"    -> "hydra.pg.dsl.model".
+-- categoryPrefix now carries only the category segment(s) (e.g. ["dsl"]), NOT the leading "hydra"
+-- (which comes from the source name's own root). The Bool parameter is retained for signature
+-- stability but no longer affects the result: the package root is always the fixed 2-segment head.
 derivedModuleName :: TypedTermDefinition ([String] -> Bool -> ModuleName -> ModuleName)
 derivedModuleName = define "derivedModuleName" $
-  doc "Generate a derived module name from a source module name, given the category's namespace segments" $
-  "categoryPrefix" ~> "alwaysDropFirst" ~> "ns" ~>
+  doc "Generate a derived module name by inserting the category after the package root (hydra.<pkgroot>)" $
+  "categoryPrefix" ~> "_alwaysDropFirst" ~> "ns" ~>
   "parts" <~ (Strings.splitOn (string ".") (Packaging.unModuleName (var "ns"))) $
-  "fallback" <~ (Packaging.moduleName2 (Strings.join (string ".")
-    (Lists.concat2 (var "categoryPrefix") (var "parts")))) $
-  Optionals.match (Lists.uncons (var "parts")) (var "fallback") ("ht" ~>
-      Logic.ifElse
-        (Logic.or (var "alwaysDropFirst") (Equality.equal (Pairs.first (var "ht")) (string "hydra")))
-        (Packaging.moduleName2 (Strings.join (string ".")
-          (Lists.concat2 (var "categoryPrefix") (Pairs.second (var "ht")))))
-        (var "fallback"))
+  "root" <~ (Lists.take (int32 2) (var "parts")) $
+  "rest" <~ (Lists.drop (int32 2) (var "parts")) $
+  Packaging.moduleName2 (Strings.join (string ".")
+    (Lists.concat2 (var "root") (Lists.concat2 (var "categoryPrefix") (var "rest"))))
 
 freshName :: TypedTermDefinition (InferenceContext -> (Name, InferenceContext))
 freshName = define "freshName" $

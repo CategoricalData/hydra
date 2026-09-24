@@ -3,19 +3,19 @@ module Hydra.Sources.Kernel.Terms.Classes where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
 import qualified Hydra.Sources.Kernel.Terms.Strip        as Strip
-import qualified Hydra.Dsl.Typing            as Typing
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
+import qualified Hydra.Core.Dsl.Typing            as Typing
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.List                   as L
 
 
--- | The hydra.classes registry: term-level bindings, each a TypeClass value
+-- | The hydra.core.classes registry: term-level bindings, each a TypeClass value
 -- describing one of Hydra's built-in type classes.
 --
 -- The binding's local name (e.g. "equality") is the marker used in
@@ -25,7 +25,7 @@ import qualified Data.List                   as L
 -- Adding a new built-in type class is just adding a binding here and updating
 -- callers that need to construct or recognize the marker name.
 ns :: ModuleName
-ns = ModuleName "hydra.classes"
+ns = ModuleName "hydra.core.classes"
 
 module_ :: Module
 module_ = Module {
@@ -49,7 +49,7 @@ define = definitionInModule module_
 -- by the class's short name as it actually appears in TypeClassConstraintSimple values built
 -- throughout the kernel (e.g. Name "fractional" in Kernel/Lib/Math.hs's polyConstrained calls,
 -- Name "ordering" in this module's own inferTypeOfMap/collection rules) -- NOT the
--- "hydra.classes.*"-qualified registry module names from this module's own namespace, which
+-- "hydra.core.classes.*"-qualified registry module names from this module's own namespace, which
 -- are never used as constraint markers. This is the entailment predicate used to discharge
 -- class constraints at the end of inference (see Inference.hs); it is the one piece of "does
 -- type T satisfy class C" logic in the kernel, kept alongside the class registry it checks

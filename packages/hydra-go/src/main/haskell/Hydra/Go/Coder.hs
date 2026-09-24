@@ -9,11 +9,11 @@ module Hydra.Go.Coder (
 ) where
 
 import Hydra.Kernel hiding (pure)
-import qualified Hydra.Core as Core
+import qualified Hydra.Core.Model as Core
 import qualified Hydra.Go.Language as GoLang
 import qualified Hydra.Go.Syntax as Go
 import Hydra.Go.Serde (moduleToExpr)
-import qualified Hydra.Overlay.Haskell.Lib.Strings as Strings
+import qualified Hydra.Core.Overlay.Haskell.Lib.Strings as Strings
 
 import qualified Data.ByteString as BS
 import qualified Data.Char as C
@@ -90,7 +90,7 @@ initState mod_ = GoState {
 }
 
 -- | Build a mapping from Hydra namespaces to Go import paths.
--- Hydra namespace "hydra.core" maps to Go package path "hydra/core".
+-- Hydra namespace "hydra.core.model" maps to Go package path "hydra/core".
 buildNsMap :: Module -> M.Map ModuleName String
 buildNsMap mod_ = M.fromList $ fmap toEntry allNs
   where
@@ -105,8 +105,8 @@ namespaceToGoPath :: String -> String
 namespaceToGoPath ns = goModulePath ++ "/" ++ fmap (\c -> if c == '.' then '/' else c) ns
 
 -- | Get the Go package alias for a namespace.
--- For two-level namespaces (hydra.core), uses the last segment: core
--- For deeper namespaces (hydra.encode.core), combines parent+child: encodecore
+-- For two-level namespaces (hydra.core.model), uses the last segment: core
+-- For deeper namespaces (hydra.core.encode.model), combines parent+child: encodecore
 -- This avoids import collisions between e.g. hydra/core and hydra/encode/core.
 namespaceToGoPackage :: ModuleName -> String
 namespaceToGoPackage (ModuleName name) =
@@ -114,15 +114,15 @@ namespaceToGoPackage (ModuleName name) =
   in case parts of
     -- Single segment (e.g., stdlib "big") → use as-is
     [p] -> p
-    -- The generated hydra.util package (Comparison, etc.) would collapse to the
+    -- The generated hydra.core.util package (Comparison, etc.) would collapse to the
     -- bare name "util", colliding with the hand-written overlay util package
-    -- (hydra.overlay.go.util), which also declares package "util". Give the
+    -- (hydra.core.overlay.go.util), which also declares package "util". Give the
     -- generated one a distinct alias so both can be imported together.
     ["hydra", "util"] -> "hutil"
-    -- Two segments (hydra.core, math.big) → last segment
+    -- Two segments (hydra.core.model, math.big) → last segment
     [_, p] -> sanitizePackageName p
-    -- Deeper (hydra.encode.core) → join all non-hydra segments for uniqueness
-    -- e.g. hydra.encode.core → encodecore, hydra.encode.json.model → encodejsonmodel
+    -- Deeper (hydra.core.encode.model) → join all non-hydra segments for uniqueness
+    -- e.g. hydra.core.encode.model → encodecore, hydra.core.encode.json.model → encodejsonmodel
     _ -> let relevant = if head parts == "hydra"
                then drop 1 parts  -- Drop "hydra" prefix
                else parts
@@ -176,7 +176,7 @@ resolveTypeRef name targs st =
               Nothing -> namespaceToGoPath (unModuleName ns)
         in (goQualTypeName (Just pkg) local targs, addImport impPath st)
 
--- | Resolve a reference to a type in "hydra.util" (Either, Pair, etc.),
+-- | Resolve a reference to a type in "hydra.core.util" (Either, Pair, etc.),
 -- handling same-namespace optimization.
 -- | Import path of the hand-written overlay util package (Optional, Either,
 -- Pair, Map, Set, comparison — see overlay/go/hydra-kernel). The package
@@ -186,7 +186,7 @@ goUtilImportPath = goModulePath ++ "/hydra/overlay/go/util"
 
 resolveUtilType :: String -> [Go.Type] -> GoState -> (Go.Type, GoState)
 resolveUtilType name targs st =
-  let utilNs = ModuleName "hydra.overlay.go.util"
+  let utilNs = ModuleName "hydra.core.overlay.go.util"
   in if goStateCurrentNs st == utilNs
     then (goQualTypeName Nothing name targs, st)
     else (goQualTypeName (Just "util") name targs, addImport goUtilImportPath st)
@@ -196,7 +196,7 @@ resolveUtilType name targs st =
 -- handling same-namespace optimization.
 resolveUtilExpr :: String -> GoState -> (Go.Expression, GoState)
 resolveUtilExpr name st =
-  let utilNs = ModuleName "hydra.overlay.go.util"
+  let utilNs = ModuleName "hydra.core.overlay.go.util"
   in if goStateCurrentNs st == utilNs
     then (goNameExpr name, st)
     else (goQualNameExpr "util" name, addImport goUtilImportPath st)
@@ -1315,7 +1315,7 @@ libPackageAlias :: String -> String
 libPackageAlias lib = "lib" ++ lib
 
 -- | Resolve a Hydra primitive name to a reference to its native overlay
--- implementation: "hydra.lib.strings.concat" -> libstrings.Concat with import
+-- implementation: "hydra.core.lib.strings.concat" -> libstrings.Concat with import
 -- "hydra.dev/hydra/overlay/go/lib/strings" aliased as libstrings (via
 -- libPackageAlias, so a bare `strings` binding/param can never shadow the pkg).
 resolvePrimRef :: Core.Name -> GoState -> (Go.Expression, GoState)
@@ -1328,7 +1328,7 @@ resolvePrimRef (Core.Name name) st = case Strings.splitOn "." name of
 -- | Extract the primitive name from a (possibly type-wrapped) primitive reference.
 primRefName :: Core.Term -> Maybe Core.Name
 primRefName t = case deannotateTerm t of
-  Core.TermVariable name@(Core.Name n) | L.isPrefixOf "hydra.lib." n -> Just name
+  Core.TermVariable name@(Core.Name n) | L.isPrefixOf "hydra.core.lib." n -> Just name
   Core.TermTypeApplication ta -> primRefName (Core.typeApplicationTermBody ta)
   Core.TermTypeLambda tl -> primRefName (Core.typeLambdaBody tl)
   _ -> Nothing
@@ -1955,7 +1955,7 @@ producesAny st t = case deannotateTerm t of
       -- names, shadowing the hydra.lib.* -> True rule further down (dead code)
       -- and dropping the assertion. #417's typeApplication wrapping on primitives
       -- routed maps.empty through here, exposing the shadow.
-      Just _ | L.isPrefixOf "hydra.lib." (unName name) -> True
+      Just _ | L.isPrefixOf "hydra.core.lib." (unName name) -> True
       Just _ -> False   -- Other qualified names: concrete type
       Nothing ->
         -- Check if the local variable has a tracked concrete type.
@@ -2013,7 +2013,7 @@ producesAny st t = case deannotateTerm t of
   -- DOES produce any and must be asserted in a concrete position (e.g. a typed
   -- struct field). It is not concrete despite being a constant.
   Core.TermVariable (Core.Name n)
-    | L.isPrefixOf "hydra.lib." n -> True
+    | L.isPrefixOf "hydra.core.lib." n -> True
   -- A case expression's produced type is whatever its handlers produce. If every
   -- arm and the default yield a concrete Go value (e.g. a bool literal default),
   -- the whole expression is concrete -- so a caller must NOT assert `.(T)` on it
@@ -2100,7 +2100,7 @@ lookupForallVars g name =
 
 -- | Build a type substitution map from a generic type's forall vars and concrete type args.
 -- E.g., for ParserTestCase with forall ["a"] and args [jsonmodel.Value],
--- returns {Name "a" -> TypeVariable "hydra.json.model.Value"}.
+-- returns {Name "a" -> TypeVariable "hydra.core.json.model.Value"}.
 -- Only includes entries where the type arg is NOT a self-referencing type variable
 -- (to prevent infinite loops in encodeType).
 buildTypeSubst :: Graph -> Core.Name -> [Core.Type] -> M.Map Core.Name Core.Type
@@ -2520,7 +2520,7 @@ isLocalRef t = case deannotateTerm t of
 -- inference/expansion passes may have added around variable references.
 isPrimitiveRef :: Core.Term -> Bool
 isPrimitiveRef t = case deannotateTerm t of
-  Core.TermVariable (Core.Name n) -> L.isPrefixOf "hydra.lib." n
+  Core.TermVariable (Core.Name n) -> L.isPrefixOf "hydra.core.lib." n
   Core.TermTypeApplication ta -> isPrimitiveRef (Core.typeApplicationTermBody ta)
   Core.TermTypeLambda tl -> isPrimitiveRef (Core.typeLambdaBody tl)
   _ -> False
@@ -3076,7 +3076,7 @@ unpackLambdasWithDomains t = case deannotateTerm t of
 -- types name their nominal types rather than inlining them). Treating every
 -- @TypeVariable@ as polymorphic therefore misclassifies concrete results — e.g.
 -- @processNeighbor : TarjanState -> int32 -> TarjanState@, whose final codomain is
--- @TypeVariable "hydra.topology.TarjanState"@, was recorded as any-producing, so the
+-- @TypeVariable "hydra.core.topology.TarjanState"@, was recorded as any-producing, so the
 -- Foldl adapter emitted the illegal @processNeighbor(_p.(TarjanState)).(func(any) any)@
 -- (an assertion on a non-interface) instead of taking the inner-eta-wrap path.
 --
@@ -3561,7 +3561,7 @@ buildImports imps
           Go.InterpretedStringLit path)
     lastSeg = last . Strings.splitOn "/"
     -- Convert import path back to namespace.
-    -- For hydra imports: "hydra.dev/hydra/encode/core" → ModuleName "hydra.encode.core"
+    -- For hydra imports: "hydra.dev/hydra/encode/core" → ModuleName "hydra.core.encode.model"
     -- For stdlib imports: "math/big" → ModuleName "math.big" (no prefix to strip)
     pathToNamespace path =
       let segs = Strings.splitOn "/" path
@@ -3571,7 +3571,7 @@ buildImports imps
       in ModuleName $ L.intercalate "." nsParts
 
 -- | Convert a Hydra namespace to a Go file path.
--- In Go, each package must be its own directory. So "hydra.core" becomes
+-- In Go, each package must be its own directory. So "hydra.core.model" becomes
 -- "hydra/core/core.go" (the directory is the package, the file is named after the last segment).
 goNamespaceToFilePath :: ModuleName -> FilePath
 goNamespaceToFilePath (ModuleName ns) =

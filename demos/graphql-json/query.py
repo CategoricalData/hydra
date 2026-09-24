@@ -71,7 +71,7 @@ def build_graphql_schema():
             with open(os.path.join(schema_dir, filename)) as f:
                 type_defs += f.read() + "\n"
 
-    # Add Query root type and referenced types from hydra.core
+    # Add Query root type and referenced types from hydra.core.model
     schema_str = type_defs + """
 
 # Stub scalars for unresolved type variables
@@ -83,7 +83,7 @@ scalar t2
 scalar v1
 scalar v2
 
-# Referenced types from hydra.core (simplified for querying)
+# Referenced types from hydra.core.model (simplified for querying)
 type Binding {
   name: Name!
   term: String
@@ -223,13 +223,13 @@ def main():
         print(f"    ... and {len(namespaces) - 10} more")
     print()
 
-    # Query 2: Find all modules that depend on hydra.rewriting
-    print("--- Query 2: Modules depending on hydra.rewriting ---")
+    # Query 2: Find all modules that depend on hydra.core.rewriting
+    print("--- Query 2: Modules depending on hydra.core.rewriting ---")
     result = run_query(schema, modules,
-        load_query("dependents-of.graphql"), {"ns": "hydra.rewriting"})
+        load_query("dependents-of.graphql"), {"ns": "hydra.core.rewriting"})
     if result:
         deps = result["dependentsOf"]
-        print(f"  Found {len(deps)} modules depending on hydra.rewriting:")
+        print(f"  Found {len(deps)} modules depending on hydra.core.rewriting:")
         for m in sorted(deps, key=lambda x: x["namespace"]["value"]):
             desc = m.get("description") or "(no description)"
             print(f"    {m['namespace']['value']}: {desc}")

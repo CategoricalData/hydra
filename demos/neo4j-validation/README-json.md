@@ -21,7 +21,7 @@ this document covers the **offline, JSON-artifact** variant, which needs no data
 ```
                    authored once, in the Java DSL
                                 │
-           hydra.neo4j.model values (schema + 11 graphs)
+           hydra.pg.neo4j.model values (schema + 11 graphs)
                                 │  Hydra JSON encoding
                                 ▼
               schema.json + valid graphs + invalid graphs
@@ -36,7 +36,7 @@ this document covers the **offline, JSON-artifact** variant, which needs no data
 ```
 
 The schema and graphs are just data — a portable JSON artifact. The validator
-(`hydra.validate.neo4j.validateGraph`) is written once in Hydra and code-generated into
+(`hydra.pg.validate.neo4j.validateGraph`) is written once in Hydra and code-generated into
 each host. So the **data** under test is identical (same files) and the **logic** is
 identical (same source), which is exactly the guarantee a Neo4j client team cannot get
 today: their Java app and their Python app validate with separate, hand-maintained code
@@ -200,8 +200,8 @@ and 64-bit integers are encoded as strings.
 | Orchestrator | `demos/neo4j-validation/bin/run-json.sh` |
 
 The validator and the Neo4j model are translingual Hydra definitions in
-[`packages/hydra-pg`](../../packages/hydra-pg/README.md) (`hydra.neo4j.model`,
-`hydra.validate.neo4j`). Only the small JSON decode glue is written per host, and only
+[`packages/hydra-pg`](../../packages/hydra-pg/README.md) (`hydra.pg.neo4j.model`,
+`hydra.pg.validate.neo4j`). Only the small JSON decode glue is written per host, and only
 because reading a generic JSON file into typed model values is inherently host-shaped;
 the validation itself is shared.
 

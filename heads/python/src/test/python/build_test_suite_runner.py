@@ -25,7 +25,7 @@ for _p in [str(_gen_test_path), str(_gen_main_path), str(_main_path)]:
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-import hydra.test.build.test_suite as build_test_suite
+import hydra.core.test.build.test_suite as build_test_suite
 
 from hydra_test_group_walker import default_test_runner, generate_pytest_tests
 

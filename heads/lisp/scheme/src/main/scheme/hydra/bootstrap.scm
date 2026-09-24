@@ -245,19 +245,19 @@
 ;; Load bytevector compatibility shim (provides snap-to-float32). Migrated to dist by #434 (see above).
 (hydra-load-native-lib (string-append *gen-main-base* "../scheme/bytevector.sld"))
 ;; POSIX type modules (#494/#498) must load BEFORE the effectful impls below: the system/files impls
-;; construct hydra.time.Timespec / hydra.file.* records at load time (e.g. get_time -> make-rec (hydra
-;; time) make-hydra_time_timespec ...), so their record constructors must already be bound. These are
+;; construct hydra.core.time.Timespec / hydra.core.file.* records at load time (e.g. get_time -> make-rec (hydra
+;; time) make-hydra_core_time_timespec ...), so their record constructors must already be bound. These are
 ;; re-loaded (idempotently) as part of hydra-load-gen-main later; loading the leaf type modules early
-;; here is harmless. Dependency order: time (leaf) -> file (imports hydra.time) -> system (imports file).
+;; here is harmless. Dependency order: time (leaf) -> file (imports hydra.core.time) -> system (imports file).
 (for-each
   (lambda (m) (hydra-load-native-lib (string-append *gen-main-base* m)))
   '("core.scm" "time.scm" "file.scm" "system.scm"))
 ;; #473 Step 0 relocated the native lib impls from hydra/lib/ to hydra/scheme/lib/;
-;; #501 relocated them again to hydra/overlay/scheme/lib/ (hydra.overlay.scheme.* namespace).
+;; #501 relocated them again to hydra/overlay/scheme/lib/ (hydra.core.overlay.scheme.* namespace).
 (for-each
   (lambda (f)
     (hydra-load-native-lib (string-append *gen-main-base* "overlay/scheme/lib/" f)))
-  ;; All hydra.overlay.scheme.lib.* impls (the registry references every one's impl procedure).
+  ;; All hydra.core.overlay.scheme.lib.* impls (the registry references every one's impl procedure).
   ;; Must include the effectful/newer libs (effects/files/system #494/#498, hashing, text) or the
   ;; registry fails with "Unbound variable: hydra_lib_<sub>_<fn>".
   '("chars.scm" "effects.scm" "eithers.scm" "equality.scm" "files.scm" "functions.scm" "hashing.scm"
@@ -305,7 +305,7 @@
     "show/typing.scm" "show/util.scm" "show/paths.scm" "show/variants.scm"
     ;; Validate
     "validate/core.scm" "validate/packaging.scm"
-    ;; Decode modules (needed by hydra_decode_packaging_module)
+    ;; Decode modules (needed by hydra_core_decode_packaging_module)
     "decode/paths.scm" "decode/ast.scm" "decode/classes.scm"
     "decode/coders.scm" "decode/context.scm" "decode/core.scm"
     "decode/error/core.scm" "decode/error/checking.scm" "decode/errors.scm"
@@ -337,7 +337,7 @@
 ;; #473: the registry (overlay/scheme/libraries.scm) references, per primitive, the PrimitiveDefinition
 ;; DATA as def:hydra_lib_<sub>_<fn>. Flat-load each generated hydra.lib.* def-module with its exports
 ;; renamed X -> def:X (hydra-load-def-module), reusing the flat-loaded kernel record constructors so the
-;; registry's hydra_packaging_primitive_definition-name accessor accepts them. The `def:` prefix keeps
+;; registry's hydra_core_packaging_primitive_definition-name accessor accepts them. The `def:` prefix keeps
 ;; the DATA distinct from the impl PROCEDUREs (hydra_lib_<sub>_<fn>, loaded from overlay/scheme/lib/*).
 (for-each
   (lambda (sub)
@@ -422,25 +422,25 @@
 ;; ============================================================================
 
 (define (bootstrap-graph)
-  (make-hydra_graph_graph '() '() '() '() '()
+  (make-hydra_core_graph_graph '() '() '() '() '()
     (standard-library)
     '() '()))
 
 (define (bootstrap-schema-map)
-  (let loop ((pairs hydra_json_bootstrap_types_by_name) (result '()))
+  (let loop ((pairs hydra_core_json_bootstrap_types_by_name) (result '()))
     (if (null? pairs)
         (reverse result)
         (let* ((pair (car pairs))
                (name (car pair))
                (typ (cdr pair))
-               (ts (hydra_scoping_f_type_to_type_scheme typ))
-               (stripped (hydra_strip_deannotate_type_recursive
-                          (hydra_core_type_scheme-body ts))))
+               (ts (hydra_core_scoping_f_type_to_type_scheme typ))
+               (stripped (hydra_core_strip_deannotate_type_recursive
+                          (hydra_core_model_type_scheme-body ts))))
           (loop (cdr pairs) (cons (cons name stripped) result))))))
 
 (define (namespace-to-path ns)
   ;; Convert "hydra.foo.bar" to "hydra/foo/bar" for the filesystem path.
-  ;; The kernel function hydra_names_module_name_to_file_path requires a
+  ;; The kernel function hydra_core_names_module_name_to_file_path requires a
   ;; case_conv + ext argument bundle; for our use (locating the JSON file
   ;; on disk, where path mirrors namespace exactly), we only need '.' -> '/'.
   (let ((len (string-length ns)))
@@ -458,14 +458,14 @@
   (let* ((file-path (string-append json-dir "/" (namespace-to-path ns-str) ".json"))
          (json-obj (json-read-file file-path))
          (hydra-json (scheme-to-hydra-json json-obj))
-         (mod-type (list 'variable "hydra.packaging.Module"))
-         (json-result (((((hydra_json_decode_from_json schema-map)
-                          #f) "hydra.packaging.Module") mod-type) hydra-json)))
+         (mod-type (list 'variable "hydra.core.packaging.Module"))
+         (json-result (((((hydra_core_json_decode_from_json schema-map)
+                          #f) "hydra.core.packaging.Module") mod-type) hydra-json)))
     (when (eq? (car json-result) 'left)
       (error (string-append "JSON decode error for " ns-str ": ")
              (cadr json-result)))
     (let* ((term (cadr json-result))
-           (mod-result ((hydra_decode_packaging_module bs-graph) term)))
+           (mod-result ((hydra_core_decode_packaging_module bs-graph) term)))
       (when (eq? (car mod-result) 'left)
         (error (string-append "Module decode error for " ns-str ": ")
                (cadr mod-result)))
@@ -537,12 +537,12 @@
                        (if (eq? (car result) 'left)
                            result
                            (let* ((program (cadr result))
-                                  (code (hydra_serialization_print_expr
-                                          (hydra_serialization_parenthesize
+                                  (code (hydra_core_serialization_print_expr
+                                          (hydra_core_serialization_parenthesize
                                             (pte program))))
-                                  (ns-val (let ((mn (hydra_packaging_module-name mod)))
+                                  (ns-val (let ((mn (hydra_core_packaging_module-name mod)))
                                             (if (string? mn) mn
-                                                (hydra_packaging_module_name-value mn))))
+                                                (hydra_core_packaging_module_name-value mn))))
                                   (ext (cond ((equal? target "clojure") "clj")
                                              ((equal? target "scheme") "scm")
                                              ((equal? target "common-lisp") "lisp")
@@ -551,7 +551,7 @@
                                   (case-conv (if (equal? target "clojure")
                                                   (list 'camel '())
                                                   (list 'lower_snake '())))
-                                  (fp (((hydra_names_module_name_to_file_path case-conv) ext) ns-val)))
+                                  (fp (((hydra_core_names_module_name_to_file_path case-conv) ext) ns-val)))
                              (list 'right (list (cons fp code))))))))))
              hydra_lisp_language_lisp_language
              (list #f #f #f #f)
@@ -621,17 +621,17 @@
   ;; cross-module variable resolution: the kernel computes transitive term
   ;; dependencies of mods-to-generate to build the data graph, and test
   ;; modules contain undeclared cross-references (e.g.
-  ;; hydra.test.lib.chars references hydra.test.testGraph.testContext but
-  ;; doesn't declare hydra.test.testGraph in dependencies). With the
+  ;; hydra.core.test.lib.chars references hydra.core.test.testGraph.testContext but
+  ;; doesn't declare hydra.core.test.testGraph in dependencies). With the
   ;; vhash maps fix, single-call codegen is fast enough.
   ;; doExpand/doHoistCase/doHoistPoly are derived inside the kernel from
   ;; lang.supportedFeatures; only doInfer is passed in. Generation.hs's
   ;; type signature is stale (declares 4 Bools) but the body takes 1.
   (let* ((bs-graph (bootstrap-graph))
-         (cx (make-hydra_typing_inference_context 0 '()))
+         (cx (make-hydra_core_typing_inference_context 0 '()))
          (do-infer (list-ref flags 0))
          (t0 (current-time-millis))
-         (result (((((((hydra_codegen_generate_source_files
+         (result (((((((hydra_core_codegen_generate_source_files
                           coder) language) do-infer)
                      bs-graph) universe-mods) mods-to-generate) cx)))
     (when (eq? (car result) 'left)
@@ -672,7 +672,7 @@
 ;; checking which overlay/<target>/hydra-kernel/.../hydra/overlay/<seg>/lib/ files actually exist,
 ;; rather than maintaining a hand-written allowlist. Existence on disk IS the signal for "this
 ;; host ships a native impl for this sub" -- correct by construction for any future
-;; hydra.lib.<sub> module whether or not it has a relocated overlay impl (hydra.lib.defaults has
+;; hydra.lib.<sub> module whether or not it has a relocated overlay impl (hydra.core.lib.defaults has
 ;; none and is therefore never redirected, replacing the old by-name exclusion). Falls back to
 ;; lib-subs-fallback if the overlay source tree isn't reachable from *repo-root*.
 (define (strip-extension name)
@@ -687,7 +687,7 @@
 ;; wrong is silent on case-insensitive filesystems (macOS): the existence check matches, the scan
 ;; then returns capitalized names that never equal the lowercase subs the coder tests against, so
 ;; every hydra.lib.* redirect is skipped and generated Haskell imports Hydra.Lib.* instead of
-;; Hydra.Overlay.Haskell.Lib.* (#630).
+;; Hydra.Core.Overlay.Haskell.Lib.* (#630).
 (define (overlay-lib-dir repo-root target)
   (if (string=? target "haskell")
       (string-append repo-root "/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib")
@@ -715,20 +715,20 @@
           (if (null? subs) lib-subs-fallback subs)))))
 
 (define (lib-module? m)
-  (let* ((mn (hydra_packaging_module-name m))
-         (ns (if (string? mn) mn (hydra_packaging_module_name-value mn))))
+  (let* ((mn (hydra_core_packaging_module-name m))
+         (ns (if (string? mn) mn (hydra_core_packaging_module_name-value mn))))
     (and (>= (string-length ns) 10)
          (string=? (substring ns 0 10) "hydra.lib."))))
 
 ;; Emit the (hydra lib <sub>) def-modules from their LOWERED form. Lib modules lowered; universe lowers
 ;; ONLY lib modules (so a lib default-implementation referencing another primitive resolves to it).
 (define (run-lib-pass coder language flags out-main all-mods mods-to-generate)
-  (let ((lib-mods (map hydra_codegen_lower_primitive_definitions
+  (let ((lib-mods (map hydra_core_codegen_lower_primitive_definitions
                        (filter lib-module? mods-to-generate))))
     (when (not (null? lib-mods))
       (let ((lib-universe (map (lambda (m)
                                  (if (lib-module? m)
-                                     (hydra_codegen_lower_primitive_definitions m)
+                                     (hydra_core_codegen_lower_primitive_definitions m)
                                      m))
                                all-mods)))
         (display (string-append "Lib pass: emitting "
@@ -829,14 +829,14 @@
     acc))
 
 ;; Dotted-target (python/clojure) redirect: rewrite hydra.lib.<sub> -> hydra.<lang-seg>.lib.<sub>
-;; and hydra.test.test_env -> hydra.<lang-seg>.test_env in the generated source. Mirrors the
+;; and hydra.core.test.test_env -> hydra.<lang-seg>.test_env in the generated source. Mirrors the
 ;; Scala/Clojure/CL host fix; redirect-scheme handles only the scheme-target S-expr form.
 (define (redirect-dotted s subs lang-seg)
-  ;; Match each delimiter that can follow the module name so both usages (hydra.lib.lists.cons) and
-  ;; import lines (import hydra.lib.lists\n) get rewritten. Mirrors the Scala host's redirectDotted.
+  ;; Match each delimiter that can follow the module name so both usages (hydra.core.lib.lists.cons) and
+  ;; import lines (import hydra.core.lib.lists\n) get rewritten. Mirrors the Scala host's redirectDotted.
   ;;
   ;; CRITICAL: protect quoted primitive-NAME string literals. Primitives are registered under their
-  ;; canonical name Name("hydra.lib.chars.isAlphaNum"); the runtime looks them up by that exact
+  ;; canonical name Name("hydra.core.lib.chars.isAlphaNum"); the runtime looks them up by that exact
   ;; string. Only the dotted CALL paths get relocated — the name literals must stay canonical, or
   ;; the evaluator can't resolve the primitive and leaves the application unreduced (e.g.
   ;; "expected 'true' but got '(...isAlphaNum @ 97:int32)'"). Use the Scala host's sentinel trick:
@@ -848,7 +848,7 @@
          (redirected
            (let loop ((remaining subs) (acc protected))
              (if (null? remaining)
-                 (string-replace-all acc "hydra.test.test_env" (string-append "hydra." lang-seg ".test_env"))
+                 (string-replace-all acc "hydra.core.test.test_env" (string-append "hydra." lang-seg ".test_env"))
                  (let ((old (string-append "hydra.lib." (car remaining)))
                        (new (string-append "hydra." lang-seg ".lib." (car remaining))))
                    (let dloop ((delims (list "." (string #\newline) " " ")" "," ":")) (a acc))
@@ -861,7 +861,7 @@
     (string-replace-all redirected sentinel "hydra.lib.")))
 
 ;; Common Lisp / Emacs Lisp redirect: rename consumer call sites
-;; hydra_lib_<sub>_ -> hydra_overlay_<lang-seg>_lib_<sub>_, and drop the def-module
+;; hydra_lib_<sub>_ -> hydra_core_overlay_<lang-seg>_lib_<sub>_, and drop the def-module
 ;; ":hydra.lib.<sub>" token from consumer defpackage (:use ...) clauses.
 (define (redirect-lisp-flat s subs lang-seg)
   (let* ((renamed (let loop ((remaining subs) (acc s))
@@ -870,7 +870,7 @@
                          (loop (cdr remaining)
                                (string-replace-all acc
                                                    (string-append "hydra_lib_" (car remaining) "_")
-                                                   (string-append "hydra_overlay_" lang-seg "_lib_" (car remaining) "_")))))))
+                                                   (string-append "hydra_core_overlay_" lang-seg "_lib_" (car remaining) "_")))))))
     (let loop ((remaining subs) (acc renamed))
       (if (null? remaining)
           acc
@@ -896,11 +896,11 @@
                  (let ((out (redirect-scheme s subs)))
                    (when (not (string=? out s)) (write-file-content path out))))
                 ((and s (string=? *target* "python")
-                      (or (string-contains-substr? s "hydra.lib.") (string-contains-substr? s "hydra.test.test")))
+                      (or (string-contains-substr? s "hydra.lib.") (string-contains-substr? s "hydra.core.test.test")))
                  (let ((out (redirect-dotted s subs "overlay.python")))
                    (when (not (string=? out s)) (write-file-content path out))))
                 ((and s (string=? *target* "clojure")
-                      (or (string-contains-substr? s "hydra.lib.") (string-contains-substr? s "hydra.test.test")))
+                      (or (string-contains-substr? s "hydra.lib.") (string-contains-substr? s "hydra.core.test.test")))
                  (let ((out (redirect-dotted s subs "overlay.clojure")))
                    (when (not (string=? out s)) (write-file-content path out))))
                 ((and s (string=? *target* "common-lisp")
@@ -937,7 +937,7 @@
     (let* ((all-ns (read-manifest-field *json-dir* "mainModules"))
            (all-mods (load-modules-from-json *json-dir* all-ns))
            (total-bindings (apply + (map (lambda (m)
-                                           (let ((els (hydra_packaging_module-definitions m)))
+                                           (let ((els (hydra_core_packaging_module-definitions m)))
                                              (if (list? els) (length els) 0)))
                                          all-mods))))
       (display (string-append "  Loaded " (number->string (length all-mods))
@@ -997,11 +997,11 @@
                                             (substring *json-dir* (+ pos nlen) jlen))
                              *json-dir*)))
                      (test-ns (read-manifest-field *json-dir* "testModules"))
-                     ;; #546/#547: the kernel test suite references hydra.test.build.* -> hydra.build.*
+                     ;; #546/#547: the kernel test suite references hydra.core.test.build.* -> hydra.build.*
                      ;; (Option A). Load hydra-build's main modules into the universe and its OWN test
-                     ;; modules (hydra.test.build.*, which live in the hydra-build package's test tree,
+                     ;; modules (hydra.core.test.build.*, which live in the hydra-build package's test tree,
                      ;; not hydra-kernel's), else cross-host gen fails with
-                     ;; "Unknown variable: hydra.test.build.modules.allTests". Mirrors the
+                     ;; "Unknown variable: hydra.build.test.modules.allTests". Mirrors the
                      ;; Java/Scala/Clojure/CL host fix (#553). Derive hydra-build's json dirs by
                      ;; substituting the package name in *json-dir* / test-json-dir.
                      (build-main-json-dir (string-replace-first *json-dir* "hydra-kernel" "hydra-build"))
@@ -1015,7 +1015,7 @@
                      (test-mods (append (load-modules-from-json test-json-dir test-ns) build-test-mods))
                      (all-universe (append all-mods build-main-mods test-mods))
                      ;; Filter skip-emit test namespaces (e.g.
-                     ;; hydra.test.testEnv): these are type-only stubs whose
+                     ;; hydra.core.test.testEnv): these are type-only stubs whose
                      ;; hand-written per-language counterparts are the source
                      ;; of truth. Mirrors testSkipEmitModuleNames in
                      ;; Hydra.Sources.Test.All and the equivalent filter in
@@ -1026,9 +1026,9 @@
                            ((null? ms) (reverse out))
                            (else
                              (let* ((m (car ms))
-                                    (mn (hydra_packaging_module-name m))
-                                    (ns-str (if (string? mn) mn (hydra_packaging_module_name-value mn))))
-                               (if (equal? ns-str "hydra.test.testEnv")
+                                    (mn (hydra_core_packaging_module-name m))
+                                    (ns-str (if (string? mn) mn (hydra_core_packaging_module_name-value mn))))
+                               (if (equal? ns-str "hydra.core.test.testEnv")
                                    (loop (cdr ms) out)
                                    (loop (cdr ms) (cons m out))))))))
                      (out-test (string-append *output-base* "/scheme-to-" *target*

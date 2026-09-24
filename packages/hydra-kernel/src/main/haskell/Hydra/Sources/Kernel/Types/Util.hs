@@ -2,16 +2,16 @@ module Hydra.Sources.Kernel.Types.Util where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Packaging as Packaging
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.util"
+ns = ModuleName "hydra.core.util"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns
@@ -23,7 +23,7 @@ module_ = Module {
             moduleDependencies = unqualifiedDep <$> [Core.ns, Packaging.ns],
             moduleMetadata = descriptionMetadata (Just "General-purpose utility types used across Hydra.")}
   where
-    -- Note: adapter, bicoder, and coder have been moved to hydra.coders.
+    -- Note: adapter, bicoder, and coder have been moved to hydra.core.coders.
     definitions = [
       caseConvention,
       comparison,

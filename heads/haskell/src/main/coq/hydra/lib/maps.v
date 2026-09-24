@@ -1,4 +1,4 @@
-(* Hydra primitive library: hydra.lib.maps *)
+(* Hydra primitive library: hydra.core.lib.maps *)
 
 (* Maps are represented as association lists: list (k * v) *)
 

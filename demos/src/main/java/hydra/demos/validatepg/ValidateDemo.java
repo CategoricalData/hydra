@@ -1,17 +1,17 @@
 package hydra.demos.validatepg;
 
-import hydra.overlay.java.build.Generation;
-import hydra.core.Literal;
-import hydra.core.LiteralType;
-import hydra.json.model.Value;
+import hydra.build.overlay.java.Generation;
+import hydra.core.model.Literal;
+import hydra.core.model.LiteralType;
+import hydra.core.json.model.Value;
 import hydra.pg.model.Graph;
 import hydra.pg.model.GraphSchema;
-import hydra.error.pg.InvalidGraphError;
-import hydra.error.pg.InvalidValueError;
-import hydra.print.Core;
-import hydra.validate.Pg;
-import hydra.util.Maybe;
-import hydra.validation.ValidationResult;
+import hydra.pg.error.model.InvalidGraphError;
+import hydra.pg.error.model.InvalidValueError;
+import hydra.core.print.Core;
+import hydra.core.validate.Pg;
+import hydra.core.util.Maybe;
+import hydra.core.validation.ValidationResult;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,18 +23,18 @@ import java.util.function.Function;
  * Java driver for the PG validation translingual demo.
  *
  * <p>Reads a schema JSON file and one or more graph JSON files (produced by GenerateData using
- * hydra.encode.pg.model), validates each graph against the schema using hydra.validate.pg,
+ * hydra.pg.encode.model), validates each graph against the schema using hydra.pg.validate.model,
  * and prints the results.
  *
  * <p>Usage: java hydra.demos.validatepg.ValidateDemo &lt;data-directory&gt;
  */
 public class ValidateDemo {
 
-    // Adapter from hydra.validate.core.checkLiteral (typed InvalidLiteralError) to the
-    // stringified InvalidValueError shape that hydra.validate.pg.validateGraph expects.
+    // Adapter from hydra.core.validate.model.checkLiteral (typed InvalidLiteralError) to the
+    // stringified InvalidValueError shape that hydra.pg.validate.model.validateGraph expects.
     private static final Function<LiteralType, Function<Literal, Maybe<InvalidValueError>>>
             CHECK_LITERAL = type -> value -> {
-        Maybe<hydra.error.core.InvalidLiteralError> result = hydra.validate.Core.checkLiteral(type, value);
+        Maybe<hydra.core.error.model.InvalidLiteralError> result = hydra.core.validate.Core.checkLiteral(type, value);
         if (!result.isJust()) {
             return Maybe.nothing();
         }

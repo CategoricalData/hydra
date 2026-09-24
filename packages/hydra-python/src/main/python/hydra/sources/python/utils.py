@@ -5,24 +5,24 @@ Host-native DSL source (authoritative; the former Haskell copy was removed in #3
 
 import sys
 
-from hydra.core import Name
-from hydra.overlay.python.dsl.python import Given, None_
-from hydra.packaging import EntityMetadata, Module, ModuleName
+from hydra.core.model import Name
+from hydra.core.overlay.python.dsl.python import Given, None_
+from hydra.core.packaging import EntityMetadata, Module, ModuleName
 
-import hydra.dsl.lib.equality as Equality
-import hydra.dsl.lib.lists as Lists
-import hydra.dsl.lib.logic as Logic
-import hydra.dsl.lib.maps as Maps
-import hydra.dsl.lib.optionals as Optionals
-import hydra.dsl.lib.pairs as Pairs
-import hydra.dsl.lib.strings as Strings
-from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
-from hydra.overlay.python.dsl.meta.defs import check_complete
-import hydra.dsl.analysis
-import hydra.dsl.serialization
-import hydra.dsl.packaging as Packaging
-import hydra.dsl.util as Util
-import hydra.dsl.python.syntax as PySyn
+import hydra.core.dsl.lib.equality as Equality
+import hydra.core.dsl.lib.lists as Lists
+import hydra.core.dsl.lib.logic as Logic
+import hydra.core.dsl.lib.maps as Maps
+import hydra.core.dsl.lib.optionals as Optionals
+import hydra.core.dsl.lib.pairs as Pairs
+import hydra.core.dsl.lib.strings as Strings
+from hydra.core.overlay.python.dsl.phantoms import *  # noqa: F401,F403
+from hydra.core.overlay.python.dsl.meta.defs import check_complete
+import hydra.core.dsl.analysis
+import hydra.core.dsl.serialization
+import hydra.core.dsl.packaging as Packaging
+import hydra.core.dsl.util as Util
+import hydra.python.dsl.syntax as PySyn
 
 from hydra.sources.python import _python_helpers as PyDsl
 
@@ -47,8 +47,8 @@ from hydra.sources.python._source_dsl import (
 DEPENDENCIES = [
     unqualified_dep(ModuleName("hydra.python.names")),
     unqualified_dep(ModuleName("hydra.python.serde")),
-    unqualified_dep(ModuleName("hydra.serialization")),
-    unqualified_dep(ModuleName("hydra.analysis")),
+    unqualified_dep(ModuleName("hydra.core.serialization")),
+    unqualified_dep(ModuleName("hydra.core.analysis")),
     unqualified_dep(ModuleName("hydra.python.environment")),
     unqualified_dep(ModuleName("hydra.python.syntax")),
 ] + KERNEL_TYPES_NAMESPACES
@@ -78,8 +78,8 @@ _PY_NAME = Name("hydra.python.syntax.Name")
 from hydra.sources.python._source_dsl import py_name as _py_name, py_helper_name as _py_helper_name
 
 # Kernel-side serialization / analysis refs (PyDsl uses no-prefix Hydra functions)
-_serialization_print_expr = hydra.dsl.serialization.print_expr
-_analysis_module_names_for_definitions = hydra.dsl.analysis.module_names_for_definitions
+_serialization_print_expr = hydra.core.dsl.serialization.print_expr
+_analysis_module_names_for_definitions = hydra.core.dsl.analysis.module_names_for_definitions
 _pyserde_expression_to_expr = var("hydra.python.serde.expressionToExpr")
 _pynames_encode_namespace = var("hydra.python.names.encodeNamespace")
 _pynames_encode_namespace_with_overrides = var("hydra.python.names.encodeNamespaceWithOverrides")
@@ -231,7 +231,7 @@ def _decimal_variant_methods():
     )
     return (_def("decimalVariantMethods")
         .doc("Generate __eq__ and __hash__ methods for the Decimal-typed union variant, "
-             "delegating to hydra.overlay.python.util._decimal (scale-aware per "
+             "delegating to hydra.core.overlay.python.util._decimal (scale-aware per "
              "docs/specification/ordering-and-equality.md; Node's generic derivation "
              "delegates to Decimal's own scale-blind equality/hash)")
         .to(body))
@@ -433,7 +433,7 @@ def _find_namespaces():
     body = lets(
         [
             field("coreNs",
-                Packaging.module_name2(string("hydra.core")),
+                Packaging.module_name2(string("hydra.core.model")),
             ),
             field("namespaces",
                 _analysis_module_names_for_definitions(

@@ -5,29 +5,29 @@ module Hydra.Sources.Test.Reduction where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import Hydra.Testing
+import Hydra.Core.Testing
 
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Reduction as Reduction
-import qualified Hydra.Dsl.Lib.Eithers as Eithers
-import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
-import qualified Hydra.Lib.Lists as DefLists
-import qualified Hydra.Lib.Math as DefMath
-import qualified Hydra.Lib.Sets as DefSets
-import qualified Hydra.Lib.Strings as DefStrings
+import qualified Hydra.Core.Dsl.Lib.Eithers as Eithers
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims as Prims
+import qualified Hydra.Core.Lib.Lists as DefLists
+import qualified Hydra.Core.Lib.Math as DefMath
+import qualified Hydra.Core.Lib.Sets as DefSets
+import qualified Hydra.Core.Lib.Strings as DefStrings
 
 
 -- Local alias for polymorphic application (Phantoms.@@ applies TypedBindings; Terms.@@ only works on TypedTerm Term)
@@ -41,13 +41,13 @@ infixl 1 #
 infixr 0 ~>:
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.reduction"
+ns = ModuleName "hydra.core.test.reduction"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.reduction", ModuleName "hydra.inference", ModuleName "hydra.print.core", ModuleName "hydra.typing", ModuleName "hydra.core", ModuleName "hydra.errors", ModuleName "hydra.test.testGraph", ModuleName "hydra.testing"],
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core.reduction", ModuleName "hydra.core.inference", ModuleName "hydra.core.print.model", ModuleName "hydra.core.typing", ModuleName "hydra.core.model", ModuleName "hydra.core.errors", ModuleName "hydra.core.test.testGraph", ModuleName "hydra.core.testing"],
             moduleMetadata = descriptionMetadata (Just "Test cases for term reduction/evaluation mechanics")}
   where
     definitions = [Phantoms.toDefinition allTests]

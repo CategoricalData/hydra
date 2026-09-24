@@ -1,14 +1,14 @@
 package hydra;
 
-import hydra.coders.Coder;
-import hydra.core.Name;
-import hydra.core.Term;
-import hydra.core.TypeScheme;
-import hydra.graph.Graph;
-import hydra.graph.Primitive;
-import hydra.overlay.java.lib.Libraries;
-import hydra.overlay.java.tools.PrimitiveFunction;
-import hydra.overlay.java.util.Either;
+import hydra.core.coders.Coder;
+import hydra.core.model.Name;
+import hydra.core.model.Term;
+import hydra.core.model.TypeScheme;
+import hydra.core.graph.Graph;
+import hydra.core.graph.Primitive;
+import hydra.core.overlay.java.lib.Libraries;
+import hydra.core.overlay.java.tools.PrimitiveFunction;
+import hydra.core.overlay.java.util.Either;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static hydra.overlay.java.Coders.roundTrip;
+import static hydra.core.overlay.java.Coders.roundTrip;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -99,7 +99,7 @@ public class HydraTestBase {
     protected static Graph emptyGraph() {
         Map<Name, Term> boundTerms = new HashMap<>();
         Map<Name, TypeScheme> boundTypes = new HashMap<>();
-        Map<Name, hydra.core.TypeVariableConstraints> classConstraints = new HashMap<>();
+        Map<Name, hydra.core.model.TypeVariableConstraints> classConstraints = new HashMap<>();
         Set<Name> lambdaVariables = new HashSet<>();
         Map<Name, Term> metadata = new HashMap<>();
 

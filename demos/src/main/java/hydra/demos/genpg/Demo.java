@@ -1,20 +1,20 @@
 package hydra.demos.genpg;
 
-import hydra.overlay.java.build.Generation;
-import hydra.typing.InferenceContext;
-import hydra.core.Term;
-import hydra.errors.Error_;
-import hydra.graph.Graph;
+import hydra.build.overlay.java.Generation;
+import hydra.core.typing.InferenceContext;
+import hydra.core.model.Term;
+import hydra.core.errors.Error_;
+import hydra.core.graph.Graph;
 import hydra.json.Writer;
 import hydra.pg.model.Edge;
 import hydra.pg.model.Element;
 import hydra.pg.model.LazyGraph;
 import hydra.pg.model.Vertex;
-import hydra.relational.RelationName;
-import hydra.tabular.Table;
-import hydra.tabular.TableType;
-import hydra.util.Either;
-import hydra.util.Pair;
+import hydra.core.relational.RelationName;
+import hydra.core.tabular.Table;
+import hydra.core.tabular.TableType;
+import hydra.core.util.Either;
+import hydra.core.util.Pair;
 
 import hydra.demos.genpg.Transform;
 import hydra.demos.genpg.Sales;
@@ -88,7 +88,7 @@ public class Demo {
             Transform.transformTableRows(cx, graphContext, vspecs, especs, tableType, table.data);
         if (result.isLeft()) {
             throw new RuntimeException(
-                "Transform error: " + hydra.print.Errors.error(((Either.Left<Error_, ?>) result).value));
+                "Transform error: " + hydra.core.print.Errors.error(((Either.Left<Error_, ?>) result).value));
         }
         return ((Either.Right<Error_, Pair<List<Vertex<Term>>, List<Edge<Term>>>>) result).value;
     }
@@ -163,13 +163,13 @@ public class Demo {
         System.out.println("  Vertices: " + vertexCount);
         System.out.println("  Edges: " + edgeCount);
 
-        Either<?, List<hydra.json.model.Value>> jsonResult = Utils.pgElementsToGraphson(
+        Either<?, List<hydra.core.json.model.Value>> jsonResult = Utils.pgElementsToGraphson(
             v -> Utils.encodeTermValue(v), els);
         if (jsonResult.isLeft()) {
             throw new RuntimeException("GraphSON encoding error: " + jsonResult);
         }
-        List<hydra.json.model.Value> jsonValues =
-            ((Either.Right<?, List<hydra.json.model.Value>>) jsonResult).value;
+        List<hydra.core.json.model.Value> jsonValues =
+            ((Either.Right<?, List<hydra.core.json.model.Value>>) jsonResult).value;
 
         List<String> jsonStrings = jsonValues.stream()
             .map(Writer::printJson)

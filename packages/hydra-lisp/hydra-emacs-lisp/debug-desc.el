@@ -14,7 +14,7 @@
 ;; Step 1: Run setTermDescription
 (let* ((cx (hydra-empty-context))
        (graph hydra--test-graph)
-       (set-fn (list :function (list :primitive "hydra.annotations.setTermDescription")))
+       (set-fn (list :function (list :primitive "hydra.core.annotations.setTermDescription")))
        (val (list :maybe (list :literal (list :string "hello"))))
        (term (list :literal (list :string "foo")))
        (set-app (list :application (make-hydra_core_application
@@ -66,7 +66,7 @@
                               (let ((k (car e)))
                                 (and (consp k) (eq (car k) :wrap)
                                      (let ((wt (cadr k)))
-                                       (and (equal (hydra_core_wrapped_term-type_name wt) "hydra.core.Name")
+                                       (and (equal (hydra_core_wrapped_term-type_name wt) "hydra.core.model.Name")
                                             (let ((b (hydra_core_wrapped_term-body wt)))
                                               (and (consp b) (eq (car b) :literal)
                                                    (consp (cadr b)) (eq (car (cadr b)) :string)
@@ -76,7 +76,7 @@
 
     ;; Step 3: Now reduce through the full getTermDescription chain
     (message "Via reducer:")
-    (let* ((get-fn (list :function (list :primitive "hydra.annotations.getTermDescription")))
+    (let* ((get-fn (list :function (list :primitive "hydra.core.annotations.getTermDescription")))
            (get-app (list :application (make-hydra_core_application
                       (list :application (make-hydra_core_application
                         (list :application (make-hydra_core_application get-fn (list :unit)))

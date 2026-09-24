@@ -38,7 +38,7 @@ so they can load any kernel module.
 
 ### M1
 
-(No imports yet. `hydra.constants.*` uses only data segments and returns
+(No imports yet. `hydra.core.constants.*` uses only data segments and returns
 constants or pointers into the segment.)
 
 ### M2 (planned)

@@ -2,13 +2,13 @@
 // Provides a real graph with primitives and kernel bindings, mirroring Haskell's TestEnv.hs.
 // Referenced directly by the generated TestGraph.java (no post-generation patching required).
 
-package hydra.test;
+package hydra.core.test;
 
-import hydra.core.Name;
-import hydra.core.Term;
-import hydra.core.Type;
-import hydra.graph.Graph;
-import hydra.typing.InferenceContext;
+import hydra.core.model.Name;
+import hydra.core.model.Term;
+import hydra.core.model.Type;
+import hydra.core.graph.Graph;
+import hydra.core.typing.InferenceContext;
 import hydra.TestSuiteRunner;
 
 import java.util.Map;

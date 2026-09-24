@@ -35,7 +35,7 @@ cd demos/grad
 
 ## How it works
 
-The `hydra.differentiation` module implements differentiation as a recursive function
+The `hydra.core.differentiation` module implements differentiation as a recursive function
 `differentiateTerm :: Name -> Term -> Term` that pattern-matches on all 21 Hydra term
 constructors and applies standard calculus rules.
 Derivative rules are provided for all differentiable Float64 primitives

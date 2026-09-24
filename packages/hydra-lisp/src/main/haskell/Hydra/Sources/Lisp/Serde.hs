@@ -8,21 +8,21 @@ module Hydra.Sources.Lisp.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Libraries
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Lib.Math                   as Math
-import qualified Hydra.Dsl.Lib.Ordering               as Ordering
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Libraries
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Core.Dsl.Lib.Math                   as Math
+import qualified Hydra.Core.Dsl.Lib.Ordering               as Ordering
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
@@ -36,7 +36,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports for Lisp AST
-import Hydra.Ast
+import Hydra.Core.Ast
 import qualified Hydra.Lisp.Syntax as L
 
 

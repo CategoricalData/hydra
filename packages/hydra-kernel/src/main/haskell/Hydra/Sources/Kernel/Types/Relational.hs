@@ -2,16 +2,16 @@ module Hydra.Sources.Kernel.Types.Relational where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Dsl.Annotations as Annotations
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations as Annotations
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.relational"
+ns = ModuleName "hydra.core.relational"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns

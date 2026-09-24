@@ -17,21 +17,21 @@ module Hydra.Demos.AvroBicoder (
 ) where
 
 import Hydra.Kernel
-import qualified Hydra.Core as Core
-import qualified Hydra.Avro.Schema as Avro
-import qualified Hydra.Json.Model as Json
-import qualified Hydra.Avro.Coder as AvroCoder
-import qualified Hydra.Avro.Encoder as Encoder
-import qualified Hydra.Avro.Environment as AvroEnv
-import qualified Hydra.Avro.SchemaJson as SchemaJson
-import qualified Hydra.Json.Parser as JsonParser
-import qualified Hydra.Json.Writer as JsonWriter
-import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
-import qualified Hydra.Print.Errors as PrintError
+import qualified Hydra.Core.Model as Core
+import qualified Hydra.Ext.Avro.Schema as Avro
+import qualified Hydra.Core.Json.Model as Json
+import qualified Hydra.Ext.Avro.Coder as AvroCoder
+import qualified Hydra.Ext.Avro.Encoder as Encoder
+import qualified Hydra.Ext.Avro.Environment as AvroEnv
+import qualified Hydra.Ext.Avro.SchemaJson as SchemaJson
+import qualified Hydra.Core.Json.Parser as JsonParser
+import qualified Hydra.Core.Json.Writer as JsonWriter
+import Hydra.Core.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
+import qualified Hydra.Core.Print.Errors as PrintError
 import Hydra.Tools.AvroWorkflows (propertyGraphGraphsonLastMile, transformAvroJsonDirectory)
-import qualified Hydra.Coders as Coders
-import qualified Hydra.Util as Util
-import qualified Hydra.Json.Writer as JsonWriter
+import qualified Hydra.Core.Coders as Coders
+import qualified Hydra.Core.Util as Util
+import qualified Hydra.Core.Json.Writer as JsonWriter
 
 import qualified Data.Map as M
 import qualified Data.List as L

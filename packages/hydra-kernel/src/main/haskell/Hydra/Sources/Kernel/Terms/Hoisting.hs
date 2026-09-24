@@ -11,46 +11,46 @@ import Hydra.Kernel hiding (
   isApplicationFunction, isLambdaBody, isUnionElimination, isUnionEliminationApplication,
   normalizePathForHoisting,
   shouldHoistAll, shouldHoistCaseStatement, shouldHoistPolymorphic, updateHoistState)
-import qualified Hydra.Dsl.Paths    as Paths
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
-import qualified Hydra.Dsl.Ast          as Ast
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Coders       as Coders
-import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph        as Graph
-import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Lib.Math     as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Literals          as Literals
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base         as MetaBase
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms        as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types        as MetaTypes
-import qualified Hydra.Dsl.Packaging       as Packaging
-import qualified Hydra.Dsl.Parsing      as Parsing
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Prims             as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular           as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing      as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Terms             as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Tests             as Tests
-import qualified Hydra.Dsl.Topology     as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
-import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Util         as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
+import qualified Hydra.Core.Dsl.Paths    as Paths
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations       as Annotations
+import qualified Hydra.Core.Dsl.Ast          as Ast
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Coders       as Coders
+import qualified Hydra.Core.Dsl.Util      as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph        as Graph
+import qualified Hydra.Core.Dsl.Json.Model         as Json
+import qualified Hydra.Core.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Math     as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals          as Literals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base         as MetaBase
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms        as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types        as MetaTypes
+import qualified Hydra.Core.Dsl.Packaging       as Packaging
+import qualified Hydra.Core.Dsl.Parsing      as Parsing
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims             as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular           as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing      as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms             as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests             as Tests
+import qualified Hydra.Core.Dsl.Topology     as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Dsl.Typing       as Typing
+import qualified Hydra.Core.Dsl.Util         as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -71,7 +71,7 @@ import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.hoisting"
+ns = ModuleName "hydra.core.hoisting"
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
@@ -208,7 +208,7 @@ hoistAllLetBindings = define "hoistAllLetBindings" $
     <> " If a hoisted binding captures lambda-bound variables from an enclosing scope,"
     <> " the binding is wrapped in lambdas for those variables, and references are replaced"
     <> " with applications."
-    <> " Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.") $
+    <> " Note: Assumes no variable shadowing; use hydra.core.rewriting.unshadowVariables first.") $
   "let0" ~>
   "emptyCx" <~ Graph.emptyGraph $
   hoistLetBindingsWithPredicate @@ constant true @@ shouldHoistAll @@ var "emptyCx" @@ var "let0"
@@ -247,7 +247,7 @@ hoistLetBindingsWithContext = define "hoistLetBindingsWithContext" $
     <> " with applications."
     <> " If a hoisted binding uses type variables from the context, those type variables are"
     <> " added to the binding's type scheme."
-    <> " Note: we assume that there is no variable shadowing; use hydra.rewriting.unshadowVariables first.") $
+    <> " Note: we assume that there is no variable shadowing; use hydra.core.rewriting.unshadowVariables first.") $
   "isParentBinding" ~> "cx" ~> "let0" ~>
   hoistLetBindingsWithPredicate @@ var "isParentBinding" @@ shouldHoistPolymorphic @@ var "cx" @@ var "let0"
 
@@ -266,7 +266,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     <> " If a hoisted binding captures type variables from an enclosing type lambda scope,"
     <> " those type variables are added to the binding's type scheme, and references are replaced"
     <> " with type applications."
-    <> " Note: we assume that there is no variable shadowing; use hydra.rewriting.unshadowVariables first.") $
+    <> " Note: we assume that there is no variable shadowing; use hydra.core.rewriting.unshadowVariables first.") $
   "isParentBinding" ~> "shouldHoistBinding" ~> "cx0" ~> "let0" ~>
   "hoistOne" <~ ("prefix" ~> "cx" ~> "pair" ~> "bindingWithCapturedVars" ~>
     "bindingAndReplacementPairs" <~ Pairs.first (var "pair") $
@@ -531,7 +531,7 @@ hoistPolymorphicLetBindings = define "hoistPolymorphicLetBindings" $
     <> " If a hoisted binding captures lambda-bound variables from an enclosing scope,"
     <> " the binding is wrapped in lambdas for those variables, and references are replaced"
     <> " with applications."
-    <> " Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.") $
+    <> " Note: Assumes no variable shadowing; use hydra.core.rewriting.unshadowVariables first.") $
   "isParentBinding" ~> "let0" ~>
   "emptyCx" <~ Graph.emptyGraph $
   hoistLetBindingsWithPredicate @@ var "isParentBinding" @@ shouldHoistPolymorphic @@ var "emptyCx" @@ var "let0"

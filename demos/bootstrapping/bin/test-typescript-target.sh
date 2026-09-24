@@ -34,8 +34,8 @@ if [ -f "$HYDRA_TS_DIST/hydra/primitives.ts" ]; then
        "$OUTPUT_DIR/src/main/typescript/hydra/primitives.ts"
 fi
 # Same for test-tree files: testEnv.ts and jsonBindings.ts are
-# hand-written counterparts of the DSL stubs `hydra.test.testEnv` and
-# `hydra.test.jsonBindings`. The TS host emits stubbed (empty) versions
+# hand-written counterparts of the DSL stubs `hydra.core.test.testEnv` and
+# `hydra.core.test.jsonBindings`. The TS host emits stubbed (empty) versions
 # when --include-tests is set; restore the hand-written versions so the
 # test graph has primitives + kernel JSON loaded.
 for f in testEnv.ts jsonBindings.ts; do

@@ -1,17 +1,17 @@
--- | Primitive declarations for the hydra.lib.chars namespace.
+-- | Primitive declarations for the hydra.core.lib.chars namespace.
 
 module Hydra.Sources.Kernel.Lib.Chars where
 
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lib.chars"
+ns = ModuleName "hydra.core.lib.chars"
 
 module_ :: Module
 module_ = Module {
@@ -19,7 +19,7 @@ module_ = Module {
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Just (EntityMetadata
-              (Just "Primitives in the hydra.lib.chars module.")
+              (Just "Primitives in the hydra.core.lib.chars module.")
               [ "Characters are represented as Unicode code points carried in an int32. Each primitive interprets its\
                 \ argument as a code point; arguments outside the valid range [0, 0x10FFFF] yield an\
                 \ implementation-defined result (typically false for the predicates).",

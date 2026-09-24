@@ -1,8 +1,8 @@
 """IEEE 754 extended totalOrder conformance for floats, per
 docs/specification/ordering-and-equality.md: single NaN, NaN greatest and equal to
-itself, -0.0 distinct from and less than +0.0. Covers hydra.lib.equality.equal and
-hydra.lib.ordering.compare, both of which route through
-hydra.overlay.python.util._compare. See #720.
+itself, -0.0 distinct from and less than +0.0. Covers hydra.core.lib.equality.equal and
+hydra.core.lib.ordering.compare, both of which route through
+hydra.core.overlay.python.util._compare. See #720.
 
 PersistentMap/PersistentSet keying is exercised only for NaN here: they are backed by
 native dict/frozenset, so key identity uses Python's native hash+`==`, not _compare --
@@ -15,11 +15,11 @@ from __future__ import annotations
 
 import math
 
-from hydra.overlay.python.lib.equality import equal
-from hydra.overlay.python.lib.ordering import compare as ordering_compare
-from hydra.overlay.python.util import PersistentMap, PersistentSet
-from hydra.overlay.python.util._compare import compare
-from hydra.util import Comparison
+from hydra.core.overlay.python.lib.equality import equal
+from hydra.core.overlay.python.lib.ordering import compare as ordering_compare
+from hydra.core.overlay.python.util import PersistentMap, PersistentSet
+from hydra.core.overlay.python.util._compare import compare
+from hydra.core.util import Comparison
 
 NAN = float("nan")
 NEG_ZERO = -0.0

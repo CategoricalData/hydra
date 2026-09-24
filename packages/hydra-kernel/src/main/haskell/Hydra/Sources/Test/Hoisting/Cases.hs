@@ -6,23 +6,23 @@ module Hydra.Sources.Test.Hoisting.Cases where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing hiding (
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing hiding (
   hoistPredicateNothing, hoistPredicateLists, hoistPredicateApplications, hoistPredicateCaseStatements)
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms hiding ((@@))
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                ((@@))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import Hydra.Testing
-import qualified Hydra.Dsl.Lib.Pairs as Pairs
+import Hydra.Core.Testing
+import qualified Hydra.Core.Dsl.Lib.Pairs as Pairs
 
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Hoisting as Hoisting
@@ -35,7 +35,7 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 infixr 0 ~>:
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.hoisting.cases"
+ns = ModuleName "hydra.core.test.hoisting.cases"
 
 module_ :: Module
 module_ = Module {

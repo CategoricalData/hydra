@@ -4,11 +4,11 @@ This is a Python translation of the Haskell Lispy.hs module,
 demonstrating how to use the Hydra Types DSL in Python.
 """
 
-from hydra.core import Binding, Name, TypeScheme, Type
-from hydra.overlay.python.dsl.annotations import doc
-from hydra.overlay.python.dsl.python import Given, None_
-from hydra.packaging import Module, ModuleName
-import hydra.overlay.python.dsl.types as T
+from hydra.core.model import Binding, Name, TypeScheme, Type
+from hydra.core.overlay.python.dsl.annotations import doc
+from hydra.core.overlay.python.dsl.python import Given, None_
+from hydra.core.packaging import Module, ModuleName
+import hydra.core.overlay.python.dsl.types as T
 
 
 # Namespace for this module

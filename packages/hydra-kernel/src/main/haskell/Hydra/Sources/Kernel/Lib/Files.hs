@@ -1,27 +1,27 @@
--- | Primitive declarations for the hydra.lib.files namespace.
+-- | Primitive declarations for the hydra.core.lib.files namespace.
 
 module Hydra.Sources.Kernel.Lib.Files where
 
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap     as Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Types         as Types
-import           Hydra.Overlay.Haskell.Dsl.Types         (effect)
-import qualified Hydra.Error.File        as FileError
-import qualified Hydra.File              as File
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap     as Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types         as Types
+import           Hydra.Core.Overlay.Haskell.Dsl.Types         (effect)
+import qualified Hydra.Core.Error.File        as FileError
+import qualified Hydra.Core.File              as File
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding (readFile, writeFile, appendFile)
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lib.files"
+ns = ModuleName "hydra.core.lib.files"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.files module.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.files module.")}
   where
     definitions = [appendFile, copy, createDirectory, createSymlink, exists, listDirectory,
                    readFile, readSymlink, removeDirectory, removeFile, rename, status, writeFile]
@@ -45,7 +45,7 @@ appendFile = define "appendFile" "Append bytes to the end of a file."
   ["appendFile(path, contents) describes an effectful computation which attempts to append the raw\
   \ bytes contents to the end of the file at path, creating the file if it does not exist. Unlike\
   \ writeFile, existing contents are preserved. File I/O is byte-oriented; to append text, encode\
-  \ it to bytes first (e.g. via hydra.lib.text.encodeUtf8). A recoverable file-system failure is\
+  \ it to bytes first (e.g. via hydra.core.lib.text.encodeUtf8). A recoverable file-system failure is\
   \ returned as left(error); success is returned as right(unit)."]
 
 copy :: PrimitiveDefinition
@@ -115,7 +115,7 @@ readFile = define "readFile" "Read the complete contents of a file as raw bytes.
     TypeScheme [] (filePath Types.~> result Types.binary) mempty)
   ["readFile(path) describes an effectful computation which attempts to read the entire contents of\
   \ the file at path as raw bytes, with no character decoding or newline translation. To interpret\
-  \ the result as text, decode it (e.g. via hydra.lib.text.decodeUtf8). A recoverable file-system\
+  \ the result as text, decode it (e.g. via hydra.core.lib.text.decodeUtf8). A recoverable file-system\
   \ failure is returned as left(error); success is returned as right(contents)."]
 
 readSymlink :: PrimitiveDefinition
@@ -189,5 +189,5 @@ writeFile = define "writeFile" "Write raw bytes as the complete contents of a fi
     TypeScheme [] (filePath Types.~> Types.binary Types.~> result Types.unit) mempty)
   ["writeFile(path, contents) describes an effectful computation which attempts to replace the file\
   \ at path with the raw bytes contents, with no character encoding or newline translation. To\
-  \ write text, encode it to bytes first (e.g. via hydra.lib.text.encodeUtf8). A recoverable\
+  \ write text, encode it to bytes first (e.g. via hydra.core.lib.text.encodeUtf8). A recoverable\
   \ file-system failure is returned as left(error); success is returned as right(unit)."]

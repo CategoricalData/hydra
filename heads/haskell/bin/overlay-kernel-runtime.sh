@@ -10,8 +10,8 @@
 # WHY this is a standalone step run BEFORE any `stack build`: the head compiles
 # dist/haskell/hydra-kernel/ (a source-dir in package.yaml) but does NOT compile
 # overlay/haskell/hydra-kernel/. The dist Overlay/ location is gitignored and empty on
-# a cold tree, so the overlaid modules (Hydra.Overlay.Haskell.Lib.*, the umbrella Hydra.hs,
-# Hydra.Overlay.Haskell.Dsl.*) must be copied into dist/haskell/ BEFORE the executables
+# a cold tree, so the overlaid modules (Hydra.Core.Overlay.Haskell.Lib.*, the umbrella Hydra.hs,
+# Hydra.Core.Overlay.Haskell.Dsl.*) must be copied into dist/haskell/ BEFORE the executables
 # are built — otherwise GHC can't find them. bin/sync.sh's Phase 0 builds the execs first,
 # so it invokes this script first. sync-haskell.sh also calls it (idempotent cp -R).
 set -euo pipefail
@@ -21,8 +21,8 @@ HYDRA_ROOT_DIR="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 
 # #370/#500: the kernel is always compiled from the co-generated dist source-dirs
 # (hydra-kernel is no longer consumed from Hackage — see #500), so the main
-# runtime overlay (Hydra.Overlay.Haskell.Lib.*, Hydra.Kernel, Hydra.Settings,
-# Hydra.Overlay.Haskell.Dsl.*) must always be applied regardless of
+# runtime overlay (Hydra.Core.Overlay.Haskell.Lib.*, Hydra.Kernel, Hydra.Settings,
+# Hydra.Core.Overlay.Haskell.Dsl.*) must always be applied regardless of
 # host mode. The test bridge (src/test) and the umbrella also overlay in both modes.
 HOST_MODE="${HYDRA_HASKELL_HOST_MODE:-local}"
 
@@ -36,7 +36,7 @@ mkdir -p "$KERNEL_DST"
 cp -R "$KERNEL_RUNTIME_SRC"/. "$KERNEL_DST/"
 echo "    hydra-kernel: overlaid $(find "$KERNEL_RUNTIME_SRC" -name '*.hs' | wc -l | tr -d ' ') hand-written runtime module(s)"
 
-# hydra-kernel test bridge: hand-written test infra (Hydra.Test.TestEnv) referenced
+# hydra-kernel test bridge: hand-written test infra (Hydra.Core.Test.TestEnv) referenced
 # by the generated TestGraph. MERGE onto the generated src/test dist (shares the dir
 # with generated test modules, so merge — never wipe).
 KERNEL_TEST_SRC="$HYDRA_ROOT_DIR/overlay/haskell/hydra-kernel/src/test/haskell"

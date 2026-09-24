@@ -1,8 +1,8 @@
 package hydra;
 
-import hydra.overlay.java.build.Generation;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleName;
+import hydra.build.overlay.java.Generation;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleName;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -123,7 +123,7 @@ public class Bootstrap {
         System.out.println("==========================================");
         System.out.println();
 
-        Map<hydra.core.Name, hydra.core.Type> schemaMap = Generation.bootstrapSchemaMap();
+        Map<hydra.core.model.Name, hydra.core.model.Type> schemaMap = Generation.bootstrapSchemaMap();
 
         // Step 1: Load baseline packages (hydra-kernel + hydra-haskell).
         System.out.println("Step 1: Loading baseline main modules from JSON...");
@@ -199,10 +199,10 @@ public class Bootstrap {
         List<Module> fullMods = new ArrayList<>(baselineMods);
         fullMods.addAll(coderMods);
 
-        // #546/#547: the kernel test suite references hydra.test.build.* -> hydra.build.*
+        // #546/#547: the kernel test suite references hydra.core.test.build.* -> hydra.build.*
         // (Option A). When emitting tests, hydra-build's main modules must be in the
         // universe so those refs type-check; otherwise cross-host generation fails with
-        // "Unknown variable: hydra.test.build.modules.allTests". Mirrors the Haskell
+        // "Unknown variable: hydra.build.test.modules.allTests". Mirrors the Haskell
         // bootstrap-from-json fix (load hydra-build under --include-tests).
         if (includeTests) {
             List<Module> buildMainMods = loadPackageMain(distJsonRoot, "hydra-build", schemaMap);
@@ -252,7 +252,7 @@ public class Bootstrap {
         }
 
         // #473 Step 0 — lib pass + redirect. The hydra.lib.* primitive IMPLEMENTATIONS live at
-        // hydra.overlay.<lang>.lib.* (the analog of Haskell's Hydra.Overlay.Haskell.Lib.*), so hydra.lib.* is free
+        // hydra.core.overlay.<lang>.lib.* (the analog of Haskell's Hydra.Core.Overlay.Haskell.Lib.*), so hydra.lib.* is free
         // for the generated PrimitiveDefinition def-modules. This mirrors the Haskell driver's
         // twoPassLib logic in bootstrap-from-json/Main.hs: the Java host must, for every target incl. haskell:
         //   (1) emit the hydra.lib.* def-modules from their LOWERED form (lib pass) — a primitive-only
@@ -268,7 +268,7 @@ public class Bootstrap {
         // name() refers to hydra.lib.Math_ etc. but never emits those def-modules -> "cannot find symbol" /
         // "PrimitiveDefinition object is not callable" / GHC "Could not find module". #703 found the haskell
         // gap: the lib pass was gated OFF for haskell on the assumption its def-modules came from elsewhere
-        // ("the registry" — Hydra.Overlay.Haskell.Libraries, the hand-written IMPL registry, which is a
+        // ("the registry" — Hydra.Core.Overlay.Haskell.Libraries, the hand-written IMPL registry, which is a
         // different thing from the def-modules it imports). See project_473_self_host_lib_pass_gap.
         // The lib pass runs now (alongside the main pass output); the redirect runs LAST (after the
         // test + ext-for-tests passes below also write into outMain/<target> and outTest/<target>),
@@ -311,7 +311,7 @@ public class Bootstrap {
             List<ModuleName> testNamespaces = Generation.readManifestField(kernelMainDir, "testModules");
             List<Module> testMods = Generation.loadModulesFromJson(testJsonDir,
                     schemaMap, testNamespaces);
-            // #546/#547: also load hydra-build's OWN test modules (hydra.test.build.*),
+            // #546/#547: also load hydra-build's OWN test modules (hydra.core.test.build.*),
             // which the kernel test suite imports (Option A). They live in the hydra-build
             // package's test tree, not hydra-kernel's. Without this, the kernel testSuite's
             // references to them are unresolved on cross-host generation.
@@ -333,13 +333,13 @@ public class Bootstrap {
             List<Module> allUniverse = new ArrayList<>(fullMods);
             allUniverse.addAll(testMods);
 
-            // Filter skip-emit test namespaces (e.g. hydra.test.testEnv): these are
+            // Filter skip-emit test namespaces (e.g. hydra.core.test.testEnv): these are
             // type-only stubs in the DSL whose hand-written per-language counterparts
             // are the source of truth. Emitting them would overwrite hand-written code
             // that registers primitives for the test graph.
             // Mirrors testSkipEmitModuleNames in Hydra.Sources.Test.All.
             java.util.Set<String> testSkipEmit = new java.util.HashSet<>();
-            testSkipEmit.add("hydra.test.testEnv");
+            testSkipEmit.add("hydra.core.test.testEnv");
             List<Module> testModsFiltered = new ArrayList<>();
             for (Module m : testMods) {
                 if (!testSkipEmit.contains(m.name.value)) {
@@ -419,7 +419,7 @@ public class Bootstrap {
         }
 
         // #612: line-wrap generated Scala files. Must run AFTER redirectLibCalls, since the
-        // redirect lengthens hydra.lib.<sub> call sites to hydra.overlay.scala.lib.<sub>
+        // redirect lengthens hydra.lib.<sub> call sites to hydra.core.overlay.scala.lib.<sub>
         // (9+ chars longer per occurrence) — wrapping before the redirect breaks at the wrong
         // column, diverging from the Haskell host (whose driver composes the same two passes
         // in this order: redirect then wrap; see wrapLongScalaText in
@@ -463,7 +463,7 @@ public class Bootstrap {
 
     /** Load a package's mainModules from its manifest. */
     static List<Module> loadPackageMain(String root, String pkg,
-            Map<hydra.core.Name, hydra.core.Type> schemaMap) throws Exception {
+            Map<hydra.core.model.Name, hydra.core.model.Type> schemaMap) throws Exception {
         String pkgDir = packageMainDir(root, pkg);
         List<ModuleName> allNs = readManifestFieldOrEmpty(pkgDir, "mainModules");
         if (allNs.isEmpty()) return new ArrayList<>();
@@ -507,7 +507,7 @@ public class Bootstrap {
     // read from disk (e.g. a packaged/relocated dist without the source tree present). The
     // primary signal is libSubsForTarget()'s filesystem existence check below, which is
     // correct-by-construction for any future hydra.lib.<sub> whether or not it has a relocated
-    // overlay impl (see hydra.lib.defaults, #549/#565/#568) and needs no by-name maintenance.
+    // overlay impl (see hydra.core.lib.defaults, #549/#565/#568) and needs no by-name maintenance.
     private static final List<String> LIB_SUBS_FALLBACK = Arrays.asList(
             "chars", "effects", "eithers", "equality", "files", "functions", "hashing", "lists", "literals",
             "logic", "maps", "math", "optionals", "ordering", "pairs", "regex", "sets", "strings", "system", "text");
@@ -563,7 +563,7 @@ public class Bootstrap {
      * case-insensitive filesystems (macOS): isDirectory() matches, listFiles() then returns
      * capitalized names that never equal the lowercase subs the coder tests against, so every
      * hydra.lib.* redirect is skipped and the generated Haskell imports Hydra.Lib.* instead of
-     * Hydra.Overlay.Haskell.Lib.* (#630).
+     * Hydra.Core.Overlay.Haskell.Lib.* (#630).
      */
     private static java.nio.file.Path overlayLibDir(String repoRoot, String target) {
         java.nio.file.Path base = Paths.get(repoRoot, "overlay", target, "hydra-kernel", "src", "main");
@@ -620,10 +620,10 @@ public class Bootstrap {
 
     /**
      * #473/#568/#569 redirect: rewrite generated CONSUMER call-sites so they resolve to the
-     * relocated native hydra.overlay.<lang>.lib.* impls instead of the hydra.lib.* def-modules
+     * relocated native hydra.core.overlay.<lang>.lib.* impls instead of the hydra.lib.* def-modules
      * (PrimitiveDefinition data, not callable). Dispatches per target's actual reference shape,
      * mirroring redirectFor / redirectSchemeFor / redirectLispFlat in bootstrap-from-json/Main.hs:
-     *   - dotted (python/scala/clojure): hydra.lib.<sub> -> hydra.overlay.<lang>.lib.<sub>
+     *   - dotted (python/scala/clojure): hydra.lib.<sub> -> hydra.core.overlay.<lang>.lib.<sub>
      *   - scheme (R7RS sexp libraries):  (hydra lib <sub>) -> (hydra overlay scheme lib <sub>)
      *   - common-lisp/emacs-lisp (flat): hydra_lib_<sub>_ -> hydra_overlay_<lang>_lib_<sub>_,
      *     and the def-module :use token is dropped from consumer defpackage clauses.
@@ -633,7 +633,7 @@ public class Bootstrap {
      *     raw dotted "hydra.lib.<sub>" text at call sites, so there is nothing to redirect here.
      * #568: the sub-list comes from libSubsForTarget()'s overlay-directory existence check, not a
      * hand-maintained allowlist, so a future hydra.lib.<sub> routes correctly with no driver change
-     * (hydra.lib.defaults has no overlay counterpart and is therefore never redirected, replacing
+     * (hydra.core.lib.defaults has no overlay counterpart and is therefore never redirected, replacing
      * the old by-name exclusion).
      */
     static void redirectLibCalls(String repoRoot, String target, String langDir) {
@@ -894,12 +894,12 @@ public class Bootstrap {
 
     /**
      * #444/#456-class test-env redirect for the Lisp targets. The hand-written test environment
-     * hydra.test.testEnv is skip-emitted from generated output (see testSkipEmit) and supplied by
-     * overlay/&lt;lang&gt;/ under the renamed namespace hydra.overlay.&lt;lang&gt;.test.testEnv (#501).
+     * hydra.core.test.testEnv is skip-emitted from generated output (see testSkipEmit) and supplied by
+     * overlay/&lt;lang&gt;/ under the renamed namespace hydra.core.overlay.&lt;lang&gt;.test.testEnv (#501).
      * Generated test modules still reference it by its canonical name, so redirect the code
      * reference (NOT quoted primitive-name strings, which never contain "test.testEnv") to the
      * overlay namespace for the dialects whose tests resolve testEnv BY MODULE REFERENCE:
-     *   - clojure: dotted `hydra.test.testEnv` -&gt; `hydra.overlay.clojure.test.testEnv`
+     *   - clojure: dotted `hydra.core.test.testEnv` -&gt; `hydra.core.overlay.clojure.test.testEnv`
      *   - scheme:  R7RS library form `(hydra test testEnv)` -&gt; `(hydra overlay scheme test testEnv)`,
      *              plus the dotted form for any residual dotted references
      * common-lisp / emacs-lisp load the hand-written test_env explicitly via their run-tests loader
@@ -920,9 +920,9 @@ public class Bootstrap {
                 String out = s;
                 if (target.equals("scheme")) {
                     out = out.replace("(hydra test testEnv)", "(hydra overlay scheme test testEnv)");
-                    out = out.replace("hydra.test.testEnv", "hydra.overlay.scheme.test.testEnv");
+                    out = out.replace("hydra.core.test.testEnv", "hydra.core.overlay.scheme.test.testEnv");
                 } else { // clojure
-                    out = out.replace("hydra.test.testEnv", "hydra.overlay.clojure.test.testEnv");
+                    out = out.replace("hydra.core.test.testEnv", "hydra.core.overlay.clojure.test.testEnv");
                 }
                 if (!out.equals(s)) {
                     Files.write(p, out.getBytes(java.nio.charset.StandardCharsets.UTF_8));

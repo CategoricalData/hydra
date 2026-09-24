@@ -1,34 +1,34 @@
--- | Primitive declarations for the hydra.lib.eithers namespace.
+-- | Primitive declarations for the hydra.core.lib.eithers namespace.
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Lib.Eithers where
 
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, compose, map)
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms hiding (apply, compose, map)
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), either, foldl, map)
 import qualified Data.Set                    as S
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lib.eithers"
+ns = ModuleName "hydra.core.lib.eithers"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.eithers module.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.eithers module.")}
   where
     -- The mapSet default-impl arg below carries an `:: ...Int...` placeholder instantiation: the
-    -- generated `Hydra.Dsl.Lib.Sets` (unlike the old `Meta.Lib.Sets`) exposes the primitive's `Ord`
+    -- generated `Hydra.Core.Dsl.Lib.Sets` (unlike the old `Meta.Lib.Sets`) exposes the primitive's `Ord`
     -- constraint, so this polymorphic def needs a concrete type here to satisfy GHC. `Int` is arbitrary
     -- and carries no meaning — the emitted primitive is type-agnostic and fully polymorphic. See #467.
     definitions = [apply, bimap, bind, compose, either, foldList, isLeft,

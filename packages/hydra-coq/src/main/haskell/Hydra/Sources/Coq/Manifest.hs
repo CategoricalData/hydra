@@ -42,7 +42,7 @@ mainModules = [
 -- list as new consumers appear.
 --
 -- Current consumers (as of 2026-05-16):
---   * Hydra.Dsl.Coq.Syntax — imported by Hydra.Sources.Coq.Generate
+--   * Hydra.Coq.Dsl.Syntax — imported by Hydra.Sources.Coq.Generate
 mainDslModules :: [Module]
 mainDslModules = [
   CoqSyntax.module_]

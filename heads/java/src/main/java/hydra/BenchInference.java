@@ -1,18 +1,18 @@
 package hydra;
 
-import hydra.typing.InferenceContext;
-import hydra.core.Name;
-import hydra.core.Term;
-import hydra.errors.Error_;
-import hydra.graph.Graph;
-import hydra.packaging.Definition;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleDependency;
-import hydra.packaging.ModuleName;
-import hydra.packaging.TermDefinition;
-import hydra.overlay.java.build.Generation;
-import hydra.overlay.java.util.Either;
-import hydra.overlay.java.util.Optional;
+import hydra.core.typing.InferenceContext;
+import hydra.core.model.Name;
+import hydra.core.model.Term;
+import hydra.core.errors.Error_;
+import hydra.core.graph.Graph;
+import hydra.core.packaging.Definition;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleDependency;
+import hydra.core.packaging.ModuleName;
+import hydra.core.packaging.TermDefinition;
+import hydra.build.overlay.java.Generation;
+import hydra.core.overlay.java.util.Either;
+import hydra.core.overlay.java.util.Optional;
 
 import java.io.File;
 import java.io.IOException;
@@ -88,7 +88,7 @@ public class BenchInference {
         long t0 = System.currentTimeMillis();
         // Seed the schema map with the bootstrap schema (kernel types) so module
         // decoding can resolve type-variable references.
-        Map<Name, hydra.core.Type> schemaMap = Generation.bootstrapSchemaMap();
+        Map<Name, hydra.core.model.Type> schemaMap = Generation.bootstrapSchemaMap();
         List<ModuleName> mainNs = Generation.readManifestField(kernelMainDir, "mainModules");
         List<Module> universe = new ArrayList<>(
                 Generation.loadModulesFromJson(kernelMainDir, schemaMap, mainNs));
@@ -178,7 +178,7 @@ public class BenchInference {
                 String local = td.name.value.substring(td.name.value.lastIndexOf('.') + 1);
                 Name newName = new Name(targetNs.value + "." + local);
                 renamed.add(new Definition.Term(
-                        new TermDefinition(newName, hydra.overlay.java.util.Optional.none(), td.signature, td.body)));
+                        new TermDefinition(newName, hydra.core.overlay.java.util.Optional.none(), td.signature, td.body)));
             } else {
                 renamed.add(d);
             }
@@ -186,7 +186,7 @@ public class BenchInference {
         // Inject the bench module's namespace as an explicit dependency
         // so walker_(k-1) lookups resolve via the universe.
         List<ModuleDependency> deps = new ArrayList<>();
-        deps.add(new ModuleDependency(benchMod.name, hydra.overlay.java.util.Optional.<hydra.packaging.PackageName>none()));
+        deps.add(new ModuleDependency(benchMod.name, hydra.core.overlay.java.util.Optional.<hydra.core.packaging.PackageName>none()));
         deps.addAll(benchMod.dependencies);
         return new Module(targetNs, benchMod.metadata, deps, renamed);
     }

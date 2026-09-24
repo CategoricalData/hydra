@@ -4,14 +4,14 @@ module Hydra.Sources.Test.Json.Writer where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms hiding ((@@))
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                ((@@))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -20,20 +20,20 @@ import qualified Data.Map                     as M
 import qualified Data.Scientific              as Sci
 
 -- Additional imports specific to this module
-import Hydra.Json.Model (Value)
-import Hydra.Testing
-import qualified Hydra.Dsl.Json.Model as Json
+import Hydra.Core.Json.Model (Value)
+import Hydra.Core.Testing
+import qualified Hydra.Core.Dsl.Json.Model as Json
 import qualified Hydra.Sources.Json.Writer as JsonWriter
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.json.writer"
+ns = ModuleName "hydra.core.test.json.writer"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.json.writer"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.core.json.writer"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for JSON serialization"))}
   where
     definitions = [

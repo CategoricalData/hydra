@@ -1,26 +1,26 @@
--- | Primitive declarations for the hydra.lib.pairs namespace.
+-- | Primitive declarations for the hydra.core.lib.pairs namespace.
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Lib.Pairs where
 
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lib.pairs"
+ns = ModuleName "hydra.core.lib.pairs"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.pairs module.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.pairs module.")}
   where
     definitions = [bimap, first, Hydra.Sources.Kernel.Lib.Pairs.pair, second]
 

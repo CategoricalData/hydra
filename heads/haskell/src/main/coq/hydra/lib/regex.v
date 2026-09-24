@@ -1,4 +1,4 @@
-(* Hydra primitive library: hydra.lib.regex *)
+(* Hydra primitive library: hydra.core.lib.regex *)
 
 Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith.
 Import ListNotations.

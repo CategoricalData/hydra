@@ -4,45 +4,45 @@ module Hydra.Sources.Json.Writer where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations                     as Annotations
-import qualified Hydra.Overlay.Haskell.Bootstrap                       as Bootstrap
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes                    as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Literals                        as Literals
-import qualified Hydra.Dsl.Paths                  as Paths
-import qualified Hydra.Dsl.Ast                        as Ast
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base                       as MetaBase
-import qualified Hydra.Dsl.Coders                     as Coders
-import qualified Hydra.Dsl.Util                    as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph                      as Graph
-import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Math                   as Math
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Packaging                     as Packaging
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms                      as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing                    as Testing
-import qualified Hydra.Dsl.Topology                   as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types                      as MetaTypes
-import qualified Hydra.Dsl.Typing                     as Typing
-import qualified Hydra.Dsl.Util                       as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants                   as Variants
-import qualified Hydra.Overlay.Haskell.Dsl.Prims                           as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular                         as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Terms                           as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Tests                           as Tests
-import qualified Hydra.Overlay.Haskell.Dsl.Types                           as Types
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations                     as Annotations
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap                       as Bootstrap
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes                    as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals                        as Literals
+import qualified Hydra.Core.Dsl.Paths                  as Paths
+import qualified Hydra.Core.Dsl.Ast                        as Ast
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base                       as MetaBase
+import qualified Hydra.Core.Dsl.Coders                     as Coders
+import qualified Hydra.Core.Dsl.Util                    as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph                      as Graph
+import qualified Hydra.Core.Dsl.Json.Model                       as Json
+import qualified Hydra.Core.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Math                   as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Core.Dsl.Packaging                     as Packaging
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                      as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                    as Testing
+import qualified Hydra.Core.Dsl.Topology                   as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types                      as MetaTypes
+import qualified Hydra.Core.Dsl.Typing                     as Typing
+import qualified Hydra.Core.Dsl.Util                       as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants                   as Variants
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims                           as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular                         as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms                           as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests                           as Tests
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                           as Types
 import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.All            as KernelTerms
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
@@ -79,8 +79,8 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports
-import Hydra.Ast
-import qualified Hydra.Json.Model as J
+import Hydra.Core.Ast
+import qualified Hydra.Core.Json.Model as J
 
 
 module_ :: Module
@@ -90,7 +90,7 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON serialization functions using the Hydra AST")}
   where
-    ns = ModuleName "hydra.json.writer"
+    ns = ModuleName "hydra.core.json.writer"
     definitions = [
       toDefinition colonOp,
       toDefinition hexByte,
@@ -202,7 +202,7 @@ valueToExpr = jsonSerdeDefinition "valueToExpr" $
       -- (scientific), avoiding both the trailing-".0" noise and the 21-digit integer.
       -- "whole-valued" must be tested by VALUE, not scale: a decimal like 42.0 or 0.00
       -- (nonzero scale, integral value) is whole and should serialize as "42"/"0". Since
-      -- hydra.lib.equality is scale-DISTINCT for decimals (1.1 ≠ 1.10, #719), comparing n
+      -- hydra.core.lib.equality is scale-DISTINCT for decimals (1.1 ≠ 1.10, #719), comparing n
       -- to bigintToDecimal(round n) with `equal` wrongly rejects any nonzero-scale integer.
       -- Instead read wholeness off the representation-faithful string `shown`: it is whole
       -- iff it is in plain (non-exponential) form AND either has no fractional part or its

@@ -2,15 +2,15 @@ module Hydra.Sources.Kernel.Types.Paths where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.paths"
+ns = ModuleName "hydra.core.paths"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns
@@ -337,7 +337,7 @@ termNode = define "TermNode" $
       doc "The subterm as written"
       Core.term,
     "type">:
-      doc "The subterm's type (a binding's forall type at roots), via hydra.checking"
+      doc "The subterm's type (a binding's forall type at roots), via hydra.core.checking"
       Core.type_,
     "links">:
       doc "The outgoing links of the node" $

@@ -1,4 +1,4 @@
-(* Hydra primitive library: hydra.lib.sets *)
+(* Hydra primitive library: hydra.core.lib.sets *)
 
 (* Sets are represented as deduplicated lists *)
 

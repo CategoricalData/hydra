@@ -7,10 +7,10 @@
 
    Currently EXCLUDES four test modules that do not compile under
    coqc today:
-     - hydra.test.lib.maps     (bare nil for empty Term_Map)
-     - hydra.test.lib.sets     (bare nil for empty Term_Set)
-     - hydra.test.json.yaml    (requires yaml kernel modules not emitted)
-     - hydra.test.testSuite    (aggregate of the above)
+     - hydra.core.test.lib.maps     (bare nil for empty Term_Map)
+     - hydra.core.test.lib.sets     (bare nil for empty Term_Set)
+     - hydra.core.test.json.yaml    (requires yaml kernel modules not emitted)
+     - hydra.core.test.testSuite    (aggregate of the above)
    See feature_326_coq-plan.md "Known gaps to revisit".
 
    Note: most test cases are expected to fail until the Hydra runtime
@@ -22,43 +22,43 @@ Require Import Stdlib.Strings.String.
 Require Import Stdlib.Lists.List.
 Require Import Stdlib.ZArith.ZArith.
 Require Import hydra.lib.base.
-Require Import hydra.testing.
+Require Import hydra.core.testing.
 Import ListNotations.
 Open Scope string_scope.
 
 (* Included test modules (the 30 that compile under coqc today).
    The 4 excluded modules are listed in the header comment. *)
-Require hydra.test.annotations.
-Require hydra.test.checking.all.
-Require hydra.test.dependencies.
-Require hydra.test.differentiation.
-Require hydra.test.etaExpansion.
-Require hydra.test.formatting.
-Require hydra.test.generation.
-Require hydra.test.hoisting.all.
-Require hydra.test.inference.all.
-Require hydra.test.json.roundtrip.
-Require hydra.test.json.writer.
-Require hydra.test.lib.chars.
-Require hydra.test.lib.eithers.
-Require hydra.test.lib.equality.
-Require hydra.test.lib.lists.
-Require hydra.test.lib.literals.
-Require hydra.test.lib.logic.
-Require hydra.test.lib.math.
-Require hydra.test.lib.optionals.
-Require hydra.test.lib.pairs.
-Require hydra.test.lib.regex.
-Require hydra.test.lib.strings.
-Require hydra.test.reduction.
-Require hydra.test.rewriting.
-Require hydra.test.serialization.
-Require hydra.test.sorting.
-Require hydra.test.strip.
-Require hydra.test.substitution.
-Require hydra.test.unification.
-Require hydra.test.validate.all.
-Require hydra.test.variables.
+Require hydra.core.test.annotations.
+Require hydra.core.test.checking.all.
+Require hydra.core.test.dependencies.
+Require hydra.core.test.differentiation.
+Require hydra.core.test.etaExpansion.
+Require hydra.core.test.formatting.
+Require hydra.core.test.generation.
+Require hydra.core.test.hoisting.all.
+Require hydra.core.test.inference.all.
+Require hydra.core.test.json.roundtrip.
+Require hydra.core.test.json.writer.
+Require hydra.core.test.lib.chars.
+Require hydra.core.test.lib.eithers.
+Require hydra.core.test.lib.equality.
+Require hydra.core.test.lib.lists.
+Require hydra.core.test.lib.literals.
+Require hydra.core.test.lib.logic.
+Require hydra.core.test.lib.math.
+Require hydra.core.test.lib.optionals.
+Require hydra.core.test.lib.pairs.
+Require hydra.core.test.lib.regex.
+Require hydra.core.test.lib.strings.
+Require hydra.core.test.reduction.
+Require hydra.core.test.rewriting.
+Require hydra.core.test.serialization.
+Require hydra.core.test.sorting.
+Require hydra.core.test.strip.
+Require hydra.core.test.substitution.
+Require hydra.core.test.unification.
+Require hydra.core.test.validate.all.
+Require hydra.core.test.variables.
 
 (* -----------------------------------------------------------------
    Test evaluation
@@ -103,37 +103,37 @@ Fixpoint flatten_group (prefix : string) (g : TestGroup) {struct g}
    ----------------------------------------------------------------- *)
 
 Definition allIncludedModules : list TestGroup := [
-  hydra.test.annotations.allTests;
-  hydra.test.checking.all.allTests;
-  hydra.test.dependencies.allTests;
-  hydra.test.differentiation.allTests;
-  hydra.test.etaExpansion.allTests;
-  hydra.test.formatting.allTests;
-  hydra.test.generation.allTests;
-  hydra.test.hoisting.all.allTests;
-  hydra.test.inference.all.allTests;
-  hydra.test.json.roundtrip.allTests;
-  hydra.test.json.writer.allTests;
-  hydra.test.lib.chars.allTests;
-  hydra.test.lib.eithers.allTests;
-  hydra.test.lib.equality.allTests;
-  hydra.test.lib.lists.allTests;
-  hydra.test.lib.literals.allTests;
-  hydra.test.lib.logic.allTests;
-  hydra.test.lib.math.allTests;
-  hydra.test.lib.optionals.allTests;
-  hydra.test.lib.pairs.allTests;
-  hydra.test.lib.regex.allTests;
-  hydra.test.lib.strings.allTests;
-  hydra.test.reduction.allTests;
-  hydra.test.rewriting.allTests;
-  hydra.test.serialization.allTests;
-  hydra.test.sorting.allTests;
-  hydra.test.strip.allTests;
-  hydra.test.substitution.allTests;
-  hydra.test.unification.allTests;
-  hydra.test.validate.all.allTests;
-  hydra.test.variables.allTests
+  hydra.core.test.annotations.allTests;
+  hydra.core.test.checking.all.allTests;
+  hydra.core.test.dependencies.allTests;
+  hydra.core.test.differentiation.allTests;
+  hydra.core.test.etaExpansion.allTests;
+  hydra.core.test.formatting.allTests;
+  hydra.core.test.generation.allTests;
+  hydra.core.test.hoisting.all.allTests;
+  hydra.core.test.inference.all.allTests;
+  hydra.core.test.json.roundtrip.allTests;
+  hydra.core.test.json.writer.allTests;
+  hydra.core.test.lib.chars.allTests;
+  hydra.core.test.lib.eithers.allTests;
+  hydra.core.test.lib.equality.allTests;
+  hydra.core.test.lib.lists.allTests;
+  hydra.core.test.lib.literals.allTests;
+  hydra.core.test.lib.logic.allTests;
+  hydra.core.test.lib.math.allTests;
+  hydra.core.test.lib.optionals.allTests;
+  hydra.core.test.lib.pairs.allTests;
+  hydra.core.test.lib.regex.allTests;
+  hydra.core.test.lib.strings.allTests;
+  hydra.core.test.reduction.allTests;
+  hydra.core.test.rewriting.allTests;
+  hydra.core.test.serialization.allTests;
+  hydra.core.test.sorting.allTests;
+  hydra.core.test.strip.allTests;
+  hydra.core.test.substitution.allTests;
+  hydra.core.test.unification.allTests;
+  hydra.core.test.validate.all.allTests;
+  hydra.core.test.variables.allTests
 ].
 
 Definition allResults : list (string * bool) :=

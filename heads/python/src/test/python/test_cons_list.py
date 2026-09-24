@@ -1,4 +1,4 @@
-"""Unit tests for hydra.util.ConsList.
+"""Unit tests for hydra.core.util.ConsList.
 
 Mirrors the shape of heads/java/src/test/java/hydra/util/ConsListTest.java.
 """
@@ -7,7 +7,7 @@ from collections.abc import Sequence
 
 import pytest
 
-from hydra.overlay.python.util import ConsList
+from hydra.core.overlay.python.util import ConsList
 
 
 def test_empty():

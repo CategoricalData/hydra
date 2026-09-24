@@ -16,8 +16,8 @@ module Hydra.Sources.Kernel.Lib.Defaults where
 
 -- Note: non-standard imports; this module is constructed dynamically from other modules.
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Encode.Core as EncodeCore
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Core.Encode.Model as EncodeCore
 import qualified Hydra.Sources.Kernel.Lib.Eithers as Eithers
 import qualified Hydra.Sources.Kernel.Lib.Equality as Equality
 import qualified Hydra.Sources.Kernel.Lib.Functions as Functions
@@ -34,7 +34,7 @@ import           Data.Maybe (mapMaybe)
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lib.defaults"
+ns = ModuleName "hydra.core.lib.defaults"
 
 -- | The primitive-defining hydra.lib.* modules which may contain primitives
 -- with declared default implementations.
@@ -55,13 +55,13 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = [DefinitionTerm defaultImplementationsDefinition],
-            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core", ModuleName "hydra.lib.eithers", ModuleName "hydra.lib.equality", ModuleName "hydra.lib.functions", ModuleName "hydra.lib.lists", ModuleName "hydra.lib.logic", ModuleName "hydra.lib.maps", ModuleName "hydra.lib.math", ModuleName "hydra.lib.optionals", ModuleName "hydra.lib.pairs", ModuleName "hydra.lib.sets"],
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core.model", ModuleName "hydra.core.lib.eithers", ModuleName "hydra.core.lib.equality", ModuleName "hydra.core.lib.functions", ModuleName "hydra.core.lib.lists", ModuleName "hydra.core.lib.logic", ModuleName "hydra.core.lib.maps", ModuleName "hydra.core.lib.math", ModuleName "hydra.core.lib.optionals", ModuleName "hydra.core.lib.pairs", ModuleName "hydra.core.lib.sets"],
             moduleMetadata = descriptionMetadata (Just ("A module which provides a single map from primitive names to their"
       ++ " default, cross-compilable reference implementations, for primitives which declare one."))}
 
 defaultImplementationsDefinition :: TermDefinition
 defaultImplementationsDefinition = TermDefinition {
-    termDefinitionName = Name "hydra.lib.defaults.defaultImplementations",
+    termDefinitionName = Name "hydra.core.lib.defaults.defaultImplementations",
     termDefinitionMetadata = Nothing,
     termDefinitionBody = defaultImplementationsTerm,
     termDefinitionSignature = Nothing}
@@ -76,8 +76,8 @@ defaultImplementationsDefinition = TermDefinition {
 -- value subterms to a single type, which fails across heterogeneous implementations.
 -- Instead, each implementation is reified as term-level data via EncodeCore.term,
 -- exactly as typesByNameTerm (Hydra.Sources.Json.Bootstrap) encodes each Type as a
--- uniformly-typed hydra.core.Type term via EncodeCore.type_. This makes every map
--- value uniformly typed as (encoded) hydra.core.Term, sidestepping inference into the
+-- uniformly-typed hydra.core.model.Type term via EncodeCore.type_. This makes every map
+-- value uniformly typed as (encoded) hydra.core.model.Term, sidestepping inference into the
 -- implementations' differing executable types.
 defaultImplementationsTerm :: Term
 defaultImplementationsTerm = TermAnnotated $ AnnotatedTerm {

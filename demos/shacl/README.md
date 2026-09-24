@@ -23,7 +23,7 @@ This will:
 
 ## What it demonstrates
 
-- **SHACL shapes generation** from Hydra's type system via `hydra.shacl.coder`
+- **SHACL shapes generation** from Hydra's type system via `hydra.rdf.shacl.coder`
 - **RDF encoding** of typed Hydra terms via the same coder's `encodeTerm`
 - **Serialization** to N-Triples via `hydra.rdf.serde`
 - **Positive validation**: generated RDF conforms to generated shapes
@@ -44,7 +44,7 @@ The SHACL coder provides two capabilities:
 The demo runs both on the Hydra kernel:
 
 ```
-Kernel type modules (hydra.core, hydra.packaging, hydra.graph, ...)
+Kernel type modules (hydra.core.model, hydra.core.packaging, hydra.core.graph, ...)
         |
         |  encodeType (per type element)
         v
@@ -76,7 +76,7 @@ The demo uses Hydra's own kernel as both schema and data:
 
 - **Data**: kernel modules serialized as JSON in `dist/json/hydra-kernel/src/main/json/`, decoded
   back into `Module` values and encoded as RDF. Each module becomes an RDF description with
-  the `hydra.packaging.Module` type, containing its namespace, element list, dependencies,
+  the `hydra.core.packaging.Module` type, containing its namespace, element list, dependencies,
   and description.
 
 ## Output files
@@ -93,9 +93,9 @@ The demo generates three intentionally invalid RDF instances:
 
 | Instance | Type | Violation |
 |----------|------|-----------|
-| `urn:invalid:module1` | `hydra.packaging.Module` | Missing required fields: `namespace`, `elements`, `dependencies` |
-| `urn:invalid:ns1` | `hydra.packaging.Namespace` | Integer value where string is expected |
-| `urn:invalid:qn1` | `hydra.packaging.QualifiedName` | Missing required field: `local` |
+| `urn:invalid:module1` | `hydra.core.packaging.Module` | Missing required fields: `namespace`, `elements`, `dependencies` |
+| `urn:invalid:ns1` | `hydra.core.packaging.Namespace` | Integer value where string is expected |
+| `urn:invalid:qn1` | `hydra.core.packaging.QualifiedName` | Missing required field: `local` |
 
 ## Prerequisites
 

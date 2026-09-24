@@ -4,14 +4,14 @@ module Hydra.Sources.Kernel.Terms.Refs where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap             as Bootstrap
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Dsl.Lib.Lists      as Lists
-import qualified Hydra.Dsl.Lib.Maps       as Maps
-import qualified Hydra.Dsl.Lib.Optionals  as Optionals
-import qualified Hydra.Dsl.Lib.Pairs      as Pairs
-import qualified Hydra.Dsl.Lib.Sets       as Sets
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap             as Bootstrap
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Dsl.Lib.Lists      as Lists
+import qualified Hydra.Core.Dsl.Lib.Maps       as Maps
+import qualified Hydra.Core.Dsl.Lib.Optionals  as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs      as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets       as Sets
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Data.List                   as L
@@ -20,13 +20,13 @@ import qualified Data.Set                    as S
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.refs"
+ns = ModuleName "hydra.core.refs"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, ModuleName "hydra.typed"] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, ModuleName "hydra.core.typed"] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Typed references to derived encode/decode/show functions, and structural coder builders")}
   where
    definitions = [
@@ -43,12 +43,12 @@ define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- | Look up the decoder for a type given its TypedName token. The result is a term
--- reference (Term.variable) to the type's synthesized hydra.decode.<ns>.<local> binding;
+-- reference (Term.variable) to the type's synthesized hydra.core.decode.<ns>.<local> binding;
 -- ordinary term evaluation resolves it to the decoder function it names.
 decodeRef :: TypedTermDefinition (TypedName a -> (Graph -> Term -> Either DecodingError a))
 decodeRef = define "decodeRef" $
   doc "Look up the decoder function for a type given its TypedName token" $
-  "tn" ~> Core.termVariable (Names.derivedBindingName @@ list [string "hydra", string "decode"] @@ boolean True @@ (unwrap _TypedName @@ var "tn"))
+  "tn" ~> Core.termVariable (Names.derivedBindingName @@ list [string "decode"] @@ boolean True @@ (unwrap _TypedName @@ var "tn"))
 
 -- | Build an encoder for a list, given an encoder for its element type.
 encodeList :: TypedTermDefinition ((a -> Term) -> [a] -> Term)
@@ -80,12 +80,12 @@ encodePair = define "encodePair" $
   "firstEncoder" ~> "secondEncoder" ~> "p" ~> Core.termPair (Pairs.bimap (var "firstEncoder") (var "secondEncoder") (var "p"))
 
 -- | Look up the encoder for a type given its TypedName token. The result is a term
--- reference (Term.variable) to the type's synthesized hydra.encode.<ns>.<local> binding;
+-- reference (Term.variable) to the type's synthesized hydra.core.encode.<ns>.<local> binding;
 -- ordinary term evaluation resolves it to the encoder function it names.
 encodeRef :: TypedTermDefinition (TypedName a -> (a -> Term))
 encodeRef = define "encodeRef" $
   doc "Look up the encoder function for a type given its TypedName token" $
-  "tn" ~> Core.termVariable (Names.derivedBindingName @@ list [string "hydra", string "encode"] @@ boolean True @@ (unwrap _TypedName @@ var "tn"))
+  "tn" ~> Core.termVariable (Names.derivedBindingName @@ list [string "encode"] @@ boolean True @@ (unwrap _TypedName @@ var "tn"))
 
 -- | Build an encoder for a set, given an encoder for its element type.
 encodeSet :: TypedTermDefinition ((a -> Term) -> S.Set a -> Term)
@@ -99,9 +99,9 @@ encodeSet = define "encodeSet" $
     (Sets.map (var "elemEncoder") (var "xs" :: TypedTerm (S.Set Int)))
 
 -- | Look up the string-shower for a type given its TypedName token. The result is a
--- term reference (Term.variable) to the type's hydra.print.<ns>.<local> binding;
+-- term reference (Term.variable) to the type's hydra.core.print.<ns>.<local> binding;
 -- ordinary term evaluation resolves it to the shower function it names.
 showRef :: TypedTermDefinition (TypedName a -> (a -> String))
 showRef = define "showRef" $
   doc "Look up the string-shower function for a type given its TypedName token" $
-  "tn" ~> Core.termVariable (Names.derivedBindingName @@ list [string "hydra", string "show"] @@ boolean True @@ (unwrap _TypedName @@ var "tn"))
+  "tn" ~> Core.termVariable (Names.derivedBindingName @@ list [string "show"] @@ boolean True @@ (unwrap _TypedName @@ var "tn"))

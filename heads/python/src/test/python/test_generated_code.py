@@ -68,7 +68,7 @@ pyright src/main/python/hydra/lib/literals.py
 pyright src/main/python/hydra/lib/logic.py
 pyright src/main/python/hydra/lib/maps.py
 pyright src/main/python/hydra/lib/math.py
-pyright src/main/python/hydra.lib.optionals.py
+pyright src/main/python/hydra.core.lib.optionals.py
 pyright src/main/python/hydra/lib/sets.py
 pyright src/main/python/hydra/lib/strings.py
 
@@ -131,32 +131,32 @@ pyright src/gen-main/python/hydra/variants.py
 """
 
 # types
-from hydra.ast import *
-from hydra.coders import *
-from hydra.core import *
-from hydra.graph import *
-from hydra.util import *
-from hydra.packaging import *
-from hydra.typed import *
-from hydra.query import *
-from hydra.relational import *
-from hydra.tabular import *
-from hydra.testing import *
-from hydra.topology import *
-from hydra.typing import *
+from hydra.core.ast import *
+from hydra.core.coders import *
+from hydra.core.model import *
+from hydra.core.graph import *
+from hydra.core.util import *
+from hydra.core.packaging import *
+from hydra.core.typed import *
+from hydra.core.query import *
+from hydra.core.relational import *
+from hydra.core.tabular import *
+from hydra.core.testing import *
+from hydra.core.topology import *
+from hydra.core.typing import *
 
 # terms
-from hydra.constants import *
-from hydra.languages import *
-from hydra.literals import *
-# from hydra.rewriting import *
+from hydra.core.constants import *
+from hydra.core.languages import *
+from hydra.core.literals import *
+# from hydra.core.rewriting import *
 # from hydra.schemas import *
-# from hydra.serialization import *
-# from hydra.sorting import *
-# from hydra.substitution import *
-# from hydra.templates import *
-# from hydra.unification import *
-from hydra.variants import *
+# from hydra.core.serialization import *
+# from hydra.core.sorting import *
+# from hydra.core.substitution import *
+# from hydra.core.templates import *
+# from hydra.core.unification import *
+from hydra.core.variants import *
 
 from dataclasses import dataclass
 from typing import Generic, TypeVar

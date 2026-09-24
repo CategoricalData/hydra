@@ -11,27 +11,27 @@ module Hydra.Sources.Build.Test.Reconcile where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms hiding ((++))
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms hiding ((++))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 import qualified Data.Set                     as S
 
-import Hydra.Testing
+import Hydra.Core.Testing
 import qualified Hydra.Sources.Build.Reconcile as Reconcile
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Dsl.Packaging    as DPackaging
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Dsl.Packaging    as DPackaging
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.build.reconcile"
+ns = ModuleName "hydra.build.test.reconcile"
 
 module_ :: Module
 module_ = Module {

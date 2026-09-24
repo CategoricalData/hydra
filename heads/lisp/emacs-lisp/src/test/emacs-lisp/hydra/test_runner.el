@@ -8,19 +8,19 @@
 ;; ============================================================================
 
 (defun hydra-show-term (t_)
-  (condition-case nil (funcall hydra_print_core_term t_)
+  (condition-case nil (funcall hydra_core_print_model_term t_)
     (error nil)))
 
 (defun hydra-show-type-scheme (ts)
-  (condition-case nil (funcall hydra_print_core_type_scheme ts)
+  (condition-case nil (funcall hydra_core_print_model_type_scheme ts)
     (error nil)))
 
 (defun hydra-show-type (t_)
-  (condition-case nil (funcall hydra_print_core_type t_)
+  (condition-case nil (funcall hydra_core_print_model_type t_)
     (error nil)))
 
 (defun hydra-show-let (l)
-  (condition-case nil (funcall hydra_print_core_let l)
+  (condition-case nil (funcall hydra_core_print_model_let l)
     (error nil)))
 
 (defun hydra-terms-match-p (actual expected)
@@ -49,11 +49,11 @@
   "Check if term is annotated in either struct-compat or meta-encoded format."
   (and (consp term)
        (or (eq (car term) :annotated)
-           ;; Meta-encoded: (:union (:type_name "hydra.core.Term" :field (:name "annotated" ...)))
+           ;; Meta-encoded: (:union (:type_name "hydra.core.model.Term" :field (:name "annotated" ...)))
            (and (eq (car term) :union)
                 (let ((inj (cadr term)))
                   (and (consp inj)
-                       (equal (cdr (assq :type_name inj)) "hydra.core.Term")
+                       (equal (cdr (assq :type_name inj)) "hydra.core.model.Term")
                        (equal (cdr (assq :name (cdr (assq :field inj)))) "annotated")))))))
 
 (defun hydra--unwrap-term-variable-key (k)
@@ -66,7 +66,7 @@
          (let* ((inj (cadr k))
                 (tn (cdr (assq :type_name inj)))
                 (fld (cdr (assq :field inj))))
-           (and (equal tn "hydra.core.Term")
+           (and (equal tn "hydra.core.model.Term")
                 (equal (cdr (assq :name fld)) "variable"))))
     (let* ((inj (cadr k))
            (fld (cdr (assq :field inj))))
@@ -98,7 +98,7 @@
          (let* ((inj (cadr ann))
                 (tn (cdr (assq :type_name inj)))
                 (fld (cdr (assq :field inj))))
-           (and (equal tn "hydra.core.Term")
+           (and (equal tn "hydra.core.model.Term")
                 (equal (cdr (assq :name fld)) "map"))))
     (let* ((inj (cadr ann))
            (fld (cdr (assq :field inj)))
@@ -121,8 +121,8 @@
   (cond
    ((eq (car term) :annotated)
     (let* ((at (cadr term))
-           (ann (hydra_core_annotated_term-annotation at))
-           (body (hydra_core_annotated_term-body at)))
+           (ann (hydra_core_model_annotated_term-annotation at))
+           (body (hydra_core_model_annotated_term-body at)))
       (cons body (hydra--unwrap-term-annotation ann))))
    ((eq (car term) :union)
     (let* ((inj (cadr term))
@@ -191,8 +191,8 @@
       (cond
        ((eq tag :annotated)
         (let* ((at (cadr term))
-               (body (hydra_core_annotated_term-body at))
-               (ann (hydra_core_annotated_term-annotation at))
+               (body (hydra_core_model_annotated_term-body at))
+               (ann (hydra_core_model_annotated_term-annotation at))
                ;; #386: AnnotatedTerm.annotation is a Term. If it's already a
                ;; Term (Inject{Term, ...}), recurse meta-fully; if it's a bare
                ;; (:map alist) treat each pair as (Name . value) and wrap canonically.
@@ -202,7 +202,7 @@
                  ((and (consp ann) (eq (car ann) :inject)
                        (let* ((inj (cadr ann))
                               (tn (cdr (assq :type_name inj))))
-                         (equal tn "hydra.core.Term")))
+                         (equal tn "hydra.core.model.Term")))
                   (hydra--term-to-meta ann))
                  ;; Bare (:map alist) — wrap as TermMap with TermVariable keys.
                  ((and (consp ann) (eq (car ann) :map))
@@ -211,41 +211,41 @@
                  ((and (consp ann) (consp (car ann)))
                   (hydra--term-to-meta (hydra--wrap-annotation-alist-as-term ann)))
                  (t (hydra--term-to-meta ann)))))
-          (list :inject (hydra--make-injection "hydra.core.Term" "annotated"
-                         (list :record (hydra--make-record "hydra.core.AnnotatedTerm"
+          (list :inject (hydra--make-injection "hydra.core.model.Term" "annotated"
+                         (list :record (hydra--make-record "hydra.core.model.AnnotatedTerm"
                                          (list (hydra--make-field "body" (hydra--term-to-meta body))
                                                (hydra--make-field "annotation" ann-meta))))))))
        ((eq tag :literal)
-        (list :inject (hydra--make-injection "hydra.core.Term" "literal"
+        (list :inject (hydra--make-injection "hydra.core.model.Term" "literal"
                        (hydra--literal-to-meta (cadr term)))))
        ((eq tag :application)
         (let ((app (cadr term)))
-          (list :inject (hydra--make-injection "hydra.core.Term" "application"
-                         (list :record (hydra--make-record "hydra.core.Application"
-                                         (list (hydra--make-field "function" (hydra--term-to-meta (hydra_core_application-function app)))
-                                               (hydra--make-field "argument" (hydra--term-to-meta (hydra_core_application-argument app))))))))))
+          (list :inject (hydra--make-injection "hydra.core.model.Term" "application"
+                         (list :record (hydra--make-record "hydra.core.model.Application"
+                                         (list (hydra--make-field "function" (hydra--term-to-meta (hydra_core_model_application-function app)))
+                                               (hydra--make-field "argument" (hydra--term-to-meta (hydra_core_model_application-argument app))))))))))
        ((eq tag :variable)
-        (list :inject (hydra--make-injection "hydra.core.Term" "variable"
-                       (list :wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+        (list :inject (hydra--make-injection "hydra.core.model.Term" "variable"
+                       (list :wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                                      (list :literal (list :string (cadr term))))))))
        ((eq tag :wrap)
         (let ((wt (cadr term)))
-          (list :inject (hydra--make-injection "hydra.core.Term" "wrap"
-                         (list :record (hydra--make-record "hydra.core.WrappedTerm"
+          (list :inject (hydra--make-injection "hydra.core.model.Term" "wrap"
+                         (list :record (hydra--make-record "hydra.core.model.WrappedTerm"
                                          (list (hydra--make-field "typeName"
-                                                 (list :wrap (make-hydra_core_wrapped_term "hydra.core.Name"
-                                                               (list :literal (list :string (hydra_core_wrapped_term-type_name wt))))))
-                                               (hydra--make-field "body" (hydra--term-to-meta (hydra_core_wrapped_term-body wt))))))))))
+                                                 (list :wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
+                                                               (list :literal (list :string (hydra_core_model_wrapped_term-type_name wt))))))
+                                               (hydra--make-field "body" (hydra--term-to-meta (hydra_core_model_wrapped_term-body wt))))))))))
        ((eq tag :optional)
-        (list :inject (hydra--make-injection "hydra.core.Term" "optional"
+        (list :inject (hydra--make-injection "hydra.core.model.Term" "optional"
                        (if (cadr term)
                            (list :optional (hydra--term-to-meta (cadr term)))
                          (list :optional nil)))))
        ((eq tag :list)
-        (list :inject (hydra--make-injection "hydra.core.Term" "list"
+        (list :inject (hydra--make-injection "hydra.core.model.Term" "list"
                        (list :list (mapcar #'hydra--term-to-meta (cadr term))))))
        ((eq tag :map)
-        (list :inject (hydra--make-injection "hydra.core.Term" "map"
+        (list :inject (hydra--make-injection "hydra.core.model.Term" "map"
                        (hydra--term-to-meta-map term))))
        ;; Already meta-encoded or unknown — pass through
        (t term)))))
@@ -254,33 +254,33 @@
   (if (not (consp lit)) lit
     (let ((tag (car lit)))
       (cond
-       ((eq tag :string) (list :inject (hydra--make-injection "hydra.core.Literal" "string"
+       ((eq tag :string) (list :inject (hydra--make-injection "hydra.core.model.Literal" "string"
                                         (list :literal lit))))
-       ((eq tag :boolean) (list :inject (hydra--make-injection "hydra.core.Literal" "boolean"
+       ((eq tag :boolean) (list :inject (hydra--make-injection "hydra.core.model.Literal" "boolean"
                                          (list :literal lit))))
        ((eq tag :integer) (hydra--integer-to-meta (cadr lit)))
        ((eq tag :float) (hydra--float-to-meta (cadr lit)))
-       (t (list :inject (hydra--make-injection "hydra.core.Literal"
+       (t (list :inject (hydra--make-injection "hydra.core.model.Literal"
                           (downcase (symbol-name tag))
                           (list :literal lit))))))))
 
 (defun hydra--integer-to-meta (ival)
   (if (not (consp ival)) ival
-    (list :inject (hydra--make-injection "hydra.core.Literal" "integer"
-                   (list :inject (hydra--make-injection "hydra.core.IntegerValue"
+    (list :inject (hydra--make-injection "hydra.core.model.Literal" "integer"
+                   (list :inject (hydra--make-injection "hydra.core.model.IntegerValue"
                                   (downcase (symbol-name (car ival)))
                                   (list :literal (list :integer ival))))))))
 
 (defun hydra--float-to-meta (fval)
   (if (not (consp fval)) fval
-    (list :inject (hydra--make-injection "hydra.core.Literal" "float"
-                   (list :inject (hydra--make-injection "hydra.core.FloatValue"
+    (list :inject (hydra--make-injection "hydra.core.model.Literal" "float"
+                   (list :inject (hydra--make-injection "hydra.core.model.FloatValue"
                                   (downcase (symbol-name (car fval)))
                                   (list :literal (list :float fval))))))))
 
 (defun hydra--ensure-name-key (k)
   (if (stringp k)
-      (list :wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+      (list :wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                     (list :literal (list :string k))))
     k))
 
@@ -300,17 +300,17 @@
          (let* ((inj (cadr k))
                 (tn (cdr (assq :type_name inj)))
                 (fld (cdr (assq :field inj))))
-           (and (equal tn "hydra.core.Term")
+           (and (equal tn "hydra.core.model.Term")
                 (equal (cdr (assq :name fld)) "variable"))))
     k)
    (t
-    (list :inject (hydra--make-injection "hydra.core.Term" "variable" k)))))
+    (list :inject (hydra--make-injection "hydra.core.model.Term" "variable" k)))))
 
 (defun hydra--wrap-annotation-alist-as-term (anns)
   "Wrap a (NameTerm . ValueTerm) alist as the Term-encoded annotation map
    shape required by AnnotatedTerm.annotation after #386:
    Inject{Term, map = (:map ((TermVariable . ValueTerm) ...))}."
-  (list :inject (hydra--make-injection "hydra.core.Term" "map"
+  (list :inject (hydra--make-injection "hydra.core.model.Term" "map"
                  (list :map (mapcar (lambda (entry)
                                       (cons (hydra--wrap-key-as-term-variable (car entry))
                                             (cdr entry)))
@@ -323,8 +323,8 @@
                                   (cons (car entry) (hydra--term-to-meta (cdr entry))))
                                 anns))
          (ann-term (hydra--wrap-annotation-alist-as-term wrapped-pairs)))
-    (list :inject (hydra--make-injection "hydra.core.Term" "annotated"
-                   (list :record (hydra--make-record "hydra.core.AnnotatedTerm"
+    (list :inject (hydra--make-injection "hydra.core.model.Term" "annotated"
+                   (list :record (hydra--make-record "hydra.core.model.AnnotatedTerm"
                                    (list (hydra--make-field "body" (hydra--term-to-meta body))
                                          (hydra--make-field "annotation" ann-term))))))))
 
@@ -368,7 +368,7 @@
   (let* ((d (car args)) (term (cadr args))
          (s (hydra--unwrap-maybe-string d))
          (term-val (when s (list :literal (list :string s))))
-         (desc-key (list :wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+         (desc-key (list :wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                                  (list :literal (list :string "description")))))
          (maybe-val (if term-val (list :optional term-val) (list :optional (list :none)))))
     (hydra--prim-set-term-annotation _g (list desc-key maybe-val term))))
@@ -380,8 +380,8 @@
                    (while (and (consp t_) (memq (car t_) '(:type_lambda :type_application)))
                      (let ((rec (cadr t_)))
                        (setq t_ (cond
-                                 ((eq (car t_) :type_lambda) (hydra_core_type_lambda-body rec))
-                                 (t (hydra_core_type_application_term-body rec))))))
+                                 ((eq (car t_) :type_lambda) (hydra_core_model_type_lambda-body rec))
+                                 (t (hydra_core_model_type_application_term-body rec))))))
                    t_))
          (cached-anns (hydra--lookup-cached-annotations peeled))
          (term-anns (hydra--term-annotations peeled))
@@ -391,8 +391,8 @@
                         (let ((k (car e)))
                           (and (consp k) (eq (car k) :wrap)
                                (let ((wt (cadr k)))
-                                 (and (equal (hydra_core_wrapped_term-type_name wt) "hydra.core.Name")
-                                      (let ((b (hydra_core_wrapped_term-body wt)))
+                                 (and (equal (hydra_core_model_wrapped_term-type_name wt) "hydra.core.model.Name")
+                                      (let ((b (hydra_core_model_wrapped_term-body wt)))
                                         (and (consp b) (eq (car b) :literal)
                                              (consp (cadr b)) (eq (car (cadr b)) :string)
                                              (equal (cadr (cadr b)) "description"))))))))
@@ -404,7 +404,7 @@
             ((and (consp desc-term) (eq (car desc-term) :literal)
                   (consp (cadr desc-term)) (eq (car (cadr desc-term)) :string))
              (cadr (cadr desc-term)))
-            ;; Meta-encoded: (:union ((:type_name . "hydra.core.Term") (:field (:name . "literal") (:term ...))))
+            ;; Meta-encoded: (:union ((:type_name . "hydra.core.model.Term") (:field (:name . "literal") (:term ...))))
             ((and (consp desc-term) (eq (car desc-term) :union))
              (let* ((inj (cadr desc-term))
                     (fld (cdr (assq :field inj)))
@@ -426,17 +426,17 @@
 
 (defun hydra--make-ann-type-scheme (arity)
   (let ((make-t (lambda (n) (if (<= n 0) (list :unit)
-                              (list :function (make-hydra_core_function_type (list :unit) (funcall make-t (1- n))))))))
+                              (list :function (make-hydra_core_model_function_type (list :unit) (funcall make-t (1- n))))))))
     ;; Use make-prim-type-scheme from prims.el
     (make-prim-type-scheme arity)))
 
 (defun hydra--make-annotation-primitive (name arity impl-fn)
   ;; #368: errors flow through Either Left Error directly; no InContext wrap
-  (make-hydra_graph_primitive (make-prim-def-from-arity name arity)
+  (make-hydra_core_graph_primitive (make-prim-def-from-arity name arity)
     (lambda (g) (lambda (args)
       (condition-case err
           (funcall impl-fn g args)
-        (error (list :left (list :other (make-hydra_errors_other_error (format "%S" err))))))))))
+        (error (list :left (list :other (make-hydra_core_errors_other_error (format "%S" err))))))))))
 
 ;; ============================================================================
 ;; Annotation cache — preserves annotations stripped by the reducer
@@ -445,15 +445,15 @@
 (defvar hydra--annotation-cache (make-hash-table :test 'equal))
 
 (defun hydra--install-annotation-cache ()
-  "Wrap hydra_strip_deannotate_term to cache annotations before stripping.
+  "Wrap hydra_core_strip_deannotate_term to cache annotations before stripping.
 No-op when the symbol is undefined — the wrapper is a memoization aid,
 not a correctness requirement, so installs that arrive before the kernel
-is loaded (e.g. host-coder bootstraps that don't emit hydra.strip) just
+is loaded (e.g. host-coder bootstraps that don't emit hydra.core.strip) just
 skip silently."
-  (let ((original (or (and (fboundp 'hydra_strip_deannotate_term)
-                           (symbol-function 'hydra_strip_deannotate_term))
-                      (and (boundp 'hydra_strip_deannotate_term)
-                           hydra_strip_deannotate_term))))
+  (let ((original (or (and (fboundp 'hydra_core_strip_deannotate_term)
+                           (symbol-function 'hydra_core_strip_deannotate_term))
+                      (and (boundp 'hydra_core_strip_deannotate_term)
+                           hydra_core_strip_deannotate_term))))
     (when original
       (let ((wrapper (lambda (t_)
                        (when (hydra--is-annotated-p t_)
@@ -462,8 +462,8 @@ skip silently."
                            (when anns
                              (puthash body anns hydra--annotation-cache))))
                        (funcall original t_))))
-        (setq hydra_strip_deannotate_term wrapper)
-        (fset 'hydra_strip_deannotate_term wrapper)))))
+        (setq hydra_core_strip_deannotate_term wrapper)
+        (fset 'hydra_core_strip_deannotate_term wrapper)))))
 
 (defun hydra--lookup-cached-annotations (term)
   (gethash term hydra--annotation-cache))
@@ -481,29 +481,29 @@ skip silently."
   (let* ((native-graph graph)
          (cx (hydra-empty-context))
          (prims-map (cdr (assq :primitives graph)))
-         (prims-list (funcall hydra_overlay_emacs_lisp_lib_maps_to_list prims-map))
+         (prims-list (funcall hydra_core_overlay_emacs_lisp_lib_maps_to_list prims-map))
          (patched-list
            (mapcar (lambda (entry)
                      (let* ((name (car entry))
                             (prim (cadr entry))
-                            (di (hydra_packaging_primitive_definition-default_implementation
-                                  (hydra_graph_primitive-definition prim))))
+                            (di (hydra_core_packaging_primitive_definition-default_implementation
+                                  (hydra_core_graph_primitive-definition prim))))
                        (if (and (consp di) (eq (car di) :none))
                          entry
                          (let ((impl-term (cadr di)))
                            (list name
-                                 (make-hydra_graph_primitive
-                                   :definition (hydra_graph_primitive-definition prim)
+                                 (make-hydra_core_graph_primitive
+                                   :definition (hydra_core_graph_primitive-definition prim)
                                    :implementation
                                    (lambda (_g)
                                      (lambda (args)
                                        (let ((applied (cl-reduce
                                                         (lambda (f a)
-                                                          (list :application (make-hydra_core_application f a)))
+                                                          (list :application (make-hydra_core_model_application f a)))
                                                         args :initial-value impl-term)))
-                                         (funcall (funcall (funcall (funcall hydra_reduction_reduce_term cx) native-graph) t) applied))))))))))
+                                         (funcall (funcall (funcall (funcall hydra_core_reduction_reduce_term cx) native-graph) t) applied))))))))))
                    prims-list))
-         (patched-map (funcall hydra_overlay_emacs_lisp_lib_maps_from_list patched-list))
+         (patched-map (funcall hydra_core_overlay_emacs_lisp_lib_maps_from_list patched-list))
          (new-graph (copy-alist graph)))
     (setcdr (assq :primitives new-graph) patched-map)
     new-graph))
@@ -516,37 +516,37 @@ skip silently."
          ;; Add custom annotation primitives
          (ann-prims-list
           (list
-           (list "hydra.annotations.setTermAnnotation"
-                 (hydra--make-annotation-primitive "hydra.annotations.setTermAnnotation" 3
+           (list "hydra.core.annotations.setTermAnnotation"
+                 (hydra--make-annotation-primitive "hydra.core.annotations.setTermAnnotation" 3
                    #'hydra--prim-set-term-annotation))
-           (list "hydra.annotations.getTermAnnotation"
-                 (hydra--make-annotation-primitive "hydra.annotations.getTermAnnotation" 2
+           (list "hydra.core.annotations.getTermAnnotation"
+                 (hydra--make-annotation-primitive "hydra.core.annotations.getTermAnnotation" 2
                    #'hydra--prim-get-term-annotation))
-           (list "hydra.annotations.setTermDescription"
-                 (hydra--make-annotation-primitive "hydra.annotations.setTermDescription" 2
+           (list "hydra.core.annotations.setTermDescription"
+                 (hydra--make-annotation-primitive "hydra.core.annotations.setTermDescription" 2
                    #'hydra--prim-set-term-description))
-           (list "hydra.annotations.getTermDescription"
-                 (hydra--make-annotation-primitive "hydra.annotations.getTermDescription" 3
+           (list "hydra.core.annotations.getTermDescription"
+                 (hydra--make-annotation-primitive "hydra.core.annotations.getTermDescription" 3
                    #'hydra--prim-get-term-description))))
-         (ann-prims-map (funcall hydra_overlay_emacs_lisp_lib_maps_from_list ann-prims-list))
-         (all-prims (funcall (funcall hydra_overlay_emacs_lisp_lib_maps_union ann-prims-map) std-prims))
-         (prim-entries (funcall hydra_overlay_emacs_lisp_lib_maps_to_list all-prims))
+         (ann-prims-map (funcall hydra_core_overlay_emacs_lisp_lib_maps_from_list ann-prims-list))
+         (all-prims (funcall (funcall hydra_core_overlay_emacs_lisp_lib_maps_union ann-prims-map) std-prims))
+         (prim-entries (funcall hydra_core_overlay_emacs_lisp_lib_maps_to_list all-prims))
          (bound-terms
-          (funcall hydra_overlay_emacs_lisp_lib_maps_from_list
+          (funcall hydra_core_overlay_emacs_lisp_lib_maps_from_list
                    (append
                     (when (fboundp 'hydra-annotation-bindings)
                       (hydra-annotation-bindings))
                     (list
                      (list "hydra.monads.emptyContext" (list :unit))
-                     (list "hydra.lexical.emptyGraph" (list :unit)))))))
+                     (list "hydra.core.lexical.emptyGraph" (list :unit)))))))
     (list (cons :bound_terms bound-terms)
-          (cons :bound_types hydra_overlay_emacs_lisp_lib_maps_empty)
-          (cons :class_constraints hydra_overlay_emacs_lisp_lib_maps_empty)
-          (cons :lambda_variables hydra_overlay_emacs_lisp_lib_sets_empty)
-          (cons :metadata hydra_overlay_emacs_lisp_lib_maps_empty)
+          (cons :bound_types hydra_core_overlay_emacs_lisp_lib_maps_empty)
+          (cons :class_constraints hydra_core_overlay_emacs_lisp_lib_maps_empty)
+          (cons :lambda_variables hydra_core_overlay_emacs_lisp_lib_sets_empty)
+          (cons :metadata hydra_core_overlay_emacs_lisp_lib_maps_empty)
           (cons :primitives all-prims)
-          (cons :schema_types hydra_overlay_emacs_lisp_lib_maps_empty)
-          (cons :type_variables hydra_overlay_emacs_lisp_lib_sets_empty))))
+          (cons :schema_types hydra_core_overlay_emacs_lisp_lib_maps_empty)
+          (cons :type_variables hydra_core_overlay_emacs_lisp_lib_sets_empty))))
 
 (defun hydra-ensure-test-graph ()
   (unless hydra--annotation-cache-installed
@@ -555,31 +555,31 @@ skip silently."
   (unless hydra--test-graph
     (let ((base (hydra-build-test-graph)))
       (condition-case err
-          (let* ((bootstrap-types (if (boundp 'hydra_json_bootstrap_types_by_name)
-                                      hydra_json_bootstrap_types_by_name nil))
-                 (test-types (if (boundp 'hydra_test_test_graph_test_types)
-                                 hydra_test_test_graph_test_types nil))
-                 (type-to-ts (when (boundp 'hydra_scoping_f_type_to_type_scheme)
-                               hydra_scoping_f_type_to_type_scheme))
+          (let* ((bootstrap-types (if (boundp 'hydra_core_json_bootstrap_types_by_name)
+                                      hydra_core_json_bootstrap_types_by_name nil))
+                 (test-types (if (boundp 'hydra_core_test_test_graph_test_types)
+                                 hydra_core_test_test_graph_test_types nil))
+                 (type-to-ts (when (boundp 'hydra_core_scoping_f_type_to_type_scheme)
+                               hydra_core_scoping_f_type_to_type_scheme))
                  (kernel-entries
                   (when (and bootstrap-types type-to-ts)
                     (mapcar (lambda (entry)
                               (list (car entry) (funcall type-to-ts (cadr entry))))
-                            (funcall hydra_overlay_emacs_lisp_lib_maps_to_list bootstrap-types))))
+                            (funcall hydra_core_overlay_emacs_lisp_lib_maps_to_list bootstrap-types))))
                  (test-entries
                   (when (and test-types type-to-ts)
                     (mapcar (lambda (entry)
                               (list (car entry) (funcall type-to-ts (cadr entry))))
-                            (funcall hydra_overlay_emacs_lisp_lib_maps_to_list test-types))))
+                            (funcall hydra_core_overlay_emacs_lisp_lib_maps_to_list test-types))))
                  (all-entries (append (or kernel-entries nil) (or test-entries nil)))
-                 (schema-types (funcall hydra_overlay_emacs_lisp_lib_maps_from_list all-entries))
-                 (test-terms-map (if (boundp 'hydra_test_test_graph_test_terms)
-                                     hydra_test_test_graph_test_terms
-                                   hydra_overlay_emacs_lisp_lib_maps_empty))
+                 (schema-types (funcall hydra_core_overlay_emacs_lisp_lib_maps_from_list all-entries))
+                 (test-terms-map (if (boundp 'hydra_core_test_test_graph_test_terms)
+                                     hydra_core_test_test_graph_test_terms
+                                   hydra_core_overlay_emacs_lisp_lib_maps_empty))
                  (enhanced (copy-alist base)))
             (setcdr (assq :schema_types enhanced) schema-types)
             (setcdr (assq :bound_terms enhanced)
-                    (funcall (funcall hydra_overlay_emacs_lisp_lib_maps_union test-terms-map)
+                    (funcall (funcall hydra_core_overlay_emacs_lisp_lib_maps_union test-terms-map)
                              (cdr (assq :bound_terms base))))
             (setq hydra--test-graph (if hydra--use-default-impls (hydra--patch-with-default-impls enhanced) enhanced)))
         (error
@@ -587,13 +587,13 @@ skip silently."
          (setq hydra--test-graph (if hydra--use-default-impls (hydra--patch-with-default-impls base) base)))))))
 
 (defun hydra-empty-context ()
-  (funcall 'make-hydra_typing_inference_context 0 nil))
+  (funcall 'make-hydra_core_typing_inference_context 0 nil))
 
 (defun hydra-type-scheme-to-type (ts)
   "Convert a TypeScheme back to a Type by wrapping forall binders."
-  (let ((vars (hydra_core_type_scheme-variables ts))
-        (body (hydra_core_type_scheme-body ts)))
-    (cl-reduce (lambda (t_ v) (list :forall (make-hydra_core_forall_type v t_)))
+  (let ((vars (hydra_core_model_type_scheme-variables ts))
+        (body (hydra_core_model_type_scheme-body ts)))
+    (cl-reduce (lambda (t_ v) (list :forall (make-hydra_core_model_forall_type v t_)))
                (reverse vars) :initial-value body)))
 
 (defun hydra-empty-graph ()
@@ -620,7 +620,7 @@ skip silently."
          (style (cdr (assq :evaluation_style tc)))
          (eager (and (consp style) (eq (car style) :eager))))
     (condition-case err
-        (let ((result (funcall (funcall (funcall (funcall hydra_reduction_reduce_term cx) graph) eager) input)))
+        (let ((result (funcall (funcall (funcall (funcall hydra_core_reduction_reduce_term cx) graph) eager) input)))
           (if (eq (car result) :left)
               (progn (message "FAIL: %s" path) (message "  ERROR: %S" (cadr result)) (list 0 1 0))
             (let ((actual (cadr result)))
@@ -703,84 +703,84 @@ they are forced with a dummy nil.  The canonical temp directory is prepared firs
 
 (defun hydra-run-alpha-conversion-test (path tc)
   (hydra-run-simple-test path (cdr (assq :result tc))
-    (lambda () (funcall (funcall (funcall hydra_reduction_alpha_convert (cdr (assq :old_variable tc)))
+    (lambda () (funcall (funcall (funcall hydra_core_reduction_alpha_convert (cdr (assq :old_variable tc)))
                                  (cdr (assq :new_variable tc))) (cdr (assq :term tc))))))
 
 (defun hydra-run-case-conversion-test (path tc)
   (hydra-run-simple-test path (cdr (assq :to_string tc))
-    (lambda () (funcall (funcall (funcall hydra_formatting_convert_case (cdr (assq :from_convention tc)))
+    (lambda () (funcall (funcall (funcall hydra_core_formatting_convert_case (cdr (assq :from_convention tc)))
                                  (cdr (assq :to_convention tc))) (cdr (assq :from_string tc))))))
 
 (defun hydra-run-deannotate-term-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))
-    (lambda () (funcall hydra_strip_deannotate_term (cdr (assq :input tc))))))
+    (lambda () (funcall hydra_core_strip_deannotate_term (cdr (assq :input tc))))))
 
 (defun hydra-run-deannotate-type-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))
-    (lambda () (funcall hydra_strip_deannotate_type (cdr (assq :input tc))))))
+    (lambda () (funcall hydra_core_strip_deannotate_type (cdr (assq :input tc))))))
 
 (defun hydra-run-flatten-let-terms-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))
-    (lambda () (funcall hydra_rewriting_flatten_let_terms (cdr (assq :input tc))))))
+    (lambda () (funcall hydra_core_rewriting_flatten_let_terms (cdr (assq :input tc))))))
 
 (defun hydra-run-free-variables-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))
-    (lambda () (funcall hydra_rewriting_free_variables_in_term (cdr (assq :input tc))))))
+    (lambda () (funcall hydra_core_rewriting_free_variables_in_term (cdr (assq :input tc))))))
 
 (defun hydra-run-lift-lambda-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))
-    (lambda () (funcall hydra_rewriting_lift_lambda_above_let (cdr (assq :input tc))))))
+    (lambda () (funcall hydra_core_rewriting_lift_lambda_above_let (cdr (assq :input tc))))))
 
 (defun hydra-run-simplify-term-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))
-    (lambda () (funcall hydra_rewriting_simplify_term (cdr (assq :input tc))))))
+    (lambda () (funcall hydra_core_rewriting_simplify_term (cdr (assq :input tc))))))
 
 (defun hydra-run-normalize-type-vars-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))
-    (lambda () (funcall hydra_rewriting_normalize_type_variables_in_term (cdr (assq :input tc))))))
+    (lambda () (funcall hydra_core_rewriting_normalize_type_variables_in_term (cdr (assq :input tc))))))
 
 (defun hydra-run-topological-sort-test (path tc)
   (hydra-run-simple-test path (cdr (assq :expected tc))
-    (lambda () (funcall hydra_sorting_topological_sort (cdr (assq :adjacency_list tc))))))
+    (lambda () (funcall hydra_core_sorting_topological_sort (cdr (assq :adjacency_list tc))))))
 
 (defun hydra-run-topological-sort-scc-test (path tc)
   (hydra-run-simple-test path (cdr (assq :expected tc))
-    (lambda () (funcall hydra_sorting_topological_sort_components (cdr (assq :adjacency_list tc))))))
+    (lambda () (funcall hydra_core_sorting_topological_sort_components (cdr (assq :adjacency_list tc))))))
 
 (defun hydra-run-serialization-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))
-    (lambda () (funcall hydra_serialization_print_expr
-                        (funcall hydra_serialization_parenthesize (cdr (assq :input tc)))))))
+    (lambda () (funcall hydra_core_serialization_print_expr
+                        (funcall hydra_core_serialization_parenthesize (cdr (assq :input tc)))))))
 
 (defun hydra-run-type-reduction-test (path tc)
   (let ((cx (hydra-empty-context)) (graph hydra--test-graph))
     (hydra-run-either-test path (cdr (assq :output tc))
-      (funcall (funcall (funcall hydra_reduction_beta_reduce_type cx) graph) (cdr (assq :input tc))))))
+      (funcall (funcall (funcall hydra_core_reduction_beta_reduce_type cx) graph) (cdr (assq :input tc))))))
 
 (defun hydra-run-unshadow-variables-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))
-    (lambda () (funcall hydra_rewriting_unshadow_variables (cdr (assq :input tc))))))
+    (lambda () (funcall hydra_core_rewriting_unshadow_variables (cdr (assq :input tc))))))
 
 (defun hydra-run-validate-core-term-test (path tc)
-  (if (boundp 'hydra_validate_core_term)
+  (if (boundp 'hydra_core_validate_model_term)
       (hydra-run-simple-test path (cdr (assq :output tc))
-        (lambda () (funcall (funcall (funcall hydra_validate_core_term (cdr (assq :typed tc))) hydra--test-graph) (cdr (assq :input tc)))))
+        (lambda () (funcall (funcall (funcall hydra_core_validate_model_term (cdr (assq :typed tc))) hydra--test-graph) (cdr (assq :input tc)))))
     (list 0 0 1)))
 
 (defun hydra-run-eta-expansion-test (path tc)
   (let ((cx (hydra-empty-context)) (graph hydra--test-graph))
     (hydra-run-either-test path (cdr (assq :output tc))
-      (funcall (funcall (funcall hydra_reduction_eta_expand_typed_term cx) graph) (cdr (assq :input tc))))))
+      (funcall (funcall (funcall hydra_core_reduction_eta_expand_typed_term cx) graph) (cdr (assq :input tc))))))
 
 (defun hydra-run-inference-test (path tc)
   (let ((cx (hydra-empty-context)) (graph hydra--test-graph))
     (condition-case err
-        (let ((result (funcall (funcall (funcall hydra_inference_infer_type_of cx) graph) (cdr (assq :input tc)))))
+        (let ((result (funcall (funcall (funcall hydra_core_inference_infer_type_of cx) graph) (cdr (assq :input tc)))))
           (if (eq (car result) :left)
               (progn (message "FAIL: %s" path) (message "  Inference ERROR: %S" (cadr result)) (list 0 1 0))
             (let* ((pair-val (cadr result))
-                   (inner-pair (funcall hydra_overlay_emacs_lisp_lib_pairs_first pair-val))
-                   (result-scheme (funcall hydra_overlay_emacs_lisp_lib_pairs_second inner-pair))
+                   (inner-pair (funcall hydra_core_overlay_emacs_lisp_lib_pairs_first pair-val))
+                   (result-scheme (funcall hydra_core_overlay_emacs_lisp_lib_pairs_second inner-pair))
                    (expected-str (hydra-show-type-scheme (cdr (assq :output tc))))
                    (actual-str (hydra-show-type-scheme result-scheme)))
               (hydra-string-comparison-test path expected-str actual-str))))
@@ -789,59 +789,59 @@ they are forced with a dummy nil.  The canonical temp directory is prepared firs
 (defun hydra-run-inference-failure-test (path tc)
   (let ((cx (hydra-empty-context)) (graph hydra--test-graph))
     (condition-case nil
-        (let ((result (funcall (funcall (funcall hydra_inference_infer_type_of cx) graph) (cdr (assq :input tc)))))
+        (let ((result (funcall (funcall (funcall hydra_core_inference_infer_type_of cx) graph) (cdr (assq :input tc)))))
           (if (eq (car result) :left) (list 1 0 0)
             (progn (message "FAIL: %s\n  Expected failure" path) (list 0 1 0))))
       (error (list 1 0 0)))))
 
 (defun hydra-run-variable-occurs-test (path tc)
   (hydra-run-simple-test path (cdr (assq :expected tc))
-    (lambda () (funcall (funcall hydra_unification_variable_occurs_in_type (cdr (assq :variable tc)))
+    (lambda () (funcall (funcall hydra_core_unification_variable_occurs_in_type (cdr (assq :variable tc)))
                         (cdr (assq :type tc))))))
 
 (defun hydra-run-subst-in-type-test (path tc)
-  (let ((subst (funcall hydra_overlay_emacs_lisp_lib_maps_from_list (cdr (assq :substitution tc)))))
+  (let ((subst (funcall hydra_core_overlay_emacs_lisp_lib_maps_from_list (cdr (assq :substitution tc)))))
     (hydra-run-simple-test path (cdr (assq :output tc))
-      (lambda () (funcall (funcall hydra_substitution_subst_in_type subst) (cdr (assq :input tc)))))))
+      (lambda () (funcall (funcall hydra_core_substitution_subst_in_type subst) (cdr (assq :input tc)))))))
 
 (defun hydra-run-topological-sort-bindings-test (path tc)
-  (let* ((binding-map (funcall hydra_overlay_emacs_lisp_lib_maps_from_list (cdr (assq :bindings tc))))
-         (result (funcall hydra_rewriting_topological_sort_binding_map binding-map))
+  (let* ((binding-map (funcall hydra_core_overlay_emacs_lisp_lib_maps_from_list (cdr (assq :bindings tc))))
+         (result (funcall hydra_core_rewriting_topological_sort_binding_map binding-map))
          (expected (cdr (assq :expected tc))))
     (if (equal expected result) (list 1 0 0)
       (progn (message "FAIL: %s" path) (list 0 1 0)))))
 
 (defun hydra-run-json-parser-test (path tc)
   (condition-case err
-      (let ((result (funcall hydra_json_parser_parse_json (cdr (assq :input tc)))))
+      (let ((result (funcall hydra_core_json_parser_parse_json (cdr (assq :input tc)))))
         (if (hydra-terms-match-p result (cdr (assq :output tc))) (list 1 0 0)
           (progn (message "FAIL: %s" path) (list 0 1 0))))
     (error (message "FAIL: %s\n  EXCEPTION: %S" path err) (list 0 1 0))))
 
 (defun hydra-run-json-writer-test (path tc)
   (hydra-run-simple-test path (cdr (assq :output tc))
-    (lambda () (funcall hydra_json_writer_print_json (cdr (assq :input tc))))))
+    (lambda () (funcall hydra_core_json_writer_print_json (cdr (assq :input tc))))))
 
 (defun hydra-run-type-checking-test (path tc)
   (let ((cx (hydra-empty-context)) (graph hydra--test-graph))
     (condition-case err
-        (let ((infer-result (funcall (funcall (funcall hydra_inference_infer_type_of cx) graph)
+        (let ((infer-result (funcall (funcall (funcall hydra_core_inference_infer_type_of cx) graph)
                                      (cdr (assq :input tc)))))
           (if (eq (car infer-result) :left)
               (progn (message "FAIL: %s" path) (message "  Inference failed: %S" (cadr infer-result))
                      (list 0 1 0))
             (let* ((pair-val (cadr infer-result))
-                   (inner-pair (funcall hydra_overlay_emacs_lisp_lib_pairs_first pair-val))
-                   (inferred-term (funcall hydra_overlay_emacs_lisp_lib_pairs_first inner-pair))
-                   (result-scheme (funcall hydra_overlay_emacs_lisp_lib_pairs_second inner-pair))
-                   (infer-cx (funcall hydra_overlay_emacs_lisp_lib_pairs_second pair-val))
+                   (inner-pair (funcall hydra_core_overlay_emacs_lisp_lib_pairs_first pair-val))
+                   (inferred-term (funcall hydra_core_overlay_emacs_lisp_lib_pairs_first inner-pair))
+                   (result-scheme (funcall hydra_core_overlay_emacs_lisp_lib_pairs_second inner-pair))
+                   (infer-cx (funcall hydra_core_overlay_emacs_lisp_lib_pairs_second pair-val))
                    (inferred-type (hydra-type-scheme-to-type result-scheme))
-                   (type-of-result (funcall (funcall (funcall (funcall hydra_checking_type_of infer-cx) graph)
+                   (type-of-result (funcall (funcall (funcall (funcall hydra_core_checking_type_of infer-cx) graph)
                                                      nil) inferred-term)))
               (if (eq (car type-of-result) :left)
                   (progn (message "FAIL: %s" path) (message "  Type reconstruction failed: %S" (cadr type-of-result))
                          (list 0 1 0))
-                (let* ((reconstructed-type (funcall hydra_overlay_emacs_lisp_lib_pairs_first (cadr type-of-result)))
+                (let* ((reconstructed-type (funcall hydra_core_overlay_emacs_lisp_lib_pairs_first (cadr type-of-result)))
                        (term-ok (equal (hydra-show-term (cdr (assq :output_term tc)))
                                        (hydra-show-term inferred-term)))
                        (type-ok (equal (hydra-show-type (cdr (assq :output_type tc)))
@@ -861,7 +861,7 @@ they are forced with a dummy nil.  The canonical temp directory is prepared firs
 (defun hydra-run-type-checking-failure-test (path tc)
   (let ((cx (hydra-empty-context)) (graph hydra--test-graph))
     (condition-case nil
-        (let ((result (funcall (funcall (funcall hydra_inference_infer_type_of cx) graph)
+        (let ((result (funcall (funcall (funcall hydra_core_inference_infer_type_of cx) graph)
                                (cdr (assq :input tc)))))
           (if (eq (car result) :left) (list 1 0 0)
             (progn (message "FAIL: %s\n  Expected type checking failure" path) (list 0 1 0))))
@@ -869,10 +869,10 @@ they are forced with a dummy nil.  The canonical temp directory is prepared firs
 
 (defun hydra-run-unify-types-test (path tc)
   (let* ((cx (hydra-empty-context))
-         (schema-entries (mapcar (lambda (n) (list n (make-hydra_core_type_scheme nil (list :variable n) nil)))
+         (schema-entries (mapcar (lambda (n) (list n (make-hydra_core_model_type_scheme nil (list :variable n) nil)))
                                  (cdr (assq :schema_types tc))))
-         (schema-types (funcall hydra_overlay_emacs_lisp_lib_maps_from_list schema-entries))
-         (result (funcall (funcall (funcall (funcall (funcall hydra_unification_unify_types cx) schema-types)
+         (schema-types (funcall hydra_core_overlay_emacs_lisp_lib_maps_from_list schema-entries))
+         (result (funcall (funcall (funcall (funcall (funcall hydra_core_unification_unify_types cx) schema-types)
                                             (cdr (assq :left tc))) (cdr (assq :right tc))) "test"))
          (expected (cdr (assq :expected tc))))
     (condition-case err
@@ -890,7 +890,7 @@ they are forced with a dummy nil.  The canonical temp directory is prepared firs
 
 (defun hydra-run-join-types-test (path tc)
   (let* ((cx (hydra-empty-context))
-         (result (funcall (funcall (funcall (funcall hydra_unification_join_types cx)
+         (result (funcall (funcall (funcall (funcall hydra_core_unification_join_types cx)
                                             (cdr (assq :left tc))) (cdr (assq :right tc))) "test"))
          (expected (cdr (assq :expected tc))))
     (condition-case err
@@ -909,20 +909,20 @@ they are forced with a dummy nil.  The canonical temp directory is prepared firs
 (defun hydra-run-hoist-case-statements-test (path tc)
   (let ((eg (hydra-empty-graph)))
     (hydra-run-simple-test path (cdr (assq :output tc))
-      (lambda () (funcall (funcall hydra_hoisting_hoist_case_statements eg) (cdr (assq :input tc)))))))
+      (lambda () (funcall (funcall hydra_core_hoisting_hoist_case_statements eg) (cdr (assq :input tc)))))))
 
 (defun hydra-hoist-predicate-fn (pred)
   (let ((pred-type (car pred)))
     (cond
      ((eq pred-type :nothing) (lambda (_pair) nil))
      ((eq pred-type :lists) (lambda (pair)
-                              (let ((term (funcall hydra_overlay_emacs_lisp_lib_pairs_second pair)))
+                              (let ((term (funcall hydra_core_overlay_emacs_lisp_lib_pairs_second pair)))
                                 (and (consp term) (eq (car term) :list)))))
      ((eq pred-type :applications) (lambda (pair)
-                                     (let ((term (funcall hydra_overlay_emacs_lisp_lib_pairs_second pair)))
+                                     (let ((term (funcall hydra_core_overlay_emacs_lisp_lib_pairs_second pair)))
                                        (and (consp term) (eq (car term) :application)))))
      ((eq pred-type :case_statements) (lambda (pair)
-                                        (let ((term (funcall hydra_overlay_emacs_lisp_lib_pairs_second pair)))
+                                        (let ((term (funcall hydra_core_overlay_emacs_lisp_lib_pairs_second pair)))
                                           (and (consp term) (eq (car term) :function)
                                                (let ((f (cadr term)))
                                                  (and (consp f) (eq (car f) :elimination)))))))
@@ -932,11 +932,11 @@ they are forced with a dummy nil.  The canonical temp directory is prepared firs
   (let ((eg (hydra-empty-graph))
         (pred (hydra-hoist-predicate-fn (cdr (assq :predicate tc)))))
     (hydra-run-simple-test path (cdr (assq :output tc))
-      (lambda () (funcall (funcall (funcall hydra_hoisting_hoist_subterms pred) eg) (cdr (assq :input tc)))))))
+      (lambda () (funcall (funcall (funcall hydra_core_hoisting_hoist_subterms pred) eg) (cdr (assq :input tc)))))))
 
 (defun hydra-run-hoist-let-bindings-test (path tc)
   (condition-case err
-      (let* ((result (funcall hydra_hoisting_hoist_all_let_bindings (cdr (assq :input tc))))
+      (let* ((result (funcall hydra_core_hoisting_hoist_all_let_bindings (cdr (assq :input tc))))
              (expected-str (hydra-show-let (cdr (assq :output tc))))
              (actual-str (hydra-show-let result)))
         (hydra-string-comparison-test path expected-str actual-str))
@@ -944,7 +944,7 @@ they are forced with a dummy nil.  The canonical temp directory is prepared firs
 
 (defun hydra-run-hoist-polymorphic-let-bindings-test (path tc)
   (condition-case err
-      (let* ((result (funcall (funcall hydra_hoisting_hoist_polymorphic_let_bindings
+      (let* ((result (funcall (funcall hydra_core_hoisting_hoist_polymorphic_let_bindings
                                        (lambda (_x) t)) (cdr (assq :input tc))))
              (expected-str (hydra-show-let (cdr (assq :output tc))))
              (actual-str (hydra-show-let result)))
@@ -970,7 +970,7 @@ they are forced with a dummy nil.  The canonical temp directory is prepared firs
                 (funcall recurse term)))))
            (t (lambda (recurse) (lambda (term) (funcall recurse term)))))))
     (hydra-run-simple-test path (cdr (assq :output tc))
-      (lambda () (funcall (funcall hydra_rewriting_rewrite_term rewrite-impl) (cdr (assq :input tc)))))))
+      (lambda () (funcall (funcall hydra_core_rewriting_rewrite_term rewrite-impl) (cdr (assq :input tc)))))))
 
 (defun hydra-run-rewrite-type-test (path tc)
   (let* ((rewriter (cdr (assq :rewriter tc)))
@@ -984,7 +984,7 @@ they are forced with a dummy nil.  The canonical temp directory is prepared firs
                   (list :literal (list :integer (list :int32 nil))) (funcall recurse typ)))))
            (t (lambda (recurse) (lambda (typ) (funcall recurse typ)))))))
     (hydra-run-simple-test path (cdr (assq :output tc))
-      (lambda () (funcall (funcall hydra_rewriting_rewrite_type rewrite-impl) (cdr (assq :input tc)))))))
+      (lambda () (funcall (funcall hydra_core_rewriting_rewrite_type rewrite-impl) (cdr (assq :input tc)))))))
 
 (defun hydra--get-int32-val (term)
   (if (and (consp term) (eq (car term) :literal) (consp (cadr term)) (eq (car (cadr term)) :integer)
@@ -1000,21 +1000,21 @@ they are forced with a dummy nil.  The canonical temp directory is prepared firs
         (let ((result
                (cond
                 ((eq op-type :sum_int32_literals)
-                 (let ((sum (funcall (funcall (funcall (funcall hydra_rewriting_fold_over_term order)
+                 (let ((sum (funcall (funcall (funcall (funcall hydra_core_rewriting_fold_over_term order)
                                                        (lambda (acc) (lambda (term) (+ acc (hydra--get-int32-val term))))) 0) input)))
                    (list :literal (list :integer (list :int32 sum)))))
                 ((eq op-type :collect_list_lengths)
-                 (let ((lengths (funcall (funcall (funcall (funcall hydra_rewriting_fold_over_term order)
+                 (let ((lengths (funcall (funcall (funcall (funcall hydra_core_rewriting_fold_over_term order)
                                                            (lambda (acc) (lambda (term)
                                                              (if (and (consp term) (eq (car term) :list))
                                                                  (append acc (list (length (cadr term))))
                                                                acc)))) nil) input)))
                    (list :list (mapcar (lambda (len) (list :literal (list :integer (list :int32 len)))) lengths))))
                 ((eq op-type :collect_labels)
-                 (let ((labels_ (funcall (funcall (funcall (funcall hydra_rewriting_fold_over_term order)
+                 (let ((labels_ (funcall (funcall (funcall (funcall hydra_core_rewriting_fold_over_term order)
                                                             (lambda (acc) (lambda (term)
                                                               (if (and (consp term) (eq (car term) :pair))
-                                                                  (let* ((fst (funcall hydra_overlay_emacs_lisp_lib_pairs_first (cadr term))))
+                                                                  (let* ((fst (funcall hydra_core_overlay_emacs_lisp_lib_pairs_first (cadr term))))
                                                                     (if (and (consp fst) (eq (car fst) :literal)
                                                                              (consp (cadr fst)) (eq (car (cadr fst)) :string))
                                                                         (append acc (list (cadr fst))) acc))
@@ -1030,16 +1030,16 @@ they are forced with a dummy nil.  The canonical temp directory is prepared firs
       (error (message "FAIL: %s\n  EXCEPTION: %S" path err) (list 0 1 0)))))
 
 (defun hydra-run-json-coder-test (path tc)
-  (let ((empty-types hydra_overlay_emacs_lisp_lib_maps_empty))
+  (let ((empty-types hydra_core_overlay_emacs_lisp_lib_maps_empty))
     (condition-case err
-        (let ((encode-result (funcall hydra_json_encode_to_json (cdr (assq :term tc)))))
+        (let ((encode-result (funcall hydra_core_json_encode_to_json (cdr (assq :term tc)))))
           (if (eq (car encode-result) :left)
               (progn (message "FAIL: %s\n  JSON encode failed: %S" path (cadr encode-result)) (list 0 1 0))
             (let ((encoded (cadr encode-result)))
               (if (not (hydra-terms-match-p (cdr (assq :json tc)) encoded))
                   (progn (message "FAIL: %s\n  JSON encode mismatch" path) (list 0 1 0))
-                (let ((decode-result (funcall (funcall (funcall (funcall hydra_json_decode_from_json empty-types)
-                                                                (make-hydra_core_name :value "test"))
+                (let ((decode-result (funcall (funcall (funcall (funcall hydra_core_json_decode_from_json empty-types)
+                                                                (make-hydra_core_model_name :value "test"))
                                                        (cdr (assq :type tc)))
                                               encoded)))
                   (if (eq (car decode-result) :left)
@@ -1050,14 +1050,14 @@ they are forced with a dummy nil.  The canonical temp directory is prepared firs
       (error (message "FAIL: %s\n  EXCEPTION: %S" path err) (list 0 1 0)))))
 
 (defun hydra-run-json-roundtrip-test (path tc)
-  (let ((empty-types hydra_overlay_emacs_lisp_lib_maps_empty))
+  (let ((empty-types hydra_core_overlay_emacs_lisp_lib_maps_empty))
     (condition-case err
-        (let ((encode-result (funcall hydra_json_encode_to_json (cdr (assq :term tc)))))
+        (let ((encode-result (funcall hydra_core_json_encode_to_json (cdr (assq :term tc)))))
           (if (eq (car encode-result) :left)
               (progn (message "FAIL: %s\n  JSON encode failed: %S" path (cadr encode-result)) (list 0 1 0))
             (let* ((encoded (cadr encode-result))
-                   (decode-result (funcall (funcall (funcall (funcall hydra_json_decode_from_json empty-types)
-                                                             (make-hydra_core_name :value "test"))
+                   (decode-result (funcall (funcall (funcall (funcall hydra_core_json_decode_from_json empty-types)
+                                                             (make-hydra_core_model_name :value "test"))
                                                     (cdr (assq :type tc)))
                                            encoded)))
               (if (eq (car decode-result) :left)
@@ -1068,10 +1068,10 @@ they are forced with a dummy nil.  The canonical temp directory is prepared firs
       (error (message "FAIL: %s\n  EXCEPTION: %S" path err) (list 0 1 0)))))
 
 (defun hydra-run-json-decode-test (path tc)
-  (let ((empty-types hydra_overlay_emacs_lisp_lib_maps_empty))
+  (let ((empty-types hydra_core_overlay_emacs_lisp_lib_maps_empty))
     (condition-case err
-        (let* ((decode-result (funcall (funcall (funcall (funcall hydra_json_decode_from_json empty-types)
-                                                         (make-hydra_core_name :value "test"))
+        (let* ((decode-result (funcall (funcall (funcall (funcall hydra_core_json_decode_from_json empty-types)
+                                                         (make-hydra_core_model_name :value "test"))
                                                 (cdr (assq :type tc)))
                                        (cdr (assq :json tc))))
                (expected (cdr (assq :expected tc))))
@@ -1230,7 +1230,7 @@ they are forced with a dummy nil.  The canonical temp directory is prepared firs
   "Run the Hydra test suite."
   (hydra-ensure-test-graph)
   (let* ((t0 (float-time))
-         (suite hydra_test_test_suite_all_tests)
+         (suite hydra_core_test_test_suite_all_tests)
          (result (hydra-run-test-group "" suite))
          (pass (car result))
          (fail (cadr result))

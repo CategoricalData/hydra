@@ -4,24 +4,24 @@ module Hydra.Sources.Yaml.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Coders                     as Coders
-import qualified Hydra.Dsl.Util                    as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
-import qualified Hydra.Dsl.Errors                      as Error
-import qualified Hydra.Dsl.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Yaml.Model                       as Yaml
-import qualified Hydra.Overlay.Haskell.Dsl.Terms                           as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Types                           as Types
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Dsl.Coders                     as Coders
+import qualified Hydra.Core.Dsl.Util                    as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
+import qualified Hydra.Core.Dsl.Errors                      as Error
+import qualified Hydra.Core.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Dsl.Yaml.Model                       as Yaml
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms                           as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                           as Types
 import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core   as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Literals       as HydraLiterals
@@ -34,11 +34,11 @@ import qualified Data.List                                 as L
 import qualified Data.Map                                  as M
 import qualified Data.Set                                  as S
 
-import qualified Hydra.Yaml.Model as YM
+import qualified Hydra.Core.Yaml.Model as YM
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.yaml.coder"
+ns = ModuleName "hydra.ext.yaml.coder"
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
@@ -47,7 +47,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Adapt.ns, ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Strip.ns, ModuleName "hydra.print.core"] L.++ (KernelTypes.kernelTypesModuleNames L.++ [ModuleName "hydra.yaml.model"])),
+            moduleDependencies = unqualifiedDep <$> ([Adapt.ns, ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Strip.ns, ModuleName "hydra.core.print.model"] L.++ (KernelTypes.kernelTypesModuleNames L.++ [ModuleName "hydra.core.yaml.model"])),
             moduleMetadata = descriptionMetadata (Just "YAML encoding and decoding for Hydra terms")}
   where
     definitions = [
@@ -294,7 +294,7 @@ termCoder = define "termCoder" $
         (var "encodeMaybe" @@ var "maybeElementCoder")
         (var "decodeMaybe" @@ var "maybeElementCoder"),
     _Type_record>>: "rt" ~> recordCoder @@ Core.name (string "yaml") @@ var "rt" @@ var "cx" @@ var "g",
-    _Type_unit>>: constant $ right $ (var "hydra.yaml.coder.unitCoder" :: TypedTerm (Coder Term YM.Node Error))]) $
+    _Type_unit>>: constant $ right $ (var "hydra.ext.yaml.coder.unitCoder" :: TypedTerm (Coder Term YM.Node Error))]) $
   var "result"
 
 unitCoder :: TypedTermDefinition (Coder Term YM.Node Error)

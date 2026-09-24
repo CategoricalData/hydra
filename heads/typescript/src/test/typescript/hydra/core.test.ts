@@ -24,11 +24,11 @@ describe("core", () => {
     // were dropped in the runtime.ts split because the brand mismatch
     // produced canonical-map-key drift between hand-written and
     // generated code paths.
-    const n: Name = Name("hydra.core.Term");
-    expect(n.value).toBe("hydra.core.Term");
+    const n: Name = Name("hydra.core.model.Term");
+    expect(n.value).toBe("hydra.core.model.Term");
 
-    const ns: Namespace = Namespace("hydra.core");
-    expect(ns.value).toBe("hydra.core");
+    const ns: Namespace = Namespace("hydra.core.model");
+    expect(ns.value).toBe("hydra.core.model");
   });
 
   it("constructs and inspects Optional", () => {

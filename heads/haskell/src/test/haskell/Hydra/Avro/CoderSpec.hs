@@ -1,20 +1,20 @@
 module Hydra.Avro.CoderSpec where
 
 import Hydra.Kernel
-import qualified Hydra.Core as Core
-import qualified Hydra.Avro.Schema as Avro
-import qualified Hydra.Json.Model as Json
-import qualified Hydra.Avro.Testing as T
-import qualified Hydra.Avro.SchemaJson as SchemaJson
-import qualified Hydra.Avro.Encoder as Encoder
-import qualified Hydra.Avro.Environment as AvroEnv
+import qualified Hydra.Core.Model as Core
+import qualified Hydra.Ext.Avro.Schema as Avro
+import qualified Hydra.Core.Json.Model as Json
+import qualified Hydra.Ext.Avro.Testing as T
+import qualified Hydra.Ext.Avro.SchemaJson as SchemaJson
+import qualified Hydra.Ext.Avro.Encoder as Encoder
+import qualified Hydra.Ext.Avro.Environment as AvroEnv
 import Hydra.Avro.TestRunner
-import qualified Hydra.Avro.Coder as AvroCoder
-import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
+import qualified Hydra.Ext.Avro.Coder as AvroCoder
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as Types
 
-import qualified Hydra.Json.Parser as JsonParser
-import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
+import qualified Hydra.Core.Json.Parser as JsonParser
+import Hydra.Core.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
 
 import qualified Test.Hspec as H
 import qualified Data.ByteString as B
@@ -1624,7 +1624,7 @@ kernelTypeSpec = H.describe "Hydra kernel types as Avro schemas" $ do
   -- FieldType: a record with a Name (wrapped string) and a Type
   -- This exercises wrap + record
   H.it "Hydra FieldType: record with wrapped Name and recursive Type" $ do
-    let fieldTypeName = Core.Name "hydra.core.FieldType"
+    let fieldTypeName = Core.Name "hydra.core.model.FieldType"
     let fieldTypeType = hydraRecordType [
           ("name", Core.TypeWrap Types.string),  -- Name is a newtype over String
           ("type", Types.string)]  -- simplified: use string instead of recursive Type
@@ -1635,7 +1635,7 @@ kernelTypeSpec = H.describe "Hydra kernel types as Avro schemas" $ do
         case adapterTarget adapter of
           Avro.SchemaNamed named -> do
             Avro.namedName named `H.shouldBe` "FieldType"
-            Avro.namedNamespace named `H.shouldBe` Just "hydra.core"
+            Avro.namedNamespace named `H.shouldBe` Just "hydra.core.model"
             case Avro.namedType named of
               Avro.NamedTypeRecord (Avro.Record fields) -> do
                 length fields `H.shouldBe` 2
@@ -1647,7 +1647,7 @@ kernelTypeSpec = H.describe "Hydra kernel types as Avro schemas" $ do
 
   -- Projection: a record with two Name fields
   H.it "Hydra Projection: record with two wrapped Name fields" $ do
-    let projName = Core.Name "hydra.core.Projection"
+    let projName = Core.Name "hydra.core.model.Projection"
     let projType = hydraRecordType [
           ("typeName", Core.TypeWrap Types.string),
           ("field", Core.TypeWrap Types.string)]
@@ -1656,7 +1656,7 @@ kernelTypeSpec = H.describe "Hydra kernel types as Avro schemas" $ do
       Left e -> H.expectationFailure $ "encode failed: " ++ show e
       Right adapter -> do
         -- Term-level round-trip
-        let term = hydraRecord "hydra.core.Projection" [
+        let term = hydraRecord "hydra.core.model.Projection" [
               ("typeName", Terms.string "MyRecord"),
               ("field", Terms.string "myField")]
         case coderEncode (adapterCoder adapter) term of
@@ -1674,13 +1674,13 @@ kernelTypeSpec = H.describe "Hydra kernel types as Avro schemas" $ do
 
   -- MapType: a record containing two types (simplified as strings)
   H.it "Hydra MapType analog: record with key and value type fields" $ do
-    let mapTypeName = Core.Name "hydra.core.MapType"
+    let mapTypeName = Core.Name "hydra.core.model.MapType"
     let mapTypeType = hydraRecordType [("keys", Types.string), ("values", Types.string)]
     let typeMap = M.singleton mapTypeName mapTypeType
     case Encoder.encodeType emptyContext typeMap mapTypeName of
       Left e -> H.expectationFailure $ "encode failed: " ++ show e
       Right adapter -> do
-        let term = hydraRecord "hydra.core.MapType" [
+        let term = hydraRecord "hydra.core.model.MapType" [
               ("keys", Terms.string "string"),
               ("values", Terms.string "int32")]
         case coderEncode (adapterCoder adapter) term of

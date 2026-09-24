@@ -2,10 +2,10 @@ module Hydra.Sources.Build.CompareReport where
 
 -- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types                 ((>:))
-import qualified Hydra.Overlay.Haskell.Dsl.Types                 as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types                 ((>:))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                 as T
 import qualified Data.List                       as L
 import qualified Data.Map                        as M
 import qualified Data.Set                        as S
@@ -18,7 +18,7 @@ import qualified Data.Maybe                      as Y
 -- each hand-rolled as an inline-Python heredoc. Everything here is a data model;
 -- the comparison logic lives in the sibling terms module
 -- (Hydra.Sources.Build.CompareReportLogic, hydra.build.comparereportlogic), and
--- the file reads use hydra.lib.files.readFile/listDirectory. See #416.
+-- the file reads use hydra.core.lib.files.readFile/listDirectory. See #416.
 ns :: ModuleName
 ns = ModuleName "hydra.build.comparereport"
 

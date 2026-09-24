@@ -7,14 +7,14 @@ Test.Hspec.hspec Hydra.JsonSchemaCoderSpec.spec
 module Hydra.JsonSchemaCoderSpec where
 
 import Hydra.Kernel
-import qualified Hydra.Json.Schema.Coder as JsonSchemaCoder
-import qualified Hydra.Json.Schema.Model as JS
+import qualified Hydra.Ext.Json.Schema.Coder as JsonSchemaCoder
+import qualified Hydra.Ext.Json.Schema.Model as JS
 
 import qualified Test.Hspec as H
 
 
 -- | #744: literalTypeName used to map every IntegerType width to JSON Schema "integer",
--- disagreeing with the JSON value coder (Hydra.Json.Encode.encodeInteger), which writes int64,
+-- disagreeing with the JSON value coder (Hydra.Core.Json.Encode.encodeInteger), which writes int64,
 -- uint64, and bigint as JSON strings (to preserve precision beyond 2^53-1) rather than numbers.
 -- A schema generated from literalTypeName would then reject the value coder's own output for
 -- those three widths. These tests confirm literalTypeName is now width-aware: only widths that

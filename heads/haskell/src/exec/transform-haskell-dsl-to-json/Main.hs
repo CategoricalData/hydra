@@ -37,7 +37,7 @@ import Hydra.Sources.Ext (
 import Hydra.Sources.Test.All (testModules)
 
 import qualified Hydra.Kernel as Kernel
-import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Core.Packaging as Packaging
 import qualified Hydra.Sources.Demos.GenPG.Transform as GenPGTransform
 
 import Control.Monad (when)
@@ -343,7 +343,7 @@ runAllPackages routingMap fullMainUniverse srcSet distRoot includeJavaPython = d
       writeModulesJsonPackageSplit routingMap True distRoot fullUniverse writeUniverse
       -- DSL wrappers: generate for every package that has type-defining
       -- inputs. The routing is derived (#474): wrapper namespaces like
-      -- hydra.dsl.<pkg>.* resolve to their owning package via the RoutingMap
+      -- hydra.core.dsl.<pkg>.* resolve to their owning package via the RoutingMap
       -- built from each package's declared mainModules.
       let allDslInputs = concatMap packageDslInputModules allPackages
       when (not (null allDslInputs)) $ do

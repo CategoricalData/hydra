@@ -1,4 +1,4 @@
-package hydra.util;
+package hydra.core.util;
 
 import java.util.Optional;
 

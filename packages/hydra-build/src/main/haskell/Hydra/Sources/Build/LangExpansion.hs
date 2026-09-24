@@ -2,11 +2,11 @@ module Hydra.Sources.Build.LangExpansion where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.List                   as L

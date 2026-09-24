@@ -17,19 +17,19 @@ module Hydra.Tools.AvroWorkflows (
 ) where
 
 import Hydra.Kernel hiding (Result)
-import Hydra.Workflow
-import qualified Hydra.Print.Errors as PrintError
-import Hydra.Overlay.Haskell.Dsl.Annotations
-import qualified Hydra.Avro.Schema as Avro
-import qualified Hydra.Json.Model as Json
-import Hydra.Extract.Json
-import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
-import qualified Hydra.Json.Parser as JsonParser
-import Hydra.Avro.Coder
-import Hydra.Avro.Environment
-import Hydra.Avro.SchemaJson hiding (Result)
+import Hydra.Ext.Workflow
+import qualified Hydra.Core.Print.Errors as PrintError
+import Hydra.Core.Overlay.Haskell.Dsl.Annotations
+import qualified Hydra.Ext.Avro.Schema as Avro
+import qualified Hydra.Core.Json.Model as Json
+import Hydra.Core.Extract.Json
+import Hydra.Core.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
+import qualified Hydra.Core.Json.Parser as JsonParser
+import Hydra.Ext.Avro.Coder
+import Hydra.Ext.Avro.Environment
+import Hydra.Ext.Avro.SchemaJson hiding (Result)
 import Hydra.Pg.Graphson.Utils
-import qualified Hydra.Shacl.Coder as Shacl
+import qualified Hydra.Rdf.Shacl.Coder as Shacl
 import qualified Hydra.Rdf.Syntax as Rdf
 import qualified Hydra.Rdf.Utils as RdfUt
 import qualified Hydra.Pg.Model as PG
@@ -39,7 +39,7 @@ import Hydra.Sources.Kernel.Types.Core
 import Hydra.Pg.Graphson.Coder
 import Hydra.Pg.Graphson.Syntax as G
 import Hydra.Pg.Utils (defaultTinkerpopAnnotations, examplePgSchema, typeApplicationTermToPropertyGraph)
-import qualified Hydra.Json.Writer as JsonWriter
+import qualified Hydra.Core.Json.Writer as JsonWriter
 
 import qualified Control.Monad as CM
 import qualified Data.Either as E

@@ -9,25 +9,25 @@
 module Hydra.Sources.Coq.Generate where
 
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.AsTerm (asTerm)
-import Hydra.Overlay.Haskell.Libraries
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Math                   as Math
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
-import qualified Hydra.Dsl.Coq.Syntax                      as CSyntax
-import qualified Hydra.Dsl.Packaging                       as Packaging
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.AsTerm (asTerm)
+import Hydra.Core.Overlay.Haskell.Libraries
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Math                   as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
+import qualified Hydra.Coq.Dsl.Syntax                      as CSyntax
+import qualified Hydra.Core.Dsl.Packaging                       as Packaging
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Scoping         as Scoping
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
@@ -44,7 +44,7 @@ import qualified Data.Int                                  as I
 import qualified Data.Map                                  as M
 import qualified Data.Set                                  as S
 
-import Hydra.Ast
+import Hydra.Core.Ast
 import qualified Hydra.Coq.Syntax as C
 import qualified Hydra.Coq.Environment as CE
 
@@ -98,7 +98,7 @@ module_ = Module {
 -- per type definition and one per term definition with a declared scheme.
 -- Axiom-only modules bypass term encoding entirely to avoid Coq
 -- type-checking memory blowups on heavily polymorphic modules like
--- `hydra.hoisting` and `hydra.inference`.
+-- `hydra.core.hoisting` and `hydra.core.inference`.
 buildAxiomOnlyContent :: TypedTermDefinition (CE.CoqEnvironment
                                        -> String
                                        -> String
@@ -1042,7 +1042,7 @@ moduleToCoq = define "moduleToCoq" $
   "path" <~ (namespaceToPath @@ var "nsStr") $
   "desc" <~ Optionals.match ((Optionals.bind (Packaging.moduleMetadata (var "mod_")) ("em" ~> Packaging.entityMetadataDescription (var "em")))) (string "") ("d" ~> Strings.concat (list [string "(* ", var "d", string " *)\n\n"])) $
   -- Modules known to blow up Coq's type-checker; emit axiom stubs instead.
-  "axiomOnlyModules" <~ (list [string "hydra.hoisting", string "hydra.inference"]) $
+  "axiomOnlyModules" <~ (list [string "hydra.core.hoisting", string "hydra.core.inference"]) $
   "isAxiomOnly" <~ ((Lists.member :: TypedTerm String -> TypedTerm [String] -> TypedTerm Bool)
     (var "nsStr") (var "axiomOnlyModules")) $
   -- Extract type and term definitions from the adapted definition list.
@@ -1094,11 +1094,11 @@ moduleToCoq = define "moduleToCoq" $
 
 -- | Convert a dot-separated Hydra namespace into a relative file path,
 -- using `/` as the directory separator and appending `.v`. For example,
--- `"hydra.print.core"` becomes `"hydra/print/core.v"`. The last dotted
+-- `"hydra.core.print.model"` becomes `"hydra/print/core.v"`. The last dotted
 -- segment becomes the file name; earlier segments become directories.
 namespaceToPath :: TypedTermDefinition (String -> String)
 namespaceToPath = define "namespaceToPath" $
-  doc "Convert a Hydra namespace string (e.g. hydra.print.core) into a relative .v file path" $
+  doc "Convert a Hydra namespace string (e.g. hydra.core.print.model) into a relative .v file path" $
   lambda "ns" $ lets [
     "parts">: Strings.splitOn (string ".") (var "ns"),
     "dirParts">: Optionals.withDefault (list ([] :: [TypedTerm String])) (Lists.init (var "parts")),

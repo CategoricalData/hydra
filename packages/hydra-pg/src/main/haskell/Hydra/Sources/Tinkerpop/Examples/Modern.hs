@@ -4,12 +4,12 @@
 --
 -- This is a translingual term module: 'modernSchema' and 'modernGraph' are
 -- 'DefinitionTerm's built from the phantom term DSL, so they generate to all
--- host languages (unlike the genpg demo's Hydra.Overlay.Haskell.Dsl.Pg.Schemas
+-- host languages (unlike the genpg demo's Hydra.Pg.Overlay.Haskell.Dsl.Schemas
 -- helpers, which produce plain Haskell values).
 --
 -- The schema is a hydra.pg.model.GraphSchema parameterized by
--- hydra.core.LiteralType (id/property types); the data is a
--- hydra.pg.model.Graph parameterized by hydra.core.Literal (id/property values).
+-- hydra.core.model.LiteralType (id/property types); the data is a
+-- hydra.pg.model.Graph parameterized by hydra.core.model.Literal (id/property values).
 --
 -- Content is the canonical TinkerPop Modern graph (HydraPop ExampleGraphs.java).
 
@@ -17,9 +17,9 @@ module Hydra.Sources.Tinkerpop.Examples.Modern where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms        as Phantoms
-import qualified Hydra.Overlay.Haskell.Bootstrap                  as Bootstrap
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core            as Core
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms        as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap                  as Bootstrap
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core            as Core
 import qualified Hydra.Pg.Model                                   as PG
 import qualified Hydra.Sources.Pg.Model                          as PgModel
 import qualified Hydra.Sources.Kernel.Types.Core                 as KernelCore
@@ -27,7 +27,7 @@ import qualified Data.Map                                        as M
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.tinkerpop.examples.modern"
+ns = ModuleName "hydra.pg.tinkerpop.examples.modern"
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_

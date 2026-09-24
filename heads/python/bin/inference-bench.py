@@ -3,7 +3,7 @@
 
 Loads the synthetic ``hydra.bench.inferenceScaling`` workload from the kernel
 JSON, takes prefixes of the chained walker definitions, and times
-``hydra.codegen.infer_modules_given`` on each prefix. Emits a JSON line per
+``hydra.core.codegen.infer_modules_given`` on each prefix. Emits a JSON line per
 size to stdout describing ``{host, n, elapsed_seconds, ok}``, plus a final
 summary on stderr.
 
@@ -36,17 +36,17 @@ for sub in (
     if p not in sys.path:
         sys.path.insert(0, p)
 
-import hydra.codegen as codegen
-from hydra.typing import InferenceContext
-from hydra.core import Name
-from hydra.overlay.python.dsl.python import FrozenDict, Left, Right
+import hydra.core.codegen as codegen
+from hydra.core.typing import InferenceContext
+from hydra.core.model import Name
+from hydra.core.overlay.python.dsl.python import FrozenDict, Left, Right
 from hydra.generation import (
     bootstrap_graph,
     load_modules_from_json,
     read_manifest_field,
 )
-from hydra.overlay.python.dsl.python import None_
-from hydra.packaging import DefinitionTerm, Module, ModuleDependency, ModuleName, TermDefinition
+from hydra.core.overlay.python.dsl.python import None_
+from hydra.core.packaging import DefinitionTerm, Module, ModuleDependency, ModuleName, TermDefinition
 
 KERNEL_JSON = os.path.join(_ROOT, "dist/json/hydra-kernel/src/main/json")
 BENCH_JSON = os.path.join(_ROOT, "dist/json/hydra-bench/src/main/json")

@@ -3,7 +3,7 @@
 # net.fortytwo / hydra-python==<hostVersion> from PyPI, and print its
 # site-packages directory on stdout. Sourced/called by
 # bin/generate-hydra-python-from-python.sh's --published-host path so the Python
-# DSL→JSON driver imports hydra.codegen / hydra.generation-runtime / hydra.dsl.python
+# DSL→JSON driver imports hydra.core.codegen / hydra.generation-runtime / hydra.python.dsl
 # from the published wheels instead of a local dist/python build.
 #
 # The published hydra-python wheel Requires-Dist hydra-kernel==<same>, so a single

@@ -4,7 +4,7 @@
 -- as the native Haskell implementation by evaluating the same input term through
 -- both the native graph and the default-impl graph and comparing results.
 --
--- The default-impl graph (from Hydra.Test.DefaultImplGraph) replaces native
+-- The default-impl graph (from Hydra.Core.Test.DefaultImplGraph) replaces native
 -- implementations with reducer-based fallbacks for primitives that have a
 -- defaultImplementation; all other primitives retain their native implementations
 -- so cross-primitive calls resolve correctly.
@@ -12,23 +12,23 @@
 module Hydra.DefaultImplSpec where
 
 import Hydra.Kernel
-import Hydra.Reduction (reduceTerm)
-import Hydra.Print.Core (term)
-import Hydra.Test.DefaultImplGraph (defaultImplGraph, defaultImplPrimCount)
-import Hydra.Test.TestGraph (testGraph, testTypes, testTerms)
+import Hydra.Core.Reduction (reduceTerm)
+import Hydra.Core.Print.Model (term)
+import Hydra.Core.Test.DefaultImplGraph (defaultImplGraph, defaultImplPrimCount)
+import Hydra.Core.Test.TestGraph (testGraph, testTypes, testTerms)
 
-import qualified Hydra.Lib.Eithers  as DefEithers
-import qualified Hydra.Lib.Equality as DefEquality
-import qualified Hydra.Lib.Ordering as DefOrdering
-import qualified Hydra.Lib.Functions as DefFunctions
-import qualified Hydra.Lib.Lists    as DefLists
-import qualified Hydra.Lib.Logic    as DefLogic
-import qualified Hydra.Lib.Maps     as DefMaps
-import qualified Hydra.Lib.Math     as DefMath
-import qualified Hydra.Lib.Optionals as DefOptionals
-import qualified Hydra.Lib.Pairs    as DefPairs
-import qualified Hydra.Lib.Sets     as DefSets
-import qualified Hydra.Packaging    as Packaging
+import qualified Hydra.Core.Lib.Eithers  as DefEithers
+import qualified Hydra.Core.Lib.Equality as DefEquality
+import qualified Hydra.Core.Lib.Ordering as DefOrdering
+import qualified Hydra.Core.Lib.Functions as DefFunctions
+import qualified Hydra.Core.Lib.Lists    as DefLists
+import qualified Hydra.Core.Lib.Logic    as DefLogic
+import qualified Hydra.Core.Lib.Maps     as DefMaps
+import qualified Hydra.Core.Lib.Math     as DefMath
+import qualified Hydra.Core.Lib.Optionals as DefOptionals
+import qualified Hydra.Core.Lib.Pairs    as DefPairs
+import qualified Hydra.Core.Lib.Sets     as DefSets
+import qualified Hydra.Core.Packaging    as Packaging
 
 import qualified Data.List as L
 import qualified Data.Map  as M
@@ -129,7 +129,7 @@ spec = do
       defaultImplPrimCount `H.shouldSatisfy` (>= 30)
 
     -- -------------------------------------------------------------------------
-    H.describe "hydra.lib.logic" $ do
+    H.describe "hydra.core.lib.logic" $ do
       H.describe "and" $ do
         H.it "true && true"   $ checkDefaultMatchesNative (applyPrim DefLogic.and [bool_ True,  bool_ True])
         H.it "true && false"  $ checkDefaultMatchesNative (applyPrim DefLogic.and [bool_ True,  bool_ False])
@@ -144,7 +144,7 @@ spec = do
         H.it "false || false" $ checkDefaultMatchesNative (applyPrim DefLogic.or [bool_ False, bool_ False])
 
     -- -------------------------------------------------------------------------
-    H.describe "hydra.lib.math" $ do
+    H.describe "hydra.core.lib.math" $ do
       H.describe "even" $ do
         H.it "even 0"  $ checkDefaultMatchesNative (applyPrim DefMath.even [int32_ 0])
         H.it "even 2"  $ checkDefaultMatchesNative (applyPrim DefMath.even [int32_ 2])
@@ -159,7 +159,7 @@ spec = do
         H.it "odd -5" $ checkDefaultMatchesNative (applyPrim DefMath.odd [int32_ (-5)])
 
     -- -------------------------------------------------------------------------
-    H.describe "hydra.lib.equality" $ do
+    H.describe "hydra.core.lib.equality" $ do
       H.describe "identity" $ do
         H.it "identity 42"    $ checkDefaultMatchesNative (applyPrim DefFunctions.identity [int32_ 42])
         H.it "identity true"  $ checkDefaultMatchesNative (applyPrim DefFunctions.identity [bool_ True])
@@ -174,7 +174,7 @@ spec = do
         H.it "min 4 4"   $ checkDefaultMatchesNative (applyPrim DefOrdering.min [int32_ 4, int32_ 4])
 
     -- -------------------------------------------------------------------------
-    H.describe "hydra.lib.optionals" $ do
+    H.describe "hydra.core.lib.optionals" $ do
       H.describe "isGiven" $ do
         H.it "isGiven (Just 1)" $ checkDefaultMatchesNative (applyPrim DefOptionals.isGiven [just_ (int32_ 1)])
         H.it "isGiven Nothing"  $ checkDefaultMatchesNative (applyPrim DefOptionals.isGiven [nothing_])
@@ -247,7 +247,7 @@ spec = do
             [list_ []])
 
     -- -------------------------------------------------------------------------
-    H.describe "hydra.lib.eithers" $ do
+    H.describe "hydra.core.lib.eithers" $ do
       H.describe "isLeft" $ do
         H.it "isLeft (Left 1)"  $ checkDefaultMatchesNative (applyPrim DefEithers.isLeft [left_  (int32_ 1)])
         H.it "isLeft (Right 2)" $ checkDefaultMatchesNative (applyPrim DefEithers.isLeft [right_ (int32_ 2)])
@@ -329,7 +329,7 @@ spec = do
           (applyPrim DefEithers.partition [list_ []])
 
     -- -------------------------------------------------------------------------
-    H.describe "hydra.lib.lists" $ do
+    H.describe "hydra.core.lib.lists" $ do
       H.describe "filter" $ do
         H.it "filter even [1..5]" $ checkDefaultMatchesNative
           (withFn1 DefLists.filter (\x -> applyN DefMath.even x)
@@ -374,7 +374,7 @@ spec = do
             [list_ [int32_ 1, int32_ 2, int32_ 3]])
 
     -- -------------------------------------------------------------------------
-    H.describe "hydra.lib.pairs" $ do
+    H.describe "hydra.core.lib.pairs" $ do
       H.describe "bimap" $ do
         H.it "bimap negate not (1, true)" $ checkDefaultMatchesNative
           (applyPrim DefPairs.bimap
@@ -388,7 +388,7 @@ spec = do
             , pair_ (int32_ 0) (bool_ False)])
 
     -- -------------------------------------------------------------------------
-    H.describe "hydra.lib.maps" $ do
+    H.describe "hydra.core.lib.maps" $ do
       H.describe "filter" $ do
         H.it "filter even {1->2, 2->3, 3->4}" $ checkDefaultMatchesNative
           (withFn1 DefMaps.filter (\v -> applyN DefMath.even v)
@@ -448,7 +448,7 @@ spec = do
             , map_ [(int32_ 1, int32_ 10), (int32_ 2, int32_ 20)]])
 
     -- -------------------------------------------------------------------------
-    H.describe "hydra.lib.sets" $ do
+    H.describe "hydra.core.lib.sets" $ do
       H.describe "difference" $ do
         H.it "difference {1,2,3} {2,3,4}" $ checkDefaultMatchesNative
           (applyPrim DefSets.difference [set_ [int32_ 1, int32_ 2, int32_ 3], set_ [int32_ 2, int32_ 3, int32_ 4]])

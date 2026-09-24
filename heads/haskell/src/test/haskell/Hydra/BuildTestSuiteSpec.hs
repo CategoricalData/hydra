@@ -14,9 +14,9 @@ Test.Hspec.hspec Hydra.BuildTestSuiteSpec.spec
 
 module Hydra.BuildTestSuiteSpec where
 
-import Hydra.Testing
-import Hydra.Test.Build.TestSuite
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing as Testing
+import Hydra.Core.Testing
+import Hydra.Build.Test.TestSuite
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing as Testing
 
 import qualified Control.Monad as CM
 import qualified Test.Hspec as H

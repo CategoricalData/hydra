@@ -235,16 +235,16 @@ Some of the fundamental types in Hydra are:
 These are defined in
 [Hydra/Sources/Kernel/Types](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types)
 and code-generated into
-[`Hydra.Core`](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core.hs),
-[`Hydra.Graph`](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Graph.hs), and
-[`Hydra.Packaging`](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Packaging.hs).
+[`Hydra.Core.Model`](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core.hs),
+[`Hydra.Core.Graph`](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Graph.hs), and
+[`Hydra.Core.Packaging`](https://github.com/CategoricalData/hydra/blob/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Packaging.hs).
 
 See [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) for detailed explanations.
 
 ### Error handling and Context
 
 Hydra uses `Either Error a` for computations that can fail (where `Error` is the
-structured error type from `Hydra.Errors`). A `Context` value carrying trace messages
+structured error type from `Hydra.Core.Errors`). A `Context` value carrying trace messages
 and metadata is threaded explicitly alongside the `Graph`.
 
 ```haskell
@@ -283,8 +283,8 @@ Hydra provides multiple domain-specific languages for constructing types and ter
 ([Hydra/Overlay/Haskell/Dsl/Types.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Types.hs),
 [Hydra/Overlay/Haskell/Dsl/Terms.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Terms.hs)):
 ```haskell
-import qualified Hydra.Overlay.Haskell.Dsl.Types as Types
-import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as Types
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms as Terms
 
 personType = Types.record [
   "name" >: string,
@@ -299,7 +299,7 @@ alice = Terms.record [
 ([Hydra/Overlay/Haskell/Dsl/Typed/Phantoms.hs](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Dsl/Typed/Phantoms.hs)) -
 Compile-time type safety:
 ```haskell
-import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms
+import Hydra.Core.Overlay.Haskell.Dsl.Phantoms
 
 safeFn :: TTerm (Int -> String)
 safeFn = lambda "x" (Strings.toUpper (var "x"))  -- Type-checked at compile time
@@ -309,8 +309,8 @@ safeFn = lambda "x" (Strings.toUpper (var "x"))  -- Type-checked at compile time
 ([Hydra/Dsl/Lib](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Lib)) -
 Wrappers for primitive functions:
 ```haskell
-import Hydra.Dsl.Lib.Lists as Lists
-import Hydra.Dsl.Lib.Strings as Strings
+import Hydra.Core.Dsl.Lib.Lists as Lists
+import Hydra.Core.Dsl.Lib.Strings as Strings
 
 example = Lists.map (Strings.toUpper) (list ["hello", "world"])
 ```
@@ -321,10 +321,10 @@ in the Implementation wiki for comprehensive coverage.
 ### JSON and YAML serialization
 
 Hydra provides JSON and YAML coders in `Hydra.Json.*` (and a YAML model via
-`Hydra.Yaml.Model`), with DSL helpers under `Hydra.Dsl.Json.Model`.
+`Hydra.Core.Yaml.Model`), with DSL helpers under `Hydra.Core.Dsl.Json.Model`.
 The [JSON kernel recipe](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/json-kernel.md)
 covers exporting and loading kernel modules via JSON; for general-purpose JSON
-encoding and decoding, see the `Hydra.Json.Encode` and `Hydra.Json.Decode` generated
+encoding and decoding, see the `Hydra.Core.Json.Encode` and `Hydra.Core.Json.Decode` generated
 modules.
 
 ## Self-hosting demonstration
@@ -363,7 +363,7 @@ The generated code includes:
 What remains hand-written:
 - `Hydra.Lib` - Native primitive implementations
 - `Hydra.Sources` - DSL-based specifications (input to code generation)
-- `Hydra.Dsl` - DSL syntax
+- `Hydra.Core.Dsl` - DSL syntax
 - `Hydra.Generation` - I/O and generation utilities
 - Test runners
 
@@ -438,7 +438,7 @@ case term of
   TermFunction (FunctionLambda (Lambda param _ body)) -> ...
 ```
 
-Pattern synonyms (in, e.g., `Hydra.Dsl.Patterns`) would flatten these:
+Pattern synonyms (in, e.g., `Hydra.Core.Dsl.Patterns`) would flatten these:
 
 ```haskell
 case term of
@@ -463,7 +463,7 @@ messages are notoriously difficult to make friendly. Longer-term goal.
 
 #### Template Haskell accessor generation for user-defined types
 
-The kernel's generated `Hydra.Dsl.<Module>` modules give typed accessors
+The kernel's generated `Hydra.Core.Dsl.<Module>` modules give typed accessors
 for kernel types via the code-generation pipeline. User-defined record
 types (in `hydra-ext`, hydrapop, etc.) don't currently get these.
 A TH splice could fill the gap without invoking the full code generator:

@@ -2,28 +2,28 @@ module Hydra.Sources.Test.Inference.Idempotence where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
-import qualified Hydra.Lib.Eithers as DefEithers
-import qualified Hydra.Lib.Lists as DefLists
-import qualified Hydra.Lib.Logic as DefLogic
-import qualified Hydra.Lib.Math as DefMath
+import qualified Hydra.Core.Lib.Eithers as DefEithers
+import qualified Hydra.Core.Lib.Lists as DefLists
+import qualified Hydra.Core.Lib.Logic as DefLogic
+import qualified Hydra.Core.Lib.Math as DefMath
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.inference.idempotence"
+ns = ModuleName "hydra.core.test.inference.idempotence"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.inference", ModuleName "hydra.print.core"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.core.inference", ModuleName "hydra.core.print.model"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just
               ("Idempotence tests for type inference: infer(infer(e)) == infer(e). A curated corpus"
                 ++ " covering lambdas, let-polymorphism, primitives, and phantom type variables --"

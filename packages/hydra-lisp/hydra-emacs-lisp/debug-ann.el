@@ -14,8 +14,8 @@
 ;; Test: reduce setTermAnnotation, then show the result
 (let* ((cx (hydra-empty-context))
        (graph hydra--test-graph)
-       (set-fn (list :function (list :primitive "hydra.annotations.setTermAnnotation")))
-       (key (list :wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+       (set-fn (list :function (list :primitive "hydra.core.annotations.setTermAnnotation")))
+       (key (list :wrap (make-hydra_core_wrapped_term "hydra.core.model.Name"
                           (list :literal (list :string "k1")))))
        (val (list :maybe (list :literal (list :integer (list :int32 42)))))
        (term (list :literal (list :string "foo")))

@@ -61,7 +61,7 @@ if [ -f "$HYDRA_SCHEME_DIR/src/test/scheme/hydra/test_runner_body.scm" ]; then
     cp "$HYDRA_SCHEME_DIR/src/test/scheme/hydra/test_runner_body.scm" "$OUTPUT_DIR/src/test/scheme/hydra/test_runner_body.scm"
 fi
 
-# #546: overlay hydra-build's generated main+test (hydra.build.* + hydra.test.build.*),
+# #546: overlay hydra-build's generated main+test (hydra.build.* + hydra.core.test.build.*),
 # referenced by the kernel testSuite but absent from the hydra-kernel dist tree.
 HYDRA_SCHEME_BUILD_DIST="$HYDRA_ROOT/dist/scheme/hydra-build"
 if [ -d "$HYDRA_SCHEME_BUILD_DIST/src/main/scheme/hydra" ]; then

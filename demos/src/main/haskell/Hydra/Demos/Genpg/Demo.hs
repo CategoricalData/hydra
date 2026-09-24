@@ -1,22 +1,22 @@
 module Hydra.Demos.Genpg.Demo where
 
 import Hydra.Kernel
-import qualified Hydra.Print.Errors as PrintError
+import qualified Hydra.Core.Print.Errors as PrintError
 import Hydra.Demos.Genpg.Examples.Sales.DatabaseSchema
 import Hydra.Demos.Genpg.Examples.Sales.GraphSchema
 import Hydra.Demos.Genpg.Examples.Sales.Mapping
 import Hydra.Demos.Genpg.Examples.Health.DatabaseSchema
 import Hydra.Demos.Genpg.Examples.Health.GraphSchema
 import Hydra.Demos.Genpg.Examples.Health.Mapping
-import Hydra.Overlay.Haskell.Dsl.Pg.Mappings
-import Hydra.Overlay.Haskell.Lib.Literals
+import Hydra.Pg.Overlay.Haskell.Dsl.Mappings
+import Hydra.Core.Overlay.Haskell.Lib.Literals
 import Hydra.Pg.Graphson.Utils
-import qualified Hydra.Demos.Genpg.Transform as Transform
+import qualified Hydra.Pg.Demos.Genpg.Transform as Transform
 import Hydra.Pg.Utils (lazyGraphToElements)
 import Hydra.Sources.Kernel.Types.Core
-import qualified Hydra.Json.Writer as JsonWriter
+import qualified Hydra.Core.Json.Writer as JsonWriter
 import qualified Hydra.Pg.Model as Pg
-import qualified Hydra.Tabular as Tab
+import qualified Hydra.Core.Tabular as Tab
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

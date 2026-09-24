@@ -2,7 +2,7 @@
 ;;;
 ;;; Loads the synthetic hydra.bench.<series> workload from the kernel JSON,
 ;;; takes prefixes of the chained walker definitions, and times
-;;; hydra_codegen_infer_modules_given on each prefix. Emits a JSON array
+;;; hydra_core_codegen_infer_modules_given on each prefix. Emits a JSON array
 ;;; describing {host, n, elapsed_seconds, ok} per prefix size.
 ;;;
 ;;; Usage:
@@ -107,36 +107,36 @@
     (t (error "Unexpected JSON value type: ~A" (type-of obj)))))
 
 (defun bootstrap-graph ()
-  (funcall 'make-hydra_graph_graph nil nil nil nil nil
+  (funcall 'make-hydra_core_graph_graph nil nil nil nil nil
            (standard-library) nil nil))
 
 (defun bootstrap-schema-map ()
   (let ((result nil))
-    (dolist (pair (symbol-value 'hydra_json_bootstrap_types_by_name))
+    (dolist (pair (symbol-value 'hydra_core_json_bootstrap_types_by_name))
       (let* ((name (car pair))
              (typ (cdr pair))
-             (ts (funcall (symbol-value 'hydra_scoping_f_type_to_type_scheme) typ))
-             (stripped (funcall (symbol-value 'hydra_strip_deannotate_type_recursive)
-                                (funcall 'hydra_core_type_scheme-body ts))))
+             (ts (funcall (symbol-value 'hydra_core_scoping_f_type_to_type_scheme) typ))
+             (stripped (funcall (symbol-value 'hydra_core_strip_deannotate_type_recursive)
+                                (funcall 'hydra_core_model_type_scheme-body ts))))
         (push (cons name stripped) result)))
     (nreverse result)))
 
 (defun namespace-to-path (ns)
-  (funcall (symbol-value 'hydra_codegen_module_name_to_path) ns))
+  (funcall (symbol-value 'hydra_core_codegen_module_name_to_path) ns))
 
 (defun load-module-from-json (bs-graph schema-map ns-str json-dir)
   (let* ((file-path (format nil "~A/~A.json" json-dir (namespace-to-path ns-str)))
          (json-obj (json-read-file file-path))
          (hydra-json (cl-to-hydra-json json-obj))
-         (mod-type (list :variable "hydra.packaging.Module"))
+         (mod-type (list :variable "hydra.core.packaging.Module"))
          (json-result (funcall (funcall (funcall (funcall
-                        (symbol-value 'hydra_json_decode_from_json) schema-map)
-                        "hydra.packaging.Module") mod-type) hydra-json)))
+                        (symbol-value 'hydra_core_json_decode_from_json) schema-map)
+                        "hydra.core.packaging.Module") mod-type) hydra-json)))
     (when (eq (first json-result) :left)
       (error "JSON decode error for ~A: ~A" ns-str (second json-result)))
     (let* ((term (second json-result))
            (mod-result (funcall (funcall
-                         (symbol-value 'hydra_decode_packaging_module) bs-graph) term)))
+                         (symbol-value 'hydra_core_decode_packaging_module) bs-graph) term)))
       (when (eq (first mod-result) :left)
         (error "Module decode error for ~A: ~A" ns-str (second mod-result)))
       (second mod-result))))
@@ -206,15 +206,15 @@
           (cons :definitions renamed))))
 
 (defun time-inference (universe target)
-  "Time hydra_codegen_infer_modules_given universe+target target. Returns (elapsed ok err)."
+  "Time hydra_core_codegen_infer_modules_given universe+target target. Returns (elapsed ok err)."
   (let* ((bs-graph (bootstrap-graph))
-         (cx (funcall 'make-hydra_typing_inference_context 0 nil))
+         (cx (funcall 'make-hydra_core_typing_inference_context 0 nil))
          (universe-plus (append universe (list target)))
          (targets (list target))
          (t0 (get-internal-real-time))
          (result (handler-case
                      (funcall (funcall (funcall (funcall
-                       (symbol-value 'hydra_codegen_infer_modules_given)
+                       (symbol-value 'hydra_core_codegen_infer_modules_given)
                        cx) bs-graph) universe-plus) targets)
                    (error (e)
                      (list :left (format nil "exception: ~A" e)))))

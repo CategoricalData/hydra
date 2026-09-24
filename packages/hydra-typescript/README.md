@@ -184,14 +184,14 @@ current Hydra kernel (the Flow monad was removed in #245).
 
 Binary literal values are stored as base64-encoded JS strings at the Term level (the
 coder emits `value: "<base64>"`, the runtime decoder accepts either `Uint8Array` or
-base64 strings). `hydra.lib.literals.binaryToBase64` base64-encodes binary to a string;
+base64 strings). `hydra.core.lib.literals.binaryToBase64` base64-encodes binary to a string;
 `base64ToBinary` decodes it back, preserving round-trip.
 
 ## Future enhancements
 
 - **TypeScript-as-host.** Today TypeScript is a target only. Adding TS-as-host
   requires meta-level DSL builders (`hydra/dsl/*.ts` analogues of
-  `Hydra.Overlay.Haskell.Dsl.Typed.*`) plus a TS source-import path equivalent to
+  `Hydra.Core.Overlay.Haskell.Dsl.Typed.*`) plus a TS source-import path equivalent to
   `transform-haskell-dsl-to-json`. The Scala and Lisp heads also lack this today;
   not a blocker for parity with them.
 - **Primitive coverage parity.** A handful of inference edge cases tagged

@@ -36,9 +36,9 @@ This means some patterns need to be adapted (e.g., visitor pattern replaced with
 ### 3. Module/Package Layout
 
 Go's package system maps well to Hydra's module system:
-- `hydra/core` -> Hydra.Core
+- `hydra/core` -> Hydra.Core.Model
 - `hydra/compute` -> Hydra.Compute
-- `hydra/graph` -> Hydra.Graph
+- `hydra/graph` -> Hydra.Core.Graph
 - `hydra/module` -> Hydra.Module (Go keyword conflict: use `hmodule`)
 
 ### 4. Option/Maybe Types

@@ -15,7 +15,7 @@
   "include": [
     "src/test/typescript/**/*.ts",
     "../../dist/typescript/hydra-kernel/src/**/*.ts",
-    // #546: hydra-build's generated tree (hydra.build.* + hydra.test.build.*).
+    // #546: hydra-build's generated tree (hydra.build.* + hydra.core.test.build.*).
     // TS is not a #546 gate (the kernel does not currently emit build.* into TS,
     // like pg/rdf "declare-but-defer"); included for forward-consistency so if/
     // when TS build emission is wired the kernel test suite resolves it.

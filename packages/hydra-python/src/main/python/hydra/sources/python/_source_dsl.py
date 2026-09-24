@@ -11,12 +11,12 @@ Conventions:
   that the caller constructs once at module load.
 """
 
-from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
-from hydra.overlay.python.dsl.python import FrozenDict, None_
-from hydra.core import Name, Type, TypeScheme
-from hydra.packaging import DefinitionType, ModuleDependency, ModuleName, TypeDefinition
-import hydra.dsl.python.syntax as PySyn
-import hydra.overlay.python.dsl.types as T
+from hydra.core.overlay.python.dsl.phantoms import *  # noqa: F401,F403
+from hydra.core.overlay.python.dsl.python import FrozenDict, None_
+from hydra.core.model import Name, Type, TypeScheme
+from hydra.core.packaging import DefinitionType, ModuleDependency, ModuleName, TypeDefinition
+import hydra.python.dsl.syntax as PySyn
+import hydra.core.overlay.python.dsl.types as T
 
 
 def unqualified_dep(module: ModuleName) -> ModuleDependency:
@@ -30,12 +30,12 @@ def unqualified_dep(module: ModuleName) -> ModuleDependency:
 # the same 24-element list.
 KERNEL_TYPES_NAMESPACES = [
     unqualified_dep(ModuleName(n)) for n in [
-        "hydra.paths", "hydra.ast", "hydra.classes", "hydra.coders",
-        "hydra.core", "hydra.error.checking", "hydra.error.core",
-        "hydra.error.packaging", "hydra.errors", "hydra.graph", "hydra.json.model",
-        "hydra.packaging", "hydra.parsing", "hydra.query",
-        "hydra.relational", "hydra.tabular", "hydra.testing", "hydra.topology",
-        "hydra.typed", "hydra.typing", "hydra.util", "hydra.validation", "hydra.variants",
+        "hydra.core.paths", "hydra.core.ast", "hydra.core.classes", "hydra.core.coders",
+        "hydra.core.model", "hydra.core.error.checking", "hydra.core.error.model",
+        "hydra.core.error.packaging", "hydra.core.errors", "hydra.core.graph", "hydra.core.json.model",
+        "hydra.core.packaging", "hydra.core.parsing", "hydra.core.query",
+        "hydra.core.relational", "hydra.core.tabular", "hydra.core.testing", "hydra.core.topology",
+        "hydra.core.typed", "hydra.core.typing", "hydra.core.util", "hydra.core.validation", "hydra.core.variants",
     ]
 ]
 

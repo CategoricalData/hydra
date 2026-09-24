@@ -2,45 +2,45 @@ module Hydra.Sources.Test.TestGraph where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms hiding ((@@))
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                ((@@))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Test.TestEnv as TestEnv
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph         as Graph
-import qualified Hydra.Dsl.Packaging        as DPackaging
-import qualified Hydra.Dsl.Lib.Chars     as Chars
-import qualified Hydra.Dsl.Lib.Equality  as Equality
-import qualified Hydra.Dsl.Lib.Lists     as Lists
-import qualified Hydra.Dsl.Lib.Literals  as Literals
-import qualified Hydra.Dsl.Lib.Logic     as Logic
-import qualified Hydra.Dsl.Lib.Maps      as Maps
-import qualified Hydra.Dsl.Lib.Math      as Math
-import qualified Hydra.Dsl.Lib.Optionals    as Optionals
-import qualified Hydra.Dsl.Lib.Sets      as Sets
-import qualified Hydra.Dsl.Lib.Strings   as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Terms              as DslTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Types              as Types
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph         as Graph
+import qualified Hydra.Core.Dsl.Packaging        as DPackaging
+import qualified Hydra.Core.Dsl.Lib.Chars     as Chars
+import qualified Hydra.Core.Dsl.Lib.Equality  as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists     as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals  as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic     as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps      as Maps
+import qualified Hydra.Core.Dsl.Lib.Math      as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals    as Optionals
+import qualified Hydra.Core.Dsl.Lib.Sets      as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings   as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms              as DslTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types              as Types
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 import           Prelude hiding ((++))
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 import qualified Data.Set                     as S
 import qualified Data.Maybe                   as Y
-import           Hydra.Overlay.Haskell.Dsl.Typed.Base          ((>:))
-import qualified Hydra.Error.File             as FileError
-import qualified Hydra.File                   as File
+import           Hydra.Core.Overlay.Haskell.Dsl.Base          ((>:))
+import qualified Hydra.Core.Error.File             as FileError
+import qualified Hydra.Core.File                   as File
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.testGraph"
+ns = ModuleName "hydra.core.test.testGraph"
 
 module_ :: Module
 module_ = Module {
@@ -61,12 +61,12 @@ define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
 -- | The test context. Emits a reference to the hand-written
--- Hydra.Test.TestEnv.testContext.
+-- Hydra.Core.Test.TestEnv.testContext.
 testContext :: TypedTermDefinition InferenceContext
 testContext = define "testContext" $ asTerm TestEnv.testContext
 
 -- | The test graph. Emits a call to the hand-written
--- Hydra.Test.TestEnv.testGraph (applied to testTypes and testTerms).
+-- Hydra.Core.Test.TestEnv.testGraph (applied to testTypes and testTerms).
 testGraph :: TypedTermDefinition Graph
 testGraph = define "testGraph" $
   TestEnv.testGraph @@ testTypes @@ testTerms

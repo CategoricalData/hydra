@@ -9,9 +9,9 @@ module Hydra.Sources.Build.Libraries (
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 
@@ -24,7 +24,7 @@ import           Prelude hiding ((++))
 -- locations across nine hosts (Haskell driver allow-lists, Java's overlay alias map
 -- and @Libraries.java@ dispatch, Python's registration functions, Scala's and
 -- TypeScript's analogs, and — worst — four near-independent lists apiece for Common
--- Lisp and Emacs Lisp). #524 (adding @hydra.lib.hashing@) discovered most of those
+-- Lisp and Emacs Lisp). #524 (adding @hydra.core.lib.hashing@) discovered most of those
 -- locations only empirically, one host's test failure at a time; #533's inventory
 -- found two of Common Lisp's four lists had already silently drifted (fixed
 -- alongside this module, as its own commit).
@@ -40,7 +40,7 @@ import           Prelude hiding ((++))
 -- @packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/*.hs@, the
 -- actual ground truth (one file per registered @hydra.lib.\<sub>@ module).
 --
--- @hydra.lib.defaults@ is deliberately excluded: it holds constant term values with
+-- @hydra.core.lib.defaults@ is deliberately excluded: it holds constant term values with
 -- no native per-host overlay implementation and no per-host registration
 -- requirement (confirmed by #568's 'Hydra.Generation.overlayLibSubs', which excludes
 -- it from overlay-directory discovery for the same reason).
@@ -102,7 +102,7 @@ expectedLibraries = define "expectedLibraries" $
   doc "Every hydra.lib.<sub> module name every self-hosting host must register" $
   list (string <$> expectedLibraryNames)
 
--- | Whether a bare sub-namespace name (e.g. "chars", not "hydra.lib.chars") is a
+-- | Whether a bare sub-namespace name (e.g. "chars", not "hydra.core.lib.chars") is a
 -- member of 'expectedLibraries'.
 isExpectedLibrary :: TypedTermDefinition (String -> Bool)
 isExpectedLibrary = define "isExpectedLibrary" $

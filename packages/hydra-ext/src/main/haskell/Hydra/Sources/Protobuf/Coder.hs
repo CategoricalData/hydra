@@ -8,24 +8,24 @@ module Hydra.Sources.Protobuf.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Math                   as Math
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Coders                     as Coders
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
-import qualified Hydra.Dsl.Errors                      as Error
-import qualified Hydra.Dsl.Packaging                     as Packaging
-import qualified Hydra.Dsl.Util                       as Util
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Math                   as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Core.Dsl.Coders                     as Coders
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
+import qualified Hydra.Core.Dsl.Errors                      as Error
+import qualified Hydra.Core.Dsl.Packaging                     as Packaging
+import qualified Hydra.Core.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants      as Constants
@@ -51,8 +51,8 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports
-import qualified Hydra.Protobuf.Proto3 as P3
-import qualified Hydra.Protobuf.Environment as PE
+import qualified Hydra.Ext.Protobuf.Proto3 as P3
+import qualified Hydra.Ext.Protobuf.Environment as PE
 import qualified Hydra.Sources.Protobuf.Proto3 as Proto3Syntax
 import qualified Hydra.Sources.Protobuf.Language as ProtobufLanguageSource
 import qualified Hydra.Sources.Protobuf.Environment as ProtobufEnvironment
@@ -60,7 +60,7 @@ import qualified Hydra.Sources.Protobuf.Serde as ProtobufSerdeSource
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.protobuf.coder"
+ns = ModuleName "hydra.ext.protobuf.coder"
 
 module_ :: Module
 module_ = Module {
@@ -69,7 +69,7 @@ module_ = Module {
             moduleDependencies = unqualifiedDep <$> ([moduleName ProtobufSerdeSource.module_, moduleName ProtobufLanguageSource.module_,
       Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Lexical.ns, Serialization.ns,
       Annotations.ns, Constants.ns, ExtractCore.ns, Adapt.ns, PrintCore.ns, PrintError.ns,
-      ModuleName "hydra.decode.core"] L.++ (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesModuleNames)),
+      ModuleName "hydra.core.decode.model"] L.++ (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions")}
   where
     definitions = [
@@ -113,7 +113,7 @@ module_ = Module {
 
 -- | Name for the EncoderState record type (kept locally to avoid extra imports)
 _EncoderState :: Name
-_EncoderState = Name "hydra.protobuf.environment.EncoderState"
+_EncoderState = Name "hydra.ext.protobuf.environment.EncoderState"
 
 _EncoderState_context :: Name
 _EncoderState_context = Name "context"
@@ -123,7 +123,7 @@ _EncoderState_fieldIndex = Name "fieldIndex"
 
 -- | Name for the StructuralTypeRef union type (either | pair)
 _StructuralTypeRef :: Name
-_StructuralTypeRef = Name "hydra.protobuf.environment.StructuralTypeRef"
+_StructuralTypeRef = Name "hydra.ext.protobuf.environment.StructuralTypeRef"
 
 -- | Collect all structural type references (Either, Pair) from a list of types
 collectStructuralTypes :: TypedTermDefinition ([Type] -> S.Set Term)
@@ -233,9 +233,9 @@ constructModule = def "constructModule" $
 -- Accumulator helper
 -- =============================================================================
 
--- | Reference to the hydra.decode.core.type function (Graph -> Term -> Either DecodingError Type)
+-- | Reference to the hydra.core.decode.model.type function (Graph -> Term -> Either DecodingError Type)
 decodeType :: TypedTerm (Graph -> Term -> Either DecodingError Type)
-decodeType = TypedTerm $ TermVariable $ Name "hydra.decode.core.type"
+decodeType = TypedTerm $ TermVariable $ Name "hydra.core.decode.model.type"
 
 def :: String -> TypedTerm a -> TypedTermDefinition a
 def = definitionInModule module_

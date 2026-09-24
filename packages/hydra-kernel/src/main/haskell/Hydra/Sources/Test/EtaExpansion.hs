@@ -3,39 +3,39 @@ module Hydra.Sources.Test.EtaExpansion where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing hiding (checkTest, noChange)
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing hiding (checkTest, noChange)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
 
-import Hydra.Testing
+import Hydra.Core.Testing
 
 import Prelude hiding (foldl)
-import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
-import qualified Hydra.Lib.Lists as DefLists
-import qualified Hydra.Lib.Literals as DefLiterals
-import qualified Hydra.Lib.Strings as DefStrings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims as Prims
+import qualified Hydra.Core.Lib.Lists as DefLists
+import qualified Hydra.Core.Lib.Literals as DefLiterals
+import qualified Hydra.Core.Lib.Strings as DefStrings
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.etaExpansion"
+ns = ModuleName "hydra.core.test.etaExpansion"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.reduction", ModuleName "hydra.print.core", ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.core.reduction", ModuleName "hydra.core.print.model", ModuleName "hydra.core.test.testTypes"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for eta expansion of terms"))}
   where
     definitions = [
@@ -396,9 +396,9 @@ allTests = define "allTests" $
     nonExpansionOfEliminations = testGroup (Phantoms.string "Non-expansion of eliminations which produce functions") Phantoms.nothing (Phantoms.list ([] :: [TypedTerm TestGroup])) (Phantoms.list [
       noChange "applied case statement"
         (tylams ["t0"] $
-          lambdaTyped "dir" (T.var "hydra.coders.CoderDirection") $
-            lambdaTyped "coder" (T.applys (T.var "hydra.coders.Coder") (T.var <$> ["t0", "t0"])) $
-              lambdaTyped "cx" (T.var "hydra.typing.InferenceContext") $
+          lambdaTyped "dir" (T.var "hydra.core.coders.CoderDirection") $
+            lambdaTyped "coder" (T.applys (T.var "hydra.core.coders.Coder") (T.var <$> ["t0", "t0"])) $
+              lambdaTyped "cx" (T.var "hydra.core.typing.InferenceContext") $
                 lambdaTyped "v1" (T.var "t0") $
                   match (Core.nameLift _CoderDirection)
                     nothing [
@@ -418,9 +418,9 @@ allTests = define "allTests" $
 
 -- Helpers
 
--- | Reference to hydra.reduction.etaExpandTypedTerm
+-- | Reference to hydra.core.reduction.etaExpandTypedTerm
 etaExpandRef :: TypedTerm (InferenceContext -> Graph -> Term -> Either Error Term)
-etaExpandRef = TypedTerm $ TermVariable $ Name "hydra.reduction.etaExpandTypedTerm"
+etaExpandRef = TypedTerm $ TermVariable $ Name "hydra.core.reduction.etaExpandTypedTerm"
 
 noChange :: String -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 noChange name term = noChangeWithTags name [] term
@@ -432,7 +432,7 @@ cat = primitive $ DefStrings.concat
 foldl = primitive $ DefLists.foldl
 splitOn = primitive $ DefStrings.splitOn
 toLower = primitive $ DefStrings.toLower
---toLower = Core.termFunction $ Core.functionPrimitive $ Core.name (Phantoms.string "hydra.lib.strings.toLower")
+--toLower = Core.termFunction $ Core.functionPrimitive $ Core.name (Phantoms.string "hydra.core.lib.strings.toLower")
 
 testCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 testCase name = testCaseWithTags name []

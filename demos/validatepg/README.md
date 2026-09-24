@@ -20,8 +20,8 @@ This will:
 ## What it demonstrates
 
 - A property graph schema defined using the Java DSL (`hydra.pg.dsl`)
-- Graph instances — one valid and eleven invalid — encoded to JSON via `hydra.encode.pg.model`
-- Validation via `hydra.validate.pg.validateGraph` in all three host languages
+- Graph instances — one valid and eleven invalid — encoded to JSON via `hydra.pg.encode.model`
+- Validation via `hydra.pg.validate.model.validateGraph` in all three host languages
 - Identical results across Haskell, Java, and Python
 
 ## Validation conditions covered
@@ -50,7 +50,7 @@ Supply your own schema and graph JSON files:
 
 The data directory should contain:
 
-- `schema.json` — a `GraphSchema<LiteralType>` encoded via `hydra.encode.pg.model`
+- `schema.json` — a `GraphSchema<LiteralType>` encoded via `hydra.pg.encode.model`
 - One or more `<name>.json` files — `Graph<Literal>` instances encoded the same way
 
 See the generated files in `/tmp/hydra-validatepg-*` for the expected JSON format.

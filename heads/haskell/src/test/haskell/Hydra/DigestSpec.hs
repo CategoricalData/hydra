@@ -31,9 +31,9 @@ import Hydra.Digest
 import Hydra.Generation
   ( ensurePerPackageDigests, finalizePerPackageDigests, perPackageDigestPath
   , closeDirtySet, moduleReferenceEdges )
-import Hydra.Packaging (Module(..), ModuleName(..), ModuleDependency(..), Definition(..), TermDefinition(..))
+import Hydra.Core.Packaging (Module(..), ModuleName(..), ModuleDependency(..), Definition(..), TermDefinition(..))
 import Hydra.PackageRouting (buildRoutingMap)
-import Hydra.Core (Term(..), Application(..), Name(..))
+import Hydra.Core.Model (Term(..), Application(..), Name(..))
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -116,11 +116,11 @@ spec = do
 
     -- The dependency-reference lines inside the native sources (e.g.
     -- SYNTAX_NS / CORE_NS in Java, LEXICAL_NS in Python) must NOT be mistaken
-    -- for a file's own namespace. hydra.lexical is referenced by language.py's
+    -- for a file's own namespace. hydra.core.lexical is referenced by language.py's
     -- LEXICAL_NS but is defined elsewhere (and is not a hydra.python.* module),
     -- so discovery must not map it to a native .py file.
     H.it "does not misattribute a dependency reference as a native namespace" $
-      case M.lookup (ModuleName "hydra.lexical") nsFiles of
+      case M.lookup (ModuleName "hydra.core.lexical") nsFiles of
         Just fp -> (".py" `L.isSuffixOf` fp || ".java" `L.isSuffixOf` fp)
                      `H.shouldBe` False
         Nothing -> return ()  -- absent is fine; it just must not be a native file
@@ -272,7 +272,7 @@ spec = do
           -- the jsonContent-only-change trigger faithful.
           javaJsonPath = tmpRoot </> "hydra-java" </> "src" </> "main" </> "json" </> "hydra" </> "java" </> "coder.json"
 
-      writeFinalized "hydra-kernel" [("hydra.core", "kernel-hash-1")] []
+      writeFinalized "hydra-kernel" [("hydra.core.model", "kernel-hash-1")] []
       writeFinalized "hydra-jvm"    [("hydra.jvm.serde", "jvm-hash-1")] []
       kernelBefore <- DigestFormat.readPerPackageDigestFile (perPackageDigestPath tmpRoot "hydra-kernel")
       jvmBefore <- DigestFormat.readPerPackageDigestFile (perPackageDigestPath tmpRoot "hydra-jvm")
@@ -335,7 +335,7 @@ spec = do
           -- accompanying .java source edit.
           javaJsonPath = tmpRoot </> "hydra-java" </> "src" </> "main" </> "json" </> "hydra" </> "java" </> "coder.json"
 
-      writeFinalized "hydra-kernel" [("hydra.core", "kernel-hash-2")] []
+      writeFinalized "hydra-kernel" [("hydra.core.model", "kernel-hash-2")] []
       writeFinalized "hydra-jvm"    [("hydra.jvm.serde", "jvm-hash-2")] []
       kernelBefore <- DigestFormat.readPerPackageDigestFile (perPackageDigestPath tmpRoot "hydra-kernel")
       jvmBefore <- DigestFormat.readPerPackageDigestFile (perPackageDigestPath tmpRoot "hydra-jvm")
@@ -385,7 +385,7 @@ spec = do
             let dpath = perPackageDigestPath tmpRoot pkg
             SD.createDirectoryIfMissing True (takeDirectory dpath)
             DigestFormat.writeDigestMapFile dpath (M.fromList [(ModuleName k, v) | (k, v) <- hashes])
-      writeHashesOnly "hydra-kernel" [("hydra.core", "kernel-hash-2")]
+      writeHashesOnly "hydra-kernel" [("hydra.core.model", "kernel-hash-2")]
       writeHashesOnly "hydra-jvm"    [("hydra.jvm.serde", "jvm-hash-2")]
       writeHashesOnly "hydra-java"   [("jsonContent:hydra/java/coder.json", "java-json-hash-2")]
 
@@ -401,8 +401,8 @@ spec = do
   -- over its dependency closure, not a module's own content hash alone.
   -- These tests reproduce the exact mechanism behind the setOf/encodeMap
   -- staleness from the 0.17 breaking batch (#508): a module (like
-  -- hydra.extract.core) that references another module's definition (like
-  -- hydra.lib.eithers.mapSet) via a bare term-level reference, WITHOUT
+  -- hydra.core.extract.model) that references another module's definition (like
+  -- hydra.core.lib.eithers.mapSet) via a bare term-level reference, WITHOUT
   -- declaring that module in 'moduleDependencies'.
   H.describe "moduleReferenceEdges derives edges term references miss from declared deps (#701)" $ do
 
@@ -412,18 +412,18 @@ spec = do
       M.lookup (ModuleName "pkg.a") edges `H.shouldBe` Just (S.singleton (ModuleName "pkg.b"))
 
     H.it "captures an UNDECLARED edge reached only via a term-level reference (the setOf/mapSet shape)" $ do
-      -- hydra.extract.core's setOf calls Eithers.mapSet (hydra.lib.eithers.mapSet)
-      -- but never lists hydra.lib.eithers in moduleDependencies.
-      let extractCore = withUndeclaredTermRef "hydra.extract.core" "setOf" ["hydra.lib.eithers.mapSet"]
-          libEithers = nameOnly "hydra.lib.eithers"
+      -- hydra.core.extract.model's setOf calls Eithers.mapSet (hydra.core.lib.eithers.mapSet)
+      -- but never lists hydra.core.lib.eithers in moduleDependencies.
+      let extractCore = withUndeclaredTermRef "hydra.core.extract.model" "setOf" ["hydra.core.lib.eithers.mapSet"]
+          libEithers = nameOnly "hydra.core.lib.eithers"
           mods = [extractCore, libEithers]
           edges = moduleReferenceEdges mods
       -- The declared side is empty (reproducing the real gap)...
       moduleDependencies extractCore `H.shouldBe` []
       -- ...but the DERIVED edge set still finds it, because the term body
-      -- references hydra.lib.eithers.mapSet and moduleNameOf resolves that
-      -- to hydra.lib.eithers.
-      M.lookup (ModuleName "hydra.extract.core") edges `H.shouldBe` Just (S.singleton (ModuleName "hydra.lib.eithers"))
+      -- references hydra.core.lib.eithers.mapSet and moduleNameOf resolves that
+      -- to hydra.core.lib.eithers.
+      M.lookup (ModuleName "hydra.core.extract.model") edges `H.shouldBe` Just (S.singleton (ModuleName "hydra.core.lib.eithers"))
 
     H.it "unions declared and derived edges when both are present" $ do
       let m = (withDeclaredDeps "pkg.a" ["pkg.b"])
@@ -442,22 +442,22 @@ spec = do
   H.describe "closeDirtySet closes over derived (not just declared) edges (#701)" $ do
 
     H.it "marks a module dirty when its UNDECLARED term-level dependency is dirty (setOf/mapSet repro)" $ do
-      let extractCore = withUndeclaredTermRef "hydra.extract.core" "setOf" ["hydra.lib.eithers.mapSet"]
-          libEithers = nameOnly "hydra.lib.eithers"
+      let extractCore = withUndeclaredTermRef "hydra.core.extract.model" "setOf" ["hydra.core.lib.eithers.mapSet"]
+          libEithers = nameOnly "hydra.core.lib.eithers"
           mods = [extractCore, libEithers]
-          -- hydra.lib.eithers changed (e.g. mapSet gained an 'ordering'
-          -- constraint); nothing about hydra.extract.core's OWN source
+          -- hydra.core.lib.eithers changed (e.g. mapSet gained an 'ordering'
+          -- constraint); nothing about hydra.core.extract.model's OWN source
           -- changed.
-          initialDirty = S.singleton (ModuleName "hydra.lib.eithers")
+          initialDirty = S.singleton (ModuleName "hydra.core.lib.eithers")
           closure = closeDirtySet mods initialDirty
-      S.member (ModuleName "hydra.extract.core") closure `H.shouldBe` True
+      S.member (ModuleName "hydra.core.extract.model") closure `H.shouldBe` True
 
     H.it "does not mark an unrelated module dirty" $ do
-      let extractCore = withUndeclaredTermRef "hydra.extract.core" "setOf" ["hydra.lib.eithers.mapSet"]
-          libEithers = nameOnly "hydra.lib.eithers"
+      let extractCore = withUndeclaredTermRef "hydra.core.extract.model" "setOf" ["hydra.core.lib.eithers.mapSet"]
+          libEithers = nameOnly "hydra.core.lib.eithers"
           unrelated = nameOnly "hydra.unrelated"
           mods = [extractCore, libEithers, unrelated]
-          closure = closeDirtySet mods (S.singleton (ModuleName "hydra.lib.eithers"))
+          closure = closeDirtySet mods (S.singleton (ModuleName "hydra.core.lib.eithers"))
       S.member (ModuleName "hydra.unrelated") closure `H.shouldBe` False
 
   H.describe "computeMerkleHashes folds dependency hashes into each module's stored key (#701)" $ do

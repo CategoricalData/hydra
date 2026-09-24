@@ -1,6 +1,6 @@
-package hydra.util;
+package hydra.core.util;
 
-import hydra.overlay.java.util.PersistentSet;
+import hydra.core.overlay.java.util.PersistentSet;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

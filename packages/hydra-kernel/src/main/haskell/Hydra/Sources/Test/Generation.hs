@@ -8,19 +8,19 @@
 module Hydra.Sources.Test.Generation where
 
 import Hydra.Kernel hiding (inferModules)
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms         as Terms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms         as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms hiding ((++))
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
-import qualified Hydra.Dsl.Lib.Eithers   as Eithers
-import qualified Hydra.Dsl.Lib.Lists     as Lists
-import qualified Hydra.Dsl.Lib.Maps      as Maps
-import qualified Hydra.Dsl.Lib.Optionals    as Optionals
-import qualified Hydra.Dsl.Lib.Strings   as Strings
-import qualified Hydra.Dsl.Packaging          as Packaging
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms hiding ((++))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
+import qualified Hydra.Core.Dsl.Lib.Eithers   as Eithers
+import qualified Hydra.Core.Dsl.Lib.Lists     as Lists
+import qualified Hydra.Core.Dsl.Lib.Maps      as Maps
+import qualified Hydra.Core.Dsl.Lib.Optionals    as Optionals
+import qualified Hydra.Core.Dsl.Lib.Strings   as Strings
+import qualified Hydra.Core.Dsl.Packaging          as Packaging
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
@@ -37,7 +37,7 @@ import qualified Hydra.Sources.Kernel.Terms.Print.Markdown as PrintMarkdown
 infixl 1 #
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.generation"
+ns = ModuleName "hydra.core.test.generation"
 
 module_ :: Module
 module_ = Module {
@@ -241,7 +241,7 @@ allTests = define "allTests" $
 -- generateModuleDoc test input and case (#723).
 --
 -- A minimal hand-built module -- one documented term definition -- exercises
--- generateModuleDoc end-to-end (Module -> hydra.markdown.Document) followed by
+-- generateModuleDoc end-to-end (Module -> hydra.core.markdown.Document) followed by
 -- PrintMarkdown.document (Document -> String), asserting the exact rendered
 -- Markdown. This is a shrunk stand-in for the eventual convergence test
 -- (regenerate + diff against the real committed spec pages), which needs a
@@ -296,7 +296,7 @@ generateModuleDocCase = universalCase
     -- "forall v1,v2. " (see Print/Core.hs's "fa" binding); only Type-level function
     -- arrows and any NESTED Type-level foralls inside the scheme body render as
     -- Unicode (confirmed against docs/hydra-lexicon.txt, e.g.
-    -- "hydra.lib.effects.apply : (forall x,y. (effect<(x → y)> → effect<x> → effect<y>))") --
+    -- "hydra.core.lib.effects.apply : (forall x,y. (effect<(x → y)> → effect<x> → effect<y>))") --
     -- so a simple `forall a. a -> a` scheme (no nested Type-level forall) renders
     -- "(forall a. (a → a))", mixing ASCII (scheme header) and Unicode (body arrow).
     expected = Phantoms.string $

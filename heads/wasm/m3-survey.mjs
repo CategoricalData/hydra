@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..", "..");
 
-// Variant tags for hydra.core.Type (in declaration order).
+// Variant tags for hydra.core.model.Type (in declaration order).
 const TyT = {
   Annotated: 0, Application: 1, Either: 2, Forall: 3, Function: 4,
   List: 5, Literal: 6, Map: 7, Maybe: 8, Pair: 9,
@@ -25,7 +25,7 @@ const TyT = {
   Void: 15, Wrap: 16,
 };
 
-// Variant tags for hydra.core.Term (in declaration order).
+// Variant tags for hydra.core.model.Term (in declaration order).
 const TmT = {
   Annotated: 0, Application: 1, Cases: 2, Either: 3, Inject: 4,
   Lambda: 5, Let: 6, List: 7, Literal: 8, Map: 9,
@@ -37,18 +37,18 @@ const TmT = {
 // Stub primitive imports — wide enough to cover what survey targets use.
 // Every fn is first-order (no closure-carrying args).
 const imports = {
-  "hydra.lib.math": {
-    "hydra.lib.math.add": (a, b) => (a + b) | 0,
-    "hydra.lib.math.sub": (a, b) => (a - b) | 0,
-    "hydra.lib.math.mul": (a, b) => Math.imul(a, b),
+  "hydra.core.lib.math": {
+    "hydra.core.lib.math.add": (a, b) => (a + b) | 0,
+    "hydra.core.lib.math.sub": (a, b) => (a - b) | 0,
+    "hydra.core.lib.math.mul": (a, b) => Math.imul(a, b),
   },
-  "hydra.lib.lists": {
-    "hydra.lib.lists.cons": (_x, _xs) => 0,
-    "hydra.lib.lists.isEmpty": (_xs) => 1,
-    "hydra.lib.lists.length": (_xs) => 0,
+  "hydra.core.lib.lists": {
+    "hydra.core.lib.lists.cons": (_x, _xs) => 0,
+    "hydra.core.lib.lists.isEmpty": (_xs) => 1,
+    "hydra.core.lib.lists.length": (_xs) => 0,
   },
-  "hydra.lib.equality": {
-    "hydra.lib.equality.equal": (a, b) => (a === b) ? 1 : 0,
+  "hydra.core.lib.equality": {
+    "hydra.core.lib.equality.equal": (a, b) => (a === b) ? 1 : 0,
   },
 };
 
@@ -78,10 +78,10 @@ function mkFunctionType(ctx, dom, cod) {
 // Survey cases. Each has {module, export, args(ctx), expected, kind} and an
 // optional `describe` note explaining what's being exercised.
 const cases = [
-  // ----- hydra.strip.deannotate_term -----
+  // ----- hydra.core.strip.deannotate_term -----
   {
     module: "hydra/strip.wat",
-    export: "hydra.strip.deannotate_term",
+    export: "hydra.core.strip.deannotate_term",
     describe: "strip: TermUnit → TermUnit (default arm)",
     args: (ctx) => [mkUnitTerm(ctx)],
     kind: "i32-truthy-same",  // expect exact same pointer back
@@ -89,7 +89,7 @@ const cases = [
   },
   {
     module: "hydra/strip.wat",
-    export: "hydra.strip.deannotate_term",
+    export: "hydra.core.strip.deannotate_term",
     describe: "strip: TermAnnotated(TermUnit) → TermUnit (unwrap)",
     args: (ctx) => {
       const unit = mkUnitTerm(ctx);
@@ -101,7 +101,7 @@ const cases = [
   },
   {
     module: "hydra/strip.wat",
-    export: "hydra.strip.deannotate_term",
+    export: "hydra.core.strip.deannotate_term",
     describe: "strip: nested TermAnnotated(TermAnnotated(TermUnit)) → TermUnit",
     args: (ctx) => {
       const unit = mkUnitTerm(ctx);
@@ -113,20 +113,20 @@ const cases = [
     check: (actual, info) => actual === info.unit,
   },
 
-  // ----- hydra.strip.deannotate_type -----
+  // ----- hydra.core.strip.deannotate_type -----
   {
     module: "hydra/strip.wat",
-    export: "hydra.strip.deannotate_type",
+    export: "hydra.core.strip.deannotate_type",
     describe: "strip: TypeUnit → TypeUnit (default arm)",
     args: (ctx) => [mkUnitType(ctx)],
     kind: "i32-equals",
     check: (actual, info) => actual === info.inputs[0],
   },
 
-  // ----- hydra.predicates.is_unit_term -----
+  // ----- hydra.core.predicates.is_unit_term -----
   {
     module: "hydra/predicates.wat",
-    export: "hydra.predicates.is_unit_term",
+    export: "hydra.core.predicates.is_unit_term",
     describe: "predicates: is_unit_term TermUnit = true (1)",
     args: (ctx) => [mkUnitTerm(ctx)],
     kind: "i32-equals",
@@ -134,7 +134,7 @@ const cases = [
   },
   {
     module: "hydra/predicates.wat",
-    export: "hydra.predicates.is_unit_term",
+    export: "hydra.core.predicates.is_unit_term",
     describe: "predicates: is_unit_term TermAnnotated(TermUnit) = false (0, no auto-deannotate)",
     args: (ctx) => {
       const unit = mkUnitTerm(ctx);
@@ -144,10 +144,10 @@ const cases = [
     expected: 0,
   },
 
-  // ----- hydra.predicates.is_unit_type -----
+  // ----- hydra.core.predicates.is_unit_type -----
   {
     module: "hydra/predicates.wat",
-    export: "hydra.predicates.is_unit_type",
+    export: "hydra.core.predicates.is_unit_type",
     describe: "predicates: is_unit_type TypeUnit = true (1)",
     args: (ctx) => [mkUnitType(ctx)],
     kind: "i32-equals",
@@ -155,7 +155,7 @@ const cases = [
   },
   {
     module: "hydra/predicates.wat",
-    export: "hydra.predicates.is_unit_type",
+    export: "hydra.core.predicates.is_unit_type",
     describe: "predicates: is_unit_type (Unit -> Unit) = false (0)",
     args: (ctx) => {
       const u1 = mkUnitType(ctx);
@@ -166,10 +166,10 @@ const cases = [
     expected: 0,
   },
 
-  // ----- hydra.arity.type_arity (already validated in M2 — regression guard) -----
+  // ----- hydra.core.arity.type_arity (already validated in M2 — regression guard) -----
   {
     module: "hydra/arity.wat",
-    export: "hydra.arity.type_arity",
+    export: "hydra.core.arity.type_arity",
     describe: "arity: type_arity (Unit -> Unit -> Unit) = 2 [M2 regression]",
     args: (ctx) => {
       const u1 = mkUnitType(ctx), u2 = mkUnitType(ctx), u3 = mkUnitType(ctx);
@@ -180,20 +180,20 @@ const cases = [
     expected: 2,
   },
 
-  // ----- hydra.encoding.is_unit_type — another is_unit_type? -----
+  // ----- hydra.core.encoding.is_unit_type — another is_unit_type? -----
   {
     module: "hydra/encoding.wat",
-    export: "hydra.encoding.is_unit_type",
+    export: "hydra.core.encoding.is_unit_type",
     describe: "encoding: is_unit_type TypeUnit = true",
     args: (ctx) => [mkUnitType(ctx)],
     kind: "i32-equals",
     expected: 1,
   },
 
-  // ----- hydra.arity.type_scheme_arity (projection on record) -----
+  // ----- hydra.core.arity.type_scheme_arity (projection on record) -----
   {
     module: "hydra/arity.wat",
-    export: "hydra.arity.type_scheme_arity",
+    export: "hydra.core.arity.type_scheme_arity",
     describe: "arity: type_scheme_arity [TypeScheme {_, Unit}] = 0",
     args: (ctx) => {
       // TypeScheme {variables: [], type: TypeUnit} — 2-field record.
@@ -206,7 +206,7 @@ const cases = [
   },
   {
     module: "hydra/arity.wat",
-    export: "hydra.arity.type_scheme_arity",
+    export: "hydra.core.arity.type_scheme_arity",
     describe: "arity: type_scheme_arity [TypeScheme {_, Unit->Unit}] = 1",
     args: (ctx) => {
       const u1 = mkUnitType(ctx), u2 = mkUnitType(ctx);
@@ -218,20 +218,20 @@ const cases = [
     expected: 1,
   },
 
-  // ----- hydra.arity.uncurry_type (has a Just $ list [var "t"] default) -----
+  // ----- hydra.core.arity.uncurry_type (has a Just $ list [var "t"] default) -----
   {
     module: "hydra/arity.wat",
-    export: "hydra.arity.uncurry_type",
+    export: "hydra.core.arity.uncurry_type",
     describe: "arity: uncurry_type Unit returns 1-elem list (not empty, not null)",
     args: (ctx) => [mkUnitType(ctx)],
     kind: "i32-equals",
     check: (actual, info) => actual !== 0,  // non-null pointer
   },
 
-  // ----- hydra.hoisting.is_application_function -----
+  // ----- hydra.core.hoisting.is_application_function -----
   {
     module: "hydra/hoisting.wat",
-    export: "hydra.hoisting.is_application_function",
+    export: "hydra.core.hoisting.is_application_function",
     describe: "hoisting: is_application_function SubtermStepApplicationFunction = 1",
     args: (ctx) => [ctx.allocVariant(1, 0)],  // tag 1 = ApplicationFunction
     kind: "i32-equals",
@@ -239,7 +239,7 @@ const cases = [
   },
   {
     module: "hydra/hoisting.wat",
-    export: "hydra.hoisting.is_application_function",
+    export: "hydra.core.hoisting.is_application_function",
     describe: "hoisting: is_application_function SubtermStepAnnotatedBody = 0",
     args: (ctx) => [ctx.allocVariant(0, 0)],  // tag 0 = AnnotatedBody
     kind: "i32-equals",
@@ -247,7 +247,7 @@ const cases = [
   },
   {
     module: "hydra/hoisting.wat",
-    export: "hydra.hoisting.is_lambda_body",
+    export: "hydra.core.hoisting.is_lambda_body",
     describe: "hoisting: is_lambda_body SubtermStepLambdaBody = 1",
     args: (ctx) => [ctx.allocVariant(3, 0)],  // tag 3 = LambdaBody
     kind: "i32-equals",
@@ -255,7 +255,7 @@ const cases = [
   },
   {
     module: "hydra/hoisting.wat",
-    export: "hydra.hoisting.is_union_elimination",
+    export: "hydra.core.hoisting.is_union_elimination",
     describe: "hoisting: is_union_elimination TermCases = 1",
     args: (ctx) => [ctx.allocVariant(TmT.Cases, 0)],  // term tag 2 = Cases
     kind: "i32-equals",
@@ -263,17 +263,17 @@ const cases = [
   },
   {
     module: "hydra/hoisting.wat",
-    export: "hydra.hoisting.is_union_elimination",
+    export: "hydra.core.hoisting.is_union_elimination",
     describe: "hoisting: is_union_elimination TermUnit = 0",
     args: (ctx) => [mkUnitTerm(ctx)],
     kind: "i32-equals",
     expected: 0,
   },
 
-  // ----- hydra.strip.deannotate_and_detype_term (recursive) -----
+  // ----- hydra.core.strip.deannotate_and_detype_term (recursive) -----
   {
     module: "hydra/strip.wat",
-    export: "hydra.strip.deannotate_and_detype_term",
+    export: "hydra.core.strip.deannotate_and_detype_term",
     describe: "strip: deannotate_and_detype_term TermUnit = TermUnit",
     args: (ctx) => [mkUnitTerm(ctx)],
     kind: "i32-equals",

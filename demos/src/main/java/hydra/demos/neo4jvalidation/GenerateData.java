@@ -1,26 +1,26 @@
 package hydra.demos.neo4jvalidation;
 
-import hydra.core.Term;
-import hydra.encode.neo4j.Model;
+import hydra.core.model.Term;
+import hydra.core.encode.neo4j.Model;
 import hydra.json.Encode;
 import hydra.json.Writer;
-import hydra.json.model.Value;
-import hydra.neo4j.model.Constraint;
-import hydra.neo4j.model.ConstraintDefinition;
-import hydra.neo4j.model.ElementId;
-import hydra.neo4j.model.GraphType;
-import hydra.neo4j.model.Key;
-import hydra.neo4j.model.Node;
-import hydra.neo4j.model.NodeElementType;
-import hydra.neo4j.model.NodeLabel;
-import hydra.neo4j.model.PropertyExistenceConstraint;
-import hydra.neo4j.model.PropertyTypeConstraint;
-import hydra.neo4j.model.Relationship;
-import hydra.neo4j.model.RelationshipElementType;
-import hydra.neo4j.model.RelationshipType;
-import hydra.neo4j.model.ValueType;
-import hydra.overlay.java.util.Either;
-import hydra.overlay.java.util.Optional;
+import hydra.core.json.model.Value;
+import hydra.pg.neo4j.model.Constraint;
+import hydra.pg.neo4j.model.ConstraintDefinition;
+import hydra.pg.neo4j.model.ElementId;
+import hydra.pg.neo4j.model.GraphType;
+import hydra.pg.neo4j.model.Key;
+import hydra.pg.neo4j.model.Node;
+import hydra.pg.neo4j.model.NodeElementType;
+import hydra.pg.neo4j.model.NodeLabel;
+import hydra.pg.neo4j.model.PropertyExistenceConstraint;
+import hydra.pg.neo4j.model.PropertyTypeConstraint;
+import hydra.pg.neo4j.model.Relationship;
+import hydra.pg.neo4j.model.RelationshipElementType;
+import hydra.pg.neo4j.model.RelationshipType;
+import hydra.pg.neo4j.model.ValueType;
+import hydra.core.overlay.java.util.Either;
+import hydra.core.overlay.java.util.Optional;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -38,8 +38,8 @@ import java.util.Set;
  * as JSON files, from DSL-based definitions in Java.
  *
  * <p>The schema (a Neo4j {@code GraphType}) and a family of graphs (one valid, four invalid)
- * are authored once here as {@code hydra.neo4j.model} values, encoded to Hydra's canonical
- * term-JSON via {@code hydra.encode.neo4j.Model} + {@code hydra.json}, and written to disk.
+ * are authored once here as {@code hydra.pg.neo4j.model} values, encoded to Hydra's canonical
+ * term-JSON via {@code hydra.core.encode.neo4j.Model} + {@code hydra.json}, and written to disk.
  * Those JSON files are the single source of truth: every host language (Java, Python, Haskell,
  * ...) then loads the <em>same</em> files and runs the <em>same</em> generated validator, so the
  * data under test and the validation logic are identical across languages by construction.
@@ -243,12 +243,12 @@ public class GenerateData {
     // Small builders over the Neo4j model.
     // ------------------------------------------------------------------------
 
-    private static Node node(String id, Set<NodeLabel> labels, Map<Key, hydra.neo4j.model.Value> props) {
+    private static Node node(String id, Set<NodeLabel> labels, Map<Key, hydra.pg.neo4j.model.Value> props) {
         return new Node(new ElementId(id), labels, props);
     }
 
     private static Relationship rel(String id, String type, String start, String end,
-                                    Map<Key, hydra.neo4j.model.Value> props) {
+                                    Map<Key, hydra.pg.neo4j.model.Value> props) {
         return new Relationship(
             new ElementId(id), props, new RelationshipType(type),
             new ElementId(start), new ElementId(end));
@@ -263,24 +263,24 @@ public class GenerateData {
     }
 
     @SafeVarargs
-    private static Map<Key, hydra.neo4j.model.Value> props(Map.Entry<Key, hydra.neo4j.model.Value>... es) {
-        Map<Key, hydra.neo4j.model.Value> m = new LinkedHashMap<>();
-        for (Map.Entry<Key, hydra.neo4j.model.Value> e : es) {
+    private static Map<Key, hydra.pg.neo4j.model.Value> props(Map.Entry<Key, hydra.pg.neo4j.model.Value>... es) {
+        Map<Key, hydra.pg.neo4j.model.Value> m = new LinkedHashMap<>();
+        for (Map.Entry<Key, hydra.pg.neo4j.model.Value> e : es) {
             m.put(e.getKey(), e.getValue());
         }
         return m;
     }
 
-    private static Map.Entry<Key, hydra.neo4j.model.Value> entry(String key, hydra.neo4j.model.Value v) {
+    private static Map.Entry<Key, hydra.pg.neo4j.model.Value> entry(String key, hydra.pg.neo4j.model.Value v) {
         return Map.entry(new Key(key), v);
     }
 
-    private static hydra.neo4j.model.Value str(String s) {
-        return new hydra.neo4j.model.Value.String_(s);
+    private static hydra.pg.neo4j.model.Value str(String s) {
+        return new hydra.pg.neo4j.model.Value.String_(s);
     }
 
-    private static hydra.neo4j.model.Value integer(long n) {
-        return new hydra.neo4j.model.Value.Integer_(n);
+    private static hydra.pg.neo4j.model.Value integer(long n) {
+        return new hydra.pg.neo4j.model.Value.Integer_(n);
     }
 
     // ------------------------------------------------------------------------
@@ -295,11 +295,11 @@ public class GenerateData {
     private static String encodeGraphToJson(Graph graph) {
         List<Term> nodeTerms = graph.nodes.stream().map(Model::node).toList();
         List<Term> relTerms = graph.relationships.stream().map(Model::relationship).toList();
-        Term term = new Term.Record(new hydra.core.Record(
-            new hydra.core.Name("hydra.demos.neo4jvalidation.Graph"),
-            hydra.overlay.java.util.ConsList.<hydra.core.Field>of(
-                new hydra.core.Field(new hydra.core.Name("nodes"), new Term.List(nodeTerms)),
-                new hydra.core.Field(new hydra.core.Name("relationships"), new Term.List(relTerms)))));
+        Term term = new Term.Record(new hydra.core.model.Record(
+            new hydra.core.model.Name("hydra.demos.neo4jvalidation.Graph"),
+            hydra.core.overlay.java.util.ConsList.<hydra.core.model.Field>of(
+                new hydra.core.model.Field(new hydra.core.model.Name("nodes"), new Term.List(nodeTerms)),
+                new hydra.core.model.Field(new hydra.core.model.Name("relationships"), new Term.List(relTerms)))));
         return termToJson(term, "graph");
     }
 

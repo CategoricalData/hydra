@@ -1,29 +1,29 @@
 package hydra.sources.jvm;
-import hydra.dsl.lib.Equality;
-import hydra.dsl.lib.Lists;
-import hydra.dsl.lib.Logic;
-import hydra.dsl.lib.Math_;
-import hydra.dsl.lib.Optionals;
-import hydra.dsl.lib.Ordering;
-import hydra.dsl.lib.Strings;
-import hydra.packaging.Definition;
-import hydra.packaging.EntityMetadata;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleDependency;
-import hydra.packaging.ModuleName;
-import hydra.typed.TypedTerm;
-import hydra.overlay.java.util.Optional;
+import hydra.core.dsl.lib.Equality;
+import hydra.core.dsl.lib.Lists;
+import hydra.core.dsl.lib.Logic;
+import hydra.core.dsl.lib.Math_;
+import hydra.core.dsl.lib.Optionals;
+import hydra.core.dsl.lib.Ordering;
+import hydra.core.dsl.lib.Strings;
+import hydra.core.packaging.Definition;
+import hydra.core.packaging.EntityMetadata;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleDependency;
+import hydra.core.packaging.ModuleName;
+import hydra.core.typed.TypedTerm;
+import hydra.core.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static hydra.overlay.java.dsl.meta.Phantoms.*;
-import hydra.overlay.java.dsl.meta.Defs;
-import hydra.overlay.java.dsl.meta.Defs.Def;
-import static hydra.overlay.java.dsl.meta.Defs.define;
-import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
-import static hydra.overlay.java.dsl.meta.Defs.ref;
-import static hydra.overlay.java.dsl.meta.Defs.definitionsOf;
+import static hydra.core.overlay.java.dsl.Phantoms.*;
+import hydra.core.overlay.java.dsl.meta.Defs;
+import hydra.core.overlay.java.dsl.meta.Defs.Def;
+import static hydra.core.overlay.java.dsl.meta.Defs.define;
+import static hydra.core.overlay.java.dsl.meta.Defs.unqualifiedDeps;
+import static hydra.core.overlay.java.dsl.meta.Defs.ref;
+import static hydra.core.overlay.java.dsl.meta.Defs.definitionsOf;
 import java.util.function.Supplier;
 
 public class Serde {
@@ -34,7 +34,7 @@ public class Serde {
     }
 
     /** Fluent form: {@code def("name").doc("...").to(() -> body)}. See Defs.DefBuilder. */
-    private static hydra.overlay.java.dsl.meta.Defs.DefBuilder def(String localName) {
+    private static hydra.core.overlay.java.dsl.meta.Defs.DefBuilder def(String localName) {
         return define(NS, localName);
     }
 
@@ -144,29 +144,29 @@ public class Serde {
     private static final List<Definition> DEFINITIONS = definitionsOf(ALL_DEFS);
 
     private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(
-        new ModuleName("hydra.paths"),
-        new ModuleName("hydra.ast"),
-        new ModuleName("hydra.classes"),
-        new ModuleName("hydra.coders"),
-        new ModuleName("hydra.core"),
-        new ModuleName("hydra.error.checking"),
-        new ModuleName("hydra.error.core"),
-        new ModuleName("hydra.error.packaging"),
-        new ModuleName("hydra.errors"),
-        new ModuleName("hydra.graph"),
-        new ModuleName("hydra.json.model"),
-        new ModuleName("hydra.packaging"),
-        new ModuleName("hydra.parsing"),
-        new ModuleName("hydra.query"),
-        new ModuleName("hydra.relational"),
-        new ModuleName("hydra.tabular"),
-        new ModuleName("hydra.testing"),
-        new ModuleName("hydra.topology"),
-        new ModuleName("hydra.typed"),
-        new ModuleName("hydra.typing"),
-        new ModuleName("hydra.util"),
-        new ModuleName("hydra.validation"),
-        new ModuleName("hydra.variants"));
+        new ModuleName("hydra.core.paths"),
+        new ModuleName("hydra.core.ast"),
+        new ModuleName("hydra.core.classes"),
+        new ModuleName("hydra.core.coders"),
+        new ModuleName("hydra.core.model"),
+        new ModuleName("hydra.core.error.checking"),
+        new ModuleName("hydra.core.error.model"),
+        new ModuleName("hydra.core.error.packaging"),
+        new ModuleName("hydra.core.errors"),
+        new ModuleName("hydra.core.graph"),
+        new ModuleName("hydra.core.json.model"),
+        new ModuleName("hydra.core.packaging"),
+        new ModuleName("hydra.core.parsing"),
+        new ModuleName("hydra.core.query"),
+        new ModuleName("hydra.core.relational"),
+        new ModuleName("hydra.core.tabular"),
+        new ModuleName("hydra.core.testing"),
+        new ModuleName("hydra.core.topology"),
+        new ModuleName("hydra.core.typed"),
+        new ModuleName("hydra.core.typing"),
+        new ModuleName("hydra.core.util"),
+        new ModuleName("hydra.core.validation"),
+        new ModuleName("hydra.core.variants"));
 
     public static final Module module_ = new Module(
         NS,

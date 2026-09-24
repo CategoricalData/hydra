@@ -59,7 +59,7 @@ sourceSets {
 
 dependencies {
     // Pulls net.fortytwo.hydra.java:hydra-kernel transitively (per the hydra-java
-    // POM): kernel runtime + hydra.Codegen + hydra.dsl.java.* coder.
+    // POM): kernel runtime + hydra.Codegen + hydra.java.dsl.* coder.
     api "net.fortytwo.hydra.java:hydra-java:${hostVersion}"
     // GenerationTargets.java references EVERY target coder unconditionally as one
     // compilation unit (it has a writer method per target), so all must be on the
@@ -77,7 +77,7 @@ dependencies {
     // the prior local srcDir workaround's comment claiming otherwise (stale — that
     // comment predates hydra-build's publication). The published jar carries both
     // hydra.build.* (Routing etc., #560) and the overlay-merged
-    // hydra.overlay.java.build.Generation (#459) — confirmed via `jar tf` on the
+    // hydra.build.overlay.java.Generation (#459) — confirmed via `jar tf` on the
     // 0.17.5 artifact. Consuming it here (instead of srcDir'ing the locally-
     // assembled dist/java/hydra-build/src) breaks the cold-clone circularity: this
     // driver no longer needs a local dist/java/hydra-build to exist before it can

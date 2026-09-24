@@ -168,7 +168,7 @@
         '("loader.lisp" "prelude.lisp" "prims.lisp" "lazy.lisp"
           "struct-compat.lisp" "json-reader.lisp")))
 
-;; Set function bindings for native library defvars (e.g. hydra_overlay_common_lisp_lib_maps_singleton)
+;; Set function bindings for native library defvars (e.g. hydra_core_overlay_common_lisp_lib_maps_singleton)
 ;; so they can be called in function position in generated code.
 (hydra-set-function-bindings)
 
@@ -184,7 +184,7 @@
 
 ;; #498: the system overlay impl evaluates its effect values at load time (each
 ;; effectful primitive is a defvar holding the computed value), and get_time
-;; constructs a Timespec via make-hydra_time_timespec. That defstruct is defined
+;; constructs a Timespec via make-hydra_core_time_timespec. That defstruct is defined
 ;; by the generated hydra/time.lisp loaded in (hydra-load-gen-main) above, so
 ;; system.lisp must load AFTER it (not in the early overlay lib dolist).
 (load (hydra-dist-main-path "overlay/common_lisp/lib/system.lisp"))
@@ -198,7 +198,7 @@
 ;; dist/json/hydra-build/src/main/json/expected-libraries.json by update-json-manifest.
 ;; Here we fail LOUDLY, with the named culprit, if this host's native runtime is
 ;; missing any expected library — the #533 payoff. "Registered" is probed at the
-;; RUNTIME level (is there a bound hydra_overlay_common_lisp_lib_<name>_* symbol?)
+;; RUNTIME level (is there a bound hydra_core_overlay_common_lisp_lib_<name>_* symbol?)
 ;; rather than by inspecting any hardcoded load list, so the check is immune to
 ;; drift between the loader's and this harness's native-lib dolists.
 ;;
@@ -271,7 +271,7 @@
     (when (probe-file path)
       (hydra-load-file path))))
 
-;; #546: the hydra.test.build.* test data moved to the hydra-build package, so
+;; #546: the hydra.core.test.build.* test data moved to the hydra-build package, so
 ;; it lives under dist/common-lisp/hydra-build/... rather than the kernel test
 ;; tree above. In the bootstrap-demo flat layout (HYDRA_LISP_DIST_BASE set) all
 ;; packages share one tree, so *test-data-base* already covers it.
@@ -296,20 +296,20 @@
 (load-test-file "test_terms.lisp")
 (load (hydra-head-path "src/test/common-lisp/hydra/annotation_bindings.lisp"))
 ;; Load the hand-written test_env.lisp BEFORE test_graph.lisp.
-;; The kernel filters hydra.test.testEnv from generated output (per the
+;; The kernel filters hydra.core.test.testEnv from generated output (per the
 ;; testSkipEmit set in each host bootstrap), so we provide
-;; hydra_test_test_env_test_context and hydra_test_test_env_test_graph
-;; here. test_graph.lisp's defpackage references :hydra.test.testEnv.
+;; hydra_core_test_test_env_test_context and hydra_core_test_test_env_test_graph
+;; here. test_graph.lisp's defpackage references :hydra.core.test.testEnv.
 ;; #434/#501: test_env.lisp now lives in overlay/common-lisp/ under the renamed
-;; hydra.overlay.common_lisp.test namespace and is copied into the dist MAIN tree
+;; hydra.core.overlay.common_lisp.test namespace and is copied into the dist MAIN tree
 ;; at overlay/common_lisp/test/test_env.lisp, so it loads from the dist main hydra
 ;; dir (hydra-dist-main-path) rather than the generated test tree (*test-data-base*).
-;; It is HAND-WRITTEN (uses cl:defpackage :hydra.test.testEnv + cl:import), so it
+;; It is HAND-WRITTEN (uses cl:defpackage :hydra.core.test.testEnv + cl:import), so it
 ;; must be plain cl:load'd — hydra-load-file skips defpackage forms (see
 ;; hydra-skip-form-p), which would leave the package uncreated and the import
 ;; failing.
 (load (hydra-dist-main-path "overlay/common_lisp/test/test_env.lisp"))
-;; Ensure the lambda value bound to hydra_test_test_env_test_graph
+;; Ensure the lambda value bound to hydra_core_test_test_env_test_graph
 ;; gets a symbol-function cell so it's callable in function position.
 (hydra-set-function-bindings)
 (load-test-file "test_graph.lisp")
@@ -421,7 +421,7 @@
 (format t "~%Running tests...~%~%")
 
 (defvar *test-t0* (get-internal-real-time))
-(defvar *results* (run-test-group "" hydra_test_test_suite_all_tests))
+(defvar *results* (run-test-group "" hydra_core_test_test_suite_all_tests))
 (defvar *total-ms* (* 1000.0 (/ (- (get-internal-real-time) *test-t0*) internal-time-units-per-second)))
 
 (let* ((pass (first *results*))

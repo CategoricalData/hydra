@@ -29,7 +29,7 @@ if [ ! -f "$OUTPUT_DIR/src/test/clojure/run_tests.clj" ]; then
     cp "$HYDRA_CLOJURE_DIR/src/test/clojure/run_tests.clj" "$OUTPUT_DIR/src/test/clojure/"
 fi
 # testGraph.clj post-generation patch removed. The DSL emits
-# (hydra.test.testEnv :refer :all) and references
+# (hydra.core.test.testEnv :refer :all) and references
 # hydra_test_test_env_test_{context,graph} directly. Copy the
 # hand-written testEnv.clj (plus sibling test_runner.clj / annotation_bindings.clj)
 # into the dist tree so the generated requires resolve.

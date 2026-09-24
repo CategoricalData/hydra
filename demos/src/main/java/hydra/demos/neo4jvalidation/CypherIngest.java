@@ -1,17 +1,17 @@
 package hydra.demos.neo4jvalidation;
 
-import hydra.core.Term;
-import hydra.encode.neo4j.Model;
+import hydra.core.model.Term;
+import hydra.core.encode.neo4j.Model;
 import hydra.json.Encode;
 import hydra.json.Writer;
-import hydra.json.model.Value;
-import hydra.neo4j.model.ElementId;
-import hydra.neo4j.model.Key;
-import hydra.neo4j.model.Node;
-import hydra.neo4j.model.NodeLabel;
-import hydra.neo4j.model.Relationship;
-import hydra.neo4j.model.RelationshipType;
-import hydra.overlay.java.util.Either;
+import hydra.core.json.model.Value;
+import hydra.pg.neo4j.model.ElementId;
+import hydra.pg.neo4j.model.Key;
+import hydra.pg.neo4j.model.Node;
+import hydra.pg.neo4j.model.NodeLabel;
+import hydra.pg.neo4j.model.Relationship;
+import hydra.pg.neo4j.model.RelationshipType;
+import hydra.core.overlay.java.util.Either;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -38,7 +38,7 @@ import java.util.Set;
  * data: node patterns {@code (var:Label {k: v, ...})} and relationship patterns
  * {@code (a)-[:TYPE {k: v}]->(b)} / {@code (a)<-[:TYPE]-(b)}, with string, integer, float, boolean,
  * and list-of-literal property values. It is not a full openCypher parser (the project ships one of
- * those as a Java overlay, {@code hydra.overlay.java.cypher.CypherReader}); it covers exactly what a
+ * those as a Java overlay, {@code hydra.pg.overlay.java.cypher.CypherReader}); it covers exactly what a
  * data-seeding script needs, with no third-party dependencies, so the demo runs anywhere.
  *
  * <p>Usage: java hydra.demos.neo4jvalidation.CypherIngest &lt;input.cypher&gt; &lt;output.json&gt;
@@ -157,7 +157,7 @@ public class CypherIngest {
         String inner = seg.substring(1, seg.length() - 1).trim();  // strip ( )
         // Split off the property map (if any).
         String head = inner;
-        Map<Key, hydra.neo4j.model.Value> props = new LinkedHashMap<>();
+        Map<Key, hydra.pg.neo4j.model.Value> props = new LinkedHashMap<>();
         int brace = inner.indexOf('{');
         if (brace >= 0) {
             head = inner.substring(0, brace).trim();
@@ -199,7 +199,7 @@ public class CypherIngest {
         boolean leftArrow = relSeg.contains("<");
         boolean rightArrow = relSeg.contains(">");
         String type = "";
-        Map<Key, hydra.neo4j.model.Value> props = new LinkedHashMap<>();
+        Map<Key, hydra.pg.neo4j.model.Value> props = new LinkedHashMap<>();
         int lb = relSeg.indexOf('[');
         if (lb >= 0) {
             int rb = matchBracket(relSeg, lb);
@@ -229,8 +229,8 @@ public class CypherIngest {
     }
 
     /** Parse a "{k: v, k2: v2}" property map. */
-    private static Map<Key, hydra.neo4j.model.Value> parsePropertyMap(String map) {
-        Map<Key, hydra.neo4j.model.Value> result = new LinkedHashMap<>();
+    private static Map<Key, hydra.pg.neo4j.model.Value> parsePropertyMap(String map) {
+        Map<Key, hydra.pg.neo4j.model.Value> result = new LinkedHashMap<>();
         String inner = map.substring(1, map.length() - 1).trim();  // strip { }
         if (inner.isEmpty()) {
             return result;
@@ -248,32 +248,32 @@ public class CypherIngest {
     }
 
     /** Parse a literal value: string, integer, float, boolean, or list of literals. */
-    private static hydra.neo4j.model.Value parseValue(String v) {
+    private static hydra.pg.neo4j.model.Value parseValue(String v) {
         v = v.trim();
         if (v.startsWith("'") || v.startsWith("\"")) {
-            return new hydra.neo4j.model.Value.String_(unquote(v));
+            return new hydra.pg.neo4j.model.Value.String_(unquote(v));
         }
         if (v.startsWith("[")) {
-            List<hydra.neo4j.model.Value> items = new ArrayList<>();
+            List<hydra.pg.neo4j.model.Value> items = new ArrayList<>();
             String inner = v.substring(1, v.length() - 1).trim();
             if (!inner.isEmpty()) {
                 for (String item : splitTopLevel(inner)) {
                     items.add(parseValue(item.trim()));
                 }
             }
-            return new hydra.neo4j.model.Value.List(items);
+            return new hydra.pg.neo4j.model.Value.List(items);
         }
         if (v.equalsIgnoreCase("true") || v.equalsIgnoreCase("false")) {
-            return new hydra.neo4j.model.Value.Boolean_(Boolean.parseBoolean(v));
+            return new hydra.pg.neo4j.model.Value.Boolean_(Boolean.parseBoolean(v));
         }
         if (v.matches("[+-]?\\d+")) {
-            return new hydra.neo4j.model.Value.Integer_(Long.parseLong(v));
+            return new hydra.pg.neo4j.model.Value.Integer_(Long.parseLong(v));
         }
         if (v.matches("[+-]?\\d*\\.\\d+([eE][+-]?\\d+)?")) {
-            return new hydra.neo4j.model.Value.Float_(Double.parseDouble(v));
+            return new hydra.pg.neo4j.model.Value.Float_(Double.parseDouble(v));
         }
         // Fall back to a string for anything else (e.g. an unquoted token).
-        return new hydra.neo4j.model.Value.String_(v);
+        return new hydra.pg.neo4j.model.Value.String_(v);
     }
 
     // ------------------------------------------------------------------------
@@ -422,11 +422,11 @@ public class CypherIngest {
     private static String encodeGraphToJson(Graph graph) {
         List<Term> nodeTerms = graph.nodes.stream().map(Model::node).toList();
         List<Term> relTerms = graph.relationships.stream().map(Model::relationship).toList();
-        Term term = new Term.Record(new hydra.core.Record(
-            new hydra.core.Name("hydra.demos.neo4jvalidation.Graph"),
-            hydra.overlay.java.util.ConsList.<hydra.core.Field>of(
-                new hydra.core.Field(new hydra.core.Name("nodes"), new Term.List(nodeTerms)),
-                new hydra.core.Field(new hydra.core.Name("relationships"), new Term.List(relTerms)))));
+        Term term = new Term.Record(new hydra.core.model.Record(
+            new hydra.core.model.Name("hydra.demos.neo4jvalidation.Graph"),
+            hydra.core.overlay.java.util.ConsList.<hydra.core.model.Field>of(
+                new hydra.core.model.Field(new hydra.core.model.Name("nodes"), new Term.List(nodeTerms)),
+                new hydra.core.model.Field(new hydra.core.model.Name("relationships"), new Term.List(relTerms)))));
         Either<String, Value> result = Encode.toJsonUntyped(term);
         return result.accept(new Either.Visitor<String, Value, String>() {
             @Override

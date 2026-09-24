@@ -95,7 +95,7 @@ See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testin
 
 ### hydra-kernel test suite
 
-The hydra-kernel test suite (`hydra.test.testSuite`) ensures parity across all Hydra implementations.
+The hydra-kernel test suite (`hydra.core.test.testSuite`) ensures parity across all Hydra implementations.
 **Passing all hydra-kernel test suite cases is the criterion for a true Hydra implementation.**
 
 To run all tests:
@@ -294,7 +294,7 @@ Both files were generated from the property graph model defined
 ### Collection classes
 
 Hydra's term-level lists, maps, and sets get persistent (immutable,
-structurally-shared) implementations under `hydra.util`:
+structurally-shared) implementations under `hydra.core.util`:
 
 - `ConsList<T>` — singly-linked list with O(1) `cons` and tail sharing,
   matching Haskell's `[a]`.

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import Generic, TypeVar
 
-from hydra.json.model import (
+from hydra.core.json.model import (
     Value,
     ValueArray,
     ValueBoolean,

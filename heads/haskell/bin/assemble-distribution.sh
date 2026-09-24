@@ -136,7 +136,7 @@ else
 fi
 
 # Step 3: Package-specific post-processing. None today — the generator emits
-# Hydra.Test.TestEnv references directly; see sync-haskell.sh step 5 and
+# Hydra.Core.Test.TestEnv references directly; see sync-haskell.sh step 5 and
 # docs/recipes/maintenance.md "Known accepted patches".
 
 echo "=== Done. $PACKAGE assembled under $OUT_DIR ==="

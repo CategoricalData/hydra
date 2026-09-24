@@ -6,31 +6,31 @@ module Hydra.Sources.Test.Hoisting.Let where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms hiding ((@@))
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                ((@@))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import Hydra.Testing
+import Hydra.Core.Testing
 
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Hoisting as Hoisting
-import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
-import qualified Hydra.Lib.Math as DefMath
-import qualified Hydra.Dsl.Lib.Maps as Maps
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims as Prims
+import qualified Hydra.Core.Lib.Math as DefMath
+import qualified Hydra.Core.Dsl.Lib.Maps as Maps
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.hoisting.let"
+ns = ModuleName "hydra.core.test.hoisting.let"
 
 module_ :: Module
 module_ = Module {
@@ -637,7 +637,7 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
       -- The init binding is polymorphic (has type var t0 from empty list).
       -- After hoisting, the pair must KEEP its TypeApplication wrappers.
       (mkLet [(nm "f",
-        lambdaTyped "b" (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string) (Core.termLet $ mkLet [
+        lambdaTyped "b" (T.wrap (Core.name (Phantoms.string "hydra.core.model.Name")) T.string) (Core.termLet $ mkLet [
           (nm "init",
             -- Term with type lambda and type applications (as inference would produce):
             -- Λt0. TypeApp(TypeApp(Pair(TypeApp([], t0), singleton(b)), List<t0>), Set<Name>)
@@ -646,33 +646,33 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
                 (tyapp (list ([] :: [TypedTerm Term])) (T.var "t0"))
                 (apply (var "singleton") (var "b")))
               (T.list (T.var "t0")))
-              (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string))),
-            polyType ["t0"] (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string))))]
+              (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.model.Name")) T.string))),
+            polyType ["t0"] (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.model.Name")) T.string))))]
           (var "init")),
-        monoType (T.function (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
-          (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)))))]
+        monoType (T.function (T.wrap (Core.name (Phantoms.string "hydra.core.model.Name")) T.string)
+          (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.model.Name")) T.string)))))]
         (apply (var "f") (var "name_x")))
       -- Expected output: f first (original), then f_init hoisted.
       -- The hoisted binding must retain TypeApplication wrappers on the pair.
       -- Λt0 is stripped and re-added by hoisting, but inner type apps on pair are preserved.
       (mkLet [
         (nm "f",
-          lambdaTyped "b" (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
+          lambdaTyped "b" (T.wrap (Core.name (Phantoms.string "hydra.core.model.Name")) T.string)
             (apply (var "f_init") (var "b")),
-          monoType (T.function (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
-            (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string))))),
+          monoType (T.function (T.wrap (Core.name (Phantoms.string "hydra.core.model.Name")) T.string)
+            (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.model.Name")) T.string))))),
         (nm "f_init",
           -- After hoisting: captures b, re-adds type lambda for t0
           -- The inner type applications on the pair MUST be preserved
-          tylam "t0" (lambdaTyped "b" (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
+          tylam "t0" (lambdaTyped "b" (T.wrap (Core.name (Phantoms.string "hydra.core.model.Name")) T.string)
             (tyapp (tyapp
               (pair
                 (tyapp (list ([] :: [TypedTerm Term])) (T.var "t0"))
                 (apply (var "singleton") (var "b")))
               (T.list (T.var "t0")))
-              (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)))),
-          polyType ["t0"] (T.function (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
-            (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)))))]
+              (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.model.Name")) T.string)))),
+          polyType ["t0"] (T.function (T.wrap (Core.name (Phantoms.string "hydra.core.model.Name")) T.string)
+            (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.model.Name")) T.string)))))]
         (apply (var "f") (var "name_x"))),
 
     -- ============================================================

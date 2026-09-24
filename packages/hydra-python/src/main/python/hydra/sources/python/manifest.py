@@ -8,7 +8,7 @@ to enumerate which Hydra modules belong to the hydra-python package. There is no
 per-module JSON output; the manifest contributes to dist/json/hydra-python/manifest.json.
 """
 
-from hydra.packaging import Module
+from hydra.core.packaging import Module
 
 # Imports are deferred to the body of the lists to avoid forcing every module to be built
 # when only manifest metadata is needed. Each is the `module_` value from the corresponding

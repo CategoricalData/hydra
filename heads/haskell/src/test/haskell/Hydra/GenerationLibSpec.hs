@@ -1,6 +1,6 @@
 -- | Regression tests for 'overlayLibSubs' (#568/#630): the on-disk overlay-directory
 -- existence check that drives emission-time redirect of hydra.lib.<sub> references to
--- hydra.overlay.<lang>.lib.<sub>. #630 moved the redirect itself into each coder (Haskell,
+-- hydra.core.overlay.<lang>.lib.<sub>. #630 moved the redirect itself into each coder (Haskell,
 -- TypeScript, Scala, Python, Lisp), consulting 'overlayLibSubs' directly at coding time;
 -- the driver-level post-generation correction pass this file used to also test
 -- ('correctHaskellLibRedirect'/'correctTypeScriptLibRedirect') is now dead code, deleted.
@@ -25,7 +25,7 @@ spec = do
     H.it "finds a known overlay-backed sub (chars)" $
       S.member "chars" haskellSubs `H.shouldBe` True
 
-    H.it "does NOT find hydra.lib.defaults (no overlay implementation)" $
+    H.it "does NOT find hydra.core.lib.defaults (no overlay implementation)" $
       S.member "defaults" haskellSubs `H.shouldBe` False
 
     H.it "excludes the shared Libraries registry file" $
@@ -35,5 +35,5 @@ spec = do
     H.it "finds a known overlay-backed sub (math)" $
       S.member "math" typeScriptSubs `H.shouldBe` True
 
-    H.it "does NOT find hydra.lib.defaults (no overlay implementation)" $
+    H.it "does NOT find hydra.core.lib.defaults (no overlay implementation)" $
       S.member "defaults" typeScriptSubs `H.shouldBe` False

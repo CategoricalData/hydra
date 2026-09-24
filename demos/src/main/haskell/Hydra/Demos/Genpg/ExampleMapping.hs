@@ -2,15 +2,15 @@
 
 module Hydra.Demos.Genpg.ExampleMapping where
 
-import Hydra.Core (Term)
+import Hydra.Core.Model (Term)
 import Hydra.Pg.Model (Edge, Vertex, LazyGraph)
-import Hydra.Formatting (decapitalize)
-import Hydra.Typed (TypedTerm)
-import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms ((@@), constant, just, lambda, list, nothing, string, var)
-import Hydra.Overlay.Haskell.Dsl.Pg.Mappings (column, edge, edgeNoId, graph, property, vertex)
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
-import qualified Hydra.Dsl.Lib.Strings as Strings
+import Hydra.Core.Formatting (decapitalize)
+import Hydra.Core.Typed (TypedTerm)
+import Hydra.Core.Overlay.Haskell.Dsl.Phantoms ((@@), constant, just, lambda, list, nothing, string, var)
+import Hydra.Pg.Overlay.Haskell.Dsl.Mappings (column, edge, edgeNoId, graph, property, vertex)
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Core.Dsl.Lib.Strings as Strings
 import Hydra.Demos.Genpg.ExampleGraphSchema
 
 -- Helpers -----------------------

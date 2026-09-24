@@ -43,7 +43,7 @@ contract both runtimes honor.
 ## Running tests
 
 ```bash
-# M1 smoke test (hydra.constants.* with no-arg exports)
+# M1 smoke test (hydra.core.constants.* with no-arg exports)
 heads/wasm/bin/test-wasm.sh
 
 # A custom manifest
@@ -56,9 +56,9 @@ heads/wasm/bin/test-wasm.sh path/to/manifest.json
 {
   "wasm_file": "dist/wasm/hydra-kernel/src/main/wat/hydra/constants.wat",
   "tests": [
-    { "name": "...", "export": "hydra.constants.max_int32",
+    { "name": "...", "export": "hydra.core.constants.max_int32",
       "kind": "i32", "expected": 2147483647 },
-    { "name": "...", "export": "hydra.constants.keyClasses",
+    { "name": "...", "export": "hydra.core.constants.keyClasses",
       "kind": "string", "expected": "classes" }
   ]
 }
@@ -73,7 +73,7 @@ Fields:
 
 This schema is temporary and milestone-specific; later milestones will
 replace it with coder-generated manifests and then (eventually) with direct
-traversal of `hydra.test.TestSuite` from Wasm memory.
+traversal of `hydra.core.test.TestSuite` from Wasm memory.
 
 ## Milestones
 
@@ -82,7 +82,7 @@ In brief:
 - **M1**: harness + manifest + a handful of zero-arg constants run.
 - **M2**: ~20 first-order kernel functions run, first primitive library
   implementations added.
-- **M3**: simple `hydra.test.lib.*` tests run.
+- **M3**: simple `hydra.core.test.lib.*` tests run.
 - **M4**: closures (the wall). Exploratory work through M4a (closure
   arity/survey/demo probes: `m2-arity-test.mjs`, `m3-survey.mjs`,
   `m4a-closure-{test.mjs,demo.wat}`) is present in `heads/wasm/`.

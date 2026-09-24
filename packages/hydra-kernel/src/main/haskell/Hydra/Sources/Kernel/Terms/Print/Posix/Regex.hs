@@ -3,45 +3,45 @@ module Hydra.Sources.Kernel.Terms.Print.Posix.Regex where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import qualified Hydra.Dsl.Paths    as Paths
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
-import qualified Hydra.Dsl.Ast          as Ast
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Coders       as Coders
-import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph        as Graph
-import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Lib.Math     as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Literals          as Literals
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base         as MetaBase
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms        as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types        as MetaTypes
-import qualified Hydra.Dsl.Packaging       as Packaging
-import qualified Hydra.Dsl.Parsing      as Parsing
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Prims             as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular           as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing      as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Terms             as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Tests             as Tests
-import qualified Hydra.Dsl.Topology     as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
-import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Util         as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
+import qualified Hydra.Core.Dsl.Paths    as Paths
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations       as Annotations
+import qualified Hydra.Core.Dsl.Ast          as Ast
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Coders       as Coders
+import qualified Hydra.Core.Dsl.Util      as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph        as Graph
+import qualified Hydra.Core.Dsl.Json.Model         as Json
+import qualified Hydra.Core.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Math     as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals          as Literals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base         as MetaBase
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms        as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types        as MetaTypes
+import qualified Hydra.Core.Dsl.Packaging       as Packaging
+import qualified Hydra.Core.Dsl.Parsing      as Parsing
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims             as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular           as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing      as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms             as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests             as Tests
+import qualified Hydra.Core.Dsl.Topology     as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Dsl.Typing       as Typing
+import qualified Hydra.Core.Dsl.Util         as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -52,40 +52,40 @@ import qualified Data.Maybe                  as Y
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.print.posix.regex"
+ns = ModuleName "hydra.core.print.posix.regex"
 
--- Local Name constants for the hydra.regex types and fields (the generated Hydra.Dsl.Regex wrapper is
+-- Local Name constants for the hydra.core.regex types and fields (the generated Hydra.Core.Dsl.Regex wrapper is
 -- not available at Sources-compile time; see Print/Regex.hs). Referenced via project/match only.
 _CharacterRange :: Name
-_CharacterRange = Name "hydra.regex.CharacterRange"
+_CharacterRange = Name "hydra.core.regex.CharacterRange"
 _CharacterRange_from :: Name
 _CharacterRange_from = Name "from"
 _CharacterRange_to :: Name
 _CharacterRange_to = Name "to"
 
 _CharacterClass :: Name
-_CharacterClass = Name "hydra.regex.CharacterClass"
+_CharacterClass = Name "hydra.core.regex.CharacterClass"
 _CharacterClass_negated :: Name
 _CharacterClass_negated = Name "negated"
 _CharacterClass_items :: Name
 _CharacterClass_items = Name "items"
 
 _QuantifierRange :: Name
-_QuantifierRange = Name "hydra.regex.QuantifierRange"
+_QuantifierRange = Name "hydra.core.regex.QuantifierRange"
 _QuantifierRange_min :: Name
 _QuantifierRange_min = Name "min"
 _QuantifierRange_max :: Name
 _QuantifierRange_max = Name "max"
 
 _Quantified :: Name
-_Quantified = Name "hydra.regex.Quantified"
+_Quantified = Name "hydra.core.regex.Quantified"
 _Quantified_atom :: Name
 _Quantified_atom = Name "atom"
 _Quantified_quantifier :: Name
 _Quantified_quantifier = Name "quantifier"
 
 _Atom :: Name
-_Atom = Name "hydra.regex.Atom"
+_Atom = Name "hydra.core.regex.Atom"
 _Atom_literal :: Name
 _Atom_literal = Name "literal"
 _Atom_any :: Name
@@ -100,14 +100,14 @@ _Atom_class :: Name
 _Atom_class = Name "class"
 
 _ClassItem :: Name
-_ClassItem = Name "hydra.regex.ClassItem"
+_ClassItem = Name "hydra.core.regex.ClassItem"
 _ClassItem_character :: Name
 _ClassItem_character = Name "character"
 _ClassItem_range :: Name
 _ClassItem_range = Name "range"
 
 _Quantifier :: Name
-_Quantifier = Name "hydra.regex.Quantifier"
+_Quantifier = Name "hydra.core.regex.Quantifier"
 _Quantifier_one :: Name
 _Quantifier_one = Name "one"
 _Quantifier_zeroOrOne :: Name
@@ -129,9 +129,9 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just $
-              "Per-dialect printer rendering the hydra.regex AST into POSIX ERE syntax (Haskell"
+              "Per-dialect printer rendering the hydra.core.regex AST into POSIX ERE syntax (Haskell"
               <> " Text.Regex.TDFA, Scheme Guile (ice-9 regex)). Differs from the canonical"
-              <> " hydra.print.regex in three places, each probe-verified against TDFA (docs/"
+              <> " hydra.core.print.regex in three places, each probe-verified against TDFA (docs/"
               <> " specification/regex.md and issue #567/#603): (1) Hydra's . (any character INCLUDING"
               <> " newline) renders as the explicit full-code-point-range class"
               <> " [<U+0000>-<U+10FFFF>], because POSIX ERE's native . excludes newline and does not"
@@ -316,6 +316,6 @@ alternation = define "alternation" $
 
 printRegex :: TypedTermDefinition ([Term] -> String)
 printRegex = define "printRegex" $
-  doc ("Render a hydra.regex AST into POSIX ERE syntax. Identical to the canonical printer except that"
+  doc ("Render a hydra.core.regex AST into POSIX ERE syntax. Identical to the canonical printer except that"
     <> " . (any incl. newline) becomes the explicit full-code-point-range class.") $
   "r" ~> alternation @@ var "r"

@@ -1,14 +1,14 @@
 package hydra.sources.scala
 
-import hydra.overlay.scala.dsl.{Helpers, Phantoms}
-import hydra.overlay.scala.dsl.meta.Defs
-import hydra.packaging.{Definition, EntityMetadata, Module, ModuleName}
-import hydra.typed.TypedTerm
+import hydra.core.overlay.scala.dsl.{Helpers, Phantoms}
+import hydra.core.overlay.scala.dsl.meta.Defs
+import hydra.core.packaging.{Definition, EntityMetadata, Module, ModuleName}
+import hydra.core.typed.TypedTerm
 
-import hydra.dsl.{coders => Coders, file => FileDsl, lib => Lib, util => UtilDsl, variants => Variants}
-import hydra.dsl.lib.{lists => Lists, sets => Sets}
-import hydra.dsl as KernelDsl
-import hydra.core as KernelCore
+import hydra.core.dsl.{coders => Coders, file => FileDsl, lib => Lib, util => UtilDsl, variants => Variants}
+import hydra.core.dsl.lib.{lists => Lists, sets => Sets}
+import hydra.core.dsl as KernelDsl
+import hydra.core.model as KernelCore
 
 /**
  * Language constraints and reserved words for Scala.
@@ -18,7 +18,7 @@ object Language:
   val NS: ModuleName = "hydra.scala.language"
 
   /** Dependencies list — `Lexical.ns ++ KernelTypes.kernelTypesModuleNames` in the Haskell source. */
-  private val KERNEL_DEPS: Seq[ModuleName] = Seq("hydra.lexical") ++ Helpers.kernelTypesModuleNames
+  private val KERNEL_DEPS: Seq[ModuleName] = Seq("hydra.core.lexical") ++ Helpers.kernelTypesModuleNames
 
   // ===== scalaLanguage =====
 

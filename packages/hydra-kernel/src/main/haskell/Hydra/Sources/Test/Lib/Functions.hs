@@ -2,46 +2,46 @@ module Hydra.Sources.Test.Lib.Functions where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
-import Hydra.Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
-import qualified Hydra.Lib.Functions as DefFunctions
-import qualified Hydra.Lib.Ordering as DefOrdering
+import Hydra.Core.Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims as Prims
+import qualified Hydra.Core.Lib.Functions as DefFunctions
+import qualified Hydra.Core.Lib.Ordering as DefOrdering
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.lib.functions"
+ns = ModuleName "hydra.core.test.lib.functions"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.reduction", ModuleName "hydra.print.core", ModuleName "hydra.core", ModuleName "hydra.errors", ModuleName "hydra.test.testGraph", ModuleName "hydra.testing", ModuleName "hydra.util"],
-            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.functions primitives")}
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core.reduction", ModuleName "hydra.core.print.model", ModuleName "hydra.core.model", ModuleName "hydra.core.errors", ModuleName "hydra.core.test.testGraph", ModuleName "hydra.core.testing", ModuleName "hydra.core.util"],
+            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.core.lib.functions primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
--- Test groups for hydra.lib.functions primitives
+-- Test groups for hydra.core.lib.functions primitives
 
--- Note: hydra.lib.functions.absurd (void -> x) is deliberately untested in the common suite.
+-- Note: hydra.core.lib.functions.absurd (void -> x) is deliberately untested in the common suite.
 -- void is uninhabited: no well-typed term can construct a value of type void to pass as its
 -- argument, so there is no valid input for a primCase to exercise. Its native implementations
 -- are still shipped across every host, and its type-correctness is exercised indirectly by any
 -- consumer that eliminates a void-containing type.
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for hydra.lib.functions primitives" $
-    supergroup "hydra.lib.functions primitives" [
+    Phantoms.doc "Test cases for hydra.core.lib.functions primitives" $
+    supergroup "hydra.core.lib.functions primitives" [
       functionsIdentity,
       functionsConst,
       functionsFlip]

@@ -60,7 +60,7 @@ sourceSets {
             srcDir file("$projectDir/../../heads/java/src/main/java")
             include 'hydra/BenchInference.java'
             include 'hydra/Bootstrap.java'
-            // hydra.overlay.java.build.Generation (#459) moved into the hydra-build
+            // hydra.build.overlay.java.Generation (#459) moved into the hydra-build
             // overlay — the main source set above already picks it up via its
             // dist/java/hydra-build/src/main/java srcDir (line 33), since
             // copy-overlay.sh merges it onto that dist tree on every assemble.
@@ -84,7 +84,7 @@ sourceSets {
         java {
             srcDirs += file("$projectDir/../../heads/java/src/test/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-kernel/src/test/java")
-            // hydra-build (#546): the hydra.test.build.* classes moved here from the
+            // hydra-build (#546): the hydra.core.test.build.* classes moved here from the
             // kernel test tree. Kept on the test compile path so the build tests
             // remain available to the runner.
             srcDirs += file("$projectDir/../../dist/java/hydra-build/src/test/java")

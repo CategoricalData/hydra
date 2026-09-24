@@ -1,21 +1,21 @@
 package hydra.demos.neo4jvalidation;
 
-import hydra.json.model.Value;
-import hydra.neo4j.model.Constraint;
-import hydra.neo4j.model.ConstraintDefinition;
-import hydra.neo4j.model.ElementId;
-import hydra.neo4j.model.GraphType;
-import hydra.neo4j.model.Key;
-import hydra.neo4j.model.Node;
-import hydra.neo4j.model.NodeElementType;
-import hydra.neo4j.model.NodeLabel;
-import hydra.neo4j.model.PropertyExistenceConstraint;
-import hydra.neo4j.model.PropertyTypeConstraint;
-import hydra.neo4j.model.Relationship;
-import hydra.neo4j.model.RelationshipElementType;
-import hydra.neo4j.model.RelationshipType;
-import hydra.neo4j.model.ValueType;
-import hydra.overlay.java.util.Optional;
+import hydra.core.json.model.Value;
+import hydra.pg.neo4j.model.Constraint;
+import hydra.pg.neo4j.model.ConstraintDefinition;
+import hydra.pg.neo4j.model.ElementId;
+import hydra.pg.neo4j.model.GraphType;
+import hydra.pg.neo4j.model.Key;
+import hydra.pg.neo4j.model.Node;
+import hydra.pg.neo4j.model.NodeElementType;
+import hydra.pg.neo4j.model.NodeLabel;
+import hydra.pg.neo4j.model.PropertyExistenceConstraint;
+import hydra.pg.neo4j.model.PropertyTypeConstraint;
+import hydra.pg.neo4j.model.Relationship;
+import hydra.pg.neo4j.model.RelationshipElementType;
+import hydra.pg.neo4j.model.RelationshipType;
+import hydra.pg.neo4j.model.ValueType;
+import hydra.core.overlay.java.util.Optional;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -26,7 +26,7 @@ import java.util.Set;
 
 /**
  * Decodes Neo4j-model objects from the canonical Hydra term-JSON produced by
- * {@code hydra.encode.neo4j.Model} + {@code hydra.json}.
+ * {@code hydra.core.encode.neo4j.Model} + {@code hydra.json}.
  *
  * <p>The JSON encoding follows Hydra's standard conventions:
  * <ul>
@@ -123,23 +123,23 @@ class JsonNeo4jDecoder {
         ElementId id = new ElementId(expectString(requireField(obj, "id")));
         Set<NodeLabel> labels = decodeSet(requireField(obj, "labels"),
             v -> new NodeLabel(expectString(v)));
-        Map<Key, hydra.neo4j.model.Value> props = decodeProperties(requireField(obj, "properties"));
+        Map<Key, hydra.pg.neo4j.model.Value> props = decodeProperties(requireField(obj, "properties"));
         return new Node(id, labels, props);
     }
 
     private static Relationship decodeRelationship(Value json) {
         Map<String, Value> obj = expectObject(json);
         ElementId id = new ElementId(expectString(requireField(obj, "id")));
-        Map<Key, hydra.neo4j.model.Value> props = decodeProperties(requireField(obj, "properties"));
+        Map<Key, hydra.pg.neo4j.model.Value> props = decodeProperties(requireField(obj, "properties"));
         RelationshipType type = new RelationshipType(expectString(requireField(obj, "type")));
         ElementId start = new ElementId(expectString(requireField(obj, "start")));
         ElementId end = new ElementId(expectString(requireField(obj, "end")));
         return new Relationship(id, props, type, start, end);
     }
 
-    private static Map<Key, hydra.neo4j.model.Value> decodeProperties(Value json) {
+    private static Map<Key, hydra.pg.neo4j.model.Value> decodeProperties(Value json) {
         List<Value> arr = expectArray(json);
-        Map<Key, hydra.neo4j.model.Value> result = new LinkedHashMap<>();
+        Map<Key, hydra.pg.neo4j.model.Value> result = new LinkedHashMap<>();
         for (Value entry : arr) {
             Map<String, Value> e = expectObject(entry);
             Key k = new Key(expectString(requireField(e, "key")));
@@ -148,26 +148,26 @@ class JsonNeo4jDecoder {
         return result;
     }
 
-    private static hydra.neo4j.model.Value decodeValueData(Value json) {
+    private static hydra.pg.neo4j.model.Value decodeValueData(Value json) {
         Map<String, Value> obj = expectObject(json);
         if (obj.get("boolean") != null) {
-            return new hydra.neo4j.model.Value.Boolean_(expectBoolean(obj.get("boolean")));
+            return new hydra.pg.neo4j.model.Value.Boolean_(expectBoolean(obj.get("boolean")));
         }
         if (obj.get("string") != null) {
-            return new hydra.neo4j.model.Value.String_(expectString(obj.get("string")));
+            return new hydra.pg.neo4j.model.Value.String_(expectString(obj.get("string")));
         }
         if (obj.get("integer") != null) {
-            return new hydra.neo4j.model.Value.Integer_(expectLong(obj.get("integer")));
+            return new hydra.pg.neo4j.model.Value.Integer_(expectLong(obj.get("integer")));
         }
         if (obj.get("float") != null) {
-            return new hydra.neo4j.model.Value.Float_(expectNumber(obj.get("float")).doubleValue());
+            return new hydra.pg.neo4j.model.Value.Float_(expectNumber(obj.get("float")).doubleValue());
         }
         if (obj.get("list") != null) {
-            List<hydra.neo4j.model.Value> vs = new ArrayList<>();
+            List<hydra.pg.neo4j.model.Value> vs = new ArrayList<>();
             for (Value v : expectArray(obj.get("list"))) {
                 vs.add(decodeValueData(v));
             }
-            return new hydra.neo4j.model.Value.List(vs);
+            return new hydra.pg.neo4j.model.Value.List(vs);
         }
         throw new RuntimeException("Unsupported value in demo fixtures: " + obj.keySet());
     }
@@ -193,7 +193,7 @@ class JsonNeo4jDecoder {
     private static Map<String, Value> expectObject(Value json) {
         if (json instanceof Value.Object_) {
             Map<String, Value> result = new LinkedHashMap<>();
-            for (hydra.overlay.java.util.Pair<String, Value> pair : ((Value.Object_) json).value) {
+            for (hydra.core.overlay.java.util.Pair<String, Value> pair : ((Value.Object_) json).value) {
                 result.put(pair.first, pair.second);
             }
             return result;

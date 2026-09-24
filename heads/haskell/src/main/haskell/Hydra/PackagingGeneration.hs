@@ -29,12 +29,12 @@ module Hydra.PackagingGeneration (
 import Hydra.Kernel
 -- Hydra.Kernel re-exports most packaging/validation types (Package, PackageName,
 -- ValidationProfile, ValidationResult, validationResultErrors) but NOT
--- Hydra.Error.Packaging (InvalidPackageError) -- import it explicitly, as
+-- Hydra.Core.Error.Packaging (InvalidPackageError) -- import it explicitly, as
 -- Hydra.Generation does.
-import Hydra.Error.Packaging (InvalidPackageError)
+import Hydra.Core.Error.Packaging (InvalidPackageError)
 import Hydra.Generation (ValidationFindings(..), isDerivedModule)
 import qualified Hydra.Build.PackagingProfile as GenPackagingProfile
-import qualified Hydra.Validate.Packaging as ValidatePackaging
+import qualified Hydra.Core.Validate.Packaging as ValidatePackaging
 
 -- | Packages held to the full 'ValidatePackaging.kernelDefaultPackagingProfile'
 -- (every rule, including documentation completeness, is fatal). Every other
@@ -72,7 +72,7 @@ packagingProfileFor = GenPackagingProfile.packagingProfileFor
 -- conflicts) is authored and does not change across inference, so there is
 -- no post-inference call for this — running it twice would be pure
 -- redundant work with zero additional signal. Derived modules
--- (hydra.dsl.*/encode.*/decode.*) are exempted per 'isDerivedModule': their
+-- (hydra.core.dsl.*/encode.*/decode.*) are exempted per 'isDerivedModule': their
 -- definitions are synthesizer-ordered, not alphabetical, so packaging
 -- convention rules would spuriously fail on them. Native-owned packages
 -- ('nativeOwnedPackagingPackages') are excluded entirely — their JSON is

@@ -9,40 +9,40 @@ module Hydra.ExtGeneration (
 ) where
 
 import Hydra.Kernel
-import qualified Hydra.File as File
+import qualified Hydra.Core.File as File
 import Hydra.Generation
 import Hydra.Haskell.Generation
 import Hydra.Sources.Ext
 import Hydra.Sources.All
 
-import Hydra.Cpp.Language (cppLanguage)
+import Hydra.Ext.Cpp.Language (cppLanguage)
 import Hydra.Java.Language
-import Hydra.Json.Schema.Language (jsonSchemaLanguage)
-import Hydra.Protobuf.Language (protobufLanguage)
+import Hydra.Ext.Json.Schema.Language (jsonSchemaLanguage)
+import Hydra.Ext.Protobuf.Language (protobufLanguage)
 import Hydra.Python.Language
-import Hydra.Pegasus.Language (pdlLanguage)
+import Hydra.Ext.Pegasus.Language (pdlLanguage)
 import Hydra.Scala.Language (scalaLanguage)
-import Hydra.Cpp.Coder (moduleToCpp)
-import Hydra.Graphql.Coder (moduleToGraphql)
-import Hydra.Graphql.Language (graphqlLanguage)
+import Hydra.Ext.Cpp.Coder (moduleToCpp)
+import Hydra.Ext.Graphql.Coder (moduleToGraphql)
+import Hydra.Ext.Graphql.Language (graphqlLanguage)
 import Hydra.Java.Coder (moduleToJava)
-import Hydra.Json.Schema.Coder
-import Hydra.Pegasus.Coder (moduleToPdl)
-import Hydra.Protobuf.Coder (moduleToProtobuf)
+import Hydra.Ext.Json.Schema.Coder
+import Hydra.Ext.Pegasus.Coder (moduleToPdl)
+import Hydra.Ext.Protobuf.Coder (moduleToProtobuf)
 import Hydra.Python.Coder (moduleToPython)
 import Hydra.Rust.Coder (moduleToRust)
 import Hydra.Rust.Language (rustLanguage)
-import Hydra.TypeScript.Coder (moduleToTypeScript)
-import Hydra.TypeScript.Language (typeScriptLanguage)
+import Hydra.Typescript.Coder (moduleToTypeScript)
+import Hydra.Typescript.Language (typeScriptLanguage)
 import Hydra.Wasm.Coder (moduleToWasm)
 import Hydra.Wasm.Language (wasmLanguage)
 import Hydra.Lisp.Coder (moduleToLisp)
 import Hydra.Lisp.Language (clojureLanguage, commonLispLanguage, emacsLispLanguage, lispLanguage, schemeLanguage)
 import Hydra.Lisp.Serde (programToExpr)
 import qualified Hydra.Lisp.Syntax as LispSyntax
-import qualified Hydra.Serialization as Serialization
-import qualified Hydra.Names as Names
-import qualified Hydra.Util as Util
+import qualified Hydra.Core.Serialization as Serialization
+import qualified Hydra.Core.Names as Names
+import qualified Hydra.Core.Util as Util
 import Hydra.Scala.Coder (moduleToScala)
 import Hydra.Coq.GenerateDriver (moduleToCoq)
 import Hydra.Coq.Generate (globalFieldMapping, globalConstructorCounts, globalAmbiguousNames, globalSanitizedAccessors)
@@ -82,7 +82,7 @@ writeGraphqlRaw = generateSources moduleToGraphql graphqlLanguage False
 -- come from javaLanguage's supportedFeatures.
 --
 -- #633: the coder (hydra.sources.java.Utils.overlayJavaLibPackageAliases) now emits the
--- correct hydra.lib.<sub> vs. hydra.overlay.java.lib.<sub> reference directly at coding
+-- correct hydra.lib.<sub> vs. hydra.core.overlay.java.lib.<sub> reference directly at coding
 -- time, driven by the on-disk overlay-existence set computed here and threaded in as an
 -- explicit parameter, matching the other 8 hosts (#630). javaOverlayLibDir's entries are
 -- per-sub SUBDIRECTORIES (chars/, system/, ...) rather than the flat per-sub FILES the
@@ -118,7 +118,7 @@ writeProtobuf = generateSources moduleToProtobuf protobufLanguage True
 -- Emission flags come from pythonLanguage's supportedFeatures.
 --
 -- #630: the coder (Hydra.Python.Coder.encodeNamespaceStringWithOverrides) now emits the
--- correct hydra.lib.<sub> vs. hydra.overlay.python.lib.<sub> reference directly at coding
+-- correct hydra.lib.<sub> vs. hydra.core.overlay.python.lib.<sub> reference directly at coding
 -- time, driven by the on-disk overlay-existence set computed here and threaded in as an
 -- explicit parameter. This replaces the old driver-level post-generation text pass
 -- (redirectForSubs "python").
@@ -140,8 +140,8 @@ writeRust = generateSources moduleToRust rustLanguage True
 -- | Generate TypeScript source files from modules.
 -- Emission flags come from typeScriptLanguage's supportedFeatures.
 --
--- #630: the coder (Hydra.TypeScript.Coder.importsToText) emits the correct
--- hydra.lib.<sub> vs. hydra.overlay.typescript.lib.<sub> reference directly at
+-- #630: the coder (Hydra.Typescript.Coder.importsToText) emits the correct
+-- hydra.lib.<sub> vs. hydra.core.overlay.typescript.lib.<sub> reference directly at
 -- coding time, driven by the on-disk overlay-existence set computed here and
 -- threaded in as an explicit parameter. This replaces the old #568
 -- driver-level post-generation text pass (correctTypeScriptLibRedirect), which
@@ -164,10 +164,10 @@ writeCoq basePath universeModules modulesToGenerate =
       -- Hydra primitive library functions are not Hydra modules — they are
       -- implemented host-side (in this case as Coq Definitions/Axioms in
       -- `hydra/lib/*.v`) and are therefore invisible to `globalAmbiguousNames`.
-      -- Collisions like `hydra.lib.eithers.either` vs `hydra.print.core.either`
+      -- Collisions like `hydra.core.lib.eithers.either` vs `hydra.core.print.model.either`
       -- only manifest at Coq's import level. Inject the lib primitive names
       -- into the ambiguous set so that cross-module references in the
-      -- non-lib source (`hydra.print.core.maybe`) stay fully qualified.
+      -- non-lib source (`hydra.core.print.model.maybe`) stay fully qualified.
       an = Set.union (globalAmbiguousNames allMods) coqLibPrimitiveNames
       sa = globalSanitizedAccessors allMods
   in generateSources (moduleToCoq fm cc an sa) coqLanguage True basePath universeModules modulesToGenerate
@@ -176,7 +176,7 @@ writeCoq basePath universeModules modulesToGenerate =
 -- Coq modules. These are invisible to `globalAmbiguousNames` (which walks
 -- Hydra module definitions) because the lib modules are implemented
 -- host-side in hand-written Coq. Used to disambiguate references like
--- `hydra.print.core.maybe` that would otherwise collide with bare imports
+-- `hydra.core.print.model.maybe` that would otherwise collide with bare imports
 -- of the lib modules.
 coqLibPrimitiveNames :: Set.Set String
 coqLibPrimitiveNames = Set.fromList [
@@ -220,7 +220,7 @@ coqLibPrimitiveNames = Set.fromList [
 -- | Wrap moduleToLisp for a specific dialect
 --
 -- #630: the coder (Hydra.Lisp.Coder.moduleImports / encodeTerm's variable arm) now emits the
--- correct hydra.lib.<sub> vs. hydra.overlay.<langSeg>.lib.<sub> reference directly at coding
+-- correct hydra.lib.<sub> vs. hydra.core.overlay.<langSeg>.lib.<sub> reference directly at coding
 -- time, driven by the on-disk overlay-existence set threaded in as an explicit parameter. This
 -- replaces the old driver-level post-generation text passes (redirectForSubs /
 -- redirectSchemeForSubs / redirectLispFlat) for the lib redirect.
@@ -283,7 +283,7 @@ writeEmacsLisp basePath universeModules modulesToGenerate = do
 -- transform in 'generateSourcesWithTransform'), not as a read-back
 -- post-pass on disk. This is unrelated to the #630 overlay-redirect fix
 -- (a pure formatting pass, kept as-is): the coder (Hydra.Scala.Coder.toPrimImport)
--- now emits the correct hydra.lib.<sub> vs. hydra.overlay.scala.lib.<sub>
+-- now emits the correct hydra.lib.<sub> vs. hydra.core.overlay.scala.lib.<sub>
 -- reference directly at coding time, driven by the on-disk overlay-existence
 -- set computed here and threaded in as an explicit parameter -- no post-generation
 -- text pass needed for the lib redirect any more (superseded the driver-level

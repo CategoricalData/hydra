@@ -1,41 +1,41 @@
 package hydra.sources.java;
-import hydra.core.Field;
-import hydra.overlay.java.dsl.meta.Defs;
-import hydra.overlay.java.dsl.meta.Defs.Def;
-import static hydra.overlay.java.dsl.meta.Defs.define;
-import static hydra.overlay.java.dsl.meta.Defs.definitionsOf;
-import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
-import hydra.core.Name;
-import hydra.core.Type;
-import hydra.dsl.Core;
-import hydra.dsl.Packaging;
-import hydra.overlay.java.dsl.Types;
-import hydra.dsl.java.Environment;
-import hydra.dsl.java.Syntax;
-import hydra.overlay.java.dsl.meta.Phantoms;
-import hydra.dsl.lib.Eithers;
-import hydra.dsl.lib.Equality;
-import hydra.dsl.lib.Lists;
-import hydra.dsl.lib.Literals;
-import hydra.dsl.lib.Logic;
-import hydra.dsl.lib.Maps;
-import hydra.dsl.lib.Math_;
-import hydra.dsl.lib.Optionals;
-import hydra.dsl.lib.Pairs;
-import hydra.dsl.lib.Sets;
-import hydra.dsl.lib.Strings;
-import hydra.packaging.Definition;
-import hydra.packaging.EntityMetadata;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleName;
-import hydra.packaging.ModuleDependency;
-import hydra.typed.TypedTerm;
-import hydra.overlay.java.util.Optional;
+import hydra.core.model.Field;
+import hydra.core.overlay.java.dsl.meta.Defs;
+import hydra.core.overlay.java.dsl.meta.Defs.Def;
+import static hydra.core.overlay.java.dsl.meta.Defs.define;
+import static hydra.core.overlay.java.dsl.meta.Defs.definitionsOf;
+import static hydra.core.overlay.java.dsl.meta.Defs.unqualifiedDeps;
+import hydra.core.model.Name;
+import hydra.core.model.Type;
+import hydra.core.dsl.Core;
+import hydra.core.dsl.Packaging;
+import hydra.core.overlay.java.dsl.Types;
+import hydra.java.dsl.Environment;
+import hydra.java.dsl.Syntax;
+import hydra.core.overlay.java.dsl.Phantoms;
+import hydra.core.dsl.lib.Eithers;
+import hydra.core.dsl.lib.Equality;
+import hydra.core.dsl.lib.Lists;
+import hydra.core.dsl.lib.Literals;
+import hydra.core.dsl.lib.Logic;
+import hydra.core.dsl.lib.Maps;
+import hydra.core.dsl.lib.Math_;
+import hydra.core.dsl.lib.Optionals;
+import hydra.core.dsl.lib.Pairs;
+import hydra.core.dsl.lib.Sets;
+import hydra.core.dsl.lib.Strings;
+import hydra.core.packaging.Definition;
+import hydra.core.packaging.EntityMetadata;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleName;
+import hydra.core.packaging.ModuleDependency;
+import hydra.core.typed.TypedTerm;
+import hydra.core.overlay.java.util.Optional;
 
 import java.util.List;
 import java.util.function.Supplier;
 
-import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import static hydra.core.overlay.java.dsl.Phantoms.*;
 
 /**
  * Java test code generation codec for JUnit-based generation tests.
@@ -59,81 +59,81 @@ public class Testing {
     private static TypedTerm<?> prim(String fqName) { return var(fqName); }
 
     private static TypedTerm<?> stringsCat2(TypedTerm<?> a, TypedTerm<?> b) {
-        return apply(prim("hydra.lib.strings.concat2"), a, b);
+        return apply(prim("hydra.core.lib.strings.concat2"), a, b);
     }
     private static TypedTerm<?> stringsCat(TypedTerm<?> list) {
-        return apply(prim("hydra.lib.strings.concat"), list);
+        return apply(prim("hydra.core.lib.strings.concat"), list);
     }
     private static TypedTerm<?> stringsIntercalate(TypedTerm<?> sep, TypedTerm<?> list) {
-        return apply(prim("hydra.lib.strings.join"), sep, list);
+        return apply(prim("hydra.core.lib.strings.join"), sep, list);
     }
     private static TypedTerm<?> stringsSplitOn(TypedTerm<?> sep, TypedTerm<?> s) {
-        return apply(prim("hydra.lib.strings.splitOn"), sep, s);
+        return apply(prim("hydra.core.lib.strings.splitOn"), sep, s);
     }
     private static TypedTerm<?> listsConcat(TypedTerm<?> list) {
-        return apply(prim("hydra.lib.lists.concat"), list);
+        return apply(prim("hydra.core.lib.lists.concat"), list);
     }
     private static TypedTerm<?> listsConcat2(TypedTerm<?> a, TypedTerm<?> b) {
-        return apply(prim("hydra.lib.lists.concat2"), a, b);
+        return apply(prim("hydra.core.lib.lists.concat2"), a, b);
     }
     private static TypedTerm<?> listsDrop(TypedTerm<?> n, TypedTerm<?> list) {
-        return apply(prim("hydra.lib.lists.drop"), n, list);
+        return apply(prim("hydra.core.lib.lists.drop"), n, list);
     }
     private static TypedTerm<?> listsMap(TypedTerm<?> f, TypedTerm<?> list) {
-        return apply(prim("hydra.lib.lists.map"), f, list);
+        return apply(prim("hydra.core.lib.lists.map"), f, list);
     }
     private static TypedTerm<?> listsIsEmpty(TypedTerm<?> list) {
-        return apply(prim("hydra.lib.lists.isEmpty"), list);
+        return apply(prim("hydra.core.lib.lists.isEmpty"), list);
     }
     private static TypedTerm<?> listsMaybeLast(TypedTerm<?> list) {
-        return apply(prim("hydra.lib.lists.last"), list);
+        return apply(prim("hydra.core.lib.lists.last"), list);
     }
     private static TypedTerm<?> listsMaybeInit(TypedTerm<?> list) {
-        return apply(prim("hydra.lib.lists.init"), list);
+        return apply(prim("hydra.core.lib.lists.init"), list);
     }
     private static TypedTerm<?> optionalsFromOptional(TypedTerm<?> dflt, TypedTerm<?> m) {
-        return apply(prim("hydra.lib.optionals.withDefault"), dflt, m);
+        return apply(prim("hydra.core.lib.optionals.withDefault"), dflt, m);
     }
     private static TypedTerm<?> eithersBind(TypedTerm<?> e, TypedTerm<?> f) {
-        return apply(prim("hydra.lib.eithers.bind"), e, f);
+        return apply(prim("hydra.core.lib.eithers.bind"), e, f);
     }
     private static TypedTerm<?> eithersMap(TypedTerm<?> f, TypedTerm<?> e) {
-        return apply(prim("hydra.lib.eithers.map"), f, e);
+        return apply(prim("hydra.core.lib.eithers.map"), f, e);
     }
     private static TypedTerm<?> eithersMapList(TypedTerm<?> f, TypedTerm<?> list) {
-        return apply(prim("hydra.lib.eithers.mapList"), f, list);
+        return apply(prim("hydra.core.lib.eithers.mapList"), f, list);
     }
     private static TypedTerm<?> logicIfElse(TypedTerm<?> cond, TypedTerm<?> t, TypedTerm<?> f) {
-        return apply(prim("hydra.lib.logic.ifElse"), cond, t, f);
+        return apply(prim("hydra.core.lib.logic.ifElse"), cond, t, f);
     }
     private static TypedTerm<?> logicOr(TypedTerm<?> a, TypedTerm<?> b) {
-        return apply(prim("hydra.lib.logic.or"), a, b);
+        return apply(prim("hydra.core.lib.logic.or"), a, b);
     }
     private static TypedTerm<?> equalityEqual(TypedTerm<?> a, TypedTerm<?> b) {
-        return apply(prim("hydra.lib.equality.equal"), a, b);
+        return apply(prim("hydra.core.lib.equality.equal"), a, b);
     }
     private static TypedTerm<?> formattingCapitalize(TypedTerm<?> s) {
-        return apply(prim("hydra.formatting.capitalize"), s);
+        return apply(prim("hydra.core.formatting.capitalize"), s);
     }
     private static TypedTerm<?> formattingNonAlnumToUnderscores(TypedTerm<?> s) {
-        return apply(prim("hydra.formatting.nonAlnumToUnderscores"), s);
+        return apply(prim("hydra.core.formatting.nonAlnumToUnderscores"), s);
     }
     private static TypedTerm<?> formattingConvertCase(TypedTerm<?> from, TypedTerm<?> to, TypedTerm<?> s) {
-        return apply(prim("hydra.formatting.convertCase"), from, to, s);
+        return apply(prim("hydra.core.formatting.convertCase"), from, to, s);
     }
     private static TypedTerm<?> packagingModuleNamespace(TypedTerm<?> m) {
         return apply(
-            project("hydra.packaging.Module", "name"),
+            project("hydra.core.packaging.Module", "name"),
             m);
     }
     private static TypedTerm<?> unwrapNamespace(TypedTerm<?> ns) {
         return Packaging.unModuleName(tterm(ns.value));
     }
     private static TypedTerm<?> caseConventionLowerSnake() {
-        return inject("hydra.util.CaseConvention", "lowerSnake");
+        return inject("hydra.core.util.CaseConvention", "lowerSnake");
     }
     private static TypedTerm<?> caseConventionPascal() {
-        return inject("hydra.util.CaseConvention", "pascal");
+        return inject("hydra.core.util.CaseConvention", "pascal");
     }
     private static TypedTerm<?> rightTerm(TypedTerm<?> t) {
         return Phantoms.right(t);
@@ -161,15 +161,15 @@ public class Testing {
                             formattingCapitalize(optionalsFromOptional(string(""), listsMaybeLast(var("parts")))),
                             string("Test"))),
                         field("groupName_", apply(
-                            project("hydra.testing.TestGroup", "name"),
+                            project("hydra.core.testing.TestGroup", "name"),
                             var("testGroup"))),
                         field("standardImports", list(
                             string("import org.junit.jupiter.api.Test;"),
                             string("import static org.junit.jupiter.api.Assertions.*;"),
                             string("import java.util.*;"),
-                            string("import hydra.overlay.java.util.*;"))),
+                            string("import hydra.core.overlay.java.util.*;"))),
                         field("header", stringsCat(list(
-                            stringsCat2(string("// "), prim("hydra.constants.warningAutoGeneratedFile")),
+                            stringsCat2(string("// "), prim("hydra.core.constants.warningAutoGeneratedFile")),
                             string("\n"),
                             stringsCat2(string("// "), var("groupName_")),
                             string("\n\n"),
@@ -220,12 +220,12 @@ public class Testing {
                     binds(
                         field("actual_", apply(
                             apply(
-                                project("hydra.testing.UniversalTestCase", "actual"),
+                                project("hydra.core.testing.UniversalTestCase", "actual"),
                                 var("ucase")),
                             unit())),
                         field("expected_", apply(
                             apply(
-                                project("hydra.testing.UniversalTestCase", "expected"),
+                                project("hydra.core.testing.UniversalTestCase", "expected"),
                                 var("ucase")),
                             unit())),
                         field("fullName", logicIfElse(
@@ -246,12 +246,12 @@ public class Testing {
                 let(
                     binds(
                         field("name_", apply(
-                            project("hydra.testing.TestCaseWithMetadata", "name"),
+                            project("hydra.core.testing.TestCaseWithMetadata", "name"),
                             var("tcm"))),
                         field("tcase", apply(
-                            project("hydra.testing.TestCaseWithMetadata", "case"),
+                            project("hydra.core.testing.TestCaseWithMetadata", "case"),
                             var("tcm")))),
-                    match("hydra.testing.TestCase", var("tcase"), field("universal", universalBranch)));
+                    match("hydra.core.testing.TestCase", var("tcase"), field("universal", universalBranch)));
         });
 
     public static final Def generateJavaTestFile = def("generateJavaTestFile")
@@ -272,7 +272,7 @@ public class Testing {
                 let(
                     binds(
                         field("groupName", apply(
-                            project("hydra.testing.TestGroup", "name"),
+                            project("hydra.core.testing.TestGroup", "name"),
                             var("subgroup"))),
                         field("header", stringsCat2(string("    // "), var("groupName")))),
                     eithersMap(
@@ -286,10 +286,10 @@ public class Testing {
                 let(
                     binds(
                         field("cases_", apply(
-                            project("hydra.testing.TestGroup", "cases"),
+                            project("hydra.core.testing.TestGroup", "cases"),
                             var("testGroup"))),
                         field("subgroups", apply(
-                            project("hydra.testing.TestGroup", "subgroups"),
+                            project("hydra.core.testing.TestGroup", "subgroups"),
                             var("testGroup")))),
                     eithersBind(
                         eithersMap(
@@ -357,7 +357,7 @@ public class Testing {
         .to(() ->
                 stringsIntercalate(string("."),
                     listsMap(
-                        prim("hydra.formatting.capitalize"),
+                        prim("hydra.core.formatting.capitalize"),
                         stringsSplitOn(string("."), unwrapNamespace(var("ns_"))))));
 
     // Order matches the Haskell `definitions = [...]` list.
@@ -381,35 +381,35 @@ public class Testing {
     // Haskell: [SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns, Constants.ns]
     //         ++ (JavaSyntax.ns : kernelTypesNamespaces)
     private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(
-        new ModuleName("hydra.serialization"),
-        new ModuleName("hydra.test.utils"),
-        new ModuleName("hydra.formatting"),
-        new ModuleName("hydra.names"),
-        new ModuleName("hydra.constants"),
+        new ModuleName("hydra.core.serialization"),
+        new ModuleName("hydra.core.test.utils"),
+        new ModuleName("hydra.core.formatting"),
+        new ModuleName("hydra.core.names"),
+        new ModuleName("hydra.core.constants"),
         new ModuleName("hydra.java.syntax"),
-        new ModuleName("hydra.paths"),
-        new ModuleName("hydra.ast"),
-        new ModuleName("hydra.classes"),
-        new ModuleName("hydra.coders"),
-        new ModuleName("hydra.core"),
-        new ModuleName("hydra.error.checking"),
-        new ModuleName("hydra.error.core"),
-        new ModuleName("hydra.error.packaging"),
-        new ModuleName("hydra.errors"),
-        new ModuleName("hydra.graph"),
-        new ModuleName("hydra.json.model"),
-        new ModuleName("hydra.packaging"),
-        new ModuleName("hydra.parsing"),
-        new ModuleName("hydra.query"),
-        new ModuleName("hydra.relational"),
-        new ModuleName("hydra.tabular"),
-        new ModuleName("hydra.testing"),
-        new ModuleName("hydra.topology"),
-        new ModuleName("hydra.typed"),
-        new ModuleName("hydra.typing"),
-        new ModuleName("hydra.util"),
-        new ModuleName("hydra.validation"),
-        new ModuleName("hydra.variants"));
+        new ModuleName("hydra.core.paths"),
+        new ModuleName("hydra.core.ast"),
+        new ModuleName("hydra.core.classes"),
+        new ModuleName("hydra.core.coders"),
+        new ModuleName("hydra.core.model"),
+        new ModuleName("hydra.core.error.checking"),
+        new ModuleName("hydra.core.error.model"),
+        new ModuleName("hydra.core.error.packaging"),
+        new ModuleName("hydra.core.errors"),
+        new ModuleName("hydra.core.graph"),
+        new ModuleName("hydra.core.json.model"),
+        new ModuleName("hydra.core.packaging"),
+        new ModuleName("hydra.core.parsing"),
+        new ModuleName("hydra.core.query"),
+        new ModuleName("hydra.core.relational"),
+        new ModuleName("hydra.core.tabular"),
+        new ModuleName("hydra.core.testing"),
+        new ModuleName("hydra.core.topology"),
+        new ModuleName("hydra.core.typed"),
+        new ModuleName("hydra.core.typing"),
+        new ModuleName("hydra.core.util"),
+        new ModuleName("hydra.core.validation"),
+        new ModuleName("hydra.core.variants"));
 
     public static final Module module_ = new Module(
         NS,

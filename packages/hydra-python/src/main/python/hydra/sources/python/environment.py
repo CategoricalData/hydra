@@ -5,28 +5,28 @@ Host-native DSL source (authoritative; the former Haskell copy was removed in #3
 
 import sys
 
-from hydra.core import Type
-from hydra.overlay.python.dsl.python import Given, None_
-from hydra.overlay.python.dsl.meta.defs import check_complete
-from hydra.packaging import (EntityMetadata,
+from hydra.core.model import Type
+from hydra.core.overlay.python.dsl.python import Given, None_
+from hydra.core.overlay.python.dsl.meta.defs import check_complete
+from hydra.core.packaging import (EntityMetadata,
     Module,
     ModuleName,
 )
 
 from hydra.sources.python._source_dsl import make_type_def, type_ref, unqualified_dep
-import hydra.overlay.python.dsl.annotations as Annotations
-import hydra.overlay.python.dsl.types as T
+import hydra.core.overlay.python.dsl.annotations as Annotations
+import hydra.core.overlay.python.dsl.types as T
 
 
 NS = ModuleName("hydra.python.environment")
 
 DEPENDENCIES = [
     unqualified_dep(ModuleName("hydra.python.syntax")),
-    unqualified_dep(ModuleName("hydra.util")),
-    unqualified_dep(ModuleName("hydra.core")),
-    unqualified_dep(ModuleName("hydra.graph")),
-    unqualified_dep(ModuleName("hydra.packaging")),
-    unqualified_dep(ModuleName("hydra.typing")),
+    unqualified_dep(ModuleName("hydra.core.util")),
+    unqualified_dep(ModuleName("hydra.core.model")),
+    unqualified_dep(ModuleName("hydra.core.graph")),
+    unqualified_dep(ModuleName("hydra.core.packaging")),
+    unqualified_dep(ModuleName("hydra.core.typing")),
 ]
 
 _def = make_type_def(NS)
@@ -41,15 +41,15 @@ def _syntax(local: str) -> Type:
 
 
 def _core(local: str) -> Type:
-    return type_ref(ModuleName("hydra.core"), local)
+    return type_ref(ModuleName("hydra.core.model"), local)
 
 
 def _graph(local: str) -> Type:
-    return type_ref(ModuleName("hydra.graph"), local)
+    return type_ref(ModuleName("hydra.core.graph"), local)
 
 
 def _util(local: str) -> Type:
-    return type_ref(ModuleName("hydra.util"), local)
+    return type_ref(ModuleName("hydra.core.util"), local)
 
 
 # ----------------------------------------------------------------------
@@ -114,7 +114,7 @@ def _python_environment():
                     Annotations.doc(
                         "hydra.lib.<sub> sub-namespaces that have an overlay implementation on this "
                         "host (#630) -- the on-disk existence signal driving emission-time redirect "
-                        "of primitive references to hydra.overlay.python.lib.<sub>",
+                        "of primitive references to hydra.core.overlay.python.lib.<sub>",
                         T.set_(T.string()),
                     ),
                 ),

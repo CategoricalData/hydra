@@ -1,12 +1,12 @@
 package hydra.demos.validatepg;
 
-import hydra.core.FloatType;
-import hydra.core.FloatValue;
-import hydra.core.IntegerType;
-import hydra.core.IntegerValue;
-import hydra.core.Literal;
-import hydra.core.LiteralType;
-import hydra.json.model.Value;
+import hydra.core.model.FloatType;
+import hydra.core.model.FloatValue;
+import hydra.core.model.IntegerType;
+import hydra.core.model.IntegerValue;
+import hydra.core.model.Literal;
+import hydra.core.model.LiteralType;
+import hydra.core.json.model.Value;
 import hydra.pg.model.Edge;
 import hydra.pg.model.EdgeLabel;
 import hydra.pg.model.EdgeType;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Decodes PG model objects from the JSON format produced by hydra.encode.pg.model + hydra.json.encode.
+ * Decodes PG model objects from the JSON format produced by hydra.pg.encode.model + hydra.core.json.encode.
  *
  * <p>The JSON encoding follows Hydra's standard conventions:
  * <ul>
@@ -208,7 +208,7 @@ class JsonPgDecoder {
             // The object payload is now an ordered list of key/value pairs; decoding looks
             // fields up by name, so collapse it into a name-keyed map at the boundary.
             Map<String, Value> result = new LinkedHashMap<String, Value>();
-            for (hydra.util.Pair<String, Value> pair : ((Value.Object_) json).value) {
+            for (hydra.core.util.Pair<String, Value> pair : ((Value.Object_) json).value) {
                 result.put(pair.first, pair.second);
             }
             return result;

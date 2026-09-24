@@ -20,7 +20,7 @@
 --     #393 orphan reconcile: inputs/generator/recorded-outputs can all
 --     match yet the output dir still hold *extra* files not in the
 --     recorded set — e.g. target output left behind when a DSL module is
---     renamed across namespaces (hydra.eval.lib.* -> hydra.lib.defaults.*).
+--     renamed across namespaces (hydra.eval.lib.* -> hydra.core.lib.defaults.*).
 --     Such an orphan is output drift, not an input change, so it would
 --     otherwise never trigger the gated regen+prune and would linger
 --     indefinitely. When 'fresh' finds the package is otherwise a hit but
@@ -65,7 +65,7 @@ module Main where
 import Hydra.Digest
 import qualified Hydra.Digest as Digest
 import qualified Hydra.DigestFormat as DF
-import Hydra.Packaging (ModuleName(..))
+import Hydra.Core.Packaging (ModuleName(..))
 import qualified Hydra.PackageRouting as PackageRouting
 import Hydra.PackageRouting (buildRoutingMap)
 import Hydra.Sources.Ext (extRoutingInput)

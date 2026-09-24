@@ -2,9 +2,9 @@ package hydra.json;
 
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
-import hydra.coders.Coder;
-import hydra.json.model.Value;
-import hydra.overlay.java.util.Either;
+import hydra.core.coders.Coder;
+import hydra.core.json.model.Value;
+import hydra.core.overlay.java.util.Either;
 
 import java.util.HashMap;
 import java.util.Map;

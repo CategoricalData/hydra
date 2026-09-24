@@ -1,13 +1,13 @@
 package hydra.demos.validatepg;
 
-import hydra.core.Literal;
-import hydra.core.LiteralType;
-import hydra.core.Term;
-import hydra.dsl.LiteralTypes;
-import hydra.dsl.Literals;
-import hydra.encode.pg.Model;
+import hydra.core.model.Literal;
+import hydra.core.model.LiteralType;
+import hydra.core.model.Term;
+import hydra.core.dsl.LiteralTypes;
+import hydra.core.dsl.Literals;
+import hydra.pg.encode.Model;
 import hydra.json.Encode;
-import hydra.json.model.Value;
+import hydra.core.json.model.Value;
 import hydra.json.Writer;
 import hydra.pg.dsl.Graphs;
 import hydra.pg.model.Edge;
@@ -16,7 +16,7 @@ import hydra.pg.model.Graph;
 import hydra.pg.model.GraphSchema;
 import hydra.pg.model.Vertex;
 import hydra.pg.model.VertexType;
-import hydra.util.Either;
+import hydra.core.util.Either;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -248,7 +248,7 @@ public class GenerateData {
     // -- Encoding helpers --
 
     private static String encodeSchemaToJson(GraphSchema<LiteralType> schema) {
-        Term term = Model.graphSchema(hydra.encode.Core::literalType, schema);
+        Term term = Model.graphSchema(hydra.core.encode.Core::literalType, schema);
         Either<String, Value> result = Encode.toJsonUntyped(term);
         return result.accept(new Either.Visitor<String, Value, String>() {
             @Override
@@ -264,7 +264,7 @@ public class GenerateData {
     }
 
     private static String encodeGraphToJson(Graph<Literal> graph) {
-        Term term = Model.graph(hydra.encode.Core::literal, graph);
+        Term term = Model.graph(hydra.core.encode.Core::literal, graph);
         Either<String, Value> result = Encode.toJsonUntyped(term);
         return result.accept(new Either.Visitor<String, Value, String>() {
             @Override

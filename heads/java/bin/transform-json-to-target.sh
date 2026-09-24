@@ -29,7 +29,7 @@
 #
 # hostOverrides["java"] = "local" (#727/#719 un-red): target-driver's PUBLISHED-artifact
 # classpath can resolve FINE yet still be semantically stale (not merely absent). This
-# tool's own generic transcription logic -- including hydra.print.Core.term's rendering
+# tool's own generic transcription logic -- including hydra.core.print.Core.term's rendering
 # of a Literal.decimal, used when baking `expected`-value fixtures into EVERY target's
 # generated test file -- comes from the published hydra-kernel/hydra-java 0.17.6 jars,
 # which predate #719's printDecimal scale-fidelity fix (BigDecimal("42.0") instead of
@@ -97,7 +97,7 @@ fi
 
 # hostOverrides["java"] forces the local classpath even when the published artifact
 # resolves fine (it may be resolvable yet semantically stale — #727/#719). Checked
-# against "java", not $TARGET: this tool's runtime classes (hydra.print.Core etc.) come
+# against "java", not $TARGET: this tool's runtime classes (hydra.core.print.Core etc.) come
 # from published hydra-kernel/hydra-java regardless of which --target is requested.
 #
 # Checked UNCONDITIONALLY (#761) — NOT gated on HYDRA_HOST_VERSION being unset. The two

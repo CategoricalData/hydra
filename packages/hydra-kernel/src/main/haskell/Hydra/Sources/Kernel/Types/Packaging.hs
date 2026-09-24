@@ -2,16 +2,16 @@ module Hydra.Sources.Kernel.Types.Packaging where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel hiding (packageName, packageModules, packageDependencies, packageDescription, primitiveDefinition)
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.packaging"
+ns = ModuleName "hydra.core.packaging"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns
@@ -261,7 +261,7 @@ provision = define "Provision" $
   T.record [
     "name">:
       doc ("The fully-qualified name of the provision: the enclosing entity's name extended by one"
-        ++ " segment (e.g. hydra.lib.lists.concat.emptyLists). Composed at definition time by a helper"
+        ++ " segment (e.g. hydra.core.lib.lists.concat.emptyLists). Composed at definition time by a helper"
         ++ " that prefixes the entity's name, exactly as a definition's name is composed from its"
         ++ " module's name -- so the author writes only the final segment, but the stored value is the"
         ++ " full name.")

@@ -3,18 +3,18 @@ module Hydra.Sources.Yaml.Language where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import Hydra.File (_FileExtension)
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Coders                     as Coders
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants                   as Variants
-import qualified Hydra.Overlay.Haskell.Dsl.Terms                           as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Types                           as Types
-import qualified Hydra.Dsl.Util                              as Util
+import Hydra.Core.File (_FileExtension)
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Dsl.Coders                     as Coders
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants                   as Variants
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms                           as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                           as Types
+import qualified Hydra.Core.Dsl.Util                              as Util
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import           Prelude hiding ((++))
@@ -24,7 +24,7 @@ import qualified Data.Set                                  as S
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.yaml.language"
+ns = ModuleName "hydra.ext.yaml.language"
 
 module_ :: Module
 module_ = Module {

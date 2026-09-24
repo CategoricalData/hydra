@@ -8,16 +8,16 @@ module Hydra.Sources.Test.Json.Yaml where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms hiding ((@@))
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
-import qualified Hydra.Dsl.Lib.Eithers   as Eithers
-import qualified Hydra.Dsl.Lib.Maps      as Maps
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                ((@@))
+import qualified Hydra.Core.Dsl.Lib.Eithers   as Eithers
+import qualified Hydra.Core.Dsl.Lib.Maps      as Maps
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -26,22 +26,22 @@ import qualified Data.Map                     as M
 import qualified Data.Scientific              as Sci
 
 -- Additional imports specific to this module
-import Hydra.Testing
-import Hydra.Json.Model (Value)
-import qualified Hydra.Dsl.Json.Model as Json
+import Hydra.Core.Testing
+import Hydra.Core.Json.Model (Value)
+import qualified Hydra.Core.Dsl.Json.Model as Json
 import qualified Hydra.Sources.Json.Writer as JsonWriter
 import qualified Hydra.Sources.Json.Yaml.Encode as JsonYamlEncode
 import qualified Hydra.Sources.Json.Yaml.Decode as JsonYamlDecode
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.json.yaml"
+ns = ModuleName "hydra.core.test.json.yaml"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.json.writer", ModuleName "hydra.json.yaml.encode", ModuleName "hydra.json.yaml.decode"] ++ (ModuleName "hydra.yaml.model" : kernelTypesModuleNames)),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.core.json.writer", ModuleName "hydra.core.json.yaml.encode", ModuleName "hydra.core.json.yaml.decode"] ++ (ModuleName "hydra.core.yaml.model" : kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata ((Just "Round-trip test cases for the JSON<->YAML bridge, focused on decimal precision"))}
   where
     definitions = [

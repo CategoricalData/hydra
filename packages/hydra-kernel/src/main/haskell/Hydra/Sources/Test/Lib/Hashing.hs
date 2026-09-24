@@ -2,33 +2,33 @@ module Hydra.Sources.Test.Lib.Hashing where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms hiding ((++))  -- (@@), primitive, string
-import Hydra.Overlay.Haskell.Dsl.Typed.Literals               (string)
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Phantoms hiding ((++))  -- (@@), primitive, string
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Literals               (string)
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
-import Hydra.Testing
-import qualified Hydra.Lib.Hashing as DefHashing
-import qualified Hydra.Lib.Literals as DefLiterals
-import qualified Hydra.Lib.Text as DefText
+import Hydra.Core.Testing
+import qualified Hydra.Core.Lib.Hashing as DefHashing
+import qualified Hydra.Core.Lib.Literals as DefLiterals
+import qualified Hydra.Core.Lib.Text as DefText
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.lib.hashing"
+ns = ModuleName "hydra.core.test.lib.hashing"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ModuleName "hydra.print.core"] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.hashing primitives")}
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.core.reduction", ModuleName "hydra.core.print.model"] ++ kernelTypesModuleNames),
+            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.core.lib.hashing primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -42,8 +42,8 @@ bytes s = retype (primitive DefText.encodeUtf8 @@ string s)
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for hydra.lib.hashing primitives" $
-    supergroup "hydra.lib.hashing primitives" [
+    Phantoms.doc "Test cases for hydra.core.lib.hashing primitives" $
+    supergroup "hydra.core.lib.hashing primitives" [
       hashingSha256,
       hashingSha256Hex]
 

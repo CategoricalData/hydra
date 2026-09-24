@@ -96,7 +96,7 @@ fetch_java_driver() {
 }
 
 # Ensure the generated Hydra Java kernel exists (the published hydra-java jar is
-# coder-only and lacks hydra.core / hydra.validation).
+# coder-only and lacks hydra.core.model / hydra.core.validation).
 ensure_java_kernel() {
   if [ ! -f "$REPO_ROOT/dist/java/hydra-kernel/src/main/java/hydra/validation/ValidationProfile.java" ]; then
     echo "  Generating the Hydra Java kernel (dist/java/hydra-kernel)..."
@@ -154,7 +154,7 @@ run_java() {
   local driver_cp; driver_cp="$(ls "$CACHE"/*.jar | tr '\n' ':')"
   # Compile only the live-Neo4j demo entry point and let javac resolve its
   # dependencies via -sourcepath. This pulls in exactly the kernel + hydra-pg
-  # modules the demo needs (hydra.neo4j.model, hydra.validate.Neo4j, ...) and
+  # modules the demo needs (hydra.pg.neo4j.model, hydra.core.validate.Neo4j, ...) and
   # avoids both the hydra-rdf-dependent parts of hydra-pg and the sibling
   # JSON-artifact demo classes (which need hydra.Generation / hydra.json).
   local sourcepath="$REPO_ROOT/dist/java/hydra-kernel/src/main/java"

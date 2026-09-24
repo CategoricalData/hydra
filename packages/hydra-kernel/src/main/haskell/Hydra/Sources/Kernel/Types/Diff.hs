@@ -2,15 +2,15 @@ module Hydra.Sources.Kernel.Types.Diff where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.diff"
+ns = ModuleName "hydra.core.diff"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns
@@ -22,7 +22,7 @@ module_ = Module {
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleMetadata = descriptionMetadata (Just
               ("A generic, domain-agnostic framework for diffs, patches, and migrations over any 'type'/'value'"
-              <> " grammar (hydra.core.Type/Term, property-graph types, RDF shapes, ...). Fully parameterized:"
+              <> " grammar (hydra.core.model.Type/Term, property-graph types, RDF shapes, ...). Fully parameterized:"
               <> " no Type/Term/Name/step type is hardcoded. Type parameters: a = the thing being edited"
               <> " (a type or a value); t = a 'type' type; v = a value/instance type; s = a step into a value;"
               <> " n = a name/key. Fill and Migrator hold host functions and are runtime-only (not serialized)."))}

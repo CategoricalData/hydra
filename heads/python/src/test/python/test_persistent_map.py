@@ -1,10 +1,10 @@
-"""Unit tests for hydra.util.PersistentMap."""
+"""Unit tests for hydra.core.util.PersistentMap."""
 
 from collections.abc import Mapping
 
 import pytest
 
-from hydra.overlay.python.util import PersistentMap
+from hydra.core.overlay.python.util import PersistentMap
 
 
 def test_empty():

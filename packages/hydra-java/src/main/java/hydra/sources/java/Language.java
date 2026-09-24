@@ -1,40 +1,40 @@
 package hydra.sources.java;
-import hydra.core.Field;
-import hydra.overlay.java.dsl.meta.Defs;
-import hydra.overlay.java.dsl.meta.Defs.Def;
-import static hydra.overlay.java.dsl.meta.Defs.define;
-import static hydra.overlay.java.dsl.meta.Defs.definitionsOf;
-import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
-import hydra.core.Name;
-import hydra.core.Type;
-import hydra.dsl.Core;
-import hydra.dsl.Packaging;
-import hydra.overlay.java.dsl.Types;
-import hydra.dsl.java.Environment;
-import hydra.dsl.java.Syntax;
-import hydra.dsl.lib.Eithers;
-import hydra.dsl.lib.Equality;
-import hydra.dsl.lib.Lists;
-import hydra.dsl.lib.Literals;
-import hydra.dsl.lib.Logic;
-import hydra.dsl.lib.Maps;
-import hydra.dsl.lib.Math_;
-import hydra.dsl.lib.Optionals;
-import hydra.dsl.lib.Pairs;
-import hydra.dsl.lib.Sets;
-import hydra.dsl.lib.Strings;
-import hydra.packaging.Definition;
-import hydra.packaging.EntityMetadata;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleName;
-import hydra.packaging.ModuleDependency;
-import hydra.typed.TypedTerm;
-import hydra.overlay.java.util.Optional;
+import hydra.core.model.Field;
+import hydra.core.overlay.java.dsl.meta.Defs;
+import hydra.core.overlay.java.dsl.meta.Defs.Def;
+import static hydra.core.overlay.java.dsl.meta.Defs.define;
+import static hydra.core.overlay.java.dsl.meta.Defs.definitionsOf;
+import static hydra.core.overlay.java.dsl.meta.Defs.unqualifiedDeps;
+import hydra.core.model.Name;
+import hydra.core.model.Type;
+import hydra.core.dsl.Core;
+import hydra.core.dsl.Packaging;
+import hydra.core.overlay.java.dsl.Types;
+import hydra.java.dsl.Environment;
+import hydra.java.dsl.Syntax;
+import hydra.core.dsl.lib.Eithers;
+import hydra.core.dsl.lib.Equality;
+import hydra.core.dsl.lib.Lists;
+import hydra.core.dsl.lib.Literals;
+import hydra.core.dsl.lib.Logic;
+import hydra.core.dsl.lib.Maps;
+import hydra.core.dsl.lib.Math_;
+import hydra.core.dsl.lib.Optionals;
+import hydra.core.dsl.lib.Pairs;
+import hydra.core.dsl.lib.Sets;
+import hydra.core.dsl.lib.Strings;
+import hydra.core.packaging.Definition;
+import hydra.core.packaging.EntityMetadata;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleName;
+import hydra.core.packaging.ModuleDependency;
+import hydra.core.typed.TypedTerm;
+import hydra.core.overlay.java.util.Optional;
 
 import java.util.List;
 import java.util.function.Supplier;
 
-import static hydra.overlay.java.dsl.meta.Phantoms.*;
+import static hydra.core.overlay.java.dsl.Phantoms.*;
 
 /**
  * Language constraints and reserved words for Java.
@@ -55,30 +55,30 @@ public class Language {
     }
 
     /** Build an injection of a unit-tagged variant. Mirrors the inlined form
-     * that {@code hydra.dsl.variants.*} TypedTerm constants expand to in the
+     * that {@code hydra.core.dsl.variants.*} TypedTerm constants expand to in the
      * canonical JSON. */
     private static TypedTerm<?> variant(String typeName, String fieldName) {
         return inject(typeName, fieldName);
     }
     private static TypedTerm<?> literalVariant(String which) {
-        return variant("hydra.variants.LiteralVariant", which);
+        return variant("hydra.core.variants.LiteralVariant", which);
     }
     private static TypedTerm<?> termVariantInj(String which) {
-        return variant("hydra.variants.TermVariant", which);
+        return variant("hydra.core.variants.TermVariant", which);
     }
     private static TypedTerm<?> typeVariantInj(String which) {
-        return variant("hydra.variants.TypeVariant", which);
+        return variant("hydra.core.variants.TypeVariant", which);
     }
     private static TypedTerm<?> floatType(String which) {
-        return variant("hydra.core.FloatType", which);
+        return variant("hydra.core.model.FloatType", which);
     }
     private static TypedTerm<?> integerType(String which) {
-        return variant("hydra.core.IntegerType", which);
+        return variant("hydra.core.model.IntegerType", which);
     }
     /** {@code Coders.language(name, constraints, features, caseConv, ext)} expands to a Record term. */
     private static TypedTerm<?> codersLanguage(TypedTerm<?> name, TypedTerm<?> constraints,
             TypedTerm<?> supportedFeatures, TypedTerm<?> caseConventions, TypedTerm<?> defaultFileExtension) {
-        return record("hydra.coders.Language",
+        return record("hydra.core.coders.Language",
             field("name", name),
             field("constraints", constraints),
             field("supportedFeatures", supportedFeatures),
@@ -91,7 +91,7 @@ public class Language {
             TypedTerm<?> field_, TypedTerm<?> file, TypedTerm<?> module,
             TypedTerm<?> term, TypedTerm<?> termVariable, TypedTerm<?> type_,
             TypedTerm<?> typeVariable) {
-        return record("hydra.coders.CaseConventions",
+        return record("hydra.core.coders.CaseConventions",
             field("constant", constant),
             field("directory", directory),
             field("enumValue", enumValue),
@@ -105,19 +105,19 @@ public class Language {
     }
     /** Inject the named LanguageFeature variant (unit-tagged). */
     private static TypedTerm<?> codersLanguageFeature(String variant) {
-        return inject("hydra.coders.LanguageFeature", variant);
+        return inject("hydra.core.coders.LanguageFeature", variant);
     }
     /** Inject the named CaseConvention variant (unit-tagged). */
     private static TypedTerm<?> codersCaseConvention(String variant) {
-        return inject("hydra.util.CaseConvention", variant);
+        return inject("hydra.core.util.CaseConvention", variant);
     }
     /** Wrap a string as a FileExtension. */
     private static TypedTerm<?> codersFileExtension(String ext) {
-        return wrap("hydra.file.FileExtension", string(ext));
+        return wrap("hydra.core.file.FileExtension", string(ext));
     }
     /** {@code Coders.languageName2(x)} expands to a Wrap term. */
     private static TypedTerm<?> codersLanguageName2(TypedTerm<?> x) {
-        return wrap("hydra.coders.LanguageName", x);
+        return wrap("hydra.core.coders.LanguageName", x);
     }
     /** {@code Coders.languageConstraints2(...)} expands to a Record term. */
     private static TypedTerm<?> codersLanguageConstraints2(
@@ -127,7 +127,7 @@ public class Language {
             TypedTerm<?> termVariants,
             TypedTerm<?> typeVariants,
             TypedTerm<?> types) {
-        return record("hydra.coders.LanguageConstraints",
+        return record("hydra.core.coders.LanguageConstraints",
             field("literalVariants", literalVariants),
             field("floatTypes", floatTypes),
             field("integerTypes", integerTypes),
@@ -139,11 +139,11 @@ public class Language {
      * (so the element type is recorded), then applied to xs. Matches the
      * canonical encoding produced by the Haskell DSL. */
     private static TypedTerm<?> setsFromList(String elementTypeName, TypedTerm<?> listTerm) {
-        return setsFromList(hydra.overlay.java.dsl.Types.variable(elementTypeName), listTerm);
+        return setsFromList(hydra.core.overlay.java.dsl.Types.variable(elementTypeName), listTerm);
     }
     @SuppressWarnings("unchecked")
-    private static TypedTerm<?> setsFromList(hydra.core.Type elementType, TypedTerm<?> listTerm) {
-        // The generated hydra.dsl.lib.Sets.fromList is precisely typed
+    private static TypedTerm<?> setsFromList(hydra.core.model.Type elementType, TypedTerm<?> listTerm) {
+        // The generated hydra.core.dsl.lib.Sets.fromList is precisely typed
         // (TypedTerm<List<X>> -> TypedTerm<Set<X>>), tighter than the old
         // hand-written wrapper's TypedTerm<?>. The phantom type is erased in the
         // emitted term, so this unchecked cast at the loosely-typed call boundary
@@ -165,7 +165,7 @@ public class Language {
             let(
                 binds(
                     field("literalVariants", setsFromList(
-                        "hydra.variants.LiteralVariant",
+                        "hydra.core.variants.LiteralVariant",
                         list(
                             literalVariant("binary"),
                             literalVariant("boolean"),
@@ -174,12 +174,12 @@ public class Language {
                             literalVariant("integer"),
                             literalVariant("string")))),
                     field("floatTypes", setsFromList(
-                        "hydra.core.FloatType",
+                        "hydra.core.model.FloatType",
                         list(
                             floatType("float32"),
                             floatType("float64")))),
                     field("integerTypes", setsFromList(
-                        "hydra.core.IntegerType",
+                        "hydra.core.model.IntegerType",
                         list(
                             integerType("bigint"),
                             integerType("int8"),
@@ -188,7 +188,7 @@ public class Language {
                             integerType("int64"),
                             integerType("uint16")))),
                     field("termVariants", setsFromList(
-                        "hydra.variants.TermVariant",
+                        "hydra.core.variants.TermVariant",
                         list(
                             termVariantInj("application"),
                             termVariantInj("either"),
@@ -211,7 +211,7 @@ public class Language {
                             termVariantInj("variable"),
                             termVariantInj("wrap")))),
                     field("typeVariants", setsFromList(
-                        "hydra.variants.TypeVariant",
+                        "hydra.core.variants.TypeVariant",
                         list(
                             typeVariantInj("annotated"),
                             typeVariantInj("application"),
@@ -241,7 +241,7 @@ public class Language {
                         var("termVariants"),
                         var("typeVariants"),
                         var("typePredicate")),
-                    setsFromList("hydra.coders.LanguageFeature",
+                    setsFromList("hydra.core.coders.LanguageFeature",
                         list(codersLanguageFeature("nestedCaseStatements"))),
                     codersCaseConventions(
                         codersCaseConvention("upperSnake"), codersCaseConvention("camel"),
@@ -306,7 +306,7 @@ public class Language {
                     field("classNames", classNames),
                     field("keywords", keywords),
                     field("literals", literals)),
-                setsFromList(hydra.overlay.java.dsl.Types.string(), Lists.concat(list(
+                setsFromList(hydra.core.overlay.java.dsl.Types.string(), Lists.concat(list(
                         var("specialNames"),
                         var("classNames"),
                         var("keywords"),
@@ -327,30 +327,30 @@ public class Language {
 
     // Haskell: moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces
     private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(
-        new ModuleName("hydra.lexical"),
-        new ModuleName("hydra.paths"),
-        new ModuleName("hydra.ast"),
-        new ModuleName("hydra.classes"),
-        new ModuleName("hydra.coders"),
-        new ModuleName("hydra.core"),
-        new ModuleName("hydra.error.checking"),
-        new ModuleName("hydra.error.core"),
-        new ModuleName("hydra.error.packaging"),
-        new ModuleName("hydra.errors"),
-        new ModuleName("hydra.graph"),
-        new ModuleName("hydra.json.model"),
-        new ModuleName("hydra.packaging"),
-        new ModuleName("hydra.parsing"),
-        new ModuleName("hydra.query"),
-        new ModuleName("hydra.relational"),
-        new ModuleName("hydra.tabular"),
-        new ModuleName("hydra.testing"),
-        new ModuleName("hydra.topology"),
-        new ModuleName("hydra.typed"),
-        new ModuleName("hydra.typing"),
-        new ModuleName("hydra.util"),
-        new ModuleName("hydra.validation"),
-        new ModuleName("hydra.variants"));
+        new ModuleName("hydra.core.lexical"),
+        new ModuleName("hydra.core.paths"),
+        new ModuleName("hydra.core.ast"),
+        new ModuleName("hydra.core.classes"),
+        new ModuleName("hydra.core.coders"),
+        new ModuleName("hydra.core.model"),
+        new ModuleName("hydra.core.error.checking"),
+        new ModuleName("hydra.core.error.model"),
+        new ModuleName("hydra.core.error.packaging"),
+        new ModuleName("hydra.core.errors"),
+        new ModuleName("hydra.core.graph"),
+        new ModuleName("hydra.core.json.model"),
+        new ModuleName("hydra.core.packaging"),
+        new ModuleName("hydra.core.parsing"),
+        new ModuleName("hydra.core.query"),
+        new ModuleName("hydra.core.relational"),
+        new ModuleName("hydra.core.tabular"),
+        new ModuleName("hydra.core.testing"),
+        new ModuleName("hydra.core.topology"),
+        new ModuleName("hydra.core.typed"),
+        new ModuleName("hydra.core.typing"),
+        new ModuleName("hydra.core.util"),
+        new ModuleName("hydra.core.validation"),
+        new ModuleName("hydra.core.variants"));
 
     public static final Module module_ = new Module(
         NS,

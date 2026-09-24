@@ -68,7 +68,7 @@ stack exec bootstrap-from-json -- \
     --output "$DIST_ROOT"
 
 # No per-package post-processing today — the generator emits
-# Hydra.Test.TestEnv references directly. See docs/recipes/maintenance.md
+# Hydra.Core.Test.TestEnv references directly. See docs/recipes/maintenance.md
 # "Known accepted patches" for the history.
 
 cd "$HYDRA_ROOT_DIR"

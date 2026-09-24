@@ -55,8 +55,8 @@ if [ -d "$HYDRA_CLOJURE_DIST/src/test/clojure/hydra" ]; then
     cp -r "$HYDRA_CLOJURE_DIST/src/test/clojure/hydra" "$OUTPUT_DIR/src/test/clojure/"
 fi
 
-# #546: hydra-build owns hydra.build.* + hydra.test.build.*, relocated out of hydra-kernel.
-# The kernel's generated testSuite references hydra.test.build.*, which reference hydra.build.*;
+# #546: hydra-build owns hydra.build.* + hydra.core.test.build.*, relocated out of hydra-kernel.
+# The kernel's generated testSuite references hydra.core.test.build.*, which reference hydra.build.*;
 # neither is in the hydra-kernel dist tree. Overlay hydra-build's generated main+test onto the cell.
 HYDRA_CLOJURE_BUILD_DIST="$HYDRA_ROOT/dist/clojure/hydra-build"
 if [ -d "$HYDRA_CLOJURE_BUILD_DIST/src/main/clojure/hydra" ]; then

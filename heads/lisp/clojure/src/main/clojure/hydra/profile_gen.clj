@@ -1,8 +1,8 @@
 (ns hydra.profile-gen
   "Profile code generation to find bottlenecks.
    Usage: clojure -M -m hydra.profile-gen --target python --json-dir <path>"
-  (:require [hydra.overlay.clojure.preload :as preload]
-            [hydra.overlay.clojure.libraries :as libraries]
+  (:require [hydra.core.overlay.clojure.preload :as preload]
+            [hydra.core.overlay.clojure.libraries :as libraries]
             [clojure.data.json :as json])
   (:gen-class))
 
@@ -42,29 +42,29 @@
     :else (throw (IllegalArgumentException. (str "Unexpected JSON type: " (type obj))))))
 
 (defn- bootstrap-graph []
-  ((r '->hydra_graph_graph)
+  ((r '->hydra_core_graph_graph)
     {} {} {} #{} {} (libraries/standard-library) {} #{}))
 
 (defn- bootstrap-schema-map []
   (into {}
     (map (fn [[name typ]]
-           (let [ts ((r 'hydra_scoping_f_type_to_type_scheme) typ)]
-             [name ((r 'hydra_strip_deannotate_type_recursive) (:body ts))]))
-         (r 'hydra_json_bootstrap_types_by_name))))
+           (let [ts ((r 'hydra_core_scoping_f_type_to_type_scheme) typ)]
+             [name ((r 'hydra_core_strip_deannotate_type_recursive) (:body ts))]))
+         (r 'hydra_core_json_bootstrap_types_by_name))))
 
 (defn- load-modules-from-json [base-path namespaces]
   (let [bs-graph (bootstrap-graph)
         schema-map (bootstrap-schema-map)]
     (mapv (fn [ns-str]
-            (let [file-path (str base-path "/" ((r 'hydra_codegen_module_name_to_path) ns-str) ".json")
+            (let [file-path (str base-path "/" ((r 'hydra_core_codegen_module_name_to_path) ns-str) ".json")
                   obj (json/read-str (slurp file-path))
                   json-val (clojure-to-hydra-json obj)
-                  mod-type (list :variable "hydra.packaging.Module")
-                  json-result (((((r 'hydra_json_decode_from_json) schema-map) "hydra.packaging.Module") mod-type) json-val)
+                  mod-type (list :variable "hydra.core.packaging.Module")
+                  json-result (((((r 'hydra_core_json_decode_from_json) schema-map) "hydra.core.packaging.Module") mod-type) json-val)
                   _ (when (= (first json-result) :left)
                       (throw (RuntimeException. (str "JSON decode error for " ns-str ": " (second json-result)))))
                   term (second json-result)
-                  mod-result (((r 'hydra_decode_packaging_module) bs-graph) term)
+                  mod-result (((r 'hydra_core_decode_packaging_module) bs-graph) term)
                   _ (when (= (first mod-result) :left)
                       (throw (RuntimeException. (str "Module decode error for " ns-str ": " (second mod-result)))))]
               (second mod-result)))
@@ -128,7 +128,7 @@
       (flush)
 
       (let [bs-graph (bootstrap-graph)
-            cx ((r '->hydra_typing_inference_context) 0 (list))
+            cx ((r '->hydra_core_typing_inference_context) 0 (list))
             coder (case target
                     "python" @(rc 'hydra_ext_python_coder_module_to_python)
                     "clojure" (let [mtl @(rc 'hydra_ext_lisp_coder_module_to_lisp)
@@ -138,12 +138,12 @@
                                     (if (= (first result) :left)
                                       result
                                       (let [program (second result)
-                                            code (@(rc 'hydra_serialization_print_expr)
-                                                   (@(rc 'hydra_serialization_parenthesize)
+                                            code (@(rc 'hydra_core_serialization_print_expr)
+                                                   (@(rc 'hydra_core_serialization_parenthesize)
                                                      (pte program)))
                                             ns-val (let [ns (:name mod)]
                                                      (if (string? ns) ns (:value ns)))
-                                            fp (str (@(rc 'hydra_codegen_module_name_to_path) ns-val) ".clj")]
+                                            fp (str (@(rc 'hydra_core_codegen_module_name_to_path) ns-val) ".clj")]
                                         (list :right {fp code}))))))))))
             language (case target
                        "python" @(rc 'hydra_ext_python_language_python_language)
@@ -160,7 +160,7 @@
         ;; Step 4: Partition
         (println "Step 4: Partition modules...")
         (flush)
-        (let [is-native-type (r 'hydra_annotations_is_native_type)
+        (let [is-native-type (r 'hydra_core_annotations_is_native_type)
               type-mods (vec (filter (fn [mod]
                                        (some #(is-native-type %) (:definitions mod)))
                                      all-mods))
@@ -176,19 +176,19 @@
           (flush)
           (let [namespace-map (into {} (map (fn [m] [(:name m) m]) all-mods))
                 schema-mods (timed "schemaModDeps"
-                              #(((r 'hydra_codegen_module_type_deps_transitive) namespace-map) all-mods))
+                              #(((r 'hydra_core_codegen_module_type_deps_transitive) namespace-map) all-mods))
                 schema-elements (vec (filter #(is-native-type %)
                                       (mapcat :definitions (concat schema-mods type-mods))))
                 data-mods (timed "dataModDeps"
-                            #(((r 'hydra_codegen_module_term_deps_transitive) namespace-map) all-mods))
+                            #(((r 'hydra_core_codegen_module_term_deps_transitive) namespace-map) all-mods))
                 data-elements (vec (mapcat :definitions data-mods))
                 schema-graph (timed "schemaGraph"
-                               #((((r 'hydra_lexical_elements_to_graph) bs-graph) {}) schema-elements))
+                               #((((r 'hydra_core_lexical_elements_to_graph) bs-graph) {}) schema-elements))
                 schema-types (let [result (((r 'hydra_schemas_schema_graph_to_typing_environment)
-                                             (r 'hydra_lexical_empty_context)) schema-graph)]
+                                             (r 'hydra_core_lexical_empty_context)) schema-graph)]
                                (if (= (first result) :right) (second result) {}))
                 data-graph (timed "dataGraph"
-                             #((((r 'hydra_lexical_elements_to_graph) bs-graph) schema-types) data-elements))]
+                             #((((r 'hydra_core_lexical_elements_to_graph) bs-graph) schema-types) data-elements))]
             (println)
             (flush)
 
@@ -199,7 +199,7 @@
             (flush)
             (let [namespaces (mapv #(:name %) term-mods)
                   raw-result (timed "dataGraphToDefinitions"
-                               #((((((((((r 'hydra_adapt_data_graph_to_definitions)
+                               #((((((((((r 'hydra_core_adapt_data_graph_to_definitions)
                                            constraints) do-infer) do-expand) do-hoist-case) do-hoist-poly)
                                       data-elements) data-graph) namespaces) cx))]
               (if (= (first raw-result) :left)
@@ -216,16 +216,16 @@
                   ;; Step 7: Per-module coder timing
                   (println "Step 7: Per-module coder timing (ALL term modules)...")
                   (flush)
-                  (let [all-bindings ((r 'hydra_lexical_graph_to_bindings) g1)
+                  (let [all-bindings ((r 'hydra_core_lexical_graph_to_bindings) g1)
                         total-start (System/currentTimeMillis)]
                     (doseq [idx (range (count term-mods))]
                       (let [mod (nth term-mods idx)
                             defs (nth def-lists idx)
                             ;; Refresh module elements from inferred graph
-                            refreshed-els ((r 'hydra_lib_optionals_cat)
+                            refreshed-els ((r 'hydra_core_lib_optionals_cat)
                                             (mapv (fn [e]
-                                                    (((r 'hydra_lib_lists_find)
-                                                       (fn [b] (((r 'hydra_lib_equality_equal) (:name b)) (:name e))))
+                                                    (((r 'hydra_core_lib_lists_find)
+                                                       (fn [b] (((r 'hydra_core_lib_equality_equal) (:name b)) (:name e))))
                                                      all-bindings))
                                                   (:definitions mod)))
                             refreshed-mod (assoc mod :definitions refreshed-els)

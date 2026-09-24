@@ -1,6 +1,6 @@
 """I/O wrapper for Hydra code generation in Python.
 
-Provides file I/O around the pure Either-based functions in hydra.codegen.
+Provides file I/O around the pure Either-based functions in hydra.core.codegen.
 This is the Python equivalent of Haskell's Hydra.Generation module.
 """
 
@@ -14,20 +14,20 @@ from functools import lru_cache
 # exceed Python's default recursion limit for deeply nested types.
 sys.setrecursionlimit(10000)
 
-from hydra.annotations import is_native_type
-from hydra.codegen import (
+from hydra.core.annotations import is_native_type
+from hydra.core.codegen import (
     generate_source_files,
     module_name_to_path,
 )
-from hydra.typing import InferenceContext
-from hydra.core import Binding
-from hydra.overlay.python.dsl.python import FrozenDict, Given, Left, None_, Right
-from hydra.graph import Graph
+from hydra.core.typing import InferenceContext
+from hydra.core.model import Binding
+from hydra.core.overlay.python.dsl.python import FrozenDict, Given, Left, None_, Right
+from hydra.core.graph import Graph
 from hydra.json import model as JsonModel
-from hydra.packaging import Module, ModuleName
-from hydra.strip import deannotate_type_recursive, remove_types_from_term
-from hydra.scoping import f_type_to_type_scheme
-from hydra.overlay.python.sources.libraries import standard_library
+from hydra.core.packaging import Module, ModuleName
+from hydra.core.strip import deannotate_type_recursive, remove_types_from_term
+from hydra.core.scoping import f_type_to_type_scheme
+from hydra.core.overlay.python.sources.libraries import standard_library
 
 
 # #630/#635 overlaySubs threading: the hydra.lib.* sub-namespaces that a target host ships a
@@ -69,7 +69,7 @@ def _overlay_lib_subs(target):
     # wrong is silent on case-insensitive filesystems (macOS): isdir() matches, listdir() then
     # returns capitalized names that never equal the lowercase subs the coder tests against, so
     # every hydra.lib.* redirect is skipped and generated Haskell imports Hydra.Lib.* instead of
-    # Hydra.Overlay.Haskell.Lib.* (#630).
+    # Hydra.Core.Overlay.Haskell.Lib.* (#630).
     base = os.path.join(_resolve_repo_root(), "overlay", target, "hydra-kernel", "src", "main")
     if target == "haskell":
         lib_dir = os.path.join(base, "haskell", "Hydra", "Overlay", "Haskell", "Lib")
@@ -95,15 +95,15 @@ def bootstrap_schema_map():
     """Build a schema map from the bootstrap type map.
 
     This mirrors Java's Generation.bootstrapSchemaMap(): reads the hard-coded
-    type map from hydra.json.bootstrap.types_by_name (generated from the Haskell
+    type map from hydra.core.json.bootstrap.types_by_name (generated from the Haskell
     DSL), strips forall/annotation wrappers, and returns a Map[Name, Type]
     suitable for the JSON decoder.
 
     The bootstrap type map contains types from the kernel modules needed to
-    decode Module from JSON: hydra.core, hydra.error,
-    hydra.graph, hydra.module, hydra.typing, and hydra.util.
+    decode Module from JSON: hydra.core.model, hydra.core.error,
+    hydra.core.graph, hydra.module, hydra.core.typing, and hydra.core.util.
     """
-    from hydra.json.bootstrap import types_by_name
+    from hydra.core.json.bootstrap import types_by_name
 
     result = {}
     for name, typ in types_by_name.items():
@@ -137,11 +137,11 @@ def unwrap_either(result):
     match result:
         case Left(value=err):
             try:
-                # hydra.show.error: resolves against the PUBLISHED hydra-python host, which
-                # still exports the pre-#497 name. Flip to hydra.print.error only when
+                # hydra.core.show.error: resolves against the PUBLISHED hydra-python host, which
+                # still exports the pre-#497 name. Flip to hydra.core.print.error only when
                 # hydra-python next publishes with the rename (same commit as hostVersion
                 # bump). See #497 plan, W1 §4 (published-host version-pin shim).
-                from hydra.show.error import error
+                from hydra.core.show.error import error
                 raise RuntimeError(f"Error: {error(err)}")
             except ImportError:
                 raise RuntimeError(f"Error: {err}")
@@ -174,7 +174,7 @@ def _python_to_hydra_json(obj):
 
 
 def parse_json_file(path):
-    """Read a JSON file, parse to hydra.json.model.Value.
+    """Read a JSON file, parse to hydra.core.json.model.Value.
 
     Uses Python's built-in json module for performance and to avoid
     recursion depth issues with the generated parser on large files.
@@ -194,11 +194,11 @@ def decode_module(bs_graph, schema_map, json_val):
     Uses a pre-built schema map (from bootstrap_schema_map()) to decode the
     JSON into a Term, then decodes the Term into a Module.
     """
-    import hydra.json.decode as json_decode
-    import hydra.decode.packaging as decode_pkg
-    from hydra.core import Name, Type, TypeVariable
+    import hydra.core.json.decode as json_decode
+    import hydra.core.decode.packaging as decode_pkg
+    from hydra.core.model import Name, Type, TypeVariable
 
-    mod_type = TypeVariable(Name("hydra.packaging.Module"))
+    mod_type = TypeVariable(Name("hydra.core.packaging.Module"))
 
     # Step 1: Decode JSON to a Term using the schema map. compact_maps=False: decodes the
     # checked-in dist/json module-bootstrapping representation, which must stay byte-stable
@@ -206,12 +206,12 @@ def decode_module(bs_graph, schema_map, json_val):
     # to the published hydra-python wheel, which may still expose the pre-#624 4-arg
     # from_json (no compact_maps parameter) until hydra-python republishes and hostVersion is
     # bumped past it -- mirrors the try/except ImportError compat shim above for
-    # hydra.show.error. Remove the except branch once hydra-python republishes with the 5-arg
+    # hydra.core.show.error. Remove the except branch once hydra-python republishes with the 5-arg
     # signature.
     try:
-        json_result = json_decode.from_json(schema_map, False, Name("hydra.packaging.Module"), mod_type, json_val)
+        json_result = json_decode.from_json(schema_map, False, Name("hydra.core.packaging.Module"), mod_type, json_val)
     except TypeError:
-        json_result = json_decode.from_json(schema_map, Name("hydra.packaging.Module"), mod_type, json_val)
+        json_result = json_decode.from_json(schema_map, Name("hydra.core.packaging.Module"), mod_type, json_val)
     match json_result:
         case Left(value=err):
             raise RuntimeError(f"Module JSON decode error: {err}")
@@ -234,7 +234,7 @@ def decode_module(bs_graph, schema_map, json_val):
 def load_modules_from_json(base_path, namespaces):
     """Load modules from JSON files using the bootstrap schema map.
 
-    Uses bootstrap_schema_map() (from hydra.json.bootstrap.types_by_name)
+    Uses bootstrap_schema_map() (from hydra.core.json.bootstrap.types_by_name)
     to decode modules, matching Java's Generation.loadModulesFromJson().
     """
     bs_graph = bootstrap_graph()
@@ -350,7 +350,7 @@ def strip_term_types(m):
     type conflicts) but preserved on type-defining bindings
     (needed by is_native_type for schema graph construction).
     """
-    from hydra.packaging import TermDefinition, DefinitionTerm, DefinitionType
+    from hydra.core.packaging import TermDefinition, DefinitionTerm, DefinitionType
     stripped = []
     for d in m.definitions:
         if isinstance(d, DefinitionTerm):
@@ -374,7 +374,7 @@ def filter_kernel_modules(modules):
 
 def filter_type_modules(modules):
     """Filter modules to only those containing type-defining bindings."""
-    from hydra.packaging import DefinitionType
+    from hydra.core.packaging import DefinitionType
     return [m for m in modules if any(
         isinstance(d, DefinitionType) for d in m.definitions)]
 
@@ -445,10 +445,10 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
     from hydra.lisp.language import lisp_language
     from hydra.lisp.serde import program_to_expr
     from hydra.lisp.syntax import Dialect
-    from hydra.serialization import print_expr, parenthesize
-    from hydra.names import module_name_to_file_path
-    from hydra.packaging import ModuleName
-    from hydra.util import CaseConvention, FileExtension
+    from hydra.core.serialization import print_expr, parenthesize
+    from hydra.core.names import module_name_to_file_path
+    from hydra.core.packaging import ModuleName
+    from hydra.core.util import CaseConvention, FileExtension
 
     dialect_map = {
         "clojure": Dialect.CLOJURE,
@@ -608,7 +608,7 @@ def infer_and_write_by_package(
     """
     from hydra import codegen
     from hydra import sorting as Sorting
-    from hydra.overlay.python.dsl.python import FrozenDict, Left, Right
+    from hydra.core.overlay.python.dsl.python import FrozenDict, Left, Right
 
     seed_ns = {m.name.value for m in seed_acc}
     grouping_universe = [m for m in universe_mods if m.name.value not in seed_ns]
@@ -768,7 +768,7 @@ def _unsigned_term_names(m):
     termDefinitionSignature = None). Mirrors the Haskell
     Hydra.Generation.reloadTermSignatureSources's `unsigned`.
     """
-    from hydra.packaging import DefinitionTerm
+    from hydra.core.packaging import DefinitionTerm
 
     unsigned = []
     for d in m.definitions:
@@ -787,7 +787,7 @@ def reload_term_signature_sources(dist_json_root, universe_mods, mods):
     in-memory source modules always have termDefinitionSignature = None
     (inference never runs on derived modules, and native drivers build
     their DSL-module lists from the pre-inference sources list), so
-    without this read-back hydra.dsls.generate_ref_bindings's term path
+    without this read-back hydra.core.dsls.generate_ref_bindings's term path
     would silently skip every term definition and emit an empty module
     (#556). Modules with no unsigned term definitions (type modules,
     primitive-only modules) pass through untouched. Raises if a reloaded
@@ -818,24 +818,24 @@ def reload_term_signature_sources(dist_json_root, universe_mods, mods):
 
 
 def generate_dsl_modules(universe_mods, type_mods):
-    """Synthesize the DSL-wrapper modules (hydra.dsl.<lang>.*) for a set of
+    """Synthesize the DSL-wrapper modules (hydra.core.dsl.<lang>.*) for a set of
     type-defining modules, mirroring Hydra.Generation.generateDslModules.
 
-    Each type module hydra.<lang>.X yields a hydra.dsl.<lang>.X module of
+    Each type module hydra.<lang>.X yields a hydra.core.dsl.<lang>.X module of
     phantom-typed builder functions, auto-derived from its type definitions by
-    the kernel's hydra.dsls.dsl_module transform. Returns the list of generated
+    the kernel's hydra.core.dsls.dsl_module transform. Returns the list of generated
     DSL modules (empty modules — those with no DSL-eligible definitions — are
     filtered by the caller).
 
-    Both the transform (hydra.dsls.dsl_module) and the orchestrator
-    (hydra.codegen.generate_coder_modules) are kernel functions present in the
+    Both the transform (hydra.core.dsls.dsl_module) and the orchestrator
+    (hydra.core.codegen.generate_coder_modules) are kernel functions present in the
     published hydra-kernel wheel, so this runs against the published host with
     no local Haskell build. Replaces the Haskell update-json-main DSL pass for
     hydra-python (#370/#346).
     """
     from hydra import codegen
     from hydra import dsls
-    from hydra.overlay.python.dsl.python import Left, Right
+    from hydra.core.overlay.python.dsl.python import Left, Right
 
     cx = empty_context()
     result = codegen.generate_coder_modules(
@@ -929,7 +929,7 @@ def write_package_manifests(dist_json_root, main_mods, dsl_mods, enc_mods):
     manifest written here.
     """
     from hydra.build.manifest_writer import package_manifest_json
-    from hydra.json.writer import print_json
+    from hydra.core.json.writer import print_json
 
     main_by_pkg = dict(group_by_package(dist_json_root, main_mods))
     dsl_by_pkg = dict(group_by_package(dist_json_root, dsl_mods))

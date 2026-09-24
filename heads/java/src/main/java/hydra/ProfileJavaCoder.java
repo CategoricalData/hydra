@@ -1,17 +1,17 @@
 package hydra;
 
-import hydra.typing.InferenceContext;
-import hydra.core.Name;
-import hydra.core.Term;
-import hydra.errors.Error_;
-import hydra.graph.Graph;
-import hydra.packaging.Definition;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleName;
-import hydra.packaging.TermDefinition;
-import hydra.overlay.java.build.Generation;
-import hydra.overlay.java.util.Either;
-import hydra.overlay.java.util.Optional;
+import hydra.core.typing.InferenceContext;
+import hydra.core.model.Name;
+import hydra.core.model.Term;
+import hydra.core.errors.Error_;
+import hydra.core.graph.Graph;
+import hydra.core.packaging.Definition;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleName;
+import hydra.core.packaging.TermDefinition;
+import hydra.build.overlay.java.Generation;
+import hydra.core.overlay.java.util.Either;
+import hydra.core.overlay.java.util.Optional;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -53,7 +53,7 @@ public class ProfileJavaCoder {
         String javaDir   = worktreeRoot + "/dist/json/hydra-java/src/main/json";
 
         System.err.println("Loading kernel from " + kernelDir + " ...");
-        Map<Name, hydra.core.Type> schemaMap = Generation.bootstrapSchemaMap();
+        Map<Name, hydra.core.model.Type> schemaMap = Generation.bootstrapSchemaMap();
         List<ModuleName> kernelNs = Generation.readManifestField(kernelDir, "mainModules");
         List<Module> universe = new ArrayList<>(
             Generation.loadModulesFromJson(kernelDir, schemaMap, kernelNs));
@@ -86,7 +86,7 @@ public class ProfileJavaCoder {
                     if (d instanceof Definition.Term) {
                         TermDefinition td = ((Definition.Term) d).value;
                         stripped.add(new Definition.Term(
-                            new TermDefinition(td.name, hydra.overlay.java.util.Optional.none(), Optional.<hydra.typing.TermSignature>none(), td.body)));
+                            new TermDefinition(td.name, hydra.core.overlay.java.util.Optional.none(), Optional.<hydra.core.typing.TermSignature>none(), td.body)));
                     } else stripped.add(d);
                 }
                 strippedTarget = new Module(m.name, m.metadata, m.dependencies, stripped);

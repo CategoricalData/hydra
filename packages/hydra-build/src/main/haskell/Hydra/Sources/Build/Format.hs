@@ -8,10 +8,10 @@ import           Hydra.Kernel                    hiding (
   moduleValidationProfile, outputDigest, packageDescriptor, packageManifest,
   packageValidationConfiguration, packageValidationProfile, repositoryDescriptor, severity,
   sha256Hash, termValidationProfile, typeValidationProfile)
-import           Hydra.Overlay.Haskell.Dsl.Annotations
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types                 ((>:))
-import qualified Hydra.Overlay.Haskell.Dsl.Types                 as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types                 ((>:))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Packaging as Packaging
 import qualified Data.List                       as L
 import qualified Data.Map                        as M
@@ -36,7 +36,7 @@ module_ = Module {
               ++ " and per-package validation configuration."
               ++ " Each on-disk file is the canonical JSON encoding of the corresponding type."
               ++ " Overlay build configuration (overlay/<lang>/<pkg>/build.json) is specified separately, by"
-              ++ " hydra.gradle and hydra.python.pyproject. See https://github.com/CategoricalData/hydra/issues/512"))}
+              ++ " hydra.java.gradle and hydra.python.pyproject. See https://github.com/CategoricalData/hydra/issues/512"))}
   where
     definitions = [
       definitionNameConventionProfile,

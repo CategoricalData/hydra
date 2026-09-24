@@ -1,23 +1,23 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
--- | The TermGraph : TypeGraph conformance relation for hydra.paths: path erasure (a term-side position
+-- | The TermGraph : TypeGraph conformance relation for hydra.core.paths: path erasure (a term-side position
 --   maps to the type-side position of its type) plus node typing. Partial on the computation fragment —
 --   steps that have no type-side analog (application/lambda/let/cases/typeApp/typeLambda/wrap/unwrap)
 --   erase to nothing and their subtrees are not checked structurally against the schema.
 module Hydra.Sources.Kernel.Terms.Validate.Paths where
 
 import Hydra.Kernel
-import Hydra.Overlay.Haskell.Libraries
-import qualified Hydra.Dsl.Paths        as Paths
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
+import Hydra.Core.Overlay.Haskell.Libraries
+import qualified Hydra.Core.Dsl.Paths        as Paths
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.List                   as L
@@ -25,7 +25,7 @@ import qualified Data.Map                    as M
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.validate.paths"
+ns = ModuleName "hydra.core.validate.paths"
 
 module_ :: Module
 module_ = Module {

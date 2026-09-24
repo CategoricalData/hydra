@@ -10,18 +10,18 @@ module Hydra.Sources.Build.Test.Libraries where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
 import Hydra.Sources.Kernel.Types.All
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms hiding ((++))
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms hiding ((++))
 
 import qualified Hydra.Sources.Build.Libraries as BuildLibraries
-import qualified Hydra.Dsl.Lib.Logic as Logic
+import qualified Hydra.Core.Dsl.Lib.Logic as Logic
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.build.libraries"
+ns = ModuleName "hydra.build.test.libraries"
 
 module_ :: Module
 module_ = Module {

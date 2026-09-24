@@ -27,22 +27,22 @@ module Hydra.Demos.PgFormats.Demo (
   monomorphizeModuleAllString,
 ) where
 
-import qualified Hydra.Core as Core
+import qualified Hydra.Core.Model as Core
 import qualified Hydra.Pg.Model as Pg
 import Hydra.Pg.Graphson.Utils (pgElementsToGraphson, encodeTermValue)
 import Hydra.Pg.Utils (propertyGraphElements)
-import qualified Hydra.Json.Writer as JsonWriter
-import qualified Hydra.Print.Errors as PrintError
+import qualified Hydra.Core.Json.Writer as JsonWriter
+import qualified Hydra.Core.Print.Errors as PrintError
 import qualified Hydra.Sources.Pg.Model as PgModelSource
 import qualified Hydra.Sources.Pg.Graphson.Syntax as GraphsonSyntaxSource
 import qualified Hydra.Sources.All as SourcesAll
-import qualified Hydra.Packaging as Packaging
-import qualified Hydra.Variables as Variables
+import qualified Hydra.Core.Packaging as Packaging
+import qualified Hydra.Core.Variables as Variables
 import Hydra.ExtGeneration (writeJsonSchema, writeProtobuf)
-import qualified Hydra.Avro.Encoder as AvroEncoder
-import qualified Hydra.Avro.SchemaJson as AvroSchemaJson
-import qualified Hydra.Coders as Coders
-import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Ext.Avro.Encoder as AvroEncoder
+import qualified Hydra.Ext.Avro.SchemaJson as AvroSchemaJson
+import qualified Hydra.Core.Coders as Coders
+import qualified Hydra.Core.Lexical as Lexical
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -103,7 +103,7 @@ generatePgFormats outDir = do
     else fail $ "writeProtobuf did not produce expected file " ++ protoSrc
 
   -- 5. Avro schemas for hydra.pg.model.{Graph, GraphSchema}.
-  --    The Avro encoder (Hydra.Avro.Encoder.encodeType) takes a typeMap
+  --    The Avro encoder (Hydra.Ext.Avro.Encoder.encodeType) takes a typeMap
   --    M.Map Name Type plus a target Name and returns a HydraAvroAdapter
   --    whose adapterTarget is the Avro Schema. We use the same monomorphic
   --    module as the Protobuf path, since Avro likewise has no notion of
@@ -213,7 +213,7 @@ edge i lbl outV inV props = Pg.Edge {
 -- choices and should not be used in production code.
 --
 -- TODO: promote this into a proper hydra-ext utility (analogous to
--- Hydra.Adapt) that every non-generic coder can share, with a structured
+-- Hydra.Core.Adapt) that every non-generic coder can share, with a structured
 -- error type rather than String. For the demo it lives here.
 
 -- | For each polymorphic type definition in a module, a list of concrete
@@ -260,13 +260,13 @@ monomorphizeModuleStrict insts mod = do
                                  body
                                  (zip vars args)
 
--- | Convenience: instantiate every type variable to hydra.core.string AND
+-- | Convenience: instantiate every type variable to hydra.core.model.string AND
 --   strip every TypeApplication down to its head. This is a hack -- it gives
 --   the Protobuf coder a fully ground module to encode without forcing the
 --   caller to spell out per-binding instantiations, but the resulting schema
 --   flattens all id types, all property values, all parametric carriers to
 --   "string", and replaces e.g. `PropertyType<t>` with bare `PropertyType`
---   (the same flattening Hydra.Protobuf.Coder.flattenType does internally
+--   (the same flattening Hydra.Ext.Protobuf.Coder.flattenType does internally
 --   as a last-resort fallback). Use monomorphizeModuleStrict for any case
 --   where the type choice actually matters.
 monomorphizeModuleAllString :: Packaging.Module -> Packaging.Module
@@ -290,7 +290,7 @@ monomorphizeModuleAllString mod = case monomorphizeModuleStrict allString mod of
 -- | Eliminate residual TypeForall and TypeApplication wrappers anywhere in
 --   the type. TypeForall body becomes its body (binders dropped); TypeApplication
 --   becomes its function head (arguments dropped). Same shape as
---   Hydra.Protobuf.Coder.flattenType, lifted out so the demo can apply it
+--   Hydra.Ext.Protobuf.Coder.flattenType, lifted out so the demo can apply it
 --   before handing the module to writeProtobuf.
 --
 -- Also unwraps TypeWrap (newtype) nodes when they appear as the KEY of a

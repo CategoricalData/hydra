@@ -1,0 +1,316 @@
+;; Hand-written test environment for Scheme.
+;; Provides the runtime test graph and test context referenced by the
+;; generated hydra.core.test.test_graph module.
+;;
+;; Mirrors the role of heads/python/.../hydra/test/test_env.py: the DSL
+;; declares hydra.core.test.testEnv as a stub with the right signatures, and
+;; testGraph emits calls into hydra_test_test_env_test_graph /
+;; hydra_test_test_env_test_context. The actual graph build (primitives,
+;; annotation bindings, schema types) is host-language specific and
+;; lives here.
+;;
+;; The annotation-bindings helper is inlined here (rather than included
+;; from ../annotation_bindings.scm) because Guile's R7RS `include`
+;; resolves relative to the current working directory, not the source
+;; file's directory, which makes a path-based include fragile across
+;; the (dist scheme tests cd into src/test/scheme; the bootstrap demo
+;; runs guile from the demo root) and the assemble + setup scripts.
+;; Keeping the helpers here makes the library self-contained.
+
+(define-library (hydra test test_env)
+  (import (scheme base)
+          (hydra core)
+          (hydra graph)
+          (hydra typing)
+          (hydra overlay scheme libraries)
+          (hydra overlay scheme lib maps)
+          (hydra json bootstrap)
+          (hydra scoping))
+  (export hydra_test_test_env_test_context
+          hydra_test_test_env_test_graph)
+  (begin
+
+    ;; -------------------------------------------------------------------
+    ;; Term-building helpers (mirror annotation_bindings.scm)
+    (define (t-lam param body)
+      (list 'lambda (make-hydra_core_lambda param '() body)))
+    (define (t-var name)
+      (list 'variable name))
+    ;; Variadic for left-associative curried application (#443).
+    (define (t-app fun . args)
+      (let loop ((acc fun) (xs args))
+        (if (null? xs) acc
+            (loop (list 'application (make-hydra_core_application acc (car xs))) (cdr xs)))))
+    (define (t-prim name)
+      (list 'variable name))
+    (define (t-let name val body)
+      (list 'let (make-hydra_core_let
+                   (list (make-hydra_core_binding name val '()))
+                   body)))
+    (define (t-inject type-name field-name term)
+      (list 'inject (make-hydra_core_injection type-name
+                     (make-hydra_core_field field-name term))))
+    (define (t-record type-name fields)
+      (list 'record (make-hydra_core_record type-name fields)))
+    (define (t-field name term)
+      (make-hydra_core_field name term))
+    (define (t-project type-name field-name)
+      (list 'project (make-hydra_core_projection type-name field-name)))
+    (define (t-match type-name default . case-fields)
+      ;; CaseStatement.cases is [CaseAlternative{name,handler}] (#369); callers
+      ;; build cases via t-field (Field{name,term}), so convert each Field to
+      ;; a CaseAlternative.
+      (list 'cases (make-hydra_core_case_statement type-name default
+                     (map (lambda (f)
+                            (make-hydra_core_case_alternative
+                              (hydra_core_field-name f) (hydra_core_field-term f)))
+                          case-fields))))
+    (define (t-right v) (list 'either (list 'right v)))
+    (define (t-left v) (list 'either (list 'left v)))
+    (define (t-just v) (list 'optional (t-inject "hydra.core.model.Term" "literal"
+                         (t-inject "hydra.core.model.Literal" "string" v))))
+    (define (t-nothing) (list 'optional (list 'none '())))
+    ;; Build a Term.pair value at Term-AST level (mirrors Java Terms.pair, #443).
+    (define (t-pair a b) (list 'pair (list a b)))
+
+    ;; Annotation term-level bindings (mirrors Java TestSuiteRunner.addAnnotationsBindings)
+    (define (annotation-bindings)
+      (list
+        (list "hydra.core.constants.keyClasses"
+              (list 'wrap (make-hydra_core_wrapped_term "hydra.core.model.Name"
+                            (list 'literal (list 'string "classes")))))
+        (list "hydra.core.constants.keyDescription"
+              (list 'wrap (make-hydra_core_wrapped_term "hydra.core.model.Name"
+                            (list 'literal (list 'string "description")))))
+        (list "hydra.core.constants.keyType"
+              (list 'wrap (make-hydra_core_wrapped_term "hydra.core.model.Name"
+                            (list 'literal (list 'string "type")))))
+        (list "hydra.core.constants.keyDebugId"
+              (list 'wrap (make-hydra_core_wrapped_term "hydra.core.model.Name"
+                            (list 'literal (list 'string "debugId")))))
+        (list "hydra.core.constants.keyFirstClassType"
+              (list 'wrap (make-hydra_core_wrapped_term "hydra.core.model.Name"
+                            (list 'literal (list 'string "firstClassType")))))
+
+        (list "hydra.core.rewriting.deannotateTerm"
+              (t-lam "t"
+                (t-app
+                  (t-match "hydra.core.model.Term" (list 'given (t-var "t"))
+                    (t-field "annotated"
+                      (t-lam "at"
+                        (t-app (t-var "hydra.core.rewriting.deannotateTerm")
+                          (t-app (t-project "hydra.core.model.AnnotatedTerm" "body")
+                            (t-var "at"))))))
+                  (t-var "t"))))
+
+        ;; hydra.core.annotations.getAnnotationMap (#386):
+        ;;   getAnnotationMap :: Term -> Map<Name, Term>
+        (list "hydra.core.annotations.getAnnotationMap"
+              (t-lam "t"
+                (t-app
+                  (t-match "hydra.core.model.Term" (list 'given (t-app (t-prim "hydra.core.lib.maps.empty") (t-var "t")))
+                    (t-field "map"
+                      (t-lam "m"
+                        (t-app (t-prim "hydra.core.lib.maps.fromList")
+                          (t-app (t-app (t-prim "hydra.core.lib.lists.foldl")
+                            (t-lam "acc"
+                              (t-lam "pair"
+                                (t-app
+                                  (t-match "hydra.core.model.Term"
+                                    (list 'given (t-var "acc"))
+                                    (t-field "variable"
+                                      (t-lam "n"
+                                        (t-app (t-app (t-prim "hydra.core.lib.lists.cons")
+                                          (t-pair
+                                            (t-var "n")
+                                            (t-app (t-prim "hydra.core.lib.pairs.second") (t-var "pair"))))
+                                          (t-var "acc")))))
+                                  (t-app (t-prim "hydra.core.lib.pairs.first") (t-var "pair")))))
+                            (list 'list '()))
+                            (t-app (t-prim "hydra.core.lib.maps.toList") (t-var "m")))))))
+                  (t-var "t"))))
+
+        ;; hydra.core.annotations.wrapAnnotationMap (#386):
+        ;;   wrapAnnotationMap :: Map<Name, Term> -> Term
+        (list "hydra.core.annotations.wrapAnnotationMap"
+              (t-lam "m"
+                (t-inject "hydra.core.model.Term" "map"
+                  (t-app (t-prim "hydra.core.lib.maps.fromList")
+                    (t-app (t-app (t-prim "hydra.core.lib.lists.map")
+                      (t-lam "pair"
+                        (t-pair
+                          (t-inject "hydra.core.model.Term" "variable"
+                            (t-app (t-prim "hydra.core.lib.pairs.first") (t-var "pair")))
+                          (t-app (t-prim "hydra.core.lib.pairs.second") (t-var "pair")))))
+                      (t-app (t-prim "hydra.core.lib.maps.toList") (t-var "m")))))))
+
+        (list "hydra.core.annotations.termAnnotationInternal"
+              (t-lam "term"
+                (t-let "toPairs"
+                  (t-lam "rest"
+                    (t-lam "t"
+                      (t-app
+                        (t-match "hydra.core.model.Term" (list 'given (t-var "rest"))
+                          (t-field "annotated"
+                            (t-lam "at"
+                              (t-app
+                                (t-app (t-var "toPairs")
+                                  (t-app (t-app (t-prim "hydra.core.lib.lists.cons")
+                                    (t-app (t-prim "hydra.core.lib.maps.toList")
+                                      (t-app (t-var "hydra.core.annotations.getAnnotationMap")
+                                        (t-app (t-project "hydra.core.model.AnnotatedTerm" "annotation")
+                                          (t-var "at")))))
+                                    (t-var "rest")))
+                                (t-app (t-project "hydra.core.model.AnnotatedTerm" "body")
+                                  (t-var "at"))))))
+                        (t-var "t"))))
+                  (t-app (t-prim "hydra.core.lib.maps.fromList")
+                    (t-app (t-prim "hydra.core.lib.lists.concat")
+                      (t-app (t-app (t-var "toPairs") (list 'list '()))
+                        (t-var "term")))))))
+
+        (list "hydra.core.annotations.setAnnotation"
+              (t-lam "key"
+                (t-lam "val"
+                  (t-lam "m"
+                    (t-app (t-app (t-app (t-prim "hydra.core.lib.optionals.match")
+                      (t-var "val"))
+                      (t-app (t-app (t-prim "hydra.core.lib.maps.delete") (t-var "key")) (t-var "m")))
+                      (t-lam "v"
+                        (t-app (t-app (t-app (t-prim "hydra.core.lib.maps.insert")
+                          (t-var "key")) (t-var "v")) (t-var "m"))))))))
+
+        ;; After #386: wrap the annotations map via wrapAnnotationMap before
+        ;; storing in AnnotatedTerm.annotation (which is now a Term).
+        (list "hydra.core.annotations.setTermAnnotation"
+              (t-lam "key"
+                (t-lam "val"
+                  (t-lam "term"
+                    (t-let "stripped"
+                      (t-app (t-var "hydra.core.rewriting.deannotateTerm") (t-var "term"))
+                      (t-let "anns"
+                        (t-app (t-app (t-app (t-var "hydra.core.annotations.setAnnotation")
+                          (t-var "key")) (t-var "val"))
+                          (t-app (t-var "hydra.core.annotations.termAnnotationInternal") (t-var "term")))
+                        (t-app (t-app (t-app (t-prim "hydra.core.lib.logic.ifElse")
+                          (t-app (t-prim "hydra.core.lib.maps.isEmpty") (t-var "anns")))
+                          (t-var "stripped"))
+                          (t-inject "hydra.core.model.Term" "annotated"
+                            (t-record "hydra.core.model.AnnotatedTerm"
+                              (list (t-field "body" (t-var "stripped"))
+                                    (t-field "annotation"
+                                      (t-app (t-var "hydra.core.annotations.wrapAnnotationMap")
+                                        (t-var "anns")))))))))))))
+
+        (list "hydra.core.annotations.setTermDescription"
+              (t-lam "d"
+                (t-app (t-app (t-var "hydra.core.annotations.setTermAnnotation")
+                  (t-var "hydra.core.constants.keyDescription"))
+                  (t-app (t-app (t-prim "hydra.core.lib.optionals.map")
+                    (t-lam "s"
+                      (t-inject "hydra.core.model.Term" "literal"
+                        (t-inject "hydra.core.model.Literal" "string" (t-var "s")))))
+                    (t-var "d")))))
+
+        (list "hydra.core.annotations.getTermAnnotation"
+              (t-lam "key"
+                (t-lam "term"
+                  (t-app (t-app (t-prim "hydra.core.lib.maps.lookup") (t-var "key"))
+                    (t-app (t-var "hydra.core.annotations.termAnnotationInternal")
+                      (t-var "term"))))))
+
+        (list "hydra.core.annotations.getDescription"
+              (t-lam "cx"
+                (t-lam "g"
+                  (t-lam "anns"
+                    (t-app (t-app (t-app (t-prim "hydra.core.lib.optionals.match")
+                      (t-app (t-app (t-prim "hydra.core.lib.maps.lookup")
+                        (t-var "hydra.core.constants.keyDescription"))
+                        (t-var "anns")))
+                      (t-right (list 'optional (list 'none '()))))
+                      (t-lam "descTerm"
+                        (t-app
+                          (t-match "hydra.core.model.Term"
+                            (list 'given (t-right (list 'optional (list 'none '()))))
+                            (t-field "literal"
+                              (t-lam "lit"
+                                (t-app
+                                  (t-match "hydra.core.model.Literal"
+                                    (list 'given (t-right (list 'optional (list 'none '()))))
+                                    (t-field "string"
+                                      (t-lam "s"
+                                        (t-right (list 'optional (t-var "s"))))))
+                                  (t-var "lit")))))
+                          (t-var "descTerm"))))))))
+
+        (list "hydra.core.annotations.getTermDescription"
+              (t-lam "cx"
+                (t-lam "g"
+                  (t-lam "term"
+                    (t-let "peel"
+                      (t-lam "t"
+                        (t-app
+                          (t-match "hydra.core.model.Term" (list 'given (t-var "t"))
+                            (t-field "typeLambda"
+                              (t-lam "tl"
+                                (t-app (t-var "peel")
+                                  (t-app (t-project "hydra.core.model.TypeLambda" "body")
+                                    (t-var "tl")))))
+                            (t-field "typeApplication"
+                              (t-lam "ta"
+                                (t-app (t-var "peel")
+                                  (t-app (t-project "hydra.core.model.TypeApplicationTerm" "body")
+                                    (t-var "ta"))))))
+                          (t-var "t")))
+                      (t-app (t-app (t-app (t-var "hydra.core.annotations.getDescription")
+                        (t-var "cx")) (t-var "g"))
+                        (t-app (t-var "hydra.core.annotations.termAnnotationInternal")
+                          (t-app (t-var "peel") (t-var "term"))))))))))
+      )
+
+    ;; -------------------------------------------------------------------
+    ;; Public API: testEnv exports
+
+    (define hydra_test_test_env_test_context
+      (make-hydra_typing_inference_context 0 (list)))
+
+    ;; Curried form to match the Scheme coder's emission for multi-arg
+    ;; DSL functions: Map Name Type -> Map Name Term -> Graph becomes
+    ;; ((f types) terms) at the call site. The test-terms argument is
+    ;; appended to bound-terms so reduction tests that reference test
+    ;; data (e.g. testDataArthur) can resolve through the graph.
+    (define (hydra_test_test_env_test_graph test-types)
+     (lambda (test-terms)
+      (let* ((all-prims (standard-library))
+             (type-to-ts hydra_scoping_f_type_to_type_scheme)
+             (kernel-schemas
+               (map (lambda (entry)
+                      (list (car entry) (type-to-ts (cdr entry))))
+                    hydra_json_bootstrap_types_by_name))
+             (test-schemas
+               (map (lambda (entry)
+                      (list (car entry) (type-to-ts (cadr entry))))
+                    (hydra_overlay_scheme_lib_maps_to_list test-types)))
+             (schema-types
+               (hydra_overlay_scheme_lib_maps_from_list
+                 (append kernel-schemas test-schemas)))
+             (test-term-pairs
+               (map (lambda (entry)
+                      (list (car entry) (cadr entry)))
+                    (hydra_overlay_scheme_lib_maps_to_list test-terms)))
+             (bound-terms
+               (append
+                 (annotation-bindings)
+                 (list (list "hydra.monads.emptyContext" (list 'unit '()))
+                       (list "hydra.core.lexical.emptyGraph" (list 'unit '())))
+                 test-term-pairs)))
+        (make-hydra_graph_graph
+          (hydra_overlay_scheme_lib_maps_from_list bound-terms)
+          hydra_overlay_scheme_lib_maps_empty
+          (list)
+          (list)
+          hydra_overlay_scheme_lib_maps_empty
+          (hydra_overlay_scheme_lib_maps_from_list
+            (map (lambda (p) (list (car p) (cdr p))) all-prims))
+          schema-types
+          (list)))))))

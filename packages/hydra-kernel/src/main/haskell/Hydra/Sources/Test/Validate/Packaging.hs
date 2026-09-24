@@ -1,40 +1,40 @@
 
--- | Test cases for module and package validation (hydra.validate.packaging).
+-- | Test cases for module and package validation (hydra.core.validate.packaging).
 module Hydra.Sources.Test.Validate.Packaging where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Error.Packaging
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms hiding ((@@))
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Error.Packaging
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Dsl.Lib.Lists     as Lists
-import qualified Hydra.Dsl.Lib.Maps       as Maps
-import qualified Hydra.Dsl.Lib.Sets      as Sets
-import qualified Hydra.Dsl.Lib.Strings   as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
-import qualified Hydra.Dsl.Packaging          as Packaging
-import qualified Hydra.Dsl.Util               as Util
-import qualified Hydra.Dsl.Validation         as Validation
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Dsl.Lib.Lists     as Lists
+import qualified Hydra.Core.Dsl.Lib.Maps       as Maps
+import qualified Hydra.Core.Dsl.Lib.Sets      as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings   as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                ((@@))
+import qualified Hydra.Core.Dsl.Packaging          as Packaging
+import qualified Hydra.Core.Dsl.Util               as Util
+import qualified Hydra.Core.Dsl.Validation         as Validation
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-import Hydra.Testing
+import Hydra.Core.Testing
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.validate.packaging"
+ns = ModuleName "hydra.core.test.validate.packaging"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.validate.packaging",
-              ModuleName "hydra.print.error.packaging"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.core.validate.packaging",
+              ModuleName "hydra.core.print.error.packaging"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for module and package validation"))}
   where
     definitions = [
@@ -65,7 +65,7 @@ define = definitionInModule module_
 
 allTests :: TypedTermDefinition TestGroup
 allTests = define "allTests" $
-  Phantoms.doc "All test cases for hydra.validate.packaging" $
+  Phantoms.doc "All test cases for hydra.core.validate.packaging" $
   supergroup "validate.packaging" [
     checkConflictingModuleNamesTests,
     checkConflictingVariantNamesTests,
@@ -253,7 +253,7 @@ checkModuleNameConventionTests = define "checkModuleNameConventionTests" $
       noModuleError,
     mc "dotted camelCase segments: no error"
       checkModuleNameConventionRef
-      (mkModule "hydra.test.testGraph" [])
+      (mkModule "hydra.core.test.testGraph" [])
       noModuleError,
     mc "uppercase first letter of segment: error"
       checkModuleNameConventionRef
@@ -323,12 +323,12 @@ checkNestedModuleNamesTests = define "checkNestedModuleNamesTests" $
       noPackageError,
     pc "dotted-prefix nesting: error (outer defined before inner)"
       checkNestedModuleNamesRef
-      (mkPackage "test-pkg" [mkModule "hydra.codegen" [], mkModule "hydra.codegen.docs" []])
-      (nestedModuleNameErr "hydra.codegen" "hydra.codegen.docs"),
+      (mkPackage "test-pkg" [mkModule "hydra.core.codegen" [], mkModule "hydra.core.codegen.docs" []])
+      (nestedModuleNameErr "hydra.core.codegen" "hydra.core.codegen.docs"),
     pc "dotted-prefix nesting: error (inner defined before outer)"
       checkNestedModuleNamesRef
-      (mkPackage "test-pkg" [mkModule "hydra.codegen.docs" [], mkModule "hydra.codegen" []])
-      (nestedModuleNameErr "hydra.codegen" "hydra.codegen.docs")]
+      (mkPackage "test-pkg" [mkModule "hydra.core.codegen.docs" [], mkModule "hydra.core.codegen" []])
+      (nestedModuleNameErr "hydra.core.codegen" "hydra.core.codegen.docs")]
 
 checkPackageNameConventionTests :: TypedTermDefinition TestGroup
 checkPackageNameConventionTests = define "checkPackageNameConventionTests" $
@@ -357,8 +357,8 @@ checkPackageNameConventionTests = define "checkPackageNameConventionTests" $
 -- | Regression coverage for #574: a module referencing a symbol owned by
 -- another module, where the reference is not covered by a declared
 -- dependency, must be flagged -- this is the exact shape of the #555
--- incident (hydra.build.routing referenced hydra.dsls.dslModuleName
--- without hydra.dsls in its moduleDependencies, and the omission surfaced
+-- incident (hydra.build.routing referenced hydra.core.dsls.dslModuleName
+-- without hydra.core.dsls in its moduleDependencies, and the omission surfaced
 -- only much later, as an opaque "untyped term variable" error during a
 -- different package's code generation).
 checkUndeclaredDependenciesTests :: TypedTermDefinition TestGroup
@@ -374,12 +374,12 @@ checkUndeclaredDependenciesTests = define "checkUndeclaredDependenciesTests" $
     in uc "declared dependency covers the reference: no error"
       [bar, foo] Sets.empty foo [],
 
-    let dsls = mkModule "hydra.dsls" [mkDocumentedTermDef "hydra.dsls.dslModuleName"]
+    let dsls = mkModule "hydra.core.dsls" [mkDocumentedTermDef "hydra.core.dsls.dslModuleName"]
         routing = mkModuleWithDeps "hydra.build.routing" []
-          [mkReferencingTermDef "hydra.build.routing.route" "hydra.dsls.dslModuleName"]
+          [mkReferencingTermDef "hydra.build.routing.route" "hydra.core.dsls.dslModuleName"]
     in uc "#555 regression: reference to another module's symbol with no declared dependency: error"
       [dsls, routing] Sets.empty routing
-      [undeclaredDependencyErr "hydra.build.routing" "hydra.dsls.dslModuleName" "hydra.dsls"],
+      [undeclaredDependencyErr "hydra.build.routing" "hydra.core.dsls.dslModuleName" "hydra.core.dsls"],
 
     let baz = mkModule "hydra.baz" [mkDocumentedTermDef "hydra.baz.c"]
         bar = mkModuleWithDeps "hydra.bar" ["hydra.baz"] [mkDocumentedTermDef "hydra.bar.b"]
@@ -394,11 +394,11 @@ checkUndeclaredDependenciesTests = define "checkUndeclaredDependenciesTests" $
     in uc "reference to a name with no known owner (e.g. a typo): no error"
       [foo] Sets.empty foo [],
 
-    let lib = mkModule "hydra.lib.lists" [mkDocumentedTermDef "hydra.lib.lists.map"]
+    let lib = mkModule "hydra.core.lib.lists" [mkDocumentedTermDef "hydra.core.lib.lists.map"]
         foo = mkModuleWithDeps "hydra.foo" []
-          [mkReferencingTermDef "hydra.foo.a" "hydra.lib.lists.map"]
+          [mkReferencingTermDef "hydra.foo.a" "hydra.core.lib.lists.map"]
     in uc "reference to a primitive name: excluded, no error"
-      [lib, foo] (Sets.fromList $ Phantoms.list [nm "hydra.lib.lists.map"]) foo [],
+      [lib, foo] (Sets.fromList $ Phantoms.list [nm "hydra.core.lib.lists.map"]) foo [],
 
     let foo = mkModuleWithDeps "hydra.foo" []
           [mkDocumentedTermDef "hydra.foo.a",
@@ -466,7 +466,7 @@ duplicateDefinitionNameErr nsStr nameStr = justModuleError $
       unName _DuplicateDefinitionNameError_name Phantoms.>: nm nameStr]
 
 duplicateDefinitionNameRule :: Name
-duplicateDefinitionNameRule = Name "hydra.error.packaging.InvalidModuleError.duplicateDefinitionName"
+duplicateDefinitionNameRule = Name "hydra.core.error.packaging.InvalidModuleError.duplicateDefinitionName"
 
 duplicateModuleNameErr :: String -> TypedTerm (Maybe InvalidPackageError)
 duplicateModuleNameErr nsStr = justPackageError $
@@ -553,8 +553,8 @@ kernelPackageTests = define "kernelPackageTests" $
     -- check -- i.e. it fires through the real kernel-strict entry point.
     pc "nested module namespace surfaces"
       kernelPackageRef
-      (mkPackage "test-pkg" [mkModule "hydra.codegen" [], mkModule "hydra.codegen.docs" []])
-      (nestedModuleNameErr "hydra.codegen" "hydra.codegen.docs")]
+      (mkPackage "test-pkg" [mkModule "hydra.core.codegen" [], mkModule "hydra.core.codegen.docs" []])
+      (nestedModuleNameErr "hydra.core.codegen" "hydra.core.codegen.docs")]
 
 -- ============================================================================
 -- Profile-aware behaviour tests
@@ -590,7 +590,7 @@ missingDocumentationErr nsStr nameStr = justModuleError $
 
 -- | Fully qualified rule names used by the profile-aware tests.
 missingDocumentationRule :: Name
-missingDocumentationRule = Name "hydra.error.packaging.InvalidModuleError.missingDocumentation"
+missingDocumentationRule = Name "hydra.core.error.packaging.InvalidModuleError.missingDocumentation"
 
 -- | Package-universe convenience: run checkModulePartition over a list of
 -- (package name, declared module namespaces) pairs, comparing the rendered

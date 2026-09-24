@@ -130,7 +130,7 @@ echo ""
 # Overlay hand-written distribution-package source onto the dist tree (#418) so
 # each dist/haskell/<pkg>/ is a COMPLETE distribution package before stack build.
 # MUST run before step 1: hydra-ext (a transitive dep of bootstrap-from-json)
-# imports Hydra.Overlay.Haskell.Lib.{Pairs,Strings,...} which live ONLY in
+# imports Hydra.Core.Overlay.Haskell.Lib.{Pairs,Strings,...} which live ONLY in
 # overlay/haskell/hydra-kernel/.../Hydra/Overlay/Haskell/Lib/. On a cold worktree where
 # the overlay has not yet been applied, step 1's stack build fails with
 # "Could not find module 'Hydra.Overlay.Haskell.Lib.Pairs'". bin/sync.sh's Phase 0
@@ -299,9 +299,9 @@ echo "  (No post-processing needed — all patches eliminated, see #307.)"
 
 # Re-apply the overlay: step 4's `bootstrap-from-json --prune-stale` deletes
 # files in each per-package output dir that are not part of its generated set,
-# which includes the hand-written Hydra.Overlay.Haskell.Lib.* runtime modules overlaid
+# which includes the hand-written Hydra.Core.Overlay.Haskell.Lib.* runtime modules overlaid
 # before step 1. Without this re-overlay, the rebuild below (and dependent
-# packages like hydra-ext, which import Hydra.Overlay.Haskell.Lib.{Pairs,Strings,...})
+# packages like hydra-ext, which import Hydra.Core.Overlay.Haskell.Lib.{Pairs,Strings,...})
 # fail with "Could not find module 'Hydra.Overlay.Haskell.Lib.Pairs'". The overlay
 # script is idempotent. (#418)
 echo ""

@@ -64,7 +64,7 @@ case "$DIALECT" in
     scheme)
         GEN_MAIN="$HYDRA_ROOT/dist/scheme/hydra-kernel/src/main/scheme"
         GEN_TEST="$HYDRA_ROOT/dist/scheme/hydra-kernel/src/test/scheme"
-        # #546: hydra.build.* main + hydra.test.build.* test modules moved to the
+        # #546: hydra.build.* main + hydra.core.test.build.* test modules moved to the
         # hydra-build package. run-tests.scm imports (hydra test test_suite), which
         # transitively imports (hydra test build ...) -> (hydra build ...); those
         # libraries now resolve from the hydra-build dist tree, so add it to the

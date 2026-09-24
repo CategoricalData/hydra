@@ -1,34 +1,34 @@
 {
-  "comment": "M1 smoke test: verifies the harness can load a kernel WAT module, invoke zero-arg exports, and decode results (i32 constants + length-prefixed strings). Target: hydra.constants.*",
+  "comment": "M1 smoke test: verifies the harness can load a kernel WAT module, invoke zero-arg exports, and decode results (i32 constants + length-prefixed strings). Target: hydra.core.constants.*",
   "wasm_file": "dist/wasm/hydra-kernel/src/main/wat/hydra/constants.wat",
   "tests": [
     {
-      "name": "hydra.constants.debug_inference returns true (i32 1)",
-      "export": "hydra.constants.debug_inference",
+      "name": "hydra.core.constants.debug_inference returns true (i32 1)",
+      "export": "hydra.core.constants.debug_inference",
       "kind": "i32",
       "expected": 1
     },
     {
-      "name": "hydra.constants.max_int32 returns 2^31 - 1",
-      "export": "hydra.constants.max_int32",
+      "name": "hydra.core.constants.max_int32 returns 2^31 - 1",
+      "export": "hydra.core.constants.max_int32",
       "kind": "i32",
       "expected": 2147483647
     },
     {
-      "name": "hydra.constants.keyClasses returns the string \"classes\"",
-      "export": "hydra.constants.keyClasses",
+      "name": "hydra.core.constants.keyClasses returns the string \"classes\"",
+      "export": "hydra.core.constants.keyClasses",
       "kind": "string",
       "expected": "classes"
     },
     {
-      "name": "hydra.constants.keyDescription returns the string \"description\"",
-      "export": "hydra.constants.keyDescription",
+      "name": "hydra.core.constants.keyDescription returns the string \"description\"",
+      "export": "hydra.core.constants.keyDescription",
       "kind": "string",
       "expected": "description"
     },
     {
-      "name": "hydra.constants.max_trace_depth returns 5000",
-      "export": "hydra.constants.max_trace_depth",
+      "name": "hydra.core.constants.max_trace_depth returns 5000",
+      "export": "hydra.core.constants.max_trace_depth",
       "kind": "i32",
       "expected": 5000
     }

@@ -54,13 +54,13 @@
       (cond
         ((and (pair? k) (eq? (car k) 'inject)) k)
         (else
-         (list 'inject (make-hydra_core_injection "hydra.core.Term"
-                         (make-hydra_core_field "variable" k))))))
+         (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+                         (make-hydra_core_model_field "variable" k))))))
 
     (define (wrap-annotation-alist-as-term alist)
       "Wrap a (NameTerm . ValueTerm) alist as Inject{Term, map = (:map ...)}"
-      (list 'inject (make-hydra_core_injection "hydra.core.Term"
-                      (make-hydra_core_field "map"
+      (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+                      (make-hydra_core_model_field "map"
                         (list 'map (map (lambda (pair)
                                           (cons (wrap-key-as-term-variable (car pair))
                                                 (cdr pair)))
@@ -68,7 +68,7 @@
 
     ;; Term-building helpers for annotation bindings
     (define (t-lam param body)
-      (list 'function (list 'lambda (make-hydra_core_lambda param '() body))))
+      (list 'function (list 'lambda (make-hydra_core_model_lambda param '() body))))
     (define (t-var name)
       (list 'variable name))
     ;; Variadic for left-associative curried application (mirrors Java's
@@ -76,229 +76,229 @@
     (define (t-app fun . args)
       (let loop ((acc fun) (xs args))
         (if (null? xs) acc
-            (loop (list 'application (make-hydra_core_application acc (car xs))) (cdr xs)))))
+            (loop (list 'application (make-hydra_core_model_application acc (car xs))) (cdr xs)))))
     (define (t-prim name)
       (list 'function (list 'primitive name)))
     (define (t-let name val body)
-      (list 'let (make-hydra_core_let
-                   (list (make-hydra_core_binding name val '()))
+      (list 'let (make-hydra_core_model_let
+                   (list (make-hydra_core_model_binding name val '()))
                    body)))
     (define (t-inject type-name field-name term)
-      (list 'inject (make-hydra_core_injection type-name
-                     (make-hydra_core_field field-name term))))
+      (list 'inject (make-hydra_core_model_injection type-name
+                     (make-hydra_core_model_field field-name term))))
     (define (t-record type-name fields)
-      (list 'record (make-hydra_core_record type-name fields)))
+      (list 'record (make-hydra_core_model_record type-name fields)))
     (define (t-field name term)
-      (make-hydra_core_field name term))
+      (make-hydra_core_model_field name term))
     (define (t-project type-name field-name)
       (list 'function (list 'elimination
-        (list 'record (make-hydra_core_projection type-name field-name)))))
+        (list 'record (make-hydra_core_model_projection type-name field-name)))))
     (define (t-match type-name default . case-fields)
       (list 'function (list 'elimination
-        (list 'union (make-hydra_core_case_statement type-name default case-fields)))))
+        (list 'union (make-hydra_core_model_case_statement type-name default case-fields)))))
     (define (t-right v) (list 'either (list 'right v)))
     (define (t-left v) (list 'either (list 'left v)))
-    (define (t-just v) (list 'optional (t-inject "hydra.core.Term" "literal"
-                         (t-inject "hydra.core.Literal" "string" v))))
+    (define (t-just v) (list 'optional (t-inject "hydra.core.model.Term" "literal"
+                         (t-inject "hydra.core.model.Literal" "string" v))))
     (define (t-nothing) (list 'optional (list 'none '())))
     ;; Build a Term.pair value at Term-AST level: a 2-element pair payload.
-    ;; Mirrors Java's hydra.dsl.Terms.pair helper.
+    ;; Mirrors Java's hydra.core.dsl.Terms.pair helper.
     (define (t-pair a b) (list 'pair (list a b)))
 
     ;; Annotation term-level bindings (mirrors Java TestSuiteRunner.addAnnotationsBindings)
     (define (annotation-bindings)
       (list
-        ;; hydra.constants
-        (list "hydra.constants.keyClasses"
-              (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+        ;; hydra.core.constants
+        (list "hydra.core.constants.keyClasses"
+              (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                             (list 'literal (list 'string "classes")))))
-        (list "hydra.constants.keyDescription"
-              (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+        (list "hydra.core.constants.keyDescription"
+              (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                             (list 'literal (list 'string "description")))))
-        (list "hydra.constants.keyType"
-              (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+        (list "hydra.core.constants.keyType"
+              (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                             (list 'literal (list 'string "type")))))
-        (list "hydra.constants.keyDebugId"
-              (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+        (list "hydra.core.constants.keyDebugId"
+              (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                             (list 'literal (list 'string "debugId")))))
-        (list "hydra.constants.keyFirstClassType"
-              (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+        (list "hydra.core.constants.keyFirstClassType"
+              (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                             (list 'literal (list 'string "firstClassType")))))
 
-        ;; hydra.rewriting.deannotateTerm = \t -> case t of
+        ;; hydra.core.rewriting.deannotateTerm = \t -> case t of
         ;;   annotated(at) -> deannotateTerm(at.body)
         ;;   _ -> t
-        (list "hydra.rewriting.deannotateTerm"
+        (list "hydra.core.rewriting.deannotateTerm"
               (t-lam "t"
                 (t-app
-                  (t-match "hydra.core.Term" (list 'given (t-var "t"))
+                  (t-match "hydra.core.model.Term" (list 'given (t-var "t"))
                     (t-field "annotated"
                       (t-lam "at"
-                        (t-app (t-var "hydra.rewriting.deannotateTerm")
-                          (t-app (t-project "hydra.core.AnnotatedTerm" "body")
+                        (t-app (t-var "hydra.core.rewriting.deannotateTerm")
+                          (t-app (t-project "hydra.core.model.AnnotatedTerm" "body")
                             (t-var "at"))))))
                   (t-var "t"))))
 
-        ;; hydra.annotations.getAnnotationMap (#386):
+        ;; hydra.core.annotations.getAnnotationMap (#386):
         ;;   getAnnotationMap :: Term -> Map<Name, Term>
         ;;   Project (Name, value) entries from a TermMap with TermVariable
         ;;   keys; return Maps.empty for any other Term shape.
-        (list "hydra.annotations.getAnnotationMap"
+        (list "hydra.core.annotations.getAnnotationMap"
               (t-lam "t"
                 (t-app
-                  (t-match "hydra.core.Term" (list 'given (t-app (t-prim "hydra.lib.maps.empty") (t-var "t")))
+                  (t-match "hydra.core.model.Term" (list 'given (t-app (t-prim "hydra.core.lib.maps.empty") (t-var "t")))
                     (t-field "map"
                       (t-lam "m"
-                        (t-app (t-prim "hydra.lib.maps.fromList")
-                          (t-app (t-app (t-prim "hydra.lib.lists.foldl")
+                        (t-app (t-prim "hydra.core.lib.maps.fromList")
+                          (t-app (t-app (t-prim "hydra.core.lib.lists.foldl")
                             (t-lam "acc"
                               (t-lam "pair"
                                 (t-app
-                                  (t-match "hydra.core.Term"
+                                  (t-match "hydra.core.model.Term"
                                     (list 'given (t-var "acc"))
                                     (t-field "variable"
                                       (t-lam "n"
-                                        (t-app (t-app (t-prim "hydra.lib.lists.cons")
+                                        (t-app (t-app (t-prim "hydra.core.lib.lists.cons")
                                           (t-pair
                                             (t-var "n")
-                                            (t-app (t-prim "hydra.lib.pairs.second") (t-var "pair"))))
+                                            (t-app (t-prim "hydra.core.lib.pairs.second") (t-var "pair"))))
                                           (t-var "acc")))))
-                                  (t-app (t-prim "hydra.lib.pairs.first") (t-var "pair")))))
+                                  (t-app (t-prim "hydra.core.lib.pairs.first") (t-var "pair")))))
                             (list 'list '()))
-                            (t-app (t-prim "hydra.lib.maps.toList") (t-var "m")))))))
+                            (t-app (t-prim "hydra.core.lib.maps.toList") (t-var "m")))))))
                   (t-var "t"))))
 
-        ;; hydra.annotations.wrapAnnotationMap (#386):
+        ;; hydra.core.annotations.wrapAnnotationMap (#386):
         ;;   wrapAnnotationMap :: Map<Name, Term> -> Term
         ;;   Encode each Name key as a TermVariable, then wrap as a TermMap.
-        (list "hydra.annotations.wrapAnnotationMap"
+        (list "hydra.core.annotations.wrapAnnotationMap"
               (t-lam "m"
-                (t-inject "hydra.core.Term" "map"
-                  (t-app (t-prim "hydra.lib.maps.fromList")
-                    (t-app (t-app (t-prim "hydra.lib.lists.map")
+                (t-inject "hydra.core.model.Term" "map"
+                  (t-app (t-prim "hydra.core.lib.maps.fromList")
+                    (t-app (t-app (t-prim "hydra.core.lib.lists.map")
                       (t-lam "pair"
                         (t-pair
-                          (t-inject "hydra.core.Term" "variable"
-                            (t-app (t-prim "hydra.lib.pairs.first") (t-var "pair")))
-                          (t-app (t-prim "hydra.lib.pairs.second") (t-var "pair")))))
-                      (t-app (t-prim "hydra.lib.maps.toList") (t-var "m")))))))
+                          (t-inject "hydra.core.model.Term" "variable"
+                            (t-app (t-prim "hydra.core.lib.pairs.first") (t-var "pair")))
+                          (t-app (t-prim "hydra.core.lib.pairs.second") (t-var "pair")))))
+                      (t-app (t-prim "hydra.core.lib.maps.toList") (t-var "m")))))))
 
-        ;; hydra.annotations.termAnnotationInternal = \term ->
+        ;; hydra.core.annotations.termAnnotationInternal = \term ->
         ;;   let toPairs = \rest -> \t -> case t of
         ;;     annotated(at) -> toPairs(cons(toList(getAnnotationMap(at.annotation)), rest), at.body)
         ;;     _ -> rest
         ;;   in fromList(concat(toPairs([], term)))
         ;; After #386: at.annotation is a Term; project via getAnnotationMap first.
-        (list "hydra.annotations.termAnnotationInternal"
+        (list "hydra.core.annotations.termAnnotationInternal"
               (t-lam "term"
                 (t-let "toPairs"
                   (t-lam "rest"
                     (t-lam "t"
                       (t-app
-                        (t-match "hydra.core.Term" (list 'given (t-var "rest"))
+                        (t-match "hydra.core.model.Term" (list 'given (t-var "rest"))
                           (t-field "annotated"
                             (t-lam "at"
                               (t-app
                                 (t-app (t-var "toPairs")
-                                  (t-app (t-app (t-prim "hydra.lib.lists.cons")
-                                    (t-app (t-prim "hydra.lib.maps.toList")
-                                      (t-app (t-var "hydra.annotations.getAnnotationMap")
-                                        (t-app (t-project "hydra.core.AnnotatedTerm" "annotation")
+                                  (t-app (t-app (t-prim "hydra.core.lib.lists.cons")
+                                    (t-app (t-prim "hydra.core.lib.maps.toList")
+                                      (t-app (t-var "hydra.core.annotations.getAnnotationMap")
+                                        (t-app (t-project "hydra.core.model.AnnotatedTerm" "annotation")
                                           (t-var "at")))))
                                     (t-var "rest")))
-                                (t-app (t-project "hydra.core.AnnotatedTerm" "body")
+                                (t-app (t-project "hydra.core.model.AnnotatedTerm" "body")
                                   (t-var "at"))))))
                         (t-var "t"))))
-                  (t-app (t-prim "hydra.lib.maps.fromList")
-                    (t-app (t-prim "hydra.lib.lists.concat")
+                  (t-app (t-prim "hydra.core.lib.maps.fromList")
+                    (t-app (t-prim "hydra.core.lib.lists.concat")
                       (t-app (t-app (t-var "toPairs") (list 'list '()))
                         (t-var "term")))))))
 
-        ;; hydra.annotations.setAnnotation = \key -> \val -> \m ->
+        ;; hydra.core.annotations.setAnnotation = \key -> \val -> \m ->
         ;;   maybe(delete(key, m), \v -> insert(key, v, m), val)
-        (list "hydra.annotations.setAnnotation"
+        (list "hydra.core.annotations.setAnnotation"
               (t-lam "key"
                 (t-lam "val"
                   (t-lam "m"
-                    (t-app (t-app (t-app (t-prim "hydra.lib.optionals.match")
+                    (t-app (t-app (t-app (t-prim "hydra.core.lib.optionals.match")
                       (t-var "val"))
-                      (t-app (t-app (t-prim "hydra.lib.maps.delete") (t-var "key")) (t-var "m")))
+                      (t-app (t-app (t-prim "hydra.core.lib.maps.delete") (t-var "key")) (t-var "m")))
                       (t-lam "v"
-                        (t-app (t-app (t-app (t-prim "hydra.lib.maps.insert")
+                        (t-app (t-app (t-app (t-prim "hydra.core.lib.maps.insert")
                           (t-var "key")) (t-var "v")) (t-var "m"))))))))
 
-        ;; hydra.annotations.setTermAnnotation = \key -> \val -> \term ->
+        ;; hydra.core.annotations.setTermAnnotation = \key -> \val -> \term ->
         ;;   let stripped = deannotateTerm(term)
         ;;       anns = setAnnotation(key, val, termAnnotationInternal(term))
         ;;   in if null(anns) then stripped
         ;;      else inject(Term){annotated=record(AnnotatedTerm){body=stripped,
         ;;                                              annotation=wrapAnnotationMap(anns)}}
         ;; After #386: wrap the resulting Map<Name, Term> via wrapAnnotationMap.
-        (list "hydra.annotations.setTermAnnotation"
+        (list "hydra.core.annotations.setTermAnnotation"
               (t-lam "key"
                 (t-lam "val"
                   (t-lam "term"
                     (t-let "stripped"
-                      (t-app (t-var "hydra.rewriting.deannotateTerm") (t-var "term"))
+                      (t-app (t-var "hydra.core.rewriting.deannotateTerm") (t-var "term"))
                       (t-let "anns"
-                        (t-app (t-app (t-app (t-var "hydra.annotations.setAnnotation")
+                        (t-app (t-app (t-app (t-var "hydra.core.annotations.setAnnotation")
                           (t-var "key")) (t-var "val"))
-                          (t-app (t-var "hydra.annotations.termAnnotationInternal") (t-var "term")))
-                        (t-app (t-app (t-app (t-prim "hydra.lib.logic.ifElse")
-                          (t-app (t-prim "hydra.lib.maps.isEmpty") (t-var "anns")))
+                          (t-app (t-var "hydra.core.annotations.termAnnotationInternal") (t-var "term")))
+                        (t-app (t-app (t-app (t-prim "hydra.core.lib.logic.ifElse")
+                          (t-app (t-prim "hydra.core.lib.maps.isEmpty") (t-var "anns")))
                           (t-var "stripped"))
-                          (t-inject "hydra.core.Term" "annotated"
-                            (t-record "hydra.core.AnnotatedTerm"
+                          (t-inject "hydra.core.model.Term" "annotated"
+                            (t-record "hydra.core.model.AnnotatedTerm"
                               (list (t-field "body" (t-var "stripped"))
                                     (t-field "annotation"
-                                      (t-app (t-var "hydra.annotations.wrapAnnotationMap")
+                                      (t-app (t-var "hydra.core.annotations.wrapAnnotationMap")
                                         (t-var "anns")))))))))))))
 
-        ;; hydra.annotations.setTermDescription = \d ->
+        ;; hydra.core.annotations.setTermDescription = \d ->
         ;;   setTermAnnotation(keyDescription, optionals.map(\s -> inject(Term, literal, inject(Literal, string, s)), d))
-        (list "hydra.annotations.setTermDescription"
+        (list "hydra.core.annotations.setTermDescription"
               (t-lam "d"
-                (t-app (t-app (t-var "hydra.annotations.setTermAnnotation")
-                  (t-var "hydra.constants.keyDescription"))
-                  (t-app (t-app (t-prim "hydra.lib.optionals.map")
+                (t-app (t-app (t-var "hydra.core.annotations.setTermAnnotation")
+                  (t-var "hydra.core.constants.keyDescription"))
+                  (t-app (t-app (t-prim "hydra.core.lib.optionals.map")
                     (t-lam "s"
-                      (t-inject "hydra.core.Term" "literal"
-                        (t-inject "hydra.core.Literal" "string" (t-var "s")))))
+                      (t-inject "hydra.core.model.Term" "literal"
+                        (t-inject "hydra.core.model.Literal" "string" (t-var "s")))))
                     (t-var "d")))))
 
-        ;; hydra.annotations.getTermAnnotation = \key -> \term ->
+        ;; hydra.core.annotations.getTermAnnotation = \key -> \term ->
         ;;   maps.lookup(key, termAnnotationInternal(term))
-        (list "hydra.annotations.getTermAnnotation"
+        (list "hydra.core.annotations.getTermAnnotation"
               (t-lam "key"
                 (t-lam "term"
-                  (t-app (t-app (t-prim "hydra.lib.maps.lookup") (t-var "key"))
-                    (t-app (t-var "hydra.annotations.termAnnotationInternal")
+                  (t-app (t-app (t-prim "hydra.core.lib.maps.lookup") (t-var "key"))
+                    (t-app (t-var "hydra.core.annotations.termAnnotationInternal")
                       (t-var "term"))))))
 
-        ;; hydra.annotations.getDescription = \cx -> \g -> \anns ->
+        ;; hydra.core.annotations.getDescription = \cx -> \g -> \anns ->
         ;;   maybe(right(nothing),
         ;;         \descTerm -> match Term { literal(\lit -> match Literal { string(\s -> right(just(s))) }) },
         ;;         maps.lookup(keyDescription, anns))
-        (list "hydra.annotations.getDescription"
+        (list "hydra.core.annotations.getDescription"
               (t-lam "cx"
                 (t-lam "g"
                   (t-lam "anns"
-                    (t-app (t-app (t-app (t-prim "hydra.lib.optionals.match")
+                    (t-app (t-app (t-app (t-prim "hydra.core.lib.optionals.match")
                       ;; scrutinee: maps.lookup(keyDescription, anns)
-                      (t-app (t-app (t-prim "hydra.lib.maps.lookup")
-                        (t-var "hydra.constants.keyDescription"))
+                      (t-app (t-app (t-prim "hydra.core.lib.maps.lookup")
+                        (t-var "hydra.core.constants.keyDescription"))
                         (t-var "anns")))
                       ;; default: right(nothing)
                       (t-right (list 'optional (list 'none '()))))
                       ;; \descTerm -> case match to extract string
                       (t-lam "descTerm"
                         (t-app
-                          (t-match "hydra.core.Term"
+                          (t-match "hydra.core.model.Term"
                             (list 'given (t-right (list 'optional (list 'none '()))))
                             (t-field "literal"
                               (t-lam "lit"
                                 (t-app
-                                  (t-match "hydra.core.Literal"
+                                  (t-match "hydra.core.model.Literal"
                                     (list 'given (t-right (list 'optional (list 'none '()))))
                                     (t-field "string"
                                       (t-lam "s"
@@ -306,34 +306,34 @@
                                   (t-var "lit")))))
                           (t-var "descTerm"))))))))
 
-        ;; hydra.annotations.getTermDescription = \cx -> \g -> \term ->
+        ;; hydra.core.annotations.getTermDescription = \cx -> \g -> \term ->
         ;;   let peel = \t -> case t of
         ;;     typeLambda(tl) -> peel(tl.body)
         ;;     typeApplication(ta) -> peel(ta.body)
         ;;     _ -> t
         ;;   in getDescription(cx)(g)(termAnnotationInternal(peel(term)))
-        (list "hydra.annotations.getTermDescription"
+        (list "hydra.core.annotations.getTermDescription"
               (t-lam "cx"
                 (t-lam "g"
                   (t-lam "term"
                     (t-let "peel"
                       (t-lam "t"
                         (t-app
-                          (t-match "hydra.core.Term" (list 'given (t-var "t"))
+                          (t-match "hydra.core.model.Term" (list 'given (t-var "t"))
                             (t-field "typeLambda"
                               (t-lam "tl"
                                 (t-app (t-var "peel")
-                                  (t-app (t-project "hydra.core.TypeLambda" "body")
+                                  (t-app (t-project "hydra.core.model.TypeLambda" "body")
                                     (t-var "tl")))))
                             (t-field "typeApplication"
                               (t-lam "ta"
                                 (t-app (t-var "peel")
-                                  (t-app (t-project "hydra.core.TypeApplicationTerm" "body")
+                                  (t-app (t-project "hydra.core.model.TypeApplicationTerm" "body")
                                     (t-var "ta"))))))
                           (t-var "t")))
-                      (t-app (t-app (t-app (t-var "hydra.annotations.getDescription")
+                      (t-app (t-app (t-app (t-var "hydra.core.annotations.getDescription")
                         (t-var "cx")) (t-var "g"))
-                        (t-app (t-var "hydra.annotations.termAnnotationInternal")
+                        (t-app (t-var "hydra.core.annotations.termAnnotationInternal")
                           (t-app (t-var "peel") (t-var "term"))))))))))
       )
 
@@ -341,19 +341,19 @@
       (let* ((std-prims (standard-library))
              (all-prims std-prims)
              ;; Build schema types from bootstrap + test types
-             (bootstrap-types hydra_json_bootstrap_types_by_name)
-             (test-types hydra_test_test_graph_test_types)
+             (bootstrap-types hydra_core_json_bootstrap_types_by_name)
+             (test-types hydra_core_test_test_graph_test_types)
              ;; Convert types to TypeSchemes using f_type_to_type_scheme
-             (type-to-ts hydra_scoping_f_type_to_type_scheme)
+             (type-to-ts hydra_core_scoping_f_type_to_type_scheme)
              (kernel-schemas (map (lambda (entry)
                                     (list (car entry) (type-to-ts (cdr entry))))
                                   bootstrap-types))
              (test-schemas (map (lambda (entry)
                                   (list (car entry) (type-to-ts (cadr entry))))
-                                (hydra_lib_maps_to_list test-types)))
-             (schema-types (hydra_lib_maps_from_list (append kernel-schemas test-schemas)))
+                                (hydra_core_lib_maps_to_list test-types)))
+             (schema-types (hydra_core_lib_maps_from_list (append kernel-schemas test-schemas)))
              ;; Test terms
-             (test-terms-alist (hydra_lib_maps_to_list hydra_test_test_graph_test_terms))
+             (test-terms-alist (hydra_core_lib_maps_to_list hydra_core_test_test_graph_test_terms))
              (test-terms (map (lambda (entry) (list (car entry) (cdr entry))) test-terms-alist))
              (bound-terms
                (append
@@ -365,16 +365,16 @@
                  (annotation-bindings)
                  ;; Other constants
                  (list (list "hydra.monads.emptyContext" (list 'unit '()))
-                       (list "hydra.lexical.emptyGraph" (list 'unit '())))
+                       (list "hydra.core.lexical.emptyGraph" (list 'unit '())))
                  ;; Test terms
                  test-terms)))
-        (make-hydra_graph_graph
-          (hydra_lib_maps_from_list bound-terms)
-          hydra_lib_maps_empty
+        (make-hydra_core_graph_graph
+          (hydra_core_lib_maps_from_list bound-terms)
+          hydra_core_lib_maps_empty
           '()
           '()
-          hydra_lib_maps_empty
-          (hydra_lib_maps_from_list
+          hydra_core_lib_maps_empty
+          (hydra_core_lib_maps_from_list
             (map (lambda (p) (list (car p) (cdr p))) all-prims))
           schema-types
           '())))
@@ -386,20 +386,20 @@
       *test-graph*)
 
     (define (empty-context)
-      (make-hydra_typing_inference_context 0 '()))
+      (make-hydra_core_typing_inference_context 0 '()))
 
     ;; Build an empty graph with standard primitives (for hoisting tests)
     (define (empty-graph)
       (let ((std-prims (standard-library)))
-        (make-hydra_graph_graph
-          hydra_lib_maps_empty
-          hydra_lib_maps_empty
+        (make-hydra_core_graph_graph
+          hydra_core_lib_maps_empty
+          hydra_core_lib_maps_empty
           '()
           '()
-          hydra_lib_maps_empty
-          (hydra_lib_maps_from_list
+          hydra_core_lib_maps_empty
+          (hydra_core_lib_maps_from_list
             (map (lambda (p) (list (car p) (cdr p))) std-prims))
-          hydra_lib_maps_empty
+          hydra_core_lib_maps_empty
           '())))
 
     ;; ==========================================================================
@@ -415,32 +415,32 @@
       (guard (exn (#t #f))
         (if (and (pair? t) (eq? (car t) 'annotated))
             (let* ((at (cadr t))
-                   (body (hydra_core_annotated_term-body at))
-                   (ann (hydra_core_annotated_term-annotation at))
-                   (body-str (hydra_print_core_term body))
+                   (body (hydra_core_model_annotated_term-body at))
+                   (ann (hydra_core_model_annotated_term-annotation at))
+                   (body-str (hydra_core_print_model_term body))
                    ;; #386: ann is a Term (typically Inject{Term, map=...}). Show it as
                    ;; a Term directly; legacy (:map ...) shapes also show via the kernel.
                    (ann-str (cond
                               ((and (pair? ann) (eq? (car ann) 'inject))
-                               (hydra_print_core_term ann))
+                               (hydra_core_print_model_term ann))
                               ((and (pair? ann) (eq? (car ann) 'map))
-                               (hydra_print_core_term ann))
+                               (hydra_core_print_model_term ann))
                               (else "{}"))))
-              (string-append "inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body="
+              (string-append "inject(hydra.core.model.Term){annotated=record(hydra.core.model.AnnotatedTerm){body="
                              (show-term body) ", annotation=" ann-str "}}"))
-            (hydra_print_core_term t))))
+            (hydra_core_print_model_term t))))
 
     (define (show-type t)
       (guard (exn (#t #f))
-        (hydra_print_core_type t)))
+        (hydra_core_print_model_type t)))
 
     (define (show-type-scheme ts)
       (guard (exn (#t #f))
-        (hydra_print_core_type_scheme ts)))
+        (hydra_core_print_model_type_scheme ts)))
 
     (define (show-let l)
       (guard (exn (#t #f))
-        (hydra_print_core_let l)))
+        (hydra_core_print_model_let l)))
 
     (define (normalize-show s)
       (if (not s) s
@@ -530,8 +530,8 @@
             (cond
               ((eq? tag 'annotated)
                (let* ((at (cadr term))
-                      (body (hydra_core_annotated_term-body at))
-                      (ann (hydra_core_annotated_term-annotation at))
+                      (body (hydra_core_model_annotated_term-body at))
+                      (ann (hydra_core_model_annotated_term-annotation at))
                       ;; #386: AnnotatedTerm.annotation is a Term. Recurse if it
                       ;; already is one; otherwise wrap (NameTerm . ValueTerm)
                       ;; pairs canonically as Inject{Term, map=...}.
@@ -541,49 +541,49 @@
                           ((and (pair? ann) (eq? (car ann) 'map))
                            (term-to-meta (wrap-annotation-alist-as-term (cadr ann))))
                           (else (term-to-meta ann)))))
-                 (list 'inject (make-hydra_core_injection "hydra.core.Term"
-                   (make-hydra_core_field "annotated"
-                     (list 'record (make-hydra_core_record "hydra.core.AnnotatedTerm"
-                       (list (make-hydra_core_field "body" (term-to-meta body))
-                             (make-hydra_core_field "annotation" ann-meta)))))))))
+                 (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+                   (make-hydra_core_model_field "annotated"
+                     (list 'record (make-hydra_core_model_record "hydra.core.model.AnnotatedTerm"
+                       (list (make-hydra_core_model_field "body" (term-to-meta body))
+                             (make-hydra_core_model_field "annotation" ann-meta)))))))))
               ((eq? tag 'literal)
-               (list 'inject (make-hydra_core_injection "hydra.core.Term"
-                 (make-hydra_core_field "literal" (literal-to-meta (cadr term))))))
+               (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+                 (make-hydra_core_model_field "literal" (literal-to-meta (cadr term))))))
               ((eq? tag 'application)
                (let ((app (cadr term)))
-                 (list 'inject (make-hydra_core_injection "hydra.core.Term"
-                   (make-hydra_core_field "application"
-                     (list 'record (make-hydra_core_record "hydra.core.Application"
-                       (list (make-hydra_core_field "function" (term-to-meta (hydra_core_application-function app)))
-                             (make-hydra_core_field "argument" (term-to-meta (hydra_core_application-argument app)))))))))))
+                 (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+                   (make-hydra_core_model_field "application"
+                     (list 'record (make-hydra_core_model_record "hydra.core.model.Application"
+                       (list (make-hydra_core_model_field "function" (term-to-meta (hydra_core_model_application-function app)))
+                             (make-hydra_core_model_field "argument" (term-to-meta (hydra_core_model_application-argument app)))))))))))
               ((eq? tag 'variable)
                (let ((name (cadr term)))
-                 (list 'inject (make-hydra_core_injection "hydra.core.Term"
-                   (make-hydra_core_field "variable"
-                     (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+                 (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+                   (make-hydra_core_model_field "variable"
+                     (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                        (list 'literal (list 'string name)))))))))
               ((eq? tag 'wrap)
                (let ((wt (cadr term)))
-                 (list 'inject (make-hydra_core_injection "hydra.core.Term"
-                   (make-hydra_core_field "wrap"
-                     (list 'record (make-hydra_core_record "hydra.core.WrappedTerm"
-                       (list (make-hydra_core_field "typeName"
-                               (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
-                                 (list 'literal (list 'string (hydra_core_wrapped_term-type_name wt))))))
-                             (make-hydra_core_field "body" (term-to-meta (hydra_core_wrapped_term-body wt)))))))))))
+                 (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+                   (make-hydra_core_model_field "wrap"
+                     (list 'record (make-hydra_core_model_record "hydra.core.model.WrappedTerm"
+                       (list (make-hydra_core_model_field "typeName"
+                               (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
+                                 (list 'literal (list 'string (hydra_core_model_wrapped_term-type_name wt))))))
+                             (make-hydra_core_model_field "body" (term-to-meta (hydra_core_model_wrapped_term-body wt)))))))))))
               ((eq? tag 'optional)
-               (list 'inject (make-hydra_core_injection "hydra.core.Term"
-                 (make-hydra_core_field "optional"
+               (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+                 (make-hydra_core_model_field "optional"
                    (if (cadr term)
                        (list 'optional (term-to-meta (cadr term)))
                        (list 'optional '()))))))
               ((eq? tag 'list)
-               (list 'inject (make-hydra_core_injection "hydra.core.Term"
-                 (make-hydra_core_field "list"
+               (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+                 (make-hydra_core_model_field "list"
                    (list 'list (map term-to-meta (cadr term)))))))
               ((eq? tag 'map)
-               (list 'inject (make-hydra_core_injection "hydra.core.Term"
-                 (make-hydra_core_field "map" (term-to-meta-map term)))))
+               (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+                 (make-hydra_core_model_field "map" (term-to-meta-map term)))))
               (else term)))))
 
     (define (literal-to-meta lit)
@@ -591,11 +591,11 @@
           (let ((tag (car lit)))
             (cond
               ((eq? tag 'string)
-               (list 'inject (make-hydra_core_injection "hydra.core.Literal"
-                 (make-hydra_core_field "string" (list 'literal (list 'string (cadr lit)))))))
+               (list 'inject (make-hydra_core_model_injection "hydra.core.model.Literal"
+                 (make-hydra_core_model_field "string" (list 'literal (list 'string (cadr lit)))))))
               ((eq? tag 'boolean)
-               (list 'inject (make-hydra_core_injection "hydra.core.Literal"
-                 (make-hydra_core_field "boolean" (list 'literal (list 'boolean (cadr lit)))))))
+               (list 'inject (make-hydra_core_model_injection "hydra.core.model.Literal"
+                 (make-hydra_core_model_field "boolean" (list 'literal (list 'boolean (cadr lit)))))))
               ((eq? tag 'integer) (integer-to-meta (cadr lit)))
               ((eq? tag 'float) (float-to-meta (cadr lit)))
               (else lit)))))
@@ -603,24 +603,24 @@
     (define (integer-to-meta ival)
       (if (not (pair? ival)) ival
           (let ((tag (car ival)))
-            (list 'inject (make-hydra_core_injection "hydra.core.Literal"
-              (make-hydra_core_field "integer"
-                (list 'inject (make-hydra_core_injection "hydra.core.IntegerValue"
-                  (make-hydra_core_field (symbol->string tag)
+            (list 'inject (make-hydra_core_model_injection "hydra.core.model.Literal"
+              (make-hydra_core_model_field "integer"
+                (list 'inject (make-hydra_core_model_injection "hydra.core.model.IntegerValue"
+                  (make-hydra_core_model_field (symbol->string tag)
                     (list 'literal (list 'integer ival)))))))))))
 
     (define (float-to-meta fval)
       (if (not (pair? fval)) fval
           (let ((tag (car fval)))
-            (list 'inject (make-hydra_core_injection "hydra.core.Literal"
-              (make-hydra_core_field "float"
-                (list 'inject (make-hydra_core_injection "hydra.core.FloatValue"
-                  (make-hydra_core_field (symbol->string tag)
+            (list 'inject (make-hydra_core_model_injection "hydra.core.model.Literal"
+              (make-hydra_core_model_field "float"
+                (list 'inject (make-hydra_core_model_injection "hydra.core.model.FloatValue"
+                  (make-hydra_core_model_field (symbol->string tag)
                     (list 'literal (list 'float fval)))))))))))
 
     (define (ensure-name-key k)
       (if (string? k)
-          (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name" (list 'literal (list 'string k))))
+          (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name" (list 'literal (list 'string k))))
           k))
 
     (define (term-to-meta-map m)
@@ -816,8 +816,8 @@
       ;; For #311: the actual and expected fields are unit-thunks (Hydra `\_. body`,
       ;; emitted as one-arg procedure-of-unit in Scheme); force them inside the runner's
       ;; timing bracket. '() is passed as the unit argument; the body ignores it.
-      (let ((actual ((hydra_testing_universal_test_case-actual tc) '()))
-            (expected ((hydra_testing_universal_test_case-expected tc) '())))
+      (let ((actual ((hydra_core_testing_universal_test_case-actual tc) '()))
+            (expected ((hydra_core_testing_universal_test_case-expected tc) '())))
         (if (equal? actual expected)
           (list 1 0 0)
           (begin
@@ -865,8 +865,8 @@
                    (display (string-append "FAIL: " path "\n"))
                    (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                    (list 0 1 0)))
-        (let ((actual ((hydra_testing_effectful_test_case-actual tc) '()))
-              (expected ((hydra_testing_effectful_test_case-expected tc) '())))
+        (let ((actual ((hydra_core_testing_effectful_test_case-actual tc) '()))
+              (expected ((hydra_core_testing_effectful_test_case-expected tc) '())))
           (if (equal? actual expected)
               (list 1 0 0)
               (begin
@@ -939,9 +939,9 @@
     ;; ==========================================================================
 
     (define (run-evaluation-test path tc)
-      (let* ((input (hydra_testing_evaluation_test_case-input tc))
-             (expected (hydra_testing_evaluation_test_case-output tc))
-             (style (hydra_testing_evaluation_test_case-evaluation_style tc))
+      (let* ((input (hydra_core_testing_evaluation_test_case-input tc))
+             (expected (hydra_core_testing_evaluation_test_case-output tc))
+             (style (hydra_core_testing_evaluation_test_case-evaluation_style tc))
              (graph (get-test-graph))
              (cx (empty-context))
              (eager (equal? (car style) 'eager)))
@@ -949,7 +949,7 @@
                      (display (string-append "FAIL: " path "\n"))
                      (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                      (list 0 1 0)))
-          (let ((result ((((hydra_reduction_reduce_term cx) graph) eager) input)))
+          (let ((result ((((hydra_core_reduction_reduce_term cx) graph) eager) input)))
             (if (eq? (car result) 'left)
                 (begin
                   (display (string-append "FAIL: " path "\n"))
@@ -971,99 +971,99 @@
 
     (define (run-alpha-conversion-test path tc)
       (run-simple-test path
-        (hydra_testing_alpha_conversion_test_case-result tc)
+        (hydra_core_testing_alpha_conversion_test_case-result tc)
         (lambda ()
-          (((hydra_reduction_alpha_convert
-              (hydra_testing_alpha_conversion_test_case-old_variable tc))
-            (hydra_testing_alpha_conversion_test_case-new_variable tc))
-           (hydra_testing_alpha_conversion_test_case-term tc)))))
+          (((hydra_core_reduction_alpha_convert
+              (hydra_core_testing_alpha_conversion_test_case-old_variable tc))
+            (hydra_core_testing_alpha_conversion_test_case-new_variable tc))
+           (hydra_core_testing_alpha_conversion_test_case-term tc)))))
 
     (define (run-case-conversion-test path tc)
       (run-simple-test path
-        (hydra_testing_case_conversion_test_case-to_string tc)
+        (hydra_core_testing_case_conversion_test_case-to_string tc)
         (lambda ()
-          (((hydra_formatting_convert_case
-              (hydra_testing_case_conversion_test_case-from_convention tc))
-            (hydra_testing_case_conversion_test_case-to_convention tc))
-           (hydra_testing_case_conversion_test_case-from_string tc)))))
+          (((hydra_core_formatting_convert_case
+              (hydra_core_testing_case_conversion_test_case-from_convention tc))
+            (hydra_core_testing_case_conversion_test_case-to_convention tc))
+           (hydra_core_testing_case_conversion_test_case-from_string tc)))))
 
     (define (run-deannotate-term-test path tc)
       (run-simple-test path
-        (hydra_testing_deannotate_term_test_case-output tc)
+        (hydra_core_testing_deannotate_term_test_case-output tc)
         (lambda ()
-          (hydra_strip_deannotate_term
-            (hydra_testing_deannotate_term_test_case-input tc)))))
+          (hydra_core_strip_deannotate_term
+            (hydra_core_testing_deannotate_term_test_case-input tc)))))
 
     (define (run-deannotate-type-test path tc)
       (run-simple-test path
-        (hydra_testing_deannotate_type_test_case-output tc)
+        (hydra_core_testing_deannotate_type_test_case-output tc)
         (lambda ()
-          (hydra_rewriting_deannotate_type
-            (hydra_testing_deannotate_type_test_case-input tc)))))
+          (hydra_core_rewriting_deannotate_type
+            (hydra_core_testing_deannotate_type_test_case-input tc)))))
 
     (define (run-flatten-let-terms-test path tc)
       (run-simple-test path
-        (hydra_testing_flatten_let_terms_test_case-output tc)
+        (hydra_core_testing_flatten_let_terms_test_case-output tc)
         (lambda ()
-          (hydra_rewriting_flatten_let_terms
-            (hydra_testing_flatten_let_terms_test_case-input tc)))))
+          (hydra_core_rewriting_flatten_let_terms
+            (hydra_core_testing_flatten_let_terms_test_case-input tc)))))
 
     (define (run-free-variables-test path tc)
       (run-simple-test path
-        (hydra_testing_free_variables_test_case-output tc)
+        (hydra_core_testing_free_variables_test_case-output tc)
         (lambda ()
-          (hydra_rewriting_free_variables_in_term
-            (hydra_testing_free_variables_test_case-input tc)))))
+          (hydra_core_rewriting_free_variables_in_term
+            (hydra_core_testing_free_variables_test_case-input tc)))))
 
     (define (run-lift-lambda-test path tc)
       (run-simple-test path
-        (hydra_testing_lift_lambda_above_let_test_case-output tc)
+        (hydra_core_testing_lift_lambda_above_let_test_case-output tc)
         (lambda ()
-          (hydra_rewriting_lift_lambda_above_let
-            (hydra_testing_lift_lambda_above_let_test_case-input tc)))))
+          (hydra_core_rewriting_lift_lambda_above_let
+            (hydra_core_testing_lift_lambda_above_let_test_case-input tc)))))
 
     (define (run-simplify-term-test path tc)
       (run-simple-test path
-        (hydra_testing_simplify_term_test_case-output tc)
+        (hydra_core_testing_simplify_term_test_case-output tc)
         (lambda ()
-          (hydra_rewriting_simplify_term
-            (hydra_testing_simplify_term_test_case-input tc)))))
+          (hydra_core_rewriting_simplify_term
+            (hydra_core_testing_simplify_term_test_case-input tc)))))
 
     (define (run-normalize-type-vars-test path tc)
       (run-simple-test path
-        (hydra_testing_normalize_type_variables_test_case-output tc)
+        (hydra_core_testing_normalize_type_variables_test_case-output tc)
         (lambda ()
-          (hydra_rewriting_normalize_type_variables_in_term
-            (hydra_testing_normalize_type_variables_test_case-input tc)))))
+          (hydra_core_rewriting_normalize_type_variables_in_term
+            (hydra_core_testing_normalize_type_variables_test_case-input tc)))))
 
     (define (run-topological-sort-test path tc)
       (run-simple-test path
-        (hydra_testing_topological_sort_test_case-expected tc)
+        (hydra_core_testing_topological_sort_test_case-expected tc)
         (lambda ()
-          (hydra_sorting_topological_sort
-            (hydra_testing_topological_sort_test_case-adjacency_list tc)))))
+          (hydra_core_sorting_topological_sort
+            (hydra_core_testing_topological_sort_test_case-adjacency_list tc)))))
 
     (define (run-topological-sort-scc-test path tc)
       (run-simple-test path
-        (hydra_testing_topological_sort_s_c_c_test_case-expected tc)
+        (hydra_core_testing_topological_sort_s_c_c_test_case-expected tc)
         (lambda ()
-          (hydra_sorting_topological_sort_components
-            (hydra_testing_topological_sort_s_c_c_test_case-adjacency_list tc)))))
+          (hydra_core_sorting_topological_sort_components
+            (hydra_core_testing_topological_sort_s_c_c_test_case-adjacency_list tc)))))
 
     (define (run-serialization-test path tc)
       (run-simple-test path
-        (hydra_testing_serialization_test_case-output tc)
+        (hydra_core_testing_serialization_test_case-output tc)
         (lambda ()
-          (hydra_serialization_print_expr
-            (hydra_serialization_parenthesize
-              (hydra_testing_serialization_test_case-input tc))))))
+          (hydra_core_serialization_print_expr
+            (hydra_core_serialization_parenthesize
+              (hydra_core_testing_serialization_test_case-input tc))))))
 
     (define (run-unshadow-variables-test path tc)
       (run-simple-test path
-        (hydra_testing_unshadow_variables_test_case-output tc)
+        (hydra_core_testing_unshadow_variables_test_case-output tc)
         (lambda ()
-          (hydra_rewriting_unshadow_variables
-            (hydra_testing_unshadow_variables_test_case-input tc)))))
+          (hydra_core_rewriting_unshadow_variables
+            (hydra_core_testing_unshadow_variables_test_case-input tc)))))
 
     ;; ---- Medium test runners (need graph/context, Either results) ----
 
@@ -1071,17 +1071,17 @@
       (let ((cx (empty-context))
             (graph (get-test-graph)))
         (run-either-test path
-          (hydra_testing_type_reduction_test_case-output tc)
-          (((hydra_reduction_beta_reduce_type cx) graph)
-           (hydra_testing_type_reduction_test_case-input tc)))))
+          (hydra_core_testing_type_reduction_test_case-output tc)
+          (((hydra_core_reduction_beta_reduce_type cx) graph)
+           (hydra_core_testing_type_reduction_test_case-input tc)))))
 
     (define (run-eta-expansion-test path tc)
       (let ((cx (empty-context))
             (graph (get-test-graph)))
         (run-either-test path
-          (hydra_testing_eta_expansion_test_case-output tc)
-          (((hydra_reduction_eta_expand_typed_term cx) graph)
-           (hydra_testing_eta_expansion_test_case-input tc)))))
+          (hydra_core_testing_eta_expansion_test_case-output tc)
+          (((hydra_core_reduction_eta_expand_typed_term cx) graph)
+           (hydra_core_testing_eta_expansion_test_case-input tc)))))
 
     ;; ---- Inference tests ----
 
@@ -1092,8 +1092,8 @@
                      (display (string-append "FAIL: " path "\n"))
                      (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                      (list 0 1 0)))
-          (let ((result (((hydra_inference_infer_type_of cx) graph)
-                          (hydra_testing_inference_test_case-input tc))))
+          (let ((result (((hydra_core_inference_infer_type_of cx) graph)
+                          (hydra_core_testing_inference_test_case-input tc))))
             (if (eq? (car result) 'left)
                 (begin
                   (display (string-append "FAIL: " path "\n"))
@@ -1103,7 +1103,7 @@
                 (let* ((pair-val (cadr result))
                        (inner-pair (car pair-val))
                        (result-scheme (cadr inner-pair))
-                       (expected-ts (hydra_testing_inference_test_case-output tc))
+                       (expected-ts (hydra_core_testing_inference_test_case-output tc))
                        (expected-str (show-type-scheme expected-ts))
                        (actual-str (show-type-scheme result-scheme)))
                   (run-string-comparison-test path expected-str actual-str)))))))
@@ -1114,8 +1114,8 @@
         (guard (exn (#t
                      ;; Exception counts as failure (expected)
                      (list 1 0 0)))
-          (let ((result (((hydra_inference_infer_type_of cx) graph)
-                          (hydra_testing_inference_failure_test_case-input tc))))
+          (let ((result (((hydra_core_inference_infer_type_of cx) graph)
+                          (hydra_core_testing_inference_failure_test_case-input tc))))
             (if (eq? (car result) 'left)
                 (list 1 0 0)  ;; Expected failure
                 (begin
@@ -1127,11 +1127,11 @@
 
     (define (type-scheme-to-type ts)
       "Convert a TypeScheme back to a Type by wrapping forall binders around the body."
-      (let ((vars (hydra_core_type_scheme-variables ts))
-            (body (hydra_core_type_scheme-body ts)))
+      (let ((vars (hydra_core_model_type_scheme-variables ts))
+            (body (hydra_core_model_type_scheme-body ts)))
         (let loop ((vs (reverse vars)) (t body))
           (if (null? vs) t
-              (loop (cdr vs) (list 'forall (make-hydra_core_forall_type (car vs) t)))))))
+              (loop (cdr vs) (list 'forall (make-hydra_core_model_forall_type (car vs) t)))))))
 
     (define (run-type-checking-test path tc)
       (let ((cx (empty-context))
@@ -1141,8 +1141,8 @@
                      (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                      (list 0 1 0)))
           ;; Step 1: Infer type
-          (let ((infer-result (((hydra_inference_infer_type_of cx) graph)
-                                (hydra_testing_type_checking_test_case-input tc))))
+          (let ((infer-result (((hydra_core_inference_infer_type_of cx) graph)
+                                (hydra_core_testing_type_checking_test_case-input tc))))
             (if (eq? (car infer-result) 'left)
                 (begin
                   (display (string-append "FAIL: " path "\n"))
@@ -1155,7 +1155,7 @@
                        (infer-cx (cadr pair-val))
                        (inferred-type (type-scheme-to-type result-scheme))
                        ;; Step 2: Reconstruct type using typeOf
-                       (type-of-result ((((hydra_checking_type_of infer-cx) graph) '()) inferred-term)))
+                       (type-of-result ((((hydra_core_checking_type_of infer-cx) graph) '()) inferred-term)))
                   (if (eq? (car type-of-result) 'left)
                       (begin
                         (display (string-append "FAIL: " path "\n"))
@@ -1163,8 +1163,8 @@
                         (list 0 1 0))
                       (let* ((reconstructed-type (car (cadr type-of-result)))
                              ;; Compare using alpha-equivalence
-                             (expected-term (hydra_testing_type_checking_test_case-output_term tc))
-                             (expected-type (hydra_testing_type_checking_test_case-output_type tc))
+                             (expected-term (hydra_core_testing_type_checking_test_case-output_term tc))
+                             (expected-type (hydra_core_testing_type_checking_test_case-output_type tc))
                              (term-ok? (alpha-equivalent-terms? expected-term inferred-term))
                              (type-ok? (alpha-equivalent-types? expected-type inferred-type))
                              (recon-ok? (alpha-equivalent-types? expected-type reconstructed-type)))
@@ -1194,38 +1194,38 @@
 
     (define (run-variable-occurs-in-type-test path tc)
       (run-simple-test path
-        (hydra_testing_variable_occurs_in_type_test_case-expected tc)
+        (hydra_core_testing_variable_occurs_in_type_test_case-expected tc)
         (lambda ()
-          ((hydra_unification_variable_occurs_in_type
-             (hydra_testing_variable_occurs_in_type_test_case-variable tc))
-           (hydra_testing_variable_occurs_in_type_test_case-type tc)))))
+          ((hydra_core_unification_variable_occurs_in_type
+             (hydra_core_testing_variable_occurs_in_type_test_case-variable tc))
+           (hydra_core_testing_variable_occurs_in_type_test_case-type tc)))))
 
     ;; ---- Subst in type ----
 
     (define (run-subst-in-type-test path tc)
       (let* (;; Build TypeSubst from list of (name, type) pairs
              ;; Note: TypeSubst is transparent (bare alist map, not a record)
-             (subst-alist (hydra_lib_maps_from_list
-                            (hydra_testing_subst_in_type_test_case-substitution tc))))
+             (subst-alist (hydra_core_lib_maps_from_list
+                            (hydra_core_testing_subst_in_type_test_case-substitution tc))))
         (run-simple-test path
-          (hydra_testing_subst_in_type_test_case-output tc)
+          (hydra_core_testing_subst_in_type_test_case-output tc)
           (lambda ()
-            ((hydra_substitution_subst_in_type subst-alist)
-             (hydra_testing_subst_in_type_test_case-input tc))))))
+            ((hydra_core_substitution_subst_in_type subst-alist)
+             (hydra_core_testing_subst_in_type_test_case-input tc))))))
 
     ;; ---- Unify types ----
 
     (define (run-unify-types-test path tc)
       (let* ((cx (empty-context))
              ;; Build schema types as Hydra alist map from the list of names
-             (schema-entries (map (lambda (n) (list n (make-hydra_core_type_scheme '() (list 'variable n) '())))
-                                  (hydra_testing_unify_types_test_case-schema_types tc)))
-             (schema-types (hydra_lib_maps_from_list schema-entries))
-             (result (((((hydra_unification_unify_types cx) schema-types)
-                         (hydra_testing_unify_types_test_case-left tc))
-                        (hydra_testing_unify_types_test_case-right tc))
+             (schema-entries (map (lambda (n) (list n (make-hydra_core_model_type_scheme '() (list 'variable n) '())))
+                                  (hydra_core_testing_unify_types_test_case-schema_types tc)))
+             (schema-types (hydra_core_lib_maps_from_list schema-entries))
+             (result (((((hydra_core_unification_unify_types cx) schema-types)
+                         (hydra_core_testing_unify_types_test_case-left tc))
+                        (hydra_core_testing_unify_types_test_case-right tc))
                        "test"))
-             (expected (hydra_testing_unify_types_test_case-expected tc)))
+             (expected (hydra_core_testing_unify_types_test_case-expected tc)))
         (guard (exn (#t
                      (display (string-append "FAIL: " path "\n"))
                      (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
@@ -1254,7 +1254,7 @@
                         (normalize-subst (lambda (ts)
                                            (my-list-sort
                                              (lambda (a b) (string<? (car a) (car b)))
-                                             (hydra_lib_maps_to_list ts)))))
+                                             (hydra_core_lib_maps_to_list ts)))))
                    (if (equal? (normalize-subst expected-subst) (normalize-subst actual-subst))
                        (list 1 0 0)
                        (begin
@@ -1271,11 +1271,11 @@
 
     (define (run-join-types-test path tc)
       (let* ((cx (empty-context))
-             (result ((((hydra_unification_join_types cx)
-                         (hydra_testing_join_types_test_case-left tc))
-                        (hydra_testing_join_types_test_case-right tc))
+             (result ((((hydra_core_unification_join_types cx)
+                         (hydra_core_testing_join_types_test_case-left tc))
+                        (hydra_core_testing_join_types_test_case-right tc))
                        "test"))
-             (expected (hydra_testing_join_types_test_case-expected tc)))
+             (expected (hydra_core_testing_join_types_test_case-expected tc)))
         (guard (exn (#t
                      (display (string-append "FAIL: " path "\n"))
                      (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
@@ -1315,13 +1315,13 @@
     ;; ---- Topological sort bindings ----
 
     (define (run-topological-sort-bindings-test path tc)
-      (let* ((binding-map (hydra_lib_maps_from_list
-                            (hydra_testing_topological_sort_bindings_test_case-bindings tc)))
-             (result (hydra_dependencies_topological_sort_binding_map binding-map))
+      (let* ((binding-map (hydra_core_lib_maps_from_list
+                            (hydra_core_testing_topological_sort_bindings_test_case-bindings tc)))
+             (result (hydra_core_dependencies_topological_sort_binding_map binding-map))
              ;; Compare as sets of sets (order within SCCs doesn't matter)
              (result-sets (map (lambda (scc) (my-list-sort string<? scc)) result))
              (expected-sets (map (lambda (scc) (my-list-sort string<? scc))
-                                 (hydra_testing_topological_sort_bindings_test_case-expected tc)))
+                                 (hydra_core_testing_topological_sort_bindings_test_case-expected tc)))
              (result-sorted (my-list-sort (lambda (a b)
                                             (string<? (if (null? a) "" (car a))
                                                       (if (null? b) "" (car b))))
@@ -1343,10 +1343,10 @@
     (define (run-hoist-case-statements-test path tc)
       (let ((eg (empty-graph)))
         (run-simple-test path
-          (hydra_testing_hoist_case_statements_test_case-output tc)
+          (hydra_core_testing_hoist_case_statements_test_case-output tc)
           (lambda ()
-            ((hydra_hoisting_hoist_case_statements eg)
-             (hydra_testing_hoist_case_statements_test_case-input tc))))))
+            ((hydra_core_hoisting_hoist_case_statements eg)
+             (hydra_core_testing_hoist_case_statements_test_case-input tc))))))
 
     ;; ---- Hoist subterms ----
 
@@ -1376,12 +1376,12 @@
 
     (define (run-hoist-subterms-test path tc)
       (let ((eg (empty-graph))
-            (pred (predicate-fn (hydra_testing_hoist_subterms_test_case-predicate tc))))
+            (pred (predicate-fn (hydra_core_testing_hoist_subterms_test_case-predicate tc))))
         (run-simple-test path
-          (hydra_testing_hoist_subterms_test_case-output tc)
+          (hydra_core_testing_hoist_subterms_test_case-output tc)
           (lambda ()
-            (((hydra_hoisting_hoist_subterms pred) eg)
-             (hydra_testing_hoist_subterms_test_case-input tc))))))
+            (((hydra_core_hoisting_hoist_subterms pred) eg)
+             (hydra_core_testing_hoist_subterms_test_case-input tc))))))
 
     ;; ---- Hoist let bindings ----
 
@@ -1391,9 +1391,9 @@
                    (display (string-append "FAIL: " path "\n"))
                    (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                    (list 0 1 0)))
-        (let* ((result (hydra_hoisting_hoist_all_let_bindings
-                         (hydra_testing_hoist_let_bindings_test_case-input tc)))
-               (expected-str (show-let (hydra_testing_hoist_let_bindings_test_case-output tc)))
+        (let* ((result (hydra_core_hoisting_hoist_all_let_bindings
+                         (hydra_core_testing_hoist_let_bindings_test_case-input tc)))
+               (expected-str (show-let (hydra_core_testing_hoist_let_bindings_test_case-output tc)))
                (actual-str (show-let result)))
           (run-string-comparison-test path expected-str actual-str))))
 
@@ -1405,16 +1405,16 @@
                    (display (string-append "FAIL: " path "\n"))
                    (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                    (list 0 1 0)))
-        (let* ((result ((hydra_hoisting_hoist_polymorphic_let_bindings (lambda (_) #t))
-                         (hydra_testing_hoist_polymorphic_let_bindings_test_case-input tc)))
-               (expected-str (show-let (hydra_testing_hoist_polymorphic_let_bindings_test_case-output tc)))
+        (let* ((result ((hydra_core_hoisting_hoist_polymorphic_let_bindings (lambda (_) #t))
+                         (hydra_core_testing_hoist_polymorphic_let_bindings_test_case-input tc)))
+               (expected-str (show-let (hydra_core_testing_hoist_polymorphic_let_bindings_test_case-output tc)))
                (actual-str (show-let result)))
           (run-string-comparison-test path expected-str actual-str))))
 
     ;; ---- Rewrite term ----
 
     (define (run-rewrite-term-test path tc)
-      (let* ((rewriter (hydra_testing_rewrite_term_test_case-rewriter tc))
+      (let* ((rewriter (hydra_core_testing_rewrite_term_test_case-rewriter tc))
              (rewriter-type (car rewriter))
              (rewrite-impl
                (cond
@@ -1441,15 +1441,15 @@
                  ;; Default: identity rewrite
                  (else (lambda (recurse) (lambda (term) (recurse term)))))))
         (run-simple-test path
-          (hydra_testing_rewrite_term_test_case-output tc)
+          (hydra_core_testing_rewrite_term_test_case-output tc)
           (lambda ()
-            ((hydra_rewriting_rewrite_term rewrite-impl)
-             (hydra_testing_rewrite_term_test_case-input tc))))))
+            ((hydra_core_rewriting_rewrite_term rewrite-impl)
+             (hydra_core_testing_rewrite_term_test_case-input tc))))))
 
     ;; ---- Rewrite type ----
 
     (define (run-rewrite-type-test path tc)
-      (let* ((rewriter (hydra_testing_rewrite_type_test_case-rewriter tc))
+      (let* ((rewriter (hydra_core_testing_rewrite_type_test_case-rewriter tc))
              (rewriter-type (car rewriter))
              (rewrite-impl
                (cond
@@ -1464,10 +1464,10 @@
                  ;; Default: identity rewrite
                  (else (lambda (recurse) (lambda (typ) (recurse typ)))))))
         (run-simple-test path
-          (hydra_testing_rewrite_type_test_case-output tc)
+          (hydra_core_testing_rewrite_type_test_case-output tc)
           (lambda ()
-            ((hydra_rewriting_rewrite_type rewrite-impl)
-             (hydra_testing_rewrite_type_test_case-input tc))))))
+            ((hydra_core_rewriting_rewrite_type rewrite-impl)
+             (hydra_core_testing_rewrite_type_test_case-input tc))))))
 
     ;; ---- Fold over term ----
 
@@ -1500,9 +1500,9 @@
           '()))
 
     (define (run-fold-over-term-test path tc)
-      (let ((order (hydra_testing_fold_over_term_test_case-traversal_order tc))
-            (operation (hydra_testing_fold_over_term_test_case-operation tc))
-            (input (hydra_testing_fold_over_term_test_case-input tc)))
+      (let ((order (hydra_core_testing_fold_over_term_test_case-traversal_order tc))
+            (operation (hydra_core_testing_fold_over_term_test_case-operation tc))
+            (input (hydra_core_testing_fold_over_term_test_case-input tc)))
         (guard (exn (#t
                      (display (string-append "FAIL: " path "\n"))
                      (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
@@ -1511,29 +1511,29 @@
             (let ((result
                     (cond
                       ((eq? op-type 'sum_int32_literals)
-                       (let ((sum ((((hydra_rewriting_fold_over_term order)
+                       (let ((sum ((((hydra_core_rewriting_fold_over_term order)
                                       (lambda (acc) (lambda (t) (+ acc (get-int32 t))))) 0) input)))
                          (list 'literal (list 'integer (list 'int32 sum)))))
 
                       ((eq? op-type 'collect_list_lengths)
-                       (let ((lengths ((((hydra_rewriting_fold_over_term order)
+                       (let ((lengths ((((hydra_core_rewriting_fold_over_term order)
                                           (lambda (acc) (lambda (t) (append acc (get-list-length t))))) '()) input)))
                          (list 'list (map (lambda (len) (list 'literal (list 'integer (list 'int32 len)))) lengths))))
 
                       ((eq? op-type 'collect_labels)
-                       (let ((labels ((((hydra_rewriting_fold_over_term order)
+                       (let ((labels ((((hydra_core_rewriting_fold_over_term order)
                                          (lambda (acc) (lambda (t) (append acc (get-label t))))) '()) input)))
                          (list 'list (map (lambda (label) (list 'literal label)) labels))))
 
                       (else (list 'unit '())))))
-              (if (terms-match? result (hydra_testing_fold_over_term_test_case-output tc))
+              (if (terms-match? result (hydra_core_testing_fold_over_term_test_case-output tc))
                   (list 1 0 0)
                   (begin
                     (display (string-append "FAIL: " path "\n"))
                     (guard (exn (#t
-                                 (display "  Expected (raw): ") (write (hydra_testing_fold_over_term_test_case-output tc)) (newline)
+                                 (display "  Expected (raw): ") (write (hydra_core_testing_fold_over_term_test_case-output tc)) (newline)
                                  (display "  Actual (raw):   ") (write result) (newline)))
-                      (display (string-append "  Expected: " (show-term (hydra_testing_fold_over_term_test_case-output tc)) "\n"))
+                      (display (string-append "  Expected: " (show-term (hydra_core_testing_fold_over_term_test_case-output tc)) "\n"))
                       (display (string-append "  Actual:   " (show-term result) "\n")))
                     (list 0 1 0))))))))
 
@@ -1544,33 +1544,33 @@
                    (display (string-append "FAIL: " path "\n"))
                    (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                    (list 0 1 0)))
-        (let ((result (hydra_json_parser_parse_json
-                        (hydra_testing_parser_test_case-input tc))))
-          (if (terms-match? result (hydra_testing_parser_test_case-output tc))
+        (let ((result (hydra_core_json_parser_parse_json
+                        (hydra_core_testing_parser_test_case-input tc))))
+          (if (terms-match? result (hydra_core_testing_parser_test_case-output tc))
               (list 1 0 0)
               (begin
                 (display (string-append "FAIL: " path "\n"))
-                (display "  Expected (raw): ") (write (hydra_testing_parser_test_case-output tc)) (newline)
+                (display "  Expected (raw): ") (write (hydra_core_testing_parser_test_case-output tc)) (newline)
                 (display "  Actual (raw):   ") (write result) (newline)
                 (list 0 1 0))))))
 
     (define (run-json-writer-test path tc)
       (run-simple-test path
-        (hydra_testing_writer_test_case-output tc)
+        (hydra_core_testing_writer_test_case-output tc)
         (lambda ()
-          (hydra_json_writer_print_json
-            (hydra_testing_writer_test_case-input tc)))))
+          (hydra_core_json_writer_print_json
+            (hydra_core_testing_writer_test_case-input tc)))))
 
     (define (run-json-coder-test path tc)
       (guard (exn (#t
                    (display (string-append "FAIL: " path "\n"))
                    (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                    (list 0 1 0)))
-        (let* ((empty-types hydra_lib_maps_empty)
-               (tc-type (hydra_testing_json_coder_test_case-type tc))
-               (tc-term (hydra_testing_json_coder_test_case-term tc))
-               (tc-json (hydra_testing_json_coder_test_case-json tc))
-               (encode-result (hydra_json_encode_to_json tc-term)))
+        (let* ((empty-types hydra_core_lib_maps_empty)
+               (tc-type (hydra_core_testing_json_coder_test_case-type tc))
+               (tc-term (hydra_core_testing_json_coder_test_case-term tc))
+               (tc-json (hydra_core_testing_json_coder_test_case-json tc))
+               (encode-result (hydra_core_json_encode_to_json tc-term)))
           (if (eq? (car encode-result) 'left)
               (begin
                 (display (string-append "FAIL: " path "\n"))
@@ -1584,8 +1584,8 @@
                       (display "  Expected (raw): ") (write tc-json) (newline)
                       (display "  Actual (raw):   ") (write encoded) (newline)
                       (list 0 1 0))
-                    (let ((decode-result ((((hydra_json_decode_from_json empty-types)
-                                            (make-hydra_core_name "test"))
+                    (let ((decode-result ((((hydra_core_json_decode_from_json empty-types)
+                                            (make-hydra_core_model_name "test"))
                                            tc-type)
                                           encoded)))
                       (if (eq? (car decode-result) 'left)
@@ -1608,18 +1608,18 @@
                    (display (string-append "FAIL: " path "\n"))
                    (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                    (list 0 1 0)))
-        (let* ((empty-types hydra_lib_maps_empty)
-               (tc-type (hydra_testing_json_roundtrip_test_case-type tc))
-               (tc-term (hydra_testing_json_roundtrip_test_case-term tc))
-               (encode-result (hydra_json_encode_to_json tc-term)))
+        (let* ((empty-types hydra_core_lib_maps_empty)
+               (tc-type (hydra_core_testing_json_roundtrip_test_case-type tc))
+               (tc-term (hydra_core_testing_json_roundtrip_test_case-term tc))
+               (encode-result (hydra_core_json_encode_to_json tc-term)))
           (if (eq? (car encode-result) 'left)
               (begin
                 (display (string-append "FAIL: " path "\n"))
                 (display (string-append "  JSON encode failed: " (obj->string (cadr encode-result)) "\n"))
                 (list 0 1 0))
               (let* ((encoded (cadr encode-result))
-                     (decode-result ((((hydra_json_decode_from_json empty-types)
-                                       (make-hydra_core_name "test"))
+                     (decode-result ((((hydra_core_json_decode_from_json empty-types)
+                                       (make-hydra_core_model_name "test"))
                                       tc-type)
                                      encoded)))
                 (if (eq? (car decode-result) 'left)
@@ -1642,12 +1642,12 @@
                    (display (string-append "FAIL: " path "\n"))
                    (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                    (list 0 1 0)))
-        (let* ((empty-types hydra_lib_maps_empty)
-               (tc-type (hydra_testing_json_decode_test_case-type tc))
-               (tc-json (hydra_testing_json_decode_test_case-json tc))
-               (expected (hydra_testing_json_decode_test_case-expected tc))
-               (decode-result ((((hydra_json_decode_from_json empty-types)
-                                  (make-hydra_core_name "test"))
+        (let* ((empty-types hydra_core_lib_maps_empty)
+               (tc-type (hydra_core_testing_json_decode_test_case-type tc))
+               (tc-json (hydra_core_testing_json_decode_test_case-json tc))
+               (expected (hydra_core_testing_json_decode_test_case-expected tc))
+               (decode-result ((((hydra_core_json_decode_from_json empty-types)
+                                  (make-hydra_core_model_name "test"))
                                  tc-type)
                                 tc-json)))
           (cond
@@ -1690,15 +1690,15 @@
     (define (run-test-case path tcase)
       (guard (exn (#t
                    (let ((full (string-append path " > "
-                                 (hydra_testing_test_case_with_metadata-name tcase))))
+                                 (hydra_core_testing_test_case_with_metadata-name tcase))))
                      (display (string-append "FAIL: " full "\n"))
                      (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                      (list 0 1 0))))
-        (let* ((tname (hydra_testing_test_case_with_metadata-name tcase))
+        (let* ((tname (hydra_core_testing_test_case_with_metadata-name tcase))
                (full (string-append path " > " tname))
-               (tags (hydra_testing_test_case_with_metadata-tags tcase))
+               (tags (hydra_core_testing_test_case_with_metadata-tags tcase))
                (disabled? (member "disabled" tags))
-               (tc (hydra_testing_test_case_with_metadata-case tcase)))
+               (tc (hydra_core_testing_test_case_with_metadata-case tcase)))
           (if disabled?
               (list 0 0 1)
               (let ((case-type (car tc))
@@ -1748,27 +1748,27 @@
                   (else                                     (list 0 0 1))))))))
 
     ;; Test groups to skip entirely (e.g. R7RS has no standard regex library)
-    (define *skip-groups* '("hydra.lib.regex primitives"))
+    (define *skip-groups* '("hydra.core.lib.regex primitives"))
 
     (define (run-test-group path group)
       (guard (exn (#t
-                   (let* ((gname (hydra_testing_test_group-name group))
+                   (let* ((gname (hydra_core_testing_test_group-name group))
                           (full (if (string=? path "") gname
                                     (string-append path " > " gname))))
                      (display (string-append "GROUP FAIL: " full "\n"))
                      (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                      (list 0 1 0))))
-        (let* ((gname (hydra_testing_test_group-name group))
+        (let* ((gname (hydra_core_testing_test_group-name group))
                (full (if (string=? path "") gname (string-append path " > " gname))))
           (if (member gname *skip-groups*)
-              (let ((n (+ (length (hydra_testing_test_group-cases group))
-                          (apply + (map (lambda (sg) (length (hydra_testing_test_group-cases sg)))
-                                        (hydra_testing_test_group-subgroups group))))))
+              (let ((n (+ (length (hydra_core_testing_test_group-cases group))
+                          (apply + (map (lambda (sg) (length (hydra_core_testing_test_group-cases sg)))
+                                        (hydra_core_testing_test_group-subgroups group))))))
                 (list 0 0 (max n 1)))
               (let* ((sub-results (map (lambda (sg) (run-test-group full sg))
-                                       (hydra_testing_test_group-subgroups group)))
+                                       (hydra_core_testing_test_group-subgroups group)))
                      (case-results (map (lambda (tc) (run-test-case full tc))
-                                        (hydra_testing_test_group-cases group)))
+                                        (hydra_core_testing_test_group-cases group)))
                      (all (append sub-results case-results)))
                 (list (apply + (map car all))
                       (apply + (map cadr all))

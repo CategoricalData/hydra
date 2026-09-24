@@ -1,12 +1,12 @@
-"""Python equivalent of Hydra.Dsl.Python.Helpers.
+"""Python equivalent of Hydra.Python.Dsl.Helpers.
 
-Hand-written helpers built on top of the generated hydra.dsl.python.syntax DSL,
+Hand-written helpers built on top of the generated hydra.python.dsl.syntax DSL,
 mirroring the Haskell helper module of the same name. Add functions here as needed
 by the Python source DSL files.
 """
 
-from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
-import hydra.dsl.python.syntax as PySyn
+from hydra.core.overlay.python.dsl.phantoms import *  # noqa: F401,F403
+import hydra.python.dsl.syntax as PySyn
 
 
 # Expression conversion pipeline: Primary -> ... -> Expression
@@ -110,7 +110,7 @@ def double_quoted_string(val):
     return PySyn.string(val, nothing(), PySyn.quote_style_double)
 
 
-# Custom helpers (mirrors of Hydra.Dsl.Python.Helpers)
+# Custom helpers (mirrors of Hydra.Python.Dsl.Helpers)
 
 lambda_parameters_empty = PySyn.lambda_parameters(
     nothing(),

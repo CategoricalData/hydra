@@ -1,0 +1,63 @@
+package hydra.core.overlay.java.lib.math;
+
+import hydra.core.model.Name;
+import hydra.core.model.Term;
+import hydra.core.model.TypeScheme;
+import hydra.core.graph.Graph;
+import hydra.core.overlay.java.tools.PrimitiveFunction;
+import hydra.core.overlay.java.util.Optional;
+
+import java.util.List;
+import java.util.function.Function;
+
+import static hydra.core.overlay.java.dsl.Types.function;
+import static hydra.core.overlay.java.dsl.Types.optional;
+import static hydra.core.overlay.java.dsl.Types.schemeIntegral;
+import static hydra.core.overlay.java.dsl.Types.var;
+import hydra.core.errors.Error_;
+import hydra.core.overlay.java.util.Either;
+
+
+/**
+ * Compute the remainder of integer division, returning Nothing if the divisor is zero.
+ *
+ * <p>Constraint-polymorphic ('integral') truncated remainder: the type scheme is {@code integral
+ * x => x -> x -> optional x} and the implementation dispatches on the operands' runtime integer
+ * variant via {@link IntegralDispatch}. No typeclass is consulted at runtime.
+ */
+public class Rem extends PrimitiveFunction {
+    public Name name() {
+        return hydra.lib.Math_.rem().name;
+    }
+
+    @Override
+    public TypeScheme type() {
+        return schemeIntegral("x", function(var("x"), var("x"), optional(var("x"))));
+    }
+
+    @Override
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> Either.right(IntegralDispatch.rem(args.get(0), args.get(1)));
+    }
+
+    /**
+     * Computes the remainder. This is the statically-typed entry point emitted by generated
+     * code, generic and erased over the {@code integral} type variable (see
+     * {@link IntegralDispatch#applyNativeRem}).
+     * @param dividend the dividend
+     * @return a function that takes a divisor and returns a Optional containing the remainder
+     */
+    public static <A> Function<A, Optional<A>> apply(A dividend) {
+        return (divisor) -> apply(dividend, divisor);
+    }
+
+    /**
+     * Computes the remainder.
+     * @param dividend the dividend
+     * @param divisor the divisor
+     * @return a Optional containing the remainder, or empty if divisor is zero
+     */
+    public static <A> Optional<A> apply(A dividend, A divisor) {
+        return IntegralDispatch.applyNativeRem(dividend, divisor);
+    }
+}

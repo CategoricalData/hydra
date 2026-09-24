@@ -16,48 +16,48 @@ import Hydra.Kernel hiding (
   moduleToJson, moduleToSourceModule, modulesToGraph,
   moduleDepsTransitive, moduleNameToPath,
   transitiveDeps)
-import qualified Hydra.Dsl.Paths    as Paths
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
-import qualified Hydra.Dsl.Ast          as Ast
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Coders       as Coders
-import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph        as Graph
-import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Lib.Math     as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Literals          as Literals
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base         as MetaBase
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms        as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types        as MetaTypes
-import qualified Hydra.Dsl.Packaging       as Packaging
-import qualified Hydra.Dsl.Parsing      as Parsing
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Prims             as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular           as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing      as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Terms             as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Tests             as Tests
-import qualified Hydra.Dsl.Topology     as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
-import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Errors       as Error
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
+import qualified Hydra.Core.Dsl.Paths    as Paths
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations       as Annotations
+import qualified Hydra.Core.Dsl.Ast          as Ast
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Coders       as Coders
+import qualified Hydra.Core.Dsl.Util      as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph        as Graph
+import qualified Hydra.Core.Dsl.Json.Model         as Json
+import qualified Hydra.Core.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Math     as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals          as Literals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base         as MetaBase
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms        as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types        as MetaTypes
+import qualified Hydra.Core.Dsl.Packaging       as Packaging
+import qualified Hydra.Core.Dsl.Parsing      as Parsing
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims             as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular           as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing      as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms             as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests             as Tests
+import qualified Hydra.Core.Dsl.Topology     as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Dsl.Typing       as Typing
+import qualified Hydra.Core.Dsl.Errors       as Error
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Json.Model                as JsonModel
+import qualified Hydra.Core.Json.Model                as JsonModel
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
 import qualified Data.List                   as L
@@ -86,7 +86,7 @@ import qualified Hydra.Sources.Kernel.Terms.Print.Markdown   as PrintMarkdown
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.codegen"
+ns = ModuleName "hydra.core.codegen"
 
 module_ :: Module
 module_ = Module {
@@ -94,9 +94,9 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Adapt.ns, Annotations.ns, Constants.ns, Formatting.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns, Scoping.ns,
      Environment.ns, PrintCore.ns, PrintError.ns, PrintMarkdown.ns, Strip.ns,
-     ModuleName "hydra.decoding", ModuleName "hydra.encoding",
-     ModuleName "hydra.json.decode", ModuleName "hydra.json.encode", ModuleName "hydra.json.writer",
-     ModuleName "hydra.decode.core", ModuleName "hydra.decode.packaging", ModuleName "hydra.encode.packaging"] L.++ kernelTypesModuleNames),
+     ModuleName "hydra.core.decoding", ModuleName "hydra.core.encoding",
+     ModuleName "hydra.core.json.decode", ModuleName "hydra.core.json.encode", ModuleName "hydra.core.json.writer",
+     ModuleName "hydra.core.decode.model", ModuleName "hydra.core.decode.packaging", ModuleName "hydra.core.encode.packaging"] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Pure code generation pipeline for bootstrapping Hydra across languages.")}
   where
     definitions = [
@@ -136,7 +136,7 @@ buildSchemaMap = define "buildSchemaMap" $
 
 -- | Convert a generated Module into a Source module.
 -- The Source module contains a single binding `module_` which holds the Module encoded as a Term.
--- The namespace transforms e.g. "hydra.encode.util" to "hydra.sources.encode.util"
+-- The namespace transforms e.g. "hydra.core.encode.util" to "hydra.sources.encode.util"
 -- | Decode a single module from a JSON value.
 -- Given a bootstrap graph, universe modules, and a JSON value, decodes it to a Packaging.
 -- This is the pure core of the JSON module loading pipeline.
@@ -286,7 +286,7 @@ generateLexicon = define "generateLexicon" $
     ++ (string "\nTypes:\n") ++ (Formatting.unlines @@ var "typeLines")
     ++ (string "\nTerms:\n") ++ (Formatting.unlines @@ var "termLines")
 
--- | Render a single Definition (primitive, term, or type) as a hydra.markdown Section: an H2
+-- | Render a single Definition (primitive, term, or type) as a hydra.core.markdown Section: an H2
 -- heading (the definition's local name), a doc-string paragraph (or an undocumented-marker
 -- placeholder), a signature paragraph (inline code span), and one paragraph per provision (#725,
 -- now landed in this branch's lineage). Walks the Definition directly (not via graphToBindings,
@@ -321,7 +321,7 @@ definitionToSection d = match _Definition d Nothing [
       (Optionals.map ("em" ~> Packaging.entityMetadataProvisions (var "em")) (Packaging.typeDefinitionMetadata $ var "tyd")) $
     definitionSection (var "name") (var "mdoc") (var "sig") (var "provisions")]
 
--- | Build a hydra.markdown Paragraph term from a list of Inline content, with no explicit anchor
+-- | Build a hydra.core.markdown Paragraph term from a list of Inline content, with no explicit anchor
 -- (anchors are for elements needing direct linkability -- see provisionParagraph below, which
 -- sets one).
 docParagraph :: TypedTerm [Term] -> TypedTerm Term
@@ -342,7 +342,7 @@ docParagraph content =
 -- _Provision_name/_kind/_statement and _ProvisionKind_requirement/_recommendation are used
 -- unqualified per this file's existing convention for kernel-generated Name constants (e.g.
 -- _Definition_primitive above) -- not individually grepped for a prior call site the way the
--- hydra.markdown constants were (those needed hand-authoring since hydra.markdown itself is new;
+-- hydra.core.markdown constants were (those needed hand-authoring since hydra.core.markdown itself is new;
 -- Provision/ProvisionKind are ordinary kernel types with the same generated-constant mechanism as
 -- every other kernel union/record already used in this file).
 provisionParagraph :: TypedTerm Provision -> TypedTerm Term
@@ -362,7 +362,7 @@ provisionParagraph p =
       inject PrintMarkdown._Inline PrintMarkdown._Inline_text (var "pstatement")],
     PrintMarkdown._Paragraph_anchor>>: just (var "upperDashed")]
 
--- | Build a hydra.markdown Section term for one definition, given its local name, optional doc
+-- | Build a hydra.core.markdown Section term for one definition, given its local name, optional doc
 -- string, pre-rendered signature, and its provisions. Shared by all three definitionToSection
 -- branches, mirroring how formatPrimitive/formatTermBinding/formatTypeBinding share the lexicon's
 -- "  name : sig" shape.
@@ -385,19 +385,19 @@ definitionSection name mdoc sig provisions =
 
 -- | The generated-file notice banner, prepended to every generated module page as a raw HTML
 -- comment block -- resolves the previously-open "generated-file notice wording" question now
--- that hydra.markdown has a Block.raw passthrough variant (#579's addition) to carry it. Text
+-- that hydra.core.markdown has a Block.raw passthrough variant (#579's addition) to carry it. Text
 -- matches CLAUDE.md's documented convention for generated source files verbatim, since no
 -- distinct wording has been specified for generated prose pages.
 generatedFileNoticeBlock :: TypedTerm Term
 generatedFileNoticeBlock = inject PrintMarkdown._Block PrintMarkdown._Block_raw
   (string "<!-- Note: this is an automatically generated file. Do not edit. -->")
 
--- | Generate a hydra.markdown Document describing a module's definitions: one Section per
+-- | Generate a hydra.core.markdown Document describing a module's definitions: one Section per
 -- definition (name, doc string, signature, provisions -- see definitionToSection), prepended
 -- with a generated-file notice banner.
 generateModuleDoc :: TypedTermDefinition (Module -> Term)
 generateModuleDoc = define "generateModuleDoc" $
-  doc "Generate a hydra.markdown Document describing a module's definitions" $
+  doc "Generate a hydra.core.markdown Document describing a module's definitions" $
   "mod" ~>
   "sections" <~ Lists.map ("d" ~> definitionToSection (var "d")) (Packaging.moduleDefinitions $ var "mod") $
   record PrintMarkdown._Document [
@@ -438,8 +438,8 @@ generateSourceFiles = define "generateSourceFiles" $
 
   -- Compute transitive deps and build graphs.
   -- Seed the closure from BOTH universeModules and modsToGenerate, not modsToGenerate alone.
-  -- A schema type referenced only by a primitive's signature (e.g. hydra.error.file.FileError
-  -- for hydra.lib.files.readFile) has no reason to be a declared dependency of the module being
+  -- A schema type referenced only by a primitive's signature (e.g. hydra.core.error.file.FileError
+  -- for hydra.core.lib.files.readFile) has no reason to be a declared dependency of the module being
   -- generated; the caller's only way to make it resolvable is via universeModules. Seeding the
   -- closure from modsToGenerate alone silently drops such types from graphSchemaTypes, causing
   -- them to be treated as free type variables during unification and wrongly generalized. #637
@@ -708,18 +708,18 @@ inferModulesGiven = define "inferModulesGiven" $
 -- terms module that every host coder can emit verbatim — no per-host special-casing
 -- of the Definition.primitive arm is needed. The lowering must run after inference
 -- so that every inner term in defaultImplementation carries its inferred type.
--- A hydra.packaging dependency is added if the module contains any primitive
--- definitions (so that the host coder's lookup of `hydra.packaging.PrimitiveDefinition`
+-- A hydra.core.packaging dependency is added if the module contains any primitive
+-- definitions (so that the host coder's lookup of `hydra.core.packaging.PrimitiveDefinition`
 -- resolves). Modules without primitives pass through unchanged.
 lowerPrimitiveDefinitions :: TypedTermDefinition (Module -> Module)
 lowerPrimitiveDefinitions = define "lowerPrimitiveDefinitions" $
   doc "Lower Definition.primitive arms to Definition.term arms with term-encoded PrimitiveDefinition" $
   "m" ~>
-  "pkgNs" <~ (wrap _ModuleName (string "hydra.packaging") :: TypedTerm ModuleName) $
-  "coreNs" <~ (wrap _ModuleName (string "hydra.core") :: TypedTerm ModuleName) $
+  "pkgNs" <~ (wrap _ModuleName (string "hydra.core.packaging") :: TypedTerm ModuleName) $
+  "coreNs" <~ (wrap _ModuleName (string "hydra.core.model") :: TypedTerm ModuleName) $
   "primDefSig" <~ Scoping.typeSchemeToTermSignature @@ Core.typeScheme
     (list ([] :: [TypedTerm Name]))
-    (Core.typeVariable (wrap _Name (string "hydra.packaging.PrimitiveDefinition")))
+    (Core.typeVariable (wrap _Name (string "hydra.core.packaging.PrimitiveDefinition")))
     Maps.empty $
   "origDefs" <~ Packaging.moduleDefinitions (var "m") $
   "hasPrim" <~ Lists.foldl
@@ -737,9 +737,9 @@ lowerPrimitiveDefinitions = define "lowerPrimitiveDefinitions" $
             (just (var "primDefSig"))
             (encoderFor _PrimitiveDefinition @@ var "pd"))])
       (var "origDefs") $
-    -- Ensure hydra.packaging and hydra.core are among the module's
+    -- Ensure hydra.core.packaging and hydra.core.model are among the module's
     -- dependencies. The encoded PrimitiveDefinition term references the
-    -- PrimitiveDefinition record type (hydra.packaging) and a slew of
+    -- PrimitiveDefinition record type (hydra.core.packaging) and a slew of
     -- Core types inside the embedded signature (Name, TermSignature,
     -- Parameter, Result, LiteralType*, TypeLiteral, ...). We prune any
     -- existing references first to dedupe.
@@ -818,38 +818,38 @@ moduleToJson = define "moduleToJson" $
   doc "Convert a Module to a JSON string" $
   "schemaMap" ~> "m" ~>
   "term" <~ encoderFor _Module @@ var "m" $
-  "modType" <~ Core.typeVariable (wrap _Name (string "hydra.packaging.Module")) $
-  Eithers.map ("json" ~> var "hydra.json.writer.printJson" @@ var "json")
+  "modType" <~ Core.typeVariable (wrap _Name (string "hydra.core.packaging.Module")) $
+  Eithers.map ("json" ~> var "hydra.core.json.writer.printJson" @@ var "json")
     (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError $ var "_e") ("_a" ~> var "_a")
       -- compactMaps = False: dist/json module files are read by the published-host
       -- cold-seeder, which must be able to decode them without #624's compact-map support.
-      (var "hydra.json.encode.toJson" @@ var "schemaMap" @@ false @@ Core.nameLift _Module @@ var "modType" @@ var "term"))
+      (var "hydra.core.json.encode.toJson" @@ var "schemaMap" @@ false @@ Core.nameLift _Module @@ var "modType" @@ var "term"))
 
 -- | Rebuild a module's term definitions using freshly inferred bindings.
 -- Type-only modules (containing only native type definitions) are returned unchanged.
 -- Term definitions that are not present in the inferred-bindings list are dropped.
 -- | Convert a generated Module into a Source module.
 -- The Source module contains a single binding `module_` which holds the Module encoded as a Term.
--- The namespace transforms e.g. "hydra.encode.util" to "hydra.sources.encode.util"
+-- The namespace transforms e.g. "hydra.core.encode.util" to "hydra.sources.encode.util"
 moduleToSourceModule :: TypedTermDefinition (Module -> Module)
 moduleToSourceModule = define "moduleToSourceModule" $
   doc "Convert a generated Module into a Source module" $
   "m" ~>
-  -- Transform namespace: hydra.encode.util -> hydra.sources.encode.util
+  -- Transform namespace: hydra.core.encode.util -> hydra.sources.encode.util
   "sourceNs" <~ wrap _ModuleName (
     (string "hydra.sources.") ++ Strings.join (string ".")
       (Lists.drop (int32 1) (Strings.splitOn (string ".") (Packaging.unModuleName $ Packaging.moduleName $ var "m")))) $
   -- The module type namespace
-  "modTypeNs" <~ (wrap _ModuleName (string "hydra.packaging") :: TypedTerm ModuleName) $
+  "modTypeNs" <~ (wrap _ModuleName (string "hydra.core.packaging") :: TypedTerm ModuleName) $
   -- Create binding: module_ = <encoded Module term>
-  -- The binding is statically typed as hydra.packaging.Module so inference can
+  -- The binding is statically typed as hydra.core.packaging.Module so inference can
   -- skip re-deriving the (large) term's type from scratch.
   "moduleDef" <~ Packaging.definitionTerm (Packaging.termDefinition
     (wrap _Name (Packaging.unModuleName (var "sourceNs") ++ (string ".module_")))
     nothing
     (just (Scoping.typeSchemeToTermSignature @@ Core.typeScheme
       (list ([] :: [TypedTerm Name]))
-      (Core.typeVariable (wrap _Name (string "hydra.packaging.Module")))
+      (Core.typeVariable (wrap _Name (string "hydra.core.packaging.Module")))
       Maps.empty))
     (encoderFor _Module @@ var "m")) $
   Packaging.module_
@@ -898,8 +898,8 @@ modulesToGraph = define "modulesToGraph" $
     ("m" ~> pair (Packaging.moduleName $ var "m") (var "m"))
     (Lists.concat2 (var "universeModules") (var "modules"))) :: TypedTerm (M.Map Name Module)) $
   -- Seed the closure from BOTH universeModules and modules, not modules alone.
-  -- A schema type referenced only by a primitive's signature (e.g. hydra.error.file.FileError
-  -- for hydra.lib.files.readFile) has no reason to be a declared dependency of a caller's own
+  -- A schema type referenced only by a primitive's signature (e.g. hydra.core.error.file.FileError
+  -- for hydra.core.lib.files.readFile) has no reason to be a declared dependency of a caller's own
   -- target module; the caller's only way to make it resolvable is via universeModules. Seeding
   -- the closure from modules alone silently drops such types from graphSchemaTypes, causing
   -- them to be treated as free type variables during unification and wrongly generalized. #637
@@ -928,10 +928,10 @@ modulesToGraph = define "modulesToGraph" $
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe,
 -- and modules to generate, produce a list of (filePath, content) pairs.
 -- This function contains no I/O and can be generated to other languages.
--- | Convert a module name to a file path (e.g., "hydra.core" -> "hydra/core").
+-- | Convert a module name to a file path (e.g., "hydra.core.model" -> "hydra/core").
 moduleNameToPath :: TypedTermDefinition (ModuleName -> String)
 moduleNameToPath = define "moduleNameToPath" $
-  doc "Convert a module name to a file path (e.g., hydra.core -> hydra/core)" $
+  doc "Convert a module name to a file path (e.g., hydra.core.model -> hydra/core)" $
   "ns" ~>
   Strings.join (string "/") (Strings.splitOn (string ".") (Packaging.unModuleName $ var "ns"))
 

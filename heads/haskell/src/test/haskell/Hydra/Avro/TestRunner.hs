@@ -6,13 +6,13 @@ module Hydra.Avro.TestRunner (
 ) where
 
 import Hydra.Kernel
-import qualified Hydra.Core as Core
-import qualified Hydra.Avro.Schema as Schema
-import qualified Hydra.Json.Model as Json
-import qualified Hydra.Avro.Coder as AvroCoder
-import qualified Hydra.Avro.Encoder as Encoder
-import qualified Hydra.Avro.SchemaJson as SchemaJson
-import qualified Hydra.Avro.Testing as T
+import qualified Hydra.Core.Model as Core
+import qualified Hydra.Ext.Avro.Schema as Schema
+import qualified Hydra.Core.Json.Model as Json
+import qualified Hydra.Ext.Avro.Coder as AvroCoder
+import qualified Hydra.Ext.Avro.Encoder as Encoder
+import qualified Hydra.Ext.Avro.SchemaJson as SchemaJson
+import qualified Hydra.Ext.Avro.Testing as T
 
 import qualified Test.Hspec as H
 import qualified Data.Map as M

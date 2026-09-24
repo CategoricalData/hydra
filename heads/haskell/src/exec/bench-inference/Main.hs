@@ -19,10 +19,10 @@ module Main where
 
 import Hydra.Kernel
 import Hydra.Generation (showError)
-import qualified Hydra.Codegen as CodeGeneration
+import qualified Hydra.Core.Codegen as CodeGeneration
 import qualified Hydra.Sources.All as All
 import qualified Hydra.Sources.Ext as Ext
-import Hydra.Overlay.Haskell.Bootstrap (bootstrapGraph, unqualifiedDep)
+import Hydra.Core.Overlay.Haskell.Bootstrap (bootstrapGraph, unqualifiedDep)
 
 import qualified Data.List               as L
 import qualified Data.Map                as M

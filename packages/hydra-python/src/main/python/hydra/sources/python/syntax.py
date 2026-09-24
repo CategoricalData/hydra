@@ -6,21 +6,21 @@ Retrieved from https://docs.python.org/3/reference/grammar.html on 2024-12-22.
 
 import sys
 
-from hydra.core import Type
-from hydra.overlay.python.dsl.python import Given, None_
-from hydra.overlay.python.dsl.meta.defs import check_complete
-from hydra.packaging import (EntityMetadata,
+from hydra.core.model import Type
+from hydra.core.overlay.python.dsl.python import Given, None_
+from hydra.core.overlay.python.dsl.meta.defs import check_complete
+from hydra.core.packaging import (EntityMetadata,
     Module,
     ModuleName,
 )
 
 from hydra.sources.python._source_dsl import make_type_def, type_ref, unqualified_dep
-import hydra.overlay.python.dsl.annotations as Annotations
-import hydra.overlay.python.dsl.types as T
+import hydra.core.overlay.python.dsl.annotations as Annotations
+import hydra.core.overlay.python.dsl.types as T
 
 
 NS = ModuleName("hydra.python.syntax")
-DEPENDENCIES = [unqualified_dep(ModuleName("hydra.core"))]
+DEPENDENCIES = [unqualified_dep(ModuleName("hydra.core.model"))]
 DESCRIPTION = (
     "A Python syntax model, tracking the Python 3.14 PEG grammar:\n"
     "  https://docs.python.org/3.14/reference/grammar.html"

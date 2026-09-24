@@ -48,7 +48,7 @@ if [ -d "$HYDRA_CL_DIST/src/test/common-lisp/hydra" ]; then
     cp -r "$HYDRA_CL_DIST/src/test/common-lisp/hydra" "$OUTPUT_DIR/src/test/common-lisp/"
 fi
 
-# #546: overlay hydra-build's generated main+test (hydra.build.* + hydra.test.build.*),
+# #546: overlay hydra-build's generated main+test (hydra.build.* + hydra.core.test.build.*),
 # referenced by the kernel testSuite but absent from the hydra-kernel dist tree.
 HYDRA_CL_BUILD_DIST="$HYDRA_ROOT/dist/common-lisp/hydra-build"
 if [ -d "$HYDRA_CL_BUILD_DIST/src/main/common-lisp/hydra" ]; then

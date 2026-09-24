@@ -4,11 +4,11 @@
 
 module Hydra.Coq.GenerateDriver where
 
-import qualified Hydra.Packaging as Pkg
+import qualified Hydra.Core.Packaging as Pkg
 import qualified Hydra.Coq.Generate as CoqGenerate
-import qualified Hydra.Typing as Typing
-import qualified Hydra.Graph as Graph
-import qualified Hydra.Errors as Errors
+import qualified Hydra.Core.Typing as Typing
+import qualified Hydra.Core.Graph as Graph
+import qualified Hydra.Core.Errors as Errors
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import Control.Monad (forM_)

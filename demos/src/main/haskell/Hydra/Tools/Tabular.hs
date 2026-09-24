@@ -6,8 +6,8 @@ module Hydra.Tools.Tabular (
 ) where
 
 import Hydra.Kernel
-import Hydra.Tabular
-import qualified Hydra.Print.Core as PrintCore
+import Hydra.Core.Tabular
+import qualified Hydra.Core.Print.Model as PrintCore
 
 import qualified Control.Monad as CM
 import qualified Data.List as L

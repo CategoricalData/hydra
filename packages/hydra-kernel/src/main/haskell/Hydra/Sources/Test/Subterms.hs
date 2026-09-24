@@ -1,32 +1,32 @@
 {-# LANGUAGE FlexibleContexts #-}
 
--- | Test cases for hydra.print.paths (step/path printer round-trip), hydra.subterms (the term-graph view),
---   and hydra.validate.paths (the TermGraph:TypeGraph path-erasure relation).
+-- | Test cases for hydra.core.print.paths (step/path printer round-trip), hydra.core.subterms (the term-graph view),
+--   and hydra.core.validate.paths (the TermGraph:TypeGraph path-erasure relation).
 module Hydra.Sources.Test.Subterms where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms hiding ((@@))
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
-import qualified Hydra.Dsl.Paths                               as Paths
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                ((@@))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
+import qualified Hydra.Core.Dsl.Paths                               as Paths
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import Hydra.Testing
+import Hydra.Core.Testing
 
 import qualified Hydra.Sources.Kernel.Terms.Print.Paths as PrintPaths
 import qualified Hydra.Sources.Kernel.Terms.Validate.Paths as ValidatePaths
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.subterms"
+ns = ModuleName "hydra.core.test.subterms"
 
 module_ :: Module
 module_ = Module {

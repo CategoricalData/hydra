@@ -15,180 +15,180 @@
 
 ;; Term-building helpers for annotation bindings
 (define (t-lam param body)
-  (list 'function (list 'lambda (make-hydra_core_lambda param '() body))))
+  (list 'function (list 'lambda (make-hydra_core_model_lambda param '() body))))
 (define (t-var name)
   (list 'variable name))
 (define (t-app fun arg)
-  (list 'application (make-hydra_core_application fun arg)))
+  (list 'application (make-hydra_core_model_application fun arg)))
 (define (t-prim name)
   (list 'function (list 'primitive name)))
 (define (t-let name val body)
-  (list 'let (make-hydra_core_let
-               (list (make-hydra_core_binding name val '()))
+  (list 'let (make-hydra_core_model_let
+               (list (make-hydra_core_model_binding name val '()))
                body)))
 (define (t-inject type-name field-name term)
-  (list 'inject (make-hydra_core_injection type-name
-                 (make-hydra_core_field field-name term))))
+  (list 'inject (make-hydra_core_model_injection type-name
+                 (make-hydra_core_model_field field-name term))))
 (define (t-record type-name fields)
-  (list 'record (make-hydra_core_record type-name fields)))
+  (list 'record (make-hydra_core_model_record type-name fields)))
 (define (t-field name term)
-  (make-hydra_core_field name term))
+  (make-hydra_core_model_field name term))
 (define (t-project type-name field-name)
   (list 'function (list 'elimination
-    (list 'record (make-hydra_core_projection type-name field-name)))))
+    (list 'record (make-hydra_core_model_projection type-name field-name)))))
 (define (t-match type-name default . case-fields)
   (list 'function (list 'elimination
-    (list 'union (make-hydra_core_case_statement type-name default case-fields)))))
+    (list 'union (make-hydra_core_model_case_statement type-name default case-fields)))))
 (define (t-right v) (list 'either (list 'right v)))
 (define (t-left v) (list 'either (list 'left v)))
-(define (t-just v) (list 'optional (t-inject "hydra.core.Term" "literal"
-                     (t-inject "hydra.core.Literal" "string" v))))
+(define (t-just v) (list 'optional (t-inject "hydra.core.model.Term" "literal"
+                     (t-inject "hydra.core.model.Literal" "string" v))))
 (define (t-nothing) (list 'optional (list 'none '())))
 
 ;; Annotation term-level bindings (mirrors Java TestSuiteRunner.addAnnotationsBindings)
 (define (annotation-bindings)
   (list
-    ;; hydra.constants
-    (list "hydra.constants.keyClasses"
-          (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+    ;; hydra.core.constants
+    (list "hydra.core.constants.keyClasses"
+          (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                         (list 'literal (list 'string "classes")))))
-    (list "hydra.constants.keyDescription"
-          (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+    (list "hydra.core.constants.keyDescription"
+          (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                         (list 'literal (list 'string "description")))))
-    (list "hydra.constants.keyType"
-          (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+    (list "hydra.core.constants.keyType"
+          (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                         (list 'literal (list 'string "type")))))
-    (list "hydra.constants.keyDebugId"
-          (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+    (list "hydra.core.constants.keyDebugId"
+          (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                         (list 'literal (list 'string "debugId")))))
-    (list "hydra.constants.keyFirstClassType"
-          (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+    (list "hydra.core.constants.keyFirstClassType"
+          (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                         (list 'literal (list 'string "firstClassType")))))
 
-    ;; hydra.rewriting.deannotateTerm = \t -> case t of
+    ;; hydra.core.rewriting.deannotateTerm = \t -> case t of
     ;;   annotated(at) -> deannotateTerm(at.body)
     ;;   _ -> t
-    (list "hydra.rewriting.deannotateTerm"
+    (list "hydra.core.rewriting.deannotateTerm"
           (t-lam "t"
             (t-app
-              (t-match "hydra.core.Term" (list 'given (t-var "t"))
+              (t-match "hydra.core.model.Term" (list 'given (t-var "t"))
                 (t-field "annotated"
                   (t-lam "at"
-                    (t-app (t-var "hydra.rewriting.deannotateTerm")
-                      (t-app (t-project "hydra.core.AnnotatedTerm" "body")
+                    (t-app (t-var "hydra.core.rewriting.deannotateTerm")
+                      (t-app (t-project "hydra.core.model.AnnotatedTerm" "body")
                         (t-var "at"))))))
               (t-var "t"))))
 
-    ;; hydra.annotations.termAnnotationInternal = \term ->
+    ;; hydra.core.annotations.termAnnotationInternal = \term ->
     ;;   let toPairs = \rest -> \t -> case t of
     ;;     annotated(at) -> toPairs(cons(toList(at.annotation), rest), at.body)
     ;;     _ -> rest
     ;;   in fromList(concat(toPairs([], term)))
-    (list "hydra.annotations.termAnnotationInternal"
+    (list "hydra.core.annotations.termAnnotationInternal"
           (t-lam "term"
             (t-let "toPairs"
               (t-lam "rest"
                 (t-lam "t"
                   (t-app
-                    (t-match "hydra.core.Term" (list 'given (t-var "rest"))
+                    (t-match "hydra.core.model.Term" (list 'given (t-var "rest"))
                       (t-field "annotated"
                         (t-lam "at"
                           (t-app
                             (t-app (t-var "toPairs")
-                              (t-app (t-app (t-prim "hydra.lib.lists.cons")
-                                (t-app (t-prim "hydra.lib.maps.toList")
-                                  (t-app (t-project "hydra.core.AnnotatedTerm" "annotation")
+                              (t-app (t-app (t-prim "hydra.core.lib.lists.cons")
+                                (t-app (t-prim "hydra.core.lib.maps.toList")
+                                  (t-app (t-project "hydra.core.model.AnnotatedTerm" "annotation")
                                     (t-var "at"))))
                                 (t-var "rest")))
-                            (t-app (t-project "hydra.core.AnnotatedTerm" "body")
+                            (t-app (t-project "hydra.core.model.AnnotatedTerm" "body")
                               (t-var "at"))))))
                     (t-var "t"))))
-              (t-app (t-prim "hydra.lib.maps.fromList")
-                (t-app (t-prim "hydra.lib.lists.concat")
+              (t-app (t-prim "hydra.core.lib.maps.fromList")
+                (t-app (t-prim "hydra.core.lib.lists.concat")
                   (t-app (t-app (t-var "toPairs") (list 'list '()))
                     (t-var "term")))))))
 
-    ;; hydra.annotations.setAnnotation = \key -> \val -> \m ->
+    ;; hydra.core.annotations.setAnnotation = \key -> \val -> \m ->
     ;;   maybe(delete(key, m), \v -> insert(key, v, m), val)
-    (list "hydra.annotations.setAnnotation"
+    (list "hydra.core.annotations.setAnnotation"
           (t-lam "key"
             (t-lam "val"
               (t-lam "m"
-                (t-app (t-app (t-app (t-prim "hydra.lib.optionals.match")
+                (t-app (t-app (t-app (t-prim "hydra.core.lib.optionals.match")
                   (t-var "val"))
-                  (t-app (t-app (t-prim "hydra.lib.maps.delete") (t-var "key")) (t-var "m")))
+                  (t-app (t-app (t-prim "hydra.core.lib.maps.delete") (t-var "key")) (t-var "m")))
                   (t-lam "v"
-                    (t-app (t-app (t-app (t-prim "hydra.lib.maps.insert")
+                    (t-app (t-app (t-app (t-prim "hydra.core.lib.maps.insert")
                       (t-var "key")) (t-var "v")) (t-var "m"))))))))
 
-    ;; hydra.annotations.setTermAnnotation = \key -> \val -> \term ->
+    ;; hydra.core.annotations.setTermAnnotation = \key -> \val -> \term ->
     ;;   let stripped = deannotateTerm(term)
     ;;       anns = setAnnotation(key, val, termAnnotationInternal(term))
     ;;   in if null(anns) then stripped
     ;;      else inject(Term){annotated=record(AnnotatedTerm){body=stripped, annotation=anns}}
-    (list "hydra.annotations.setTermAnnotation"
+    (list "hydra.core.annotations.setTermAnnotation"
           (t-lam "key"
             (t-lam "val"
               (t-lam "term"
                 (t-let "stripped"
-                  (t-app (t-var "hydra.rewriting.deannotateTerm") (t-var "term"))
+                  (t-app (t-var "hydra.core.rewriting.deannotateTerm") (t-var "term"))
                   (t-let "anns"
-                    (t-app (t-app (t-app (t-var "hydra.annotations.setAnnotation")
+                    (t-app (t-app (t-app (t-var "hydra.core.annotations.setAnnotation")
                       (t-var "key")) (t-var "val"))
-                      (t-app (t-var "hydra.annotations.termAnnotationInternal") (t-var "term")))
-                    (t-app (t-app (t-app (t-prim "hydra.lib.logic.ifElse")
-                      (t-app (t-prim "hydra.lib.maps.isEmpty") (t-var "anns")))
+                      (t-app (t-var "hydra.core.annotations.termAnnotationInternal") (t-var "term")))
+                    (t-app (t-app (t-app (t-prim "hydra.core.lib.logic.ifElse")
+                      (t-app (t-prim "hydra.core.lib.maps.isEmpty") (t-var "anns")))
                       (t-var "stripped"))
-                      (t-inject "hydra.core.Term" "annotated"
-                        (t-record "hydra.core.AnnotatedTerm"
+                      (t-inject "hydra.core.model.Term" "annotated"
+                        (t-record "hydra.core.model.AnnotatedTerm"
                           (list (t-field "body" (t-var "stripped"))
                                 (t-field "annotation" (t-var "anns"))))))))))))
 
-    ;; hydra.annotations.setTermDescription = \d ->
+    ;; hydra.core.annotations.setTermDescription = \d ->
     ;;   setTermAnnotation(keyDescription, optionals.map(\s -> inject(Term, literal, inject(Literal, string, s)), d))
-    (list "hydra.annotations.setTermDescription"
+    (list "hydra.core.annotations.setTermDescription"
           (t-lam "d"
-            (t-app (t-app (t-var "hydra.annotations.setTermAnnotation")
-              (t-var "hydra.constants.keyDescription"))
-              (t-app (t-app (t-prim "hydra.lib.optionals.map")
+            (t-app (t-app (t-var "hydra.core.annotations.setTermAnnotation")
+              (t-var "hydra.core.constants.keyDescription"))
+              (t-app (t-app (t-prim "hydra.core.lib.optionals.map")
                 (t-lam "s"
-                  (t-inject "hydra.core.Term" "literal"
-                    (t-inject "hydra.core.Literal" "string" (t-var "s")))))
+                  (t-inject "hydra.core.model.Term" "literal"
+                    (t-inject "hydra.core.model.Literal" "string" (t-var "s")))))
                 (t-var "d")))))
 
-    ;; hydra.annotations.getTermAnnotation = \key -> \term ->
+    ;; hydra.core.annotations.getTermAnnotation = \key -> \term ->
     ;;   maps.lookup(key, termAnnotationInternal(term))
-    (list "hydra.annotations.getTermAnnotation"
+    (list "hydra.core.annotations.getTermAnnotation"
           (t-lam "key"
             (t-lam "term"
-              (t-app (t-app (t-prim "hydra.lib.maps.lookup") (t-var "key"))
-                (t-app (t-var "hydra.annotations.termAnnotationInternal")
+              (t-app (t-app (t-prim "hydra.core.lib.maps.lookup") (t-var "key"))
+                (t-app (t-var "hydra.core.annotations.termAnnotationInternal")
                   (t-var "term"))))))
 
-    ;; hydra.annotations.getDescription = \cx -> \g -> \anns ->
+    ;; hydra.core.annotations.getDescription = \cx -> \g -> \anns ->
     ;;   maybe(right(nothing),
     ;;         \descTerm -> match Term { literal(\lit -> match Literal { string(\s -> right(just(s))) }) },
     ;;         maps.lookup(keyDescription, anns))
-    (list "hydra.annotations.getDescription"
+    (list "hydra.core.annotations.getDescription"
           (t-lam "cx"
             (t-lam "g"
               (t-lam "anns"
-                (t-app (t-app (t-app (t-prim "hydra.lib.optionals.match")
+                (t-app (t-app (t-app (t-prim "hydra.core.lib.optionals.match")
                   ;; scrutinee: maps.lookup(keyDescription, anns)
-                  (t-app (t-app (t-prim "hydra.lib.maps.lookup")
-                    (t-var "hydra.constants.keyDescription"))
+                  (t-app (t-app (t-prim "hydra.core.lib.maps.lookup")
+                    (t-var "hydra.core.constants.keyDescription"))
                     (t-var "anns")))
                   ;; default: right(nothing)
                   (t-right (list 'optional (list 'none '()))))
                   ;; \descTerm -> case match to extract string
                   (t-lam "descTerm"
                     (t-app
-                      (t-match "hydra.core.Term"
+                      (t-match "hydra.core.model.Term"
                         (list 'given (t-right (list 'optional (list 'none '()))))
                         (t-field "literal"
                           (t-lam "lit"
                             (t-app
-                              (t-match "hydra.core.Literal"
+                              (t-match "hydra.core.model.Literal"
                                 (list 'given (t-right (list 'optional (list 'none '()))))
                                 (t-field "string"
                                   (t-lam "s"
@@ -196,34 +196,34 @@
                               (t-var "lit")))))
                       (t-var "descTerm"))))))))
 
-    ;; hydra.annotations.getTermDescription = \cx -> \g -> \term ->
+    ;; hydra.core.annotations.getTermDescription = \cx -> \g -> \term ->
     ;;   let peel = \t -> case t of
     ;;     typeLambda(tl) -> peel(tl.body)
     ;;     typeApplication(ta) -> peel(ta.body)
     ;;     _ -> t
     ;;   in getDescription(cx)(g)(termAnnotationInternal(peel(term)))
-    (list "hydra.annotations.getTermDescription"
+    (list "hydra.core.annotations.getTermDescription"
           (t-lam "cx"
             (t-lam "g"
               (t-lam "term"
                 (t-let "peel"
                   (t-lam "t"
                     (t-app
-                      (t-match "hydra.core.Term" (list 'given (t-var "t"))
+                      (t-match "hydra.core.model.Term" (list 'given (t-var "t"))
                         (t-field "typeLambda"
                           (t-lam "tl"
                             (t-app (t-var "peel")
-                              (t-app (t-project "hydra.core.TypeLambda" "body")
+                              (t-app (t-project "hydra.core.model.TypeLambda" "body")
                                 (t-var "tl")))))
                         (t-field "typeApplication"
                           (t-lam "ta"
                             (t-app (t-var "peel")
-                              (t-app (t-project "hydra.core.TypeApplicationTerm" "body")
+                              (t-app (t-project "hydra.core.model.TypeApplicationTerm" "body")
                                 (t-var "ta"))))))
                       (t-var "t")))
-                  (t-app (t-app (t-app (t-var "hydra.annotations.getDescription")
+                  (t-app (t-app (t-app (t-var "hydra.core.annotations.getDescription")
                     (t-var "cx")) (t-var "g"))
-                    (t-app (t-var "hydra.annotations.termAnnotationInternal")
+                    (t-app (t-var "hydra.core.annotations.termAnnotationInternal")
                       (t-app (t-var "peel") (t-var "term"))))))))))
   )
 
@@ -231,19 +231,19 @@
   (let* ((std-prims (standard-library))
          (all-prims std-prims)
          ;; Build schema types from bootstrap + test types
-         (bootstrap-types hydra_json_bootstrap_types_by_name)
-         (test-types hydra_test_test_graph_test_types)
+         (bootstrap-types hydra_core_json_bootstrap_types_by_name)
+         (test-types hydra_core_test_test_graph_test_types)
          ;; Convert types to TypeSchemes using f_type_to_type_scheme
-         (type-to-ts hydra_scoping_f_type_to_type_scheme)
+         (type-to-ts hydra_core_scoping_f_type_to_type_scheme)
          (kernel-schemas (map (lambda (entry)
                                 (list (car entry) (type-to-ts (cdr entry))))
                               bootstrap-types))
          (test-schemas (map (lambda (entry)
                               (list (car entry) (type-to-ts (cadr entry))))
-                            (hydra_lib_maps_to_list test-types)))
-         (schema-types (hydra_lib_maps_from_list (append kernel-schemas test-schemas)))
+                            (hydra_core_lib_maps_to_list test-types)))
+         (schema-types (hydra_core_lib_maps_from_list (append kernel-schemas test-schemas)))
          ;; Test terms
-         (test-terms-alist (hydra_lib_maps_to_list hydra_test_test_graph_test_terms))
+         (test-terms-alist (hydra_core_lib_maps_to_list hydra_core_test_test_graph_test_terms))
          (test-terms (map (lambda (entry) (list (car entry) (cdr entry))) test-terms-alist))
          (bound-terms
            (append
@@ -255,16 +255,16 @@
              (annotation-bindings)
              ;; Other constants
              (list (list "hydra.monads.emptyContext" (list 'unit '()))
-                   (list "hydra.lexical.emptyGraph" (list 'unit '())))
+                   (list "hydra.core.lexical.emptyGraph" (list 'unit '())))
              ;; Test terms
              test-terms)))
-    (make-hydra_graph_graph
-      (hydra_lib_maps_from_list bound-terms)
-      hydra_lib_maps_empty
+    (make-hydra_core_graph_graph
+      (hydra_core_lib_maps_from_list bound-terms)
+      hydra_core_lib_maps_empty
       '()
       '()
-      hydra_lib_maps_empty
-      (hydra_lib_maps_from_list
+      hydra_core_lib_maps_empty
+      (hydra_core_lib_maps_from_list
         (map (lambda (p) (list (car p) (cdr p))) all-prims))
       schema-types
       '())))
@@ -276,20 +276,20 @@
   *test-graph*)
 
 (define (empty-context)
-  (make-hydra_typing_inference_context 0 '()))
+  (make-hydra_core_typing_inference_context 0 '()))
 
 ;; Build an empty graph with standard primitives (for hoisting tests)
 (define (empty-graph)
   (let ((std-prims (standard-library)))
-    (make-hydra_graph_graph
-      hydra_lib_maps_empty
-      hydra_lib_maps_empty
+    (make-hydra_core_graph_graph
+      hydra_core_lib_maps_empty
+      hydra_core_lib_maps_empty
       '()
       '()
-      hydra_lib_maps_empty
-      (hydra_lib_maps_from_list
+      hydra_core_lib_maps_empty
+      (hydra_core_lib_maps_from_list
         (map (lambda (p) (list (car p) (cdr p))) std-prims))
-      hydra_lib_maps_empty
+      hydra_core_lib_maps_empty
       '())))
 
 ;; ==========================================================================
@@ -305,27 +305,27 @@
   (guard (exn (#t #f))
     (if (and (pair? t) (eq? (car t) 'annotated))
         (let* ((at (cadr t))
-               (body (hydra_core_annotated_term-body at))
-               (ann (hydra_core_annotated_term-annotation at))
-               (body-str (hydra_print_core_term body))
+               (body (hydra_core_model_annotated_term-body at))
+               (ann (hydra_core_model_annotated_term-annotation at))
+               (body-str (hydra_core_print_model_term body))
                (ann-str (if (and (pair? ann) (eq? (car ann) 'map))
-                            (hydra_print_core_term ann)
+                            (hydra_core_print_model_term ann)
                             "{}")))
-          (string-append "inject(hydra.core.Term){annotated=record(hydra.core.AnnotatedTerm){body="
+          (string-append "inject(hydra.core.model.Term){annotated=record(hydra.core.model.AnnotatedTerm){body="
                          (show-term body) ", annotation=" ann-str "}}"))
-        (hydra_print_core_term t))))
+        (hydra_core_print_model_term t))))
 
 (define (show-type t)
   (guard (exn (#t #f))
-    (hydra_print_core_type t)))
+    (hydra_core_print_model_type t)))
 
 (define (show-type-scheme ts)
   (guard (exn (#t #f))
-    (hydra_print_core_type_scheme ts)))
+    (hydra_core_print_model_type_scheme ts)))
 
 (define (show-let l)
   (guard (exn (#t #f))
-    (hydra_print_core_let l)))
+    (hydra_core_print_model_let l)))
 
 (define (normalize-show s)
   (if (not s) s
@@ -415,52 +415,52 @@
         (cond
           ((eq? tag 'annotated)
            (let* ((at (cadr term))
-                  (body (hydra_core_annotated_term-body at))
-                  (ann (hydra_core_annotated_term-annotation at))
+                  (body (hydra_core_model_annotated_term-body at))
+                  (ann (hydra_core_model_annotated_term-annotation at))
                   (ann-term (if (and (pair? ann) (eq? (car ann) 'map)) ann (list 'map ann))))
-             (list 'inject (make-hydra_core_injection "hydra.core.Term"
-               (make-hydra_core_field "annotated"
-                 (list 'record (make-hydra_core_record "hydra.core.AnnotatedTerm"
-                   (list (make-hydra_core_field "body" (term-to-meta body))
-                         (make-hydra_core_field "annotation" (term-to-meta-map ann-term))))))))))
+             (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+               (make-hydra_core_model_field "annotated"
+                 (list 'record (make-hydra_core_model_record "hydra.core.model.AnnotatedTerm"
+                   (list (make-hydra_core_model_field "body" (term-to-meta body))
+                         (make-hydra_core_model_field "annotation" (term-to-meta-map ann-term))))))))))
           ((eq? tag 'literal)
-           (list 'inject (make-hydra_core_injection "hydra.core.Term"
-             (make-hydra_core_field "literal" (literal-to-meta (cadr term))))))
+           (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+             (make-hydra_core_model_field "literal" (literal-to-meta (cadr term))))))
           ((eq? tag 'application)
            (let ((app (cadr term)))
-             (list 'inject (make-hydra_core_injection "hydra.core.Term"
-               (make-hydra_core_field "application"
-                 (list 'record (make-hydra_core_record "hydra.core.Application"
-                   (list (make-hydra_core_field "function" (term-to-meta (hydra_core_application-function app)))
-                         (make-hydra_core_field "argument" (term-to-meta (hydra_core_application-argument app)))))))))))
+             (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+               (make-hydra_core_model_field "application"
+                 (list 'record (make-hydra_core_model_record "hydra.core.model.Application"
+                   (list (make-hydra_core_model_field "function" (term-to-meta (hydra_core_model_application-function app)))
+                         (make-hydra_core_model_field "argument" (term-to-meta (hydra_core_model_application-argument app)))))))))))
           ((eq? tag 'variable)
            (let ((name (cadr term)))
-             (list 'inject (make-hydra_core_injection "hydra.core.Term"
-               (make-hydra_core_field "variable"
-                 (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
+             (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+               (make-hydra_core_model_field "variable"
+                 (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                    (list 'literal (list 'string name)))))))))
           ((eq? tag 'wrap)
            (let ((wt (cadr term)))
-             (list 'inject (make-hydra_core_injection "hydra.core.Term"
-               (make-hydra_core_field "wrap"
-                 (list 'record (make-hydra_core_record "hydra.core.WrappedTerm"
-                   (list (make-hydra_core_field "typeName"
-                           (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name"
-                             (list 'literal (list 'string (hydra_core_wrapped_term-type_name wt))))))
-                         (make-hydra_core_field "body" (term-to-meta (hydra_core_wrapped_term-body wt)))))))))))
+             (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+               (make-hydra_core_model_field "wrap"
+                 (list 'record (make-hydra_core_model_record "hydra.core.model.WrappedTerm"
+                   (list (make-hydra_core_model_field "typeName"
+                           (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
+                             (list 'literal (list 'string (hydra_core_model_wrapped_term-type_name wt))))))
+                         (make-hydra_core_model_field "body" (term-to-meta (hydra_core_model_wrapped_term-body wt)))))))))))
           ((eq? tag 'optional)
-           (list 'inject (make-hydra_core_injection "hydra.core.Term"
-             (make-hydra_core_field "optional"
+           (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+             (make-hydra_core_model_field "optional"
                (if (cadr term)
                    (list 'optional (term-to-meta (cadr term)))
                    (list 'optional '()))))))
           ((eq? tag 'list)
-           (list 'inject (make-hydra_core_injection "hydra.core.Term"
-             (make-hydra_core_field "list"
+           (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+             (make-hydra_core_model_field "list"
                (list 'list (map term-to-meta (cadr term)))))))
           ((eq? tag 'map)
-           (list 'inject (make-hydra_core_injection "hydra.core.Term"
-             (make-hydra_core_field "map" (term-to-meta-map term)))))
+           (list 'inject (make-hydra_core_model_injection "hydra.core.model.Term"
+             (make-hydra_core_model_field "map" (term-to-meta-map term)))))
           (else term)))))
 
 (define (literal-to-meta lit)
@@ -468,11 +468,11 @@
       (let ((tag (car lit)))
         (cond
           ((eq? tag 'string)
-           (list 'inject (make-hydra_core_injection "hydra.core.Literal"
-             (make-hydra_core_field "string" (list 'literal (list 'string (cadr lit)))))))
+           (list 'inject (make-hydra_core_model_injection "hydra.core.model.Literal"
+             (make-hydra_core_model_field "string" (list 'literal (list 'string (cadr lit)))))))
           ((eq? tag 'boolean)
-           (list 'inject (make-hydra_core_injection "hydra.core.Literal"
-             (make-hydra_core_field "boolean" (list 'literal (list 'boolean (cadr lit)))))))
+           (list 'inject (make-hydra_core_model_injection "hydra.core.model.Literal"
+             (make-hydra_core_model_field "boolean" (list 'literal (list 'boolean (cadr lit)))))))
           ((eq? tag 'integer) (integer-to-meta (cadr lit)))
           ((eq? tag 'float) (float-to-meta (cadr lit)))
           (else lit)))))
@@ -480,24 +480,24 @@
 (define (integer-to-meta ival)
   (if (not (pair? ival)) ival
       (let ((tag (car ival)))
-        (list 'inject (make-hydra_core_injection "hydra.core.Literal"
-          (make-hydra_core_field "integer"
-            (list 'inject (make-hydra_core_injection "hydra.core.IntegerValue"
-              (make-hydra_core_field (symbol->string tag)
+        (list 'inject (make-hydra_core_model_injection "hydra.core.model.Literal"
+          (make-hydra_core_model_field "integer"
+            (list 'inject (make-hydra_core_model_injection "hydra.core.model.IntegerValue"
+              (make-hydra_core_model_field (symbol->string tag)
                 (list 'literal (list 'integer ival)))))))))))
 
 (define (float-to-meta fval)
   (if (not (pair? fval)) fval
       (let ((tag (car fval)))
-        (list 'inject (make-hydra_core_injection "hydra.core.Literal"
-          (make-hydra_core_field "float"
-            (list 'inject (make-hydra_core_injection "hydra.core.FloatValue"
-              (make-hydra_core_field (symbol->string tag)
+        (list 'inject (make-hydra_core_model_injection "hydra.core.model.Literal"
+          (make-hydra_core_model_field "float"
+            (list 'inject (make-hydra_core_model_injection "hydra.core.model.FloatValue"
+              (make-hydra_core_model_field (symbol->string tag)
                 (list 'literal (list 'float fval)))))))))))
 
 (define (ensure-name-key k)
   (if (string? k)
-      (list 'wrap (make-hydra_core_wrapped_term "hydra.core.Name" (list 'literal (list 'string k))))
+      (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name" (list 'literal (list 'string k))))
       k))
 
 (define (term-to-meta-map m)
@@ -753,9 +753,9 @@
 ;; ==========================================================================
 
 (define (run-evaluation-test path tc)
-  (let* ((input (hydra_testing_evaluation_test_case-input tc))
-         (expected (hydra_testing_evaluation_test_case-output tc))
-         (style (hydra_testing_evaluation_test_case-evaluation_style tc))
+  (let* ((input (hydra_core_testing_evaluation_test_case-input tc))
+         (expected (hydra_core_testing_evaluation_test_case-output tc))
+         (style (hydra_core_testing_evaluation_test_case-evaluation_style tc))
          (graph (get-test-graph))
          (cx (empty-context))
          (eager (equal? (car style) 'eager)))
@@ -763,7 +763,7 @@
                  (display (string-append "FAIL: " path "\n"))
                  (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                  (list 0 1 0)))
-      (let ((result ((((hydra_reduction_reduce_term cx) graph) eager) input)))
+      (let ((result ((((hydra_core_reduction_reduce_term cx) graph) eager) input)))
         (if (eq? (car result) 'left)
             (begin
               (display (string-append "FAIL: " path "\n"))
@@ -785,47 +785,47 @@
 
 (define (run-alpha-conversion-test path tc)
   (run-simple-test path
-    (hydra_testing_alpha_conversion_test_case-result tc)
+    (hydra_core_testing_alpha_conversion_test_case-result tc)
     (lambda ()
-      (((hydra_reduction_alpha_convert
-          (hydra_testing_alpha_conversion_test_case-old_variable tc))
-        (hydra_testing_alpha_conversion_test_case-new_variable tc))
-       (hydra_testing_alpha_conversion_test_case-term tc)))))
+      (((hydra_core_reduction_alpha_convert
+          (hydra_core_testing_alpha_conversion_test_case-old_variable tc))
+        (hydra_core_testing_alpha_conversion_test_case-new_variable tc))
+       (hydra_core_testing_alpha_conversion_test_case-term tc)))))
 
 (define (run-case-conversion-test path tc)
   (run-simple-test path
-    (hydra_testing_case_conversion_test_case-to_string tc)
+    (hydra_core_testing_case_conversion_test_case-to_string tc)
     (lambda ()
-      (((hydra_formatting_convert_case
-          (hydra_testing_case_conversion_test_case-from_convention tc))
-        (hydra_testing_case_conversion_test_case-to_convention tc))
-       (hydra_testing_case_conversion_test_case-from_string tc)))))
+      (((hydra_core_formatting_convert_case
+          (hydra_core_testing_case_conversion_test_case-from_convention tc))
+        (hydra_core_testing_case_conversion_test_case-to_convention tc))
+       (hydra_core_testing_case_conversion_test_case-from_string tc)))))
 
 (define (run-deannotate-term-test path tc)
   (run-simple-test path
-    (hydra_testing_deannotate_term_test_case-output tc)
+    (hydra_core_testing_deannotate_term_test_case-output tc)
     (lambda ()
-      (hydra_strip_deannotate_term
-        (hydra_testing_deannotate_term_test_case-input tc)))))
+      (hydra_core_strip_deannotate_term
+        (hydra_core_testing_deannotate_term_test_case-input tc)))))
 
 (define (run-deannotate-type-test path tc)
   (run-simple-test path
-    (hydra_testing_deannotate_type_test_case-output tc)
+    (hydra_core_testing_deannotate_type_test_case-output tc)
     (lambda ()
-      (hydra_rewriting_deannotate_type
-        (hydra_testing_deannotate_type_test_case-input tc)))))
+      (hydra_core_rewriting_deannotate_type
+        (hydra_core_testing_deannotate_type_test_case-input tc)))))
 
 (define (run-flatten-let-terms-test path tc)
   (run-simple-test path
-    (hydra_testing_flatten_let_terms_test_case-output tc)
+    (hydra_core_testing_flatten_let_terms_test_case-output tc)
     (lambda ()
-      (hydra_rewriting_flatten_let_terms
-        (hydra_testing_flatten_let_terms_test_case-input tc)))))
+      (hydra_core_rewriting_flatten_let_terms
+        (hydra_core_testing_flatten_let_terms_test_case-input tc)))))
 
 (define (run-free-variables-test path tc)
   (run-simple-test path
-    (hydra_testing_free_variables_test_case-output tc)
+    (hydra_core_testing_free_variables_test_case-output tc)
     (lambda ()
-      (hydra_rewriting_free_variables_in_term
-        (hydra_testing_free_variables_test_case-input tc)))))
+      (hydra_core_rewriting_free_variables_in_term
+        (hydra_core_testing_free_variables_test_case-input tc)))))
 

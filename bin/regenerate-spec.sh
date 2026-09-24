@@ -7,7 +7,7 @@ set -euo pipefail
 # Java-host by default (contrast bin/regenerate-lexicon.sh, which runs the
 # Haskell host via `stack ghci`; #723 moves generation logic off Haskell as
 # anything but an alternate host). The generation logic itself is translingual
-# (hydra.codegen's generateModuleDoc, alongside generateLexicon); this script
+# (hydra.core.codegen's generateModuleDoc, alongside generateLexicon); this script
 # is the thin Java driver + I/O shell around it, invoking hydra.RegenerateSpec.
 #
 # Usage:
@@ -17,7 +17,7 @@ set -euo pipefail
 # committed page under docs/specification/{primitives,types}/ (the page-name
 # mapping is config-driven inside hydra.RegenerateSpec, not this script).
 # One or more --module flags scope regeneration to specific kernel modules
-# (e.g. --module hydra.lib.lists), for iterating on a single page.
+# (e.g. --module hydra.core.lib.lists), for iterating on a single page.
 #
 # Prerequisites: the Java head buildable (./gradlew tasks from heads/java),
 # and dist/json populated (run bin/sync.sh or bin/sync-java.sh first).
@@ -49,7 +49,7 @@ cd "$HYDRA_ROOT/heads/java"
 
 echo "Regenerating docs/specification/{primitives,types}/ pages..."
 
-# headsExtras compiles hydra/RegenerateSpec.java + hydra.codegen's generated
+# headsExtras compiles hydra/RegenerateSpec.java + hydra.core.codegen's generated
 # Java form (hydra.Codegen), matching the classpath-resolution mechanics
 # already used by bin/inference-bench.sh for a same-shape driver (a Java
 # main class reading dist/json and writing output files, no published/local

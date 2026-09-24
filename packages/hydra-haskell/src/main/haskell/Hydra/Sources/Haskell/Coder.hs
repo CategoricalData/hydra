@@ -4,47 +4,47 @@ module Hydra.Sources.Haskell.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import Hydra.File (_FileExtension)
-import Hydra.Overlay.Haskell.Libraries
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations                     as Annotations
-import qualified Hydra.Overlay.Haskell.Bootstrap                       as Bootstrap
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes                    as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Literals                        as Literals
-import qualified Hydra.Dsl.Paths                  as Paths
-import qualified Hydra.Dsl.Ast                        as Ast
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base                       as MetaBase
-import qualified Hydra.Dsl.Coders                     as Coders
-import qualified Hydra.Dsl.Util                    as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph                      as Graph
-import qualified Hydra.Dsl.Json.Model                       as Json
-import qualified Hydra.Dsl.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Math                   as Math
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Packaging                     as Packaging
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms                      as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing                    as Testing
-import qualified Hydra.Dsl.Topology                   as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types                      as MetaTypes
-import qualified Hydra.Dsl.Typing                     as Typing
-import qualified Hydra.Dsl.Util                       as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants                   as Variants
-import qualified Hydra.Dsl.Errors                     as Error
-import qualified Hydra.Overlay.Haskell.Dsl.Prims                           as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular                         as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Terms                           as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Tests                           as Tests
-import qualified Hydra.Overlay.Haskell.Dsl.Types                           as Types
+import Hydra.Core.File (_FileExtension)
+import Hydra.Core.Overlay.Haskell.Libraries
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations                     as Annotations
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap                       as Bootstrap
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes                    as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals                        as Literals
+import qualified Hydra.Core.Dsl.Paths                  as Paths
+import qualified Hydra.Core.Dsl.Ast                        as Ast
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base                       as MetaBase
+import qualified Hydra.Core.Dsl.Coders                     as Coders
+import qualified Hydra.Core.Dsl.Util                    as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph                      as Graph
+import qualified Hydra.Core.Dsl.Json.Model                       as Json
+import qualified Hydra.Core.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Math                   as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Core.Dsl.Packaging                     as Packaging
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                      as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                    as Testing
+import qualified Hydra.Core.Dsl.Topology                   as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types                      as MetaTypes
+import qualified Hydra.Core.Dsl.Typing                     as Typing
+import qualified Hydra.Core.Dsl.Util                       as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants                   as Variants
+import qualified Hydra.Core.Dsl.Errors                     as Error
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims                           as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular                         as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms                           as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests                           as Tests
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                           as Types
 import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.All            as KernelTerms
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
@@ -180,12 +180,12 @@ constructModule = haskellCoderDefinition "constructModule" $
   -- (see `hRaw` below) so that lowered `hydra.lib.<sub>` modules emit
   -- with the canonical module name. For *referenced* namespaces, native
   -- runtime libraries live at "hydra.<host>.lib.<sub>", but kernel JSON
-  -- references them as the canonical "hydra.lib.<sub>" (three segments
-  -- exactly). When we see a referenced namespace matching that shape AND
+  -- references them as the canonical "hydra.core.lib.<sub>" (four segments
+  -- exactly, post-#729 package-rooted grammar). When we see a referenced namespace matching that shape AND
   -- its sub is present in 'overlaySubs' (the caller-supplied, on-disk
   -- overlay-existence signal -- see #630), rewrite the middle so generated
   -- Haskell imports the host-native module. Subs with no overlay (e.g.
-  -- hydra.lib.defaults) are left pointing at the canonical kernel module.
+  -- hydra.core.lib.defaults) are left pointing at the canonical kernel module.
   -- This existence check happens at emission time; #630 retired the
   -- driver-level post-generation text pass that used to narrow an
   -- unconditional shape-only redirect back down after the fact (#568).
@@ -193,16 +193,16 @@ constructModule = haskellCoderDefinition "constructModule" $
   "h">: "namespace" ~>
     "raw" <~ (unwrap _ModuleName @@ var "namespace") $
     "parts" <~ Strings.splitOn (string ".") (var "raw") $
-    "sub" <~ Strings.join (string ".") (Lists.drop (int32 2) (var "parts")) $
+    "sub" <~ Strings.join (string ".") (Lists.drop (int32 3) (var "parts")) $
     Logic.ifElse
       (Logic.and
         (Logic.and
-          (Equality.equal (Lists.length (var "parts")) (int32 3))
+          (Equality.equal (Lists.length (var "parts")) (int32 4))
           (Equality.equal
-            (Lists.take (int32 2) (var "parts"))
-            (list [string "hydra", string "lib"])))
+            (Lists.take (int32 3) (var "parts"))
+            (list [string "hydra", string "core", string "lib"])))
         (Sets.member (var "sub") (var "overlaySubs" :: TypedTerm (S.Set String))))
-      (Strings.concat2 (string "hydra.overlay.haskell.lib.") (var "sub"))
+      (Strings.concat2 (string "hydra.core.overlay.haskell.lib.") (var "sub"))
       (var "raw"),
   "createDeclarations">: "def" ~>
     match _Definition (var "def") Nothing [
@@ -255,7 +255,7 @@ constructModule = haskellCoderDefinition "constructModule" $
             "Enum", "Ordering", "decodeFloat", "encodeFloat", "fail", "lines", "map", "pure", "sum", "unlines"])],
         -- Data.Scientific and Data.Void are always imported (modules that don't use them
         -- produce an unused-import warning). Void is unconditional rather than gated on
-        -- HaskellModuleMetadata.usesVoid because the synthesized Hydra.Dsl.Lib.* wrapper
+        -- HaskellModuleMetadata.usesVoid because the synthesized Hydra.Core.Dsl.Lib.* wrapper
         -- modules (Dsls.hs's dslModule) reference Void in phantom-typed signatures without
         -- flowing through gatherMetadata's usesVoid detection.
         list [
@@ -274,12 +274,12 @@ constructModule = haskellCoderDefinition "constructModule" $
         var "condImport"
           @@ (project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesSet @@ var "meta")
           @@ pair (pair (string "Data.Set") (just $ string "S")) (list ([] :: [TypedTerm String])),
-        -- Conditionally add Hydra.Overlay.Haskell.Lib.Literals import (the native runtime
-        -- for hydra.lib.literals) if binary or decimal literals are present.
+        -- Conditionally add Hydra.Core.Overlay.Haskell.Lib.Literals import (the native runtime
+        -- for hydra.core.lib.literals) if binary or decimal literals are present.
         Logic.ifElse (Logic.or
             (Analysis.moduleContainsBinaryLiterals @@ var "mod")
             (Analysis.moduleContainsDecimalLiterals @@ var "mod"))
-          (list [pair (pair (string "Hydra.Overlay.Haskell.Lib.Literals") (just $ string "Literals")) (list ([] :: [TypedTerm String]))])
+          (list [pair (pair (string "Hydra.Core.Overlay.Haskell.Lib.Literals") (just $ string "Literals")) (list ([] :: [TypedTerm String]))])
           (list ([] :: [TypedTerm ((String, Maybe String), [String])]))]] $
     "declLists" <<~ Eithers.mapList (var "createDeclarations") (var "defs") $ lets [
     "decls">: Lists.concat $ var "declLists",
@@ -1175,7 +1175,7 @@ typeDecl = haskellCoderDefinition "typeDecl" $
 -- | Extract TypeScheme class constraints into the Map format used by encodeTypeWithClassAssertions.
 -- TypeScheme constraints are a Map Name TypeVariableConstraints, where TypeVariableConstraints
 -- has a 'classes' field of type Set TypeClassConstraint. Each TypeClassConstraint.simple
--- carries the name of a built-in type class binding under hydra.classes.
+-- carries the name of a built-in type class binding under hydra.core.classes.
 typeSchemeConstraintsToClassMap :: TypedTermDefinition (M.Map Name TypeVariableConstraints -> M.Map Name (S.Set Name))
 typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsToClassMap" $
   doc "Project type scheme constraints to a map of type variables to typeclass names" $

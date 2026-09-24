@@ -25,7 +25,7 @@ hard-checked here (the generator omits empty ones — see Generation.writeDslJso
 see check-manifest-json-tracked.py for the trackedness side): a whole-package
 truncation still surfaces as a missing mainModules file.
 
-Haskell path derivation mirrors hydra.codegen + the Haskell coder:
+Haskell path derivation mirrors hydra.core.codegen + the Haskell coder:
   namespace "a.b.cD" -> "A/B/CD.hs" — each dot-separated segment has its FIRST
   character upper-cased with the remainder preserved (camelCase kept, e.g.
   manifestWriter -> ManifestWriter), NOT Python str.capitalize() (which would

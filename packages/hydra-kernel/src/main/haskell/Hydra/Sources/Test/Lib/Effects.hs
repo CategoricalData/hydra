@@ -2,62 +2,62 @@ module Hydra.Sources.Test.Lib.Effects where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
 -- Effectful test cases are authored with HONESTLY-TYPED builders (Phantoms + Literals), NOT the
--- reified-Term builders in Hydra.Overlay.Haskell.Dsl.Typed.Terms. The reified builders (e.g. Terms.string,
--- Terms.primitive) construct hydra.core.Term *data* for the reduce/interpret path used by universal
+-- reified-Term builders in Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms. The reified builders (e.g. Terms.string,
+-- Terms.primitive) construct hydra.core.model.Term *data* for the reduce/interpret path used by universal
 -- tests; effectful cases instead compile directly to raw target effectful code, so their terms must
 -- infer at their true types (effect<string>, string). For #494.
-import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms hiding ((++))  -- (@@), primitive, lambda, var, just, nothing, optional, wrap
-import Hydra.Overlay.Haskell.Dsl.Typed.Literals               (string, binary)
+import Hydra.Core.Overlay.Haskell.Dsl.Phantoms hiding ((++))  -- (@@), primitive, lambda, var, just, nothing, optional, wrap
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Literals               (string, binary)
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Data.ByteString.Char8        as BC
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 import qualified Data.Set                     as S
 
 -- Additional imports specific to this file
-import Hydra.Testing
-import qualified Hydra.File as File
-import qualified Hydra.Lib.Effects as DefEffects
-import qualified Hydra.Lib.Eithers as DefEithers
-import qualified Hydra.Lib.Files as DefFiles
-import qualified Hydra.Lib.Optionals as DefOptionals
-import qualified Hydra.Lib.Strings as DefStrings
-import qualified Hydra.Lib.Text as DefText
+import Hydra.Core.Testing
+import qualified Hydra.Core.File as File
+import qualified Hydra.Core.Lib.Effects as DefEffects
+import qualified Hydra.Core.Lib.Eithers as DefEithers
+import qualified Hydra.Core.Lib.Files as DefFiles
+import qualified Hydra.Core.Lib.Optionals as DefOptionals
+import qualified Hydra.Core.Lib.Strings as DefStrings
+import qualified Hydra.Core.Lib.Text as DefText
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.lib.effects"
+ns = ModuleName "hydra.core.test.lib.effects"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core", ModuleName "hydra.file", ModuleName "hydra.testing"],
-            moduleMetadata = descriptionMetadata (Just "Effectful test cases for hydra.lib.effects primitives")}
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core.model", ModuleName "hydra.core.file", ModuleName "hydra.core.testing"],
+            moduleMetadata = descriptionMetadata (Just "Effectful test cases for hydra.core.lib.effects primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
--- Test groups for hydra.lib.effects primitives. Two kinds of case live here:
+-- Test groups for hydra.core.lib.effects primitives. Two kinds of case live here:
 --   * Pure effect programs (pure/map/apply/compose plus the result-only bind/foldl/mapList/
 --     mapOptional cases): no file I/O, so a runner's per-case temp-directory scan detects no
---     hydra.lib.files primitives and skips directory preparation for them.
+--     hydra.core.lib.files primitives and skips directory preparation for them.
 --   * Ordering-observation cases (the *Order / *Sequencing groups, #675): these make the
 --     sequencing contract OBSERVABLE by appending to a single file inside a bind/foldList/mapList/
 --     mapOptional chain and reading it back, so a host that reorders, double-runs, skips, or
 --     eagerly runs an effect produces a different file and fails. These cases DO reference
---     hydra.lib.files, so the runner's per-case scan triggers temp-directory preparation for them.
--- The temp directory is the same canonical /tmp/hydra-testing used by hydra.test.lib.files.
+--     hydra.core.lib.files, so the runner's per-case scan triggers temp-directory preparation for them.
+-- The temp directory is the same canonical /tmp/hydra-testing used by hydra.core.test.lib.files.
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Effectful test cases for hydra.lib.effects primitives" $
-    supergroup "hydra.lib.effects primitives" [
+    Phantoms.doc "Effectful test cases for hydra.core.lib.effects primitives" $
+    supergroup "hydra.core.lib.effects primitives" [
       effectsApply,
       effectsBind,
       effectsBindOrder,
@@ -77,7 +77,7 @@ allTests = definitionInModule module_ "allTests" $
 -- REAL host file effects: append into one file inside an effect chain, then read it back. A pure
 -- effect program cannot observe order (no side effect to reorder), so these are the enforcement
 -- vehicle for the obligations specified in docs/specification/primitives/effects.md.
--- The helpers mirror hydra.test.lib.files (Files.hs) so both modules share the same idioms.
+-- The helpers mirror hydra.core.test.lib.files (Files.hs) so both modules share the same idioms.
 -- ============================================================================
 
 testDir :: String

@@ -31,7 +31,7 @@ packages/hydra-jvm/
 Generated artifacts land under `dist/json/hydra-jvm/` (JSON) and are then
 assembled into target-language packages by the host-specific sync steps.
 Phase 5 of `bin/sync.sh` generates a full `dist/java/hydra-jvm/` tree (the
-generated `hydra.jvm.serde` module plus a synthesized `hydra.dsl.jvm.*`
+generated `hydra.jvm.serde` module plus a synthesized `hydra.jvm.dsl.*`
 wrapper), matching the other JVM packages.
 
 ## Publishing

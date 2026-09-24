@@ -1,17 +1,17 @@
 module Hydra.Sources.Kernel.Types.Error.Packaging where
 
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Packaging as Packaging
 import qualified Hydra.Sources.Kernel.Types.Util as Util
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.error.packaging"
+ns = ModuleName "hydra.core.error.packaging"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns
@@ -154,7 +154,7 @@ invalidModuleError = define "InvalidModuleError" $
 
 invalidModuleNameConventionError :: TypeDefinition
 invalidModuleNameConventionError = define "InvalidModuleNameConventionError" $
-  doc "A module whose name does not match the dotted-lowercase naming convention. Module names must be dot-separated lowercase segments, each starting with a letter, e.g. hydra.core or hydra.lib.lists." $
+  doc "A module whose name does not match the dotted-lowercase naming convention. Module names must be dot-separated lowercase segments, each starting with a letter, e.g. hydra.core.model or hydra.core.lib.lists." $
   T.record [
     "moduleName">:
       doc "The module name that violates the convention" $
@@ -221,7 +221,7 @@ moduleInMultiplePackagesError = define "ModuleInMultiplePackagesError" $
 
 nestedModuleNameError :: TypeDefinition
 nestedModuleNameError = define "NestedModuleNameError" $
-  doc "A module namespace which is a strict dotted-prefix of another module namespace in the same package, e.g. hydra.codegen and hydra.codegen.docs. When two such namespaces coexist, a definition name that is prefix-valid for both modules cannot be unambiguously assigned to one." $
+  doc "A module namespace which is a strict dotted-prefix of another module namespace in the same package, e.g. hydra.core.codegen and hydra.core.codegen.docs. When two such namespaces coexist, a definition name that is prefix-valid for both modules cannot be unambiguously assigned to one." $
   T.record [
     "outer">:
       doc "The shorter namespace, a strict dotted-prefix of the inner namespace" $

@@ -16,27 +16,27 @@ module Hydra.Sources.TypeScript.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import Hydra.File (_FileExtension)
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Math                   as Math
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Ordering                  as Ordering
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph                      as Graph
-import qualified Hydra.Dsl.Errors                          as Error
-import qualified Hydra.Dsl.Packaging                       as Packaging
-import qualified Hydra.Dsl.Typing                          as Typing
-import qualified Hydra.Dsl.Util                            as Util
+import Hydra.Core.File (_FileExtension)
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Math                   as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Ordering                  as Ordering
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph                      as Graph
+import qualified Hydra.Core.Dsl.Errors                          as Error
+import qualified Hydra.Core.Dsl.Packaging                       as Packaging
+import qualified Hydra.Core.Dsl.Typing                          as Typing
+import qualified Hydra.Core.Dsl.Util                            as Util
 import qualified Hydra.Sources.Kernel.Terms.Analysis       as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity          as Arity
@@ -58,14 +58,14 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- Additional imports for the TypeScript AST
-import qualified Hydra.TypeScript.Syntax as TS
+import qualified Hydra.Typescript.Syntax as TS
 import qualified Hydra.Sources.TypeScript.Syntax as TypeScriptSyntax
 import qualified Hydra.Sources.TypeScript.Language as TypeScriptLanguageSource
 import qualified Hydra.Sources.TypeScript.Serde as TypeScriptSerdeSource
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.typeScript.coder"
+ns = ModuleName "hydra.typescript.coder"
 
 module_ :: Module
 module_ = Module {
@@ -285,7 +285,7 @@ encodeBindingAsStatement = def "encodeBindingAsStatement" $
 
 -- | True when a let-binding's value should be thunked to preserve Haskell's
 -- lazy evaluation. A non-lambda binding whose right-hand side calls a
--- `hydra.print.*` function (e.g. `print.core.type_`) is dangerous to build
+-- `hydra.core.print.*` function (e.g. `print.core.type_`) is dangerous to build
 -- eagerly: TypeScript is strict, so the `const` is evaluated on entry to the
 -- enclosing function even when the binding is only referenced in a fallback
 -- position (an `ifElse` else-branch or a `cases` default). The Haskell source
@@ -1084,7 +1084,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
 -- =============================================================================
 --
 -- A minimal printer for TS.ModuleItem -> String. Avoids the indirection
--- through Hydra.Serialization / Hydra.Ast.Expr used by Java/Scala/Rust
+-- through Hydra.Core.Serialization / Hydra.Core.Ast.Expr used by Java/Scala/Rust
 -- Serde modules. The TypeScript surface we emit is small enough to print
 -- directly: just interface declarations and type aliases. Layout is
 -- minimal — one declaration per block, members one per line.
@@ -1541,7 +1541,7 @@ importsToText = def "importsToText" $
     -- current file's directory, we walk up (n_current - 1) times then descend
     -- through the target's path segments.
     --
-    -- Test modules (those whose namespace starts with `hydra.test.`) live in
+    -- Test modules (those whose namespace starts with `hydra.core.test.`) live in
     -- a sibling tree at `<dist>/src/test/typescript/hydra/test/...`, while
     -- main modules live at `<dist>/src/main/typescript/hydra/...`. A cross-
     -- tree import from a test module to a main module needs to escape from
@@ -1566,23 +1566,28 @@ importsToText = def "importsToText" $
         "targetIsTest" <~ Logic.and
           (Logic.not (Lists.isEmpty (var "targetSegs")))
           (Equality.equal (Optionals.withDefault (string "") (Lists.head (var "targetSegs"))) (string "test")) $
-        -- #501/#507: the TS lib runtime impls (hydra.lib.*) ship under the renamed
-        -- overlay namespace at hydra/overlay/typescript/lib/, not hydra/lib/ (which holds
+        -- #501/#507/#729: the TS lib runtime impls (hydra.core.lib.*) ship under the renamed
+        -- overlay namespace at hydra/core/overlay/typescript/lib/, not hydra/core/lib/ (which holds
         -- only the generated PrimitiveDefinition def-modules). A generated reference to
-        -- hydra.lib.<x> must import from overlay/typescript/lib/<x> IF that sub actually has
-        -- an overlay implementation on this host (checked via 'overlaySubs', the caller-supplied
-        -- on-disk existence signal -- see #630); otherwise it stays pointing at the generated
-        -- def-module path. Remap ONLY the on-disk path here; the module alias (nsSlug below)
-        -- keeps the original hydra.lib.<x> segments so the import alias still matches the call
+        -- hydra.core.lib.<x> must import from hydra/core/overlay/typescript/lib/<x> IF that sub
+        -- actually has an overlay implementation on this host (checked via 'overlaySubs', the
+        -- caller-supplied on-disk existence signal -- see #630); otherwise it stays pointing at the
+        -- generated def-module path. Remap ONLY the on-disk path here; the module alias (nsSlug below)
+        -- keeps the original hydra.core.lib.<x> segments so the import alias still matches the call
         -- sites. This existence check happens at emission time; #630 retired the driver-level
         -- post-generation text pass (correctTypeScriptLibRedirect) that used to narrow an
         -- unconditional shape-only redirect back down after the fact (#568).
-        "targetSub" <~ Optionals.withDefault (string "") (Lists.at (int32 1) (var "targetSegs")) $
+        -- Post-#729 grammar: targetSegs (ns after stripping the leading "hydra") is
+        -- [core, lib, <sub>] for a lib reference, so match head=="core" && parts[1]=="lib",
+        -- <sub>=parts[2], and rewrite the on-disk path to [core, overlay, typescript, lib, <sub>].
+        "targetSub" <~ Optionals.withDefault (string "") (Lists.at (int32 2) (var "targetSegs")) $
         "targetPathSegs" <~ Logic.ifElse
           (Logic.and
-            (Equality.equal (Optionals.withDefault (string "") (Lists.head (var "targetSegs"))) (string "lib"))
+            (Logic.and
+              (Equality.equal (Optionals.withDefault (string "") (Lists.head (var "targetSegs"))) (string "core"))
+              (Equality.equal (Optionals.withDefault (string "") (Lists.at (int32 1) (var "targetSegs"))) (string "lib")))
             (Sets.member (var "targetSub") (var "overlaySubs" :: TypedTerm (S.Set String))))
-          (Lists.concat2 (list [string "overlay", string "typescript"]) (var "targetSegs"))
+          (list [string "core", string "overlay", string "typescript", string "lib", var "targetSub"])
           (var "targetSegs") $
         "targetPath" <~ Strings.join (string "/") (var "targetPathSegs") $
         -- Cross-tree paths: test → main needs extra "../../main/typescript/".
@@ -1601,14 +1606,14 @@ importsToText = def "importsToText" $
           (var "baseUpPrefix") $
         -- Both type and value imports use namespace-style `import [type] * as <alias>`
         -- to prevent duplicate-identifier errors when two modules export the same
-        -- local name (e.g. `Literal` from hydra.core and hydra.rdf.syntax).
+        -- local name (e.g. `Literal` from hydra.core.model and hydra.rdf.syntax).
         -- Type imports use the `$type_` prefix; value imports use `$mod_`.
         -- Build a unique alias by joining all post-`hydra.` segments with
-        -- underscores. So `hydra.test.checking.all` → `test_checking_all`,
-        -- `hydra.test.hoisting.all` → `test_hoisting_all`, avoiding the
+        -- underscores. So `hydra.core.test.checking.all` → `test_checking_all`,
+        -- `hydra.core.test.hoisting.all` → `test_hoisting_all`, avoiding the
         -- collisions that bare last-segment aliasing would produce.
         -- Prefix module aliases with `$` to avoid shadowing by local Hydra
-        -- identifiers. E.g. `hydra.arity` would alias as `arity`, which a
+        -- identifiers. E.g. `hydra.core.arity` would alias as `arity`, which a
         -- local `const arity = ...` then shadows (TDZ in JS even though
         -- legal in Haskell). Prefix with `$` to keep aliases out of the
         -- local-name space.
@@ -1654,9 +1659,9 @@ importsToText = def "importsToText" $
 -- The TS-side primitive accepts either a value or a thunk and calls the
 -- thunk when needed (mirroring Python's `callable()` check).
 
--- Name constants for hydra.packaging types used in TypeScript-specific rendering
+-- Name constants for hydra.core.packaging types used in TypeScript-specific rendering
 _EntityReference_ts :: Name
-_EntityReference_ts = Name "hydra.packaging.EntityReference"
+_EntityReference_ts = Name "hydra.core.packaging.EntityReference"
 _EntityReference_definition_ts :: Name
 _EntityReference_definition_ts = Name "definition"
 _EntityReference_module_ts :: Name
@@ -1668,7 +1673,7 @@ _EntityReference_term_expr_ts = Name "termExpr"
 _EntityReference_type_expr_ts :: Name
 _EntityReference_type_expr_ts = Name "typeExpr"
 _DefinitionReference_ts :: Name
-_DefinitionReference_ts = Name "hydra.packaging.DefinitionReference"
+_DefinitionReference_ts = Name "hydra.core.packaging.DefinitionReference"
 _DefinitionReference_primitive_ts :: Name
 _DefinitionReference_primitive_ts = Name "primitive"
 _DefinitionReference_term_ts :: Name
@@ -1678,7 +1683,7 @@ _DefinitionReference_type_ts = Name "type"
 
 tsDocEntityRef :: TypedTermDefinition (Term -> String)
 tsDocEntityRef = def "tsDocEntityRef" $
-  doc "Render a {@type hydra.packaging.EntityReference} as TSDoc link syntax" $
+  doc "Render a {@type hydra.core.packaging.EntityReference} as TSDoc link syntax" $
   cases _EntityReference_ts Nothing [
     _EntityReference_definition_ts>>: lambda "d" $
       Strings.concat2 (string "{@link ")
@@ -2063,12 +2068,12 @@ sortBindingsTopologically = def "sortBindingsTopologically" $
 -- (including ones only reachable through a nested lambda) since that
 -- function answers a different question (value-level free-variable capture,
 -- not emission-order safety). Used to break false dependency cycles caused
--- by DSL-level thunks such as `hydra.parsers.lazy` (e.g. mutually recursive
+-- by DSL-level thunks such as `hydra.core.parsers.lazy` (e.g. mutually recursive
 -- parsers deliberately deferred with `lazy(() -> otherParser)`). See #604.
 eagerFreeVariablesInTerm :: TypedTermDefinition (Term -> S.Set Name)
 eagerFreeVariablesInTerm = def "eagerFreeVariablesInTerm" $
   doc ("Find the free variables of a term that are referenced eagerly, i.e. outside of any nested " L.++
-    "lambda body; used to break false dependency cycles caused by DSL-level thunks such as hydra.parsers.lazy") $
+    "lambda body; used to break false dependency cycles caused by DSL-level thunks such as hydra.core.parsers.lazy") $
   lambda "term" $
     "dfltVars" <~ (lambda "_" $ Lists.foldl
       (lambda "s" $ lambda "t" $ Sets.union (var "s") (eagerFreeVariablesInTerm @@ var "t"))
@@ -2092,7 +2097,7 @@ eagerFreeVariablesInTerm = def "eagerFreeVariablesInTerm" $
 -- Dependency edges are computed from *eager* free variables
 -- ('eagerFreeVariablesInTerm'), not the full free-variable set: a reference
 -- that only occurs inside a nested lambda body (e.g. a DSL-level
--- `hydra.parsers.lazy(() -> otherDef)` thunk used to break genuine mutual
+-- `hydra.core.parsers.lazy(() -> otherDef)` thunk used to break genuine mutual
 -- recursion) is deferred until call time and is not a TDZ hazard, so it must
 -- not be treated as an ordering constraint. Counting it would create a false
 -- cycle: e.g. `atom` referencing `alternation` only inside a `lazy` thunk,

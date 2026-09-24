@@ -25,8 +25,8 @@ demos/
 │   │   └── element-counts.graphql         # Rank modules by number of elements
 │   └── output/                            # Generated GraphQL schema files
 │       └── hydra/
-│           ├── module.graphql             # Schema for hydra.packaging types
-│           └── util.graphql               # Schema for hydra.util types (Pair, Either, etc.)
+│           ├── module.graphql             # Schema for hydra.core.packaging types
+│           └── util.graphql               # Schema for hydra.core.util types (Pair, Either, etc.)
 demos/src/main/haskell/Hydra/Demos/
 │   └── GraphqlJson.hs                    # Haskell demo module (schema generation)
 ```
@@ -70,7 +70,7 @@ python3 demos/graphql-json/query.py
 
 ## Example queries
 
-### Find all modules that depend on hydra.rewriting
+### Find all modules that depend on hydra.core.rewriting
 
 `queries/dependents-of.graphql`:
 ```graphql
@@ -84,10 +84,10 @@ query ($ns: String!) {
 
 Output (45 modules):
 ```
-hydra.adapt: Simple, one-way adapters for types and terms
-hydra.annotations: Utilities for reading and writing type and term annotations
-hydra.checking: Type checking and type reconstruction (type-of)...
-hydra.inference: Type inference following Algorithm W...
+hydra.core.adapt: Simple, one-way adapters for types and terms
+hydra.core.annotations: Utilities for reading and writing type and term annotations
+hydra.core.checking: Type checking and type reconstruction (type-of)...
+hydra.core.inference: Type inference following Algorithm W...
 ...
 ```
 
@@ -106,10 +106,10 @@ query ($ns: String!) {
 
 Output:
 ```
-Namespace: hydra.packaging
+Namespace: hydra.core.packaging
 Description: A model for Hydra namespaces and modules
-Term dependencies: ['hydra.graph']
-Type dependencies: ['hydra.core']
+Term dependencies: ['hydra.core.graph']
+Type dependencies: ['hydra.core.model']
 ```
 
 ### Search modules by description
@@ -139,11 +139,11 @@ other supported language.
 
 The demo exercises two core Hydra capabilities in parallel:
 
-1. **GraphQL coder** (`Hydra.Graphql.Coder`): converts Hydra type definitions
+1. **GraphQL coder** (`Hydra.Ext.Graphql.Coder`): converts Hydra type definitions
    into GraphQL SDL. Record types become GraphQL object types; unit-variant unions
    become enums; data-carrying unions become object types with nullable fields.
    Built-in Pair and Either type constructors are mapped to the named fallback types
-   `hydra.util.Pair` and `hydra.util.Either`.
+   `hydra.core.util.Pair` and `hydra.core.util.Either`.
 
 2. **JSON encoding pipeline** (`moduleToJson`): converts Hydra module instances to
    JSON using a two-step process: first a generated term encoder converts the typed

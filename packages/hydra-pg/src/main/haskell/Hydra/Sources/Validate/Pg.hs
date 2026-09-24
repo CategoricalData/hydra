@@ -3,19 +3,19 @@ module Hydra.Sources.Validate.Pg where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel hiding (Edge(..), _Edge, _Edge_in, _Edge_out, Element(..), _Element, Graph(..), _Graph)
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Validation                      as Validation
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Core.Dsl.Validation                      as Validation
 import           Prelude hiding ((++))
 import qualified Data.List                                 as L
 import qualified Data.Map                                  as M
@@ -23,16 +23,16 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import Hydra.Pg.Model as PG
-import Hydra.Error.Pg as Err
+import Hydra.Pg.Error.Model as Err
 import qualified Hydra.Sources.Pg.Model as PgModel
 import qualified Hydra.Sources.Error.Pg as ErrorPg
 
 
 module_ :: Module
 module_ = Module {
-            moduleName = (ModuleName "hydra.validate.pg"),
+            moduleName = (ModuleName "hydra.pg.validate.model"),
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [PgModel.ns, ErrorPg.ns, ModuleName "hydra.validation", ModuleName "hydra.core"],
+            moduleDependencies = unqualifiedDep <$> [PgModel.ns, ErrorPg.ns, ModuleName "hydra.core.validation", ModuleName "hydra.core.model"],
             moduleMetadata = descriptionMetadata (Just "Validation functions for property graphs")}
   where
    definitions = [
@@ -216,7 +216,7 @@ appendFindingVertex = validationDefinition "appendFindingVertex" $
             (var "acc"))
           (var "acc")))
 
--- | The default validation profile for hydra.validate.pg. Every PG rule
+-- | The default validation profile for hydra.pg.validate.model. Every PG rule
 -- is classified as an error; no warnings; 'maxErrors = 1' preserves the
 -- legacy 'first error wins' behaviour; 'maxWarnings = 20' is a small
 -- starting cap.
@@ -394,7 +394,7 @@ validateEdge = validationDefinition "validateEdge" $
 -- edges) so 'maxErrors' is enforced over the entire graph, not per
 -- phase.
 -- `Ord v` + `forall` here because the graph's vertex/edge maps are keyed by the polymorphic vertex
--- type `v`, and the generated `Hydra.Dsl.Lib.Maps` exposes the primitive's `Ord` key constraint (the
+-- type `v`, and the generated `Hydra.Core.Dsl.Lib.Maps` exposes the primitive's `Ord` key constraint (the
 -- old hand-written `Meta.Lib.Maps` did not). This also forces a placeholder concrete type (`Int`) at
 -- registration in `definitions`; `v` is phantom/erased so the choice is arbitrary. See #467.
 validateGraph :: forall t v. Ord v => TypedTermDefinition (
@@ -483,7 +483,7 @@ validateGraph = validationDefinition "validateGraph" $
 -- 'InvalidElementPropertyError' (key + inner InvalidPropertyError).
 -- The `forall t v.` (no constraint) exists only to bring the type vars into scope for in-body
 -- `:: TypedTerm (M.Map PG.PropertyKey v)` annotations, needed now that the generated
--- `Hydra.Dsl.Lib.Maps` requires the map type to be pinned (the key here is concrete, so no `Ord`). See #467.
+-- `Hydra.Core.Dsl.Lib.Maps` requires the map type to be pinned (the key here is concrete, so no `Ord`). See #467.
 validateProperties :: forall t v. TypedTermDefinition (
      ValidationProfile
   -> (t -> v -> Maybe InvalidValueError)

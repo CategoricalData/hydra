@@ -1,24 +1,24 @@
--- | Primitive declarations for the hydra.lib.strings namespace.
+-- | Primitive declarations for the hydra.core.lib.strings namespace.
 
 module Hydra.Sources.Kernel.Lib.Strings where
 
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), concat, length)
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lib.strings"
+ns = ModuleName "hydra.core.lib.strings"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.strings module.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.strings module.")}
   where
     definitions = [charAt, concat, concat2, fromList, isEmpty, join, length,
                    splitOn, toList, toLower, toUpper]

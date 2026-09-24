@@ -9,18 +9,18 @@ module Hydra.Sources.Test.Json.Roundtrip where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms hiding ((@@))
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Literals      as Literals
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
-import qualified Hydra.Dsl.Lib.Eithers   as Eithers
-import qualified Hydra.Dsl.Lib.Maps      as Maps
-import qualified Hydra.Dsl.Lib.Strings   as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Literals      as Literals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                ((@@))
+import qualified Hydra.Core.Dsl.Lib.Eithers   as Eithers
+import qualified Hydra.Core.Dsl.Lib.Maps      as Maps
+import qualified Hydra.Core.Dsl.Lib.Strings   as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -29,11 +29,11 @@ import qualified Data.Map                     as M
 import qualified Data.Scientific              as Sci
 
 -- Additional imports specific to this module
-import Hydra.Testing
-import Hydra.Json.Model (Value)
-import qualified Hydra.Json.Model as Model
-import qualified Hydra.Encode.Json.Model as EncodeJsonModel
-import qualified Hydra.Typed as Typed
+import Hydra.Core.Testing
+import Hydra.Core.Json.Model (Value)
+import qualified Hydra.Core.Json.Model as Model
+import qualified Hydra.Core.Encode.Json.Model as EncodeJsonModel
+import qualified Hydra.Core.Typed as Typed
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Json.Encode as EncodeModule
 import qualified Hydra.Sources.Json.Decode as JsonDecode
@@ -41,13 +41,13 @@ import qualified Hydra.Sources.Json.Writer as JsonWriter
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.json.roundtrip"
+ns = ModuleName "hydra.core.test.json.roundtrip"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([PrintCore.ns, ModuleName "hydra.json.encode", ModuleName "hydra.json.decode", ModuleName "hydra.json.writer"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([PrintCore.ns, ModuleName "hydra.core.json.encode", ModuleName "hydra.core.json.decode", ModuleName "hydra.core.json.writer"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Round-trip test cases for JSON encoding and decoding"))}
   where
     definitions = [
@@ -434,7 +434,7 @@ emailAliasTypes :: TypedTerm (M.Map Name Type)
 emailAliasTypes = Maps.fromList $ Phantoms.list [
   Phantoms.pair emailAliasName T.string]
 
--- | hydra.core.Name-style wrapper: wrap(string)
+-- | hydra.core.model.Name-style wrapper: wrap(string)
 wrappedStringType :: TypedTerm Type
 wrappedStringType = T.wrap (name "WrappedString") T.string
 

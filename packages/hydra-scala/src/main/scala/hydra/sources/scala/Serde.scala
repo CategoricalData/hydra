@@ -1,13 +1,13 @@
 package hydra.sources.scala
 
-import hydra.overlay.scala.dsl.{Helpers, Phantoms}
-import hydra.overlay.scala.dsl.meta.Defs
-import hydra.overlay.scala.dsl.Phantoms.{`var` => v, `match`, prim, applyP, lambda, let, field, string, int32, list, nothing, just, doc, matchWithDefault, project, unwrap, wrap, constant, makeLocal, define, cat2}
-import hydra.packaging.{Definition, EntityMetadata, Module, ModuleName}
-import hydra.typed.TypedTerm
+import hydra.core.overlay.scala.dsl.{Helpers, Phantoms}
+import hydra.core.overlay.scala.dsl.meta.Defs
+import hydra.core.overlay.scala.dsl.Phantoms.{`var` => v, `match`, prim, applyP, lambda, let, field, string, int32, list, nothing, just, doc, matchWithDefault, project, unwrap, wrap, constant, makeLocal, define, cat2}
+import hydra.core.packaging.{Definition, EntityMetadata, Module, ModuleName}
+import hydra.core.typed.TypedTerm
 
-import hydra.dsl.scala.syntax as ScalaSyntax
-import hydra.dsl.{ast => AstDsl}
+import hydra.scala.dsl.syntax as ScalaSyntax
+import hydra.core.dsl.{ast => AstDsl}
 
 /**
  * Serialization functions for converting Scala AST to abstract expressions.
@@ -21,52 +21,52 @@ object Serde:
 
   /** Dependencies match Haskell `[Serialization.ns, jvmSerdeNs] ++ (ScalaSyntax.ns:kernelTypesModuleNames)`. */
   private val DEPS: Seq[ModuleName] =
-    Seq("hydra.serialization", "hydra.jvm.serde", "hydra.scala.syntax") ++ Helpers.kernelTypesModuleNames
+    Seq("hydra.core.serialization", "hydra.jvm.serde", "hydra.scala.syntax") ++ Helpers.kernelTypesModuleNames
 
   // ===== Shorthand helpers (kept inline-small) =====
 
   private val local = makeLocal(NS)
 
   private def cst(t: TypedTerm[String]): TypedTerm[Any] =
-    applyP("hydra.serialization.cst", t)
+    applyP("hydra.core.serialization.cst", t)
 
   private def cstS(s: String): TypedTerm[Any] = cst(string(s))
 
   private def spaceSep(elems: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.serialization.spaceSep", elems)
+    applyP("hydra.core.serialization.spaceSep", elems)
 
   private def noSep(elems: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.serialization.noSep", elems)
+    applyP("hydra.core.serialization.noSep", elems)
 
   private def newlineSep(elems: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.serialization.newlineSep", elems)
+    applyP("hydra.core.serialization.newlineSep", elems)
 
   private def doubleNewlineSep(elems: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.serialization.doubleNewlineSep", elems)
+    applyP("hydra.core.serialization.doubleNewlineSep", elems)
 
   private def commaSep(style: TypedTerm[Any], elems: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.serialization.commaSep", style, elems)
+    applyP("hydra.core.serialization.commaSep", style, elems)
 
   private def parenList(elems: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.serialization.parenListAdaptive", elems)
+    applyP("hydra.core.serialization.parenListAdaptive", elems)
 
   private def bracketList(style: TypedTerm[Any], elems: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.serialization.bracketList", style, elems)
+    applyP("hydra.core.serialization.bracketList", style, elems)
 
   private def curlyBracesList(msymb: TypedTerm[Any], style: TypedTerm[Any], elems: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.serialization.curlyBracesList", msymb, style, elems)
+    applyP("hydra.core.serialization.curlyBracesList", msymb, style, elems)
 
   private def curlyBlock(style: TypedTerm[Any], e: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.serialization.curlyBlock", style, e)
+    applyP("hydra.core.serialization.curlyBlock", style, e)
 
   private def ifx(op: TypedTerm[Any], lhs: TypedTerm[Any], rhs: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.serialization.ifx", op, lhs, rhs)
+    applyP("hydra.core.serialization.ifx", op, lhs, rhs)
 
   private def expressionLength(e: TypedTerm[Any]): TypedTerm[Int] =
-    applyP("hydra.serialization.expressionLength", e)
+    applyP("hydra.core.serialization.expressionLength", e)
 
-  private def inlineStyle: TypedTerm[Any] = v("hydra.serialization.inlineStyle")
-  private def fullBlockStyle: TypedTerm[Any] = v("hydra.serialization.fullBlockStyle")
+  private def inlineStyle: TypedTerm[Any] = v("hydra.core.serialization.inlineStyle")
+  private def fullBlockStyle: TypedTerm[Any] = v("hydra.core.serialization.fullBlockStyle")
 
   private def termToExprCall(t: TypedTerm[Any]): TypedTerm[Any] =
     applyP(local("termToExpr"), t)
@@ -126,43 +126,43 @@ object Serde:
     applyP(local("litToExpr"), t)
 
   private def map[A, B](fn: TypedTerm[A], xs: TypedTerm[Seq[A]]): TypedTerm[Seq[B]] =
-    applyP("hydra.lib.lists.map", fn, xs)
+    applyP("hydra.core.lib.lists.map", fn, xs)
 
   private def listNull(xs: TypedTerm[Any]): TypedTerm[Boolean] =
-    applyP("hydra.lib.lists.isEmpty", xs)
+    applyP("hydra.core.lib.lists.isEmpty", xs)
 
   private def listConcat(xss: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.lib.lists.concat", xss)
+    applyP("hydra.core.lib.lists.concat", xss)
 
   private def listLength(xs: TypedTerm[Any]): TypedTerm[Int] =
-    applyP("hydra.lib.lists.length", xs)
+    applyP("hydra.core.lib.lists.length", xs)
 
   private def listMaybeHead(xs: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.lib.lists.head", xs)
+    applyP("hydra.core.lib.lists.head", xs)
 
   private def optGiven(x: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.lib.optionals.given", x)
+    applyP("hydra.core.lib.optionals.given", x)
 
   private def optCat(xs: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.lib.optionals.givens", xs)
+    applyP("hydra.core.lib.optionals.givens", xs)
 
   private def optMap(fn: TypedTerm[Any], xo: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.lib.optionals.map", fn, xo)
+    applyP("hydra.core.lib.optionals.map", fn, xo)
 
   private def optCases(xo: TypedTerm[Any], dflt: TypedTerm[Any], fn: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.lib.optionals.match", xo, dflt, fn)
+    applyP("hydra.core.lib.optionals.match", xo, dflt, fn)
 
   private def optFromOptional(dflt: TypedTerm[Any], xo: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.lib.optionals.withDefault", dflt, xo)
+    applyP("hydra.core.lib.optionals.withDefault", dflt, xo)
 
   private def ifElse(cond: TypedTerm[Boolean], thn: TypedTerm[Any], els: TypedTerm[Any]): TypedTerm[Any] =
-    applyP("hydra.lib.logic.ifElse", cond, thn, els)
+    applyP("hydra.core.lib.logic.ifElse", cond, thn, els)
 
   private def eq[A](a: TypedTerm[A], b: TypedTerm[A]): TypedTerm[Boolean] =
-    applyP("hydra.lib.equality.equal", a, b)
+    applyP("hydra.core.lib.equality.equal", a, b)
 
   private def gt(a: TypedTerm[Int], b: TypedTerm[Int]): TypedTerm[Boolean] =
-    applyP("hydra.lib.ordering.gt", a, b)
+    applyP("hydra.core.lib.ordering.gt", a, b)
 
   // ===== Definitions (alphabetical, matching Haskell source ordering) =====
 
@@ -433,9 +433,9 @@ object Serde:
 
   // ---- functionArrowOp ----
   private val functionArrowOpBody =
-    applyP("hydra.serialization.op",
+    applyP("hydra.core.serialization.op",
       string("=>"),
-      applyP("hydra.lib.math.negate", int32(1)),
+      applyP("hydra.core.lib.math.negate", int32(1)),
       AstDsl.associativityRight)
 
   lazy val functionArrowOpDef: Definition =
@@ -558,21 +558,21 @@ object Serde:
       field("boolean", lambda("b",
         cst(ifElse(v("b"), string("true"), string("false"))))),
       field("byte", lambda("i",
-        cst(cat2(applyP("hydra.lib.literals.printInt8", v("i")), string(".toByte"))))),
+        cst(cat2(applyP("hydra.core.lib.literals.printInt8", v("i")), string(".toByte"))))),
       field("short", lambda("i",
-        cst(cat2(applyP("hydra.lib.literals.printInt16", v("i")), string(".toShort"))))),
+        cst(cat2(applyP("hydra.core.lib.literals.printInt16", v("i")), string(".toShort"))))),
       field("int", lambda("i",
-        cst(applyP("hydra.lib.literals.printInt32", v("i"))))),
+        cst(applyP("hydra.core.lib.literals.printInt32", v("i"))))),
       field("long", lambda("i",
-        cst(cat2(applyP("hydra.lib.literals.printInt64", v("i")), string("L"))))),
+        cst(cat2(applyP("hydra.core.lib.literals.printInt64", v("i")), string("L"))))),
       field("float", lambda("f",
         cst(applyP(local("scalaFloatLiteralText"),
           string("Float"), string("f"),
-          applyP("hydra.lib.literals.printFloat32", v("f")))))),
+          applyP("hydra.core.lib.literals.printFloat32", v("f")))))),
       field("double", lambda("f",
         cst(applyP(local("scalaFloatLiteralText"),
           string("Double"), string(""),
-          applyP("hydra.lib.literals.printFloat64", v("f")))))),
+          applyP("hydra.core.lib.literals.printFloat64", v("f")))))),
       field("unit", constant(cstS("()"))),
       field("string", lambda("s",
         cst(cat2(string("\""), cat2(
@@ -581,10 +581,10 @@ object Serde:
       field("bytes", lambda("bs",
         cst(cat2(string("Array[Byte]("),
           cat2(
-            applyP("hydra.lib.strings.join",
+            applyP("hydra.core.lib.strings.join",
               string(", "),
               map(
-                lambda("b", cat2(applyP("hydra.lib.literals.printInt32", v("b")), string(".toByte"))),
+                lambda("b", cat2(applyP("hydra.core.lib.literals.printInt32", v("b")), string(".toByte"))),
                 v("bs"))),
             string(")"))))))))
 

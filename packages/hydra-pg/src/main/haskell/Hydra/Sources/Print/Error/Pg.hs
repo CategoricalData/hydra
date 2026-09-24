@@ -2,21 +2,21 @@ module Hydra.Sources.Print.Error.Pg where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import           Prelude hiding ((++))
 
 -- Additional imports
-import           Hydra.Error.Pg
+import           Hydra.Pg.Error.Model
 import qualified Hydra.Sources.Error.Pg                    as ErrorPg
 import qualified Hydra.Pg.Model                            as PG
 import qualified Hydra.Sources.Pg.Model                    as PgModelSource
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.print.error.pg"
+ns = ModuleName "hydra.pg.print.error"
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -26,7 +26,7 @@ module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ((ErrorPg.ns:PgModelSource.ns:KernelTypes.kernelTypesModuleNames)),
-            moduleMetadata = descriptionMetadata (Just "String representations of hydra.error.pg types")}
+            moduleMetadata = descriptionMetadata (Just "String representations of hydra.pg.error.model types")}
   where
     definitions = [
       toDefinition invalidEdgeError,

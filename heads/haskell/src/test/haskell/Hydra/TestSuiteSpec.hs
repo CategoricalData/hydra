@@ -6,9 +6,9 @@ Test.Hspec.hspec Hydra.TestSuiteSpec.spec
 
 module Hydra.TestSuiteSpec where
 
-import Hydra.Testing
-import Hydra.Test.TestSuite
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing as Testing
+import Hydra.Core.Testing
+import Hydra.Core.Test.TestSuite
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing as Testing
 
 import qualified Control.Monad as CM
 import qualified Test.Hspec as H
@@ -28,7 +28,7 @@ effectfulTestDir = "/tmp/hydra-testing"
 -- | Prepare a guaranteed-empty canonical temp directory before an effectful test case that needs it.
 -- Currently prepares unconditionally for every effectful case (never for universal cases). A future
 -- refinement (#494) is to skip preparation for pure-effect cases whose term references no
--- hydra.lib.files primitive; that scan happens at test-generation time, not here in compiled code.
+-- hydra.core.lib.files primitive; that scan happens at test-generation time, not here in compiled code.
 prepareEffectfulTempDir :: TestCaseWithMetadata -> IO ()
 prepareEffectfulTempDir _ = do
   exists <- Dir.doesDirectoryExist effectfulTestDir
@@ -46,7 +46,7 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
       H.it "universal" $ H.shouldBe (actual ()) (expected ())
     -- Effectful cases: 'actual' is a thunk producing an effect (mapped to IO String by the
     -- Haskell coder). Prepare the canonical temp directory iff the effect references a
-    -- hydra.lib.files primitive, then execute the effect and compare to 'expected'. See
+    -- hydra.core.lib.files primitive, then execute the effect and compare to 'expected'. See
     -- docs/test-suite-architecture.md and Hydra.Effects.Testing.
     TestCaseEffectful (EffectfulTestCase actual expected) ->
       H.it "effectful" $ do

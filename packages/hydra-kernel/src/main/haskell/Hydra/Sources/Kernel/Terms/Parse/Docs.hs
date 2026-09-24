@@ -2,45 +2,45 @@ module Hydra.Sources.Kernel.Terms.Parse.Docs where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (_DefinitionReference, _DefinitionReference_primitive, _DefinitionReference_term, _DefinitionReference_type, _EntityReference, _EntityReference_definition, _EntityReference_module, _EntityReference_package, _EntityReference_term_expr, _EntityReference_type_expr)
-import qualified Hydra.Dsl.Paths    as Paths
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
-import qualified Hydra.Dsl.Ast          as Ast
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Coders       as Coders
-import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph        as Graph
-import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Lib.Math     as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Literals          as Literals
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base         as MetaBase
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms        as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types        as MetaTypes
-import qualified Hydra.Dsl.Packaging       as Packaging
-import qualified Hydra.Dsl.Parsing      as Parsing
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Prims             as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular           as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing      as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Terms             as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Tests             as Tests
-import qualified Hydra.Dsl.Topology     as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
-import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Util         as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
+import qualified Hydra.Core.Dsl.Paths    as Paths
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations       as Annotations
+import qualified Hydra.Core.Dsl.Ast          as Ast
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Coders       as Coders
+import qualified Hydra.Core.Dsl.Util      as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph        as Graph
+import qualified Hydra.Core.Dsl.Json.Model         as Json
+import qualified Hydra.Core.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Math     as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals          as Literals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base         as MetaBase
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms        as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types        as MetaTypes
+import qualified Hydra.Core.Dsl.Packaging       as Packaging
+import qualified Hydra.Core.Dsl.Parsing      as Parsing
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims             as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular           as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing      as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms             as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests             as Tests
+import qualified Hydra.Core.Dsl.Topology     as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Dsl.Typing       as Typing
+import qualified Hydra.Core.Dsl.Util         as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -51,7 +51,7 @@ import qualified Data.Maybe                  as Y
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.parse.docs"
+ns = ModuleName "hydra.core.parse.docs"
 
 module_ :: Module
 module_ = Module {
@@ -67,16 +67,16 @@ module_ = Module {
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
--- Name constants for hydra.docs types (not yet in generated dist)
+-- Name constants for hydra.core.docs types (not yet in generated dist)
 _DocSegment :: Name
-_DocSegment = Name "hydra.docs.DocSegment"
+_DocSegment = Name "hydra.core.docs.DocSegment"
 _DocSegment_ref :: Name
 _DocSegment_ref = Name "ref"
 _DocSegment_text :: Name
 _DocSegment_text = Name "text"
 
 _EntityReference :: Name
-_EntityReference = Name "hydra.packaging.EntityReference"
+_EntityReference = Name "hydra.core.packaging.EntityReference"
 _EntityReference_definition :: Name
 _EntityReference_definition = Name "definition"
 _EntityReference_module :: Name
@@ -89,7 +89,7 @@ _EntityReference_type_expr :: Name
 _EntityReference_type_expr = Name "typeExpr"
 
 _DefinitionReference :: Name
-_DefinitionReference = Name "hydra.packaging.DefinitionReference"
+_DefinitionReference = Name "hydra.core.packaging.DefinitionReference"
 _DefinitionReference_primitive :: Name
 _DefinitionReference_primitive = Name "primitive"
 _DefinitionReference_term :: Name
@@ -100,7 +100,7 @@ _DefinitionReference_type = Name "type"
 parseDocAnnotation :: TypedTermDefinition (String -> Maybe Term)
 parseDocAnnotation = define "parseDocAnnotation" $
   doc ("Parse the content between the doc-escape delimiters into an EntityReference."
-    <> " The input is the inner content (tag and optional rhs), e.g. \"type hydra.core.Lambda\"."
+    <> " The input is the inner content (tag and optional rhs), e.g. \"type hydra.core.model.Lambda\"."
     <> " Returns nothing for unrecognized tags.") $
   lambda "inner" $
   lets [
@@ -128,8 +128,8 @@ parseDocAnnotation = define "parseDocAnnotation" $
 
 parseDocString :: TypedTermDefinition (String -> [Term])
 parseDocString = define "parseDocString" $
-  doc ("Parse a documentation string into a list of {@type hydra.docs.DocSegment}s."
-    <> " Recognized doc-escape tags become DocSegment.ref segments (wrapping a {@type hydra.packaging.EntityReference});"
+  doc ("Parse a documentation string into a list of {@type hydra.core.docs.DocSegment}s."
+    <> " Recognized doc-escape tags become DocSegment.ref segments (wrapping a {@type hydra.core.packaging.EntityReference});"
     <> " all other text (including unrecognized doc-escape blocks) becomes"
     <> " DocSegment.text segments."
     <> " Adjacent text fragments are not merged.") $

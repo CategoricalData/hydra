@@ -96,7 +96,7 @@ def namespace_to_haskell_suffix(ns: str) -> str:
 
 
 def namespace_to_java_dir(ns: str) -> str:
-    """hydra.build.format -> hydra/build/format ; hydra.typeScript.coder -> hydra/typeScript/coder
+    """hydra.build.format -> hydra/build/format ; hydra.typescript.coder -> hydra/typeScript/coder
 
     Java package segments preserve the namespace's OWN casing verbatim — a
     camelCase segment like 'typeScript', 'pathAlgebra', or 'openGql' becomes a
@@ -112,7 +112,7 @@ def namespace_to_java_dir(ns: str) -> str:
 
 
 def _camel_to_lower_snake(seg: str) -> str:
-    """Mirror hydra.formatting.convert_case CAMEL -> LOWER_SNAKE for one segment.
+    """Mirror hydra.core.formatting.convert_case CAMEL -> LOWER_SNAKE for one segment.
 
     The Python coder names each module file by snake-casing its namespace segment
     (dist/python .../hydra/python/names.py: each DottedName part is CAMEL ->
@@ -238,10 +238,10 @@ def _npm_candidate_suffixes(ns: str) -> list[str]:
     Normally one compiled .js at hydra/<segs>.js. But the translingual primitive
     libraries (hydra.lib.*) are provided host-natively: in the TypeScript host they
     ship as OVERLAY modules at hydra/overlay/typescript/lib/<leaf>.js, not at
-    hydra/lib/<leaf>.js (only hydra.lib.defaults is a generated hydra/lib/ file).
+    hydra/lib/<leaf>.js (only hydra.core.lib.defaults is a generated hydra/lib/ file).
     So for a hydra.lib.X namespace, accept EITHER the direct path or the TS overlay
     path — the primitive is present either way. This mirrors the Java jar, where
-    hydra.lib.strings is satisfied by hydra/lib/Strings.class AND/OR the
+    hydra.core.lib.strings is satisfied by hydra/lib/Strings.class AND/OR the
     hydra/overlay/java/lib/strings/ package.
     """
     direct = namespace_to_npm_suffix(ns)  # hydra/<segs>.js

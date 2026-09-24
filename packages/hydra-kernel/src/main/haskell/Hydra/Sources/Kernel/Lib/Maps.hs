@@ -1,30 +1,30 @@
--- | Primitive declarations for the hydra.lib.maps namespace.
+-- | Primitive declarations for the hydra.core.lib.maps namespace.
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Lib.Maps where
 
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (map)
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms hiding (map)
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), filter, lookup, map)
 import qualified Data.Map                    as M
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lib.maps"
+ns = ModuleName "hydra.core.lib.maps"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.maps module.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.maps module.")}
   where
     -- The default-impl args below carry an ':: ...Int...' placeholder: the generated 'Hydra.Dsl.Lib.*'
     -- (unlike old 'Meta.Lib.*') exposes the primitive's Ord constraint, so these polymorphic defs need a
@@ -112,7 +112,7 @@ difference = define "difference" "Compute the difference of two maps by key."
     [("v", [])] (mp tk tv Types.~> mp tk tv Types.~> mp tk tv))
   ["difference(m1, m2) returns the map containing exactly the bindings of m1 whose keys do not appear\
   \ in m2. Only the key set of m2 matters; its values are ignored.",
-   "The key-set analogue is hydra.lib.sets.difference.",
+   "The key-set analogue is hydra.core.lib.sets.difference.",
    "Requires an 'ordering' constraint on the key type.",
    "Total. Corresponds to Haskell's Data.Map.difference :: Ord k => Map k v -> Map k v -> Map k v."]
 
@@ -204,7 +204,7 @@ intersection = define "intersection" "Compute the intersection of two maps by ke
   ["intersection(m1, m2) returns the map containing exactly the bindings of m1 whose keys also appear\
   \ in m2. On each common key the value is taken from m1; only the key set of m2 matters, and its\
   \ values are ignored.",
-   "The key-set analogue is hydra.lib.sets.intersection.",
+   "The key-set analogue is hydra.core.lib.sets.intersection.",
    "Requires an 'ordering' constraint on the key type.",
    "Total. Corresponds to Haskell's Data.Map.intersection :: Ord k => Map k v -> Map k v -> Map k v."]
 
@@ -315,6 +315,6 @@ unions = define "unions" "Compute the left-biased union of a list of maps."
   ["unions(ms) returns the map containing every binding of every map in ms; when a key occurs in more\
   \ than one map, the binding from the earliest such map in the list wins.",
    "unions(ms) is equivalent to folding union over ms from the left, starting from empty; unions([])\
-  \ is empty, and the bias matches union and hydra.lib.sets.unions.",
+  \ is empty, and the bias matches union and hydra.core.lib.sets.unions.",
    "Requires an 'ordering' constraint on the key type.",
    "Total. Corresponds to Haskell's Data.Map.unions :: Ord k => [Map k v] -> Map k v."]

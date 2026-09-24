@@ -12,7 +12,7 @@
 // HYDRA_DEFAULT_IMPLS=1: unlike Java/Python/Scala, this runner has no env check of its
 // own to add — the primitive-evaluating cases under `allTests` (reduction/*, from
 // `evalCase`/`primCase` in the DSL) close over a single `Graph` built by
-// `hydra.test.testEnv.testGraph(...)` at module-load time (before any test runs). That
+// `hydra.core.test.testEnv.testGraph(...)` at module-load time (before any test runs). That
 // function (overlay/typescript/hydra-kernel/src/test/typescript/hydra/test/testEnv.ts)
 // is what reads HYDRA_DEFAULT_IMPLS and patches primitives with their defaultImplementation.
 // Setting the env var before running this suite is sufficient; no flag threads through here.

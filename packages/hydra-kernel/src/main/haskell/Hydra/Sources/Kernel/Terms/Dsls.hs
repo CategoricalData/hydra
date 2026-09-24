@@ -5,29 +5,29 @@ module Hydra.Sources.Kernel.Terms.Dsls where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Dsl.Coders       as Coders
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Lib.Math     as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Dsl.Packaging       as Packaging
-import qualified Hydra.Dsl.Typing          as Typing
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations       as Annotations
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Dsl.Coders       as Coders
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Math     as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Dsl.Packaging       as Packaging
+import qualified Hydra.Core.Dsl.Typing          as Typing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants     as Variants
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms hiding (
   elimination, field, fieldType, floatType, floatValue, function, injection, integerType, integerValue, lambda, literal,
   literalType, record, term, type_, typeScheme, wrap)
-import qualified Hydra.Overlay.Haskell.Dsl.Terms             as Terms
-import qualified Hydra.Dsl.Errors       as Error
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms             as Terms
+import qualified Hydra.Core.Dsl.Errors       as Error
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
@@ -37,25 +37,25 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.DeepCore as DeepCore
-import           Hydra.Overlay.Haskell.Dsl.Typed.DeepCore ((@@@))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Deep.Core as DeepCore
+import           Hydra.Core.Overlay.Haskell.Dsl.Deep.Core ((@@@))
 import           Prelude hiding ((++))
 import qualified Data.List                   as L
 import qualified Data.Map                    as M
 import qualified Data.Set                    as S
-import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
-import qualified Hydra.Lib.Lists as DefLists
-import qualified Hydra.Lib.Optionals as DefOptionals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims as Prims
+import qualified Hydra.Core.Lib.Lists as DefLists
+import qualified Hydra.Core.Lib.Optionals as DefOptionals
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.dsls"
+ns = ModuleName "hydra.core.dsls"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Reflect.ns, Rewriting.ns, Scoping.ns, Strip.ns, ModuleName "hydra.constants", ModuleName "hydra.decode.core", ModuleName "hydra.encode.core"] L.++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Reflect.ns, Rewriting.ns, Scoping.ns, Strip.ns, ModuleName "hydra.core.constants", ModuleName "hydra.core.decode.model", ModuleName "hydra.core.encode.model"] L.++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Functions for generating domain-specific DSL modules from type modules")}
   where
     definitions = [
@@ -186,26 +186,26 @@ deepWrap typeName body =
 
 -- | Filter bindings to only DSL-eligible type definitions
 -- | Generate a fully qualified binding name for a DSL function from a type name
--- For example, "hydra.core.AnnotatedTerm" -> "hydra.dsl.core.annotatedTerm"
+-- For example, "hydra.core.model.AnnotatedTerm" -> "hydra.core.dsl.model.annotatedTerm"
 -- For local types (no namespace), returns just the decapitalized local name
 dslBindingName :: TypedTermDefinition (Name -> Name)
 dslBindingName = define "dslBindingName" $
   doc "Generate a binding name for a DSL function from a type name" $
-  Names.derivedBindingName @@ list [string "hydra", string "dsl"] @@ boolean False
+  Names.derivedBindingName @@ list [string "dsl"] @@ boolean False
 
 -- | Generate a DSL element name from a type name and a local element name.
--- For example, ("hydra.core.AnnotatedTerm", "annotatedTermBody") -> "hydra.dsl.core.annotatedTermBody"
+-- For example, ("hydra.core.model.AnnotatedTerm", "annotatedTermBody") -> "hydra.core.dsl.model.annotatedTermBody"
 -- This extracts the namespace from the type name, transforms it to the DSL namespace,
 -- and appends the local element name.
 dslDefinitionName :: TypedTermDefinition (Name -> String -> Name)
 dslDefinitionName = define "dslDefinitionName" $
   doc "Generate a qualified DSL element name from a type name and local element name" $
-  Names.derivedDefinitionName @@ list [string "hydra", string "dsl"] @@ boolean False @@ boolean True
+  Names.derivedDefinitionName @@ list [string "dsl"] @@ boolean False @@ boolean True
 
 -- | Generate a record constructor function.
 -- For a record type like {body: Term, annotation: Map(Name, Term)},
 -- produces a deep (meta) term:
---   \body -> \annotation -> TermRecord (Record "hydra.core.AnnotatedTerm" [Field "body" body, ...])
+--   \body -> \annotation -> TermRecord (Record "hydra.core.model.AnnotatedTerm" [Field "body" body, ...])
 -- When code-generated into Haskell, this becomes:
 --   annotatedTerm body annotation = Core.TermRecord (Core.Record { ... })
 -- | Transform a source module into a DSL module.
@@ -248,14 +248,14 @@ dslModule = define "dslModule" $
           (list ([] :: [TypedTerm String])) (list ([] :: [TypedTerm EntityReference])) nothing
           (list ([] :: [TypedTerm Provision]))))
         -- DSL modules depend on:
-        -- (1) the original module + its source dependencies + hydra.typed (for TypedTerm),
+        -- (1) the original module + its source dependencies + hydra.core.typed (for TypedTerm),
         -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions), and
         -- (3) the original module's own encode/decode modules (referenced by
         --     generateParametricRefBuilders's composition builders)
         (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.distinct (Lists.concat2
-          (list [Packaging.moduleName (var "mod"), Packaging.moduleName2 (string "hydra.typed"),
-            Names.derivedModuleName @@ list [string "hydra", string "encode"] @@ boolean True @@ (Packaging.moduleName (var "mod")),
-            Names.derivedModuleName @@ list [string "hydra", string "decode"] @@ boolean True @@ (Packaging.moduleName (var "mod"))])
+          (list [Packaging.moduleName (var "mod"), Packaging.moduleName2 (string "hydra.core.typed"),
+            Names.derivedModuleName @@ list [string "encode"] @@ boolean True @@ (Packaging.moduleName (var "mod")),
+            Names.derivedModuleName @@ list [string "decode"] @@ boolean True @@ (Packaging.moduleName (var "mod"))])
           (Lists.concat2
             (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod")))
             (primitive DefLists.map @@ dslModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
@@ -279,7 +279,7 @@ dslModule = define "dslModule" $
 -- (empty list), not an error. Wiring term-level DSL refs (which need a signature source)
 -- is a later phase; until then the type path covers each module's type definitions and
 -- the primitive path covers each library's primitives.
--- A signature with a void-typed parameter or result (e.g. hydra.lib.functions.absurd ::
+-- A signature with a void-typed parameter or result (e.g. hydra.core.lib.functions.absurd ::
 -- void -> t1, the void eliminator) is excluded: void is deliberately non-serializable
 -- (#690's isSerializableType forbids it), and a TypedTerm-wrapped DSL ref would carry
 -- that void type straight into per-target emission, where a target coder's encodeType
@@ -328,11 +328,11 @@ typeIsVoidFree = define "typeIsVoidFree" $
   Logic.not (Sets.member Variants.typeVariantVoid (var "allVariants"))
 
 -- | Generate a DSL module name from a source module name
--- For example, "hydra.core" -> "hydra.dsl.core"
+-- For example, "hydra.core.model" -> "hydra.core.dsl.model"
 dslModuleName :: TypedTermDefinition (ModuleName -> ModuleName)
 dslModuleName = define "dslModuleName" $
   doc "Generate a DSL module name from a source module name" $
-  Names.derivedModuleName @@ list [string "hydra", string "dsl"] @@ boolean False
+  Names.derivedModuleName @@ list [string "dsl"] @@ boolean False
 
 -- | Build a "functions of phantom terms" TypeScheme from a TermSignature.
 -- Each value parameter type and the result type are wrapped in TypedTerm, then folded
@@ -355,7 +355,7 @@ dslSignatureTypeScheme = define "dslSignatureTypeScheme" $
   Core.typeScheme (var "typeVars") (var "funType") Maps.empty
 
 -- | Generate a fully qualified binding name for a DSL function from a type name
--- For example, "hydra.core.AnnotatedTerm" -> "hydra.dsl.core.annotatedTerm"
+-- For example, "hydra.core.model.AnnotatedTerm" -> "hydra.core.dsl.model.annotatedTerm"
 -- For local types (no namespace), returns just the decapitalized local name
 -- | Build a TypeScheme from a list of parameter types and a result type.
 -- All types are wrapped in TypedTerm. Forall variables are collected from the original type.
@@ -461,7 +461,7 @@ generateRecordAccessor = define "generateRecordAccessor" $
 -- | Generate a record constructor function.
 -- For a record type like {body: Term, annotation: Map(Name, Term)},
 -- produces a deep (meta) term:
---   \body -> \annotation -> TermRecord (Record "hydra.core.AnnotatedTerm" [Field "body" body, ...])
+--   \body -> \annotation -> TermRecord (Record "hydra.core.model.AnnotatedTerm" [Field "body" body, ...])
 -- When code-generated into Haskell, this becomes:
 --   annotatedTerm body annotation = Core.TermRecord (Core.Record { ... })
 generateRecordConstructor :: TypedTermDefinition (Type -> Name -> [FieldType] -> [Binding])
@@ -610,7 +610,7 @@ generateSignatureRef = define "generateSignatureRef" $
 -- (encodeValidationResult (encodeParseResult (encodeRef nameName))) and stay at kind
 -- *, since each parameter is a single coder argument (no HKT). Non-parametric types
 -- (no forall vars) get no builder — generateTypeNameToken's bare TypedName token
--- already suffices for them via hydra.refs's encodeRef/decodeRef.
+-- already suffices for them via hydra.core.refs's encodeRef/decodeRef.
 generateParametricRefBuilders :: TypedTermDefinition (Type -> Name -> [Binding])
 generateParametricRefBuilders = define "generateParametricRefBuilders" $
   doc "Generate encode/decode composition builders for a parametric type definition" $
@@ -619,8 +619,8 @@ generateParametricRefBuilders = define "generateParametricRefBuilders" $
   Logic.ifElse (Lists.isEmpty (var "vars"))
     (list ([] :: [TypedTerm Binding]))
     (list [
-      generateParametricCoderBuilder ["hydra", "encode"] encoderVarType encoderResultType "encode" (var "origType") (var "typeName"),
-      generateParametricCoderBuilder ["hydra", "decode"] decoderVarType decoderVarType "decode" (var "origType") (var "typeName")])
+      generateParametricCoderBuilder ["encode"] encoderVarType encoderResultType "encode" (var "origType") (var "typeName"),
+      generateParametricCoderBuilder ["decode"] decoderVarType decoderVarType "decode" (var "origType") (var "typeName")])
   where
     encoderVarType v = Core.typeFunction $ Core.functionType v (Core.typeVariable (Core.nameLift _Term))
     encoderResultType = encoderVarType
@@ -672,11 +672,11 @@ generateParametricCoderBuilder categoryPrefix varCoderType resultCoderType categ
     (just (var "ts"))
 
 -- | Generate a compile-time name token for a type definition: a TypedName constant
--- tying the type's Name to its host type, so it can be passed to hydra.refs helpers
+-- tying the type's Name to its host type, so it can be passed to hydra.core.refs helpers
 -- (encodeRef, decodeRef, showRef) without an unsafely bare Name. For a type "Name" in
--- module "hydra.core", produces:
+-- module "hydra.core.model", produces:
 --   nameName :: TypedName Name
---   nameName = TypedName "hydra.core.Name"
+--   nameName = TypedName "hydra.core.model.Name"
 generateTypeNameToken :: TypedTermDefinition (Type -> Name -> Binding)
 generateTypeNameToken = define "generateTypeNameToken" $
   doc "Generate a TypedName token constant for a type definition" $
@@ -811,7 +811,7 @@ injectTermProject :: TypedTerm Term -> TypedTerm Term
 injectTermProject t = Core.termInject $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_project) t)
 
 -- | Generate a DSL element name from a type name and a local element name.
--- For example, ("hydra.core.AnnotatedTerm", "annotatedTermBody") -> "hydra.dsl.core.annotatedTermBody"
+-- For example, ("hydra.core.model.AnnotatedTerm", "annotatedTermBody") -> "hydra.core.dsl.model.annotatedTermBody"
 -- This extracts the namespace from the type name, transforms it to the DSL namespace,
 -- and appends the local element name.
 injectTermRecord :: TypedTerm Term -> TypedTerm Term
@@ -845,7 +845,7 @@ isDslEligibleBinding = define "isDslEligibleBinding" $
   doc "Check if a binding is eligible for DSL generation" $
   "cx" ~> "graph" ~> "b" ~>
   "ns" <~ (Names.moduleNameOf @@ Core.bindingName (var "b")) $
-  Logic.ifElse (Equality.equal (Optionals.match (var "ns") (string "") (reify Packaging.unModuleName)) (string "hydra.typed"))
+  Logic.ifElse (Equality.equal (Optionals.match (var "ns") (string "") (reify Packaging.unModuleName)) (string "hydra.core.typed"))
     (right nothing)
     (right (just (var "b")))
 
@@ -882,11 +882,11 @@ unwrapTypedTerm v = Core.termApplication $ Core.application
   (Core.termUnwrap (Core.nameLift _TypedTerm))
   v
 
--- | Wrap a type in TypedName: TypeApplication (TypeVariable "hydra.typed.TypedName") innerType
+-- | Wrap a type in TypedName: TypeApplication (TypeVariable "hydra.core.typed.TypedName") innerType
 wrapInTypedName :: TypedTerm Type -> TypedTerm Type
 wrapInTypedName t = Core.typeApplication $ Core.applicationType (Core.typeVariable (Core.nameLift _TypedName)) t
 
--- | Wrap a type in TypedTerm: TypeApplication (TypeVariable "hydra.typed.TypedTerm") innerType
+-- | Wrap a type in TypedTerm: TypeApplication (TypeVariable "hydra.core.typed.TypedTerm") innerType
 wrapInTypedTerm :: TypedTerm Type -> TypedTerm Type
 wrapInTypedTerm t = Core.typeApplication $ Core.applicationType (Core.typeVariable (Core.nameLift _TypedTerm)) t
 

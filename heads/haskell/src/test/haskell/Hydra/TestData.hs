@@ -1,8 +1,8 @@
 module Hydra.TestData where
 
 import Hydra.Kernel
-import Hydra.Overlay.Haskell.Dsl.Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Terms as Terms
+import Hydra.Core.Overlay.Haskell.Dsl.Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms as Terms
 
 import qualified Data.Map as M
 

@@ -19,6 +19,6 @@ module Hydra.Minimal (
   string,
 ) where
 
-import Hydra.Core
-import Hydra.Reflect
-import Hydra.Overlay.Haskell.Dsl.Literals
+import Hydra.Core.Model
+import Hydra.Core.Reflect
+import Hydra.Core.Overlay.Haskell.Dsl.Literals

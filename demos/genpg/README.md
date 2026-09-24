@@ -284,7 +284,7 @@ writeEncoderSourceHaskell "../../dist/haskell/hydra-pg/src/main/haskell" (kernel
 
 ### Step 2: Sync Python kernel (if kernel code changed)
 
-If Hydra kernel code has changed (e.g., `hydra.json.writer`, `hydra.lib.*`), regenerate the Python kernel modules:
+If Hydra kernel code has changed (e.g., `hydra.core.json.writer`, `hydra.lib.*`), regenerate the Python kernel modules:
 
 ```bash
 cd heads/haskell
@@ -310,8 +310,8 @@ This generates to `dist/python/hydra-pg/src/main/python` (and related directorie
 - `hydra.pg.model` - Property graph data model
 - `hydra.pg.mapping` - Mapping definitions
 - `hydra.pg.graphson.*` - GraphSON coder, syntax, utilities
-- `hydra.encode.pg.*`, `hydra.decode.pg.*` - Encoders/decoders
-- `hydra.demos.genpg.transform` - Table-to-graph transformation logic
+- `hydra.pg.encode.*`, `hydra.pg.decode.*` - Encoders/decoders
+- `hydra.pg.demos.genpg.transform` - Table-to-graph transformation logic
 - `hydra.demos.genpg.sales` - Sales demo schemas and mapping
 - `hydra.demos.genpg.health` - Health demo schemas and mapping
 
@@ -333,8 +333,8 @@ generateJavaModules
 This generates to `dist/java/hydra-pg/src/main/java` (and related directories):
 - `hydra.pg.mapping` - Mapping definitions
 - `hydra.pg.graphson.*` - GraphSON coder, syntax, utilities
-- `hydra.encode.pg.*`, `hydra.decode.pg.*` - Encoders/decoders
-- `hydra.demos.genpg.transform` - Table-to-graph transformation logic
+- `hydra.pg.encode.*`, `hydra.pg.decode.*` - Encoders/decoders
+- `hydra.pg.demos.genpg.transform` - Table-to-graph transformation logic
 - `hydra.demos.genpg.sales` - Sales demo schemas and mapping
 - `hydra.demos.genpg.health` - Health demo schemas and mapping
 

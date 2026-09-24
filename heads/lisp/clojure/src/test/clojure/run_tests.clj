@@ -1,4 +1,4 @@
 (ns run-tests
-  (:require [hydra.test-runner]))
+  (:require [hydra.core.test-runner]))
 
-(hydra.test-runner/-main)
+(hydra.core.test-runner/-main)

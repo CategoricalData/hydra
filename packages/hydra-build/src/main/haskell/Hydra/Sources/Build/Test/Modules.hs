@@ -11,17 +11,17 @@ module Hydra.Sources.Build.Test.Modules where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms         as Terms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms         as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms hiding ((++))
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
-import qualified Hydra.Dsl.Packaging          as Packaging
-import qualified Hydra.Dsl.Lib.Strings        as Strings
-import qualified Hydra.Dsl.Lib.Optionals      as Optionals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms hiding ((++))
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                ((@@))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
+import qualified Hydra.Core.Dsl.Packaging          as Packaging
+import qualified Hydra.Core.Dsl.Lib.Strings        as Strings
+import qualified Hydra.Core.Dsl.Lib.Optionals      as Optionals
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
@@ -31,7 +31,7 @@ import qualified Hydra.Sources.Kernel.Terms.Print.Core     as PrintCore
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.build.modules"
+ns = ModuleName "hydra.build.test.modules"
 
 module_ :: Module
 module_ = Module {
@@ -181,7 +181,7 @@ filterKernelModulesGroup :: TypedTerm TestGroup
 filterKernelModulesGroup = subgroup "filterKernelModules" [
     universalCase "hydra.* dropped, non-hydra kept"
       (showModuleNames (BuildModules.filterKernelModules @@ Phantoms.list [
-        mod' "hydra.core" [aTypeDef "hydra.core.Foo"],
+        mod' "hydra.core.model" [aTypeDef "hydra.core.model.Foo"],
         mod' "example.foo" [aTypeDef "example.foo.Bar"]]))
       (showModuleNames (Phantoms.list [mod' "example.foo" [aTypeDef "example.foo.Bar"]])),
     universalCase "hydra.json.yaml.* dropped"

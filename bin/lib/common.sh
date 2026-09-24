@@ -282,7 +282,7 @@ step_cache_record() {
 # pass fails with a visible "heap overflow" instead of being silently
 # SIGKILL'd by the OOM killer. The first cap at -M5G surfaced the
 # real cause: update-json-main's full-inference path
-# (Hydra.Inference.writeModulesJson) blows past 5 GB on CI; 6 GB is
+# (Hydra.Core.Inference.writeModulesJson) blows past 5 GB on CI; 6 GB is
 # the temporary headroom until per-module incremental inference is
 # wired through writeModulesJson (see project memory
 # incremental_inference_wiring; tracks the #247 follow-up).

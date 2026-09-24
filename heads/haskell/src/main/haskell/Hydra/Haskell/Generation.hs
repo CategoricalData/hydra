@@ -9,7 +9,7 @@ module Hydra.Haskell.Generation (
 ) where
 
 import Hydra.Kernel
-import Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep)
+import Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep)
 import Hydra.Haskell.Coder
 import Hydra.Haskell.Language
 import Hydra.Generation
@@ -25,7 +25,7 @@ import qualified Hydra.Sources.Kernel.Types.Util as UtilTypes
 -- Third argument: modules to transform and generate
 --
 -- #630: the coder (Hydra.Haskell.Coder.constructModule) emits the correct
--- hydra.lib.<sub> vs. hydra.overlay.haskell.lib.<sub> reference directly at
+-- hydra.lib.<sub> vs. hydra.core.overlay.haskell.lib.<sub> reference directly at
 -- coding time, driven by the on-disk overlay-existence set computed here and
 -- threaded in as an explicit parameter. This replaces the old #568
 -- driver-level post-generation text pass (correctHaskellLibRedirect), which
@@ -67,7 +67,7 @@ writeCoderHaskell :: ([Module] -> [Module] -> IO [Module]) -> FilePath -> [Modul
 writeCoderHaskell generate basePath universeModules typeModules = do
     coderMods <- generate universeModules typeModules
     -- Add core types namespace to each encoder/decoder module's type dependencies
-    -- since the encoders/decoders reference hydra.core.Term, hydra.core.Injection, etc.
+    -- since the encoders/decoders reference hydra.core.model.Term, hydra.core.model.Injection, etc.
     let withCoreDeps = fmap addCoreDep coderMods
     _ <- writeHaskell basePath universeModules withCoreDeps
     return ()
@@ -102,8 +102,8 @@ writeDslHaskell basePath universeModules typeModules = do
 
 -- | Generate the lexicon to the standard location, using the Haskell-host kernel modules.
 -- Path is relative to heads/haskell/ (where the sync script runs stack ghci).
--- The kernel terms modules reference encoder/decoder bindings (hydra.encode.core.*,
--- hydra.decode.packaging.*, ...); since #448 those modules are synthesized in-memory
+-- The kernel terms modules reference encoder/decoder bindings (hydra.core.encode.model.*,
+-- hydra.core.decode.packaging.*, ...); since #448 those modules are synthesized in-memory
 -- rather than shipped as sources, so they must be synthesized here and added to the
 -- lexicon universe for inference to resolve the references. Synthesis covers all
 -- kernel type modules (+ JSON runtime types) because the synthesized coders

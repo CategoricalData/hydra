@@ -1,20 +1,20 @@
 package hydra.sources.java;
-import hydra.core.Type;
-import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
-import hydra.overlay.java.dsl.Types;
-import hydra.packaging.Definition;
-import hydra.packaging.EntityMetadata;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleName;
-import hydra.packaging.ModuleDependency;
-import hydra.overlay.java.util.Optional;
+import hydra.core.model.Type;
+import static hydra.core.overlay.java.dsl.meta.Defs.unqualifiedDeps;
+import hydra.core.overlay.java.dsl.Types;
+import hydra.core.packaging.Definition;
+import hydra.core.packaging.EntityMetadata;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleName;
+import hydra.core.packaging.ModuleDependency;
+import hydra.core.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static hydra.overlay.java.dsl.Helpers.doc;
-import static hydra.overlay.java.dsl.Helpers.typeDef;
-import static hydra.overlay.java.dsl.Helpers.typeref;
+import static hydra.core.overlay.java.dsl.Helpers.doc;
+import static hydra.core.overlay.java.dsl.Helpers.typeDef;
+import static hydra.core.overlay.java.dsl.Helpers.typeref;
 
 /**
  * Java syntax — Hydra type definitions matching the Oracle Java SE 21 BNF.
@@ -22,7 +22,7 @@ import static hydra.overlay.java.dsl.Helpers.typeref;
  */
 public class Syntax {
     public static final ModuleName NS = new ModuleName("hydra.java.syntax");
-    private static final ModuleName CORE_NS = new ModuleName("hydra.core");
+    private static final ModuleName CORE_NS = new ModuleName("hydra.core.model");
 
     private static Type java(String local) { return typeref(NS, local); }
 

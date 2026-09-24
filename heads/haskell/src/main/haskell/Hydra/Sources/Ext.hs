@@ -104,7 +104,7 @@ hydraJvmModules :: [Module]
 hydraJvmModules = []
 
 -- | hydra-java is no longer sourced from a Haskell DSL (#346/#370), exactly like
--- hydra-python. Its canonical hydra.java.* and hydra.dsl.java.* JSON is produced
+-- hydra-python. Its canonical hydra.java.* and hydra.java.dsl.* JSON is produced
 -- solely by the native Java driver (hydra.UpdateJavaJson via
 -- bin/update-java-json.sh) running against the published hydra-java host. The
 -- Haskell DSL copy under packages/hydra-java/src/main/haskell/ has been deleted.
@@ -122,7 +122,7 @@ hydraPgModules :: [Module]
 hydraPgModules = PgManifest.mainModules
 
 -- | hydra-python is no longer sourced from a Haskell DSL (#346/#370). Its
--- canonical hydra.python.* and hydra.dsl.python.* JSON is produced solely by the
+-- canonical hydra.python.* and hydra.python.dsl.* JSON is produced solely by the
 -- native Python driver (bin/update-python-json.py) running against the published
 -- hydra-python host. The Haskell DSL copy under
 -- packages/hydra-python/src/main/haskell/ has been deleted, so there is nothing to
@@ -138,7 +138,7 @@ hydraRustModules :: [Module]
 hydraRustModules = RustManifest.mainModules
 
 -- | hydra-scala is no longer sourced from a Haskell DSL (#509). Its canonical
--- hydra.scala.* and hydra.dsl.scala.* JSON is produced solely by the native
+-- hydra.scala.* and hydra.scala.dsl.* JSON is produced solely by the native
 -- Scala driver (hydra.UpdateScalaJson via bin/generate-hydra-scala-from-scala.sh)
 -- running against the published hydra-scala host. The Haskell DSL copy under
 -- packages/hydra-scala/src/main/haskell/ has been deleted. Kept as an empty
@@ -153,9 +153,9 @@ hydraWasmModules = WasmManifest.mainModules
 -- Per-package derived-module source lists (#474)
 -- ----------------------------------------------------------------------
 -- Two lists per package (decoupled — #474/#475):
---   * mainDslModules      — broad: every type module gets a hydra.dsl.<x> wrapper.
+--   * mainDslModules      — broad: every type module gets a hydra.core.dsl.<x> wrapper.
 --   * mainEncodingModules — narrower: source modules whose synthesized
---                           hydra.encode.<x>/hydra.decode.<x> compile across all
+--                           hydra.core.encode.<x>/hydra.core.decode.<x> compile across all
 --                           eta-expanding targets (Java/Python). #475 will let
 --                           this re-broaden toward mainDslModules.
 -- hydra-java / hydra-python are native-owned, so both are empty here.
@@ -219,7 +219,7 @@ extRoutingInput =
   [ ("hydra-kernel",     map moduleName (kernelModules ++ otherModules ++ dslSourceModules ++ testModules))
   , ("hydra-haskell",    map moduleName haskellModules)
   , ("hydra-bench",      map moduleName hydraBenchModules)
-  -- hydra-build carries BOTH its main and test module names so hydra.test.build.*
+  -- hydra-build carries BOTH its main and test module names so hydra.core.test.build.*
   -- routes to hydra-build's test tree (it is the first non-kernel package with
   -- non-empty testModules; the kernel row above likewise folds in testModules).
   , ("hydra-build",      map moduleName (hydraBuildModules ++ hydraBuildTestModules))
@@ -227,19 +227,19 @@ extRoutingInput =
   , ("hydra-ext",        map moduleName hydraExtPackageModules)
   , ("hydra-go",         map moduleName hydraGoModules)
   , ("hydra-jvm",        map moduleName hydraJvmModules)
-  -- hydra.gradle is a translingual build-config module authored in the hydra-java
+  -- hydra.java.gradle is a translingual build-config module authored in the hydra-java
   -- package's native Java DSL (no Haskell Module value to reference, hence listed
   -- by bare name). Its namespace is build-system-keyed (no hydra.java. segment),
   -- so it must be declared here explicitly to route to hydra-java rather than
   -- failing the fail-loud router (#511).
-  , ("hydra-java",       map moduleName hydraJavaModules ++ [ModuleName "hydra.gradle"])
+  , ("hydra-java",       map moduleName hydraJavaModules ++ [ModuleName "hydra.java.gradle"])
   , ("hydra-typescript", map moduleName hydraTypeScriptModules)
   , ("hydra-lisp",       map moduleName hydraLispModules)
   , ("hydra-pg",         map moduleName (hydraPgModules
                            ++ [GenPGTransform.module_]))
   -- hydra.python.pyproject is a build-config module authored in the hydra-python
   -- package's native Python DSL (no Haskell Module value to reference, hence listed
-  -- by bare name), analogous to hydra.gradle above. Declared explicitly so the
+  -- by bare name), analogous to hydra.java.gradle above. Declared explicitly so the
   -- fail-loud router routes it to hydra-python (#511).
   , ("hydra-python",     map moduleName hydraPythonModules ++ [ModuleName "hydra.python.pyproject"])
   , ("hydra-rdf",        map moduleName hydraRdfModules)

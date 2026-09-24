@@ -1,24 +1,24 @@
 package hydra.demos.neo4jvalidation;
 
-import hydra.neo4j.model.ConstraintDefinition;
-import hydra.neo4j.model.Constraint;
-import hydra.neo4j.model.ElementId;
-import hydra.neo4j.model.GraphType;
-import hydra.neo4j.model.Key;
+import hydra.pg.neo4j.model.ConstraintDefinition;
+import hydra.pg.neo4j.model.Constraint;
+import hydra.pg.neo4j.model.ElementId;
+import hydra.pg.neo4j.model.GraphType;
+import hydra.pg.neo4j.model.Key;
 
-import hydra.neo4j.model.NodeElementType;
-import hydra.neo4j.model.NodeLabel;
-import hydra.neo4j.model.PropertyExistenceConstraint;
-import hydra.neo4j.model.PropertyTypeConstraint;
-import hydra.neo4j.model.RelationshipElementType;
-import hydra.neo4j.model.RelationshipType;
-import hydra.neo4j.model.Value;
-import hydra.neo4j.model.ValueType;
-import hydra.error.neo4j.InvalidGraphError;
-import hydra.validate.Neo4j;
-import hydra.validation.ValidationProfile;
-import hydra.validation.ValidationResult;
-import hydra.overlay.java.util.Optional;
+import hydra.pg.neo4j.model.NodeElementType;
+import hydra.pg.neo4j.model.NodeLabel;
+import hydra.pg.neo4j.model.PropertyExistenceConstraint;
+import hydra.pg.neo4j.model.PropertyTypeConstraint;
+import hydra.pg.neo4j.model.RelationshipElementType;
+import hydra.pg.neo4j.model.RelationshipType;
+import hydra.pg.neo4j.model.Value;
+import hydra.pg.neo4j.model.ValueType;
+import hydra.pg.error.neo4j.InvalidGraphError;
+import hydra.core.validate.Neo4j;
+import hydra.core.validation.ValidationProfile;
+import hydra.core.validation.ValidationResult;
+import hydra.core.overlay.java.util.Optional;
 
 import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
@@ -39,8 +39,8 @@ import java.util.Set;
  *
  * <p>Connects to a running Neo4j over the Bolt protocol using the official
  * Neo4j Java driver ({@code org.neo4j.driver}), reads all nodes and
- * relationships, maps the driver's types onto Hydra's {@code hydra.neo4j.model}
- * types, and runs {@code hydra.validate.neo4j.validateGraph} against a graph
+ * relationships, maps the driver's types onto Hydra's {@code hydra.pg.neo4j.model}
+ * types, and runs {@code hydra.pg.validate.neo4j.validateGraph} against a graph
  * type defined here. The same validation runs identically in the Python
  * counterpart (demo.py).
  *
@@ -71,8 +71,8 @@ public class Neo4jValidationDemo {
         }
 
         try (driver; Session session = driver.session()) {
-            List<hydra.neo4j.model.Node> nodes = readNodes(session);
-            List<hydra.neo4j.model.Relationship> rels = readRelationships(session);
+            List<hydra.pg.neo4j.model.Node> nodes = readNodes(session);
+            List<hydra.pg.neo4j.model.Relationship> rels = readRelationships(session);
 
             System.out.println("Read " + nodes.size() + " nodes and " + rels.size()
                 + " relationships from Neo4j.");
@@ -99,8 +99,8 @@ public class Neo4jValidationDemo {
     // Reading from Neo4j and mapping to the Hydra model
     // ------------------------------------------------------------------------
 
-    private static List<hydra.neo4j.model.Node> readNodes(Session session) {
-        List<hydra.neo4j.model.Node> result = new ArrayList<>();
+    private static List<hydra.pg.neo4j.model.Node> readNodes(Session session) {
+        List<hydra.pg.neo4j.model.Node> result = new ArrayList<>();
         Result r = session.run("MATCH (n) RETURN n");
         while (r.hasNext()) {
             Record rec = r.next();
@@ -110,8 +110,8 @@ public class Neo4jValidationDemo {
         return result;
     }
 
-    private static List<hydra.neo4j.model.Relationship> readRelationships(Session session) {
-        List<hydra.neo4j.model.Relationship> result = new ArrayList<>();
+    private static List<hydra.pg.neo4j.model.Relationship> readRelationships(Session session) {
+        List<hydra.pg.neo4j.model.Relationship> result = new ArrayList<>();
         Result r = session.run("MATCH ()-[rel]->() RETURN rel");
         while (r.hasNext()) {
             Record rec = r.next();
@@ -121,18 +121,18 @@ public class Neo4jValidationDemo {
         return result;
     }
 
-    private static hydra.neo4j.model.Node mapNode(org.neo4j.driver.types.Node dn) {
+    private static hydra.pg.neo4j.model.Node mapNode(org.neo4j.driver.types.Node dn) {
         Set<NodeLabel> labels = new LinkedHashSet<>();
         for (String l : dn.labels()) {
             labels.add(new NodeLabel(l));
         }
         Map<Key, Value> props = mapProperties(dn.asMap());
-        return new hydra.neo4j.model.Node(new ElementId(dn.elementId()), labels, props);
+        return new hydra.pg.neo4j.model.Node(new ElementId(dn.elementId()), labels, props);
     }
 
-    private static hydra.neo4j.model.Relationship mapRelationship(org.neo4j.driver.types.Relationship dr) {
+    private static hydra.pg.neo4j.model.Relationship mapRelationship(org.neo4j.driver.types.Relationship dr) {
         Map<Key, Value> props = mapProperties(dr.asMap());
-        return new hydra.neo4j.model.Relationship(
+        return new hydra.pg.neo4j.model.Relationship(
             new ElementId(dr.elementId()),
             props,
             new RelationshipType(dr.type()),
@@ -148,7 +148,7 @@ public class Neo4jValidationDemo {
         return props;
     }
 
-    /** Map a driver property value to a hydra.neo4j.model.Value. Covers the kinds the fixture uses. */
+    /** Map a driver property value to a hydra.pg.neo4j.model.Value. Covers the kinds the fixture uses. */
     private static Value mapValue(Object o) {
         if (o instanceof Boolean) {
             return new Value.Boolean_((Boolean) o);
@@ -251,41 +251,41 @@ public class Neo4jValidationDemo {
         });
     }
 
-    private static String describeNode(hydra.error.neo4j.InvalidNodeError err) {
-        return err.accept(new hydra.error.neo4j.InvalidNodeError.PartialVisitor<String>() {
+    private static String describeNode(hydra.pg.error.neo4j.InvalidNodeError err) {
+        return err.accept(new hydra.pg.error.neo4j.InvalidNodeError.PartialVisitor<String>() {
             @Override
-            public String visit(hydra.error.neo4j.InvalidNodeError.MissingProperty m) {
+            public String visit(hydra.pg.error.neo4j.InvalidNodeError.MissingProperty m) {
                 return "missing required property `" + m.value.key.value + "`";
             }
             @Override
-            public String visit(hydra.error.neo4j.InvalidNodeError.WrongPropertyType w) {
+            public String visit(hydra.pg.error.neo4j.InvalidNodeError.WrongPropertyType w) {
                 return "property `" + w.value.key.value + "` has the wrong type (expected "
                     + valueTypeName(w.value.expectedType) + ")";
             }
             @Override
-            public String otherwise(hydra.error.neo4j.InvalidNodeError other) {
+            public String otherwise(hydra.pg.error.neo4j.InvalidNodeError other) {
                 return other.toString();
             }
         });
     }
 
-    private static String describeRelationship(hydra.error.neo4j.InvalidRelationshipError err) {
-        return err.accept(new hydra.error.neo4j.InvalidRelationshipError.PartialVisitor<String>() {
+    private static String describeRelationship(hydra.pg.error.neo4j.InvalidRelationshipError err) {
+        return err.accept(new hydra.pg.error.neo4j.InvalidRelationshipError.PartialVisitor<String>() {
             @Override
-            public String visit(hydra.error.neo4j.InvalidRelationshipError.MissingProperty m) {
+            public String visit(hydra.pg.error.neo4j.InvalidRelationshipError.MissingProperty m) {
                 return "missing required property `" + m.value.key.value + "`";
             }
             @Override
-            public String visit(hydra.error.neo4j.InvalidRelationshipError.WrongPropertyType w) {
+            public String visit(hydra.pg.error.neo4j.InvalidRelationshipError.WrongPropertyType w) {
                 return "property `" + w.value.key.value + "` has the wrong type (expected "
                     + valueTypeName(w.value.expectedType) + ")";
             }
             @Override
-            public String visit(hydra.error.neo4j.InvalidRelationshipError.NoMatchingPattern p) {
+            public String visit(hydra.pg.error.neo4j.InvalidRelationshipError.NoMatchingPattern p) {
                 return "endpoints match no declared pattern for this relationship type";
             }
             @Override
-            public String otherwise(hydra.error.neo4j.InvalidRelationshipError other) {
+            public String otherwise(hydra.pg.error.neo4j.InvalidRelationshipError other) {
                 return other.toString();
             }
         });

@@ -1,10 +1,10 @@
-"""Unit tests for hydra.util.PersistentSet."""
+"""Unit tests for hydra.core.util.PersistentSet."""
 
 from collections.abc import Set as AbstractSet
 
 import pytest
 
-from hydra.overlay.python.util import PersistentSet
+from hydra.core.overlay.python.util import PersistentSet
 
 
 def test_empty():

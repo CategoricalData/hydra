@@ -2,73 +2,73 @@ module Hydra.Sources.Test.Lib.System where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
 -- Effectful test cases use HONESTLY-TYPED builders (Phantoms + Literals), NOT the reified-Term
--- builders in Hydra.Overlay.Haskell.Dsl.Typed.Terms: effectful cases compile directly to raw target effectful code,
+-- builders in Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms: effectful cases compile directly to raw target effectful code,
 -- so their terms must infer at their true types (effect<...>, string, binary). For #498.
-import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms hiding ((++))  -- (@@), primitive, lambda, var, wrap, just, nothing
-import Hydra.Overlay.Haskell.Dsl.Typed.Literals               (string, int32, int64, uint32, boolean)
+import Hydra.Core.Overlay.Haskell.Dsl.Phantoms hiding ((++))  -- (@@), primitive, lambda, var, wrap, just, nothing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Literals               (string, int32, int64, uint32, boolean)
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
-import Hydra.Testing
-import qualified Hydra.File as File
-import qualified Hydra.System as System
-import qualified Hydra.Error.System as ErrorSystem
-import qualified Hydra.Time as Time
-import qualified Hydra.Lib.Effects as DefEffects
-import qualified Hydra.Lib.Eithers as DefEithers
-import qualified Hydra.Lib.Equality as DefEquality
-import qualified Hydra.Lib.Ordering as DefOrdering
-import qualified Hydra.Lib.Literals as DefLiterals
-import qualified Hydra.Lib.Logic as DefLogic
-import qualified Hydra.Lib.Maps as DefMaps
-import qualified Hydra.Lib.Optionals as DefOptionals
-import qualified Hydra.Lib.Strings as DefStrings
-import qualified Hydra.Lib.System as DefSystem
-import qualified Hydra.Lib.Text as DefText
+import Hydra.Core.Testing
+import qualified Hydra.Core.File as File
+import qualified Hydra.Core.System as System
+import qualified Hydra.Core.Error.System as ErrorSystem
+import qualified Hydra.Core.Time as Time
+import qualified Hydra.Core.Lib.Effects as DefEffects
+import qualified Hydra.Core.Lib.Eithers as DefEithers
+import qualified Hydra.Core.Lib.Equality as DefEquality
+import qualified Hydra.Core.Lib.Ordering as DefOrdering
+import qualified Hydra.Core.Lib.Literals as DefLiterals
+import qualified Hydra.Core.Lib.Logic as DefLogic
+import qualified Hydra.Core.Lib.Maps as DefMaps
+import qualified Hydra.Core.Lib.Optionals as DefOptionals
+import qualified Hydra.Core.Lib.Strings as DefStrings
+import qualified Hydra.Core.Lib.System as DefSystem
+import qualified Hydra.Core.Lib.Text as DefText
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.lib.system"
+ns = ModuleName "hydra.core.test.lib.system"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core", ModuleName "hydra.system", ModuleName "hydra.error.system", ModuleName "hydra.testing"],
-            moduleMetadata = descriptionMetadata (Just "Effectful test cases for hydra.lib.system primitives")}
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core.model", ModuleName "hydra.core.system", ModuleName "hydra.core.error.system", ModuleName "hydra.core.testing"],
+            moduleMetadata = descriptionMetadata (Just "Effectful test cases for hydra.core.lib.system primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
--- Test groups for hydra.lib.system primitives. These do not touch the canonical temp directory; they
+-- Test groups for hydra.core.lib.system primitives. These do not touch the canonical temp directory; they
 -- exercise process execution, the environment, the working directory, and the system clock. The cases
 -- are written to be deterministic across hosts: they assert booleans or fixed strings rather than
 -- host-specific values.
 --
--- Note: hydra.lib.system.exit is intentionally untested here. It terminates the calling process, so
+-- Note: hydra.core.lib.system.exit is intentionally untested here. It terminates the calling process, so
 -- exercising it in-process would kill the test runner itself; there is no meaningful in-process
 -- assertion to make. See #561.
 --
--- Note: hydra.lib.system.readStdin is intentionally untested here, for the same class of reason as
+-- Note: hydra.core.lib.system.readStdin is intentionally untested here, for the same class of reason as
 -- exit: the common test runner does not control what is attached to its own standard input across
 -- hosts, so there is no deterministic content to assert.
 --
--- Note: hydra.lib.system.writeStderr/writeStdout tests were deferred (F2/#376, historical: the
+-- Note: hydra.core.lib.system.writeStderr/writeStdout tests were deferred (F2/#376, historical: the
 -- since-retired Haskell cold-seeder pinned an older published hydra-kernel that predated these
 -- primitives, and its build also compiled this file). That constraint no longer applies (#703).
 -- Re-add systemWriteStderr/systemWriteStdout (removed below) if still missing. See #526.
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Effectful test cases for hydra.lib.system primitives" $
-    supergroup "hydra.lib.system primitives" [
+    Phantoms.doc "Effectful test cases for hydra.core.lib.system primitives" $
+    supergroup "hydra.core.lib.system primitives" [
       systemExecute,
       systemGetEnvironment,
       systemGetEnvironmentVariable,

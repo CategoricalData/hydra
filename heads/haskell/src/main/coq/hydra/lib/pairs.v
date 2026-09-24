@@ -1,4 +1,4 @@
-(* Hydra primitive library: hydra.lib.pairs *)
+(* Hydra primitive library: hydra.core.lib.pairs *)
 
 Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith.
 

@@ -6,17 +6,17 @@ module Hydra.Sources.Coq.Language where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.File (_FileExtension)
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Libraries
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Coders                          as Coders
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants                   as Variants
-import qualified Hydra.Dsl.Util                              as Util
+import           Hydra.Core.File (_FileExtension)
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Libraries
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Core.Dsl.Coders                          as Coders
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants                   as Variants
+import qualified Hydra.Core.Dsl.Util                              as Util
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
@@ -27,7 +27,7 @@ import qualified Data.Map                                  as M
 import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
-import Hydra.Ast
+import Hydra.Core.Ast
 
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
@@ -155,7 +155,7 @@ coqReservedWords = define "coqReservedWords" $
       -- code tries to use the type.
       "list", "option", "prod", "sum", "unit", "bool", "nat", "string",
       -- Names that collide with Hydra kernel function names after namespace
-      -- stripping (e.g., hydra.print.core.term, hydra.print.core.type).
+      -- stripping (e.g., hydra.core.print.model.term, hydra.core.print.model.type).
       "term", "literal", "graph", "element"]
 
 -- | Reserved words that must be renamed when they appear as a stripped-local

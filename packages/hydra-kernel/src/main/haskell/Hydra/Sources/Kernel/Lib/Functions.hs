@@ -1,25 +1,25 @@
--- | Primitive declarations for the hydra.lib.functions namespace.
+-- | Primitive declarations for the hydra.core.lib.functions namespace.
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Lib.Functions where
 
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap          as Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms hiding (compose, const, flip, identity)
-import qualified Hydra.Overlay.Haskell.Dsl.Types              as Types
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap          as Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms hiding (compose, const, flip, identity)
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types              as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), const, flip)
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lib.functions"
+ns = ModuleName "hydra.core.lib.functions"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.functions module.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.functions module.")}
   where
     definitions = [absurd, compose, const, flip, identity]
 

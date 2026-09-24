@@ -8,14 +8,14 @@ import { loadAll } from "../../../../../../../dist/typescript/hydra-kernel/src/t
 // convert() must normalize that bare string to {tag: "unit"}/{tag: "void"},
 // not pass it through unmodified (which produced a raw string that failed
 // every `.tag`-based switch downstream, e.g. rewriting.ts's Type-strip
-// switch). hydra.core's own Type union definition, loaded via
+// switch). hydra.core.model's own Type union definition, loaded via
 // loadAll()'s TYPE_NAMESPACES, exercises this path directly: its `unit`
 // and `void` field types are each themselves annotated(unit) in the
 // kernel JSON.
 describe("jsonBindings compact string form (bug_564)", () => {
   it("normalizes Type.unit's compact JSON form to {tag: unit}, not a bare string", () => {
     const { types } = loadAll();
-    const typeScheme = types.find(([name]) => name.value === "hydra.core.Type");
+    const typeScheme = types.find(([name]) => name.value === "hydra.core.model.Type");
     expect(typeScheme).toBeDefined();
 
     const body = typeScheme![1].body as unknown;

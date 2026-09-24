@@ -65,7 +65,7 @@ for comprehensive documentation.
 
 ### Hydra-kernel test suite
 
-The hydra-kernel test suite (`hydra.test.testSuite`) ensures parity across all Hydra implementations.
+The hydra-kernel test suite (`hydra.core.test.testSuite`) ensures parity across all Hydra implementations.
 **Passing all hydra-kernel test suite cases is the criterion for a true Hydra implementation.**
 
 To run all tests (from `heads/python/`):
@@ -294,13 +294,13 @@ The cost is full O(n) copy on every update (no structural sharing); the
 benefit is C-speed inner loops. Hydra-Python has **no third-party runtime
 dependencies** beyond the standard library.
 
-Where ordered iteration matters (`hydra.lib.maps.{keys, elems, to_list}`, the
+Where ordered iteration matters (`hydra.core.lib.maps.{keys, elems, to_list}`, the
 various `*_list()` extraction helpers, `PersistentSet.__iter__`), elements
 are sorted at extraction time via a fall-through comparator: natural `<`
 where it works, structural comparison for Hydra `Term`/`Type` and other
 complex values that don't define ordering in Python.
 
-The classes live under `hydra.python.util` rather than `hydra.util` because the
+The classes live under `hydra.python.util` rather than `hydra.core.util` because the
 latter is already a kernel-generated module (containing `Comparison`,
 `CaseConvention`, etc.) shared across all Hydra implementations. Putting the
 Python-runtime helpers under `hydra.python.util` keeps the kernel namespace
@@ -322,7 +322,7 @@ Rough guide:
 | Workload | Faster on |
 |---|---|
 | `bin/run-bootstrapping-demo.sh` codegen | CPython by ~5% |
-| Type inference on large modules (`hydra.codegen.infer_modules_given`) | PyPy by ~4× |
+| Type inference on large modules (`hydra.core.codegen.infer_modules_given`) | PyPy by ~4× |
 | `hydra.lib.*` primitive microbenchmarks | CPython by ~2.5× |
 
 The microbench gap reflects CPython's C-level `dict`/`frozenset`/`tuple`

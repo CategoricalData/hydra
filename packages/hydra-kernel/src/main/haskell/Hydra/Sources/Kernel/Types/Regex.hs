@@ -2,15 +2,15 @@ module Hydra.Sources.Kernel.Types.Regex where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.regex"
+ns = ModuleName "hydra.core.regex"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns
@@ -22,8 +22,8 @@ module_ = Module {
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleMetadata = descriptionMetadata (Just $
               "A model for Hydra's translingual regular-expression syntax: the abstract syntax tree"
-              ++ " (AST) into which hydra.parse.regex parses a pattern and from which hydra.print.regex"
-              ++ " (and the per-dialect hydra.print.<dialect>.regex renderers) emit target syntax."
+              ++ " (AST) into which hydra.core.parse.regex parses a pattern and from which hydra.core.print.regex"
+              ++ " (and the per-dialect hydra.core.print.<dialect>.regex renderers) emit target syntax."
               ++ " Covers the minimal core defined in docs/specification/regex.md (literals, character"
               ++ " classes, ., quantifiers, alternation, anchors, grouping). See issue #567.")}
   where
@@ -83,7 +83,7 @@ characterClass = define "CharacterClass" $
     "items">:
       doc ("The class members: individual characters and/or character ranges. Must be non-empty; the"
         ++ " empty class [] and negated-empty class [^] are excluded from the core (they are not in the"
-        ++ " POSIX/PCRE/ECMA intersection). hydra.parse.regex rejects an empty class.") $
+        ++ " POSIX/PCRE/ECMA intersection). hydra.core.parse.regex rejects an empty class.") $
       T.list classItem]
 
 characterRange :: TypeDefinition
@@ -121,7 +121,7 @@ quantified = define "Quantified" $
 
 quantifier :: TypeDefinition
 quantifier = define "Quantifier" $
-  doc ("A regular-expression quantifier. Mirrors hydra.query.RegexQuantifier, which models the same"
+  doc ("A regular-expression quantifier. Mirrors hydra.core.query.RegexQuantifier, which models the same"
     ++ " set of quantifiers for graph-path queries; a future refactor may hoist a shared type"
     ++ " (see #567 findings).") $
   T.union [

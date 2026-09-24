@@ -1,15 +1,15 @@
 module Hydra.Sources.Kernel.Types.Error.File where
 
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.File as File
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.error.file"
+ns = ModuleName "hydra.core.error.file"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns

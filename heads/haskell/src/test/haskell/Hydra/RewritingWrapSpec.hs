@@ -7,7 +7,7 @@ Test.Hspec.hspec Hydra.RewritingWrapSpec.spec
 module Hydra.RewritingWrapSpec where
 
 import Hydra.Kernel
-import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Core.Rewriting as Rewriting
 
 import qualified Test.Hspec as H
 

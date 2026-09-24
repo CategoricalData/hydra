@@ -35,7 +35,7 @@ lazy val root = project
     // both under dist/scala/hydra-kernel/src/test/scala after the overlay copy.
     Test / unmanagedSourceDirectories ++= Seq(
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-kernel" / "src" / "test" / "scala",
-      // #546: the hydra.test.build.* modules moved to hydra-build; the kernel
+      // #546: the hydra.core.test.build.* modules moved to hydra-build; the kernel
       // test suite still references their groups (Option A).
       baseDirectory.value / ".." / ".." / "dist" / "scala" / "hydra-build" / "src" / "test" / "scala",
     ),

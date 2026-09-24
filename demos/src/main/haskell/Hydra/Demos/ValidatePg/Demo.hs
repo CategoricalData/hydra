@@ -1,21 +1,21 @@
 -- | Haskell driver for the PG validation translingual demo.
 --
 -- Reads a schema JSON file and graph JSON files (produced by GenerateData using
--- hydra.encode.pg.model), validates each graph against the schema using
--- Hydra.Validate.Pg, and prints the results.
+-- hydra.pg.encode.model), validates each graph against the schema using
+-- Hydra.Pg.Validate.Model, and prints the results.
 --
 -- Usage: runhaskell ValidateDemo.hs <data-directory>
 
 module Hydra.Demos.ValidatePg.Demo where
 
-import qualified Hydra.Core as Core
+import qualified Hydra.Core.Model as Core
 import qualified Hydra.Pg.Model as Pg
-import qualified Hydra.Print.Core as PrintCore
-import qualified Hydra.Validate.Core as ValidateCore
-import qualified Hydra.Validate.Pg as Validation
-import qualified Hydra.Validation as V
-import qualified Hydra.Error.Pg as Err
-import qualified Hydra.Json.Model as Json
+import qualified Hydra.Core.Print.Model as PrintCore
+import qualified Hydra.Core.Validate.Model as ValidateCore
+import qualified Hydra.Pg.Validate.Model as Validation
+import qualified Hydra.Core.Validation as V
+import qualified Hydra.Pg.Error.Model as Err
+import qualified Hydra.Core.Json.Model as Json
 import qualified Data.List as L
 
 import qualified Data.Aeson as A
@@ -97,8 +97,8 @@ graphNames =
   , "missing_required_edge_property"
   ]
 
--- | Adapter from hydra.validate.core.checkLiteral (typed InvalidLiteralError) to the
--- stringified InvalidValueError shape that hydra.validate.pg.validateGraph expects.
+-- | Adapter from hydra.core.validate.model.checkLiteral (typed InvalidLiteralError) to the
+-- stringified InvalidValueError shape that hydra.pg.validate.model.validateGraph expects.
 checkLiteral :: Core.LiteralType -> Core.Literal -> Maybe Err.InvalidValueError
 checkLiteral lt lv = case ValidateCore.checkLiteral lt lv of
   Nothing -> Nothing

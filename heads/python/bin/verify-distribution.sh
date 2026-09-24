@@ -108,16 +108,16 @@ shopt -u nullglob
 # Keep this list broad: each entry is a distinct module file, so a wheel that
 # omits a package any of them import is caught.
 KERNEL_IMPORTS=(
-    hydra.codegen
-    hydra.rewriting
-    hydra.encoding
-    hydra.arity
-    hydra.analysis
-    hydra.query
-    hydra.predicates
-    hydra.validate.core
-    hydra.validate.packaging
-    hydra.overlay.python.util
+    hydra.core.codegen
+    hydra.core.rewriting
+    hydra.core.encoding
+    hydra.core.arity
+    hydra.core.analysis
+    hydra.core.query
+    hydra.core.predicates
+    hydra.core.validate.model
+    hydra.core.validate.packaging
+    hydra.core.overlay.python.util
 )
 
 # Pick a Python interpreter that satisfies the wheels' requires-python (>=3.12).

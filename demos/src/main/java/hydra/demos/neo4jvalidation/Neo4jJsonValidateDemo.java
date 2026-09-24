@@ -1,14 +1,14 @@
 package hydra.demos.neo4jvalidation;
 
-import hydra.overlay.java.build.Generation;
-import hydra.error.neo4j.InvalidGraphError;
-import hydra.json.model.Value;
-import hydra.neo4j.model.GraphType;
-import hydra.neo4j.model.Node;
-import hydra.neo4j.model.Relationship;
-import hydra.validate.Neo4j;
-import hydra.validation.ValidationProfile;
-import hydra.validation.ValidationResult;
+import hydra.build.overlay.java.Generation;
+import hydra.pg.error.neo4j.InvalidGraphError;
+import hydra.core.json.model.Value;
+import hydra.pg.neo4j.model.GraphType;
+import hydra.pg.neo4j.model.Node;
+import hydra.pg.neo4j.model.Relationship;
+import hydra.core.validate.Neo4j;
+import hydra.core.validation.ValidationProfile;
+import hydra.core.validation.ValidationResult;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,8 +21,8 @@ import java.util.List;
  *
  * <p>Reads the shared {@code schema.json} and each graph JSON file (produced by
  * {@link GenerateData} from Java DSL definitions), decodes them back into
- * {@code hydra.neo4j.model} values, and validates each graph against the schema
- * with {@code hydra.validate.neo4j.validateGraph}. The same validator — generated
+ * {@code hydra.pg.neo4j.model} values, and validates each graph against the schema
+ * with {@code hydra.pg.validate.neo4j.validateGraph}. The same validator — generated
  * from one Hydra source — runs identically in the Python and Haskell counterparts;
  * because every host reads the <em>same</em> JSON files, the data and the logic are
  * identical across languages by construction.
@@ -125,75 +125,75 @@ public class Neo4jJsonValidateDemo {
         });
     }
 
-    private static String describeNode(hydra.error.neo4j.InvalidNodeError e) {
-        return e.accept(new hydra.error.neo4j.InvalidNodeError.Visitor<String>() {
+    private static String describeNode(hydra.pg.error.neo4j.InvalidNodeError e) {
+        return e.accept(new hydra.pg.error.neo4j.InvalidNodeError.Visitor<String>() {
             @Override
-            public String visit(hydra.error.neo4j.InvalidNodeError.MissingProperty x) {
+            public String visit(hydra.pg.error.neo4j.InvalidNodeError.MissingProperty x) {
                 return "missing required property '" + x.value.key.value + "'";
             }
 
             @Override
-            public String visit(hydra.error.neo4j.InvalidNodeError.WrongPropertyType x) {
+            public String visit(hydra.pg.error.neo4j.InvalidNodeError.WrongPropertyType x) {
                 return "property '" + x.value.key.value + "' has the wrong type (expected "
                     + valueTypeName(x.value.expectedType) + ")";
             }
 
             @Override
-            public String visit(hydra.error.neo4j.InvalidNodeError.MissingImpliedLabel x) {
+            public String visit(hydra.pg.error.neo4j.InvalidNodeError.MissingImpliedLabel x) {
                 return "missing implied label '" + x.value.label.value + "'";
             }
 
             @Override
-            public String visit(hydra.error.neo4j.InvalidNodeError.NoSuchLabel x) {
+            public String visit(hydra.pg.error.neo4j.InvalidNodeError.NoSuchLabel x) {
                 return "no node element type matches the node's labels";
             }
 
             @Override
-            public String visit(hydra.error.neo4j.InvalidNodeError.KeyViolation x) {
+            public String visit(hydra.pg.error.neo4j.InvalidNodeError.KeyViolation x) {
                 return "key constraint violation";
             }
 
             @Override
-            public String visit(hydra.error.neo4j.InvalidNodeError.UniquenessViolation x) {
+            public String visit(hydra.pg.error.neo4j.InvalidNodeError.UniquenessViolation x) {
                 return "uniqueness violation";
             }
         });
     }
 
-    private static String describeRel(hydra.error.neo4j.InvalidRelationshipError e) {
-        return e.accept(new hydra.error.neo4j.InvalidRelationshipError.PartialVisitor<String>() {
+    private static String describeRel(hydra.pg.error.neo4j.InvalidRelationshipError e) {
+        return e.accept(new hydra.pg.error.neo4j.InvalidRelationshipError.PartialVisitor<String>() {
             @Override
-            public String otherwise(hydra.error.neo4j.InvalidRelationshipError x) {
+            public String otherwise(hydra.pg.error.neo4j.InvalidRelationshipError x) {
                 return x.getClass().getSimpleName();
             }
 
             @Override
-            public String visit(hydra.error.neo4j.InvalidRelationshipError.NoMatchingPattern x) {
+            public String visit(hydra.pg.error.neo4j.InvalidRelationshipError.NoMatchingPattern x) {
                 return "endpoints match no declared pattern for this relationship type";
             }
 
             @Override
-            public String visit(hydra.error.neo4j.InvalidRelationshipError.MissingProperty x) {
+            public String visit(hydra.pg.error.neo4j.InvalidRelationshipError.MissingProperty x) {
                 return "missing required property '" + x.value.key.value + "'";
             }
 
             @Override
-            public String visit(hydra.error.neo4j.InvalidRelationshipError.WrongPropertyType x) {
+            public String visit(hydra.pg.error.neo4j.InvalidRelationshipError.WrongPropertyType x) {
                 return "property '" + x.value.key.value + "' has the wrong type (expected "
                     + valueTypeName(x.value.expectedType) + ")";
             }
 
             @Override
-            public String visit(hydra.error.neo4j.InvalidRelationshipError.NoSuchType x) {
+            public String visit(hydra.pg.error.neo4j.InvalidRelationshipError.NoSuchType x) {
                 return "no relationship element type has this type";
             }
         });
     }
 
-    private static String valueTypeName(hydra.neo4j.model.ValueType vt) {
-        return vt.accept(new hydra.neo4j.model.ValueType.PartialVisitor<String>() {
+    private static String valueTypeName(hydra.pg.neo4j.model.ValueType vt) {
+        return vt.accept(new hydra.pg.neo4j.model.ValueType.PartialVisitor<String>() {
             @Override
-            public String otherwise(hydra.neo4j.model.ValueType x) {
+            public String otherwise(hydra.pg.neo4j.model.ValueType x) {
                 return x.getClass().getSimpleName().replace("_", "").toUpperCase();
             }
         });

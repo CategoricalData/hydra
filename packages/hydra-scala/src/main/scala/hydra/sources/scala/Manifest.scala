@@ -1,6 +1,6 @@
 package hydra.sources.scala
 
-import hydra.packaging.Module
+import hydra.core.packaging.Module
 
 /**
  * Package manifest for hydra-scala.

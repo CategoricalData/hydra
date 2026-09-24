@@ -48,21 +48,21 @@ module Hydra.DigestFormat (
 ) where
 
 import qualified Hydra.Digest as Digest
-import Hydra.Packaging (Module, ModuleName(..), PackageName(..), Version(..))
-import Hydra.Overlay.Haskell.Bootstrap (bootstrapGraph)
+import Hydra.Core.Packaging (Module, ModuleName(..), PackageName(..), Version(..))
+import Hydra.Core.Overlay.Haskell.Bootstrap (bootstrapGraph)
 import Hydra.Sources.Kernel.Types.All (kernelTypesModules)
 import qualified Hydra.Sources.Build.Format as SourcesBuildFormat
 
 import qualified Hydra.Build.Format as Format
-import qualified Hydra.Decode.Build.Format as DecodeFormat
-import qualified Hydra.Encode.Build.Format as EncodeFormat
-import qualified Hydra.Codegen as Codegen
-import qualified Hydra.Core as Core
-import qualified Hydra.Graph as Graph
-import qualified Hydra.Json.Decode as JsonDecode
-import qualified Hydra.Json.Encode as JsonEncode
-import qualified Hydra.Json.Model as Json
-import qualified Hydra.Json.Writer as JsonWriter
+import qualified Hydra.Build.Decode.Format as DecodeFormat
+import qualified Hydra.Build.Encode.Format as EncodeFormat
+import qualified Hydra.Core.Codegen as Codegen
+import qualified Hydra.Core.Model as Core
+import qualified Hydra.Core.Graph as Graph
+import qualified Hydra.Core.Json.Decode as JsonDecode
+import qualified Hydra.Core.Json.Encode as JsonEncode
+import qualified Hydra.Core.Json.Model as Json
+import qualified Hydra.Core.Json.Writer as JsonWriter
 
 import qualified Data.Aeson as A
 import qualified Data.Aeson.Key as AK
@@ -86,7 +86,7 @@ data FormatContext = FormatContext
   }
 
 -- | Build the codec context from the format module and its dependency
--- closure (hydra.build.format + hydra.packaging reach the whole schema).
+-- closure (hydra.build.format + hydra.core.packaging reach the whole schema).
 mkFormatContext :: Graph.Graph -> [Module] -> FormatContext
 mkFormatContext bsGraph mods = FormatContext g (Codegen.buildSchemaMap g)
   where

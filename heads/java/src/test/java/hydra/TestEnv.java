@@ -1,13 +1,13 @@
 // Hand-written test environment for the bootstrapping demo's Java target.
 // Provides a real graph with primitives and kernel bindings.
-// (The per-package hydra.test.TestEnv at heads/java/src/test/java/hydra/test/
+// (The per-package hydra.core.test.TestEnv at heads/java/src/test/java/hydra/test/
 // is the runtime counterpart of the DSL stub Hydra.Sources.Test.TestEnv;
 // this file is kept under hydra.* for the bootstrapping demo's setup-java-target.sh.)
 
 package hydra;
 
-import hydra.graph.Graph;
-import hydra.typing.InferenceContext;
+import hydra.core.graph.Graph;
+import hydra.core.typing.InferenceContext;
 
 public class TestEnv {
     private static Graph cachedGraph;

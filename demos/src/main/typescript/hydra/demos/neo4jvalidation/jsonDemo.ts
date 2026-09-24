@@ -1,8 +1,8 @@
 // TypeScript driver for the Neo4j validation translingual demo (JSON-artifact variant).
 //
 // Reads the shared schema.json and each graph JSON file (produced by the Java
-// GenerateData from DSL definitions), decodes them into hydra.neo4j.model values,
-// and validates each graph against the schema with hydra.validate.neo4j.validateGraph.
+// GenerateData from DSL definitions), decodes them into hydra.pg.neo4j.model values,
+// and validates each graph against the schema with hydra.pg.validate.neo4j.validateGraph.
 // The same validator -- generated from one Hydra source -- runs identically in the
 // Java, Python, and Haskell counterparts; because every host reads the same JSON
 // files, the data and the logic are identical across languages by construction.
@@ -22,7 +22,7 @@ import * as Sets from "hydra/overlay/typescript/lib/sets.js";
 import { Given, None } from "hydra/runtime.js";
 
 // ---------------------------------------------------------------------------
-// Decoders: plain JSON (JSON.parse output) -> hydra.neo4j.model
+// Decoders: plain JSON (JSON.parse output) -> hydra.pg.neo4j.model
 // ---------------------------------------------------------------------------
 
 type Json = any;

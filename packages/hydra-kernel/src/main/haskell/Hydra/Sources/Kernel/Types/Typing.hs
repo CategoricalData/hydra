@@ -2,16 +2,16 @@ module Hydra.Sources.Kernel.Types.Typing where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Paths as Paths
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.typing"
+ns = ModuleName "hydra.core.typing"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns
@@ -152,7 +152,7 @@ typeClass = define "TypeClass" $
   doc ("A type class identifier together with a human-readable description."
     ++ " Type classes are referenced as bare names (e.g. the local name \"equality\") in"
     ++ " TypeVariableConstraints.classes; the canonical definitions live as term bindings"
-    ++ " under hydra.classes.") $
+    ++ " under hydra.core.classes.") $
   T.record [
     "description">:
       doc "A human-readable description of the type class"

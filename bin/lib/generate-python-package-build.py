@@ -40,7 +40,7 @@ def load_overlay_build_config(repo_root: str, name: str) -> dict:
     INTERIM: reads the JSON directly. The build.json format is the canonical
     encoding of hydra.python.pyproject.PyProjectBuildConfiguration; when the build
     system is nativized (#416) this hand parse is replaced by a generated
-    hydra.decode.pyproject decoder. The on-disk format does not change.
+    hydra.core.decode.pyproject decoder. The on-disk format does not change.
     """
     path = os.path.join(repo_root, "overlay", "python", name, "build.json")
     if not os.path.isfile(path):
@@ -76,7 +76,7 @@ def _pep440(version_obj) -> str:
 
 
 def _pyproject_requirement(dep: dict) -> str:
-    """An encoded hydra.packaging.PackageDependency -> a PEP 508 requirement string,
+    """An encoded hydra.core.packaging.PackageDependency -> a PEP 508 requirement string,
     e.g. {"name":"gremlinpython","version":{"range":...}} -> "gremlinpython>=3.7,<4.0"."""
     return dep["name"] + _pep440(dep.get("version", {}))
 

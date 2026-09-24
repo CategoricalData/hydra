@@ -1,5 +1,5 @@
 package hydra.sources.java;
-import hydra.packaging.Module;
+import hydra.core.packaging.Module;
 
 import java.util.Arrays;
 import java.util.Collections;

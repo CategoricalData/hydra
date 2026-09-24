@@ -19,53 +19,53 @@ module Hydra.Sources.Kernel.Terms.Validate.Core where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
-import Hydra.Overlay.Haskell.Libraries
-import qualified Hydra.Dsl.Paths    as Paths
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
+import Hydra.Core.Overlay.Haskell.Libraries
+import qualified Hydra.Core.Dsl.Paths    as Paths
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations       as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Annotations as KernelAnnotations
-import qualified Hydra.Dsl.Ast          as Ast
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Coders       as Coders
-import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph        as Graph
-import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Lib.Math     as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Literals          as Literals
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base         as MetaBase
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms        as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types        as MetaTypes
-import qualified Hydra.Dsl.Packaging       as Packaging
-import qualified Hydra.Dsl.Parsing      as Parsing
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (
+import qualified Hydra.Core.Dsl.Ast          as Ast
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Coders       as Coders
+import qualified Hydra.Core.Dsl.Util      as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph        as Graph
+import qualified Hydra.Core.Dsl.Json.Model         as Json
+import qualified Hydra.Core.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Math     as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals          as Literals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base         as MetaBase
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms        as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types        as MetaTypes
+import qualified Hydra.Core.Dsl.Packaging       as Packaging
+import qualified Hydra.Core.Dsl.Parsing      as Parsing
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms hiding (
   binding, elimination, field, fields, fieldType, floatType, floatValue, function, injection, integerType,
   integerValue, lambda, literal, literalType, term, type_, typeScheme)
-import qualified Hydra.Overlay.Haskell.Dsl.Prims             as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular           as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing      as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Terms             as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Tests             as Tests
-import qualified Hydra.Dsl.Topology     as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
-import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Util         as Util
-import qualified Hydra.Dsl.Validation   as Validation
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
-import qualified Hydra.Dsl.Errors            as Error
-import qualified Hydra.Dsl.Error.Core       as ErrorsCore
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims             as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular           as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing      as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms             as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests             as Tests
+import qualified Hydra.Core.Dsl.Topology     as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Dsl.Typing       as Typing
+import qualified Hydra.Core.Dsl.Util         as Util
+import qualified Hydra.Core.Dsl.Validation   as Validation
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants     as Variants
+import qualified Hydra.Core.Dsl.Errors            as Error
+import qualified Hydra.Core.Dsl.Error.Model       as ErrorsCore
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -83,7 +83,7 @@ import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.validate.core"
+ns = ModuleName "hydra.core.validate.model"
 
 module_ :: Module
 module_ = Module {
@@ -309,7 +309,7 @@ checkTerm = define "checkTerm" $
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_constantCondition
           (match _Term (var "fun") (Just noError) [
             _Term_variable>>: "primName" ~>
-              Logic.ifElse (Equality.equal (Core.unName $ var "primName") (string "hydra.lib.logic.ifElse"))
+              Logic.ifElse (Equality.equal (Core.unName $ var "primName") (string "hydra.core.lib.logic.ifElse"))
                 (match _Term (var "arg") (Just noError) [
                   _Term_literal>>: "lit" ~>
                     match _Literal (var "lit") (Just noError) [
@@ -836,7 +836,7 @@ checkUndefinedTypeVariablesInType = define "checkUndefinedTypeVariablesInType" $
   "freeVars" <~ Variables.freeVariablesInType @@ var "typ" $
   -- freeVariablesInType treats every TypeVariable node as a free variable,
   -- including ordinary nominal type references (Hydra represents e.g.
-  -- hydra.core.Name as TypeVariable "hydra.core.Name", not a distinct node
+  -- hydra.core.model.Name as TypeVariable "hydra.core.model.Name", not a distinct node
   -- kind) -- not just lexically forall-bound variables. So the resolved-name
   -- set here must be the union of graphTypeVariables (lexical, introduced by
   -- type lambdas) and the nominal type names declared in graphSchemaTypes,
@@ -1065,7 +1065,7 @@ isValidName = define "isValidName" $
 justError :: TypedTerm InvalidTermError -> TypedTerm (Maybe InvalidTermError)
 justError (TypedTerm t) = TypedTerm $ TermOptional $ Just t
 
--- | The default validation profile for hydra.validate.core (term and type
+-- | The default validation profile for hydra.core.validate.model (term and type
 -- validators). Every check currently wired up is in 'errorRules' except
 -- 'InvalidTypeError.singleVariantUnion' and 'InvalidTypeError.emptyRecordType',
 -- which are treated as warnings -- an empty record type is unit-like (one
@@ -1151,7 +1151,7 @@ noTypeError = TypedTerm $ TermOptional Nothing
 
 -- | Compose a fully qualified rule identifier from a union-type qualified
 -- name and a variant local name, joined with '.'. Used at profile-construction
--- time to derive rule IDs like 'hydra.error.core.InvalidTermError.duplicateBinding'
+-- time to derive rule IDs like 'hydra.core.error.model.InvalidTermError.duplicateBinding'
 -- from the generated _InvalidTermError and _InvalidTermError_duplicateBinding
 -- constants. Pure host-side helper; not exported as a kernel term.
 qualifiedRule :: Name -> Name -> Name

@@ -2,8 +2,8 @@
 
 Connects to a running Neo4j over Bolt using the official Neo4j Python driver
 (the ``neo4j`` package), reads all nodes and relationships, maps the driver's
-types onto Hydra's ``hydra.neo4j.model`` types, and runs
-``hydra.validate.neo4j.validate_graph`` against a graph type defined here. The
+types onto Hydra's ``hydra.pg.neo4j.model`` types, and runs
+``hydra.pg.validate.neo4j.validate_graph`` against a graph type defined here. The
 same validation runs identically in the Java counterpart.
 
 The client-interfacing logic (the driver calls and the mapping from the
@@ -18,13 +18,13 @@ so it does not break offline runs.
 
 import sys
 
-import hydra.neo4j.model as model
-import hydra.validate.neo4j as validate
-import hydra.validation as validation
+import hydra.pg.neo4j.model as model
+import hydra.pg.validate.neo4j as validate
+import hydra.core.validation as validation
 
 
 def map_value(o):
-    """Map a driver property value to a hydra.neo4j.model.Value."""
+    """Map a driver property value to a hydra.pg.neo4j.model.Value."""
     if isinstance(o, bool):
         return model.ValueBoolean(o)
     if isinstance(o, int):

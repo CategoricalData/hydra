@@ -1,10 +1,10 @@
 package hydra;
 
-import hydra.core.Name;
-import hydra.core.Type;
-import hydra.overlay.java.build.Generation;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleName;
+import hydra.core.model.Name;
+import hydra.core.model.Type;
+import hydra.build.overlay.java.Generation;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleName;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -148,7 +148,7 @@ public class UpdateJavaJson {
             Generation.inferAndWriteByPackage(
                 hydraRoot, distJsonRoot, universePlusSources, sources, universe);
             // #370/#346: also synthesize the DSL-wrapper modules
-            // (hydra.dsl.java.{environment,syntax}) that the legacy Haskell
+            // (hydra.java.dsl.{environment,syntax}) that the legacy Haskell
             // update-json-main DSL pass used to write. Now that hydra-java is
             // single-writer (no Haskell DSL fallback), the native driver owns its
             // full emission set. The DSL-type source modules are the type-defining
@@ -179,17 +179,17 @@ public class UpdateJavaJson {
                 distJsonRoot, universePlusSources, dslSourcesForSynthesis);
             System.err.println("  DSL wrappers: " + writtenDsl.size() + " module(s) written");
 
-            // #511: synthesize term encode/decode wrappers (hydra.encode.* /
-            // hydra.decode.*) for native type modules that must be read from /
-            // written to JSON as typed values. hydra.gradle is the build-config
+            // #511: synthesize term encode/decode wrappers (hydra.core.encode.* /
+            // hydra.core.decode.*) for native type modules that must be read from /
+            // written to JSON as typed values. hydra.java.gradle is the build-config
             // type whose overlay build.json is read via the canonical
-            // Decode.fromJson → Term → hydra.decode.gradle path (exactly as
-            // hydra.packaging.Module is read via hydra.decode.packaging). The
+            // Decode.fromJson → Term → hydra.java.decode.gradle path (exactly as
+            // hydra.core.packaging.Module is read via hydra.core.decode.packaging). The
             // native Java path previously synthesized only DSL wrappers; this adds
             // the encode/decode synthesis it lacked.
             List<Module> encTypeMods = new ArrayList<>();
             for (Module m : sources) {
-                if (m.name.value.equals("hydra.gradle")) {
+                if (m.name.value.equals("hydra.java.gradle")) {
                     encTypeMods.add(m);
                 }
             }
@@ -199,11 +199,11 @@ public class UpdateJavaJson {
 
             // #511: write the native packages' manifest.json source-driven (rich
             // schema, partitioned by Generation.groupByPackage, #560). Previously
-            // these manifests were static/stale, so a new module (hydra.gradle)
+            // these manifests were static/stale, so a new module (hydra.java.gradle)
             // never appeared and routing silently fell back to hydra-kernel.
-            // mainModules = the loaded source modules (includes hydra.gradle);
+            // mainModules = the loaded source modules (includes hydra.java.gradle);
             // mainDslModules = the DSL-type source modules; mainEncodingModules =
-            // the encode/decode source modules (hydra.gradle).
+            // the encode/decode source modules (hydra.java.gradle).
             Generation.writePackageManifests(
                 distJsonRoot, sources, dslTypeMods, encTypeMods);
         } catch (RuntimeException | java.io.IOException ex) {

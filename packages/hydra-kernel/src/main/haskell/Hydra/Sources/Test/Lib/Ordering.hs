@@ -2,41 +2,41 @@ module Hydra.Sources.Test.Lib.Ordering where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 -- Additional imports specific to this file
-import Hydra.Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
-import qualified Hydra.Lib.Ordering as DefOrdering
+import Hydra.Core.Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims as Prims
+import qualified Hydra.Core.Lib.Ordering as DefOrdering
 import qualified Data.Scientific as Sci
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.lib.ordering"
+ns = ModuleName "hydra.core.test.lib.ordering"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.reduction", ModuleName "hydra.print.core", ModuleName "hydra.core", ModuleName "hydra.errors", ModuleName "hydra.test.testGraph", ModuleName "hydra.testing", ModuleName "hydra.util"],
-            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.ordering primitives")}
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core.reduction", ModuleName "hydra.core.print.model", ModuleName "hydra.core.model", ModuleName "hydra.core.errors", ModuleName "hydra.core.test.testGraph", ModuleName "hydra.core.testing", ModuleName "hydra.core.util"],
+            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.core.lib.ordering primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
--- Test groups for hydra.lib.ordering primitives
+-- Test groups for hydra.core.lib.ordering primitives
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for hydra.lib.ordering primitives" $
-    supergroup "hydra.lib.ordering primitives" [
+    Phantoms.doc "Test cases for hydra.core.lib.ordering primitives" $
+    supergroup "hydra.core.lib.ordering primitives" [
       -- Integer tests
       orderingCompare,
       orderingGt,
@@ -79,7 +79,7 @@ orderingCompare = subgroup "compare" [
   test "equal" 5 5 "equalTo",
   test "greater than" 5 3 "greaterThan"]
   where
-    test testName x y resultField = primCase testName DefOrdering.compare [int32 x, int32 y] (injectUnit (name "hydra.util.Comparison") resultField)
+    test testName x y resultField = primCase testName DefOrdering.compare [int32 x, int32 y] (injectUnit (name "hydra.core.util.Comparison") resultField)
 
 -- Tests for ordering with float values
 orderingCompareFloats :: TypedTerm TestGroup
@@ -89,7 +89,7 @@ orderingCompareFloats = subgroup "compare floats" [
   test "greater than" 5.0 3.0 "greaterThan",
   test "negative vs positive" (-1.0) 1.0 "lessThan"]
   where
-    test testName x y resultField = primCase testName DefOrdering.compare [float64 x, float64 y] (injectUnit (name "hydra.util.Comparison") resultField)
+    test testName x y resultField = primCase testName DefOrdering.compare [float64 x, float64 y] (injectUnit (name "hydra.core.util.Comparison") resultField)
 
 -- Tests for ordering with decimal values: value first, then scale as tiebreak
 -- (numerically equal decimals of different scale are distinct, smaller scale first).
@@ -101,8 +101,8 @@ orderingCompareDecimals = subgroup "compare decimals" [
   scaleDistinctTest "same value, scale tiebreak (larger scale)" (decimalOf 110 2) (decimalOf 1100 3) "lessThan",
   scaleDistinctTest "same value, scale tiebreak (transitively)" (decimalOf 11 1) (decimalOf 1100 3) "lessThan"]
   where
-    test testName x y resultField = primCase testName DefOrdering.compare [x, y] (injectUnit (name "hydra.util.Comparison") resultField)
-    scaleDistinctTest testName x y resultField = primCaseWithTags testName [tag_scaleDistinct] DefOrdering.compare [x, y] (injectUnit (name "hydra.util.Comparison") resultField)
+    test testName x y resultField = primCase testName DefOrdering.compare [x, y] (injectUnit (name "hydra.core.util.Comparison") resultField)
+    scaleDistinctTest testName x y resultField = primCaseWithTags testName [tag_scaleDistinct] DefOrdering.compare [x, y] (injectUnit (name "hydra.core.util.Comparison") resultField)
     decimalOf coefficient scale = decimal (Sci.scientific coefficient (negate scale))
 
 -- Tests for ordering with string values
@@ -119,7 +119,7 @@ orderingCompareStrings = subgroup "compare strings" [
   -- relative to a BMP private-use character (U+E000-FFFF, a single unit).
   test "astral character greater than BMP private-use character" "\127757" "\xE000" "greaterThan"]
   where
-    test testName x y resultField = primCase testName DefOrdering.compare [string x, string y] (injectUnit (name "hydra.util.Comparison") resultField)
+    test testName x y resultField = primCase testName DefOrdering.compare [string x, string y] (injectUnit (name "hydra.core.util.Comparison") resultField)
 
 orderingGt :: TypedTerm TestGroup
 orderingGt = subgroup "gt" [
@@ -315,7 +315,7 @@ orderingCompareLists = subgroup "compare lists" [
   test "equal" (intList [1, 2, 3]) (intList [1, 2, 3]) "equalTo",
   test "greater than" (intList [1, 3]) (intList [1, 2]) "greaterThan"]
   where
-    test testName x y resultField = primCase testName DefOrdering.compare [x, y] (injectUnit (name "hydra.util.Comparison") resultField)
+    test testName x y resultField = primCase testName DefOrdering.compare [x, y] (injectUnit (name "hydra.core.util.Comparison") resultField)
     intList els = Terms.list (int32 <$> els)
 
 orderingCompareSets :: TypedTerm TestGroup
@@ -325,7 +325,7 @@ orderingCompareSets = subgroup "compare sets" [
   test "less than (canonical order)" (intSet [1, 2]) (intSet [1, 3]) "lessThan",
   test "greater than (canonical order)" (intSet [1, 3]) (intSet [1, 2]) "greaterThan"]
   where
-    test testName x y resultField = primCase testName DefOrdering.compare [x, y] (injectUnit (name "hydra.util.Comparison") resultField)
+    test testName x y resultField = primCase testName DefOrdering.compare [x, y] (injectUnit (name "hydra.core.util.Comparison") resultField)
     intSet els = Terms.set (int32 <$> els)
 
 orderingCompareMaps :: TypedTerm TestGroup
@@ -337,5 +337,5 @@ orderingCompareMaps = subgroup "compare maps" [
   test "less than (by key)" (intMap [(1, 10)]) (intMap [(2, 10)]) "lessThan",
   test "less than (by value, same key)" (intMap [(1, 10)]) (intMap [(1, 20)]) "lessThan"]
   where
-    test testName x y resultField = primCase testName DefOrdering.compare [x, y] (injectUnit (name "hydra.util.Comparison") resultField)
+    test testName x y resultField = primCase testName DefOrdering.compare [x, y] (injectUnit (name "hydra.core.util.Comparison") resultField)
     intMap pairs = Terms.map $ Phantoms.map $ M.fromList [(int32 k, int32 v) | (k, v) <- pairs]

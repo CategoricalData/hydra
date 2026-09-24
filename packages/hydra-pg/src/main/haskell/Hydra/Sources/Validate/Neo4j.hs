@@ -5,19 +5,19 @@ module Hydra.Sources.Validate.Neo4j where
 import Hydra.Kernel hiding (
   Node(..), _Node, Relationship(..), _Relationship, Path(..), _Path,
   Element(..), _Element)
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Validation                      as Validation
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Core.Dsl.Validation                      as Validation
 import           Prelude hiding ((++))
 import qualified Data.List                                 as L
 import qualified Data.Map                                  as M
@@ -25,17 +25,17 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports
-import Hydra.Neo4j.Model as N4
-import Hydra.Error.Neo4j as Err
+import Hydra.Pg.Neo4j.Model as N4
+import Hydra.Pg.Error.Neo4j as Err
 import qualified Hydra.Sources.Neo4j.Model as Neo4jModel
 import qualified Hydra.Sources.Error.Neo4j as ErrorNeo4j
 
 
 module_ :: Module
 module_ = Module {
-            moduleName = (ModuleName "hydra.validate.neo4j"),
+            moduleName = (ModuleName "hydra.pg.validate.neo4j"),
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [Neo4jModel.ns, ErrorNeo4j.ns, ModuleName "hydra.validation", ModuleName "hydra.core"],
+            moduleDependencies = unqualifiedDep <$> [Neo4jModel.ns, ErrorNeo4j.ns, ModuleName "hydra.core.validation", ModuleName "hydra.core.model"],
             moduleMetadata = descriptionMetadata (Just "Validation functions for Neo4j property graphs")}
   where
    definitions = [
@@ -57,7 +57,7 @@ module_ = Module {
 
 -- | The full set of Neo4j validation rule names. Single source of truth for
 -- the profiles and the guarded* helpers. Each name is
--- 'hydra.error.neo4j.<UnionType>.<variant>'. The 'noSuchLabel' / 'noSuchType'
+-- 'hydra.pg.error.neo4j.<UnionType>.<variant>'. The 'noSuchLabel' / 'noSuchType'
 -- rules implement closed-world validation (a node/relationship that matches no
 -- element type is an error); they are excluded from the default (open-world)
 -- profile. The uniqueness/key rules are produced only by graph-level
@@ -142,7 +142,7 @@ validationDefinition = definitionInModule module_
 -- | A no-op DSL definition exposing the full rule-name set.
 allNeo4jRuleNamesDef :: TypedTermDefinition [Name]
 allNeo4jRuleNamesDef = validationDefinition "allNeo4jRuleNames" $
-  doc "All Neo4j validation rule names, as fully qualified 'hydra.error.neo4j.<UnionType>.<variant>' strings." $
+  doc "All Neo4j validation rule names, as fully qualified 'hydra.pg.error.neo4j.<UnionType>.<variant>' strings." $
   list (nameLift <$> allNeo4jRuleNames)
 
 -- | Classify a rule-tagged node finding against the profile and append.

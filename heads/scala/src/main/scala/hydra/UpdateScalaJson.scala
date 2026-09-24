@@ -1,7 +1,7 @@
 package hydra
 
-import hydra.core.{Name, Type}
-import hydra.packaging.{Module, ModuleName}
+import hydra.core.model.{Name, Type}
+import hydra.core.packaging.{Module, ModuleName}
 
 import _root_.java.nio.charset.StandardCharsets
 import _root_.java.nio.file.{Files, Paths}
@@ -16,11 +16,11 @@ import _root_.java.nio.file.{Files, Paths}
  *      references resolve) from `dist/json/hydra-{kernel,jvm,java}/`.
  *   2. Collect the Scala DSL source modules' `module_` static fields from
  *      `hydra.sources.scala.*`.
- *   3. Run `hydra.codegen.inferModulesGiven(universe + sources, sources)` to
+ *   3. Run `hydra.core.codegen.inferModulesGiven(universe + sources, sources)` to
  *      get typed Modules — adds TermSignatures, typed let bindings, explicit
  *      `tyapp` wrappers. Without this the JSON output diverges from the
  *      Haskell baseline by exactly the inference annotations.
- *   4. Encode each inferred Module to JSON via `hydra.codegen.moduleToJson`.
+ *   4. Encode each inferred Module to JSON via `hydra.core.codegen.moduleToJson`.
  *   5. Write each output to `dist/json/hydra-scala/src/main/json/hydra/scala/<name>.json`.
  *
  * Phase-2 caveat (#509): this driver currently handles only the Scala source
@@ -50,7 +50,7 @@ import _root_.java.nio.file.{Files, Paths}
 
   // 1. Load the kernel + jvm + java universes — every module these expose
   //    needs to be present when we run inference, since the Scala sources
-  //    reference hydra.core, hydra.coders, hydra.variants, hydra.util, etc.
+  //    reference hydra.core.model, hydra.core.coders, hydra.core.variants, hydra.core.util, etc.
   System.err.println()
   System.err.println("Loading universe ...")
   var t0 = System.nanoTime()
@@ -58,15 +58,15 @@ import _root_.java.nio.file.{Files, Paths}
   val kernelJsonDir = worktreeRoot.resolve("dist/json/hydra-kernel/src/main/json").toString
   val kernelMainNs: Seq[ModuleName] = Generation.readManifestField(kernelJsonDir, "mainModules")
   // mainDslModules lists the type-defining modules whose DSL wrappers are
-  // emitted; the wrappers themselves live at hydra.dsl.<X>. Prefix to load,
+  // emitted; the wrappers themselves live at hydra.core.dsl.<X>. Prefix to load,
   // but only for wrappers that physically exist on disk (some kernel types
   // don't get DSL wrappers).
   val kernelDslNs: Seq[ModuleName] =
     Generation.readManifestField(kernelJsonDir, "mainDslModules")
-      .map(ns => "hydra.dsl." + ns.stripPrefix("hydra."))
+      .map(ns => "hydra.core.dsl." + ns.stripPrefix("hydra."))
       .filter(ns =>
         Files.exists(Paths.get(kernelJsonDir,
-          hydra.codegen.moduleNameToPath(ns) + ".json")))
+          hydra.core.codegen.moduleNameToPath(ns) + ".json")))
   val kernelNs: Seq[ModuleName] = (kernelMainNs ++ kernelDslNs).distinct
   val kernelMods: Seq[Module] = Generation.loadModulesFromJson(kernelJsonDir, schemaMap0, kernelNs)
   val jvmJsonDir = worktreeRoot.resolve("dist/json/hydra-jvm/src/main/json").toString
@@ -83,15 +83,15 @@ import _root_.java.nio.file.{Files, Paths}
     else Seq.empty
   val javaMods: Seq[Module] =
     if javaNs.nonEmpty then Generation.loadModulesFromJson(javaJsonDir, schemaMap0, javaNs) else Seq.empty
-  // Load hydra-scala's existing DSL wrappers (hydra.dsl.scala.syntax etc.) so
+  // Load hydra-scala's existing DSL wrappers (hydra.scala.dsl.syntax etc.) so
   // Coder can reference ScalaSyntax.* generated accessors at inference time.
   val scalaPkgJsonDir = worktreeRoot.resolve("dist/json/hydra-scala/src/main/json").toString
   val scalaDslNs: Seq[ModuleName] =
     if Files.exists(Paths.get(scalaPkgJsonDir, "manifest.json")) then
       Generation.readManifestField(scalaPkgJsonDir, "mainDslModules")
-        .map(ns => "hydra.dsl." + ns.stripPrefix("hydra."))
+        .map(ns => "hydra.core.dsl." + ns.stripPrefix("hydra."))
         .filter(ns => Files.exists(Paths.get(scalaPkgJsonDir,
-          hydra.codegen.moduleNameToPath(ns) + ".json")))
+          hydra.core.codegen.moduleNameToPath(ns) + ".json")))
     else Seq.empty
   val scalaDslMods: Seq[Module] =
     if scalaDslNs.nonEmpty then Generation.loadModulesFromJson(scalaPkgJsonDir, schemaMap0, scalaDslNs) else Seq.empty
@@ -116,9 +116,9 @@ import _root_.java.nio.file.{Files, Paths}
   System.err.println("Running inference ...")
   t0 = System.nanoTime()
   val bsGraph = Generation.bootstrapGraph()
-  val ctx = hydra.typing.InferenceContext(0, Seq.empty)
+  val ctx = hydra.core.typing.InferenceContext(0, Seq.empty)
   val universePlusSources: Seq[Module] = universeBase ++ sources
-  val inferred: Seq[Module] = hydra.codegen.inferModulesGiven(ctx)(bsGraph)(universePlusSources)(sources) match
+  val inferred: Seq[Module] = hydra.core.codegen.inferModulesGiven(ctx)(bsGraph)(universePlusSources)(sources) match
     case Left(err) =>
       System.err.println(s"ERROR: inference failed: $err")
       System.exit(2)
@@ -130,19 +130,19 @@ import _root_.java.nio.file.{Files, Paths}
   System.err.println()
   System.err.println("Writing JSON ...")
   t0 = System.nanoTime()
-  val graph = hydra.codegen.modulesToGraph(bsGraph)(universePlusSources)(universePlusSources)
-  val schemaMap: Map[Name, Type] = hydra.codegen.buildSchemaMap(graph)
+  val graph = hydra.core.codegen.modulesToGraph(bsGraph)(universePlusSources)(universePlusSources)
+  val schemaMap: Map[Name, Type] = hydra.core.codegen.buildSchemaMap(graph)
   Files.createDirectories(outDir)
   var nWritten = 0
   var nUnchanged = 0
   for m <- inferred do
-    val jsonStr: String = hydra.codegen.moduleToJson(schemaMap)(m) match
+    val jsonStr: String = hydra.core.codegen.moduleToJson(schemaMap)(m) match
       case Left(err) =>
         System.err.println(s"ERROR: encode failed for ${m.name}: $err")
         System.exit(3)
         throw new RuntimeException("unreachable")
       case Right(s) => s
-    val relPath = hydra.codegen.moduleNameToPath(m.name) + ".json"
+    val relPath = hydra.core.codegen.moduleNameToPath(m.name) + ".json"
     val filePath = outDir.resolve(relPath)
     Files.createDirectories(filePath.getParent)
     val newContent = if jsonStr.endsWith("\n") then jsonStr else jsonStr + "\n"

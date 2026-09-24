@@ -1,46 +1,46 @@
--- | Test cases for hydra.annotations functions
+-- | Test cases for hydra.core.annotations functions
 module Hydra.Sources.Test.Annotations where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import Hydra.Testing
-import qualified Hydra.Dsl.Lib.Maps as Maps
+import Hydra.Core.Testing
+import qualified Hydra.Core.Dsl.Lib.Maps as Maps
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph as Graph
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph as Graph
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.annotations"
+ns = ModuleName "hydra.core.test.annotations"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [Annotations.ns, Lexical.ns, ModuleName "hydra.reduction", ModuleName "hydra.print.core", ModuleName "hydra.core", ModuleName "hydra.errors", ModuleName "hydra.test.testGraph", ModuleName "hydra.testing"],
-            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.annotations functions")}
+            moduleDependencies = unqualifiedDep <$> [Annotations.ns, Lexical.ns, ModuleName "hydra.core.reduction", ModuleName "hydra.core.print.model", ModuleName "hydra.core.model", ModuleName "hydra.core.errors", ModuleName "hydra.core.test.testGraph", ModuleName "hydra.core.testing"],
+            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.core.annotations functions")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
 
 allTests :: TypedTermDefinition TestGroup
 allTests = Phantoms.definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for hydra.annotations functions" $
+    Phantoms.doc "Test cases for hydra.core.annotations functions" $
     supergroup "annotations" [
       arbitraryAnnotationTests,
       descriptionTests,
@@ -48,7 +48,7 @@ allTests = Phantoms.definitionInModule module_ "allTests" $
 
 -- | Annotation eval case: like annEvalCase but tagged as disabled because these tests
 -- require kernel term bindings in the test graph (via reduceTerm), which not all
--- implementations provide yet. See hydra.test.environment in the branch plan.
+-- implementations provide yet. See hydra.core.test.environment in the branch plan.
 annEvalCase :: String -> TypedTerm Term -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
 annEvalCase name = evalCase name
 

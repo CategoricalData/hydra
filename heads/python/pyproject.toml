@@ -146,7 +146,7 @@ pythonpath = [
     "../../dist/python/hydra-lisp/src/main/python",
     "../../dist/python/hydra-pg/src/main/python",
     "../../dist/python/hydra-rdf/src/main/python",
-    # #546: hydra-build's generated main (hydra.build.*) + test (hydra.test.build.*)
+    # #546: hydra-build's generated main (hydra.build.*) + test (hydra.core.test.build.*)
     # modules. The kernel test_suite aggregate references the build test groups
     # (Option A), which import the build main modules, so both are on the path.
     "../../dist/python/hydra-build/src/main/python",
@@ -157,7 +157,7 @@ pythonpath = [
 testpaths = [
     "src/test/python"
 ]
-# Suppress warnings about TestCase* and TestGroup classes in hydra.testing
+# Suppress warnings about TestCase* and TestGroup classes in hydra.core.testing
 # (these are data classes, not pytest test classes)
 filterwarnings = [
     "ignore::pytest.PytestCollectionWarning"

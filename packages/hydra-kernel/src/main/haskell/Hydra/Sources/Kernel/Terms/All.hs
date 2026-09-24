@@ -175,7 +175,7 @@ kernelPrimaryTermsModules = [
 
 -- | The primitive-defining hydra.lib.* modules (a subset of kernelTermsModules).
 -- These carry PrimitiveDefinitions only; they are the input to the term/primitive
--- DSL ref path (#467), which projects each primitive to a hydra.dsl.lib.<x> wrapper.
+-- DSL ref path (#467), which projects each primitive to a hydra.core.dsl.lib.<x> wrapper.
 kernelLibModules :: [Module]
 kernelLibModules = [
   LibChars.module_,

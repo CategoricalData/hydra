@@ -26,8 +26,8 @@ them can be cross-checked against the others.
 | `GraphSchema.schema.json` | JSON Schema for `hydra.pg.model.GraphSchema` | Hydra-Haskell `writeJsonSchema` |
 | `GraphsonVertex.schema.json` | JSON Schema for `hydra.pg.graphson.syntax.Vertex` (one GraphSON document = one Vertex object) | Hydra-Haskell `writeJsonSchema` |
 | `pg-model.proto` | Protobuf v3 definitions for the entire `hydra.pg.model` namespace | Hydra-Haskell `writeProtobuf` (after demo-local monomorphization) |
-| `Graph.avsc` | Avro schema for `hydra.pg.model.Graph` | Hydra-Haskell `Hydra.Avro.Encoder.encodeType` (after monomorphization + string-newtype inlining) |
-| `GraphSchema.avsc` | Avro schema for `hydra.pg.model.GraphSchema` | Hydra-Haskell `Hydra.Avro.Encoder.encodeType` |
+| `Graph.avsc` | Avro schema for `hydra.pg.model.Graph` | Hydra-Haskell `Hydra.Ext.Avro.Encoder.encodeType` (after monomorphization + string-newtype inlining) |
+| `GraphSchema.avsc` | Avro schema for `hydra.pg.model.GraphSchema` | Hydra-Haskell `Hydra.Ext.Avro.Encoder.encodeType` |
 
 ## Regenerating
 

@@ -2,15 +2,15 @@ module Hydra.Sources.Kernel.Types.Variants where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel hiding (literalVariant, termVariant, typeVariant)
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.variants"
+ns = ModuleName "hydra.core.variants"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns

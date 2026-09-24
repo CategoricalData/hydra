@@ -1,7 +1,7 @@
--- | DSL declarations for hydra.test.testEnv.
+-- | DSL declarations for hydra.core.test.testEnv.
 --
--- This module declares the FQNs hydra.test.testEnv.testGraph and
--- hydra.test.testEnv.testContext so the code generator can resolve
+-- This module declares the FQNs hydra.core.test.testEnv.testGraph and
+-- hydra.core.test.testEnv.testContext so the code generator can resolve
 -- references to them (from Meta/Testing.hs) during type inference. It is
 -- included in the generator's universe for type resolution but is NOT
 -- emitted to src/gen-test/haskell, so the hand-written
@@ -17,23 +17,23 @@ module Hydra.Sources.Test.TestEnv where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms as Phantoms
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import Hydra.Sources.Kernel.Types.All
 import qualified Data.Map as M
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.testEnv"
+ns = ModuleName "hydra.core.test.testEnv"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Lexical.ns] Prelude.++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata (Just ("Type-level declarations for the hand-written Hydra.Test.TestEnv module."))}
+            moduleMetadata = descriptionMetadata (Just ("Type-level declarations for the hand-written Hydra.Core.Test.TestEnv module."))}
   where
    definitions = [
      Phantoms.toDefinition testContext,
@@ -42,11 +42,11 @@ module_ = Module {
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
 
--- | Stub: the real testContext lives in hand-written Hydra.Test.TestEnv
+-- | Stub: the real testContext lives in hand-written Hydra.Core.Test.TestEnv
 testContext :: TypedTermDefinition InferenceContext
 testContext = define "testContext" $ asTerm Lexical.emptyInferenceContext
 
--- | Stub: the real testGraph lives in hand-written Hydra.Test.TestEnv.
+-- | Stub: the real testGraph lives in hand-written Hydra.Core.Test.TestEnv.
 -- The hand-written runtime takes a test-types map and a test-terms map;
 -- the DSL stub has the matching signature so the generator emits calls
 -- of the form `TestEnv.testGraph testTypes testTerms` rather than a

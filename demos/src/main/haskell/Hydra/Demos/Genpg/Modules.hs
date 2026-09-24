@@ -13,9 +13,9 @@ import Hydra.Demos.Genpg.Examples.Sales.Mapping as Sales
 import Hydra.Demos.Genpg.Examples.Health.DatabaseSchema as Health
 import Hydra.Demos.Genpg.Examples.Health.GraphSchema as Health
 import Hydra.Demos.Genpg.Examples.Health.Mapping as Health
-import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Encode.Pg.Model as EncodePg
-import qualified Hydra.Encode.Tabular as EncodeTabular
+import qualified Hydra.Core.Encode.Model as EncodeCore
+import qualified Hydra.Pg.Encode.Model as EncodePg
+import qualified Hydra.Core.Encode.Tabular as EncodeTabular
 
 
 -- | The sales module containing sales demo schemas and mapping.
@@ -42,13 +42,13 @@ salesModule = Module {
       termDefinitionSignature = Just (typeSchemeToTermSignature lazyGraphTermScheme)
     }
   ],
-  moduleDependencies = fmap (\ns -> ModuleDependency ns Nothing) [ModuleName "hydra.tabular",
-    ModuleName "hydra.relational",
+  moduleDependencies = fmap (\ns -> ModuleDependency ns Nothing) [ModuleName "hydra.core.tabular",
+    ModuleName "hydra.core.relational",
     ModuleName "hydra.pg.model",
-    ModuleName "hydra.core", ModuleName "hydra.tabular",
-    ModuleName "hydra.relational",
+    ModuleName "hydra.core.model", ModuleName "hydra.core.tabular",
+    ModuleName "hydra.core.relational",
     ModuleName "hydra.pg.model",
-    ModuleName "hydra.core"],
+    ModuleName "hydra.core.model"],
   moduleMetadata = (Just (EntityMetadata (Just "GenPG schemas for the sales demo") [] [] Nothing []))
 }
 
@@ -82,13 +82,13 @@ healthModule = Module {
       termDefinitionSignature = Just (typeSchemeToTermSignature lazyGraphTermScheme)
     }
   ],
-  moduleDependencies = fmap (\ns -> ModuleDependency ns Nothing) [ModuleName "hydra.tabular",
-    ModuleName "hydra.relational",
+  moduleDependencies = fmap (\ns -> ModuleDependency ns Nothing) [ModuleName "hydra.core.tabular",
+    ModuleName "hydra.core.relational",
     ModuleName "hydra.pg.model",
-    ModuleName "hydra.core", ModuleName "hydra.tabular",
-    ModuleName "hydra.relational",
+    ModuleName "hydra.core.model", ModuleName "hydra.core.tabular",
+    ModuleName "hydra.core.relational",
     ModuleName "hydra.pg.model",
-    ModuleName "hydra.core"],
+    ModuleName "hydra.core.model"],
   moduleMetadata = (Just (EntityMetadata (Just "GenPG schemas for the health demo") [] [] Nothing []))
 }
 
@@ -102,7 +102,7 @@ healthNamespace = ModuleName "hydra.demos.genpg.health"
 listTableTypeScheme :: TypeScheme
 listTableTypeScheme = TypeScheme {
   typeSchemeVariables = [],
-  typeSchemeBody = TypeList (TypeVariable (Name "hydra.tabular.TableType")),
+  typeSchemeBody = TypeList (TypeVariable (Name "hydra.core.tabular.TableType")),
   typeSchemeConstraints = mempty
 }
 
@@ -113,7 +113,7 @@ graphSchemaTypeScheme = TypeScheme {
   typeSchemeVariables = [],
   typeSchemeBody = TypeApplication (ApplicationType
     (TypeVariable (Name "hydra.pg.model.GraphSchema"))
-    (TypeVariable (Name "hydra.core.Type"))),
+    (TypeVariable (Name "hydra.core.model.Type"))),
   typeSchemeConstraints = mempty
 }
 
@@ -124,6 +124,6 @@ lazyGraphTermScheme = TypeScheme {
   typeSchemeVariables = [],
   typeSchemeBody = TypeApplication (ApplicationType
     (TypeVariable (Name "hydra.pg.model.LazyGraph"))
-    (TypeVariable (Name "hydra.core.Term"))),
+    (TypeVariable (Name "hydra.core.model.Term"))),
   typeSchemeConstraints = mempty
 }

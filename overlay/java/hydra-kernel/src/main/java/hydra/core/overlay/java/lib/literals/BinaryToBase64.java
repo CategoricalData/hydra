@@ -1,0 +1,71 @@
+package hydra.core.overlay.java.lib.literals;
+
+import hydra.core.model.Name;
+import hydra.core.model.Term;
+import hydra.core.model.TypeScheme;
+import hydra.core.overlay.java.dsl.Terms;
+import hydra.core.graph.Graph;
+import hydra.core.overlay.java.tools.PrimitiveFunction;
+
+import java.util.List;
+import java.util.function.Function;
+
+import static hydra.core.overlay.java.dsl.Types.binary;
+import static hydra.core.overlay.java.dsl.Types.function;
+import static hydra.core.overlay.java.dsl.Types.scheme;
+import static hydra.core.overlay.java.dsl.Types.string;
+import hydra.core.errors.Error_;
+import hydra.core.errors.OtherError;
+import hydra.core.overlay.java.util.Either;
+
+
+/**
+ * Primitive function which encodes binary data as a base64 string.
+ * 
+ */
+public class BinaryToBase64 extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.core.lib.literals.binaryToBase64"
+     */
+    public Name name() {
+        return hydra.lib.Literals.binaryToBase64().name;
+    }
+
+    /**
+     * Returns the type scheme for this function: binary -&gt; string.
+     * @return the type scheme representing the function signature
+     */
+    @Override
+    public TypeScheme type() {
+        return scheme(function(binary(), string()));
+    }
+
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that converts binary terms to string terms
+     */
+    @Override
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> {
+            Term term = args.get(0);
+            if (term instanceof Term.Literal) {
+                hydra.core.model.Literal lit = ((Term.Literal) term).value;
+                if (lit instanceof hydra.core.model.Literal.Binary) {
+                    byte[] bytes = ((hydra.core.model.Literal.Binary) lit).value;
+                    return Either.right(Terms.string(apply(bytes)));
+                }
+            }
+            return Either.left(new Error_.Other(new OtherError("expected binary literal")));
+        };
+    }
+
+    /**
+     * Converts binary data to a base64-encoded string.
+     * @param binary the binary data as a byte array
+     * @return the base64-encoded string
+     */
+    public static String apply(byte[] binary) {
+        return java.util.Base64.getEncoder().encodeToString(binary);
+    }
+}

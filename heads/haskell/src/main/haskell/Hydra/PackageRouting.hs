@@ -48,10 +48,10 @@ module Hydra.PackageRouting (
 ) where
 
 import Hydra.Kernel hiding (buildRoutingMap, groupByPackageIn, namespaceToPackageIn)
-import Hydra.Error.Packaging (InvalidPackageError)
+import Hydra.Core.Error.Packaging (InvalidPackageError)
 import qualified Hydra.Build.Routing as GenRouting
-import qualified Hydra.Validate.Packaging as ValidatePackaging
-import qualified Hydra.Print.Error.Packaging as PrintErrorPackaging
+import qualified Hydra.Core.Validate.Packaging as ValidatePackaging
+import qualified Hydra.Core.Print.Error.Packaging as PrintErrorPackaging
 
 import qualified Data.Map as M
 import qualified System.FilePath as FP
@@ -94,8 +94,8 @@ fromPairs pairs = [ PackageManifest p ms [] [] [] | (p, ms) <- pairs ]
 --
 -- Input: one @(package, declaredModuleNames)@ pair per package. Delegates
 -- to the generated 'GenRouting.buildRoutingMap', which expands each
--- declared module's derived names (@hydra.dsl.<x>@, @hydra.encode.<x>@,
--- @hydra.decode.<x>@, and their @hydra.sources.*@ source wrappers) using
+-- declared module's derived names (@hydra.core.dsl.<x>@, @hydra.core.encode.<x>@,
+-- @hydra.core.decode.<x>@, and their @hydra.sources.*@ source wrappers) using
 -- the shipped-kernel derived-name functions, so the naming rule lives in
 -- exactly one place (the generated module, not this shim).
 --

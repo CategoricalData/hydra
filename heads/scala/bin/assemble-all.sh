@@ -86,7 +86,7 @@ case " $BATCH_PACKAGES " in
 esac
 
 # (testGraph.scala emptyGraph-to-buildTestGraph patch eliminated: the
-# DSL emits hydra.test.testEnv.testGraph(testTypes) directly, and the
+# DSL emits hydra.core.test.testEnv.testGraph(testTypes) directly, and the
 # hand-written testEnv.scala resolves the call to
 # TestSuiteRunner.buildTestGraph. Mirrors heads/scala/bin/assemble-distribution.sh.)
 

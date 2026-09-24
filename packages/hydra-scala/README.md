@@ -10,7 +10,7 @@ producing output identical to the Haskell, Java, Python, and Lisp hosts for all 
 [hydra-rdf](https://categoricaldata.net/hydra/scala/scaladoc/hydra-rdf/),
 [hydra-pg](https://categoricaldata.net/hydra/scala/scaladoc/hydra-pg/), and the other Scala packages —
 all linked from the index).
-Cross-package references (e.g. a reference to `hydra.core.Type` from `hydra-pg`) **are** hyperlinked into
+Cross-package references (e.g. a reference to `hydra.core.model.Type` from `hydra-pg`) **are** hyperlinked into
 the dependency's tree. Scala 3 Scaladoc cannot cross-link separate per-package trees on its own — it
 renders a type from a binary-package dependency as an unresolved link, and `-external-mappings` only
 rewrites already-resolved external symbols. So the Pages build injects the links in a post-processing
@@ -95,7 +95,7 @@ In 0.15, Hydra's Scala code is split across three locations
   - `hydra/UpdateScalaJson.scala` — native Scala DSL → JSON driver
   - The hand-written primitive implementations and DSL runtime live in the overlay
     ([`overlay/scala/hydra-kernel/`](https://github.com/CategoricalData/hydra/tree/main/overlay/scala/hydra-kernel),
-    namespace `hydra.overlay.scala.*`, #434/#501) and are copied into `dist/scala/` at assemble time
+    namespace `hydra.core.overlay.scala.*`, #434/#501) and are copied into `dist/scala/` at assemble time
 
 - **Generated Scala kernel** ([`dist/scala/hydra-kernel/src/main/scala/`](https://github.com/CategoricalData/hydra/tree/main/dist/scala/hydra-kernel/src/main/scala))
   - `hydra/core.scala`, `hydra/graph.scala`, `hydra/packaging.scala`, ... — generated kernel modules

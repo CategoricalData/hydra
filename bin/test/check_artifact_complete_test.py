@@ -37,8 +37,8 @@ HYDRA_BUILD_MAIN_MODULES = [
     "hydra.build.modules",
     "hydra.build.reconcile",
     "hydra.build.routing",
-    "hydra.decode.build.format",
-    "hydra.encode.build.format",
+    "hydra.build.decode.format",
+    "hydra.build.encode.format",
 ]
 
 
@@ -128,7 +128,7 @@ def case_java_cat_not_concat(tmp: Path) -> None:
     write_manifest(
         manifest,
         "hydra-kernel",
-        ["hydra.overlay.java.lib.strings", "hydra.dsl.lib", "hydra.lib.optionals"],
+        ["hydra.core.overlay.java.lib.strings", "hydra.core.dsl.lib", "hydra.core.lib.optionals"],
     )
     # The stale 0.17.2 jar: pre-#417 class names present, #417-renamed ones absent.
     artifact = tmp / "hydra-kernel-0.17.2.jar"
@@ -146,9 +146,9 @@ def case_java_cat_not_concat(tmp: Path) -> None:
     required.write_text(
         json.dumps(
             {
-                "hydra.overlay.java.lib.strings": ["Concat", "Join"],
-                "hydra.dsl.lib": ["Ordering"],
-                "hydra.lib.optionals": ["WithDefault"],
+                "hydra.core.overlay.java.lib.strings": ["Concat", "Join"],
+                "hydra.core.dsl.lib": ["Ordering"],
+                "hydra.core.lib.optionals": ["WithDefault"],
             }
         ),
         encoding="utf-8",
@@ -186,7 +186,7 @@ def make_npm_tgz(path: Path, module_relpaths: list[str]) -> None:
 
 
 def _camel_to_lower_snake(seg: str) -> str:
-    # Mirror the Python coder (hydra.formatting CAMEL -> LOWER_SNAKE): decapitalize,
+    # Mirror the Python coder (hydra.core.formatting CAMEL -> LOWER_SNAKE): decapitalize,
     # start a new word at each uppercase char, lowercase, join with '_'. So the real
     # wheel names 'manifestWriter' as manifest_writer.py, NOT manifestwriter.py.
     if not seg:
@@ -252,7 +252,7 @@ def case_npm_lib_overlay(tmp: Path) -> None:
     # hydra/overlay/typescript/lib/<leaf>.js, NOT hydra/lib/<leaf>.js. The gate
     # must accept the overlay location, or every kernel npm tarball false-fails.
     manifest = tmp / "npm-lib-manifest.json"
-    main_modules = ["hydra.lib.strings", "hydra.lib.math", "hydra.lib.defaults"]
+    main_modules = ["hydra.core.lib.strings", "hydra.core.lib.math", "hydra.core.lib.defaults"]
     write_manifest(manifest, "hydra-kernel", main_modules)
     artifact = tmp / "hydra-kernel-0.17.3.tgz"
     # strings + math only at the overlay path; defaults at the direct hydra/lib/ path.

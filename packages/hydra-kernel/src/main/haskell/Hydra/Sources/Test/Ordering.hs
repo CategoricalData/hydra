@@ -5,13 +5,13 @@ module Hydra.Sources.Test.Ordering where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -19,21 +19,21 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 import qualified Data.Scientific              as Sci
 
-import Hydra.Testing
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Literals as Literals
+import Hydra.Core.Testing
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
 import qualified Hydra.Sources.Kernel.Terms.Print.Util as PrintUtil
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.ordering"
+ns = ModuleName "hydra.core.test.ordering"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ModuleName "hydra.print.core", PrintUtil.ns, ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.core.reduction", ModuleName "hydra.core.print.model", PrintUtil.ns, ModuleName "hydra.core.test.testTypes"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Test cases for Ord instance comparisons on complex Hydra types")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -127,7 +127,7 @@ literalComparisonTests = subgroup "Literal comparison" [
 --
 -- NOTE: scale-tiebreak cases (e.g. 1.1 vs 1.10) are deliberately NOT tested here.
 -- compareTest/equalTest compile down to a direct native call on Term's derived,
--- scale-blind Ord/Eq instance (via Hydra.Dsl.Lib.Ordering/Equality), not through
+-- scale-blind Ord/Eq instance (via Hydra.Core.Dsl.Lib.Ordering/Equality), not through
 -- primitive dispatch -- so they can't exercise termCompare/termEqual's scale
 -- awareness. The scale-tiebreak cases are covered instead by
 -- Sources/Test/Lib/Ordering.hs's orderingCompareDecimals and
@@ -175,12 +175,12 @@ nameComparisonTests = subgroup "Name comparison" [
     "greaterThan",
   -- Qualified names
   compareTest "qualified name less than"
-    (nameTerm "hydra.core.Term")
-    (nameTerm "hydra.core.Type")
+    (nameTerm "hydra.core.model.Term")
+    (nameTerm "hydra.core.model.Type")
     "lessThan",
   compareTest "qualified name equal"
-    (nameTerm "hydra.core.Term")
-    (nameTerm "hydra.core.Term")
+    (nameTerm "hydra.core.model.Term")
+    (nameTerm "hydra.core.model.Term")
     "equalTo",
   -- Boolean equality
   equalTest "name equality true" 
@@ -399,7 +399,7 @@ unionComparisonTests = subgroup "Union comparison" [
   -- Different variants: Term.inject compares by variant NAME (lexicographic). This is the
   -- ACCEPTED, conformant behavior (Josh's ruling, #718/#327) -- NOT a mere term-only limitation:
   -- Injection carries only the variant name (no ordinal), and compare/Ord never receive the
-  -- union Type, so name order is the correct, schema-free semantics for hydra.core.Term
+  -- union Type, so name order is the correct, schema-free semantics for hydra.core.model.Term
   -- injections (spec: ordering-and-equality.md, "Injections and variant order"). The Number
   -- union declares its variants ["int", "float"] -- declared order is int < float, the OPPOSITE
   -- of name order (float < int) -- so these two cases pin name order over declared order in

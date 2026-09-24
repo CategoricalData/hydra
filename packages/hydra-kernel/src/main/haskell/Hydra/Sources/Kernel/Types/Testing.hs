@@ -2,15 +2,15 @@ module Hydra.Sources.Kernel.Types.Testing where
 
 -- Standard type-level kernel imports
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:), (@@), (~>))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.testing"
+ns = ModuleName "hydra.core.testing"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns
@@ -77,7 +77,7 @@ testCaseWithMetadata = define "TestCaseWithMetadata" $
       doc "Zero or more tags for the test case" $
       T.list tag,
     "provisions">:
-      doc ("The fully-qualified names of zero or more provisions (hydra.packaging.Provision) which"
+      doc ("The fully-qualified names of zero or more provisions (hydra.core.packaging.Provision) which"
         ++ " this test case confirms. A provision is authoritative with zero, one, or many"
         ++ " confirming tests.") $
       T.list Core.name]

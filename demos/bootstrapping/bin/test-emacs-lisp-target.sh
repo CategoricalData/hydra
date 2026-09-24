@@ -25,7 +25,7 @@ if [ ! -f "$OUTPUT_DIR/run-tests.el" ]; then
 fi
 
 # Copy hand-written test_env.el into the dist tree. The DSL emits
-# (require 'hydra.test.testEnv) and references
+# (require 'hydra.core.test.testEnv) and references
 # hydra_test_test_env_test_{context,graph} directly; this file provides them.
 TEST_ENV_SRC="$HYDRA_ELISP_DIR/src/test/emacs-lisp/hydra/test/test_env.el"
 TEST_ENV_DST="$OUTPUT_DIR/src/test/emacs-lisp/hydra/test/test_env.el"

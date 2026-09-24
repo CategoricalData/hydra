@@ -7,8 +7,8 @@ Test.Hspec.hspec Hydra.GraphqlCoderSpec.spec
 module Hydra.GraphqlCoderSpec where
 
 import Hydra.Kernel
-import qualified Hydra.Graphql.Coder as GraphqlCoder
-import qualified Hydra.Graphql.Syntax as Syntax
+import qualified Hydra.Ext.Graphql.Coder as GraphqlCoder
+import qualified Hydra.Ext.Graphql.Syntax as Syntax
 
 import Hydra.TestUtils
 

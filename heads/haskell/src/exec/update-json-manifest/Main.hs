@@ -84,7 +84,7 @@ main = do
 
   let routingMap = buildRoutingMap extRoutingInput
   -- testModules folds in hydra-build's test modules (#546): they route to
-  -- hydra-build's manifest via routingMap, which now maps hydra.test.build.*
+  -- hydra-build's manifest via routingMap, which now maps hydra.core.test.build.*
   -- to hydra-build (see Ext.extRoutingInput). hydra-build is the first
   -- non-kernel package to contribute testModules here.
   let allTestModules = testModules ++ hydraBuildTestModules

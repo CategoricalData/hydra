@@ -1,23 +1,23 @@
-package hydra.dsl;
+package hydra.core.dsl;
 
-import hydra.core.Projection;
-import hydra.core.Term;
-import hydra.core.Name;
+import hydra.core.model.Projection;
+import hydra.core.model.Term;
+import hydra.core.model.Name;
 import org.junit.jupiter.api.Test;
 
-import hydra.overlay.java.dsl.Terms;
-import static hydra.overlay.java.dsl.Terms.name;
-import static hydra.overlay.java.dsl.Terms.annot;
-import static hydra.overlay.java.dsl.Terms.apply;
-import static hydra.overlay.java.dsl.Terms.field;
-import static hydra.overlay.java.dsl.Terms.float32;
-import static hydra.overlay.java.dsl.Terms.inject;
-import static hydra.overlay.java.dsl.Terms.lambda;
-import static hydra.overlay.java.dsl.Terms.list;
-import static hydra.overlay.java.dsl.Terms.primitive;
-import static hydra.overlay.java.dsl.Terms.project;
-import static hydra.overlay.java.dsl.Terms.record;
-import static hydra.overlay.java.dsl.Terms.variable;
+import hydra.core.overlay.java.dsl.Terms;
+import static hydra.core.overlay.java.dsl.Terms.name;
+import static hydra.core.overlay.java.dsl.Terms.annot;
+import static hydra.core.overlay.java.dsl.Terms.apply;
+import static hydra.core.overlay.java.dsl.Terms.field;
+import static hydra.core.overlay.java.dsl.Terms.float32;
+import static hydra.core.overlay.java.dsl.Terms.inject;
+import static hydra.core.overlay.java.dsl.Terms.lambda;
+import static hydra.core.overlay.java.dsl.Terms.list;
+import static hydra.core.overlay.java.dsl.Terms.primitive;
+import static hydra.core.overlay.java.dsl.Terms.project;
+import static hydra.core.overlay.java.dsl.Terms.record;
+import static hydra.core.overlay.java.dsl.Terms.variable;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -29,25 +29,25 @@ import static org.junit.jupiter.api.Assertions.fail;
 @SuppressWarnings("unchecked")
 public class TermsTest {
     /**
-     * See {@link hydra.dsl.TypesTest} for the record type corresponding to this term.
+     * See {@link hydra.core.dsl.TypesTest} for the record type corresponding to this term.
      */
     private final Term bayAreaLatLon = record("LatLon", // records always have a name
             field("lat", float32(37.7749f)), field("lon", float32(-122.4194f)));
 
     /**
      * An injection term chooses one of the variants of a union type, and supplies an appropriate term.
-     * See {@link hydra.dsl.TypesTest} for the union type corresponding to this term
+     * See {@link hydra.core.dsl.TypesTest} for the union type corresponding to this term
      */
     private final Term bayAreaLocation = inject("Location", field("latlon", bayAreaLatLon));
 
     /**
-     * See {@link hydra.dsl.TypesTest} for a function type corresponding to this term.
+     * See {@link hydra.core.dsl.TypesTest} for a function type corresponding to this term.
      */
-    private final Term stringLength = primitive("hydra.lib.strings.length");
+    private final Term stringLength = primitive("hydra.core.lib.strings.length");
 
     private final Term cat3 =
             lambda("s1", lambda("s2",
-                    lambda("s3", apply(primitive("hydra.lib.strings.concat"), list(variable("s1"), variable("s2"), variable("s3"))))));
+                    lambda("s3", apply(primitive("hydra.core.lib.strings.concat"), list(variable("s1"), variable("s2"), variable("s3"))))));
 
     private final Term longitude = project("LatLon", "lon");
 
@@ -84,9 +84,9 @@ public class TermsTest {
         assertEquals(name("Location"), ((Term.Inject) bayAreaLocation).value.typeName);
         assertEquals(name("latlon"), ((Term.Inject) bayAreaLocation).value.field.name);
 
-        assertTrue(primitive("hydra.lib.strings.length") instanceof Term.Variable);
-        assertEquals(name("hydra.lib.strings.length"),
-                ((Term.Variable) primitive("hydra.lib.strings.length")).value);
+        assertTrue(primitive("hydra.core.lib.strings.length") instanceof Term.Variable);
+        assertEquals(name("hydra.core.lib.strings.length"),
+                ((Term.Variable) primitive("hydra.core.lib.strings.length")).value);
 
         assertTrue(cat3 instanceof Term.Lambda);
         assertEquals(new Name("s1"),
@@ -115,7 +115,7 @@ public class TermsTest {
             public String visit(Term.Annotated instance) {
                 // #386: annotation is now a Term (TermMap), not a Map<Name, Term>.
                 Term desc = hydra.Annotations.getAnnotationMap(instance.value.annotation).get(new Name("description"));
-                return ((hydra.overlay.java.util.Either.Right<?, String>) hydra.extract.Core.string(null, desc)).value;
+                return ((hydra.core.overlay.java.util.Either.Right<?, String>) hydra.core.extract.Core.string(null, desc)).value;
             }
 
             @Override

@@ -4,33 +4,33 @@ module Hydra.Sources.Test.Validate.Core where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Dsl.Lib.Lists     as Lists
-import qualified Hydra.Dsl.Lib.Sets      as Sets
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
-import qualified Hydra.Dsl.Validation         as Validation
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Dsl.Lib.Lists     as Lists
+import qualified Hydra.Core.Dsl.Lib.Sets      as Sets
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
+import qualified Hydra.Core.Dsl.Validation         as Validation
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import Hydra.Testing
+import Hydra.Core.Testing
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.validate.core"
+ns = ModuleName "hydra.core.test.validate.model"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.validate.core", ModuleName "hydra.print.error.core", ModuleName "hydra.test.testGraph"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.core.validate.model", ModuleName "hydra.core.print.error.model", ModuleName "hydra.core.test.testGraph"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for core term and type validation"))}
   where
     definitions = [
@@ -303,7 +303,7 @@ duplicateFieldsTests = define "duplicateFieldsTests" $
 -- | The fully qualified rule name for InvalidTermError.emptyLetBindings.
 -- Matches the format produced by 'qualifiedRule' in Validate/Core.hs.
 emptyLetBindingsRule :: Name
-emptyLetBindingsRule = Name "hydra.error.core.InvalidTermError.emptyLetBindings"
+emptyLetBindingsRule = Name "hydra.core.error.model.InvalidTermError.emptyLetBindings"
 
 emptyLetBindingsTests :: TypedTermDefinition TestGroup
 emptyLetBindingsTests = define "emptyLetBindingsTests" $
@@ -360,11 +360,11 @@ emptyCaseStatementTests = define "emptyCaseStatementTests" $
 -- ============================================================================
 
 -- | The name of the resolvable union type used to test case completeness:
--- the kernel's own hydra.core.IntegerType, with variants bigint, int8,
+-- the kernel's own hydra.core.model.IntegerType, with variants bigint, int8,
 -- int16, int32, int64, uint8, uint16, uint32, uint64 -- all unit-payload, so
 -- every case-alternative handler has the same simple Unit -> result shape.
 caseCompletenessUnionName :: String
-caseCompletenessUnionName = "hydra.core.IntegerType"
+caseCompletenessUnionName = "hydra.core.model.IntegerType"
 
 -- | A constant-function case alternative handler: ignores the matched
 -- variant's (unit) payload and always returns the same int32 value. Handlers
@@ -379,9 +379,9 @@ constAlt n = lambda "_" (int32 n)
 -- the per-package test-module JSON generation pass (a separate static
 -- Checking pass in Hydra.Sources.Kernel.Terms.Checking, distinct from
 -- checkTerm's own logic) fails with "incorrect unification:
--- {hydra.core.Term↦(unit → tNNNNN)}" on ANY case-statement term here,
+-- {hydra.core.model.Term↦(unit → tNNNNN)}" on ANY case-statement term here,
 -- confirmed even with a single minimal case (one alternative, one kernel
--- union type, hydra.core.IntegerType -- chosen specifically to avoid the
+-- union type, hydra.core.model.IntegerType -- chosen specifically to avoid the
 -- Literal/LiteralType field-name collision and the test-fixture-vs-kernel-
 -- schema resolution gap tried first). This is a test-embedding
 -- infrastructure limitation, not a defect in checkTerm's completeness
@@ -577,18 +577,18 @@ unknownPrimitiveTests = define "unknownPrimitiveTests" $
     -- A qualified reference to an ordinary (non-primitive) kernel term
     -- definition resolves via graphBoundTerms, not graphPrimitives -- must
     -- not be misclassified as an unknown primitive. Uses
-    -- hydra.constants.keyDescription rather than another hydra.constants.*
+    -- hydra.core.constants.keyDescription rather than another hydra.core.constants.*
     -- binding because every host's hand-written test harness populates its
     -- graphBoundTerms equivalent from a narrow, independently-curated
     -- subset of kernel bindings (Haskell's TestEnv.hs is the only harness
     -- that imports whole kernel term modules); keyDescription is the one
-    -- hydra.constants.* name every host (Java/Scala/Scheme/Clojure/
+    -- hydra.core.constants.* name every host (Java/Scala/Scheme/Clojure/
     -- Common Lisp/Emacs Lisp) already includes, since their own test
     -- fixtures reference it for annotation handling. See #722 P0 (main
     -- red on 6 hosts): regexCamelCase is real but was never ported to any
     -- non-Haskell harness, so it isn't a safe cross-host test fixture.
     untypedCase "qualified reference to a bound (non-primitive) kernel term is valid"
-      (toTermTerm $ var "hydra.constants.keyDescription")
+      (toTermTerm $ var "hydra.core.constants.keyDescription")
       noError,
     -- A qualified (primitive-shaped) name that resolves to neither a known
     -- primitive nor a bound term is the actual unknownPrimitiveName case.
@@ -600,7 +600,7 @@ unknownPrimitiveTests = define "unknownPrimitiveTests" $
       (unknownPrimErr "hydra.lib.nonexistent.foo")]
 
 -- ============================================================================
--- UntypedTermVariableError (hydra.error.core, term layer)
+-- UntypedTermVariableError (hydra.core.error.model, term layer)
 -- ============================================================================
 
 untypedTermVariableTests :: TypedTermDefinition TestGroup

@@ -304,7 +304,7 @@ Each bootstrapping path copies a minimal set of static resources from the
 Hydra source tree:
 
 - **Primitive library implementations**: Hand-written native functions that
-  cannot be bootstrapped (e.g., `Hydra.Lib.Lists`, `Hydra.Lib.Maps`)
+  cannot be bootstrapped (e.g., `Hydra.Core.Lib.Lists`, `Hydra.Core.Lib.Maps`)
 - **Build configuration**: Language-specific build files (stack.yaml,
   build.gradle, pyproject.toml)
 - **Test infrastructure**: Test runners and base classes

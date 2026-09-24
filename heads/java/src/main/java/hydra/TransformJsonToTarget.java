@@ -1,10 +1,10 @@
 package hydra;
 
-import hydra.overlay.java.build.Generation;
-import hydra.packaging.Definition;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleName;
-import hydra.packaging.TermDefinition;
+import hydra.build.overlay.java.Generation;
+import hydra.core.packaging.Definition;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleName;
+import hydra.core.packaging.TermDefinition;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +28,7 @@ import java.util.function.Function;
  * <p>Unlike {@link Bootstrap} (which always generates for the WHOLE loaded universe, kernel
  * + optionally every coder package, for the cross-host bootstrap demo), this driver narrows
  * {@code modsToGenerate} to exactly one package's declared modules — the same scoping
- * {@code hydra.overlay.java.build.Generation}'s {@code groupByPackage} uses elsewhere. The full
+ * {@code hydra.build.overlay.java.Generation}'s {@code groupByPackage} uses elsewhere. The full
  * per-package JSON universe is still loaded so cross-package type references resolve; only the
  * target package's own modules are written to {@code --output}.
  *
@@ -118,7 +118,7 @@ public class TransformJsonToTarget {
             System.exit(1);
         }
 
-        Map<hydra.core.Name, hydra.core.Type> schemaMap = Generation.bootstrapSchemaMap();
+        Map<hydra.core.model.Name, hydra.core.model.Type> schemaMap = Generation.bootstrapSchemaMap();
 
         // Baseline: hydra-kernel + hydra-haskell, exactly as Bootstrap loads it, so cross-package
         // kernel type references always resolve regardless of which package is requested.
@@ -143,7 +143,7 @@ public class TransformJsonToTarget {
         }
 
         // Extra package dependencies for ext packages, mirroring bootstrap-from-json/Main.hs's
-        // packageDeps: hydra-pg's own DSL (hydra.dsl.pg.model) references hydra.rdf.utils, and
+        // packageDeps: hydra-pg's own DSL (hydra.pg.dsl.model) references hydra.rdf.utils, and
         // hydra-ext similarly depends on hydra-rdf, so both need hydra-rdf's main modules in the
         // universe — otherwise generation fails with "untyped term variable:
         // hydra.rdf.utils.resourceToNode" (#459: hit generating hydra-pg/main --include-dsls
@@ -168,11 +168,11 @@ public class TransformJsonToTarget {
         List<Module> modsToGenerate;
         if (includeTests) {
             // #546/#547 (mirrored from bootstrap-from-json/Main.hs): hydra-kernel's always-emitted
-            // hydra.test.testSuite references hydra.test.build.* test modules (which in turn
+            // hydra.core.test.testSuite references hydra.core.test.build.* test modules (which in turn
             // reference hydra.build.* main modules), so whenever ANY package's tests are generated,
             // both hydra-build's main AND test modules must be in the universe for those refs to
             // type — otherwise generation fails with "Unknown variable:
-            // hydra.test.build.modules.allTests" (#459: hit generating hydra-kernel/test standalone,
+            // hydra.build.test.modules.allTests" (#459: hit generating hydra-kernel/test standalone,
             // since hydra-build was never in CODER_PACKAGES/needsCoders for a plain --package
             // hydra-kernel request).
             if (!"hydra-build".equals(pkg)) {
@@ -202,7 +202,7 @@ public class TransformJsonToTarget {
             modsToGenerate = testNs.isEmpty() ? new ArrayList<>()
                     : Generation.loadModulesFromJson(testJsonDir, schemaMap, testNs);
             universeMods.addAll(modsToGenerate);
-            // Filter skip-emit test namespaces (e.g. hydra.test.testEnv) from what gets WRITTEN:
+            // Filter skip-emit test namespaces (e.g. hydra.core.test.testEnv) from what gets WRITTEN:
             // these are type-only stubs in the DSL whose hand-written per-language counterparts
             // are the source of truth. Emitting them collides with (or overwrites) hand-written
             // code that registers primitives for the test graph. The universe above still needs
@@ -210,7 +210,7 @@ public class TransformJsonToTarget {
             // universe add. Mirrors testSkipEmitModuleNames in Hydra.Sources.Test.All and
             // Bootstrap.java's equivalent filter.
             Set<String> testSkipEmit = new HashSet<>();
-            testSkipEmit.add("hydra.test.testEnv");
+            testSkipEmit.add("hydra.core.test.testEnv");
             List<Module> testModsFiltered = new ArrayList<>();
             for (Module m : modsToGenerate) {
                 if (!testSkipEmit.contains(m.name.value)) {
@@ -242,7 +242,7 @@ public class TransformJsonToTarget {
         } else if (includeDsls) {
             // mainDslModules lists the SOURCE type-module names (e.g. hydra.jvm.serde), not the
             // derived DSL wrapper module names — the wrapper's own JSON lives at the name
-            // hydra.Dsls.dslModuleName(ns) produces (e.g. hydra.dsl.jvm.serde), already generated
+            // hydra.Dsls.dslModuleName(ns) produces (e.g. hydra.jvm.dsl.serde), already generated
             // and stored as its own file. Mirrors bootstrap-from-json/Main.hs's loadPackageDsl:
             // derive names via dslModuleName, then filter to those that actually exist on disk
             // before loading (a source module may have no DSL-eligible bindings).
@@ -420,9 +420,9 @@ public class TransformJsonToTarget {
 
     // #735: which cases to drop, and which targets to drop them for, are both kernel data
     // instead of hand-copied lists (the #719 root cause: this filter and Main.hs's copy
-    // drifted out of sync). A case is scale-distinct iff it carries the hydra.testing.Tag
+    // drifted out of sync). A case is scale-distinct iff it carries the hydra.core.testing.Tag
     // "scaleDistinct" (see tag_scaleDistinct in
-    // Hydra.Overlay.Haskell.Dsl.Typed.Testing); a target drops such cases iff its
+    // Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing); a target drops such cases iff its
     // Language's literalVariants omits literalVariantDecimal (i.e. Literal.decimal has no
     // real scale field there, so scale-distinctness can't be observed). This auto-empties
     // as each host's Language gains decimal in literalVariants -- no driver edit needed.
@@ -435,7 +435,7 @@ public class TransformJsonToTarget {
     // target-driver against the PUBLISHED hydra-lisp jar, and a compile-time reference to a
     // factory method added alongside a not-yet-published kernel/coder change would break
     // that build. See GenerationTargets.lispDialectLanguage's comment for the full rationale.
-    private static hydra.coders.Language languageForTarget(String target) {
+    private static hydra.core.coders.Language languageForTarget(String target) {
         switch (target) {
             case "haskell":    return hydra.haskell.Language.haskellLanguage();
             case "java":       return hydra.java.Language.javaLanguage();
@@ -452,29 +452,29 @@ public class TransformJsonToTarget {
     }
 
     private static boolean dropsScaleDistinctTests(String target) {
-        hydra.coders.Language language = languageForTarget(target);
+        hydra.core.coders.Language language = languageForTarget(target);
         for (Object variant : language.constraints.literalVariants) {
-            if (variant instanceof hydra.variants.LiteralVariant.Decimal) {
+            if (variant instanceof hydra.core.variants.LiteralVariant.Decimal) {
                 return false;
             }
         }
         return true;
     }
 
-    private static boolean isScaleDistinctCase(hydra.core.Term t) {
-        if (!(t instanceof hydra.core.Term.Record)) return false;
-        hydra.core.Record r = ((hydra.core.Term.Record) t).value;
-        if (!r.typeName.value.equals("hydra.testing.TestCaseWithMetadata")) return false;
-        for (hydra.core.Field f : r.fields) {
-            if (f.name.value.equals("tags") && f.term instanceof hydra.core.Term.List) {
-                for (hydra.core.Term tagTerm : ((hydra.core.Term.List) f.term).value) {
-                    if (!(tagTerm instanceof hydra.core.Term.Wrap)) continue;
-                    hydra.core.WrappedTerm wrapped = ((hydra.core.Term.Wrap) tagTerm).value;
-                    if (!wrapped.typeName.value.equals("hydra.testing.Tag")) continue;
-                    if (!(wrapped.body instanceof hydra.core.Term.Literal)) continue;
-                    hydra.core.Literal lit = ((hydra.core.Term.Literal) wrapped.body).value;
-                    if (lit instanceof hydra.core.Literal.String_
-                            && SCALE_DISTINCT_TAG.equals(((hydra.core.Literal.String_) lit).value)) {
+    private static boolean isScaleDistinctCase(hydra.core.model.Term t) {
+        if (!(t instanceof hydra.core.model.Term.Record)) return false;
+        hydra.core.model.Record r = ((hydra.core.model.Term.Record) t).value;
+        if (!r.typeName.value.equals("hydra.core.testing.TestCaseWithMetadata")) return false;
+        for (hydra.core.model.Field f : r.fields) {
+            if (f.name.value.equals("tags") && f.term instanceof hydra.core.model.Term.List) {
+                for (hydra.core.model.Term tagTerm : ((hydra.core.model.Term.List) f.term).value) {
+                    if (!(tagTerm instanceof hydra.core.model.Term.Wrap)) continue;
+                    hydra.core.model.WrappedTerm wrapped = ((hydra.core.model.Term.Wrap) tagTerm).value;
+                    if (!wrapped.typeName.value.equals("hydra.core.testing.Tag")) continue;
+                    if (!(wrapped.body instanceof hydra.core.model.Term.Literal)) continue;
+                    hydra.core.model.Literal lit = ((hydra.core.model.Term.Literal) wrapped.body).value;
+                    if (lit instanceof hydra.core.model.Literal.String_
+                            && SCALE_DISTINCT_TAG.equals(((hydra.core.model.Literal.String_) lit).value)) {
                         return true;
                     }
                 }
@@ -488,17 +488,17 @@ public class TransformJsonToTarget {
     // callback receives `recurse`, the function that descends into and rebuilds every subterm one
     // level down (via fsub); calling recurse.apply(t) first (bottom-up) then inspecting the result
     // is the exact contract, matching the Haskell `recurse t` application.
-    private static hydra.core.Term stripScaleDistinctCases(hydra.core.Term term0) {
+    private static hydra.core.model.Term stripScaleDistinctCases(hydra.core.model.Term term0) {
         return hydra.Rewriting.rewriteTerm(
                 recurse -> t -> {
-                    hydra.core.Term recursedT = recurse.apply(t);
-                    if (recursedT instanceof hydra.core.Term.List) {
-                        List<hydra.core.Term> els = ((hydra.core.Term.List) recursedT).value;
-                        List<hydra.core.Term> filtered = new ArrayList<>();
-                        for (hydra.core.Term e : els) {
+                    hydra.core.model.Term recursedT = recurse.apply(t);
+                    if (recursedT instanceof hydra.core.model.Term.List) {
+                        List<hydra.core.model.Term> els = ((hydra.core.model.Term.List) recursedT).value;
+                        List<hydra.core.model.Term> filtered = new ArrayList<>();
+                        for (hydra.core.model.Term e : els) {
                             if (!isScaleDistinctCase(e)) filtered.add(e);
                         }
-                        return new hydra.core.Term.List(filtered);
+                        return new hydra.core.model.Term.List(filtered);
                     }
                     return recursedT;
                 },

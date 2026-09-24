@@ -2,17 +2,17 @@ package hydra;
 
 // Driver-level fail-loud tests for Generation's routing wrapper (#560).
 //
-// hydra.test.build.routing (packages/hydra-build) already exercises the
+// hydra.build.test.routing (packages/hydra-build) already exercises the
 // GENERATED module (hydra.build.Routing) directly for unrouted-namespace
 // failures. This test closes the remaining gap: proving Generation.java's
 // own Either-to-RuntimeException conversion (namespaceToPackage,
 // groupByPackage) actually propagates that fail-loud behavior rather than
 // swallowing it.
 
-import hydra.overlay.java.build.Generation;
-import hydra.overlay.java.util.Optional;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleName;
+import hydra.build.overlay.java.Generation;
+import hydra.core.overlay.java.util.Optional;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 

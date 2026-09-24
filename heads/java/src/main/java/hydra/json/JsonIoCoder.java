@@ -1,9 +1,9 @@
 package hydra.json;
 
 import com.cedarsoftware.util.io.JsonObject;
-import hydra.coders.Coder;
-import hydra.json.model.Value;
-import hydra.overlay.java.util.Either;
+import hydra.core.coders.Coder;
+import hydra.core.json.model.Value;
+import hydra.core.overlay.java.util.Either;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -12,8 +12,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import hydra.overlay.java.util.ConsList;
-import hydra.overlay.java.util.Pair;
+import hydra.core.overlay.java.util.ConsList;
+import hydra.core.overlay.java.util.Pair;
 
 /**
  * A bidirectional coder between Hydra's native JSON values and the JSON objects supported by json-io.

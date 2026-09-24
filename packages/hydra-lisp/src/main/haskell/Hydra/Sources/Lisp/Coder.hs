@@ -11,28 +11,28 @@ module Hydra.Sources.Lisp.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Libraries
-import qualified Hydra.Dsl.Lib.Strings                as Strings
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Lib.Eithers                as Eithers
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Dsl.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Lib.Math                   as Math
-import qualified Hydra.Dsl.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Coders                          as Coders
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core                       as Core
-import qualified Hydra.Dsl.Errors                           as Error
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph                      as Graph
-import qualified Hydra.Dsl.Packaging                          as Packaging
-import qualified Hydra.Dsl.Typing                          as Typing
-import qualified Hydra.Dsl.Util                            as Util
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Libraries
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Dsl.Lib.Eithers                as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Core.Dsl.Lib.Math                   as Math
+import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
+import qualified Hydra.Core.Dsl.Coders                          as Coders
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
+import qualified Hydra.Core.Dsl.Errors                           as Error
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph                      as Graph
+import qualified Hydra.Core.Dsl.Packaging                          as Packaging
+import qualified Hydra.Core.Dsl.Typing                          as Typing
+import qualified Hydra.Core.Dsl.Util                            as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
@@ -64,7 +64,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([moduleName LispLanguageSource.module_, Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns, ModuleName "hydra.print.core"] L.++ (LispSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = unqualifiedDep <$> ([moduleName LispLanguageSource.module_, Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns, ModuleName "hydra.core.print.model"] L.++ (LispSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleMetadata = descriptionMetadata (Just "Lisp code generator: converts Hydra type and term modules to Lisp AST")}
   where
     definitions = [
@@ -157,11 +157,11 @@ dialectSupportsLetrec = def "dialectSupportsLetrec" $
     L._Dialect_clojure>>: constant $ boolean False]
 
 -- | Encode a function application, detecting ifElse and other lazy primitives.
--- Transforms (((hydra.lib.logic.ifElse C) T) E) into native (if C T E).
+-- Transforms (((hydra.core.lib.logic.ifElse C) T) E) into native (if C T E).
 -- For other lazy primitives, wraps the appropriate argument in a thunk.
 encodeApplication :: TypedTermDefinition (L.Dialect -> S.Set String -> InferenceContext -> Graph -> Term -> Term -> Either Error L.Expression)
 encodeApplication = def "encodeApplication" $
-  doc "Encode a function application, detecting ifElse and other lazy primitives; transforms (((hydra.lib.logic.ifElse C) T) E) into native (if C T E)" $
+  doc "Encode a function application, detecting ifElse and other lazy primitives; transforms (((hydra.core.lib.logic.ifElse C) T) E) into native (if C T E)" $
   "dialect" ~> "overlaySubs" ~> "cx" ~> "g" ~> lambda "rawFun" $ lambda "rawArg" $
     "dFun" <~ (Strip.deannotateTerm @@ var "rawFun") $
     -- Helper: encode a normal (non-special) application. Wrapped in a 0-arg
@@ -198,7 +198,7 @@ encodeApplication = def "encodeApplication" $
             "innerArg" <~ Core.applicationArgument (var "app3") $
             "dInnerFun" <~ (Strip.deannotateTerm @@ var "innerFun") $
             -- 3-deep: ifElse, maybe, or cases
-            Logic.ifElse (isPrimitiveRef @@ string "hydra.lib.logic.ifElse" @@ var "dInnerFun")
+            Logic.ifElse (isPrimitiveRef @@ string "hydra.core.lib.logic.ifElse" @@ var "dInnerFun")
               -- ifElse: (((ifElse C) T) E) -> native (if C T E)
               ("eC" <<~ (var "enc" @@ var "innerArg") $
               "eT" <<~ (var "enc" @@ var "midArg") $
@@ -626,10 +626,11 @@ encodeTerm = def "encodeTerm" $
      _Term_unit>>: constant $
        right (asTerm lispNilExpr),
 
-     -- #630: a hydra.lib.<sub>.<fn> variable reference redirects to
-     -- hydra.overlay.<langSeg>.lib.<sub>.<fn> IF that sub has an overlay implementation on
+     -- #630/#729: a hydra.core.lib.<sub>.<fn> variable reference (five segments, post-#729
+     -- package-rooted grammar) redirects to
+     -- hydra.core.overlay.<langSeg>.lib.<sub>.<fn> IF that sub has an overlay implementation on
      -- this dialect (checked via overlaySubs), before case-conversion to the flat Lisp
-     -- identifier form -- so e.g. hydra.lib.strings.concat2 becomes
+     -- identifier form -- so e.g. hydra.core.lib.strings.concat2 becomes
      -- hydra_overlay_clojure_lib_strings_concat2 for a redirected sub, matching what the
      -- retired driver-level redirectLispFlat post-pass used to produce for the flat-namespace
      -- dialects, and resolving correctly for Clojure/Scheme via their (now redirected)
@@ -637,22 +638,22 @@ encodeTerm = def "encodeTerm" $
      _Term_variable>>: lambda "name" $
        "fullName" <~ Core.unName (var "name") $
        "parts" <~ Strings.splitOn (string ".") (var "fullName") $
-       "sub" <~ Optionals.withDefault (string "") (Lists.at (int32 2) (var "parts")) $
+       "sub" <~ Optionals.withDefault (string "") (Lists.at (int32 3) (var "parts")) $
        "redirectedName" <~ Logic.ifElse
          (Logic.and
            (Logic.and
-             (Equality.equal (Lists.length (var "parts")) (int32 4))
-             (Equality.equal (Lists.take (int32 2) (var "parts")) (list [string "hydra", string "lib"])))
+             (Equality.equal (Lists.length (var "parts")) (int32 5))
+             (Equality.equal (Lists.take (int32 3) (var "parts")) (list [string "hydra", string "core", string "lib"])))
            (Sets.member (var "sub") (var "overlaySubs" :: TypedTerm (S.Set String))))
          (Strings.concat (list [
-           string "hydra.overlay.",
+           string "hydra.core.overlay.",
            (match L._Dialect (var "dialect") (Just $ string "lisp") [
              L._Dialect_clojure>>: constant $ string "clojure",
              L._Dialect_scheme>>: constant $ string "scheme",
              L._Dialect_commonLisp>>: constant $ string "common_lisp",
              L._Dialect_emacsLisp>>: constant $ string "emacs_lisp"]),
            string ".lib.",
-           Strings.join (string ".") (Lists.drop (int32 2) (var "parts"))]))
+           Strings.join (string ".") (Lists.drop (int32 3) (var "parts"))]))
          (var "fullName") $
        right (lispVar @@ (Formatting.convertCaseCamelOrUnderscoreToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ var "redirectedName"))),
 
@@ -1093,7 +1094,8 @@ moduleExports = def "moduleExports" $
 
 -- | Generate import declarations from the dependency namespaces of a module's definitions.
 --
--- #630: a hydra.lib.<sub> import redirects to hydra.overlay.<langSeg>.lib.<sub> IF that sub
+-- #630/#729: a hydra.core.lib.<sub> import (four segments, post-#729 package-rooted grammar)
+-- redirects to hydra.core.overlay.<langSeg>.lib.<sub> IF that sub
 -- actually has an overlay implementation on this dialect (checked via overlaySubs, the
 -- caller-supplied on-disk existence signal), otherwise it stays pointing at the generated
 -- def-module namespace. This existence check happens at emission time, structurally on the
@@ -1113,14 +1115,14 @@ moduleImports = def "moduleImports" $
     "redirectedNsString" <~ ("ns" ~>
       "raw" <~ Packaging.unModuleName (var "ns") $
       "parts" <~ Strings.splitOn (string ".") (var "raw") $
-      "sub" <~ Strings.join (string ".") (Lists.drop (int32 2) (var "parts")) $
+      "sub" <~ Strings.join (string ".") (Lists.drop (int32 3) (var "parts")) $
       Logic.ifElse
         (Logic.and
           (Logic.and
-            (Equality.equal (Lists.length (var "parts")) (int32 3))
-            (Equality.equal (Lists.take (int32 2) (var "parts")) (list [string "hydra", string "lib"])))
+            (Equality.equal (Lists.length (var "parts")) (int32 4))
+            (Equality.equal (Lists.take (int32 3) (var "parts")) (list [string "hydra", string "core", string "lib"])))
           (Sets.member (var "sub") (var "overlaySubs" :: TypedTerm (S.Set String))))
-        (Strings.concat (list [string "hydra.overlay.", var "langSeg", string ".lib.", var "sub"]))
+        (Strings.concat (list [string "hydra.core.overlay.", var "langSeg", string ".lib.", var "sub"]))
         (var "raw")) $
     "depNss" <~ Sets.toList (Sets.delete (var "focusNs")
       (Analysis.definitionDependencyModuleNames @@ var "defs")) $
@@ -1163,8 +1165,8 @@ moduleToLisp = def "moduleToLisp" $
         L._Program_forms>>: var "allItems"])
 
 -- | Convert a fully-qualified Hydra Name to a snake_case identifier string.
--- E.g. Name "hydra.reduction.alphaConvert" -> "hydra_reduction_alpha_convert"
--- E.g. Name "hydra.core.AnnotatedTerm" -> "hydra_core_annotated_term"
+-- E.g. Name "hydra.core.reduction.alphaConvert" -> "hydra_reduction_alpha_convert"
+-- E.g. Name "hydra.core.model.AnnotatedTerm" -> "hydra_core_annotated_term"
 -- Splits on dots, converts each part to snake_case, joins with underscore.
 -- Reserved words get a trailing underscore.
 qualifiedSnakeName :: TypedTermDefinition (Name -> String)
@@ -1178,7 +1180,7 @@ qualifiedSnakeName = def "qualifiedSnakeName" $
     Formatting.sanitizeWithUnderscores @@ LispLanguageSource.lispReservedWords @@ var "joined"
 
 -- | Convert a fully-qualified Hydra Name to a PascalCase type identifier string.
--- E.g. Name "hydra.core.AnnotatedTerm" -> "AnnotatedTerm"
+-- E.g. Name "hydra.core.model.AnnotatedTerm" -> "AnnotatedTerm"
 -- Type names keep PascalCase for the local part, since they are used with define-record-type.
 qualifiedTypeName :: TypedTermDefinition (Name -> String)
 qualifiedTypeName = def "qualifiedTypeName" $

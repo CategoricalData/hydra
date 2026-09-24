@@ -1,6 +1,6 @@
 package hydra
 
-import hydra.core.Type
+import hydra.core.model.Type
 
 import _root_.java.io.File
 
@@ -110,7 +110,7 @@ import _root_.java.io.File
   val kernelNsSet = baselineMods.map(_.name).toSet
 
   // Step 3: Optionally load coder packages.
-  var coderMods: Seq[hydra.packaging.Module] = Seq.empty
+  var coderMods: Seq[hydra.core.packaging.Module] = Seq.empty
   if includeCoders then
     println("Step 3: Loading coder package modules from JSON...")
     stepStart = System.currentTimeMillis()
@@ -186,12 +186,12 @@ import _root_.java.io.File
     val testNamespaces = Generation.readManifestField(kernelMainDir, "testModules")
     var testMods = Generation.loadModulesFromJson(testJsonDir, schemaMap, testNamespaces)
 
-    // #546/#547: the kernel test suite references hydra.test.build.* -> hydra.build.*
+    // #546/#547: the kernel test suite references hydra.core.test.build.* -> hydra.build.*
     // (Option A). When emitting tests, hydra-build's main modules must be in the
     // universe so those refs type-check, and hydra-build's OWN test modules
-    // (hydra.test.build.*, which live in the hydra-build package's test tree, not
+    // (hydra.core.test.build.*, which live in the hydra-build package's test tree, not
     // hydra-kernel's) must be loaded too — otherwise cross-host generation fails with
-    // "Unknown variable: hydra.test.build.modules.allTests". Mirrors the Haskell
+    // "Unknown variable: hydra.build.test.modules.allTests". Mirrors the Haskell
     // bootstrap-from-json / Java Bootstrap.java fix (#553).
     val buildMainMods = BootstrapHelpers.loadPackageMain(distJsonRoot, "hydra-build", schemaMap)
     val buildMainDir = BootstrapHelpers.packageMainDir(distJsonRoot, "hydra-build")
@@ -209,13 +209,13 @@ import _root_.java.io.File
 
     val allUniverse = allMainMods ++ buildMainMods ++ testMods
 
-    // Filter skip-emit test namespaces (e.g. hydra.test.testEnv): these are
+    // Filter skip-emit test namespaces (e.g. hydra.core.test.testEnv): these are
     // type-only stubs in the DSL whose hand-written per-language counterparts
     // are the source of truth. Emitting them would overwrite hand-written code
     // that registers primitives for the test graph. Mirrors
     // testSkipEmitModuleNames in Hydra.Sources.Test.All and the equivalent
     // filter in heads/python/.../bootstrap.py.
-    val testSkipEmit = Set("hydra.test.testEnv")
+    val testSkipEmit = Set("hydra.core.test.testEnv")
     val testModsToEmit = testMods.filter(m => !testSkipEmit.contains(m.name))
 
     val outTest = outDir + File.separator + "src/test"
@@ -280,7 +280,7 @@ object BootstrapHelpers:
    *  checking which overlay/<target>/hydra-kernel/.../hydra/overlay/<seg>/lib/ files actually
    *  exist, rather than maintaining a hand-written allowlist. Existence on disk IS the signal for
    *  "this host ships a native impl for this sub" — correct by construction for any future
-   *  hydra.lib.<sub> module whether or not it has a relocated overlay impl (hydra.lib.defaults has
+   *  hydra.lib.<sub> module whether or not it has a relocated overlay impl (hydra.core.lib.defaults has
    *  none and is therefore never redirected, replacing the old by-name exclusion). Falls back to
    *  libSubsFallback if the overlay source tree isn't reachable from repoRoot. */
   def libSubsForTarget(repoRoot: String, target: String): Seq[String] =
@@ -295,7 +295,7 @@ object BootstrapHelpers:
       }.filterNot(name => name.equalsIgnoreCase("Libraries") || name == "__init__" || name == "PrimitiveType")
       if subs.isEmpty then libSubsFallback else subs
 
-  private def isLibModule(m: hydra.packaging.Module): Boolean =
+  private def isLibModule(m: hydra.core.packaging.Module): Boolean =
     m.name.startsWith("hydra.lib.")
 
   /** #473 lib pass: emit the hydra.lib.* PrimitiveDefinition def-modules from their LOWERED form.
@@ -303,11 +303,11 @@ object BootstrapHelpers:
    *  modsToGenerate and lowered; the universe lowers ONLY the lib modules so a lib
    *  default-implementation referencing another primitive resolves to the primitive, not a lowered
    *  binding. */
-  def runLibPass(target: String, langDir: String, allMainMods: Seq[hydra.packaging.Module],
-      modsToGenerate: Seq[hydra.packaging.Module]): Unit =
-    val libMods = modsToGenerate.filter(isLibModule).map(hydra.codegen.lowerPrimitiveDefinitions)
+  def runLibPass(target: String, langDir: String, allMainMods: Seq[hydra.core.packaging.Module],
+      modsToGenerate: Seq[hydra.core.packaging.Module]): Unit =
+    val libMods = modsToGenerate.filter(isLibModule).map(hydra.core.codegen.lowerPrimitiveDefinitions)
     if libMods.isEmpty then return
-    val libUniverse = allMainMods.map(m => if isLibModule(m) then hydra.codegen.lowerPrimitiveDefinitions(m) else m)
+    val libUniverse = allMainMods.map(m => if isLibModule(m) then hydra.core.codegen.lowerPrimitiveDefinitions(m) else m)
     println(s"Lib pass: emitting ${libMods.size} hydra.lib.* definition modules to $target...")
     target match
       case "java" => Generation.writeJava(langDir, libUniverse, libMods)
@@ -342,9 +342,9 @@ object BootstrapHelpers:
       case "python" =>
         // Python consumes the hydra.lib.* def-modules like scala/clojure: its generated
         // consumers reference hydra.lib.<sub>.<fn> (the PrimitiveDefinition data, not callable).
-        // Redirect them to the relocated impls at hydra.overlay.python.lib.<sub>. Without this the
+        // Redirect them to the relocated impls at hydra.core.overlay.python.lib.<sub>. Without this the
         // cell fails at runtime with "'PrimitiveDefinition' object is not callable" (e.g. scoping.py
-        // calling hydra.lib.lists.cons). Mirrors the scala/clojure cases; the python-native host
+        // calling hydra.core.lib.lists.cons). Mirrors the scala/clojure cases; the python-native host
         // driver already emits the redirected form.
         for f <- files if !isLibDefFile(f) && !isOverlayFile(f) do
           val s = readFile(f)
@@ -384,9 +384,9 @@ object BootstrapHelpers:
             if out != s then writeFile(f, out)
       case _ => () // java + typescript + haskell: no redirect
 
-  /** #444/#456 testEnv redirect: the hand-written test environment hydra.test.testEnv is
+  /** #444/#456 testEnv redirect: the hand-written test environment hydra.core.test.testEnv is
    *  skip-emitted from generated output. For CLOJURE, the hand-written counterpart lives in
-   *  overlay/clojure/ under the renamed namespace hydra.overlay.clojure.test.testEnv (#501), so the
+   *  overlay/clojure/ under the renamed namespace hydra.core.overlay.clojure.test.testEnv (#501), so the
    *  generated test modules — which still reference the canonical name — must be rewritten to the
    *  overlay namespace, mirroring redirectClojureTestEnv in
    *  heads/haskell/.../bootstrap-from-json/Main.hs. Scheme / Common Lisp / Emacs Lisp keep their
@@ -402,8 +402,8 @@ object BootstrapHelpers:
       case "clojure" =>
         for f <- files do
           val s = readFile(f)
-          if s.contains("hydra.test.testEnv") then
-            val out = s.replace("hydra.test.testEnv", "hydra.overlay.clojure.test.testEnv")
+          if s.contains("hydra.core.test.testEnv") then
+            val out = s.replace("hydra.core.test.testEnv", "hydra.core.overlay.clojure.test.testEnv")
             if out != s then writeFile(f, out)
       case _ => ()
 
@@ -423,7 +423,7 @@ object BootstrapHelpers:
 
   /** Files under `hydra/lib/` must NOT be redirected: the lib pass emits the def-modules there and they
    *  must keep their canonical `package hydra.lib.*` (redirecting the package decl would relocate the
-   *  def-module on top of the hand-written impl at hydra.overlay.scala.lib.* and shadow its generic
+   *  def-module on top of the hand-written impl at hydra.core.overlay.scala.lib.* and shadow its generic
    *  methods with the def-module's `lazy val`s — "does not take type parameters"). The Haskell driver
    *  keeps these canonical by running the lib pass with NO redirect.
    *  Consumers that need redirecting live everywhere EXCEPT hydra/lib/ and the overlay
@@ -472,7 +472,7 @@ object BootstrapHelpers:
 
   /** Load a package's mainModules from its manifest. */
   def loadPackageMain(root: String, pkg: String,
-      schemaMap: Map[String, Type]): Seq[hydra.packaging.Module] =
+      schemaMap: Map[String, Type]): Seq[hydra.core.packaging.Module] =
     val pkgDir = packageMainDir(root, pkg)
     val allNs = readManifestFieldOrEmpty(pkgDir, "mainModules")
     if allNs.isEmpty then Seq.empty

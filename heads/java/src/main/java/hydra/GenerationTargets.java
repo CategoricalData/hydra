@@ -1,13 +1,13 @@
 package hydra;
 
-import hydra.coders.Language;
-import hydra.errors.Error_;
-import hydra.graph.Graph;
-import hydra.overlay.java.build.Generation;
-import hydra.packaging.Definition;
-import hydra.packaging.Module;
-import hydra.overlay.java.util.Either;
-import hydra.overlay.java.util.Pair;
+import hydra.core.coders.Language;
+import hydra.core.errors.Error_;
+import hydra.core.graph.Graph;
+import hydra.build.overlay.java.Generation;
+import hydra.core.packaging.Definition;
+import hydra.core.packaging.Module;
+import hydra.core.overlay.java.util.Either;
+import hydra.core.overlay.java.util.Pair;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,14 +50,14 @@ public class GenerationTargets {
     // Deriving the keep-set from the paths ACTUALLY written (not a re-derivation of
     // moduleNameToPath+ext) means the prune can never disagree with what was emitted.
     public static List<String> generateSources(
-            Function<Module, Function<List<Definition>, Function<hydra.typing.InferenceContext, Function<Graph, Either<Error_, Map<String, String>>>>>> coder,
+            Function<Module, Function<List<Definition>, Function<hydra.core.typing.InferenceContext, Function<Graph, Either<Error_, Map<String, String>>>>>> coder,
             Language language,
             boolean doInfer,
             String basePath,
             List<Module> universe,
             List<Module> modulesToGenerate) {
         Graph bsGraph = Generation.bootstrapGraph();
-        hydra.typing.InferenceContext cx = new hydra.typing.InferenceContext(0, new java.util.ArrayList<>());
+        hydra.core.typing.InferenceContext cx = new hydra.core.typing.InferenceContext(0, new java.util.ArrayList<>());
         Either<Error_, List<Pair<String, String>>> result =
                 Codegen.generateSourceFiles(coder, language,
                         doInfer,
@@ -66,8 +66,8 @@ public class GenerationTargets {
         if (result.isLeft()) {
             Error_ err = ((Either.Left<Error_, List<Pair<String, String>>>) result).value;
             // Mirrors the dual-compile-context note in Generation.decodeModuleFromJson:
-            // this file compiles against BOTH the published host (pre-#497 hydra.show.*)
-            // and a local build (post-#497 hydra.print.*). Neither package name works in
+            // this file compiles against BOTH the published host (pre-#497 hydra.core.show.*)
+            // and a local build (post-#497 hydra.core.print.*). Neither package name works in
             // both, so fall back to Object#toString rather than hard-depending on either
             // printer package here.
             throw new RuntimeException("Code generation failed: " + err);
@@ -175,35 +175,35 @@ public class GenerationTargets {
     public static List<String> writeLispDialect(String repoRoot, String basePath, String dialectName, String fileExt,
                                          List<Module> universe, List<Module> mods) {
         hydra.lisp.syntax.Dialect dialect;
-        hydra.util.CaseConvention caseConv;
+        hydra.core.util.CaseConvention caseConv;
         String libSubsTarget;
         // #727: Clojure (native BigDecimal) and Common Lisp/Scheme/Emacs Lisp (native bignums,
         // usable as a (coefficient . scale) cons pair) each get their own Language value with
         // decimal in literalVariants, so adaptTerm no longer downgrades their decimals to
         // float64.
-        hydra.coders.Language language;
+        hydra.core.coders.Language language;
         switch (dialectName) {
             case "clojure":
                 dialect = new hydra.lisp.syntax.Dialect.Clojure();
-                caseConv = new hydra.util.CaseConvention.Camel();
+                caseConv = new hydra.core.util.CaseConvention.Camel();
                 libSubsTarget = "clojure";
                 language = lispDialectLanguage("clojureLanguage");
                 break;
             case "scheme":
                 dialect = new hydra.lisp.syntax.Dialect.Scheme();
-                caseConv = new hydra.util.CaseConvention.LowerSnake();
+                caseConv = new hydra.core.util.CaseConvention.LowerSnake();
                 libSubsTarget = "scheme";
                 language = lispDialectLanguage("schemeLanguage");
                 break;
             case "commonLisp":
                 dialect = new hydra.lisp.syntax.Dialect.CommonLisp();
-                caseConv = new hydra.util.CaseConvention.LowerSnake();
+                caseConv = new hydra.core.util.CaseConvention.LowerSnake();
                 libSubsTarget = "common-lisp";
                 language = lispDialectLanguage("commonLispLanguage");
                 break;
             case "emacsLisp":
                 dialect = new hydra.lisp.syntax.Dialect.EmacsLisp();
-                caseConv = new hydra.util.CaseConvention.LowerSnake();
+                caseConv = new hydra.core.util.CaseConvention.LowerSnake();
                 libSubsTarget = "emacs-lisp";
                 language = lispDialectLanguage("emacsLispLanguage");
                 break;
@@ -212,23 +212,23 @@ public class GenerationTargets {
         }
 
         final hydra.lisp.syntax.Dialect d = dialect;
-        final hydra.util.CaseConvention cc = caseConv;
+        final hydra.core.util.CaseConvention cc = caseConv;
         final java.util.Set<String> overlaySubs = new java.util.HashSet<>(Bootstrap.libSubsForTarget(repoRoot, libSubsTarget));
         return generateSources(
                 mod -> defs -> cx -> g -> {
-                    hydra.overlay.java.util.Either result = hydra.lisp.Coder.moduleToLisp(d, overlaySubs, mod, defs, cx, g);
-                    if (result instanceof hydra.overlay.java.util.Either.Left) {
+                    hydra.core.overlay.java.util.Either result = hydra.lisp.Coder.moduleToLisp(d, overlaySubs, mod, defs, cx, g);
+                    if (result instanceof hydra.core.overlay.java.util.Either.Left) {
                         return result;
                     }
-                    hydra.lisp.syntax.Program program = (hydra.lisp.syntax.Program) ((hydra.overlay.java.util.Either.Right) result).value;
+                    hydra.lisp.syntax.Program program = (hydra.lisp.syntax.Program) ((hydra.core.overlay.java.util.Either.Right) result).value;
                     String code = hydra.Serialization.printExpr(
                             hydra.Serialization.parenthesize(
                                     hydra.lisp.Serde.programToExpr(program)));
                     String filePath = hydra.Names.moduleNameToFilePath(
-                            cc, new hydra.file.FileExtension(fileExt), mod.name);
+                            cc, new hydra.core.file.FileExtension(fileExt), mod.name);
                     Map<String, String> fileMap = new java.util.TreeMap<>();
                     fileMap.put(filePath, code);
-                    return new hydra.overlay.java.util.Either.Right(fileMap);
+                    return new hydra.core.overlay.java.util.Either.Right(fileMap);
                 },
                 language,
                 false,
@@ -245,9 +245,9 @@ public class GenerationTargets {
     // published jar when run via target-driver), falling back to the always-published
     // lispLanguage() so target-driver keeps compiling either way. Safe because target-driver never
     // calls writeLispDialect at runtime; local builds always have the fresh method.
-    static hydra.coders.Language lispDialectLanguage(String factoryMethodName) {
+    static hydra.core.coders.Language lispDialectLanguage(String factoryMethodName) {
         try {
-            return (hydra.coders.Language) hydra.lisp.Language.class
+            return (hydra.core.coders.Language) hydra.lisp.Language.class
                     .getMethod(factoryMethodName)
                     .invoke(null);
         } catch (NoSuchMethodException e) {

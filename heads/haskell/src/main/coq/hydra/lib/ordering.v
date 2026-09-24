@@ -1,7 +1,7 @@
-(* Hydra primitive library: hydra.lib.ordering *)
+(* Hydra primitive library: hydra.core.lib.ordering *)
 
 Require Import Stdlib.Strings.String Stdlib.Lists.List Stdlib.ZArith.ZArith Stdlib.QArith.QArith.
-Require Import hydra.util.
+Require Import hydra.core.util.
 Require Import hydra.lib.base.
 
 Definition compare {x : Type} (a b : x) : Comparison :=

@@ -1,8 +1,8 @@
-package hydra.util;
+package hydra.core.util;
 
-import hydra.overlay.java.util.Optional;
-import hydra.overlay.java.util.Pair;
-import hydra.overlay.java.util.PersistentMap;
+import hydra.core.overlay.java.util.Optional;
+import hydra.core.overlay.java.util.Pair;
+import hydra.core.overlay.java.util.PersistentMap;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

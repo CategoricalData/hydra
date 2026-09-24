@@ -1,13 +1,13 @@
-package hydra.util;
+package hydra.core.util;
 
-import hydra.coders.Coder;
+import hydra.core.coders.Coder;
 import hydra.HydraTestBase;
-import hydra.overlay.java.util.Either;
-import hydra.overlay.java.util.StatelessCoder;
+import hydra.core.overlay.java.util.Either;
+import hydra.core.overlay.java.util.StatelessCoder;
 import org.junit.jupiter.api.Test;
 
-import static hydra.overlay.java.Coders.composeStateless;
-import static hydra.overlay.java.Coders.inverseStateless;
+import static hydra.core.overlay.java.Coders.composeStateless;
+import static hydra.core.overlay.java.Coders.inverseStateless;
 
 
 /**

@@ -1,15 +1,15 @@
 module Hydra.Sources.Kernel.Types.Error.System where
 
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.File as File
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.error.system"
+ns = ModuleName "hydra.core.error.system"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns
@@ -26,7 +26,7 @@ module_ = Module {
 
 systemError :: TypeDefinition
 systemError = define "SystemError" $
-  doc ("A recoverable failure to launch a process or to perform a hydra.lib.system system call, named"
+  doc ("A recoverable failure to launch a process or to perform a hydra.core.lib.system system call, named"
     ++ " after the POSIX errno values the host reports. A child that launches successfully and then"
     ++ " exits non-zero is not a SystemError; it is a ProcessResult with a non-zero exitCode") $
   T.union [

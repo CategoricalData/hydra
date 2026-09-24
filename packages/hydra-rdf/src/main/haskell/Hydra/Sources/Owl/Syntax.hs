@@ -2,10 +2,10 @@ module Hydra.Sources.Owl.Syntax where
 
 -- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types                 ((>:))
-import qualified Hydra.Overlay.Haskell.Dsl.Types                 as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types                 ((>:))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Data.List                       as L
 import qualified Data.Map                        as M
@@ -13,13 +13,13 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 -- Additional imports
-import qualified Hydra.Overlay.Haskell.Dsl.Terms              as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms              as Terms
 import qualified Hydra.Sources.Rdf.Syntax as RdfSyntax
 import qualified Hydra.Sources.Xml.Schema as XmlSchema
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.owl.syntax"
+ns = ModuleName "hydra.rdf.owl.syntax"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns

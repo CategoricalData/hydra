@@ -1,112 +1,112 @@
 -- | A proxy for the Hydra kernel, i.e. the code which must be present in every Hydra implementation.
 {-
 Note: the following modules are part of the kernel, but they are not default imports because of name collisions:
-- Hydra.Ast
-- Hydra.Decode.Core
-- Hydra.Encode.Core
-- Hydra.Extract.Core
-- Hydra.Extract.Util
-- Hydra.Print.Variants
-- Hydra.Codegen
-- Hydra.Json.Parser
-- Hydra.Json.Writer
-- Hydra.Parsers
-- Hydra.Print.Core
-- Hydra.Topology
+- Hydra.Core.Ast
+- Hydra.Core.Decode.Model
+- Hydra.Core.Encode.Model
+- Hydra.Core.Extract.Model
+- Hydra.Core.Extract.Util
+- Hydra.Core.Print.Variants
+- Hydra.Core.Codegen
+- Hydra.Core.Json.Parser
+- Hydra.Core.Json.Writer
+- Hydra.Core.Parsers
+- Hydra.Core.Print.Model
+- Hydra.Core.Topology
 -}
 
 module Hydra.Kernel (
-  module Hydra.Paths,
-  module Hydra.Adapt,
-  module Hydra.Analysis,
-  module Hydra.Annotations,
-  module Hydra.Arity,
-  module Hydra.Checking,
-  module Hydra.Coders,
-  module Hydra.Constants,
-  module Hydra.Core,
-  module Hydra.Dependencies,
-  module Hydra.Environment,
-  module Hydra.Error.Checking,
-  module Hydra.Error.Core,
-  module Hydra.Errors,
-  module Hydra.Languages,
-  module Hydra.Formatting,
-  module Hydra.Graph,
-  module Hydra.Inference,
-  module Hydra.Lexical,
-  module Hydra.Literals,
-  module Hydra.Packaging,
-  module Hydra.Parsing,
-  module Hydra.Typed,
-  module Hydra.Names,
-  module Hydra.Predicates,
-  module Hydra.Query,
-  module Hydra.Reduction,
-  module Hydra.Reflect,
-  module Hydra.Relational,
-  module Hydra.Resolution,
-  module Hydra.Rewriting,
-  module Hydra.Scoping,
-  module Hydra.Serialization,
-  module Hydra.Strip,
+  module Hydra.Core.Paths,
+  module Hydra.Core.Adapt,
+  module Hydra.Core.Analysis,
+  module Hydra.Core.Annotations,
+  module Hydra.Core.Arity,
+  module Hydra.Core.Checking,
+  module Hydra.Core.Coders,
+  module Hydra.Core.Constants,
+  module Hydra.Core.Model,
+  module Hydra.Core.Dependencies,
+  module Hydra.Core.Environment,
+  module Hydra.Core.Error.Checking,
+  module Hydra.Core.Error.Model,
+  module Hydra.Core.Errors,
+  module Hydra.Core.Languages,
+  module Hydra.Core.Formatting,
+  module Hydra.Core.Graph,
+  module Hydra.Core.Inference,
+  module Hydra.Core.Lexical,
+  module Hydra.Core.Literals,
+  module Hydra.Core.Packaging,
+  module Hydra.Core.Parsing,
+  module Hydra.Core.Typed,
+  module Hydra.Core.Names,
+  module Hydra.Core.Predicates,
+  module Hydra.Core.Query,
+  module Hydra.Core.Reduction,
+  module Hydra.Core.Reflect,
+  module Hydra.Core.Relational,
+  module Hydra.Core.Resolution,
+  module Hydra.Core.Rewriting,
+  module Hydra.Core.Scoping,
+  module Hydra.Core.Serialization,
+  module Hydra.Core.Strip,
   module Hydra.Settings,
-  module Hydra.Sorting,
-  module Hydra.Substitution,
-  module Hydra.Tabular,
-  module Hydra.Templates,
-  module Hydra.Testing,
-  module Hydra.Typing,
-  module Hydra.Unification,
-  module Hydra.Util,
-  module Hydra.Validation,
-  module Hydra.Variables,
-  module Hydra.Variants,
+  module Hydra.Core.Sorting,
+  module Hydra.Core.Substitution,
+  module Hydra.Core.Tabular,
+  module Hydra.Core.Templates,
+  module Hydra.Core.Testing,
+  module Hydra.Core.Typing,
+  module Hydra.Core.Unification,
+  module Hydra.Core.Util,
+  module Hydra.Core.Validation,
+  module Hydra.Core.Variables,
+  module Hydra.Core.Variants,
 ) where
 
-import Hydra.Paths
-import Hydra.Adapt
-import Hydra.Analysis
-import Hydra.Annotations
-import Hydra.Arity
-import Hydra.Checking
-import Hydra.Coders
-import Hydra.Constants
-import Hydra.Core
-import Hydra.Dependencies
-import Hydra.Environment
-import Hydra.Error.Checking
-import Hydra.Error.Core
-import Hydra.Errors
-import Hydra.Languages
-import Hydra.Formatting
-import Hydra.Graph
-import Hydra.Inference
-import Hydra.Lexical
-import Hydra.Literals
-import Hydra.Packaging
-import Hydra.Parsing
-import Hydra.Typed
-import Hydra.Names
-import Hydra.Predicates
-import Hydra.Query
-import Hydra.Reduction
-import Hydra.Reflect
-import Hydra.Relational
-import Hydra.Resolution
-import Hydra.Rewriting
-import Hydra.Scoping
-import Hydra.Serialization
+import Hydra.Core.Paths
+import Hydra.Core.Adapt
+import Hydra.Core.Analysis
+import Hydra.Core.Annotations
+import Hydra.Core.Arity
+import Hydra.Core.Checking
+import Hydra.Core.Coders
+import Hydra.Core.Constants
+import Hydra.Core.Model
+import Hydra.Core.Dependencies
+import Hydra.Core.Environment
+import Hydra.Core.Error.Checking
+import Hydra.Core.Error.Model
+import Hydra.Core.Errors
+import Hydra.Core.Languages
+import Hydra.Core.Formatting
+import Hydra.Core.Graph
+import Hydra.Core.Inference
+import Hydra.Core.Lexical
+import Hydra.Core.Literals
+import Hydra.Core.Packaging
+import Hydra.Core.Parsing
+import Hydra.Core.Typed
+import Hydra.Core.Names
+import Hydra.Core.Predicates
+import Hydra.Core.Query
+import Hydra.Core.Reduction
+import Hydra.Core.Reflect
+import Hydra.Core.Relational
+import Hydra.Core.Resolution
+import Hydra.Core.Rewriting
+import Hydra.Core.Scoping
+import Hydra.Core.Serialization
 import Hydra.Settings
-import Hydra.Strip
-import Hydra.Sorting
-import Hydra.Substitution
-import Hydra.Tabular
-import Hydra.Templates
-import Hydra.Testing
-import Hydra.Typing
-import Hydra.Unification
-import Hydra.Util
-import Hydra.Validation
-import Hydra.Variables
-import Hydra.Variants
+import Hydra.Core.Strip
+import Hydra.Core.Sorting
+import Hydra.Core.Substitution
+import Hydra.Core.Tabular
+import Hydra.Core.Templates
+import Hydra.Core.Testing
+import Hydra.Core.Typing
+import Hydra.Core.Unification
+import Hydra.Core.Util
+import Hydra.Core.Validation
+import Hydra.Core.Variables
+import Hydra.Core.Variants

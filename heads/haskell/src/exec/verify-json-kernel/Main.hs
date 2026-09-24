@@ -6,15 +6,15 @@
 module Main where
 
 import Hydra.Kernel
-import Hydra.Packaging (_Module)
+import Hydra.Core.Packaging (_Module)
 import Hydra.Sources.All (kernelModules)
 import Hydra.Generation (modulesToGraph)
-import Hydra.Codegen (moduleNameToPath)
-import qualified Hydra.Json.Model as Json
-import qualified Hydra.Json.Decode as JsonDecode
-import qualified Hydra.Decode.Packaging as DecodePackaging
-import qualified Hydra.Decode.Core as DecodeCore
-import qualified Hydra.Strip as Strip
+import Hydra.Core.Codegen (moduleNameToPath)
+import qualified Hydra.Core.Json.Model as Json
+import qualified Hydra.Core.Json.Decode as JsonDecode
+import qualified Hydra.Core.Decode.Packaging as DecodePackaging
+import qualified Hydra.Core.Decode.Model as DecodeCore
+import qualified Hydra.Core.Strip as Strip
 
 import Control.Monad (forM, when)
 import System.Exit (exitFailure, exitSuccess)
@@ -239,7 +239,7 @@ stripTypeAnnotations m = m {
   where
     stripDef (DefinitionTerm td) = DefinitionTerm td {
       termDefinitionBody = Strip.removeTypesFromTerm (termDefinitionBody td),
-      termDefinitionSignature = Just $ typeSchemeToTermSignature $ TypeScheme [] (TypeVariable $ Name "hydra.core.Unit") M.empty }
+      termDefinitionSignature = Just $ typeSchemeToTermSignature $ TypeScheme [] (TypeVariable $ Name "hydra.core.model.Unit") M.empty }
     stripDef d = d
 
 -- | Find the first difference between two modules

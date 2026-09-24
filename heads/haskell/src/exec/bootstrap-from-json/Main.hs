@@ -29,11 +29,11 @@ module Main where
 
 import Hydra.Kernel
 import Hydra.Generation
-import qualified Hydra.Codegen as CodeGeneration
+import qualified Hydra.Core.Codegen as CodeGeneration
 import Hydra.PackageRouting (RoutingMap, buildRoutingMap, groupByPackageIn, namespaceToPackageIn)
-import Hydra.Dsls (dslModuleName)
-import Hydra.Encoding (encodeModuleName)
-import Hydra.Decoding (decodeModuleName)
+import Hydra.Core.Dsls (dslModuleName)
+import Hydra.Core.Encoding (encodeModuleName)
+import Hydra.Core.Decoding (decodeModuleName)
 import qualified Hydra.TargetFilePaths as TargetFilePaths
 import qualified Hydra.Digest as Digest
 import qualified Hydra.DigestFormat as DigestFormat
@@ -50,13 +50,13 @@ import Hydra.Python.Coder (moduleToPython)
 import Hydra.Python.Language (pythonLanguage)
 import Hydra.Scala.Coder (moduleToScala)
 import Hydra.Scala.Language (scalaLanguage)
-import Hydra.TypeScript.Coder (moduleToTypeScript)
-import Hydra.TypeScript.Language (typeScriptLanguage)
+import Hydra.Typescript.Coder (moduleToTypeScript)
+import Hydra.Typescript.Language (typeScriptLanguage)
 import Hydra.Lisp.Language (clojureLanguage, commonLispLanguage, emacsLispLanguage, lispLanguage, schemeLanguage)
 import qualified Hydra.Lisp.Syntax as LispSyntax
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import Hydra.Sources.Test.All (testSkipEmitModuleNames)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing (tag_scaleDistinct)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing (tag_scaleDistinct)
 
 import Control.Exception (catch, IOException)
 import Control.Monad (when, forM)
@@ -87,7 +87,7 @@ moduleHasTypeDefinition m = any isType (moduleDefinitions m)
 
 -- | Deduplicate a list of modules by namespace, keeping the first occurrence.
 -- baselineMods (loadPackageMain "hydra-kernel") loads manifest.json's mainModules
--- verbatim, which already includes derived hydra.encode.*/hydra.decode.* namespaces
+-- verbatim, which already includes derived hydra.core.encode.*/hydra.core.decode.* namespaces
 -- (update-json-manifest's mainUniverse folds encMods/decMods in by design). dslMods
 -- (loadPackageDsl) independently re-derives those same namespaces from
 -- mainEncodingModules via encodeModuleName/decodeModuleName. Without a dedup here,
@@ -470,10 +470,10 @@ main = do
   -- without an explicit --package. Unlike the other ext packages (assembled
   -- individually via --package), hydra-build's main modules (hydra.build.*) are
   -- a transitive dependency of the always-emitted kernel test suite
-  -- (hydra.test.testSuite -> hydra.test.build.* -> hydra.build.*, Option A /
+  -- (hydra.core.test.testSuite -> hydra.core.test.build.* -> hydra.build.*, Option A /
   -- #546/#547), so they must be present for the kernel test tree to compile.
   -- #546/#547: whenever the kernel test suite is emitted (--include-tests), it
-  -- references hydra.test.build.* -> hydra.build.* (Option A), so hydra-build's
+  -- references hydra.core.test.build.* -> hydra.build.* (Option A), so hydra-build's
   -- main modules must be in the universe to type those refs — otherwise
   -- cross-host generation fails with "untyped term variable:
   -- hydra.build.modules.dedupPreservingOrder". This holds for the plain demo
@@ -659,7 +659,7 @@ main = do
   --       arms, which non-Haskell coders skip — primitive calls resolve to the primitive.
   --   (2) lib pass: ONLY the hydra.lib.* modules, lowered, with a universe that contains
   --       no consumer modules — so no consumer hoisting/inference sees the shadow.
-  let isLibMod m = "hydra.lib." `isPrefixOf` unModuleName (moduleName m)
+  let isLibMod m = "hydra.core.lib." `isPrefixOf` unModuleName (moduleName m)
   -- The lib pass (#473 Step 0) emits hydra.lib.* PrimitiveDefinition def-modules for
   -- non-Haskell targets. It is enabled per-target only where the generated def-module
   -- path does NOT collide with the host's hand-written native implementations:
@@ -668,7 +668,7 @@ main = do
   --     (hydra/lib/chars/*.java) + Libraries.java/PrimitiveType.java; no filename clash.
   --   * python / scala / lisp dialects: the generated def path (hydra/lib/math.<ext>)
   --     collides with the native impl at the same path; those hosts need their impls
-  --     relocated to hydra.<lang>.lib.* first (mirroring Haskell's Hydra.Overlay.Haskell.Lib.*).
+  --     relocated to hydra.<lang>.lib.* first (mirroring Haskell's Hydra.Core.Overlay.Haskell.Lib.*).
   --     Enabled here incrementally as each host's impls are relocated.
   let twoPassLib = target `elem` ["java", "python", "scala", "clojure", "scheme", "common-lisp", "emacs-lisp"]
   let applyLowering = if target == "haskell"
@@ -709,7 +709,7 @@ main = do
         _             -> Nothing
 
   -- #630: each Lisp dialect's coder now emits the correct hydra.lib.<sub> vs.
-  -- hydra.overlay.<langSeg>.lib.<sub> reference directly at coding time, driven by the
+  -- hydra.core.overlay.<langSeg>.lib.<sub> reference directly at coding time, driven by the
   -- on-disk overlay-existence set for its own dialect.
   lispKnownLibSubs <- case lispDialectAndExt of
         Just (LispSyntax.DialectClojure, _)    -> overlayLibSubs clojureOverlayLibDir
@@ -738,12 +738,12 @@ main = do
   -- universe is passed for typing context only; generateSourceFiles
   -- emits files only for the modsToGenerate argument (per the existing
   -- typeModulesToGenerate / termModulesToGenerate filters in
-  -- Hydra.Codegen). No expansion, no prune.
+  -- Hydra.Core.Codegen). No expansion, no prune.
   -- #473 Step 0 / #501 — consumer-pass redirect transform. The hydra.lib.* primitive
-  -- IMPLEMENTATIONS live at hydra.overlay.<lang>.lib.* (the analog of Haskell's
-  -- Hydra.Overlay.Haskell.Lib.*), so hydra.lib.* is free for the generated PrimitiveDefinition
+  -- IMPLEMENTATIONS live at hydra.core.overlay.<lang>.lib.* (the analog of Haskell's
+  -- Hydra.Core.Overlay.Haskell.Lib.*), so hydra.lib.* is free for the generated PrimitiveDefinition
   -- def-modules (emitted by the lib pass). Generated CONSUMER code calls primitives as
-  -- hydra.lib.<sub>.<fn>; rewrite those references to hydra.overlay.<lang>.lib.<sub>.<fn> so
+  -- hydra.lib.<sub>.<fn>; rewrite those references to hydra.core.overlay.<lang>.lib.<sub>.<fn> so
   -- they resolve to the relocated impls. Applied ONLY to the consumer pass (the lib pass keeps
   -- its hydra.lib.* def-module names). Every hydra.lib.<sub> occurrence in generated source
   -- is a member access (verified), so this textual redirect is safe. No-op for Haskell/Java
@@ -751,21 +751,21 @@ main = do
   let libSubs = ["chars","eithers","equality","functions","hashing","lists","literals","logic","maps","math","optionals","ordering","pairs","regex","sets","strings"]
   -- This list (and every libSubs* variant below) is an ALLOW-list, not a hydra.lib.* prefix
   -- match, and that is intentional: each entry names a sub-namespace that actually has a
-  -- hydra.overlay.<lang>.lib.<sub> implementation to redirect to. A kernel-emitted, overlay-less
-  -- hydra.lib.* module (e.g. hydra.lib.defaults, a generated Map constant with no host-native
+  -- hydra.core.overlay.<lang>.lib.<sub> implementation to redirect to. A kernel-emitted, overlay-less
+  -- hydra.lib.* module (e.g. hydra.core.lib.defaults, a generated Map constant with no host-native
   -- counterpart) has no such target and is correctly left out. Do NOT "simplify" redirectForSubs
   -- to match any hydra.lib.<x> generically -- that reintroduces the unconditional-rewrite bug
   -- fixed by name in the Haskell (#549) and TypeScript (#565) coders; #569 confirmed Scala/Lisp
   -- were never exposed to it precisely because this redirect stays allow-list-based. See #568
   -- for the longer-term structural fix (route by overlay-module existence instead of by name).
-  -- The effectful lib sub-namespaces (#286) have native impls in Python only (hydra.overlay.python.lib.{effects,files,text});
-  -- other hosts lack hydra.overlay.<lang>.lib.{effects,files,text}, so redirecting their call sites would dangle. Restrict the
+  -- The effectful lib sub-namespaces (#286) have native impls in Python only (hydra.core.overlay.python.lib.{effects,files,text});
+  -- other hosts lack hydra.core.overlay.<lang>.lib.{effects,files,text}, so redirecting their call sites would dangle. Restrict the
   -- effectful redirect to Python by extending the sub-list only for the Python consumer transform.
   let libSubsPython = libSubs ++ ["effects","files","system","text"]
-  -- Scala (#494) likewise provides native effectful impls at hydra.overlay.scala.lib.{effects,files,text},
+  -- Scala (#494) likewise provides native effectful impls at hydra.core.overlay.scala.lib.{effects,files,text},
   -- so its consumer call sites are redirected for these sub-namespaces too.
   let libSubsScala = libSubs ++ ["effects","files","system","text"]
-  -- Clojure (#494) provides native effectful impls at hydra.overlay.clojure.lib.{effects,files,text}
+  -- Clojure (#494) provides native effectful impls at hydra.core.overlay.clojure.lib.{effects,files,text}
   -- (overlay/clojure/.../hydra/overlay/clojure/lib/{effects,files,text}.clj), so its consumer call sites
   -- are redirected for these sub-namespaces too. The other Lisp dialects (scheme/common-lisp/
   -- emacs-lisp) do not yet have these runtimes, so they keep the baseline libSubs.
@@ -779,13 +779,13 @@ main = do
   -- native effectful impls at hydra/common_lisp/lib/{effects,files,text}.lisp and
   -- hydra/emacs_lisp/lib/{effects,files,text}.el, so the effectful subs are included.
   let libSubsLisp = libSubs ++ ["effects","files","system","text"]
-  -- Java routes most hydra.lib.* references to hydra.overlay.java.lib.* via the coder's
+  -- Java routes most hydra.lib.* references to hydra.core.overlay.java.lib.* via the coder's
   -- overlayJavaLibPackageAliases (so it normally needs no string redirect). But that alias is
-  -- applied only on the registered-primitive emission path; the effectful hydra.lib.system prims
-  -- (unsupportedEffectPrimitive) fall to the plain-variable path and emit the raw hydra.lib.system
-  -- package, which has no Java home (the impls live only at hydra.overlay.java.lib.system). Redirect
+  -- applied only on the registered-primitive emission path; the effectful hydra.core.lib.system prims
+  -- (unsupportedEffectPrimitive) fall to the plain-variable path and emit the raw hydra.core.lib.system
+  -- package, which has no Java home (the impls live only at hydra.core.overlay.java.lib.system). Redirect
   -- just those call sites for Java. Scoped to "system" so the alias-routed libs are left untouched
-  -- (their refs are already hydra.overlay.java.lib.* and never match the hydra.lib. prefix). For #501.
+  -- (their refs are already hydra.core.overlay.java.lib.* and never match the hydra.lib. prefix). For #501.
   let libSubsJava = ["system"]
   -- For each lib sub-namespace, redirect the CODE-REFERENCE shapes the coders emit:
   --   1. member access / qualified prefix:  hydra.lib.<sub>.<fn>   (and bare prefix uses)
@@ -801,16 +801,16 @@ main = do
   -- Each sub-namespace name is matched only when followed by a non-identifier boundary
   -- ('.', ';', newline, space) so e.g. "lists" never clobbers "listsX".
   let redirectForSubs subs langSeg s =
-        let old = "hydra.lib."
-            new = "hydra.overlay." ++ langSeg ++ ".lib."
+        let old = "hydra.core.lib."
+            new = "hydra.core.overlay." ++ langSeg ++ ".lib."
             sentinel = "\0HYDRALIBNAME\0"  -- cannot occur in generated source
-            protect   = replaceAll "\"hydra.lib." ("\"" ++ sentinel)
-            restore   = replaceAll sentinel "hydra.lib."
+            protect   = replaceAll "\"hydra.core.lib." ("\"" ++ sentinel)
+            restore   = replaceAll sentinel "hydra.core.lib."
             repl acc sub = replaceAll (old ++ sub ++ ".")  (new ++ sub ++ ".")    -- member access
                          $ replaceAll (old ++ sub ++ ";")  (new ++ sub ++ ";")    -- import hydra.lib.X; (java/scala)
                          $ replaceAll (old ++ sub ++ "\n") (new ++ sub ++ "\n")   -- import hydra.lib.X<newline> (python)
                          $ replaceAll (old ++ sub ++ " ")  (new ++ sub ++ " ")    -- "hydra.lib.X as Y" etc.
-                         $ replaceAll ("hydra.lib import " ++ sub) ("hydra.overlay." ++ langSeg ++ ".lib import " ++ sub) acc
+                         $ replaceAll ("hydra.core.lib import " ++ sub) ("hydra.core.overlay." ++ langSeg ++ ".lib import " ++ sub) acc
         in restore (L.foldl' repl (protect s) subs)
   let redirectFor = redirectForSubs libSubs
   -- Scheme (R7RS) names library modules with the space-separated form `(hydra lib <sub>)`
@@ -843,23 +843,23 @@ main = do
             -- drop the package token from `(:use ... :hydra.lib.<sub> ...)` (leading space form)
             dropUse acc sub = replaceAll (" :hydra.lib." ++ sub) "" acc
         in L.foldl' dropUse (L.foldl' renameCalls s libSubsLisp) libSubsLisp
-  -- The hand-written test environment hydra.test.testEnv is skip-emitted from
+  -- The hand-written test environment hydra.core.test.testEnv is skip-emitted from
   -- generated output and supplied by overlay/<lang>/ under the renamed namespace
-  -- hydra.overlay.<lang>.test.testEnv (#501). Generated test modules still
+  -- hydra.core.overlay.<lang>.test.testEnv (#501). Generated test modules still
   -- reference it by its canonical name, so redirect the code reference (NOT the
   -- quoted primitive-name strings, which never contain "test.testEnv") to the
   -- overlay namespace for the dialects whose tests resolve testEnv by module
-  -- reference. Clojure uses the dotted form `hydra.test.testEnv`; Scheme uses the
+  -- reference. Clojure uses the dotted form `hydra.core.test.testEnv`; Scheme uses the
   -- space-separated library form `(hydra test testEnv)`. Common Lisp / Emacs Lisp
   -- load the hand-written test_env explicitly via their run-tests.lisp/loader, so
   -- they need no code redirect here (their loader path is fixed separately).
   let redirectClojureTestEnv langSeg s =
-        replaceAll "hydra.test.testEnv" ("hydra.overlay." ++ langSeg ++ ".test.testEnv") s
+        replaceAll "hydra.core.test.testEnv" ("hydra.core.overlay." ++ langSeg ++ ".test.testEnv") s
   let redirectSchemeTestEnv langSeg s =
         replaceAll "(hydra test testEnv)" ("(hydra overlay " ++ langSeg ++ " test testEnv)")
-          $ replaceAll "hydra.test.testEnv" ("hydra.overlay." ++ langSeg ++ ".test.testEnv") s
+          $ replaceAll "hydra.core.test.testEnv" ("hydra.core.overlay." ++ langSeg ++ ".test.testEnv") s
   -- #630: the Haskell, TypeScript, Scala, Python, and Lisp-family coders now emit
-  -- the correct hydra.lib.<sub> vs. hydra.overlay.<lang>.lib.<sub> reference
+  -- the correct hydra.lib.<sub> vs. hydra.core.overlay.<lang>.lib.<sub> reference
   -- directly at coding time, driven by the on-disk overlay-existence set threaded
   -- in as an explicit parameter (haskellKnownLibSubs / typeScriptKnownLibSubs /
   -- scalaKnownLibSubs / pythonKnownLibSubs / lispKnownLibSubs, above/below) -- no
@@ -868,7 +868,7 @@ main = do
   -- driver-level redirectForSubs "scala" / "python" / "clojure" / redirectSchemeFor
   -- / redirectLispFlat calls). wrapLongScalaText is unrelated (pure line-wrap
   -- formatting) and stays; redirectClojureTestEnv / redirectSchemeTestEnv are
-  -- unrelated (hydra.test.testEnv, not hydra.lib.*) and stay too. Java remains on
+  -- unrelated (hydra.core.test.testEnv, not hydra.lib.*) and stay too. Java remains on
   -- its pre-#630 post-pass / allow-list redirect pending its own #630 fan-out.
   haskellKnownLibSubs <- overlayLibSubs haskellOverlayLibDir
   typeScriptKnownLibSubs <- overlayLibSubs typeScriptOverlayLibDir
@@ -879,9 +879,9 @@ main = do
   -- required for this to compile against the regenerated dist/json/hydra-java, not a
   -- behavior change. The libSubsJava/redirectForSubs "java" post-pass is INTENTIONALLY
   -- kept as-is here (not retired): whether it's still load-bearing for the effectful
-  -- hydra.lib.system primitives is an open, empirically-unconfirmed question (#633
+  -- hydra.core.lib.system primitives is an open, empirically-unconfirmed question (#633
   -- deliverable 1/4, tracked separately) -- retiring it prematurely here would risk
-  -- silently breaking Java-hosted generation of hydra.lib.system if it's still needed.
+  -- silently breaking Java-hosted generation of hydra.core.lib.system if it's still needed.
   javaKnownLibSubs <- overlayLibSubs javaOverlayLibDir
   let consumerTransform = case target of
         "haskell"     -> id
@@ -909,7 +909,7 @@ main = do
           exitFailure
   -- The consumer pass uses the standard (un-lowered, for non-Haskell) universe.
   -- Consumer pass: standard universe + the lib-call redirect transform (no-op for haskell;
-  -- Java redirects only hydra.lib.system, the rest via the coder's package aliases).
+  -- Java redirects only hydra.core.lib.system, the rest via the coder's package aliases).
   let genForDir :: FilePath -> [Module] -> IO [FilePath]
       genForDir = genForDirT consumerTransform allModsFinal'
   -- Lib pass: isolated lowered universe + NO redirect (def-modules keep their hydra.lib.* names).
@@ -1039,7 +1039,7 @@ main = do
       -- kernel test JSON is at hydra-kernel/src/test/json; hydra-build's at
       -- hydra-build/src/test/json, etc.). hydra-build is the first non-kernel
       -- package to ship test modules, but the loop is general. The kernel's
-      -- generated hydra.test.testSuite imports every package's test modules
+      -- generated hydra.core.test.testSuite imports every package's test modules
       -- (Option A, #546/#547), so all must be loaded and emitted here.
       let pkgTestDir pkg = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "test" FP.</> "json"
       testModsAll <- fmap concat $ CM.forM allRoutingPackages $ \pkg -> do
@@ -1054,7 +1054,7 @@ main = do
       -- narrow testMods to modules owned by that package. The universe is
       -- unchanged so cross-package refs still resolve.
       --
-      -- Additionally, filter out skip-emit namespaces (e.g. hydra.test.testEnv).
+      -- Additionally, filter out skip-emit namespaces (e.g. hydra.core.test.testEnv).
       -- These are type-only stubs whose hand-written per-language
       -- counterparts are the source of truth; emitting them would
       -- overwrite hand-written code.
@@ -1072,8 +1072,8 @@ main = do
       -- #735: which cases to drop, and which targets to drop them for, are both kernel
       -- data instead of hand-copied lists (the #719 root cause: this filter and
       -- TransformJsonToTarget.java's copy drifted out of sync). A case is scale-distinct
-      -- iff it carries the hydra.testing.Tag "scaleDistinct" (see tag_scaleDistinct in
-      -- Hydra.Overlay.Haskell.Dsl.Typed.Testing); a target drops such cases iff its
+      -- iff it carries the hydra.core.testing.Tag "scaleDistinct" (see tag_scaleDistinct in
+      -- Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing); a target drops such cases iff its
       -- Language's literalVariants omits literalVariantDecimal (i.e. Literal.decimal has
       -- no real scale field there, so scale-distinctness can't be observed). Reuses
       -- lispLanguageForTarget (defined above for codegen) rather than re-deriving the Lisp
@@ -1120,7 +1120,7 @@ main = do
       let allUniverse = allMods ++ testModsAll
 
       -- When --kernel-only is active, non-kernel modules are excluded from allMainMods.
-      -- But test modules may depend on non-kernel modules (e.g. hydra.test.serialization
+      -- But test modules may depend on non-kernel modules (e.g. hydra.core.test.serialization
       -- depends on hydra.haskell.operators). Generate those modules to outMain
       -- so test code can reference them.
       when (optKernelOnly opts) $ do
@@ -1132,7 +1132,7 @@ main = do
           -- Route through genForDirT (consumerTransform) rather than raw
           -- generateSources so these modules get the #473-Step-0 primitive
           -- redirect (hydra.lib.* -> hydra.<lang>.lib.*) that the main/test sets
-          -- get. Without it, e.g. hydra.build.modules calls hydra.lib.lists.nub
+          -- get. Without it, e.g. hydra.build.modules calls hydra.core.lib.lists.nub
           -- as a raw PrimitiveDefinition (uncallable at runtime on non-Haskell
           -- targets: "'PrimitiveDefinition' object is not callable"). Universe is
           -- allUniverse (main + test), matching genTestForDir below.
@@ -1256,7 +1256,7 @@ elapsed end start = realToFrac (diffUTCTime end start)
 --
 -- The recorded digest is in v2 format (digest-check refresh writes it
 -- after a successful regen). The "inputs" map's keys are namespace
--- strings (e.g. "hydra.core"); values are SHA-256 hex of the DSL
+-- strings (e.g. "hydra.core.model"); values are SHA-256 hex of the DSL
 -- source file as of the last successful regen.
 --
 -- Modules with no recorded entry are kept (treated as dirty).

@@ -4,13 +4,13 @@ module Hydra.Sources.Test.Checking.Fundamentals where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -19,26 +19,26 @@ import qualified Data.Map                     as M
 
 import qualified Data.ByteString              as B
 import qualified Data.ByteString.Char8        as BC
-import qualified Hydra.Overlay.Haskell.Dsl.Prims as Prims
-import qualified Hydra.Lib.Equality as DefEquality
-import qualified Hydra.Lib.Functions as DefFunctions
-import qualified Hydra.Lib.Lists as DefLists
-import qualified Hydra.Lib.Logic as DefLogic
-import qualified Hydra.Lib.Maps as DefMaps
-import qualified Hydra.Lib.Math as DefMath
-import qualified Hydra.Lib.Optionals as DefOptionals
-import qualified Hydra.Lib.Sets as DefSets
-import qualified Hydra.Lib.Strings as DefStrings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims as Prims
+import qualified Hydra.Core.Lib.Equality as DefEquality
+import qualified Hydra.Core.Lib.Functions as DefFunctions
+import qualified Hydra.Core.Lib.Lists as DefLists
+import qualified Hydra.Core.Lib.Logic as DefLogic
+import qualified Hydra.Core.Lib.Maps as DefMaps
+import qualified Hydra.Core.Lib.Math as DefMath
+import qualified Hydra.Core.Lib.Optionals as DefOptionals
+import qualified Hydra.Core.Lib.Sets as DefSets
+import qualified Hydra.Core.Lib.Strings as DefStrings
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.checking.fundamentals"
+ns = ModuleName "hydra.core.test.checking.fundamentals"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.rewriting", ModuleName "hydra.inference", ModuleName "hydra.scoping", ModuleName "hydra.print.core", ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.core.rewriting", ModuleName "hydra.core.inference", ModuleName "hydra.core.scoping", ModuleName "hydra.core.print.model", ModuleName "hydra.core.test.testTypes"] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Fundamental type checking test cases: literals, variables, lambdas, applications, let terms, and primitives"))}
   where
     definitions = [

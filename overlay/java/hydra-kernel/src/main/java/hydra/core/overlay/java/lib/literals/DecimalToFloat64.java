@@ -1,0 +1,59 @@
+package hydra.core.overlay.java.lib.literals;
+
+import hydra.core.model.Name;
+import hydra.core.model.Term;
+import hydra.core.model.TypeScheme;
+import hydra.core.overlay.java.dsl.Terms;
+import hydra.core.overlay.java.dsl.Types;
+import hydra.core.graph.Graph;
+import hydra.core.overlay.java.tools.PrimitiveFunction;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.function.Function;
+
+import static hydra.core.overlay.java.dsl.Types.function;
+import static hydra.core.overlay.java.dsl.Types.scheme;
+import hydra.core.errors.Error_;
+import hydra.core.overlay.java.util.Either;
+
+/**
+ * Primitive function which converts a decimal (arbitrary-precision exact decimal) to a float64 (IEEE 754 double).
+ * This conversion may lose precision for values that cannot be represented exactly as a double.
+ */
+public class DecimalToFloat64 extends PrimitiveFunction {
+    /**
+     * Returns the unique name identifying this primitive function.
+     * @return the function name "hydra.core.lib.literals.decimalToFloat64"
+     */
+    public Name name() {
+        return hydra.lib.Literals.decimalToFloat64().name;
+    }
+
+    /**
+     * Returns the type scheme for this function: decimal -&gt; float64.
+     * @return the type scheme representing the function signature
+     */
+    @Override
+    public TypeScheme type() {
+        return scheme(function(Types.decimal(), Types.float64()));
+    }
+
+    /**
+     * Provides the implementation of this primitive function.
+     * @return a function that converts decimal terms to float64 terms
+     */
+    @Override
+    protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(d -> Terms.float64(apply(d)), hydra.core.extract.Core.decimal(graph, args.get(0)));
+    }
+
+    /**
+     * Converts a BigDecimal value to a Double (IEEE 754 double).
+     * @param value the BigDecimal value to convert
+     * @return the Double representation of the value
+     */
+    public static Double apply(BigDecimal value) {
+        return value.doubleValue();
+    }
+}

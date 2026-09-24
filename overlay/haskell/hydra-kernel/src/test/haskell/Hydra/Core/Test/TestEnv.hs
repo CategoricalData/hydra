@@ -1,0 +1,72 @@
+-- | Test environment providing the test graph and context with primitives.
+-- This is a hand-written bridge module referenced by the generated TestGraph.
+-- It should NOT be overwritten by code generation.
+
+module Hydra.Core.Test.TestEnv (testGraph, testContext) where
+
+import Hydra.Kernel
+import Hydra.Core.Overlay.Haskell.Libraries (standardLibraries)
+import Hydra.Core.Json.Bootstrap (typesByName)
+import qualified Hydra.Sources.Kernel.Terms.Annotations as TermAnnotations
+import qualified Hydra.Sources.Kernel.Terms.Constants as TermConstants
+import qualified Hydra.Sources.Kernel.Terms.Dependencies as TermDependencies
+import qualified Hydra.Sources.Kernel.Terms.Extract.Core as TermExtractCore
+import qualified Hydra.Sources.Kernel.Terms.Lexical as TermLexical
+import qualified Hydra.Sources.Kernel.Terms.Rewriting as TermRewriting
+import qualified Hydra.Sources.Kernel.Terms.Scoping as TermScoping
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as TermShowCore
+import qualified Hydra.Sources.Kernel.Terms.Strip as TermStrip
+import qualified Hydra.Sources.Kernel.Terms.Variables as TermVariables
+import qualified Hydra.Core.Decode.Model as TermDecodeCore
+import qualified Hydra.Core.Encode.Model as TermEncodeCore
+import qualified Data.List as L
+import qualified Data.Map as M
+
+-- | Convert a Type to a TypeScheme, extracting forall-bound variables.
+-- Also strips top-level annotations.
+typeToScheme :: Type -> TypeScheme
+typeToScheme = go []
+  where
+    go vars (TypeForall (ForallType var body)) = go (vars ++ [var]) body
+    go vars (TypeAnnotated (AnnotatedType body _)) = go vars body
+    go vars body = TypeScheme vars body M.empty
+
+-- | The test graph with primitives, schema types, and kernel term bindings.
+-- The testTerms argument is accepted for signature parity with the DSL
+-- (Map Name Type -> Map Name Term -> Graph) but ignored — Haskell tests
+-- read test terms directly from Hydra.Core.Test.TestTerms.
+testGraph :: M.Map Name Type -> M.Map Name Term -> Graph
+testGraph testTypes _testTerms = let
+    allPrims = L.concatMap libraryPrimitives standardLibraries
+    primsMap = M.fromList $ fmap (\p -> (primitiveDefinitionName (primitiveDefinition p), p)) allPrims
+    kernelSchemas = M.map typeToScheme typesByName
+    testSchemas = M.map typeToScheme testTypes
+    allSchemas = M.union kernelSchemas testSchemas
+    -- Kernel term definitions needed for reduceTerm to evaluate kernel functions
+    kernelTermDefs = L.concat $ fmap moduleDefinitions
+      [ TermAnnotations.module_
+      , TermConstants.module_
+      , TermDependencies.module_
+      , TermExtractCore.module_
+      , TermLexical.module_
+      , TermRewriting.module_
+      , TermScoping.module_
+      , TermShowCore.module_
+      , TermStrip.module_
+      , TermVariables.module_
+      ]
+    boundTerms = M.fromList
+      [ (termDefinitionName td, termDefinitionBody td) | DefinitionTerm td <- kernelTermDefs ]
+    boundTypes = M.fromList
+      [ (termDefinitionName td, ts)
+      | DefinitionTerm td <- kernelTermDefs, Just sig <- [termDefinitionSignature td], let ts = termSignatureToTypeScheme sig ]
+    base = emptyGraph
+  in base {
+    graphPrimitives = primsMap,
+    graphSchemaTypes = allSchemas,
+    graphBoundTerms = boundTerms,
+    graphBoundTypes = boundTypes }
+
+-- | The test context (empty).
+testContext :: InferenceContext
+testContext = emptyInferenceContext

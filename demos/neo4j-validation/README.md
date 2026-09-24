@@ -17,10 +17,10 @@ For each host (Java, Python), the demo:
    (`org.neo4j.driver` for Java, the `neo4j` package for Python).
 2. Reads all nodes and relationships.
 3. Maps the driver's `Node` / `Relationship` / value types onto Hydra's
-   `hydra.neo4j.model` types.
+   `hydra.pg.neo4j.model` types.
 4. Builds a graph type (the schema) in host code — a small movie domain
    (`Person`, `Movie`, `ACTED_IN`, and an overloaded `LIKES`).
-5. Runs `hydra.validate.neo4j.validateGraph` and prints the violations.
+5. Runs `hydra.pg.validate.neo4j.validateGraph` and prints the violations.
 
 The same Hydra validation runs identically in both hosts; only the
 client-interfacing layer (the driver calls and the driver-to-Hydra mapping)
@@ -94,4 +94,4 @@ against the graph type defined in the demo, the validator reports:
 ## See also
 
 - The Neo4j model and validator: [`packages/hydra-pg` README](../../packages/hydra-pg/README.md), "Neo4j model".
-- The validator source: `hydra.validate.neo4j` (`packages/hydra-pg/.../Sources/Validate/Neo4j.hs`).
+- The validator source: `hydra.pg.validate.neo4j` (`packages/hydra-pg/.../Sources/Validate/Neo4j.hs`).

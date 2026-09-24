@@ -57,7 +57,7 @@ defines the algorithms:
   the Python and Java coders (see [TCO implementation](https://github.com/CategoricalData/hydra/blob/main/docs/tco-implementation.md)).
 - **`Rewriting.hs`** — free-variable analysis, substitution, term traversal.
 - **`Analysis.hs`** — `isSelfTailRecursive` and related shared analyses.
-- **`Validate/`** — module-level validation rules (`hydra.validate.*`).
+- **`Validate/`** — module-level validation rules (`hydra.core.validate.*`).
 - **`Sorting.hs`**, **`Topology.hs`** — Tarjan SCC over module/term dependency
   graphs.
 - **`Dsls.hs`**, **`Generation.hs`** — the meta-level pieces that drive sync
@@ -85,7 +85,7 @@ for the recipe to add a new one.
 
 Host-side primitive registries — including the Haskell-side
 [`Hydra/Overlay/Haskell/Libraries.hs`](https://github.com/CategoricalData/hydra/blob/main/overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Libraries.hs)
-(in `overlay/haskell` since #473, relocated under the `hydra.overlay.<lang>.*`
+(in `overlay/haskell` since #473, relocated under the `hydra.core.overlay.<lang>.*`
 namespace by #501) that pairs each native implementation with a
 primitive name — are distinct from this canonical registry: they provide
 host-specific implementations and **derive** each primitive's name from its
@@ -103,7 +103,7 @@ live in adjacent directories:
 | `heads/haskell/src/main/haskell/Hydra/Dsl/`                        | Hand-written Haskell DSL helpers used to write the sources |
 | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib/` | Hand-written Haskell primitive implementations (overlaid onto the kernel dist) |
 | `dist/haskell/hydra-kernel/`                                       | Generated Haskell kernel (`Hydra/Core.hs`, `Hydra/Graph.hs`, etc.) |
-| `dist/java/hydra-kernel/`                               | Generated Java kernel (`hydra.core.*`, `hydra.graph.*`, etc.) |
+| `dist/java/hydra-kernel/`                               | Generated Java kernel (`hydra.core.model.*`, `hydra.core.graph.*`, etc.) |
 | `dist/python/hydra-kernel/`                             | Generated Python kernel |
 | `dist/scala/hydra-kernel/`                              | Generated Scala kernel |
 | `dist/{clojure,common-lisp,emacs-lisp,scheme}/hydra-kernel/` | Generated Lisp-dialect kernels |

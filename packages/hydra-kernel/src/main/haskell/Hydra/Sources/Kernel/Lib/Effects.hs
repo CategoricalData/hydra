@@ -1,25 +1,25 @@
--- | Primitive declarations for the hydra.lib.effects namespace.
+-- | Primitive declarations for the hydra.core.lib.effects namespace.
 
 module Hydra.Sources.Kernel.Lib.Effects where
 
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap     as Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms hiding (apply, compose, map)
-import qualified Hydra.Overlay.Haskell.Dsl.Types         as Types
-import           Hydra.Overlay.Haskell.Dsl.Types         (effect)
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap     as Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms as Phantoms hiding (apply, compose, map)
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types         as Types
+import           Hydra.Core.Overlay.Haskell.Dsl.Types         (effect)
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), foldl, map, pure)
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lib.effects"
+ns = ModuleName "hydra.core.lib.effects"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.effects module.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.effects module.")}
   where
     definitions = [apply, bind, compose, foldList, map, mapList, mapOptional, mapSet, pure]
 

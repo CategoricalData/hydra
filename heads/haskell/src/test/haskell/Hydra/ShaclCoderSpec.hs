@@ -7,9 +7,9 @@ Test.Hspec.hspec Hydra.ShaclCoderSpec.spec
 module Hydra.ShaclCoderSpec where
 
 import Hydra.Kernel
-import Hydra.Overlay.Haskell.Dsl.Terms as Terms
-import qualified Hydra.Shacl.Coder as ShaclCoder
-import qualified Hydra.Shacl.Model as ShaclModel
+import Hydra.Core.Overlay.Haskell.Dsl.Terms as Terms
+import qualified Hydra.Rdf.Shacl.Coder as ShaclCoder
+import qualified Hydra.Rdf.Shacl.Model as ShaclModel
 import qualified Hydra.Rdf.Syntax as Rdf
 
 import Hydra.TestUtils

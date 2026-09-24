@@ -5,48 +5,48 @@ module Hydra.Sources.Kernel.Terms.Decoding where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (literalType, matchRecord, matchUnion)
-import qualified Hydra.Dsl.Paths    as Paths
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
-import qualified Hydra.Dsl.Ast          as Ast
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Coders       as Coders
-import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph        as Graph
-import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Lib.Math     as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Literals          as Literals
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base         as MetaBase
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms        as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types        as MetaTypes
-import qualified Hydra.Dsl.Packaging       as Packaging
-import qualified Hydra.Dsl.Parsing      as Parsing
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (
+import qualified Hydra.Core.Dsl.Paths    as Paths
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations       as Annotations
+import qualified Hydra.Core.Dsl.Ast          as Ast
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Coders       as Coders
+import qualified Hydra.Core.Dsl.Util      as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph        as Graph
+import qualified Hydra.Core.Dsl.Json.Model         as Json
+import qualified Hydra.Core.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Math     as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals          as Literals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base         as MetaBase
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms        as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types        as MetaTypes
+import qualified Hydra.Core.Dsl.Packaging       as Packaging
+import qualified Hydra.Core.Dsl.Parsing      as Parsing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms hiding (
   elimination, field, fieldType, floatType, floatValue, function, injection, integerType, integerValue, literal,
   literalType, record, term, type_, typeScheme)
-import qualified Hydra.Overlay.Haskell.Dsl.Prims             as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular           as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing      as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Terms             as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Tests             as Tests
-import qualified Hydra.Dsl.Topology     as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
-import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Errors       as Error
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims             as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular           as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing      as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms             as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests             as Tests
+import qualified Hydra.Core.Dsl.Topology     as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Dsl.Typing       as Typing
+import qualified Hydra.Core.Dsl.Errors       as Error
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
@@ -67,17 +67,17 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.DeepCore as DeepCore
-import           Hydra.Overlay.Haskell.Dsl.Typed.DeepCore ((@@@))
-import qualified Hydra.Lib.Eithers as DefEithers
-import qualified Hydra.Lib.Lists as DefLists
-import qualified Hydra.Lib.Maps as DefMaps
-import qualified Hydra.Lib.Optionals as DefOptionals
-import qualified Hydra.Lib.Strings as DefStrings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Deep.Core as DeepCore
+import           Hydra.Core.Overlay.Haskell.Dsl.Deep.Core ((@@@))
+import qualified Hydra.Core.Lib.Eithers as DefEithers
+import qualified Hydra.Core.Lib.Lists as DefLists
+import qualified Hydra.Core.Lib.Maps as DefMaps
+import qualified Hydra.Core.Lib.Optionals as DefOptionals
+import qualified Hydra.Core.Lib.Strings as DefStrings
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.decoding"
+ns = ModuleName "hydra.core.decoding"
 
 module_ :: Module
 module_ = Module {
@@ -145,7 +145,7 @@ formatDecodingError = "e" ~> unwrap _DecodingError @@ var "e"
 -- @Either DecodingError X@), used to instantiate the polymorphic eithers.either. (#476)
 deannotateAndMatch :: TypedTerm Type -> TypedTerm (Maybe Term) -> [TypedTerm CaseAlternative] -> TypedTerm Term
 deannotateAndMatch resultType dflt cses =
-  -- Domains are known by construction: cx : hydra.graph.Graph, raw : Term,
+  -- Domains are known by construction: cx : hydra.core.graph.Graph, raw : Term,
   -- err : DecodingError (Left branch), stripped : Term (Right branch). (#476)
   dlam "cx" graphType $ dlam "raw" termType $
   -- eithers.either : forall x,y,z. (x->z)->(y->z)->either<x,y>->z;
@@ -162,12 +162,12 @@ deannotateAndMatch resultType dflt cses =
   where
     -- Build a real TermLambda with an explicit domain via DeepCore's family. (#476)
     dlam v ty body = DeepCore.lambdaTyped (Core.name (string v)) (just ty) body
-    graphType         = Core.typeVariable (Core.name (string "hydra.graph.Graph"))
+    graphType         = Core.typeVariable (Core.name (string "hydra.core.graph.Graph"))
     termType          = Core.typeVariable (Core.nameLift _Term)
     decodingErrorType = Core.typeVariable (Core.nameLift _DecodingError)
 
 -- | Helper to create a decoding error term from a message (object-level)
--- Returns: Term.wrap (WrappedTerm "hydra.util.DecodingError" (Term.literal (Literal.string msg)))
+-- Returns: Term.wrap (WrappedTerm "hydra.core.util.DecodingError" (Term.literal (Literal.string msg)))
 decodingErrorTerm :: TypedTerm String -> TypedTerm Term
 decodingErrorTerm msg = DeepCore.wrap _DecodingError $ DeepCore.string msg
 
@@ -365,13 +365,13 @@ decodeBinding = define "decodeBinding" $
         (just (decoderTypeSchemeNamed @@ (Core.bindingName (var "b")) @@ var "typ"))))
 
 -- | Generate a fully qualified binding name for a decoder function from a type name
--- For example, "hydra.util.CaseConvention" -> "hydra.decode.util.caseConvention"
+-- For example, "hydra.core.util.CaseConvention" -> "hydra.core.decode.util.caseConvention"
 -- | Generate a fully qualified binding name for a decoder function from a type name
--- For example, "hydra.util.CaseConvention" -> "hydra.decode.util.caseConvention"
+-- For example, "hydra.core.util.CaseConvention" -> "hydra.core.decode.util.caseConvention"
 decodeBindingName :: TypedTermDefinition (Name -> Name)
 decodeBindingName = define "decodeBindingName" $
   doc "Generate a binding name for a decoder function from a type name" $
-  Names.derivedBindingName @@ list [string "hydra", string "decode"] @@ boolean True
+  Names.derivedBindingName @@ list [string "decode"] @@ boolean True
 
 -- | Generate a decoder for a literal type
 -- Match on the LiteralType to generate type-specific decoders
@@ -564,10 +564,10 @@ decodeModule = define "decodeModule" $
           ("x" ~> var "x")
           (decodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         -- Decoder modules need:
-        -- 1. hydra.extract.core, hydra.lexical, hydra.rewriting (for decoding utilities)
-        -- 2. Decoded versions of source dependencies (e.g., hydra.core -> hydra.decode.core).
+        -- 1. hydra.core.extract.model, hydra.core.lexical, hydra.core.rewriting (for decoding utilities)
+        -- 2. Decoded versions of source dependencies (e.g., hydra.core.model -> hydra.core.decode.model).
         --    If type A references type B, the decoder for A needs to call the decoder for B.
-        -- 3. The original module's namespace (the schema being decoded) and hydra.util
+        -- 3. The original module's namespace (the schema being decoded) and hydra.core.util
         "allDecodedDeps" <~ (primitive DefLists.distinct @@ (Lists.map (asTerm decodeModuleName) (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))) $
         right (just (Packaging.module_
           (decodeModuleName @@ (Packaging.moduleName (var "mod")))
@@ -579,11 +579,11 @@ decodeModule = define "decodeModule" $
             (list ([] :: [TypedTerm Provision]))))
           (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.concat2
             (list [
-              (Packaging.moduleName2 $ string "hydra.extract.core"),
-              (Packaging.moduleName2 $ string "hydra.lexical"),
-              (Packaging.moduleName2 $ string "hydra.rewriting"),
+              (Packaging.moduleName2 $ string "hydra.core.extract.model"),
+              (Packaging.moduleName2 $ string "hydra.core.lexical"),
+              (Packaging.moduleName2 $ string "hydra.core.rewriting"),
               Packaging.moduleName (var "mod"),
-              Packaging.moduleName2 $ string "hydra.util"])
+              Packaging.moduleName2 $ string "hydra.core.util"])
             (var "allDecodedDeps")))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") nothing
@@ -592,11 +592,11 @@ decodeModule = define "decodeModule" $
             (var "decodedBindings")))))
 
 -- | Generate a decoder module name from a source module name
--- For example, "hydra.util" -> "hydra.decode.util"
+-- For example, "hydra.core.util" -> "hydra.core.decode.util"
 decodeModuleName :: TypedTermDefinition (ModuleName -> ModuleName)
 decodeModuleName = define "decodeModuleName" $
   doc "Generate a decoder module name from a source module name" $
-  Names.derivedModuleName @@ list [string "hydra", string "decode"] @@ boolean True
+  Names.derivedModuleName @@ list [string "decode"] @@ boolean True
 
 -- | Generate a decoder for a record type with element name
 -- | Generate a decoder for a pair type
@@ -629,7 +629,7 @@ decodeRecordTypeImpl = define "decodeRecordTypeImpl" $
     <> " result type (e.g. Table<v>) used for the record's body annotations. (#476)") $
   "tname" ~> "rt" ~> "rtype" ~>
   "recType" <~ (var "rtype") $
-  "graphType" <~ (Core.typeVariable (Core.name (string "hydra.graph.Graph"))) $
+  "graphType" <~ (Core.typeVariable (Core.name (string "hydra.core.graph.Graph"))) $
   "termType" <~ (Core.typeVariable (Core.nameLift _Term)) $
   -- For each field, build a term that decodes it from fieldMap using requireField helper.
   -- requireField : forall t0,t1,t2. ... ; t0=Graph, t1=Term, t2=field's decoded type. (#476)
@@ -709,7 +709,7 @@ decodeType = define "decodeType" $
   doc "Generate a decoder term for a Type" $
   "typ" ~>
   match _Type (var "typ")
-    (Just $ MetaTerms.lambdaTyped "cx" (Core.typeVariable (Core.name (string "hydra.graph.Graph"))) $ MetaTerms.lambdaTyped "t" (Core.typeVariable (Core.nameLift _Term)) $ leftError (Core.typeVariable (Core.nameLift _Term)) $ string "unsupported type variant") [
+    (Just $ MetaTerms.lambdaTyped "cx" (Core.typeVariable (Core.name (string "hydra.core.graph.Graph"))) $ MetaTerms.lambdaTyped "t" (Core.typeVariable (Core.nameLift _Term)) $ leftError (Core.typeVariable (Core.nameLift _Term)) $ string "unsupported type variant") [
     _Type_annotated>>: "at" ~> decodeType @@ (Core.annotatedTypeBody (var "at")),
     -- The function side is wrapped in an explicit TypeApplication carrying the DECODED
     -- result type of the argument (decoderFullResultType, matching every sibling call site
@@ -749,7 +749,7 @@ decodeTypeNamed = define "decodeTypeNamed" $
     <> " types that fail to compile against the parameterized signature. (#476)") $
   "ename" ~> "typ" ~> "rtype" ~>
   match _Type (var "typ")
-    (Just $ MetaTerms.lambdaTyped "cx" (Core.typeVariable (Core.name (string "hydra.graph.Graph"))) $ MetaTerms.lambdaTyped "t" (Core.typeVariable (Core.nameLift _Term)) $ leftError (Core.typeVariable (Core.nameLift _Term)) $ string "unsupported type variant") [
+    (Just $ MetaTerms.lambdaTyped "cx" (Core.typeVariable (Core.name (string "hydra.core.graph.Graph"))) $ MetaTerms.lambdaTyped "t" (Core.typeVariable (Core.nameLift _Term)) $ leftError (Core.typeVariable (Core.nameLift _Term)) $ string "unsupported type variant") [
     _Type_annotated>>: "at" ~> decodeTypeNamed @@ var "ename" @@ (Core.annotatedTypeBody (var "at")) @@ var "rtype",
     -- See decodeType's _Type_application case (#740) for why the function side needs an
     -- explicit TypeApplication wrapper carrying decoderFullResultType, not the raw type.
@@ -852,7 +852,7 @@ decodeUnionTypeNamed = define "decodeUnionTypeNamed" $
 decodeUnitType :: TypedTermDefinition Term
 decodeUnitType = define "decodeUnitType" $
   doc "Generate a decoder for the unit type" $
-  MetaTerms.lambdaTyped "cx" (Core.typeVariable (Core.name (string "hydra.graph.Graph"))) $ MetaTerms.lambdaTyped "t" (Core.typeVariable (Core.nameLift _Term)) $ DeepCore.ref ExtractCore.decodeUnit @@@ DeepCore.var "cx" @@@ DeepCore.var "t"
+  MetaTerms.lambdaTyped "cx" (Core.typeVariable (Core.name (string "hydra.core.graph.Graph"))) $ MetaTerms.lambdaTyped "t" (Core.typeVariable (Core.nameLift _Term)) $ DeepCore.ref ExtractCore.decodeUnit @@@ DeepCore.var "cx" @@@ DeepCore.var "t"
 
 -- | Generate a decoder for a union type with element name
 -- | Generate a decoder for a wrapped type (without element name)
@@ -1055,7 +1055,7 @@ decoderType = define "decoderType" $
   -- Get the result type (the full type, preserving type applications)
   "resultType" <~ (decoderFullResultType @@ var "typ") $
   -- Build the base decoder type: Graph -> Term -> Either DecodingError ResultType
-  -- Graph is a concrete type (hydra.graph.Graph), not a type variable
+  -- Graph is a concrete type (hydra.core.graph.Graph), not a type variable
   "baseType" <~ (Core.typeFunction $ Core.functionType
     (Core.typeVariable (Core.nameLift _Graph))
     (Core.typeFunction $ Core.functionType
@@ -1095,7 +1095,7 @@ decoderTypeScheme = define "decoderTypeScheme" $
     "typeVars" <~ collectTypeVariables @@ var "typ" $
     "allOrdVars" <~ collectOrdConstrainedVariables @@ var "typ" $
     -- Filter to only include actual forall-bound type variables
-    -- (collectOrdConstrainedVariables may return nominal type references like "hydra.relational.ColumnName")
+    -- (collectOrdConstrainedVariables may return nominal type references like "hydra.core.relational.ColumnName")
     "ordVars" <~ Lists.filter
       ("v" ~> Lists.member (var "v" :: TypedTerm Name) (var "typeVars" :: TypedTerm [Name]))
       (var "allOrdVars") $

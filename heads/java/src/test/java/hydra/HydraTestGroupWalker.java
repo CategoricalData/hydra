@@ -1,6 +1,6 @@
 package hydra;
 
-import hydra.testing.*;
+import hydra.core.testing.*;
 
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;

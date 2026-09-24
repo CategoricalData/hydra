@@ -45,9 +45,9 @@ cp "$HYDRA_SCALA_PKG/project/build.properties" "$OUTPUT_DIR/project/" 2>/dev/nul
 echo "  Copying hand-written source files..."
 if [ -d "$HYDRA_SCALA_OVERLAY/src/main/scala" ]; then
     mkdir -p "$OUTPUT_DIR/src/main/scala/hydra"
-    # Copy the hydra.overlay.scala.* runtime (native primitive IMPLEMENTATIONS + Libraries.scala
+    # Copy the hydra.core.overlay.scala.* runtime (native primitive IMPLEMENTATIONS + Libraries.scala
     # registry). #501 moved these under hydra/overlay/scala/ (was hydra/scala/lib pre-#501, and
-    # hydra/lib pre-#473). The generated consumers + registry call hydra.overlay.scala.lib.*;
+    # hydra/lib pre-#473). The generated consumers + registry call hydra.core.overlay.scala.lib.*;
     # without them the cell fails to compile with "value overlay is not a member of hydra".
     # Blanket-copy the whole overlay subtree (as the Java/Python cells do) so it stays correct
     # across future namespace moves rather than cherry-picking paths that a rename can orphan.
@@ -65,7 +65,7 @@ if [ -d "$HYDRA_SCALA_OVERLAY/src/test/scala" ]; then
     cp -r "$HYDRA_SCALA_OVERLAY/src/test/scala/hydra" "$OUTPUT_DIR/src/test/scala/"
 fi
 
-# #546: overlay hydra-build's generated main+test (hydra.build.* + hydra.test.build.*),
+# #546: overlay hydra-build's generated main+test (hydra.build.* + hydra.core.test.build.*),
 # referenced by the kernel testSuite but absent from the hydra-kernel dist tree.
 HYDRA_SCALA_BUILD_DIST="$HYDRA_ROOT/dist/scala/hydra-build"
 if [ -d "$HYDRA_SCALA_BUILD_DIST/src/main/scala/hydra" ]; then

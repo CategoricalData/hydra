@@ -1,4 +1,4 @@
-// M2: exercise case-dispatch via hydra.arity.type_arity.
+// M2: exercise case-dispatch via hydra.core.arity.type_arity.
 //
 // This is a JS-defined test file rather than a JSON manifest because M2
 // tests construct live Wasm values as input (tagged unions, records) —
@@ -16,7 +16,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..", "..");
 const WAT = join(ROOT, "dist/wasm/hydra-kernel/src/main/wat/hydra/arity.wat");
 
-// Variant tags for hydra.core.Type (ordered as declared in Core.hs):
+// Variant tags for hydra.core.model.Type (ordered as declared in Core.hs):
 const T = {
   Annotated: 0,  Application: 1, Either: 2,  Forall: 3,
   Function: 4,   List: 5,        Literal: 6, Map: 7,
@@ -29,12 +29,12 @@ const T = {
 // on each function arrow). We don't care about the i32 values' correctness
 // beyond "math.add returns a+b" for the arrow-count test.
 const imports = {
-  "hydra.lib.math": {
-    "hydra.lib.math.add": (a, b) => (a + b) | 0,
-    "hydra.lib.math.sub": (a, b) => (a - b) | 0,
+  "hydra.core.lib.math": {
+    "hydra.core.lib.math.add": (a, b) => (a + b) | 0,
+    "hydra.core.lib.math.sub": (a, b) => (a - b) | 0,
   },
-  "hydra.lib.lists": {
-    "hydra.lib.lists.cons": (_x, _xs) => 0,
+  "hydra.core.lib.lists": {
+    "hydra.core.lib.lists.cons": (_x, _xs) => 0,
   },
 };
 
@@ -58,7 +58,7 @@ const memory = instance.exports.memory;
 const tests = [
   {
     name: "type_arity TypeUnit = 0",
-    export: "hydra.arity.type_arity",
+    export: "hydra.core.arity.type_arity",
     kind: "i32",
     expected: 0,
     args: (ctx) => {
@@ -68,7 +68,7 @@ const tests = [
   },
   {
     name: "type_arity TypeList _ = 0 (default arm, not explicit case)",
-    export: "hydra.arity.type_arity",
+    export: "hydra.core.arity.type_arity",
     kind: "i32",
     expected: 0,
     args: (ctx) => {
@@ -79,7 +79,7 @@ const tests = [
   },
   {
     name: "type_arity (Unit -> Unit) = 1",
-    export: "hydra.arity.type_arity",
+    export: "hydra.core.arity.type_arity",
     kind: "i32",
     expected: 1,
     args: (ctx) => {
@@ -93,7 +93,7 @@ const tests = [
   },
   {
     name: "type_arity (Unit -> Unit -> Unit) = 2",
-    export: "hydra.arity.type_arity",
+    export: "hydra.core.arity.type_arity",
     kind: "i32",
     expected: 2,
     args: (ctx) => {
@@ -109,7 +109,7 @@ const tests = [
   },
   {
     name: "type_arity TypeEither _ = 0 (Either was misrouted before br_table fix)",
-    export: "hydra.arity.type_arity",
+    export: "hydra.core.arity.type_arity",
     kind: "i32",
     expected: 0,
     args: (ctx) => {

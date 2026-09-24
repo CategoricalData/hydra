@@ -1,15 +1,15 @@
 module Hydra.Sources.Kernel.Types.Validation where
 
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations (doc)
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types ((>:))
-import qualified Hydra.Overlay.Haskell.Dsl.Types as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations (doc)
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types ((>:))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.validation"
+ns = ModuleName "hydra.core.validation"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns
@@ -18,7 +18,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = (DefinitionType <$> definitions),
-            moduleDependencies = unqualifiedDep <$> [Core.ns, ModuleName "hydra.error.core"],
+            moduleDependencies = unqualifiedDep <$> [Core.ns, ModuleName "hydra.core.error.model"],
             moduleMetadata = descriptionMetadata (Just "Framework types for configurable validation: profiles classify checks as errors or warnings, and results accumulate findings up to caller-specified bounds.")}
   where
     definitions = [
@@ -30,7 +30,7 @@ validationProfile = define "ValidationProfile" $
   doc "Configuration for a validation pass: which check rules are active, how each is classified, and the upper bounds on collected findings. A check whose rule name appears in neither set is never evaluated. Errors hard-stop the traversal once maxErrors is reached; warnings only stop being collected once maxWarnings is reached, never causing termination." $
   T.record [
     "errorRules">:
-      doc "The set of fully qualified rule names whose findings are treated as errors. Each name has the form 'hydra.error.<package>.<UnionType>.<variant>', e.g. 'hydra.error.core.InvalidTermError.duplicateBinding'." $
+      doc "The set of fully qualified rule names whose findings are treated as errors. Each name has the form 'hydra.core.error.<package>.<UnionType>.<variant>', e.g. 'hydra.core.error.model.InvalidTermError.duplicateBinding'." $
       T.set Core.name,
     "warningRules">:
       doc "The set of fully qualified rule names whose findings are treated as warnings. Same name format as errorRules." $

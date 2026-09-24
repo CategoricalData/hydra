@@ -99,7 +99,7 @@ else
     else
         # Under HYDRA_IN_SYNC (Phase 1.5 in bin/sync.sh): the local-host runtime
         # we are about to put on PYTHONPATH must match the current kernel layout
-        # before update-python-json.py imports hydra.codegen. We can't recurse
+        # before update-python-json.py imports hydra.core.codegen. We can't recurse
         # via sync-python.sh, but the per-package assembler is non-recursive,
         # reads dist/json/hydra-kernel (already produced by Phase 1), and has
         # its own digest-based freshness gate — calling it warm is a fast no-op.

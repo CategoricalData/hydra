@@ -15,17 +15,17 @@ from typing import Callable, Optional
 
 import pytest
 
-import hydra.testing
+import hydra.core.testing
 
-TestRunner = Callable[[str, hydra.testing.TestCaseWithMetadata], Optional[Callable[[], None]]]
+TestRunner = Callable[[str, hydra.core.testing.TestCaseWithMetadata], Optional[Callable[[], None]]]
 
 
-def is_disabled(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
-    disabled_tag = hydra.testing.Tag("disabled")
+def is_disabled(tcase: hydra.core.testing.TestCaseWithMetadata) -> bool:
+    disabled_tag = hydra.core.testing.Tag("disabled")
     return disabled_tag in tcase.tags
 
 
-def should_skip_test(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
+def should_skip_test(tcase: hydra.core.testing.TestCaseWithMetadata) -> bool:
     return is_disabled(tcase)
 
 
@@ -38,7 +38,7 @@ def _resolve_subgroup(subgroup_item, suite_module):
         return subgroup_item
 
 
-def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) -> Optional[Callable[[], None]]:
+def default_test_runner(desc: str, tcase: hydra.core.testing.TestCaseWithMetadata) -> Optional[Callable[[], None]]:
     """Default test runner: handles UniversalTestCase and EffectfulTestCase, both string comparisons."""
     if should_skip_test(tcase):
         return None
@@ -46,7 +46,7 @@ def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) ->
     case = tcase.case
 
     match case:
-        case hydra.testing.TestCaseUniversal(value=tc):
+        case hydra.core.testing.TestCaseUniversal(value=tc):
             def run_universal():
                 actual = tc.actual(None)
                 expected = tc.expected(None)
@@ -54,7 +54,7 @@ def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) ->
                     raise AssertionError(f"expected {expected!r} but got {actual!r}")
             return run_universal
 
-        case hydra.testing.TestCaseEffectful(value=tc):
+        case hydra.core.testing.TestCaseEffectful(value=tc):
             def run_effectful():
                 prepare_effectful_temp_dir()
                 actual = tc.actual(None)
@@ -84,7 +84,7 @@ def prepare_effectful_temp_dir() -> None:
     os.makedirs(EFFECTFUL_TEST_DIR, exist_ok=True)
 
 
-def _count_test_cases(group: hydra.testing.TestGroup, runner: TestRunner, suite_module) -> tuple[int, int]:
+def _count_test_cases(group: hydra.core.testing.TestGroup, runner: TestRunner, suite_module) -> tuple[int, int]:
     runnable = 0
     skipped = 0
     for tcase in group.cases:
@@ -103,7 +103,7 @@ def _count_test_cases(group: hydra.testing.TestGroup, runner: TestRunner, suite_
 
 
 def _group_to_json_value(group, parent_path, runner, results, suite_module):
-    import hydra.json.model as json
+    import hydra.core.json.model as json
 
     path = f"{parent_path}/{group.name}" if parent_path else group.name
     runnable, skipped = _count_test_cases(group, runner, suite_module)
@@ -131,15 +131,15 @@ def _group_to_json_value(group, parent_path, runner, results, suite_module):
 def write_benchmark_json(
     output_path: str,
     runner: TestRunner,
-    root_group: hydra.testing.TestGroup,
+    root_group: hydra.core.testing.TestGroup,
     suite_module,
     language: str,
     benchmark_results: dict[str, float],
 ) -> None:
     """Write benchmark results as JSON using Hydra's JSON writer."""
     import subprocess
-    import hydra.json.model as json
-    import hydra.json.writer as json_writer
+    import hydra.core.json.model as json
+    import hydra.core.json.writer as json_writer
 
     root_path = root_group.name
 
@@ -197,7 +197,7 @@ def write_benchmark_json(
 
 
 def generate_pytest_tests(
-    group: hydra.testing.TestGroup,
+    group: hydra.core.testing.TestGroup,
     runner: TestRunner,
     suite_module,
     prefix: str = "",
@@ -232,7 +232,7 @@ def generate_pytest_tests(
             tests.append((test_name, case_hydra_path, make_skip_test()))
             continue
 
-        def make_test(test_desc: str, test_case: hydra.testing.TestCaseWithMetadata):
+        def make_test(test_desc: str, test_case: hydra.core.testing.TestCaseWithMetadata):
             def test_fn():
                 test_func = runner(test_desc, test_case)
                 if test_func:

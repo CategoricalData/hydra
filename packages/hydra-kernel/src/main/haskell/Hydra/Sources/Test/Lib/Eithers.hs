@@ -4,14 +4,14 @@ module Hydra.Sources.Test.Lib.Eithers where
 
 -- Standard imports for tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
-import Hydra.Overlay.Haskell.Dsl.Typed.Terms                   as Terms hiding ((@@))
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                ((@@))
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                ((@@))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -20,27 +20,27 @@ import qualified Data.Map                     as M
 import qualified Data.Set                     as S
 
 -- Additional imports specific to this file
-import Hydra.Testing
-import qualified Hydra.Dsl.Lib.Eithers as Eithers
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Logic as Logic
-import qualified Hydra.Dsl.Lib.Math as Math
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
-import qualified Hydra.Dsl.Lib.Sets as Sets
-import qualified Hydra.Dsl.Lib.Strings as Strings
+import Hydra.Core.Testing
+import qualified Hydra.Core.Dsl.Lib.Eithers as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic as Logic
+import qualified Hydra.Core.Dsl.Lib.Math as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Core.Dsl.Lib.Sets as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings as Strings
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.lib.eithers"
+ns = ModuleName "hydra.core.test.lib.eithers"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", PrintCore.ns] ++ kernelTypesModuleNames),
-            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.lib.eithers primitives")}
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.core.reduction", PrintCore.ns] ++ kernelTypesModuleNames),
+            moduleMetadata = descriptionMetadata (Just "Test cases for hydra.core.lib.eithers primitives")}
   where
     definitions = [Phantoms.toDefinition allTests]
 
@@ -100,12 +100,12 @@ rightInt x = Phantoms.right (Phantoms.int32 x)
 rightStr :: String -> TypedTerm (Either a String)
 rightStr s = Phantoms.right (Phantoms.string s)
 
--- Test groups for hydra.lib.eithers primitives
+-- Test groups for hydra.core.lib.eithers primitives
 
 allTests :: TypedTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $
-    Phantoms.doc "Test cases for hydra.lib.eithers primitives" $
-    supergroup "hydra.lib.eithers primitives" [
+    Phantoms.doc "Test cases for hydra.core.lib.eithers primitives" $
+    supergroup "hydra.core.lib.eithers primitives" [
       eithersBind,
       eithersBimap,
       eithersIsLeft,

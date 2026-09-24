@@ -1,42 +1,42 @@
 package hydra.sources.java;
-import hydra.core.Field;
-import hydra.core.Name;
-import hydra.core.Type;
-import hydra.dsl.Core;
-import hydra.dsl.Packaging;
-import hydra.overlay.java.dsl.Types;
-import hydra.dsl.java.Environment;
-import hydra.dsl.java.Syntax;
-import hydra.dsl.lib.Eithers;
-import hydra.dsl.lib.Equality;
-import hydra.dsl.lib.Lists;
-import hydra.dsl.lib.Literals;
-import hydra.dsl.lib.Logic;
-import hydra.dsl.lib.Maps;
-import hydra.dsl.lib.Math_;
-import hydra.dsl.lib.Optionals;
-import hydra.dsl.lib.Ordering;
-import hydra.dsl.lib.Pairs;
-import hydra.dsl.lib.Sets;
-import hydra.dsl.lib.Strings;
-import hydra.packaging.Definition;
-import hydra.packaging.EntityMetadata;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleDependency;
-import hydra.packaging.ModuleName;
-import hydra.typed.TypedTerm;
-import hydra.overlay.java.util.Optional;
+import hydra.core.model.Field;
+import hydra.core.model.Name;
+import hydra.core.model.Type;
+import hydra.core.dsl.Core;
+import hydra.core.dsl.Packaging;
+import hydra.core.overlay.java.dsl.Types;
+import hydra.java.dsl.Environment;
+import hydra.java.dsl.Syntax;
+import hydra.core.dsl.lib.Eithers;
+import hydra.core.dsl.lib.Equality;
+import hydra.core.dsl.lib.Lists;
+import hydra.core.dsl.lib.Literals;
+import hydra.core.dsl.lib.Logic;
+import hydra.core.dsl.lib.Maps;
+import hydra.core.dsl.lib.Math_;
+import hydra.core.dsl.lib.Optionals;
+import hydra.core.dsl.lib.Ordering;
+import hydra.core.dsl.lib.Pairs;
+import hydra.core.dsl.lib.Sets;
+import hydra.core.dsl.lib.Strings;
+import hydra.core.packaging.Definition;
+import hydra.core.packaging.EntityMetadata;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleDependency;
+import hydra.core.packaging.ModuleName;
+import hydra.core.typed.TypedTerm;
+import hydra.core.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static hydra.overlay.java.dsl.meta.Phantoms.*;
-import hydra.overlay.java.dsl.meta.Defs;
-import hydra.overlay.java.dsl.meta.Defs.Def;
-import static hydra.overlay.java.dsl.meta.Defs.define;
-import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
-import static hydra.overlay.java.dsl.meta.Defs.ref;
-import static hydra.overlay.java.dsl.meta.Defs.definitionsOf;
+import static hydra.core.overlay.java.dsl.Phantoms.*;
+import hydra.core.overlay.java.dsl.meta.Defs;
+import hydra.core.overlay.java.dsl.meta.Defs.Def;
+import static hydra.core.overlay.java.dsl.meta.Defs.define;
+import static hydra.core.overlay.java.dsl.meta.Defs.unqualifiedDeps;
+import static hydra.core.overlay.java.dsl.meta.Defs.ref;
+import static hydra.core.overlay.java.dsl.meta.Defs.definitionsOf;
 import java.util.function.Supplier;
 import hydra.java.syntax.AdditionalBound;
 import hydra.java.syntax.AdditiveExpression;
@@ -225,9 +225,9 @@ public class Serde {
     public static final Def additionalBoundToExpr = def("additionalBoundToExpr")
         .lam("ab")
         .to(() ->
-                hydra.dsl.Serialization.spaceSep(
+                hydra.core.dsl.Serialization.spaceSep(
                     list(
-                        hydra.dsl.Serialization.cst( string("&")),
+                        hydra.core.dsl.Serialization.cst( string("&")),
                         apply(
                             ref(Serde.interfaceTypeToExpr),
                             apply(unwrap(AdditionalBound.TYPE_), var("ab"))))));
@@ -243,7 +243,7 @@ public class Serde {
                     field(
                         AdditiveExpression.PLUS,
                         lambda("b",
-                            hydra.dsl.Serialization.infixWs(
+                            hydra.core.dsl.Serialization.infixWs(
                                 string("+"),
                                 apply(
                                     ref(Serde.additiveExpressionToExpr),
@@ -254,7 +254,7 @@ public class Serde {
                     field(
                         AdditiveExpression.MINUS,
                         lambda("b",
-                            hydra.dsl.Serialization.infixWs(
+                            hydra.core.dsl.Serialization.infixWs(
                                 string("-"),
                                 apply(
                                     ref(Serde.additiveExpressionToExpr),
@@ -266,7 +266,7 @@ public class Serde {
     public static final Def ambiguousNameToExpr = def("ambiguousNameToExpr")
         .lam("an")
         .to(() ->
-                hydra.dsl.Serialization.dotSep(
+                hydra.core.dsl.Serialization.dotSep(
                     Lists.map(
                         ref(Serde.identifierToExpr),
                         apply(unwrap(AmbiguousName.TYPE_), var("an")))));
@@ -274,7 +274,7 @@ public class Serde {
     public static final Def andExpressionToExpr = def("andExpressionToExpr")
         .lam("ae")
         .to(() ->
-                hydra.dsl.Serialization.infixWsList(
+                hydra.core.dsl.Serialization.infixWsList(
                     string("&"),
                     Lists.map(
                         ref(Serde.equalityExpressionToExpr),
@@ -305,11 +305,11 @@ public class Serde {
     public static final Def annotationTypeDeclarationToExpr = def("annotationTypeDeclarationToExpr")
         .to(() ->
                 constant(
-                hydra.dsl.Serialization.cst( string("STUB:AnnotationInterfaceDeclaration"))));
+                hydra.core.dsl.Serialization.cst( string("STUB:AnnotationInterfaceDeclaration"))));
 
     public static final Def arrayAccessToExpr = def("arrayAccessToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:ArrayAccess"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:ArrayAccess"))));
 
     public static final Def arrayCreationExpressionToExpr = def("arrayCreationExpressionToExpr")
         .lam("ace")
@@ -319,7 +319,7 @@ public class Serde {
                     field(
                         ArrayCreationExpression.NO_INIT,
                         constant(
-                            hydra.dsl.Serialization.cst(
+                            hydra.core.dsl.Serialization.cst(
                                 string("STUB:ArrayCreationExpression")))),
                     field(
                         ArrayCreationExpression.WITH_INIT,
@@ -334,16 +334,16 @@ public class Serde {
                                                 proj(ArrayCreationExpressionWithInitializer_Primitive.TYPE_, ArrayCreationExpressionWithInitializer_Primitive.TYPE, "pa")),
                                             field("ai",
                                                 proj(ArrayCreationExpressionWithInitializer_Primitive.TYPE_, ArrayCreationExpressionWithInitializer_Primitive.ARRAY, "pa")),
-                                            hydra.dsl.Serialization.spaceSep(
+                                            hydra.core.dsl.Serialization.spaceSep(
                                                 list(
-                                                    hydra.dsl.Serialization.cst(
+                                                    hydra.core.dsl.Serialization.cst(
                                                         string("new")),
-                                                    hydra.dsl.Serialization.noSep(
+                                                    hydra.core.dsl.Serialization.noSep(
                                                         list(
                                                             apply(
                                                                 ref(Serde.primitiveTypeWithAnnotationsToExpr),
                                                                 var("pt")),
-                                                            hydra.dsl.Serialization.cst(
+                                                            hydra.core.dsl.Serialization.cst(
                                                                 string("[]")))),
                                                     apply(
                                                         ref(Serde.arrayInitializerToExpr),
@@ -351,7 +351,7 @@ public class Serde {
                                 field(
                                     ArrayCreationExpressionWithInitializer.CLASS_OR_INTERFACE,
                                     constant(
-                                        hydra.dsl.Serialization.cst(
+                                        hydra.core.dsl.Serialization.cst(
                                             string("STUB:ArrayCreationExpression")))))))));
 
     public static final Def arrayInitializerToExpr = def("arrayInitializerToExpr")
@@ -360,21 +360,21 @@ public class Serde {
                 let("groups",
                     apply(unwrap(ArrayInitializer.TYPE_), var("ai")),
                     Optionals.withDefault(
-                        hydra.dsl.Serialization.cst( string("{}")),
+                        hydra.core.dsl.Serialization.cst( string("{}")),
                         Optionals.map(
                             lambda("firstGroup",
                                 Logic.ifElse(
                                     Equality.equal(Lists.length(var("groups")), int32(1)),
-                                    hydra.dsl.Serialization.noSep(
+                                    hydra.core.dsl.Serialization.noSep(
                                         list(
-                                            hydra.dsl.Serialization.cst( string("{")),
-                                            hydra.dsl.Serialization.commaSep(
-                                                hydra.dsl.Serialization.inlineStyle(),
+                                            hydra.core.dsl.Serialization.cst( string("{")),
+                                            hydra.core.dsl.Serialization.commaSep(
+                                                hydra.core.dsl.Serialization.inlineStyle(),
                                                 Lists.map(
                                                     ref(Serde.variableInitializerToExpr),
                                                     var("firstGroup"))),
-                                            hydra.dsl.Serialization.cst( string("}")))),
-                                    hydra.dsl.Serialization.cst( string("{}")))),
+                                            hydra.core.dsl.Serialization.cst( string("}")))),
+                                    hydra.core.dsl.Serialization.cst( string("{}")))),
                             Lists.head(var("groups"))))));
 
     public static final Def arrayTypeToExpr = def("arrayTypeToExpr")
@@ -399,12 +399,12 @@ public class Serde {
                             field(
                                 ArrayType_Variant.VARIABLE,
                                 lambda("tv", apply(ref(Serde.typeVariableToExpr), var("tv")))))),
-                    hydra.dsl.Serialization.noSep(
+                    hydra.core.dsl.Serialization.noSep(
                         list(var("varExpr"), apply(ref(Serde.dimsToExpr), var("dims"))))));
 
     public static final Def assertStatementToExpr = def("assertStatementToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:AssertStatement"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:AssertStatement"))));
 
     public static final Def assignmentExpressionToExpr = def("assignmentExpressionToExpr")
         .lam("e")
@@ -455,7 +455,7 @@ public class Serde {
                             field(AssignmentOperator.AND, constant(string("&="))),
                             field(AssignmentOperator.XOR, constant(string("^="))),
                             field(AssignmentOperator.OR, constant(string("|="))))),
-                    hydra.dsl.Serialization.infixWs(
+                    hydra.core.dsl.Serialization.infixWs(
                         var("ctop"),
                         apply(ref(Serde.leftHandSideToExpr), var("lhs")),
                         apply(ref(Serde.expressionToExpr), var("rhs")))));
@@ -493,9 +493,9 @@ public class Serde {
     public static final Def blockToExpr = def("blockToExpr")
         .lam("b")
         .to(() ->
-                hydra.dsl.Serialization.curlyBlock(
-                    hydra.dsl.Serialization.fullBlockStyle(),
-                    hydra.dsl.Serialization.newlineSep(
+                hydra.core.dsl.Serialization.curlyBlock(
+                    hydra.core.dsl.Serialization.fullBlockStyle(),
+                    hydra.core.dsl.Serialization.newlineSep(
                         Lists.map(
                             ref(Serde.blockStatementToExpr),
                             apply(unwrap(Block.TYPE_), var("b"))))));
@@ -505,16 +505,16 @@ public class Serde {
         .to(() ->
                 let("mlabel",
                     apply(unwrap(BreakStatement.TYPE_), var("bs")),
-                    hydra.dsl.Serialization.withSemi(
-                        hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.withSemi(
+                        hydra.core.dsl.Serialization.spaceSep(
                             Optionals.givens(
                                 list(
-                                    just(hydra.dsl.Serialization.cst( string("break"))),
+                                    just(hydra.core.dsl.Serialization.cst( string("break"))),
                                     Optionals.map(ref(Serde.identifierToExpr), var("mlabel"))))))));
 
     public static final Def castExpressionLambdaToExpr = def("castExpressionLambdaToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:CastExpression_Lambda"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:CastExpression_Lambda"))));
 
     public static final Def castExpressionNotPlusMinusToExpr = def("castExpressionNotPlusMinusToExpr")
         .lam("npm")
@@ -524,7 +524,7 @@ public class Serde {
                         proj(CastExpression_NotPlusMinus.TYPE_, CastExpression_NotPlusMinus.REF_AND_BOUNDS, "npm")),
                     field("ex",
                         proj(CastExpression_NotPlusMinus.TYPE_, CastExpression_NotPlusMinus.EXPRESSION, "npm")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         list(
                             apply(ref(Serde.castExpressionRefAndBoundsToExpr), var("rb")),
                             apply(ref(Serde.unaryExpressionToExpr), var("ex"))))));
@@ -537,9 +537,9 @@ public class Serde {
                         proj(CastExpression_Primitive.TYPE_, CastExpression_Primitive.TYPE, "cp")),
                     field("ex",
                         proj(CastExpression_Primitive.TYPE_, CastExpression_Primitive.EXPRESSION, "cp")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         list(
-                            hydra.dsl.Serialization.parenList(
+                            hydra.core.dsl.Serialization.parenList(
                                 bool(false),
                                 list(
                                     apply(ref(Serde.primitiveTypeWithAnnotationsToExpr), var("pt")))),
@@ -553,10 +553,10 @@ public class Serde {
                         proj(CastExpression_RefAndBounds.TYPE_, CastExpression_RefAndBounds.TYPE, "rab")),
                     field("adds",
                         proj(CastExpression_RefAndBounds.TYPE_, CastExpression_RefAndBounds.BOUNDS, "rab")),
-                    hydra.dsl.Serialization.parenList(
+                    hydra.core.dsl.Serialization.parenList(
                         bool(false),
                         list(
-                            hydra.dsl.Serialization.spaceSep(
+                            hydra.core.dsl.Serialization.spaceSep(
                                 Optionals.givens(
                                     list(
                                         just(apply(ref(Serde.referenceTypeToExpr), var("rt"))),
@@ -564,7 +564,7 @@ public class Serde {
                                             Lists.isEmpty(var("adds")),
                                             nothing(),
                                             just(
-                                                hydra.dsl.Serialization.spaceSep(
+                                                hydra.core.dsl.Serialization.spaceSep(
                                                     Lists.map(
                                                         ref(Serde.additionalBoundToExpr),
                                                         var("adds"))))))))))));
@@ -619,9 +619,9 @@ public class Serde {
     public static final Def classBodyToExpr = def("classBodyToExpr")
         .lam("cb")
         .to(() ->
-                hydra.dsl.Serialization.curlyBlock(
-                    hydra.dsl.Serialization.fullBlockStyle(),
-                    hydra.dsl.Serialization.doubleNewlineSep(
+                hydra.core.dsl.Serialization.curlyBlock(
+                    hydra.core.dsl.Serialization.fullBlockStyle(),
+                    hydra.core.dsl.Serialization.doubleNewlineSep(
                         Lists.map(
                             ref(Serde.classBodyDeclarationWithCommentsToExpr),
                             apply(unwrap(ClassBody.TYPE_), var("cb"))))));
@@ -659,7 +659,7 @@ public class Serde {
                     field("e",
                         proj(ClassInstanceCreationExpression.TYPE_, ClassInstanceCreationExpression.EXPRESSION, "cice")),
                     Optionals.match(var("mqual"), apply(ref(Serde.unqualifiedClassInstanceCreationExpressionToExpr), var("e")), lambda("q",
-                            hydra.dsl.Serialization.dotSep(
+                            hydra.core.dsl.Serialization.dotSep(
                                 list(
                                     apply(
                                         ref(Serde.classInstanceCreationExpressionQualifierToExpr),
@@ -670,7 +670,7 @@ public class Serde {
 
     public static final Def classLiteralToExpr = def("classLiteralToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:ClassLiteral"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:ClassLiteral"))));
 
     public static final Def classMemberDeclarationToExpr = def("classMemberDeclarationToExpr")
         .lam("d")
@@ -691,7 +691,7 @@ public class Serde {
                         lambda("id", apply(ref(Serde.interfaceDeclarationToExpr), var("id")))),
                     field(
                         ClassMemberDeclaration.NONE,
-                        constant(hydra.dsl.Serialization.cst( string(";"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string(";"))))));
 
     public static final Def classModifierToExpr = def("classModifierToExpr")
         .lam("m")
@@ -703,25 +703,25 @@ public class Serde {
                         lambda("ann", apply(ref(Serde.annotationToExpr), var("ann")))),
                     field(
                         ClassModifier.PUBLIC,
-                        constant(hydra.dsl.Serialization.cst( string("public")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("public")))),
                     field(
                         ClassModifier.PROTECTED,
-                        constant(hydra.dsl.Serialization.cst( string("protected")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("protected")))),
                     field(
                         ClassModifier.PRIVATE,
-                        constant(hydra.dsl.Serialization.cst( string("private")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("private")))),
                     field(
                         ClassModifier.ABSTRACT,
-                        constant(hydra.dsl.Serialization.cst( string("abstract")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("abstract")))),
                     field(
                         ClassModifier.STATIC,
-                        constant(hydra.dsl.Serialization.cst( string("static")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("static")))),
                     field(
                         ClassModifier.FINAL,
-                        constant(hydra.dsl.Serialization.cst( string("final")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("final")))),
                     field(
                         ClassModifier.STRICTFP,
-                        constant(hydra.dsl.Serialization.cst( string("strictfp"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string("strictfp"))))));
 
     public static final Def classOrInterfaceTypeToExpr = def("classOrInterfaceTypeToExpr")
         .lam("cit")
@@ -743,11 +743,11 @@ public class Serde {
                         proj(ClassOrInterfaceTypeToInstantiate.TYPE_, ClassOrInterfaceTypeToInstantiate.IDENTIFIERS, "coitti")),
                     field("margs",
                         proj(ClassOrInterfaceTypeToInstantiate.TYPE_, ClassOrInterfaceTypeToInstantiate.TYPE_ARGUMENTS, "coitti")),
-                    hydra.dsl.Serialization.noSep(
+                    hydra.core.dsl.Serialization.noSep(
                         Optionals.givens(
                             list(
                                 just(
-                                    hydra.dsl.Serialization.dotSep(
+                                    hydra.core.dsl.Serialization.dotSep(
                                         Lists.map(ref(Serde.annotatedIdentifierToExpr), var("ids")))),
                                 Optionals.map(ref(Serde.typeArgumentsOrDiamondToExpr), var("margs")))))));
 
@@ -772,30 +772,30 @@ public class Serde {
                             field(
                                 ClassTypeQualifier.PACKAGE,
                                 lambda("pkg",
-                                    hydra.dsl.Serialization.dotSep(
+                                    hydra.core.dsl.Serialization.dotSep(
                                         list(
                                             apply(ref(Serde.packageNameToExpr), var("pkg")),
                                             apply(ref(Serde.typeIdentifierToExpr), var("id")))))),
                             field(
                                 ClassTypeQualifier.PARENT,
                                 lambda("cit",
-                                    hydra.dsl.Serialization.dotSep(
+                                    hydra.core.dsl.Serialization.dotSep(
                                         list(
                                             apply(ref(Serde.classOrInterfaceTypeToExpr), var("cit")),
                                             apply(ref(Serde.typeIdentifierToExpr), var("id")))))))),
-                    hydra.dsl.Serialization.noSep(
+                    hydra.core.dsl.Serialization.noSep(
                         Optionals.givens(
                             list(
                                 just(
-                                    hydra.dsl.Serialization.spaceSep(
+                                    hydra.core.dsl.Serialization.spaceSep(
                                         Optionals.givens(
                                             list(
                                                 Logic.ifElse(
                                                     Lists.isEmpty(var("anns")),
                                                     nothing(),
                                                     just(
-                                                        hydra.dsl.Serialization.commaSep(
-                                                            hydra.dsl.Serialization.inlineStyle(),
+                                                        hydra.core.dsl.Serialization.commaSep(
+                                                            hydra.core.dsl.Serialization.inlineStyle(),
                                                             Lists.map(
                                                                 ref(Serde.annotationToExpr),
                                                                 var("anns"))))),
@@ -804,8 +804,8 @@ public class Serde {
                                     Lists.isEmpty(var("args")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.angleBracesList(
-                                            hydra.dsl.Serialization.inlineStyle(),
+                                        hydra.core.dsl.Serialization.angleBracesList(
+                                            hydra.core.dsl.Serialization.inlineStyle(),
                                             Lists.map(ref(Serde.typeArgumentToExpr), var("args"))))))))));
 
     public static final Def compilationUnitToExpr = def("compilationUnitToExpr")
@@ -827,7 +827,7 @@ public class Serde {
                                     just(
                                         apply(
                                             ref(Serde.singleLineComment),
-                                            hydra.dsl.Constants.warningAutoGeneratedFile()))),
+                                            hydra.core.dsl.Constants.warningAutoGeneratedFile()))),
                                 field("pkgSec",
                                     Optionals.map(ref(Serde.packageDeclarationToExpr), var("mpkg"))),
                                 field("importsSec",
@@ -835,7 +835,7 @@ public class Serde {
                                         Lists.isEmpty(var("imports")),
                                         nothing(),
                                         just(
-                                            hydra.dsl.Serialization.newlineSep(
+                                            hydra.core.dsl.Serialization.newlineSep(
                                                 Lists.map(
                                                     ref(Serde.importDeclarationToExpr),
                                                     var("imports")))))),
@@ -844,11 +844,11 @@ public class Serde {
                                         Lists.isEmpty(var("types")),
                                         nothing(),
                                         just(
-                                            hydra.dsl.Serialization.doubleNewlineSep(
+                                            hydra.core.dsl.Serialization.doubleNewlineSep(
                                                 Lists.map(
                                                     ref(Serde.typeDeclarationWithCommentsToExpr),
                                                     var("types")))))),
-                                hydra.dsl.Serialization.doubleNewlineSep(
+                                hydra.core.dsl.Serialization.doubleNewlineSep(
                                     Optionals.givens(
                                         list(
                                             var("warning"),
@@ -859,7 +859,7 @@ public class Serde {
     public static final Def conditionalAndExpressionToExpr = def("conditionalAndExpressionToExpr")
         .lam("cae")
         .to(() ->
-                hydra.dsl.Serialization.infixWsList(
+                hydra.core.dsl.Serialization.infixWsList(
                     string("&&"),
                     Lists.map(
                         ref(Serde.inclusiveOrExpressionToExpr),
@@ -868,13 +868,13 @@ public class Serde {
     public static final Def conditionalExpressionTernaryCondToExpr = def("conditionalExpressionTernaryCondToExpr")
         .to(() ->
                 constant(
-                hydra.dsl.Serialization.cst(
+                hydra.core.dsl.Serialization.cst(
                     string("STUB:ConditionalExpression_TernaryCond"))));
 
     public static final Def conditionalExpressionTernaryLambdaToExpr = def("conditionalExpressionTernaryLambdaToExpr")
         .to(() ->
                 constant(
-                hydra.dsl.Serialization.cst(
+                hydra.core.dsl.Serialization.cst(
                     string("STUB:ConditionalExpression_TernaryLambda"))));
 
     public static final Def conditionalExpressionToExpr = def("conditionalExpressionToExpr")
@@ -897,7 +897,7 @@ public class Serde {
     public static final Def conditionalOrExpressionToExpr = def("conditionalOrExpressionToExpr")
         .lam("coe")
         .to(() ->
-                hydra.dsl.Serialization.infixWsList(
+                hydra.core.dsl.Serialization.infixWsList(
                     string("||"),
                     Lists.map(
                         ref(Serde.conditionalAndExpressionToExpr),
@@ -913,29 +913,29 @@ public class Serde {
                         proj(ConstantDeclaration.TYPE_, ConstantDeclaration.TYPE, "cd")),
                     field("vars",
                         proj(ConstantDeclaration.TYPE_, ConstantDeclaration.VARIABLES, "cd")),
-                    hydra.dsl.Serialization.withSemi(
-                        hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.withSemi(
+                        hydra.core.dsl.Serialization.spaceSep(
                             Optionals.givens(
                                 list(
                                     Logic.ifElse(
                                         Lists.isEmpty(var("mods")),
                                         nothing(),
                                         just(
-                                            hydra.dsl.Serialization.spaceSep(
+                                            hydra.core.dsl.Serialization.spaceSep(
                                                 Lists.map(
                                                     ref(Serde.constantModifierToExpr),
                                                     var("mods"))))),
                                     just(apply(ref(Serde.unannTypeToExpr), var("typ"))),
                                     just(
-                                        hydra.dsl.Serialization.commaSep(
-                                            hydra.dsl.Serialization.inlineStyle(),
+                                        hydra.core.dsl.Serialization.commaSep(
+                                            hydra.core.dsl.Serialization.inlineStyle(),
                                             Lists.map(
                                                 ref(Serde.variableDeclaratorToExpr),
                                                 var("vars"))))))))));
 
     public static final Def constantModifierToExpr = def("constantModifierToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:ConstantModifier"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:ConstantModifier"))));
 
     public static final Def constructorBodyToExpr = def("constructorBodyToExpr")
         .lam("cb")
@@ -945,16 +945,16 @@ public class Serde {
                         proj(ConstructorBody.TYPE_, ConstructorBody.INVOCATION, "cb")),
                     field("stmts",
                         proj(ConstructorBody.TYPE_, ConstructorBody.STATEMENTS, "cb")),
-                    hydra.dsl.Serialization.curlyBlock(
-                        hydra.dsl.Serialization.fullBlockStyle(),
-                        hydra.dsl.Serialization.doubleNewlineSep(
+                    hydra.core.dsl.Serialization.curlyBlock(
+                        hydra.core.dsl.Serialization.fullBlockStyle(),
+                        hydra.core.dsl.Serialization.doubleNewlineSep(
                             Optionals.givens(
                                 list(
                                     Optionals.map(
                                         ref(Serde.explicitConstructorInvocationToExpr),
                                         var("minvoc")),
                                     just(
-                                        hydra.dsl.Serialization.newlineSep(
+                                        hydra.core.dsl.Serialization.newlineSep(
                                             Lists.map(ref(Serde.blockStatementToExpr), var("stmts"))))))))));
 
     public static final Def constructorDeclarationToExpr = def("constructorDeclarationToExpr")
@@ -969,14 +969,14 @@ public class Serde {
                         proj(ConstructorDeclaration.TYPE_, ConstructorDeclaration.THROWS, "cd")),
                     field("body",
                         proj(ConstructorDeclaration.TYPE_, ConstructorDeclaration.BODY, "cd")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.isEmpty(var("mods")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.spaceSep(
+                                        hydra.core.dsl.Serialization.spaceSep(
                                             Lists.map(
                                                 ref(Serde.constructorModifierToExpr),
                                                 var("mods"))))),
@@ -994,21 +994,21 @@ public class Serde {
                         proj(ConstructorDeclarator.TYPE_, ConstructorDeclarator.NAME, "cd")),
                     field("fparams",
                         proj(ConstructorDeclarator.TYPE_, ConstructorDeclarator.FORMAL_PARAMETERS, "cd")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.isEmpty(var("tparams")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.angleBracesList(
-                                            hydra.dsl.Serialization.inlineStyle(),
+                                        hydra.core.dsl.Serialization.angleBracesList(
+                                            hydra.core.dsl.Serialization.inlineStyle(),
                                             Lists.map(
                                                 ref(Serde.typeParameterToExpr),
                                                 var("tparams"))))),
                                 just(apply(ref(Serde.simpleTypeNameToExpr), var("name"))),
                                 just(
-                                    hydra.dsl.Serialization.parenListAdaptive(
+                                    hydra.core.dsl.Serialization.parenListAdaptive(
                                         Lists.map(ref(Serde.formalParameterToExpr), var("fparams")))))))));
 
     public static final Def constructorModifierToExpr = def("constructorModifierToExpr")
@@ -1021,37 +1021,37 @@ public class Serde {
                         lambda("ann", apply(ref(Serde.annotationToExpr), var("ann")))),
                     field(
                         ConstructorModifier.PUBLIC,
-                        constant(hydra.dsl.Serialization.cst( string("public")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("public")))),
                     field(
                         ConstructorModifier.PROTECTED,
-                        constant(hydra.dsl.Serialization.cst( string("protected")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("protected")))),
                     field(
                         ConstructorModifier.PRIVATE,
-                        constant(hydra.dsl.Serialization.cst( string("private"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string("private"))))));
 
     public static final Def continueStatementToExpr = def("continueStatementToExpr")
         .lam("cs")
         .to(() ->
                 let("mlabel",
                     apply(unwrap(ContinueStatement.TYPE_), var("cs")),
-                    hydra.dsl.Serialization.withSemi(
-                        hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.withSemi(
+                        hydra.core.dsl.Serialization.spaceSep(
                             Optionals.givens(
                                 list(
-                                    just(hydra.dsl.Serialization.cst( string("continue"))),
+                                    just(hydra.core.dsl.Serialization.cst( string("continue"))),
                                     Optionals.map(ref(Serde.identifierToExpr), var("mlabel"))))))));
 
     public static final Def dimsToExpr = def("dimsToExpr")
         .lam("d")
         .to(() ->
-                hydra.dsl.Serialization.noSep(
+                hydra.core.dsl.Serialization.noSep(
                     Lists.map(
-                        constant(hydra.dsl.Serialization.cst( string("[]"))),
+                        constant(hydra.core.dsl.Serialization.cst( string("[]"))),
                         apply(unwrap(Dims.TYPE_), var("d")))));
 
     public static final Def doStatementToExpr = def("doStatementToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:DoStatement"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:DoStatement"))));
 
     public static final Def elementValuePairToExpr = def("elementValuePairToExpr")
         .lam("evp")
@@ -1061,7 +1061,7 @@ public class Serde {
                         proj(ElementValuePair.TYPE_, ElementValuePair.KEY, "evp")),
                     field("v",
                         proj(ElementValuePair.TYPE_, ElementValuePair.VALUE, "evp")),
-                    hydra.dsl.Serialization.infixWs(
+                    hydra.core.dsl.Serialization.infixWs(
                         string("="),
                         apply(ref(Serde.identifierToExpr), var("k")),
                         apply(ref(Serde.elementValueToExpr), var("v")))));
@@ -1077,8 +1077,8 @@ public class Serde {
                     field(
                         ElementValue.ELEMENT_VALUE_ARRAY_INITIALIZER,
                         lambda("evai",
-                            hydra.dsl.Serialization.commaSep(
-                                hydra.dsl.Serialization.inlineStyle(),
+                            hydra.core.dsl.Serialization.commaSep(
+                                hydra.core.dsl.Serialization.inlineStyle(),
                                 Lists.map(
                                     ref(Serde.elementValueToExpr),
                                     apply(
@@ -1090,7 +1090,7 @@ public class Serde {
 
     public static final Def enumDeclarationToExpr = def("enumDeclarationToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:EnumDeclaration"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:EnumDeclaration"))));
 
     public static final Def equalityExpressionToExpr = def("equalityExpressionToExpr")
         .lam("e")
@@ -1103,7 +1103,7 @@ public class Serde {
                     field(
                         EqualityExpression.EQUAL,
                         lambda("b",
-                            hydra.dsl.Serialization.infixWs(
+                            hydra.core.dsl.Serialization.infixWs(
                                 string("=="),
                                 apply(
                                     ref(Serde.equalityExpressionToExpr),
@@ -1114,7 +1114,7 @@ public class Serde {
                     field(
                         EqualityExpression.NOT_EQUAL,
                         lambda("b",
-                            hydra.dsl.Serialization.infixWs(
+                            hydra.core.dsl.Serialization.infixWs(
                                 string("!="),
                                 apply(
                                     ref(Serde.equalityExpressionToExpr),
@@ -1126,7 +1126,7 @@ public class Serde {
     public static final Def exclusiveOrExpressionToExpr = def("exclusiveOrExpressionToExpr")
         .lam("eoe")
         .to(() ->
-                hydra.dsl.Serialization.infixWsList(
+                hydra.core.dsl.Serialization.infixWsList(
                     string("^"),
                     Lists.map(
                         ref(Serde.andExpressionToExpr),
@@ -1135,7 +1135,7 @@ public class Serde {
     public static final Def explicitConstructorInvocationToExpr = def("explicitConstructorInvocationToExpr")
         .to(() ->
                 constant(
-                hydra.dsl.Serialization.cst( string("STUB:ExplicitConstructorInvocation"))));
+                hydra.core.dsl.Serialization.cst( string("STUB:ExplicitConstructorInvocation"))));
 
     public static final Def expressionNameToExpr = def("expressionNameToExpr")
         .lam("en")
@@ -1145,7 +1145,7 @@ public class Serde {
                         proj(ExpressionName.TYPE_, ExpressionName.QUALIFIER, "en")),
                     field("id",
                         proj(ExpressionName.TYPE_, ExpressionName.IDENTIFIER, "en")),
-                    hydra.dsl.Serialization.dotSep(
+                    hydra.core.dsl.Serialization.dotSep(
                         Optionals.givens(
                             list(
                                 Optionals.map(ref(Serde.ambiguousNameToExpr), var("mqual")),
@@ -1154,7 +1154,7 @@ public class Serde {
     public static final Def expressionStatementToExpr = def("expressionStatementToExpr")
         .lam("es")
         .to(() ->
-                hydra.dsl.Serialization.withSemi(
+                hydra.core.dsl.Serialization.withSemi(
                     apply(
                         ref(Serde.statementExpressionToExpr),
                         apply(unwrap(ExpressionStatement.TYPE_), var("es")))));
@@ -1184,24 +1184,24 @@ public class Serde {
                         field(
                             FieldAccess_Qualifier.PRIMARY,
                             lambda("p",
-                                hydra.dsl.Serialization.dotSep(
+                                hydra.core.dsl.Serialization.dotSep(
                                     list(
                                         apply(ref(Serde.primaryToExpr), var("p")),
                                         apply(ref(Serde.identifierToExpr), var("id")))))),
                         field(
                             FieldAccess_Qualifier.SUPER,
                             constant(
-                                hydra.dsl.Serialization.dotSep(
+                                hydra.core.dsl.Serialization.dotSep(
                                     list(
-                                        hydra.dsl.Serialization.cst( string("super")),
+                                        hydra.core.dsl.Serialization.cst( string("super")),
                                         apply(ref(Serde.identifierToExpr), var("id")))))),
                         field(
                             FieldAccess_Qualifier.TYPED,
                             lambda("tn",
-                                hydra.dsl.Serialization.dotSep(
+                                hydra.core.dsl.Serialization.dotSep(
                                     list(
                                         apply(ref(Serde.typeNameToExpr), var("tn")),
-                                        hydra.dsl.Serialization.cst( string("super")),
+                                        hydra.core.dsl.Serialization.cst( string("super")),
                                         apply(ref(Serde.identifierToExpr), var("id")))))))));
 
     public static final Def fieldDeclarationToExpr = def("fieldDeclarationToExpr")
@@ -1214,22 +1214,22 @@ public class Serde {
                         proj(FieldDeclaration.TYPE_, FieldDeclaration.UNANN_TYPE, "fd")),
                     field("vars",
                         proj(FieldDeclaration.TYPE_, FieldDeclaration.VARIABLE_DECLARATORS, "fd")),
-                    hydra.dsl.Serialization.withSemi(
-                        hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.withSemi(
+                        hydra.core.dsl.Serialization.spaceSep(
                             Optionals.givens(
                                 list(
                                     Logic.ifElse(
                                         Lists.isEmpty(var("mods")),
                                         nothing(),
                                         just(
-                                            hydra.dsl.Serialization.spaceSep(
+                                            hydra.core.dsl.Serialization.spaceSep(
                                                 Lists.map(
                                                     ref(Serde.fieldModifierToExpr),
                                                     var("mods"))))),
                                     just(apply(ref(Serde.unannTypeToExpr), var("typ"))),
                                     just(
-                                        hydra.dsl.Serialization.commaSep(
-                                            hydra.dsl.Serialization.inlineStyle(),
+                                        hydra.core.dsl.Serialization.commaSep(
+                                            hydra.core.dsl.Serialization.inlineStyle(),
                                             Lists.map(
                                                 ref(Serde.variableDeclaratorToExpr),
                                                 var("vars"))))))))));
@@ -1244,30 +1244,30 @@ public class Serde {
                         lambda("ann", apply(ref(Serde.annotationToExpr), var("ann")))),
                     field(
                         FieldModifier.PUBLIC,
-                        constant(hydra.dsl.Serialization.cst( string("public")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("public")))),
                     field(
                         FieldModifier.PROTECTED,
-                        constant(hydra.dsl.Serialization.cst( string("protected")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("protected")))),
                     field(
                         FieldModifier.PRIVATE,
-                        constant(hydra.dsl.Serialization.cst( string("private")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("private")))),
                     field(
                         FieldModifier.STATIC,
-                        constant(hydra.dsl.Serialization.cst( string("static")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("static")))),
                     field(
                         FieldModifier.FINAL,
-                        constant(hydra.dsl.Serialization.cst( string("final")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("final")))),
                     field(
                         FieldModifier.TRANSIENT,
-                        constant(hydra.dsl.Serialization.cst( string("transient")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("transient")))),
                     field(
                         FieldModifier.VOLATILE,
-                        constant(hydra.dsl.Serialization.cst( string("volatile"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string("volatile"))))));
 
     public static final Def floatingPointLiteralToExpr = def("floatingPointLiteralToExpr")
         .lam("fl")
         .to(() ->
-                hydra.dsl.Serialization.cst(
+                hydra.core.dsl.Serialization.cst(
                     apply(
                         ref(Serde.javaFloatLiteralText),
                         Literals.printFloat64(
@@ -1280,14 +1280,14 @@ public class Serde {
                     var("ft"),
                     field(
                         FloatingPointType.FLOAT,
-                        constant(hydra.dsl.Serialization.cst( string("float")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("float")))),
                     field(
                         FloatingPointType.DOUBLE,
-                        constant(hydra.dsl.Serialization.cst( string("double"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string("double"))))));
 
     public static final Def forStatementToExpr = def("forStatementToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:ForStatement"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:ForStatement"))));
 
     public static final Def formalParameterSimpleToExpr = def("formalParameterSimpleToExpr")
         .lam("fps")
@@ -1299,14 +1299,14 @@ public class Serde {
                         proj(FormalParameter_Simple.TYPE_, FormalParameter_Simple.TYPE, "fps")),
                     field("id",
                         proj(FormalParameter_Simple.TYPE_, FormalParameter_Simple.ID, "fps")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.isEmpty(var("mods")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.spaceSep(
+                                        hydra.core.dsl.Serialization.spaceSep(
                                             Lists.map(
                                                 ref(Serde.variableModifierToExpr),
                                                 var("mods"))))),
@@ -1328,12 +1328,12 @@ public class Serde {
     public static final Def identifierToExpr = def("identifierToExpr")
         .lam("id")
         .to(() ->
-                hydra.dsl.Serialization.cst(
+                hydra.core.dsl.Serialization.cst(
                     apply(unwrap(Identifier.TYPE_), var("id"))));
 
     public static final Def ifThenElseStatementToExpr = def("ifThenElseStatementToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:IfThenElseStatement"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:IfThenElseStatement"))));
 
     public static final Def ifThenStatementToExpr = def("ifThenStatementToExpr")
         .lam("its")
@@ -1343,14 +1343,14 @@ public class Serde {
                         proj(IfThenStatement.TYPE_, IfThenStatement.EXPRESSION, "its")),
                     field("thn",
                         proj(IfThenStatement.TYPE_, IfThenStatement.STATEMENT, "its")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         list(
-                            hydra.dsl.Serialization.cst( string("if")),
-                            hydra.dsl.Serialization.parenList(
+                            hydra.core.dsl.Serialization.cst( string("if")),
+                            hydra.core.dsl.Serialization.parenList(
                                 bool(false),
                                 list(apply(ref(Serde.expressionToExpr), var("cond")))),
-                            hydra.dsl.Serialization.curlyBlock(
-                                hydra.dsl.Serialization.fullBlockStyle(),
+                            hydra.core.dsl.Serialization.curlyBlock(
+                                hydra.core.dsl.Serialization.fullBlockStyle(),
                                 apply(ref(Serde.statementToExpr), var("thn")))))));
 
     public static final Def importDeclarationToExpr = def("importDeclarationToExpr")
@@ -1361,10 +1361,10 @@ public class Serde {
                     field(
                         ImportDeclaration.SINGLE_TYPE,
                         lambda("st",
-                            hydra.dsl.Serialization.withSemi(
-                                hydra.dsl.Serialization.spaceSep(
+                            hydra.core.dsl.Serialization.withSemi(
+                                hydra.core.dsl.Serialization.spaceSep(
                                     list(
-                                        hydra.dsl.Serialization.cst( string("import")),
+                                        hydra.core.dsl.Serialization.cst( string("import")),
                                         apply(
                                             ref(Serde.typeNameToExpr),
                                             apply(
@@ -1373,23 +1373,23 @@ public class Serde {
                     field(
                         ImportDeclaration.TYPE_IMPORT_ON_DEMAND,
                         constant(
-                            hydra.dsl.Serialization.cst(
+                            hydra.core.dsl.Serialization.cst(
                                 string("STUB:ImportDeclarationTypeImportOnDemand")))),
                     field(
                         ImportDeclaration.SINGLE_STATIC_IMPORT,
                         constant(
-                            hydra.dsl.Serialization.cst(
+                            hydra.core.dsl.Serialization.cst(
                                 string("STUB:ImportDeclarationSingleStaticImport")))),
                     field(
                         ImportDeclaration.STATIC_IMPORT_ON_DEMAND,
                         constant(
-                            hydra.dsl.Serialization.cst(
+                            hydra.core.dsl.Serialization.cst(
                                 string("STUB:ImportDeclarationStaticImportOnDemand"))))));
 
     public static final Def inclusiveOrExpressionToExpr = def("inclusiveOrExpressionToExpr")
         .lam("ioe")
         .to(() ->
-                hydra.dsl.Serialization.infixWsList(
+                hydra.core.dsl.Serialization.infixWsList(
                     string("|"),
                     Lists.map(
                         ref(Serde.exclusiveOrExpressionToExpr),
@@ -1397,7 +1397,7 @@ public class Serde {
 
     public static final Def instanceInitializerToExpr = def("instanceInitializerToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:InstanceInitializer"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:InstanceInitializer"))));
 
     public static final Def integerLiteralToExpr = def("integerLiteralToExpr")
         .lam("il")
@@ -1416,7 +1416,7 @@ public class Serde {
                                     bigint(java.math.BigInteger.valueOf(-2147483648L)))),
                             string("L"),
                             string(""))),
-                    hydra.dsl.Serialization.cst(
+                    hydra.core.dsl.Serialization.cst(
                         Strings.concat2(Literals.printBigint(var("i")), var("suffix")))));
 
     public static final Def integralTypeToExpr = def("integralTypeToExpr")
@@ -1426,26 +1426,26 @@ public class Serde {
                     var("t"),
                     field(
                         IntegralType.BYTE,
-                        constant(hydra.dsl.Serialization.cst( string("byte")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("byte")))),
                     field(
                         IntegralType.SHORT,
-                        constant(hydra.dsl.Serialization.cst( string("short")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("short")))),
                     field(
                         IntegralType.INT,
-                        constant(hydra.dsl.Serialization.cst( string("int")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("int")))),
                     field(
                         IntegralType.LONG,
-                        constant(hydra.dsl.Serialization.cst( string("long")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("long")))),
                     field(
                         IntegralType.CHAR,
-                        constant(hydra.dsl.Serialization.cst( string("char"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string("char"))))));
 
     public static final Def interfaceBodyToExpr = def("interfaceBodyToExpr")
         .lam("ib")
         .to(() ->
-                hydra.dsl.Serialization.curlyBlock(
-                    hydra.dsl.Serialization.fullBlockStyle(),
-                    hydra.dsl.Serialization.doubleNewlineSep(
+                hydra.core.dsl.Serialization.curlyBlock(
+                    hydra.core.dsl.Serialization.fullBlockStyle(),
+                    hydra.core.dsl.Serialization.doubleNewlineSep(
                         Lists.map(
                             ref(Serde.interfaceMemberDeclarationWithCommentsToExpr),
                             apply(unwrap(InterfaceBody.TYPE_), var("ib"))))));
@@ -1503,14 +1503,14 @@ public class Serde {
                         proj(InterfaceMethodDeclaration.TYPE_, InterfaceMethodDeclaration.HEADER, "imd")),
                     field("body",
                         proj(InterfaceMethodDeclaration.TYPE_, InterfaceMethodDeclaration.BODY, "imd")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.isEmpty(var("mods")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.spaceSep(
+                                        hydra.core.dsl.Serialization.spaceSep(
                                             Lists.map(
                                                 ref(Serde.interfaceMethodModifierToExpr),
                                                 var("mods"))))),
@@ -1527,22 +1527,22 @@ public class Serde {
                         lambda("a", apply(ref(Serde.annotationToExpr), var("a")))),
                     field(
                         InterfaceMethodModifier.PUBLIC,
-                        constant(hydra.dsl.Serialization.cst( string("public")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("public")))),
                     field(
                         InterfaceMethodModifier.PRIVATE,
-                        constant(hydra.dsl.Serialization.cst( string("private")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("private")))),
                     field(
                         InterfaceMethodModifier.ABSTRACT,
-                        constant(hydra.dsl.Serialization.cst( string("abstract")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("abstract")))),
                     field(
                         InterfaceMethodModifier.DEFAULT,
-                        constant(hydra.dsl.Serialization.cst( string("default")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("default")))),
                     field(
                         InterfaceMethodModifier.STATIC,
-                        constant(hydra.dsl.Serialization.cst( string("static")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("static")))),
                     field(
                         InterfaceMethodModifier.STRICTFP,
-                        constant(hydra.dsl.Serialization.cst( string("strictfp"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string("strictfp"))))));
 
     public static final Def interfaceModifierToExpr = def("interfaceModifierToExpr")
         .lam("m")
@@ -1554,22 +1554,22 @@ public class Serde {
                         lambda("a", apply(ref(Serde.annotationToExpr), var("a")))),
                     field(
                         InterfaceModifier.PUBLIC,
-                        constant(hydra.dsl.Serialization.cst( string("public")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("public")))),
                     field(
                         InterfaceModifier.PROTECTED,
-                        constant(hydra.dsl.Serialization.cst( string("protected")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("protected")))),
                     field(
                         InterfaceModifier.PRIVATE,
-                        constant(hydra.dsl.Serialization.cst( string("private")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("private")))),
                     field(
                         InterfaceModifier.ABSTRACT,
-                        constant(hydra.dsl.Serialization.cst( string("abstract")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("abstract")))),
                     field(
                         InterfaceModifier.STATIC,
-                        constant(hydra.dsl.Serialization.cst( string("static")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("static")))),
                     field(
                         InterfaceModifier.STRICTFP,
-                        constant(hydra.dsl.Serialization.cst( string("strictfp"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string("strictfp"))))));
 
     public static final Def interfaceTypeToExpr = def("interfaceTypeToExpr")
         .lam("it")
@@ -1594,7 +1594,7 @@ public class Serde {
 
     public static final Def labeledStatementToExpr = def("labeledStatementToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:LabeledStatement"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:LabeledStatement"))));
 
     public static final Def lambdaBodyToExpr = def("lambdaBodyToExpr")
         .lam("b")
@@ -1616,7 +1616,7 @@ public class Serde {
                         proj(LambdaExpression.TYPE_, LambdaExpression.PARAMETERS, "le")),
                     field("body",
                         proj(LambdaExpression.TYPE_, LambdaExpression.BODY, "le")),
-                    hydra.dsl.Serialization.infixWs(
+                    hydra.core.dsl.Serialization.infixWs(
                         string("->"),
                         apply(ref(Serde.lambdaParametersToExpr), var("params")),
                         apply(ref(Serde.lambdaBodyToExpr), var("body")))));
@@ -1629,7 +1629,7 @@ public class Serde {
                     field(
                         LambdaParameters.TUPLE,
                         lambda("l",
-                            hydra.dsl.Serialization.parenList(
+                            hydra.core.dsl.Serialization.parenList(
                                 bool(false),
                                 Lists.map(ref(Serde.lambdaParametersToExpr), var("l"))))),
                     field(
@@ -1658,7 +1658,7 @@ public class Serde {
                     var("l"),
                     field(
                         Literal.NULL,
-                        constant(hydra.dsl.Serialization.cst( string("null")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("null")))),
                     field(
                         Literal.INTEGER,
                         lambda("il", apply(ref(Serde.integerLiteralToExpr), var("il")))),
@@ -1668,14 +1668,14 @@ public class Serde {
                     field(
                         Literal.BOOLEAN,
                         lambda("b",
-                            hydra.dsl.Serialization.cst(
+                            hydra.core.dsl.Serialization.cst(
                                 Logic.ifElse(var("b"), string("true"), string("false"))))),
                     field(
                         Literal.CHARACTER,
                         lambda("c",
                             let("ci",
                                 Literals.bigintToInt32(Literals.uint16ToBigint(var("c"))),
-                                hydra.dsl.Serialization.cst(
+                                hydra.core.dsl.Serialization.cst(
                                     Strings.concat2(
                                         string("'"),
                                         Strings.concat2(
@@ -1704,7 +1704,7 @@ public class Serde {
                                                                             int32(127))),
                                                                     Strings.fromList(
                                                                         list(var("ci"))),
-                                                                    hydra.dsl.jvm.Serde.javaUnicodeEscape(
+                                                                    hydra.jvm.dsl.Serde.javaUnicodeEscape(
                                                                         var("ci")))))))),
                                             string("'"))))))),
                     field(
@@ -1721,12 +1721,12 @@ public class Serde {
                         lambda("ut", apply(ref(Serde.unannTypeToExpr), var("ut")))),
                     field(
                         LocalVariableType.VAR,
-                        constant(hydra.dsl.Serialization.cst( string("var"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string("var"))))));
 
     public static final Def localVariableDeclarationStatementToExpr = def("localVariableDeclarationStatementToExpr")
         .lam("lvds")
         .to(() ->
-                hydra.dsl.Serialization.withSemi(
+                hydra.core.dsl.Serialization.withSemi(
                     apply(
                         ref(Serde.localVariableDeclarationToExpr),
                         apply(
@@ -1743,27 +1743,27 @@ public class Serde {
                         proj(LocalVariableDeclaration.TYPE_, LocalVariableDeclaration.TYPE, "lvd")),
                     field("decls",
                         proj(LocalVariableDeclaration.TYPE_, LocalVariableDeclaration.DECLARATORS, "lvd")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.isEmpty(var("mods")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.spaceSep(
+                                        hydra.core.dsl.Serialization.spaceSep(
                                             Lists.map(
                                                 ref(Serde.variableModifierToExpr),
                                                 var("mods"))))),
                                 just(apply(ref(Serde.localNameToExpr), var("t"))),
                                 just(
-                                    hydra.dsl.Serialization.commaSep(
-                                        hydra.dsl.Serialization.inlineStyle(),
+                                    hydra.core.dsl.Serialization.commaSep(
+                                        hydra.core.dsl.Serialization.inlineStyle(),
                                         Lists.map(ref(Serde.variableDeclaratorToExpr), var("decls")))))))));
 
     public static final Def markerAnnotationToExpr = def("markerAnnotationToExpr")
         .lam("ma")
         .to(() ->
-                hydra.dsl.Serialization.prefix(
+                hydra.core.dsl.Serialization.prefix(
                     string("@"),
                     apply(
                         ref(Serde.typeNameToExpr),
@@ -1779,7 +1779,7 @@ public class Serde {
                         lambda("block", apply(ref(Serde.blockToExpr), var("block")))),
                     field(
                         MethodBody.NONE,
-                        constant(hydra.dsl.Serialization.cst( string(";"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string(";"))))));
 
     public static final Def methodDeclarationToExpr = def("methodDeclarationToExpr")
         .lam("md")
@@ -1794,27 +1794,27 @@ public class Serde {
                     field("body",
                         proj(MethodDeclaration.TYPE_, MethodDeclaration.BODY, "md")),
                     field("headerAndBody",
-                        hydra.dsl.Serialization.spaceSep(
+                        hydra.core.dsl.Serialization.spaceSep(
                             Optionals.givens(
                                 list(
                                     Logic.ifElse(
                                         Lists.isEmpty(var("mods")),
                                         nothing(),
                                         just(
-                                            hydra.dsl.Serialization.spaceSep(
+                                            hydra.core.dsl.Serialization.spaceSep(
                                                 Lists.map(
                                                     ref(Serde.methodModifierToExpr),
                                                     var("mods"))))),
                                     just(apply(ref(Serde.methodHeaderToExpr), var("header"))),
                                     just(apply(ref(Serde.methodBodyToExpr), var("body"))))))),
-                    hydra.dsl.Serialization.newlineSep(
+                    hydra.core.dsl.Serialization.newlineSep(
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.isEmpty(var("anns")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.newlineSep(
+                                        hydra.core.dsl.Serialization.newlineSep(
                                             Lists.map(ref(Serde.annotationToExpr), var("anns"))))),
                                 just(var("headerAndBody")))))));
 
@@ -1826,10 +1826,10 @@ public class Serde {
                         proj(MethodDeclarator.TYPE_, MethodDeclarator.IDENTIFIER, "md")),
                     field("params",
                         proj(MethodDeclarator.TYPE_, MethodDeclarator.FORMAL_PARAMETERS, "md")),
-                    hydra.dsl.Serialization.noSep(
+                    hydra.core.dsl.Serialization.noSep(
                         list(
                             apply(ref(Serde.identifierToExpr), var("id")),
-                            hydra.dsl.Serialization.parenListAdaptive(
+                            hydra.core.dsl.Serialization.parenListAdaptive(
                                 Lists.map(ref(Serde.formalParameterToExpr), var("params")))))));
 
     public static final Def methodHeaderToExpr = def("methodHeaderToExpr")
@@ -1844,15 +1844,15 @@ public class Serde {
                         proj(MethodHeader.TYPE_, MethodHeader.DECLARATOR, "mh")),
                     field("mthrows",
                         proj(MethodHeader.TYPE_, MethodHeader.THROWS, "mh")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.isEmpty(var("params")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.angleBracesList(
-                                            hydra.dsl.Serialization.inlineStyle(),
+                                        hydra.core.dsl.Serialization.angleBracesList(
+                                            hydra.core.dsl.Serialization.inlineStyle(),
                                             Lists.map(ref(Serde.typeParameterToExpr), var("params"))))),
                                 just(apply(ref(Serde.resultToExpr), var("result"))),
                                 just(apply(ref(Serde.methodDeclaratorToExpr), var("decl"))),
@@ -1867,7 +1867,7 @@ public class Serde {
                     field("args",
                         proj(MethodInvocation.TYPE_, MethodInvocation.ARGUMENTS, "mi")),
                     field("argSec",
-                        hydra.dsl.Serialization.parenListAdaptive(
+                        hydra.core.dsl.Serialization.parenListAdaptive(
                             Lists.map(ref(Serde.expressionToExpr), var("args")))),
                     field("headerSec",
                         match(MethodInvocation_Header.TYPE_,
@@ -1886,15 +1886,15 @@ public class Serde {
                                         field("cid",
                                             proj(MethodInvocation_Complex.TYPE_, MethodInvocation_Complex.IDENTIFIER, "cx")),
                                         field("idSec",
-                                            hydra.dsl.Serialization.noSep(
+                                            hydra.core.dsl.Serialization.noSep(
                                                 Optionals.givens(
                                                     list(
                                                         Logic.ifElse(
                                                             Lists.isEmpty(var("targs")),
                                                             nothing(),
                                                             just(
-                                                                hydra.dsl.Serialization.angleBracesList(
-                                                                    hydra.dsl.Serialization.inlineStyle(),
+                                                                hydra.core.dsl.Serialization.angleBracesList(
+                                                                    hydra.core.dsl.Serialization.inlineStyle(),
                                                                     Lists.map(
                                                                         ref(Serde.typeArgumentToExpr),
                                                                         var("targs"))))),
@@ -1907,7 +1907,7 @@ public class Serde {
                                             field(
                                                 MethodInvocation_Variant.TYPE,
                                                 lambda("tname",
-                                                    hydra.dsl.Serialization.dotSep(
+                                                    hydra.core.dsl.Serialization.dotSep(
                                                         list(
                                                             apply(
                                                                 ref(Serde.typeNameToExpr),
@@ -1916,7 +1916,7 @@ public class Serde {
                                             field(
                                                 MethodInvocation_Variant.EXPRESSION,
                                                 lambda("en",
-                                                    hydra.dsl.Serialization.dotSep(
+                                                    hydra.core.dsl.Serialization.dotSep(
                                                         list(
                                                             apply(
                                                                 ref(Serde.expressionNameToExpr),
@@ -1925,7 +1925,7 @@ public class Serde {
                                             field(
                                                 MethodInvocation_Variant.PRIMARY,
                                                 lambda("p",
-                                                    hydra.dsl.Serialization.dotSep(
+                                                    hydra.core.dsl.Serialization.dotSep(
                                                         list(
                                                             apply(
                                                                 ref(Serde.primaryToExpr),
@@ -1934,23 +1934,23 @@ public class Serde {
                                             field(
                                                 MethodInvocation_Variant.SUPER,
                                                 constant(
-                                                    hydra.dsl.Serialization.dotSep(
+                                                    hydra.core.dsl.Serialization.dotSep(
                                                         list(
-                                                            hydra.dsl.Serialization.cst(
+                                                            hydra.core.dsl.Serialization.cst(
                                                                 string("super")),
                                                             var("idSec"))))),
                                             field(
                                                 MethodInvocation_Variant.TYPE_SUPER,
                                                 lambda("tname",
-                                                    hydra.dsl.Serialization.dotSep(
+                                                    hydra.core.dsl.Serialization.dotSep(
                                                         list(
                                                             apply(
                                                                 ref(Serde.typeNameToExpr),
                                                                 var("tname")),
-                                                            hydra.dsl.Serialization.cst(
+                                                            hydra.core.dsl.Serialization.cst(
                                                                 string("super")),
                                                             var("idSec"))))))))))),
-                    hydra.dsl.Serialization.noSep( list(var("headerSec"), var("argSec")))));
+                    hydra.core.dsl.Serialization.noSep( list(var("headerSec"), var("argSec")))));
 
     public static final Def methodModifierToExpr = def("methodModifierToExpr")
         .lam("m")
@@ -1962,31 +1962,31 @@ public class Serde {
                         lambda("ann", apply(ref(Serde.annotationToExpr), var("ann")))),
                     field(
                         MethodModifier.PUBLIC,
-                        constant(hydra.dsl.Serialization.cst( string("public")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("public")))),
                     field(
                         MethodModifier.PROTECTED,
-                        constant(hydra.dsl.Serialization.cst( string("protected")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("protected")))),
                     field(
                         MethodModifier.PRIVATE,
-                        constant(hydra.dsl.Serialization.cst( string("private")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("private")))),
                     field(
                         MethodModifier.ABSTRACT,
-                        constant(hydra.dsl.Serialization.cst( string("abstract")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("abstract")))),
                     field(
                         MethodModifier.STATIC,
-                        constant(hydra.dsl.Serialization.cst( string("static")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("static")))),
                     field(
                         MethodModifier.FINAL,
-                        constant(hydra.dsl.Serialization.cst( string("final")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("final")))),
                     field(
                         MethodModifier.SYNCHRONIZED,
-                        constant(hydra.dsl.Serialization.cst( string("synchronized")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("synchronized")))),
                     field(
                         MethodModifier.NATIVE,
-                        constant(hydra.dsl.Serialization.cst( string("native")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("native")))),
                     field(
                         MethodModifier.STRICTFP,
-                        constant(hydra.dsl.Serialization.cst( string("strictfp"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string("strictfp"))))));
 
     public static final Def methodNameToExpr = def("methodNameToExpr")
         .lam("mn")
@@ -1997,7 +1997,7 @@ public class Serde {
 
     public static final Def methodReferenceToExpr = def("methodReferenceToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:MethodReference"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:MethodReference"))));
 
     public static final Def multiplicativeExpressionToExpr = def("multiplicativeExpressionToExpr")
         .lam("e")
@@ -2010,7 +2010,7 @@ public class Serde {
                     field(
                         MultiplicativeExpression.TIMES,
                         lambda("b",
-                            hydra.dsl.Serialization.infixWs(
+                            hydra.core.dsl.Serialization.infixWs(
                                 string("*"),
                                 apply(
                                     ref(Serde.multiplicativeExpressionToExpr),
@@ -2021,7 +2021,7 @@ public class Serde {
                     field(
                         MultiplicativeExpression.DIVIDE,
                         lambda("b",
-                            hydra.dsl.Serialization.infixWs(
+                            hydra.core.dsl.Serialization.infixWs(
                                 string("/"),
                                 apply(
                                     ref(Serde.multiplicativeExpressionToExpr),
@@ -2032,7 +2032,7 @@ public class Serde {
                     field(
                         MultiplicativeExpression.MOD,
                         lambda("b",
-                            hydra.dsl.Serialization.infixWs(
+                            hydra.core.dsl.Serialization.infixWs(
                                 string("%"),
                                 apply(
                                     ref(Serde.multiplicativeExpressionToExpr),
@@ -2049,13 +2049,13 @@ public class Serde {
                         proj(NormalAnnotation.TYPE_, NormalAnnotation.TYPE_NAME, "na")),
                     field("pairs",
                         proj(NormalAnnotation.TYPE_, NormalAnnotation.PAIRS, "na")),
-                    hydra.dsl.Serialization.prefix(
+                    hydra.core.dsl.Serialization.prefix(
                         string("@"),
-                        hydra.dsl.Serialization.noSep(
+                        hydra.core.dsl.Serialization.noSep(
                             list(
                                 apply(ref(Serde.typeNameToExpr), var("tname")),
-                                hydra.dsl.Serialization.commaSep(
-                                    hydra.dsl.Serialization.inlineStyle(),
+                                hydra.core.dsl.Serialization.commaSep(
+                                    hydra.core.dsl.Serialization.inlineStyle(),
                                     Lists.map(ref(Serde.elementValuePairToExpr), var("pairs"))))))));
 
     public static final Def normalClassDeclarationToExpr = def("normalClassDeclarationToExpr")
@@ -2074,18 +2074,18 @@ public class Serde {
                         proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.IMPLEMENTS, "ncd")),
                     field("body",
                         proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.BODY, "ncd")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.isEmpty(var("mods")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.spaceSep(
+                                        hydra.core.dsl.Serialization.spaceSep(
                                             Lists.map(ref(Serde.classModifierToExpr), var("mods"))))),
-                                just(hydra.dsl.Serialization.cst( string("class"))),
+                                just(hydra.core.dsl.Serialization.cst( string("class"))),
                                 just(
-                                    hydra.dsl.Serialization.noSep(
+                                    hydra.core.dsl.Serialization.noSep(
                                         Optionals.givens(
                                             list(
                                                 just(
@@ -2096,16 +2096,16 @@ public class Serde {
                                                     Lists.isEmpty(var("tparams")),
                                                     nothing(),
                                                     just(
-                                                        hydra.dsl.Serialization.angleBracesList(
-                                                            hydra.dsl.Serialization.inlineStyle(),
+                                                        hydra.core.dsl.Serialization.angleBracesList(
+                                                            hydra.core.dsl.Serialization.inlineStyle(),
                                                             Lists.map(
                                                                 ref(Serde.typeParameterToExpr),
                                                                 var("tparams"))))))))),
                                 Optionals.map(
                                     lambda("c",
-                                        hydra.dsl.Serialization.spaceSep(
+                                        hydra.core.dsl.Serialization.spaceSep(
                                             list(
-                                                hydra.dsl.Serialization.cst(
+                                                hydra.core.dsl.Serialization.cst(
                                                     string("extends")),
                                                 apply(ref(Serde.classTypeToExpr), var("c"))))),
                                     var("msuperc")),
@@ -2113,12 +2113,12 @@ public class Serde {
                                     Lists.isEmpty(var("superi")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.spaceSep(
+                                        hydra.core.dsl.Serialization.spaceSep(
                                             list(
-                                                hydra.dsl.Serialization.cst(
+                                                hydra.core.dsl.Serialization.cst(
                                                     string("implements")),
-                                                hydra.dsl.Serialization.commaSep(
-                                                    hydra.dsl.Serialization.inlineStyle(),
+                                                hydra.core.dsl.Serialization.commaSep(
+                                                    hydra.core.dsl.Serialization.inlineStyle(),
                                                     Lists.map(
                                                         ref(Serde.interfaceTypeToExpr),
                                                         var("superi"))))))),
@@ -2138,20 +2138,20 @@ public class Serde {
                         proj(NormalInterfaceDeclaration.TYPE_, NormalInterfaceDeclaration.EXTENDS, "nid")),
                     field("body",
                         proj(NormalInterfaceDeclaration.TYPE_, NormalInterfaceDeclaration.BODY, "nid")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.isEmpty(var("mods")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.spaceSep(
+                                        hydra.core.dsl.Serialization.spaceSep(
                                             Lists.map(
                                                 ref(Serde.interfaceModifierToExpr),
                                                 var("mods"))))),
-                                just(hydra.dsl.Serialization.cst( string("interface"))),
+                                just(hydra.core.dsl.Serialization.cst( string("interface"))),
                                 just(
-                                    hydra.dsl.Serialization.noSep(
+                                    hydra.core.dsl.Serialization.noSep(
                                         Optionals.givens(
                                             list(
                                                 just(
@@ -2162,8 +2162,8 @@ public class Serde {
                                                     Lists.isEmpty(var("tparams")),
                                                     nothing(),
                                                     just(
-                                                        hydra.dsl.Serialization.angleBracesList(
-                                                            hydra.dsl.Serialization.inlineStyle(),
+                                                        hydra.core.dsl.Serialization.angleBracesList(
+                                                            hydra.core.dsl.Serialization.inlineStyle(),
                                                             Lists.map(
                                                                 ref(Serde.typeParameterToExpr),
                                                                 var("tparams"))))))))),
@@ -2171,12 +2171,12 @@ public class Serde {
                                     Lists.isEmpty(var("extends")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.spaceSep(
+                                        hydra.core.dsl.Serialization.spaceSep(
                                             list(
-                                                hydra.dsl.Serialization.cst(
+                                                hydra.core.dsl.Serialization.cst(
                                                     string("extends")),
-                                                hydra.dsl.Serialization.commaSep(
-                                                    hydra.dsl.Serialization.inlineStyle(),
+                                                hydra.core.dsl.Serialization.commaSep(
+                                                    hydra.core.dsl.Serialization.inlineStyle(),
                                                     Lists.map(
                                                         ref(Serde.interfaceTypeToExpr),
                                                         var("extends"))))))),
@@ -2202,24 +2202,24 @@ public class Serde {
                         proj(PackageDeclaration.TYPE_, PackageDeclaration.MODIFIERS, "pd")),
                     field("ids",
                         proj(PackageDeclaration.TYPE_, PackageDeclaration.IDENTIFIERS, "pd")),
-                    hydra.dsl.Serialization.withSemi(
-                        hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.withSemi(
+                        hydra.core.dsl.Serialization.spaceSep(
                             Optionals.givens(
                                 list(
                                     Logic.ifElse(
                                         Lists.isEmpty(var("mods")),
                                         nothing(),
                                         just(
-                                            hydra.dsl.Serialization.spaceSep(
+                                            hydra.core.dsl.Serialization.spaceSep(
                                                 Lists.map(
                                                     ref(Serde.packageModifierToExpr),
                                                     var("mods"))))),
                                     just(
-                                        hydra.dsl.Serialization.spaceSep(
+                                        hydra.core.dsl.Serialization.spaceSep(
                                             list(
-                                                hydra.dsl.Serialization.cst(
+                                                hydra.core.dsl.Serialization.cst(
                                                     string("package")),
-                                                hydra.dsl.Serialization.cst(
+                                                hydra.core.dsl.Serialization.cst(
                                                     Strings.join(
                                                         string("."),
                                                         Lists.map(
@@ -2239,7 +2239,7 @@ public class Serde {
     public static final Def packageNameToExpr = def("packageNameToExpr")
         .lam("pn")
         .to(() ->
-                hydra.dsl.Serialization.dotSep(
+                hydra.core.dsl.Serialization.dotSep(
                     Lists.map(
                         ref(Serde.identifierToExpr),
                         apply(unwrap(PackageName.TYPE_), var("pn")))));
@@ -2247,18 +2247,18 @@ public class Serde {
     public static final Def packageOrTypeNameToExpr = def("packageOrTypeNameToExpr")
         .lam("potn")
         .to(() ->
-                hydra.dsl.Serialization.dotSep(
+                hydra.core.dsl.Serialization.dotSep(
                     Lists.map(
                         ref(Serde.identifierToExpr),
                         apply(unwrap(PackageOrTypeName.TYPE_), var("potn")))));
 
     public static final Def postDecrementExpressionToExpr = def("postDecrementExpressionToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:PostDecrementExpression"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:PostDecrementExpression"))));
 
     public static final Def postIncrementExpressionToExpr = def("postIncrementExpressionToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:PostIncrementExpression"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:PostIncrementExpression"))));
 
     public static final Def postfixExpressionToExpr = def("postfixExpressionToExpr")
         .lam("e")
@@ -2280,11 +2280,11 @@ public class Serde {
 
     public static final Def preDecrementExpressionToExpr = def("preDecrementExpressionToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:PreDecrementExpression"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:PreDecrementExpression"))));
 
     public static final Def preIncrementExpressionToExpr = def("preIncrementExpressionToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:PreIncrementExpression"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:PreIncrementExpression"))));
 
     public static final Def primaryNoNewArrayExpressionExpressionToExpr = def("primaryNoNewArrayExpressionExpressionToExpr")
         .lam("p")
@@ -2299,18 +2299,18 @@ public class Serde {
                         lambda("cl", apply(ref(Serde.classLiteralToExpr), var("cl")))),
                     field(
                         PrimaryNoNewArrayExpression.THIS,
-                        constant(hydra.dsl.Serialization.cst( string("this")))),
+                        constant(hydra.core.dsl.Serialization.cst( string("this")))),
                     field(
                         PrimaryNoNewArrayExpression.DOT_THIS,
                         lambda("n",
-                            hydra.dsl.Serialization.dotSep(
+                            hydra.core.dsl.Serialization.dotSep(
                                 list(
                                     apply(ref(Serde.typeNameToExpr), var("n")),
-                                    hydra.dsl.Serialization.cst( string("this")))))),
+                                    hydra.core.dsl.Serialization.cst( string("this")))))),
                     field(
                         PrimaryNoNewArrayExpression.PARENS,
                         lambda("e",
-                            hydra.dsl.Serialization.parenList(
+                            hydra.core.dsl.Serialization.parenList(
                                 bool(false),
                                 list(apply(ref(Serde.expressionToExpr), var("e")))))),
                     field(
@@ -2353,7 +2353,7 @@ public class Serde {
                         lambda("nt", apply(ref(Serde.numericTypeToExpr), var("nt")))),
                     field(
                         PrimitiveType.BOOLEAN,
-                        constant(hydra.dsl.Serialization.cst( string("boolean"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string("boolean"))))));
 
     public static final Def primitiveTypeWithAnnotationsToExpr = def("primitiveTypeWithAnnotationsToExpr")
         .lam("ptwa")
@@ -2363,20 +2363,20 @@ public class Serde {
                         proj(PrimitiveTypeWithAnnotations.TYPE_, PrimitiveTypeWithAnnotations.TYPE, "ptwa")),
                     field("anns",
                         proj(PrimitiveTypeWithAnnotations.TYPE_, PrimitiveTypeWithAnnotations.ANNOTATIONS, "ptwa")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.isEmpty(var("anns")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.spaceSep(
+                                        hydra.core.dsl.Serialization.spaceSep(
                                             Lists.map(ref(Serde.annotationToExpr), var("anns"))))),
                                 just(apply(ref(Serde.primitiveTypeToExpr), var("pt"))))))));
 
     public static final Def receiverParameterToExpr = def("receiverParameterToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:ReceiverParameter"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:ReceiverParameter"))));
 
     public static final Def referenceTypeToExpr = def("referenceTypeToExpr")
         .lam("rt")
@@ -2396,7 +2396,7 @@ public class Serde {
     public static final Def relationalExpressionGreaterThanEqualToExpr = def("relationalExpressionGreaterThanEqualToExpr")
         .lam("gte")
         .to(() ->
-                hydra.dsl.Serialization.infixWs(
+                hydra.core.dsl.Serialization.infixWs(
                     string(">="),
                     apply(
                         ref(Serde.relationalExpressionToExpr),
@@ -2408,7 +2408,7 @@ public class Serde {
     public static final Def relationalExpressionGreaterThanToExpr = def("relationalExpressionGreaterThanToExpr")
         .lam("gt")
         .to(() ->
-                hydra.dsl.Serialization.infixWs(
+                hydra.core.dsl.Serialization.infixWs(
                     string(">"),
                     apply(
                         ref(Serde.relationalExpressionToExpr),
@@ -2428,8 +2428,8 @@ public class Serde {
                             lambda("rt", apply(ref(Serde.referenceTypeToExpr), var("rt")))),
                         field(
                             InstanceofExpression_Rhs.PATTERN,
-                            constant(hydra.dsl.Serialization.cst( string("STUB:Pattern"))))),
-                    hydra.dsl.Serialization.infixWs(
+                            constant(hydra.core.dsl.Serialization.cst( string("STUB:Pattern"))))),
+                    hydra.core.dsl.Serialization.infixWs(
                         string("instanceof"),
                         apply(
                             ref(Serde.relationalExpressionToExpr),
@@ -2439,7 +2439,7 @@ public class Serde {
     public static final Def relationalExpressionLessThanEqualToExpr = def("relationalExpressionLessThanEqualToExpr")
         .lam("lte")
         .to(() ->
-                hydra.dsl.Serialization.infixWs(
+                hydra.core.dsl.Serialization.infixWs(
                     string("<="),
                     apply(
                         ref(Serde.relationalExpressionToExpr),
@@ -2451,7 +2451,7 @@ public class Serde {
     public static final Def relationalExpressionLessThanToExpr = def("relationalExpressionLessThanToExpr")
         .lam("lt")
         .to(() ->
-                hydra.dsl.Serialization.infixWs(
+                hydra.core.dsl.Serialization.infixWs(
                     string("<"),
                     apply(
                         ref(Serde.relationalExpressionToExpr),
@@ -2499,18 +2499,18 @@ public class Serde {
                         lambda("t", apply(ref(Serde.unannTypeToExpr), var("t")))),
                     field(
                         Result.VOID,
-                        constant(hydra.dsl.Serialization.cst( string("void"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string("void"))))));
 
     public static final Def returnStatementToExpr = def("returnStatementToExpr")
         .lam("rs")
         .to(() ->
                 let("mex",
                     apply(unwrap(ReturnStatement.TYPE_), var("rs")),
-                    hydra.dsl.Serialization.withSemi(
-                        hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.withSemi(
+                        hydra.core.dsl.Serialization.spaceSep(
                             Optionals.givens(
                                 list(
-                                    just(hydra.dsl.Serialization.cst( string("return"))),
+                                    just(hydra.core.dsl.Serialization.cst( string("return"))),
                                     Optionals.map(ref(Serde.expressionToExpr), var("mex"))))))));
 
     public static final Def sanitizeJavaComment = def("sanitizeJavaComment")
@@ -2530,22 +2530,22 @@ public class Serde {
                                         Strings.splitOn(string("&"), var("s"))))))));
 
     public static final Def javaDocEntityRef = def("javaDocEntityRef")
-        .doc("Render a hydra.packaging.EntityReference as Javadoc link syntax")
+        .doc("Render a hydra.core.packaging.EntityReference as Javadoc link syntax")
         .lam("ref")
         .to(() ->
-                match("hydra.packaging.EntityReference", var("ref"),
+                match("hydra.core.packaging.EntityReference", var("ref"),
                         field("definition",
                             lambda("d",
                                 Strings.concat2(
                                     string("{@code "),
                                     Strings.concat2(
-                                        match("hydra.packaging.DefinitionReference", var("d"),
-                                            field("primitive", lambda("n", hydra.dsl.Names.localNameOf( var("n")))),
-                                            field("term",      lambda("n", hydra.dsl.Names.localNameOf( var("n")))),
-                                            field("type",      lambda("n", hydra.dsl.Names.localNameOf( var("n"))))),
+                                        match("hydra.core.packaging.DefinitionReference", var("d"),
+                                            field("primitive", lambda("n", hydra.core.dsl.Names.localNameOf( var("n")))),
+                                            field("term",      lambda("n", hydra.core.dsl.Names.localNameOf( var("n")))),
+                                            field("type",      lambda("n", hydra.core.dsl.Names.localNameOf( var("n"))))),
                                         string("}"))))),
                         field("module",    lambda("m", Strings.concat2(string(""), apply(unwrap(ModuleName.TYPE_), var("m"))))),
-                        field("package",   lambda("p", Strings.concat2(string(""), apply(unwrap(hydra.packaging.PackageName.TYPE_), var("p"))))),
+                        field("package",   lambda("p", Strings.concat2(string(""), apply(unwrap(hydra.core.packaging.PackageName.TYPE_), var("p"))))),
                         field("termExpr", lambda("s", Strings.concat2(string("{@code "), Strings.concat2(var("s"), string("}"))))),
                         field("typeExpr", lambda("s", Strings.concat2(string("{@code "), Strings.concat2(var("s"), string("}")))))));
 
@@ -2560,7 +2560,7 @@ public class Serde {
                     field(
                         ShiftExpression.SHIFT_LEFT,
                         lambda("b",
-                            hydra.dsl.Serialization.infixWs(
+                            hydra.core.dsl.Serialization.infixWs(
                                 string("<<"),
                                 apply(
                                     ref(Serde.shiftExpressionToExpr),
@@ -2571,7 +2571,7 @@ public class Serde {
                     field(
                         ShiftExpression.SHIFT_RIGHT,
                         lambda("b",
-                            hydra.dsl.Serialization.infixWs(
+                            hydra.core.dsl.Serialization.infixWs(
                                 string(">>"),
                                 apply(
                                     ref(Serde.shiftExpressionToExpr),
@@ -2582,7 +2582,7 @@ public class Serde {
                     field(
                         ShiftExpression.SHIFT_RIGHT_ZERO_FILL,
                         lambda("b",
-                            hydra.dsl.Serialization.infixWs(
+                            hydra.core.dsl.Serialization.infixWs(
                                 string(">>>"),
                                 apply(
                                     ref(Serde.shiftExpressionToExpr),
@@ -2609,12 +2609,12 @@ public class Serde {
                     Optionals.match(var("mv"), apply(
                             ref(Serde.markerAnnotationToExpr),
                             wrap(MarkerAnnotation.TYPE_, var("tname"))), lambda("v",
-                            hydra.dsl.Serialization.prefix(
+                            hydra.core.dsl.Serialization.prefix(
                                 string("@"),
-                                hydra.dsl.Serialization.noSep(
+                                hydra.core.dsl.Serialization.noSep(
                                     list(
                                         apply(ref(Serde.typeNameToExpr), var("tname")),
-                                        hydra.dsl.Serialization.parenList(
+                                        hydra.core.dsl.Serialization.parenList(
                                             bool(false),
                                             list(apply(ref(Serde.elementValueToExpr), var("v")))))))))));
 
@@ -2624,7 +2624,7 @@ public class Serde {
         .to(() ->
                 let("sanitized",
                         apply(ref(Serde.sanitizeJavaComment), var("c")),
-                        hydra.dsl.Serialization.cst(
+                        hydra.core.dsl.Serialization.cst(
                             Logic.ifElse(
                                 Equality.equal(var("sanitized"), string("")),
                                 string("//"),
@@ -2693,7 +2693,7 @@ public class Serde {
                         lambda("b", apply(ref(Serde.blockToExpr), var("b")))),
                     field(
                         StatementWithoutTrailingSubstatement.EMPTY,
-                        constant(hydra.dsl.Serialization.cst( string(";")))),
+                        constant(hydra.core.dsl.Serialization.cst( string(";")))),
                     field(
                         StatementWithoutTrailingSubstatement.EXPRESSION,
                         lambda("e", apply(ref(Serde.expressionStatementToExpr), var("e")))),
@@ -2727,7 +2727,7 @@ public class Serde {
 
     public static final Def staticInitializerToExpr = def("staticInitializerToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:StaticInitializer"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:StaticInitializer"))));
 
     public static final Def stringLiteralToExpr = def("stringLiteralToExpr")
         .doc("Serialize a Java string literal with proper Unicode escaping.")
@@ -2735,39 +2735,39 @@ public class Serde {
         .to(() ->
                 let("s",
                         apply(unwrap(StringLiteral.TYPE_), var("sl")),
-                        hydra.dsl.Serialization.cst(
+                        hydra.core.dsl.Serialization.cst(
                             Strings.concat2(
                                 string("\""),
                                 Strings.concat2(
-                                    hydra.dsl.jvm.Serde.escapeJavaString(var("s")),
+                                    hydra.jvm.dsl.Serde.escapeJavaString(var("s")),
                                     string("\""))))));
 
     public static final Def switchStatementToExpr = def("switchStatementToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:SwitchStatement"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:SwitchStatement"))));
 
     public static final Def synchronizedStatementToExpr = def("synchronizedStatementToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:SynchronizedStatement"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:SynchronizedStatement"))));
 
     public static final Def throwStatementToExpr = def("throwStatementToExpr")
         .lam("ts")
         .to(() ->
-                hydra.dsl.Serialization.withSemi(
-                    hydra.dsl.Serialization.spaceSep(
+                hydra.core.dsl.Serialization.withSemi(
+                    hydra.core.dsl.Serialization.spaceSep(
                         list(
-                            hydra.dsl.Serialization.cst( string("throw")),
+                            hydra.core.dsl.Serialization.cst( string("throw")),
                             apply(
                                 ref(Serde.expressionToExpr),
                                 apply(unwrap(ThrowStatement.TYPE_), var("ts")))))));
 
     public static final Def throwsToExpr = def("throwsToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:Throws"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:Throws"))));
 
     public static final Def tryStatementToExpr = def("tryStatementToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:TryStatement"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:TryStatement"))));
 
     public static final Def typeArgumentToExpr = def("typeArgumentToExpr")
         .lam("a")
@@ -2789,12 +2789,12 @@ public class Serde {
                     field(
                         TypeArgumentsOrDiamond.ARGUMENTS,
                         lambda("args",
-                            hydra.dsl.Serialization.angleBracesList(
-                                hydra.dsl.Serialization.inlineStyle(),
+                            hydra.core.dsl.Serialization.angleBracesList(
+                                hydra.core.dsl.Serialization.inlineStyle(),
                                 Lists.map(ref(Serde.typeArgumentToExpr), var("args"))))),
                     field(
                         TypeArgumentsOrDiamond.DIAMOND,
-                        constant(hydra.dsl.Serialization.cst( string("<>"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string("<>"))))));
 
     public static final Def typeBoundToExpr = def("typeBoundToExpr")
         .lam("b")
@@ -2815,7 +2815,7 @@ public class Serde {
                                 Logic.ifElse(
                                     Lists.isEmpty(var("additional")),
                                     apply(ref(Serde.classOrInterfaceTypeToExpr), var("cit")),
-                                    hydra.dsl.Serialization.spaceSep(
+                                    hydra.core.dsl.Serialization.spaceSep(
                                         Lists.cons(
                                             apply(ref(Serde.classOrInterfaceTypeToExpr), var("cit")),
                                             Lists.map(
@@ -2835,7 +2835,7 @@ public class Serde {
                         lambda("d", apply(ref(Serde.interfaceDeclarationToExpr), var("d")))),
                     field(
                         TopLevelClassOrInterfaceDeclaration.NONE,
-                        constant(hydra.dsl.Serialization.cst( string(";"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string(";"))))));
 
     public static final Def typeDeclarationWithCommentsToExpr = def("typeDeclarationWithCommentsToExpr")
         .lam("tdwc")
@@ -2865,7 +2865,7 @@ public class Serde {
                         proj(TypeName.TYPE_, TypeName.IDENTIFIER, "tn")),
                     field("mqual",
                         proj(TypeName.TYPE_, TypeName.QUALIFIER, "tn")),
-                    hydra.dsl.Serialization.dotSep(
+                    hydra.core.dsl.Serialization.dotSep(
                         Optionals.givens(
                             list(
                                 Optionals.map(ref(Serde.packageOrTypeNameToExpr), var("mqual")),
@@ -2888,23 +2888,23 @@ public class Serde {
                         proj(TypeParameter.TYPE_, TypeParameter.IDENTIFIER, "tp")),
                     field("bound",
                         proj(TypeParameter.TYPE_, TypeParameter.BOUND, "tp")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.isEmpty(var("mods")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.spaceSep(
+                                        hydra.core.dsl.Serialization.spaceSep(
                                             Lists.map(
                                                 ref(Serde.typeParameterModifierToExpr),
                                                 var("mods"))))),
                                 just(apply(ref(Serde.typeIdentifierToExpr), var("id"))),
                                 Optionals.map(
                                     lambda("b",
-                                        hydra.dsl.Serialization.spaceSep(
+                                        hydra.core.dsl.Serialization.spaceSep(
                                             list(
-                                                hydra.dsl.Serialization.cst(
+                                                hydra.core.dsl.Serialization.cst(
                                                     string("extends")),
                                                 apply(ref(Serde.typeBoundToExpr), var("b"))))),
                                     var("bound")))))));
@@ -2930,14 +2930,14 @@ public class Serde {
                         proj(TypeVariable.TYPE_, TypeVariable.ANNOTATIONS, "tv")),
                     field("id",
                         proj(TypeVariable.TYPE_, TypeVariable.IDENTIFIER, "tv")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.isEmpty(var("anns")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.spaceSep(
+                                        hydra.core.dsl.Serialization.spaceSep(
                                             Lists.map(ref(Serde.annotationToExpr), var("anns"))))),
                                 just(apply(ref(Serde.typeIdentifierToExpr), var("id"))))))));
 
@@ -2959,16 +2959,16 @@ public class Serde {
                     field(
                         UnaryExpressionNotPlusMinus.TILDE,
                         lambda("u",
-                            hydra.dsl.Serialization.spaceSep(
+                            hydra.core.dsl.Serialization.spaceSep(
                                 list(
-                                    hydra.dsl.Serialization.cst( string("~")),
+                                    hydra.core.dsl.Serialization.cst( string("~")),
                                     apply(ref(Serde.unaryExpressionToExpr), var("u")))))),
                     field(
                         UnaryExpressionNotPlusMinus.NOT,
                         lambda("u",
-                            hydra.dsl.Serialization.noSep(
+                            hydra.core.dsl.Serialization.noSep(
                                 list(
-                                    hydra.dsl.Serialization.cst( string("!")),
+                                    hydra.core.dsl.Serialization.cst( string("!")),
                                     apply(ref(Serde.unaryExpressionToExpr), var("u")))))),
                     field(
                         UnaryExpressionNotPlusMinus.CAST,
@@ -2988,16 +2988,16 @@ public class Serde {
                     field(
                         UnaryExpression.PLUS,
                         lambda("p",
-                            hydra.dsl.Serialization.spaceSep(
+                            hydra.core.dsl.Serialization.spaceSep(
                                 list(
-                                    hydra.dsl.Serialization.cst( string("+")),
+                                    hydra.core.dsl.Serialization.cst( string("+")),
                                     apply(ref(Serde.unaryExpressionToExpr), var("p")))))),
                     field(
                         UnaryExpression.MINUS,
                         lambda("m",
-                            hydra.dsl.Serialization.spaceSep(
+                            hydra.core.dsl.Serialization.spaceSep(
                                 list(
-                                    hydra.dsl.Serialization.cst( string("-")),
+                                    hydra.core.dsl.Serialization.cst( string("-")),
                                     apply(ref(Serde.unaryExpressionToExpr), var("m")))))),
                     field(
                         UnaryExpression.OTHER,
@@ -3015,31 +3015,31 @@ public class Serde {
                         proj(UnqualifiedClassInstanceCreationExpression.TYPE_, UnqualifiedClassInstanceCreationExpression.ARGUMENTS, "ucice")),
                     field("mbody",
                         proj(UnqualifiedClassInstanceCreationExpression.TYPE_, UnqualifiedClassInstanceCreationExpression.BODY, "ucice")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         Optionals.givens(
                             list(
-                                just(hydra.dsl.Serialization.cst( string("new"))),
+                                just(hydra.core.dsl.Serialization.cst( string("new"))),
                                 Logic.ifElse(
                                     Lists.isEmpty(var("targs")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.angleBracesList(
-                                            hydra.dsl.Serialization.inlineStyle(),
+                                        hydra.core.dsl.Serialization.angleBracesList(
+                                            hydra.core.dsl.Serialization.inlineStyle(),
                                             Lists.map(ref(Serde.typeArgumentToExpr), var("targs"))))),
                                 just(
-                                    hydra.dsl.Serialization.noSep(
+                                    hydra.core.dsl.Serialization.noSep(
                                         list(
                                             apply(
                                                 ref(Serde.classOrInterfaceTypeToInstantiateToExpr),
                                                 var("cit")),
-                                            hydra.dsl.Serialization.parenList(
+                                            hydra.core.dsl.Serialization.parenList(
                                                 bool(false),
                                                 Lists.map(ref(Serde.expressionToExpr), var("args")))))),
                                 Optionals.map(ref(Serde.classBodyToExpr), var("mbody")))))));
 
     public static final Def variableArityParameterToExpr = def("variableArityParameterToExpr")
         .to(() ->
-                constant(hydra.dsl.Serialization.cst( string("STUB:VariableArityParameter"))));
+                constant(hydra.core.dsl.Serialization.cst( string("STUB:VariableArityParameter"))));
 
     public static final Def variableDeclaratorIdToExpr = def("variableDeclaratorIdToExpr")
         .lam("vdi")
@@ -3049,7 +3049,7 @@ public class Serde {
                         proj(VariableDeclaratorId.TYPE_, VariableDeclaratorId.IDENTIFIER, "vdi")),
                     field("mdims",
                         proj(VariableDeclaratorId.TYPE_, VariableDeclaratorId.DIMS, "vdi")),
-                    hydra.dsl.Serialization.noSep(
+                    hydra.core.dsl.Serialization.noSep(
                         Optionals.givens(
                             list(
                                 just(apply(ref(Serde.identifierToExpr), var("id"))),
@@ -3066,7 +3066,7 @@ public class Serde {
                     field("idSec",
                         apply(ref(Serde.variableDeclaratorIdToExpr), var("id"))),
                     Optionals.match(var("minit"), var("idSec"), lambda("init",
-                            hydra.dsl.Serialization.infixWs(
+                            hydra.core.dsl.Serialization.infixWs(
                                 string("="),
                                 var("idSec"),
                                 apply(ref(Serde.variableInitializerToExpr), var("init")))))));
@@ -3093,7 +3093,7 @@ public class Serde {
                         lambda("ann", apply(ref(Serde.annotationToExpr), var("ann")))),
                     field(
                         VariableModifier.FINAL,
-                        constant(hydra.dsl.Serialization.cst( string("final"))))));
+                        constant(hydra.core.dsl.Serialization.cst( string("final"))))));
 
     public static final Def whileStatementToExpr = def("whileStatementToExpr")
         .lam("ws")
@@ -3104,15 +3104,15 @@ public class Serde {
                     field("body",
                         proj(WhileStatement.TYPE_, WhileStatement.BODY, "ws")),
                     field("condSer",
-                        Optionals.match(var("mcond"), hydra.dsl.Serialization.cst( string("true")), lambda("c", apply(ref(Serde.expressionToExpr), var("c"))))),
-                    hydra.dsl.Serialization.spaceSep(
+                        Optionals.match(var("mcond"), hydra.core.dsl.Serialization.cst( string("true")), lambda("c", apply(ref(Serde.expressionToExpr), var("c"))))),
+                    hydra.core.dsl.Serialization.spaceSep(
                         list(
-                            hydra.dsl.Serialization.cst( string("while")),
-                            hydra.dsl.Serialization.parenList(
+                            hydra.core.dsl.Serialization.cst( string("while")),
+                            hydra.core.dsl.Serialization.parenList(
                                 bool(false),
                                 list(var("condSer"))),
-                            hydra.dsl.Serialization.curlyBlock(
-                                hydra.dsl.Serialization.fullBlockStyle(),
+                            hydra.core.dsl.Serialization.curlyBlock(
+                                hydra.core.dsl.Serialization.fullBlockStyle(),
                                 apply(ref(Serde.statementToExpr), var("body")))))));
 
     public static final Def wildcardBoundsToExpr = def("wildcardBoundsToExpr")
@@ -3123,16 +3123,16 @@ public class Serde {
                     field(
                         WildcardBounds.EXTENDS,
                         lambda("rt",
-                            hydra.dsl.Serialization.spaceSep(
+                            hydra.core.dsl.Serialization.spaceSep(
                                 list(
-                                    hydra.dsl.Serialization.cst( string("extends")),
+                                    hydra.core.dsl.Serialization.cst( string("extends")),
                                     apply(ref(Serde.referenceTypeToExpr), var("rt")))))),
                     field(
                         WildcardBounds.SUPER,
                         lambda("rt",
-                            hydra.dsl.Serialization.spaceSep(
+                            hydra.core.dsl.Serialization.spaceSep(
                                 list(
-                                    hydra.dsl.Serialization.cst( string("super")),
+                                    hydra.core.dsl.Serialization.cst( string("super")),
                                     apply(ref(Serde.referenceTypeToExpr), var("rt"))))))));
 
     public static final Def wildcardToExpr = def("wildcardToExpr")
@@ -3143,17 +3143,17 @@ public class Serde {
                         proj(Wildcard.TYPE_, Wildcard.ANNOTATIONS, "w")),
                     field("mbounds",
                         proj(Wildcard.TYPE_, Wildcard.WILDCARD, "w")),
-                    hydra.dsl.Serialization.spaceSep(
+                    hydra.core.dsl.Serialization.spaceSep(
                         Optionals.givens(
                             list(
                                 Logic.ifElse(
                                     Lists.isEmpty(var("anns")),
                                     nothing(),
                                     just(
-                                        hydra.dsl.Serialization.commaSep(
-                                            hydra.dsl.Serialization.inlineStyle(),
+                                        hydra.core.dsl.Serialization.commaSep(
+                                            hydra.core.dsl.Serialization.inlineStyle(),
                                             Lists.map(ref(Serde.annotationToExpr), var("anns"))))),
-                                just(hydra.dsl.Serialization.cst( string("*"))),
+                                just(hydra.core.dsl.Serialization.cst( string("*"))),
                                 Optionals.map(ref(Serde.wildcardBoundsToExpr), var("mbounds")))))));
 
     public static final Def withComments = def("withComments")
@@ -3161,9 +3161,9 @@ public class Serde {
         .lam("mc").lam("expr")
         .to(() ->
                 Optionals.match(var("mc"), var("expr"), lambda("c",
-                            hydra.dsl.Serialization.newlineSep(
+                            hydra.core.dsl.Serialization.newlineSep(
                                 list(
-                                    hydra.dsl.Serialization.cst(
+                                    hydra.core.dsl.Serialization.cst(
                                         Strings.concat2(
                                             string("/**\n"),
                                             Strings.concat2(
@@ -3178,12 +3178,12 @@ public class Serde {
                                                                     string(" * "),
                                                                     var("l")))),
                                                         apply(
-                                                            var("hydra.formatting.lines"),
+                                                            var("hydra.core.formatting.lines"),
                                                             apply(
                                                                 ref(Serde.sanitizeJavaComment),
                                                                 apply(
                                                                     apply(
-                                                                        var("hydra.print.docs.renderDocStringWith"),
+                                                                        var("hydra.core.print.docs.renderDocStringWith"),
                                                                         ref(Serde.javaDocEntityRef)),
                                                                     var("c")))))),
                                                 string("\n */")))),
@@ -3378,35 +3378,35 @@ public class Serde {
 
     private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(
         new ModuleName("hydra.jvm.serde"),
-        new ModuleName("hydra.constants"),
-        new ModuleName("hydra.serialization"),
-        new ModuleName("hydra.names"),
-        new ModuleName("hydra.print.docs"),
+        new ModuleName("hydra.core.constants"),
+        new ModuleName("hydra.core.serialization"),
+        new ModuleName("hydra.core.names"),
+        new ModuleName("hydra.core.print.docs"),
         new ModuleName("hydra.java.syntax"),
-        new ModuleName("hydra.paths"),
-        new ModuleName("hydra.ast"),
-        new ModuleName("hydra.classes"),
-        new ModuleName("hydra.coders"),
-        new ModuleName("hydra.core"),
-        new ModuleName("hydra.error.checking"),
-        new ModuleName("hydra.error.core"),
-        new ModuleName("hydra.error.packaging"),
-        new ModuleName("hydra.errors"),
-        new ModuleName("hydra.formatting"),
-        new ModuleName("hydra.graph"),
-        new ModuleName("hydra.json.model"),
-        new ModuleName("hydra.packaging"),
-        new ModuleName("hydra.parsing"),
-        new ModuleName("hydra.query"),
-        new ModuleName("hydra.relational"),
-        new ModuleName("hydra.tabular"),
-        new ModuleName("hydra.testing"),
-        new ModuleName("hydra.topology"),
-        new ModuleName("hydra.typed"),
-        new ModuleName("hydra.typing"),
-        new ModuleName("hydra.util"),
-        new ModuleName("hydra.validation"),
-        new ModuleName("hydra.variants"));
+        new ModuleName("hydra.core.paths"),
+        new ModuleName("hydra.core.ast"),
+        new ModuleName("hydra.core.classes"),
+        new ModuleName("hydra.core.coders"),
+        new ModuleName("hydra.core.model"),
+        new ModuleName("hydra.core.error.checking"),
+        new ModuleName("hydra.core.error.model"),
+        new ModuleName("hydra.core.error.packaging"),
+        new ModuleName("hydra.core.errors"),
+        new ModuleName("hydra.core.formatting"),
+        new ModuleName("hydra.core.graph"),
+        new ModuleName("hydra.core.json.model"),
+        new ModuleName("hydra.core.packaging"),
+        new ModuleName("hydra.core.parsing"),
+        new ModuleName("hydra.core.query"),
+        new ModuleName("hydra.core.relational"),
+        new ModuleName("hydra.core.tabular"),
+        new ModuleName("hydra.core.testing"),
+        new ModuleName("hydra.core.topology"),
+        new ModuleName("hydra.core.typed"),
+        new ModuleName("hydra.core.typing"),
+        new ModuleName("hydra.core.util"),
+        new ModuleName("hydra.core.validation"),
+        new ModuleName("hydra.core.variants"));
 
     public static final Module module_ = new Module(
         NS,

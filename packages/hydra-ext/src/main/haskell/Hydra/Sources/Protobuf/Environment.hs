@@ -3,15 +3,15 @@
 module Hydra.Sources.Protobuf.Environment where
 
 import           Hydra.Kernel
-import           Hydra.Overlay.Haskell.Dsl.Annotations
-import           Hydra.Overlay.Haskell.Bootstrap
-import           Hydra.Overlay.Haskell.Dsl.Types                    ((>:))
-import qualified Hydra.Overlay.Haskell.Dsl.Types                    as T
+import           Hydra.Core.Overlay.Haskell.Dsl.Annotations
+import           Hydra.Core.Overlay.Haskell.Bootstrap
+import           Hydra.Core.Overlay.Haskell.Dsl.Types                    ((>:))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                    as T
 import qualified Hydra.Sources.Kernel.Types.Core    as CoreTypes
 import qualified Hydra.Sources.Kernel.Types.Typing  as TypingTypes
 
 ns :: ModuleName
-ns = ModuleName "hydra.protobuf.environment"
+ns = ModuleName "hydra.ext.protobuf.environment"
 
 define :: String -> Type -> TypeDefinition
 define = defineType ns

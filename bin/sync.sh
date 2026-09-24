@@ -339,7 +339,7 @@ python3 "$HYDRA_ROOT/bin/lib/generate-head-haskell-build.py" --mode "$HASKELL_HO
 # bootstrap patch (Step 8, extending-hydra-core.md) currently known to bridge that
 # gap; it is idempotent and a no-op once a locally-built, current host regenerates
 # this file for real (see the script's own header for the full invariant).
-HASKELL_DIST_SENTINEL="$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Adapt.hs"
+HASKELL_DIST_SENTINEL="$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Adapt.hs"
 if [ ! -f "$HASKELL_DIST_SENTINEL" ]; then
     echo ""
     echo "Cold-start detected (missing dist/haskell/hydra-kernel); seeding dist/haskell/"
@@ -350,7 +350,7 @@ if [ ! -f "$HASKELL_DIST_SENTINEL" ]; then
 fi
 
 # The head compiles dist/haskell/hydra-kernel/ (a package.yaml source-dir) which
-# includes hand-written runtime modules (Hydra.Overlay.Haskell.Lib.*, the umbrella Hydra.hs)
+# includes hand-written runtime modules (Hydra.Core.Overlay.Haskell.Lib.*, the umbrella Hydra.hs)
 # that live in the top-level overlay/haskell/ tree (#418). The dist Overlay/ location is
 # gitignored and empty on a cold tree, so they must be overlaid into dist/ BEFORE
 # this stack build — otherwise GHC can't find them. (sync-haskell.sh's own overlay
@@ -456,14 +456,14 @@ heal_java_python_native() {
     # default seeding path, but when the user passes --local-host (e.g. the published
     # hydra-python wheel or hydra-java jar is incompatible with the current kernel —
     # the #370/#472 migration-shim case, the #494 FileExtension move for Java, and
-    # the #467 hydra.dsl.lib.* additions) this heal must also run local, or it hits
+    # the #467 hydra.core.dsl.lib.* additions) this heal must also run local, or it hits
     # the broken published artifact and aborts the whole sync.
     #
     # In LOCAL mode the native driver's bootstrap shim compiles the host's DSL coder
     # against the generated dist/<host>/ source trees (the Java rollup's gradle source
     # set in packages/hydra-java/build.gradle pulls in dist/java/hydra-{kernel,haskell,
-    # java,lisp,python,scala,typescript}; it needs hydra.typed.TypedTerm, the effect
-    # type, hydra.file.*, AND hydra.java.syntax.* etc.). On a COLD tree those trees do
+    # java,lisp,python,scala,typescript}; it needs hydra.core.typed.TypedTerm, the effect
+    # type, hydra.core.file.*, AND hydra.java.syntax.* etc.). On a COLD tree those trees do
     # not exist yet — they are normally produced in Phase 3/4, which run AFTER this heal
     # — and the driver's own self-bootstrap is suppressed under HYDRA_IN_SYNC to avoid
     # recursion. So pre-assemble the host packages the rollup compiles against, from the
@@ -649,7 +649,7 @@ done
 #   - Each self-hosting package needs ITSELF assembled into ITS OWN target language
 #     (dist/java/hydra-java, dist/python/hydra-python, dist/scala/hydra-scala) before
 #     packages/hydra-<lang>'s own DSL source can compile — it imports its own generated
-#     hydra.dsl.<lang>.* wrapper modules (packages/hydra-java/build.gradle srcDirs).
+#     hydra.core.dsl.<lang>.* wrapper modules (packages/hydra-java/build.gradle srcDirs).
 #   - hydra-java (and hydra-scala, transitively) also needs hydra-jvm (shared JVM serde
 #     helpers, "sourceLanguage": "java") assembled into the SAME target — hydra.jvm.serde.*
 #     is a compiled-import dependency of hydra-java's/hydra-scala's own generated Serde.
@@ -664,7 +664,7 @@ done
 # On a warm tree this is silently already satisfied by a previous sync; a genuinely cold
 # checkout has none of these directories and nothing else creates them (confirmed: this
 # bug predates #497, reproduces on main from an equally cold dist/, unrelated to the
-# hydra.print.* rename). Guarded by a directory-exists sentinel + HOSTS/TARGETS membership
+# hydra.core.print.* rename). Guarded by a directory-exists sentinel + HOSTS/TARGETS membership
 # so this is a no-op on a warm tree and skips languages not in scope for this sync.
 if printf '%s\n' $LANG_UNION | grep -qx java; then
     for pkg in hydra-jvm hydra-java; do
@@ -956,7 +956,7 @@ if printf '%s\n' $LANG_UNION | grep -qx java; then
     # block does below. Without this, `sync.sh --local-host` would leave Phase 5's
     # Java re-export on the published host, defeating --local-host when the published
     # hydra-java jar is incompatible with the current kernel (the #494 FileExtension
-    # move and the #467 hydra.dsl.lib.* additions are exactly this case).
+    # move and the #467 hydra.core.dsl.lib.* additions are exactly this case).
     JAVA_HOST_MODE_FLAG="--$(java_host_mode)-host"   # per-host: hostOverrides[java]=local OR global --local-host
     native_generate_and_report java \
         "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" \

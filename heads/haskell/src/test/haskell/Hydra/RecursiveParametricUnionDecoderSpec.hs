@@ -38,15 +38,15 @@
 module Hydra.RecursiveParametricUnionDecoderSpec where
 
 import Hydra.Kernel
-import qualified Hydra.Codegen as Codegen
+import qualified Hydra.Core.Codegen as Codegen
 import qualified Hydra.Generation as Generation
-import qualified Hydra.Languages as Languages
+import qualified Hydra.Core.Languages as Languages
 import qualified Hydra.Sources.Kernel.Manifest as KernelManifest
 import qualified Hydra.Sources.Kernel.Terms.Decoding as Decoding
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
-import qualified Hydra.Overlay.Haskell.Bootstrap as Bootstrap
-import Hydra.Typed (TypedTermDefinition(..), TypedTerm(..))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap as Bootstrap
+import Hydra.Core.Typed (TypedTermDefinition(..), TypedTerm(..))
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -69,7 +69,7 @@ javaLikeLanguage = Languages.hydraLanguage {
 -- | A standalone module containing just the recursive parametric union test fixture.
 fixtureModule :: Module
 fixtureModule = Module {
-  moduleName = ModuleName "hydra.test.recursiveParametricUnionDecoderFixture",
+  moduleName = ModuleName "hydra.core.test.recursiveParametricUnionDecoderFixture",
   moduleDefinitions = [Phantoms.toDefinition TestTypes.testTypeUnionPolymorphicRecursiveListWrapped],
   moduleDependencies = [],
   moduleMetadata = Bootstrap.descriptionMetadata (Just "#740 regression fixture module")}
@@ -167,7 +167,7 @@ spec = H.describe "Decoder emission for a recursive parametric union type (#740)
             "decodeType's _Type_application arm does not reference decoderFullResultType \
             \-- likely regressed to the raw applied type (the green-but-wrong trap)"
 
--- | Find the case-alternative handler tagged "application" within a hydra.core.Type
+-- | Find the case-alternative handler tagged "application" within a hydra.core.model.Type
 -- CaseStatement anywhere in the term (decodeType's top-level match-on-Type).
 findApplicationCaseHandler :: Term -> Maybe Term
 findApplicationCaseHandler t = case t of
@@ -175,7 +175,7 @@ findApplicationCaseHandler t = case t of
   TermLambda (Lambda _ _ body) -> findApplicationCaseHandler body
   TermApplication (Application f a) ->
     firstJust [findApplicationCaseHandler f, findApplicationCaseHandler a]
-  TermCases (CaseStatement (Name "hydra.core.Type") _ cases) ->
+  TermCases (CaseStatement (Name "hydra.core.model.Type") _ cases) ->
     firstJust [Just h | CaseAlternative n h <- cases, unName n == "application"]
   _ -> Nothing
   where
@@ -183,10 +183,10 @@ findApplicationCaseHandler t = case t of
     firstJust (Just x : _) = Just x
     firstJust (Nothing : rest) = firstJust rest
 
--- | Does this term reference hydra.decoding.decoderFullResultType anywhere?
+-- | Does this term reference hydra.core.decoding.decoderFullResultType anywhere?
 usesDecoderFullResultType :: Term -> Bool
 usesDecoderFullResultType t = case t of
-  TermVariable n -> unName n == "hydra.decoding.decoderFullResultType"
+  TermVariable n -> unName n == "hydra.core.decoding.decoderFullResultType"
   TermAnnotated (AnnotatedTerm body _) -> usesDecoderFullResultType body
   TermApplication (Application f a) -> usesDecoderFullResultType f || usesDecoderFullResultType a
   TermInject (Injection _ (Field _ ft)) -> usesDecoderFullResultType ft

@@ -1,9 +1,9 @@
 -- | Haskell driver for the Neo4j validation translingual demo (JSON-artifact variant).
 --
 -- Reads the shared schema.json and each graph JSON file (produced by the Java
--- GenerateData from DSL definitions), decodes them back into hydra.neo4j.model
+-- GenerateData from DSL definitions), decodes them back into hydra.pg.neo4j.model
 -- values, and validates each graph against the schema with
--- Hydra.Validate.Neo4j.validateGraph. The same validator -- generated from one
+-- Hydra.Pg.Validate.Neo4j.validateGraph. The same validator -- generated from one
 -- Hydra source -- runs identically in the Java and Python counterparts; because
 -- every host reads the same JSON files, the data and the logic are identical
 -- across languages by construction.
@@ -12,11 +12,11 @@
 
 module Hydra.Demos.Neo4jValidation.JsonDemo where
 
-import qualified Hydra.Neo4j.Model as M4
-import qualified Hydra.Validate.Neo4j as Validate
-import qualified Hydra.Error.Neo4j as Err
-import qualified Hydra.Validation as V
-import qualified Hydra.Json.Model as Json
+import qualified Hydra.Pg.Neo4j.Model as M4
+import qualified Hydra.Pg.Validate.Neo4j as Validate
+import qualified Hydra.Pg.Error.Neo4j as Err
+import qualified Hydra.Core.Validation as V
+import qualified Hydra.Core.Json.Model as Json
 
 import qualified Data.Aeson as A
 import qualified Data.Aeson.KeyMap as AKM

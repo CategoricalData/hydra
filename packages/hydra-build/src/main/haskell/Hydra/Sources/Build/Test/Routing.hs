@@ -3,29 +3,29 @@ module Hydra.Sources.Build.Test.Routing where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing                 as Testing
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing                 as Testing
 import Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core          as Core
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms hiding ((++))
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types         as T
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms hiding ((++))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import Hydra.Testing
+import Hydra.Core.Testing
 import qualified Hydra.Sources.Build.Routing as Routing
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Print.Errors as PrintError
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Dsl.Packaging    as Packaging
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Dsl.Packaging    as Packaging
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.build.routing"
+ns = ModuleName "hydra.build.test.routing"
 
 module_ :: Module
 module_ = Module {
@@ -55,8 +55,8 @@ mn s = Packaging.moduleName2 (string s)
 
 fixturePkgs :: TypedTerm [(String, [ModuleName])]
 fixturePkgs = list [
-  pair (string "hydra-kernel") (list [mn "hydra.strip", mn "hydra.sorting"]),
-  pair (string "hydra-ext") (list [mn "hydra.avro.schema", mn "hydra.dsl.avro.schema"])]
+  pair (string "hydra-kernel") (list [mn "hydra.core.strip", mn "hydra.core.sorting"]),
+  pair (string "hydra-ext") (list [mn "hydra.ext.avro.schema", mn "hydra.ext.dsl.avro.schema"])]
 
 fixtureMap :: TypedTerm (M.Map ModuleName String)
 fixtureMap = Routing.buildRoutingMap @@ fixturePkgs
@@ -79,14 +79,14 @@ showEither = Eithers.either
 
 buildRoutingMapGroup :: TypedTerm TestGroup
 buildRoutingMapGroup = subgroup "buildRoutingMap" [
-  -- Note: derived names are expanded for EVERY declared module, including hydra.dsl.avro.schema
-  -- itself (already a derived-shaped name) -- so its own derived names (hydra.dsl.dsl.avro.schema,
-  -- hydra.decode.dsl.avro.schema, etc.) also appear. This mirrors the native
+  -- Note: derived names are expanded for EVERY declared module, including hydra.ext.dsl.avro.schema
+  -- itself (already a derived-shaped name) -- so its own derived names (hydra.ext.dsl.dsl.avro.schema,
+  -- hydra.ext.decode.dsl.avro.schema, etc.) also appear. This mirrors the native
   -- Hydra.PackageRouting.buildRoutingMap doc: "we expand the derived names for EVERY declared
   -- module... the extra map entries are harmless."
   universalCase "declared modules route to their declared package"
     (showRoutingMap fixtureMap)
-    (string "[hydra.avro.schema -> hydra-ext, hydra.decode.avro.schema -> hydra-ext, hydra.decode.dsl.avro.schema -> hydra-ext, hydra.decode.sorting -> hydra-kernel, hydra.decode.strip -> hydra-kernel, hydra.dsl.avro.schema -> hydra-ext, hydra.dsl.dsl.avro.schema -> hydra-ext, hydra.dsl.sorting -> hydra-kernel, hydra.dsl.strip -> hydra-kernel, hydra.encode.avro.schema -> hydra-ext, hydra.encode.dsl.avro.schema -> hydra-ext, hydra.encode.sorting -> hydra-kernel, hydra.encode.strip -> hydra-kernel, hydra.sorting -> hydra-kernel, hydra.sources.decode.avro.schema -> hydra-ext, hydra.sources.decode.dsl.avro.schema -> hydra-ext, hydra.sources.decode.sorting -> hydra-kernel, hydra.sources.decode.strip -> hydra-kernel, hydra.sources.encode.avro.schema -> hydra-ext, hydra.sources.encode.dsl.avro.schema -> hydra-ext, hydra.sources.encode.sorting -> hydra-kernel, hydra.sources.encode.strip -> hydra-kernel, hydra.strip -> hydra-kernel]"),
+    (string "[hydra.core.decode.sorting -> hydra-kernel, hydra.core.decode.strip -> hydra-kernel, hydra.core.dsl.sorting -> hydra-kernel, hydra.core.dsl.strip -> hydra-kernel, hydra.core.encode.sorting -> hydra-kernel, hydra.core.encode.strip -> hydra-kernel, hydra.core.sorting -> hydra-kernel, hydra.core.strip -> hydra-kernel, hydra.ext.avro.schema -> hydra-ext, hydra.ext.decode.avro.schema -> hydra-ext, hydra.ext.decode.dsl.avro.schema -> hydra-ext, hydra.ext.dsl.avro.schema -> hydra-ext, hydra.ext.dsl.dsl.avro.schema -> hydra-ext, hydra.ext.encode.avro.schema -> hydra-ext, hydra.ext.encode.dsl.avro.schema -> hydra-ext, hydra.sources.core.decode.sorting -> hydra-kernel, hydra.sources.core.decode.strip -> hydra-kernel, hydra.sources.core.encode.sorting -> hydra-kernel, hydra.sources.core.encode.strip -> hydra-kernel, hydra.sources.ext.decode.avro.schema -> hydra-ext, hydra.sources.ext.decode.dsl.avro.schema -> hydra-ext, hydra.sources.ext.encode.avro.schema -> hydra-ext, hydra.sources.ext.encode.dsl.avro.schema -> hydra-ext]"),
   universalCase "an empty package list produces an empty routing map"
     (showRoutingMap (Routing.buildRoutingMap @@ list ([] :: [TypedTerm (String, [ModuleName])])))
     (string "[]"),
@@ -97,21 +97,21 @@ buildRoutingMapGroup = subgroup "buildRoutingMap" [
     (showRoutingMap (Routing.buildRoutingMap @@ list [
       pair (string "hydra-first") (list [mn "hydra.shared"]),
       pair (string "hydra-second") (list [mn "hydra.shared"])]))
-    (string "[hydra.decode.shared -> hydra-second, hydra.dsl.shared -> hydra-second, hydra.encode.shared -> hydra-second, hydra.shared -> hydra-second, hydra.sources.decode.shared -> hydra-second, hydra.sources.encode.shared -> hydra-second]")]
+    (string "[hydra.shared -> hydra-second, hydra.shared.decode -> hydra-second, hydra.shared.dsl -> hydra-second, hydra.shared.encode -> hydra-second, hydra.sources.shared.decode -> hydra-second, hydra.sources.shared.encode -> hydra-second]")]
 
 namespaceToPackageInGroup :: TypedTerm TestGroup
 namespaceToPackageInGroup = subgroup "namespaceToPackageIn" [
   universalCase "a declared module routes to its package"
-    (showEither (Routing.namespaceToPackageIn @@ fixtureMap @@ mn "hydra.strip"))
+    (showEither (Routing.namespaceToPackageIn @@ fixtureMap @@ mn "hydra.core.strip"))
     (string "right(hydra-kernel)"),
   universalCase "a derived DSL module routes to the source module's package"
-    (showEither (Routing.namespaceToPackageIn @@ fixtureMap @@ mn "hydra.dsl.strip"))
+    (showEither (Routing.namespaceToPackageIn @@ fixtureMap @@ mn "hydra.core.dsl.strip"))
     (string "right(hydra-kernel)"),
   universalCase "a derived encode module routes to the source module's package"
-    (showEither (Routing.namespaceToPackageIn @@ fixtureMap @@ mn "hydra.encode.avro.schema"))
+    (showEither (Routing.namespaceToPackageIn @@ fixtureMap @@ mn "hydra.ext.encode.avro.schema"))
     (string "right(hydra-ext)"),
   universalCase "a declared module that collides with another package's derived name wins as declared"
-    (showEither (Routing.namespaceToPackageIn @@ fixtureMap @@ mn "hydra.dsl.avro.schema"))
+    (showEither (Routing.namespaceToPackageIn @@ fixtureMap @@ mn "hydra.ext.dsl.avro.schema"))
     (string "right(hydra-ext)"),
   universalCase "an unrouted module fails loudly instead of falling back to a default package"
     (showEither (Routing.namespaceToPackageIn @@ fixtureMap @@ mn "hydra.nonexistent.module"))
@@ -141,8 +141,8 @@ groupByPackageInGroup = subgroup "groupByPackageIn" [
     (showGroups (Routing.groupByPackageIn @@ fixtureMap @@ list ([] :: [TypedTerm Module])))
     (string "right([])"),
   universalCase "modules are partitioned and sorted by owning package"
-    (showGroups (Routing.groupByPackageIn @@ fixtureMap @@ list [testMod "hydra.sorting", testMod "hydra.avro.schema", testMod "hydra.strip"]))
-    (string "right([hydra-ext: [hydra.avro.schema], hydra-kernel: [hydra.sorting, hydra.strip]])"),
+    (showGroups (Routing.groupByPackageIn @@ fixtureMap @@ list [testMod "hydra.core.sorting", testMod "hydra.ext.avro.schema", testMod "hydra.core.strip"]))
+    (string "right([hydra-ext: [hydra.ext.avro.schema], hydra-kernel: [hydra.core.sorting, hydra.core.strip]])"),
   universalCase "an unrouted module in the list fails the whole grouping loudly"
-    (showGroups (Routing.groupByPackageIn @@ fixtureMap @@ list [testMod "hydra.strip", testMod "hydra.nonexistent.module"]))
+    (showGroups (Routing.groupByPackageIn @@ fixtureMap @@ list [testMod "hydra.core.strip", testMod "hydra.nonexistent.module"]))
     (string "left(unrouted module: hydra.nonexistent.module is not declared in any package's manifest (RoutingMap). Add it to the owning package's Manifest.mainModules.)")]

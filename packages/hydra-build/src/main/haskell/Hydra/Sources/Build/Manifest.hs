@@ -13,14 +13,14 @@
 -- registry), and #416 (promotion of the build system into Hydra).
 --
 -- hydra-build is the first non-kernel package to declare non-empty testModules;
--- the JSON-writing drivers route hydra.test.build.* to this package's test tree
+-- the JSON-writing drivers route hydra.core.test.build.* to this package's test tree
 -- via each package's Manifest.testModules (see Hydra.Sources.Ext.extRoutingInput
 -- and heads/haskell/src/exec/transform-haskell-dsl-to-json packageTestModules).
 --
 -- testModules includes its own generated test-aggregate module
--- (hydra.test.build.testSuite, from Hydra.Sources.Build.Test.Suite), combining
+-- (hydra.build.test.testSuite, from Hydra.Sources.Build.Test.Suite), combining
 -- hydra-build's test groups (#547). Each host runs it via its own runner file
--- (independent of hydra-kernel's hydra.test.testSuite runner), replacing the
+-- (independent of hydra-kernel's hydra.core.test.testSuite runner), replacing the
 -- #546 "Option A" arrangement where the kernel's test suite imported
 -- hydra-build's test groups directly.
 

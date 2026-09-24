@@ -13,7 +13,7 @@
 --   * hydra-pg: hydraPgModules + pg decode/encode meta-sources + GenPGTransform
 --   * hydra-rdf: hydraRdfModules
 --
--- DSL wrapper modules (hydra.dsl.*) are generated in a second pass with the
+-- DSL wrapper modules (hydra.core.dsl.*) are generated in a second pass with the
 -- same routing.
 
 module Main where
@@ -40,18 +40,19 @@ import Hydra.Sources.Ext (
   allDslModules, allEncodingModules, extRoutingInput)
 
 import qualified Hydra.Kernel as Kernel
-import qualified Hydra.Core as Core
-import qualified Hydra.Validate.Packaging as ValidatePackaging
-import qualified Hydra.Validate.Core as ValidateCore
-import qualified Hydra.Print.Error.Packaging as PrintErrorPackaging
-import qualified Hydra.Print.Error.Core as PrintErrorCore
-import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Core.Model as Core
+import qualified Hydra.Core.Validate.Packaging as ValidatePackaging
+import qualified Hydra.Core.Validate.Model as ValidateCore
+import qualified Hydra.Core.Print.Error.Packaging as PrintErrorPackaging
+import qualified Hydra.Core.Print.Error.Model as PrintErrorCore
+import qualified Hydra.Core.Packaging as Packaging
 import qualified Hydra.Sources.Demos.GenPG.Transform as GenPGTransform
 
 import Control.Exception (catch, SomeException)
 import Control.Monad (when)
 import qualified Control.Monad as CM
 import qualified Data.List as L
+import qualified Data.List.Split as LS
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified System.Directory as DD
@@ -81,13 +82,13 @@ dedupByNamespace = go S.empty
 -- package, not just the kernel) since the name is fully-qualified.
 kernelExemptTypeNames :: S.Set Core.Name
 kernelExemptTypeNames = S.fromList
-  [Core.Name "hydra.error.checking.UntypedLambdaError"]
+  [Core.Name "hydra.core.error.checking.UntypedLambdaError"]
 
 -- | Term definitions exempt from #575 semantic validation. etaExpandTypedTerm
 -- contains a deliberate `Logic.ifElse false ...` inference hack that lets the
 -- inferencer assign `list<Type>` to an otherwise-typeless empty list; excising
 -- it causes bootstrap-from-json (Java target) to fail with "expected
--- list<hydra.core.Type> but found list<unit>". Validate.Core's
+-- list<hydra.core.model.Type> but found list<unit>". Validate.Core's
 -- constant-condition rule flags it but the hack is load-bearing; see the
 -- comment in Sources/Kernel/Terms/Reduction.hs. Applied globally (every
 -- package, not just the kernel) since the name is fully-qualified.
@@ -106,26 +107,26 @@ kernelExemptTypeNames = S.fromList
 -- lands (or as any of the below get separately corrected).
 kernelExemptTermNames :: S.Set Core.Name
 kernelExemptTermNames = S.fromList
-  [ Core.Name "hydra.reduction.etaExpandTypedTerm"
-  , Core.Name "hydra.adapt.adaptLiteral"
-  , Core.Name "hydra.avro.coder.avroHydraAdapter"
-  , Core.Name "hydra.avro.coder.expectArrayE"
-  , Core.Name "hydra.avro.coder.expectObjectE"
-  , Core.Name "hydra.avro.coder.expectStringE"
-  , Core.Name "hydra.avro.encoder.encodeTypeInner"
-  , Core.Name "hydra.avro.encoder.enumAdapter"
-  , Core.Name "hydra.avro.encoder.floatAdapter"
-  , Core.Name "hydra.avro.encoder.integerAdapter"
-  , Core.Name "hydra.avro.encoder.literalAdapter"
-  , Core.Name "hydra.avro.encoder.termToJsonValue"
-  , Core.Name "hydra.avro.schemaJson.expectArrayE"
-  , Core.Name "hydra.avro.schemaJson.expectNumberE"
-  , Core.Name "hydra.avro.schemaJson.expectObjectE"
-  , Core.Name "hydra.avro.schemaJson.expectStringE"
+  [ Core.Name "hydra.core.reduction.etaExpandTypedTerm"
+  , Core.Name "hydra.core.adapt.adaptLiteral"
+  , Core.Name "hydra.ext.avro.coder.avroHydraAdapter"
+  , Core.Name "hydra.ext.avro.coder.expectArrayE"
+  , Core.Name "hydra.ext.avro.coder.expectObjectE"
+  , Core.Name "hydra.ext.avro.coder.expectStringE"
+  , Core.Name "hydra.ext.avro.encoder.encodeTypeInner"
+  , Core.Name "hydra.ext.avro.encoder.enumAdapter"
+  , Core.Name "hydra.ext.avro.encoder.floatAdapter"
+  , Core.Name "hydra.ext.avro.encoder.integerAdapter"
+  , Core.Name "hydra.ext.avro.encoder.literalAdapter"
+  , Core.Name "hydra.ext.avro.encoder.termToJsonValue"
+  , Core.Name "hydra.ext.avro.schemaJson.expectArrayE"
+  , Core.Name "hydra.ext.avro.schemaJson.expectNumberE"
+  , Core.Name "hydra.ext.avro.schemaJson.expectObjectE"
+  , Core.Name "hydra.ext.avro.schemaJson.expectStringE"
   , Core.Name "hydra.coq.coder.encodeType"
-  , Core.Name "hydra.cpp.coder.encodeLiteralType"
-  , Core.Name "hydra.demos.genpg.transform.evaluateProperties"
-  , Core.Name "hydra.environment.reorderDefs"
+  , Core.Name "hydra.ext.cpp.coder.encodeLiteralType"
+  , Core.Name "hydra.pg.demos.genpg.transform.evaluateProperties"
+  , Core.Name "hydra.core.environment.reorderDefs"
   , Core.Name "hydra.haskell.coder.constructModule"
   , Core.Name "hydra.haskell.coder.gatherMetadata"
   , Core.Name "hydra.haskell.serde.expressionToExpr"
@@ -133,31 +134,31 @@ kernelExemptTermNames = S.fromList
   , Core.Name "hydra.haskell.serde.patternToExpr"
   , Core.Name "hydra.haskell.serde.typeToExpr"
   , Core.Name "hydra.haskell.testing.generateTestCase"
-  , Core.Name "hydra.inference.inferGraphTypes"
-  , Core.Name "hydra.inference.inferTypeOfLet"
-  , Core.Name "hydra.json.schema.serde.fromObject"
-  , Core.Name "hydra.pegasus.coder.encodePossiblyOptionalType"
-  , Core.Name "hydra.pegasus.serde.schemaToExpr"
+  , Core.Name "hydra.core.inference.inferGraphTypes"
+  , Core.Name "hydra.core.inference.inferTypeOfLet"
+  , Core.Name "hydra.ext.json.schema.serde.fromObject"
+  , Core.Name "hydra.ext.pegasus.coder.encodePossiblyOptionalType"
+  , Core.Name "hydra.ext.pegasus.serde.schemaToExpr"
   , Core.Name "hydra.pg.coder.edgeCoder"
   , Core.Name "hydra.pg.coder.findAdjacenEdgeAdapters"
   , Core.Name "hydra.pg.coder.hasVertexAdapters"
   , Core.Name "hydra.pg.coder.vertexCoder"
-  , Core.Name "hydra.print.errors.checkingError"
-  , Core.Name "hydra.print.errors.error"
+  , Core.Name "hydra.core.print.errors.checkingError"
+  , Core.Name "hydra.core.print.errors.error"
   , Core.Name "hydra.rdf.utils.encodeLiteral"
-  , Core.Name "hydra.reduction.betaReduceType"
+  , Core.Name "hydra.core.reduction.betaReduceType"
   , Core.Name "hydra.rust.coder.encodeLiteral"
   , Core.Name "hydra.rust.coder.encodeLiteralType"
   , Core.Name "hydra.rust.coder.encodeType"
-  , Core.Name "hydra.shacl.coder.encodeLiteralType"
-  , Core.Name "hydra.shacl.coder.withType"
-  , Core.Name "hydra.templates.instantiateTemplate"
-  , Core.Name "hydra.typeScript.coder.encodeType"
-  , Core.Name "hydra.typeScript.serde.moduleItemToExpr"
-  , Core.Name "hydra.typeScript.serde.typeExpressionToString"
+  , Core.Name "hydra.rdf.shacl.coder.encodeLiteralType"
+  , Core.Name "hydra.rdf.shacl.coder.withType"
+  , Core.Name "hydra.core.templates.instantiateTemplate"
+  , Core.Name "hydra.typescript.coder.encodeType"
+  , Core.Name "hydra.typescript.serde.moduleItemToExpr"
+  , Core.Name "hydra.typescript.serde.typeExpressionToString"
   , Core.Name "hydra.wasm.coder.encodeLiteral"
   , Core.Name "hydra.wasm.coder.encodeLiteralType"
-  , Core.Name "hydra.yaml.coder.literalYamlCoder"
+  , Core.Name "hydra.ext.yaml.coder.literalYamlCoder"
   ]
 
 main :: IO ()
@@ -201,7 +202,7 @@ main = do
 
   -- Synthesize all encode/decode modules in-memory from their source type modules
   -- and add them to the universe so that other modules' inference can resolve
-  -- hydra.encode.*/hydra.decode.* cross-references. These modules are no longer
+  -- hydra.core.encode.*/hydra.core.decode.* cross-references. These modules are no longer
   -- imported from dist/haskell/*/Sources/{Encode,Decode}/*.hs (#448); the
   -- JSON under dist/json is produced independently by writeDerivedJsonPackageSplit
   -- below. Same synthesizer, same content, no .hs needed.
@@ -217,7 +218,7 @@ main = do
   -- the native (hydra-jvm / hydra-java / hydra-python) modules loaded from dist/json.
   -- Native modules are tagged by the package whose manifest they were LOADED from
   -- (#511), NOT by namespace prefix — prefix-tagging dropped modules without the
-  -- package's prefix segment (e.g. hydra.gradle, owned by hydra-java). everything
+  -- package's prefix segment (e.g. hydra.java.gradle, owned by hydra-java). everything
   -- else comes from extRoutingInput.
   let nativeRoutingInput = [ (pkg, fmap Kernel.moduleName mods) | (pkg, mods) <- nativeTagged ]
       routingMap = buildRoutingMap (extRoutingInput ++ nativeRoutingInput)
@@ -234,7 +235,7 @@ main = do
         let ns = Packaging.unModuleName (Kernel.moduleName m)
         in L.isPrefixOf "hydra.jvm." ns || L.isPrefixOf "hydra.java." ns || L.isPrefixOf "hydra.python." ns
       -- The native packages (#344) are loaded into the universe together with
-      -- their ALREADY-DERIVED DSL wrapper modules (hydra.dsl.{java,python}.*),
+      -- their ALREADY-DERIVED DSL wrapper modules (hydra.core.dsl.{java,python}.*),
       -- via loadNativePackageModules reading both mainModules and dslModules
       -- from JSON. Those wrappers are DERIVED modules: their phantom types
       -- (atomTrue : TypedTerm Atom) are declared at construction, not inferred.
@@ -249,19 +250,24 @@ main = do
       -- wrappers are written by the derived pass below, not here.)
       isNativeDslWrapper m =
         let ns = Packaging.unModuleName (Kernel.moduleName m)
-        in L.isPrefixOf "hydra.dsl.java." ns || L.isPrefixOf "hydra.dsl.python." ns
-      -- Derived encode/decode modules (hydra.encode.*, hydra.decode.*) are compiled
+        in L.isPrefixOf "hydra.java.dsl." ns || L.isPrefixOf "hydra.python.dsl." ns
+      -- Derived encode/decode modules (hydra.core.encode.*, hydra.core.decode.*) are compiled
       -- into mainModules and so reach this universe, but they are DERIVED: the
       -- synthesizer is authoritative for their in-term annotations and the derived
       -- pass below re-emits them with doInfer=False. They must NOT be re-inferred
       -- by this main (doInfer=True) pass — inference's occurs-check rejects the
       -- saturated nominal self-applications in polymorphic decoder signatures (e.g.
-      -- hydra.decode.parsing.parseResult : ParseResult @ a). They are loaded only to
+      -- hydra.core.decode.parsing.parseResult : ParseResult @ a). They are loaded only to
       -- seed the inference universe for the hand-written modules. Exclude them here;
       -- the derived pass is their sole writer. (#476)
+      -- #729: derived encode/decode modules are hydra.<pkgroot>.<encode|decode>.<...> for ANY package
+      -- (the grammar reorder moved the category after the package root; a hardcoded "hydra.core.encode."
+      -- prefix silently stops matching ext-package derived modules like hydra.pg.encode.model, which
+      -- would then be wrongly re-inferred by this doInfer=True pass — see the #476 note above).
       isDerivedEncodeDecode m =
-        let ns = Packaging.unModuleName (Kernel.moduleName m)
-        in L.isPrefixOf "hydra.encode." ns || L.isPrefixOf "hydra.decode." ns
+        case LS.splitOn "." (Packaging.unModuleName (Kernel.moduleName m)) of
+          ("hydra" : _pkgroot : category : _rest) -> category == "encode" || category == "decode"
+          _ -> False
       isDerived m = isNativeDslWrapper m || isDerivedEncodeDecode m
       writeUniverse
         | includeJavaPython = filter (not . isDerived) universe
@@ -279,21 +285,21 @@ main = do
   --     inference universe and can embed literal cross-namespace variable
   --     references inside their own compiled bodies (observed: a
   --     hydra.python.coder.json definitions entry literally named
-  --     "hydra.environment.reorderDefs", which corrupted the check's
+  --     "hydra.core.environment.reorderDefs", which corrupted the check's
   --     name-to-owner map when included in its universe).
-  --   * isDerivedModule (hydra.dsl.*/encode.*/decode.*), the #575 GLOBAL
+  --   * isDerivedModule (hydra.core.dsl.*/encode.*/decode.*), the #575 GLOBAL
   --     derived-module policy (shared with the structural/semantic passes
   --     below): synthesized modules whose moduleDependencies is computed by
   --     Encoding.encodeModule/Decoding.decodeModule from the SOURCE module's
   --     declared deps, but never includes the source's own raw namespace --
   --     even though the generated body embeds literal type references into
-  --     it (e.g. hydra.encode.paths references hydra.core.Field/.Name/.Term/
-  --     etc. with hydra.core absent from its declared deps by construction,
+  --     it (e.g. hydra.core.encode.paths references hydra.core.model.Field/.Name/.Term/
+  --     etc. with hydra.core.model absent from its declared deps by construction,
   --     not by omission). Not a real gap. (#574 originally scoped this
   --     exclusion to isDerivedEncodeDecode specifically, pending the #575
   --     broader decision on derived-module validation policy -- now
   --     resolved: isDerivedModule is that decision, applied uniformly here
-  --     and in the structural/semantic passes below. hydra.dsl.* wrappers
+  --     and in the structural/semantic passes below. hydra.core.dsl.* wrappers
   --     are additionally covered now, not just encode/decode.)
   let isExcludedFromUndeclaredDepsCheck m = isNativeOwned m || isDerivedModule m
       undeclaredDepsUniverse = filter (not . isExcludedFromUndeclaredDepsCheck) universe
@@ -375,10 +381,10 @@ main = do
   -- with its own package-specific basePath, mirroring
   -- namespaceToPackageJsonDirIn. A prior version of this call passed the
   -- shared dist/json ROOT for every module regardless of owning package,
-  -- which produced <root>/hydra/paths.json for hydra.paths (owned by
+  -- which produced <root>/hydra/paths.json for hydra.core.paths (owned by
   -- hydra-kernel, correct location
   -- <root>/hydra-kernel/src/main/json/hydra/paths.json) -- a crash on every
-  -- real sync, since hydra.paths always exists. Only meaningful if the write
+  -- real sync, since hydra.core.paths always exists. Only meaningful if the write
   -- succeeded. Structural (packaging) checks do NOT rerun here -- see the
   -- pre-inference call site's comment above. typedUniverse is loaded only
   -- for writeUniverse's modules (the ones this driver actually wrote), so
@@ -386,11 +392,11 @@ main = do
   -- post-inference validation: their JSON is written by separate native
   -- drivers this file never touches, so there is nothing fresh to reload.
   --
-  -- ALSO append synthesizedEncodeDecode (the in-memory hydra.encode.*/
-  -- hydra.decode.* modules built at the top of main, doInfer=False) to the
+  -- ALSO append synthesizedEncodeDecode (the in-memory hydra.core.encode.*/
+  -- hydra.core.decode.* modules built at the top of main, doInfer=False) to the
   -- GRAPH CONTEXT (not the validated set -- see below): many non-derived
   -- modules legitimately call derived encode/decode functions (e.g.
-  -- hydra.codegen.moduleToJson calls hydra.encode.packaging.module), and
+  -- hydra.core.codegen.moduleToJson calls hydra.core.encode.packaging.module), and
   -- those derived modules' own JSON is written later by
   -- writeDerivedJsonPackageSplit (after this validation call), so it is not
   -- on disk yet to reload. universe already includes synthesizedEncodeDecode
@@ -433,7 +439,7 @@ main = do
   putStrLn "Generating derived modules (DSL + encode + decode) to JSON..."
   -- The derived-module generators run over each package's derivedMainModules
   -- list (see each package's Manifest.hs). For each source module we emit
-  -- hydra.dsl.<x>, hydra.encode.<x>, and hydra.decode.<x>, routed to their
+  -- hydra.core.dsl.<x>, hydra.core.encode.<x>, and hydra.core.decode.<x>, routed to their
   -- owning package's dist/json/<pkg>/ via the derived RoutingMap. The
   -- encode/decode JSON is emitted DIRECTLY from the synthesized Modules — no
   -- per-host Hydra.Sources.{Encode,Decode}.*.hs source-as-data copy is needed
@@ -457,7 +463,7 @@ main = do
       exitFailure
 
 -- | Check every module in the given universe for undeclared cross-module
--- dependencies (hydra.validate.packaging.checkUndeclaredDependencies /
+-- dependencies (hydra.core.validate.packaging.checkUndeclaredDependencies /
 -- kernelUniverseUndeclaredDependencies; see #574): a module referencing a
 -- name owned by another module which is not among its declared
 -- moduleDependencies. Runs over the WHOLE universe (all packages), not
@@ -471,7 +477,7 @@ main = do
 checkUndeclaredDependenciesOrExit :: [Kernel.Module] -> IO ()
 checkUndeclaredDependenciesOrExit mods = do
     putStrLn $ "Checking " ++ show (length mods)
-               ++ " modules for undeclared cross-module dependencies (hydra.validate.packaging.checkUndeclaredDependencies)..."
+               ++ " modules for undeclared cross-module dependencies (hydra.core.validate.packaging.checkUndeclaredDependencies)..."
     hFlush stdout
     let graph = modulesToGraph mods mods
     let primNames = S.fromList (M.keys (Kernel.graphPrimitives graph))

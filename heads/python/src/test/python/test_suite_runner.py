@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 # IMPORTANT: Add paths BEFORE any hydra imports
-# Main path provides the full hydra package, gen-test provides hydra.test
+# Main path provides the full hydra package, gen-test provides hydra.core.test
 _root = Path(__file__).parent.parent.parent
 _main_path = _root / "main" / "python"
 _gen_main_path = _root / "gen-main" / "python"
@@ -25,19 +25,19 @@ for _p in [str(_gen_test_path), str(_gen_main_path), str(_main_path)]:
 
 from typing import Optional
 
-import hydra.core
-import hydra.graph
-import hydra.lexical
-import hydra.rewriting
-import hydra.testing
-from hydra.overlay.python.dsl.python import FrozenDict, None_
-import hydra.typing
+import hydra.core.model
+import hydra.core.graph
+import hydra.core.lexical
+import hydra.core.rewriting
+import hydra.core.testing
+from hydra.core.overlay.python.dsl.python import FrozenDict, None_
+import hydra.core.typing
 
-import hydra.test.test_types
+import hydra.core.test.test_types
 
 # Now we can import the test modules
-import hydra.test.test_suite as test_suite
-import hydra.test.test_graph as test_graph
+import hydra.core.test.test_suite as test_suite
+import hydra.core.test.test_graph as test_graph
 
 from hydra_test_group_walker import (
     default_test_runner,
@@ -46,7 +46,7 @@ from hydra_test_group_walker import (
 )
 
 
-def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
+def _load_kernel_term_bindings() -> dict[hydra.core.model.Name, hydra.core.model.Binding]:
     """
     Load kernel term bindings from JSON.
 
@@ -83,22 +83,22 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
     if not json_dir:
         json_dir = "../../dist/json/hydra-kernel/src/main/json"  # fallback
 
-    # Load only the essential evaluator term modules (hydra.annotations
+    # Load only the essential evaluator term modules (hydra.core.annotations
     # and their dependencies). Loading all 92 term modules from JSON is too slow.
     # This matches the optimization in Haskell (TestUtils.hs) and Java (TestSuiteRunner.java).
     evaluator_term_namespaces = [
-        hydra.core.Name("hydra.annotations"),
-        hydra.core.Name("hydra.constants"),
-        hydra.core.Name("hydra.decode.core"),
-        hydra.core.Name("hydra.dependencies"),
-        hydra.core.Name("hydra.encode.core"),
-        hydra.core.Name("hydra.extract.core"),
-        hydra.core.Name("hydra.lexical"),
-        hydra.core.Name("hydra.rewriting"),
-        hydra.core.Name("hydra.scoping"),
-        hydra.core.Name("hydra.print.core"),
-        hydra.core.Name("hydra.strip"),
-        hydra.core.Name("hydra.variables"),
+        hydra.core.model.Name("hydra.core.annotations"),
+        hydra.core.model.Name("hydra.core.constants"),
+        hydra.core.model.Name("hydra.core.decode.model"),
+        hydra.core.model.Name("hydra.core.dependencies"),
+        hydra.core.model.Name("hydra.core.encode.model"),
+        hydra.core.model.Name("hydra.core.extract.model"),
+        hydra.core.model.Name("hydra.core.lexical"),
+        hydra.core.model.Name("hydra.core.rewriting"),
+        hydra.core.model.Name("hydra.core.scoping"),
+        hydra.core.model.Name("hydra.core.print.model"),
+        hydra.core.model.Name("hydra.core.strip"),
+        hydra.core.model.Name("hydra.core.variables"),
     ]
 
     term_mods = load_modules_from_json(json_dir, evaluator_term_namespaces)
@@ -110,10 +110,10 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
 
     sys.setrecursionlimit(old_limit)
 
-    from hydra.packaging import DefinitionTerm
-    from hydra.core import Binding
-    import hydra.overlay.python.lib.optionals as Optionals
-    from hydra.scoping import term_signature_to_type_scheme
+    from hydra.core.packaging import DefinitionTerm
+    from hydra.core.model import Binding
+    import hydra.core.overlay.python.lib.optionals as Optionals
+    from hydra.core.scoping import term_signature_to_type_scheme
     bindings = {}
     for mod in term_mods:
         for d in mod.definitions:
@@ -129,16 +129,16 @@ def _load_bootstrap_type_schemes() -> FrozenDict:
     """
     Load bootstrap type schemes for the test schema graph.
 
-    Uses hydra.json.bootstrap.types_by_name (the same bootstrap type map
+    Uses hydra.core.json.bootstrap.types_by_name (the same bootstrap type map
     used for JSON decoding) to build a Map[Name, TypeScheme] suitable for
     the test graph's schema_types. This provides type definitions for
-    hydra.core, hydra.util, hydra.typing, hydra.error, hydra.graph,
+    hydra.core.model, hydra.core.util, hydra.core.typing, hydra.core.error, hydra.core.graph,
     and hydra.module — all the types needed by inference tests.
 
     This mirrors Java's Generation.bootstrapTypeSchemes().
     """
-    from hydra.json.bootstrap import types_by_name
-    from hydra.scoping import f_type_to_type_scheme
+    from hydra.core.json.bootstrap import types_by_name
+    from hydra.core.scoping import f_type_to_type_scheme
 
     result = {}
     for name, typ in types_by_name.items():
@@ -160,23 +160,23 @@ _benchmark_results: dict[str, float] = {}  # path -> elapsed ms
 _init_start_ns: int = 0  # start time for test infrastructure initialization
 
 
-def _empty_context() -> hydra.typing.InferenceContext:
+def _empty_context() -> hydra.core.typing.InferenceContext:
     """Create an empty InferenceContext for test use."""
-    return hydra.typing.InferenceContext(
+    return hydra.core.typing.InferenceContext(
         fresh_type_variable_count=0,
         trace=(),
     )
 
 
-def _patch_graph_with_default_impls(graph: hydra.graph.Graph) -> hydra.graph.Graph:
+def _patch_graph_with_default_impls(graph: hydra.core.graph.Graph) -> hydra.core.graph.Graph:
     """
     Return a copy of the graph where each primitive that has a
     primitiveDefinitionDefaultImplementation uses it (via reduce_term) instead
     of the native host implementation.  Primitives without a default keep their
     native implementation unchanged.
     """
-    import hydra.reduction as reduction
-    from hydra.overlay.python.dsl.python import FrozenDict, Given, None_
+    import hydra.core.reduction as reduction
+    from hydra.core.overlay.python.dsl.python import FrozenDict, Given, None_
     from dataclasses import replace
 
     native_graph = graph  # used as the fallback evaluation context
@@ -187,7 +187,7 @@ def _patch_graph_with_default_impls(graph: hydra.graph.Graph) -> hydra.graph.Gra
             # Apply impl_term to each argument left-to-right
             applied = impl_term
             for arg in args:
-                applied = hydra.core.TermApplication(hydra.core.Application(applied, arg))
+                applied = hydra.core.model.TermApplication(hydra.core.model.Application(applied, arg))
             cx = _empty_context()
             return reduction.reduce_term(cx, native_graph, True, applied)
         return default_impl
@@ -203,7 +203,7 @@ def _patch_graph_with_default_impls(graph: hydra.graph.Graph) -> hydra.graph.Gra
     return replace(graph, primitives=FrozenDict(patched))
 
 
-def build_test_graph(use_default_impls: bool = False) -> hydra.graph.Graph:
+def build_test_graph(use_default_impls: bool = False) -> hydra.core.graph.Graph:
     """
     Build the test graph with schema and primitives.
 
@@ -221,20 +221,20 @@ def build_test_graph(use_default_impls: bool = False) -> hydra.graph.Graph:
     Returns:
         Graph: The test graph
     """
-    from hydra.overlay.python.dsl.python import FrozenDict, None_, Given
-    import hydra.lexical
+    from hydra.core.overlay.python.dsl.python import FrozenDict, None_, Given
+    import hydra.core.lexical
 
     from hydra.generation import bootstrap_graph
     bs_graph = bootstrap_graph()
 
     # Step 1: Build schema types from bootstrap type map + test types
-    # The bootstrap type schemes provide types for hydra.core, hydra.util,
-    # hydra.typing, hydra.error, hydra.graph, and hydra.module.
+    # The bootstrap type schemes provide types for hydra.core.model, hydra.core.util,
+    # hydra.core.typing, hydra.core.error, hydra.core.graph, and hydra.module.
     bootstrap_types = _load_bootstrap_type_schemes()
 
     # Get test type definitions and convert each to a TypeScheme
     # (extracting forall variables, just like f_type_to_type_scheme does)
-    from hydra.scoping import f_type_to_type_scheme
+    from hydra.core.scoping import f_type_to_type_scheme
     test_types_dict = test_graph.test_types()
 
     # Merge bootstrap types with test-specific types
@@ -250,11 +250,11 @@ def build_test_graph(use_default_impls: bool = False) -> hydra.graph.Graph:
 
     # Build term bindings from test data
     test_terms_dict = test_graph.test_terms()
-    data_bindings = [hydra.core.Binding(name=name, term=term, type_scheme=None_())
+    data_bindings = [hydra.core.model.Binding(name=name, term=term, type_scheme=None_())
                      for name, term in test_terms_dict.items()]
 
     # Build the test graph with schema types and all term bindings
-    graph = hydra.lexical.elements_to_graph(
+    graph = hydra.core.lexical.elements_to_graph(
         bs_graph, schema_types, tuple(kernel_term_bindings + data_bindings))
 
     if use_default_impls:
@@ -265,7 +265,7 @@ def build_test_graph(use_default_impls: bool = False) -> hydra.graph.Graph:
 
 # Cache the test graph at module level.
 # This mirrors the Haskell approach where the graph is computed once and reused.
-_test_graph: Optional[hydra.graph.Graph] = None
+_test_graph: Optional[hydra.core.graph.Graph] = None
 
 # When set to True (via --default-impls flag or HYDRA_DEFAULT_IMPLS=1 env var),
 # the test graph uses default primitive implementations instead of native ones.
@@ -274,7 +274,7 @@ USE_DEFAULT_IMPLS: bool = (
 )
 
 
-def get_test_graph() -> hydra.graph.Graph:
+def get_test_graph() -> hydra.core.graph.Graph:
     """Get the cached test graph, building it if necessary."""
     global _test_graph, _init_start_ns
     if _test_graph is None:

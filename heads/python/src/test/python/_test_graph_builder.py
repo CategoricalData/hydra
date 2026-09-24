@@ -4,13 +4,13 @@
 
 from __future__ import annotations
 
-import hydra.core
-import hydra.graph
-import hydra.test.test_graph as test_graph
-from hydra.overlay.python.dsl.python import FrozenDict, None_
+import hydra.core.model
+import hydra.core.graph
+import hydra.core.test.test_graph as test_graph
+from hydra.core.overlay.python.dsl.python import FrozenDict, None_
 
 
-def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
+def _load_kernel_term_bindings() -> dict[hydra.core.model.Name, hydra.core.model.Binding]:
     import sys
     from hydra.generation import load_modules_from_json, strip_all_term_types
 
@@ -33,18 +33,18 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
         json_dir = "../../dist/json/hydra-kernel/src/main/json"  # fallback
 
     evaluator_term_namespaces = [
-        hydra.core.Name("hydra.annotations"),
-        hydra.core.Name("hydra.constants"),
-        hydra.core.Name("hydra.decode.core"),
-        hydra.core.Name("hydra.dependencies"),
-        hydra.core.Name("hydra.encode.core"),
-        hydra.core.Name("hydra.extract.core"),
-        hydra.core.Name("hydra.lexical"),
-        hydra.core.Name("hydra.rewriting"),
-        hydra.core.Name("hydra.scoping"),
-        hydra.core.Name("hydra.print.core"),
-        hydra.core.Name("hydra.strip"),
-        hydra.core.Name("hydra.variables"),
+        hydra.core.model.Name("hydra.core.annotations"),
+        hydra.core.model.Name("hydra.core.constants"),
+        hydra.core.model.Name("hydra.core.decode.model"),
+        hydra.core.model.Name("hydra.core.dependencies"),
+        hydra.core.model.Name("hydra.core.encode.model"),
+        hydra.core.model.Name("hydra.core.extract.model"),
+        hydra.core.model.Name("hydra.core.lexical"),
+        hydra.core.model.Name("hydra.core.rewriting"),
+        hydra.core.model.Name("hydra.core.scoping"),
+        hydra.core.model.Name("hydra.core.print.model"),
+        hydra.core.model.Name("hydra.core.strip"),
+        hydra.core.model.Name("hydra.core.variables"),
     ]
 
     term_mods = load_modules_from_json(json_dir, evaluator_term_namespaces)
@@ -52,8 +52,8 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
 
     sys.setrecursionlimit(old_limit)
 
-    from hydra.packaging import DefinitionTerm
-    from hydra.core import Binding
+    from hydra.core.packaging import DefinitionTerm
+    from hydra.core.model import Binding
     bindings = {}
     for mod in term_mods:
         for d in mod.definitions:
@@ -65,8 +65,8 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
 
 
 def _load_bootstrap_type_schemes() -> FrozenDict:
-    from hydra.json.bootstrap import types_by_name
-    from hydra.scoping import f_type_to_type_scheme
+    from hydra.core.json.bootstrap import types_by_name
+    from hydra.core.scoping import f_type_to_type_scheme
 
     result = {}
     for name, typ in types_by_name.items():
@@ -74,15 +74,15 @@ def _load_bootstrap_type_schemes() -> FrozenDict:
     return FrozenDict(result)
 
 
-def build_test_graph() -> hydra.graph.Graph:
-    import hydra.lexical
+def build_test_graph() -> hydra.core.graph.Graph:
+    import hydra.core.lexical
     from hydra.generation import bootstrap_graph
 
     bs_graph = bootstrap_graph()
 
     bootstrap_types = _load_bootstrap_type_schemes()
 
-    from hydra.scoping import f_type_to_type_scheme
+    from hydra.core.scoping import f_type_to_type_scheme
     test_types_dict = test_graph.test_types()
 
     all_schema_types = dict(bootstrap_types)
@@ -94,8 +94,8 @@ def build_test_graph() -> hydra.graph.Graph:
     kernel_term_bindings = list(kernel_terms.values())
 
     test_terms_dict = test_graph.test_terms()
-    data_bindings = [hydra.core.Binding(name=name, term=term, type_scheme=None_())
+    data_bindings = [hydra.core.model.Binding(name=name, term=term, type_scheme=None_())
                      for name, term in test_terms_dict.items()]
 
-    return hydra.lexical.elements_to_graph(
+    return hydra.core.lexical.elements_to_graph(
         bs_graph, schema_types, tuple(kernel_term_bindings + data_bindings))

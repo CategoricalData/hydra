@@ -28,13 +28,13 @@ For background on Hydra's approach to property graphs, see the
   for use with `hydra-rdf`.
 - **PG validator** — checks property graphs against a schema; runs identically across
   Haskell, Java, and Python.
-- **Neo4j model** (`hydra.neo4j.model`) — a Neo4j-flavored property-graph data model and schema
+- **Neo4j model** (`hydra.pg.neo4j.model`) — a Neo4j-flavored property-graph data model and schema
   (constraints and graph types), distinct from the TinkerPop-shaped PG model above, with element-level
-  validation in `hydra.validate.neo4j` (see below).
+  validation in `hydra.pg.validate.neo4j` (see below).
 
 ## Neo4j model
 
-The `hydra.neo4j.model` module is a property-graph data model shaped to match **Neo4j**, as a
+The `hydra.pg.neo4j.model` module is a property-graph data model shaped to match **Neo4j**, as a
 counterpart to the TinkerPop-shaped `hydra.pg.model`.
 It exists because Neo4j's data model is not quite TinkerPop's: it is closer to a profile of the
 ISO/IEC GQL data model, and several structural differences make a faithful round-trip impossible to
@@ -114,9 +114,9 @@ entirely by its constraints, with no separate property list.
 
 ### Validation
 
-The `hydra.validate.neo4j` module validates a Neo4j graph against a graph type, under a configurable
+The `hydra.pg.validate.neo4j` module validates a Neo4j graph against a graph type, under a configurable
 `ValidationProfile` (the same profile/result framework as the property-graph validator
-`hydra.validate.pg`). `validateNode` and `validateRelationship` check one element against a `GraphType`;
+`hydra.pg.validate.model`). `validateNode` and `validateRelationship` check one element against a `GraphType`;
 `validateGraph` validates a whole graph (a list of nodes and relationships) and reports all violations,
 each tagged with the offending element's id.
 
@@ -158,7 +158,7 @@ which runs it in Java and Python against a live Neo4j via the Neo4j client drive
 
 ### Mapping to the property-graph model
 
-The `hydra.neo4j.pg` module maps graph *data* between this Neo4j model and Hydra's TinkerPop-shaped
+The `hydra.pg.neo4j.core` module maps graph *data* between this Neo4j model and Hydra's TinkerPop-shaped
 property-graph model (`hydra.pg.model`): per-element (`vertexToNode` / `nodeToVertex`,
 `edgeToRelationship` / `relationshipToEdge`) and whole-graph (`graphToNeo4j`, mapping a PG `Graph` to Neo4j
 nodes and relationships; and `neo4jToGraph`, mapping Neo4j nodes and relationships to PG vertices and
@@ -184,7 +184,7 @@ constrains. Four mismatches, each with a deliberate resolution:
   `(out-label, label, in-label)`. So Neo4j → PG expansion is **schema-conditional**: a type with a single
   `RelationshipElementType` becomes the plain recased label (`LIKES → likes`), while an overloaded type is
   disambiguated by endpoint labels (`LIKES` from a `Person` to a `Movie` → `personLikesMovie`), using
-  Hydra's built-in `hydra.formatting.convertCase` (UPPER_SNAKE ↔ camelCase). PG → Neo4j simply recases
+  Hydra's built-in `hydra.core.formatting.convertCase` (UPPER_SNAKE ↔ camelCase). PG → Neo4j simply recases
   the edge label (`likes → LIKES`) and does **not** un-expand — round trips are not expected to be the
   identity.
 - **Multi-label nodes.** Neo4j nodes carry a label *set*; Hydra vertices carry a single label. Hydra PG
@@ -202,23 +202,23 @@ Some property-graph integrations are inherently host-specific (third-party libra
 parsers) and so are hand-written rather than generated. They live under `overlay/java/hydra-pg/`
 (and `overlay/python/hydra-pg/`) and are copied onto the generated distribution at assembly time
 (#511; formerly separate `bindings/java/*` artifacts). Each declares its third-party dependencies via
-`overlay/<lang>/hydra-pg/build.json` (the encoded `hydra.gradle` / `hydra.python.pyproject` build
+`overlay/<lang>/hydra-pg/build.json` (the encoded `hydra.java.gradle` / `hydra.python.pyproject` build
 configuration).
 
-- **Neo4j openCypher + GQL parsers** (`hydra.overlay.java.{cypher,gql}`). ANTLR grammars under
+- **Neo4j openCypher + GQL parsers** (`hydra.core.overlay.java.{cypher,gql}`). ANTLR grammars under
   `overlay/java/hydra-pg/src/main/antlr/`: `org/neo4j/Cypher.g4` (openCypher, generates
   `org.neo4j.{CypherLexer,CypherParser}`) and `net/fortytwo/hydra/gql/parser/GQL.g4` (ISO/IEC GQL,
   generates `net.fortytwo.hydra.gql.parser.{GQLLexer,GQLParser}` — a neutral Hydra-scoped namespace, as
   GQL is an ISO standard, not Neo4j-owned). `CypherReader`/`GQLReader` wrap the generated parsers;
   `FromCypher` converts parsed Cypher ASTs into the translingual `hydra.pg.query.*` model.
-- **TinkerPop / Gremlin bridge** (`hydra.overlay.java.tinkerpop`). A bidirectional mapping between the
-  generated `hydra.tinkerpop.gremlin` model and TinkerPop's native `Bytecode`: `HydraToBytecode`
+- **TinkerPop / Gremlin bridge** (`hydra.pg.overlay.java.tinkerpop`). A bidirectional mapping between the
+  generated `hydra.pg.tinkerpop.gremlin` model and TinkerPop's native `Bytecode`: `HydraToBytecode`
   (forward), `BytecodeToHydra` (reverse), and a pg ↔ TinkerGraph bridge (`coder.HydraGremlinBridge`,
   `coder.Validate`). `GremlinText.parse` (Gremlin text → Hydra) is currently blocked by an ANTLR
   runtime conflict — see the TODO under *What it provides* and
   [#521](https://github.com/CategoricalData/hydra/issues/521). A Python TinkerPop coder lives in
   `overlay/python/hydra-pg/`.
-- **PG DSL builders** (`hydra.overlay.java.pg.dsl`). Fluent Java builders (`Graphs.vertex/edge/...`)
+- **PG DSL builders** (`hydra.pg.overlay.java.dsl`). Fluent Java builders (`Graphs.vertex/edge/...`)
   for constructing `hydra.pg.model` graphs and schemas, plus `Merging` and query helpers.
 
 ## Demos

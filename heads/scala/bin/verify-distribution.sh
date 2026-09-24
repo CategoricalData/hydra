@@ -134,7 +134,7 @@ package probe
 // exactly the packaging-boundary break this verifier exists to catch.
 object Probe {
   def main(args: Array[String]): Unit = {
-    val name = classOf[hydra.core.Name]
+    val name = classOf[hydra.core.model.Name]
     println(s"hydra-kernel class on classpath: ${name.getName}")
   }
 }

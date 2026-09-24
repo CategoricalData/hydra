@@ -66,7 +66,7 @@ while read -r line; do
     # Short-name aliases: drop the "hydra_<ns>_" prefix.
     # Hand-written runtime files (e.g., prims.lisp) reference structs
     # by their unqualified short name (e.g., make-term_coder rather
-    # than make-hydra_graph_term_coder). Provide aliases for backward
+    # than make-hydra_core_graph_term_coder). Provide aliases for backward
     # compatibility. If multiple structs would generate the same
     # short name, the later definition wins; this matches the
     # pre-#290 behavior when struct names were unprefixed in the

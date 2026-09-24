@@ -1,19 +1,19 @@
 package hydra.sources.java;
-import hydra.overlay.java.dsl.Types;
-import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
-import hydra.packaging.Definition;
-import hydra.packaging.EntityMetadata;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleName;
-import hydra.packaging.ModuleDependency;
-import hydra.overlay.java.util.Optional;
+import hydra.core.overlay.java.dsl.Types;
+import static hydra.core.overlay.java.dsl.meta.Defs.unqualifiedDeps;
+import hydra.core.packaging.Definition;
+import hydra.core.packaging.EntityMetadata;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleName;
+import hydra.core.packaging.ModuleDependency;
+import hydra.core.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static hydra.overlay.java.dsl.Helpers.doc;
-import static hydra.overlay.java.dsl.Helpers.typeDef;
-import static hydra.overlay.java.dsl.Helpers.typeref;
+import static hydra.core.overlay.java.dsl.Helpers.doc;
+import static hydra.core.overlay.java.dsl.Helpers.typeDef;
+import static hydra.core.overlay.java.dsl.Helpers.typeref;
 
 /**
  * Environment types for Java code generation.
@@ -26,17 +26,17 @@ public class Environment {
 
     // Reference helpers, mirroring Haskell {@code environment}, {@code syntax}, etc.
     private static final ModuleName SYNTAX_NS = new ModuleName("hydra.java.syntax");
-    private static final ModuleName CORE_NS = new ModuleName("hydra.core");
-    private static final ModuleName GRAPH_NS = new ModuleName("hydra.graph");
-    private static final ModuleName MODULE_NS = new ModuleName("hydra.packaging");
-    private static final ModuleName TYPING_NS = new ModuleName("hydra.typing");
+    private static final ModuleName CORE_NS = new ModuleName("hydra.core.model");
+    private static final ModuleName GRAPH_NS = new ModuleName("hydra.core.graph");
+    private static final ModuleName MODULE_NS = new ModuleName("hydra.core.packaging");
+    private static final ModuleName TYPING_NS = new ModuleName("hydra.core.typing");
 
-    private static hydra.core.Type env(String local) { return typeref(NS, local); }
-    private static hydra.core.Type syntax(String local) { return typeref(SYNTAX_NS, local); }
-    private static hydra.core.Type core(String local) { return typeref(CORE_NS, local); }
-    private static hydra.core.Type graph(String local) { return typeref(GRAPH_NS, local); }
-    private static hydra.core.Type modul(String local) { return typeref(MODULE_NS, local); }
-    private static hydra.core.Type typing(String local) { return typeref(TYPING_NS, local); }
+    private static hydra.core.model.Type env(String local) { return typeref(NS, local); }
+    private static hydra.core.model.Type syntax(String local) { return typeref(SYNTAX_NS, local); }
+    private static hydra.core.model.Type core(String local) { return typeref(CORE_NS, local); }
+    private static hydra.core.model.Type graph(String local) { return typeref(GRAPH_NS, local); }
+    private static hydra.core.model.Type modul(String local) { return typeref(MODULE_NS, local); }
+    private static hydra.core.model.Type typing(String local) { return typeref(TYPING_NS, local); }
 
     /** Classification of a Java symbol for code generation. */
     private static Definition javaSymbolClass() {

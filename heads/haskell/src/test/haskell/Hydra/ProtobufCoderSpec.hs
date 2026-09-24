@@ -7,9 +7,9 @@ Test.Hspec.hspec Hydra.ProtobufCoderSpec.spec
 module Hydra.ProtobufCoderSpec where
 
 import Hydra.Kernel
-import qualified Hydra.Protobuf.Coder as ProtobufCoder
-import qualified Hydra.Protobuf.Environment as ProtobufEnvironment
-import qualified Hydra.Protobuf.Proto3 as Proto3
+import qualified Hydra.Ext.Protobuf.Coder as ProtobufCoder
+import qualified Hydra.Ext.Protobuf.Environment as ProtobufEnvironment
+import qualified Hydra.Ext.Protobuf.Proto3 as Proto3
 
 import Hydra.TestUtils
 

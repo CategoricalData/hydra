@@ -2,12 +2,12 @@
 module Hydra.Sources.Test.Inference.All where
 
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import Hydra.Overlay.Haskell.Dsl.Typed.Testing as Testing
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing as Testing
 import Hydra.Sources.Kernel.Types.All
-import Hydra.Overlay.Haskell.Dsl.Typed.Phantoms as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types as T
+import Hydra.Core.Overlay.Haskell.Dsl.Phantoms as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -26,7 +26,7 @@ import qualified Hydra.Sources.Test.Inference.NominalTypes as NominalTypes
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.test.inference.all"
+ns = ModuleName "hydra.core.test.inference.all"
 
 module_ :: Module
 module_ = Module {

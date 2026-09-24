@@ -16,9 +16,9 @@
 module Hydra.Sources.Bench.PolymorphicChain where
 
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 
 import qualified Data.List                   as L

@@ -1,43 +1,43 @@
 """TypedTerm references to functions NOT yet covered by generated DSLs.
 
-Kernel-function references have been replaced by the generated hydra.dsl.* modules
-(#467): e.g. hydra.dsl.strip.deannotate_type, hydra.dsl.names.qualify_name.
+Kernel-function references have been replaced by the generated hydra.core.dsl.* modules
+(#467): e.g. hydra.core.dsl.strip.deannotate_type, hydra.core.dsl.names.qualify_name.
 This package's OWN modules (hydra.python.utils, hydra.python.names) are also now
-generated (#556): hydra.dsl.python.utils.*, hydra.dsl.python.names.*. The last
-derived-family reference (hydra.print.core.type) was retired in favor of the typed
-hydra.refs.show_ref + hydra.dsl.core.type_type (see #555). What remains here is a
+generated (#556): hydra.python.dsl.utils.*, hydra.python.dsl.names.*. The last
+derived-family reference (hydra.core.print.model.type) was retired in favor of the typed
+hydra.core.refs.show_ref + hydra.core.dsl.model.type_type (see #555). What remains here is a
 handful of permanent partial-application exceptions (see bottom of file) that the
 arity-saturated generated wrappers cannot express.
 
 Keep this list minimal -- only add what is actually used and not generated.
 """
 
-from hydra.overlay.python.dsl.meta.phantoms import var
-from hydra.dsl.python import utils as _utils
-from hydra.dsl.python import names as _names
-from hydra.typed import TypedTerm
-import hydra.dsl.core
-import hydra.names
-import hydra.core
+from hydra.core.overlay.python.dsl.phantoms import var
+from hydra.python.dsl import utils as _utils
+from hydra.python.dsl import names as _names
+from hydra.core.typed import TypedTerm
+import hydra.core.dsl.model
+import hydra.core.names
+import hydra.core.model
 
 
 def _print_ref(tn):
     """Look up the string-printer function for a type given its TypedName token.
 
-    Local mirror of the published hydra.refs.show_ref (#497): that helper hardcodes
-    the "hydra.show" category prefix, which predates the hydra.print.* rename and
-    cannot be changed without a new hydra-python release. hydra.names.derived_binding_name
+    Local mirror of the published hydra.core.refs.show_ref (#497): that helper hardcodes
+    the "hydra.core.show" category prefix, which predates the hydra.core.print.* rename and
+    cannot be changed without a new hydra-python release. hydra.core.names.derived_binding_name
     is a generic, prefix-parameterized utility unaffected by the rename, so we call it
-    directly with the correct "hydra.print" prefix instead of going through show_ref.
+    directly with the correct "hydra.core.print" prefix instead of going through show_ref.
     """
-    return hydra.core.TermVariable(hydra.names.derived_binding_name(["hydra", "print"], True, tn.value))
+    return hydra.core.model.TermVariable(hydra.core.names.derived_binding_name(["hydra", "print"], True, tn.value))
 
 
-# hydra.constants
+# hydra.core.constants
 
-# hydra.formatting
+# hydra.core.formatting
 
-# hydra.names
+# hydra.core.names
 
 # hydra.python.utils (used by coder.py; #556 -- generated, was var("hydra.python.utils.*"))
 utils_assignment_statement = _utils.assignment_statement
@@ -86,13 +86,13 @@ utils_raise_type_error = _utils.raise_type_error
 utils_return_single = _utils.return_single
 utils_name_and_params = _utils.name_and_params
 utils_py_none = _utils.py_none()
-show_core_type = TypedTerm(_print_ref(hydra.dsl.core.type_type))
+show_core_type = TypedTerm(_print_ref(hydra.core.dsl.model.type_type))
 names_type_variable_reference = _names.type_variable_reference
 names_term_variable_reference = _names.term_variable_reference
 names_encode_name_qualified = _names.encode_name_qualified
 
-# hydra.annotations
-formatting_normalize_comment = var("hydra.formatting.normalizeComment")
+# hydra.core.annotations
+formatting_normalize_comment = var("hydra.core.formatting.normalizeComment")
 
 utils_type_alias_statement = _utils.type_alias_statement
 utils_type_alias_statement310 = _utils.type_alias_statement310
@@ -111,25 +111,25 @@ names_variant_name = _names.variant_name
 names_encode_constant_for_type_name = _names.encode_constant_for_type_name
 names_encode_constant_for_field_name = _names.encode_constant_for_field_name
 
-# hydra.predicates (used by coder.py)
+# hydra.core.predicates (used by coder.py)
 
-# hydra.analysis
+# hydra.core.analysis
 
-# hydra.environment
+# hydra.core.environment
 
-# hydra.scoping / hydra.strip / hydra.variables
+# hydra.core.scoping / hydra.core.strip / hydra.core.variables
 
-# hydra.serialization (used by serde.py)
+# hydra.core.serialization (used by serde.py)
 
-# hydra.packaging — these are DSL accessors (generated), not kernel functions.
-# Re-export from hydra.dsl.packaging for symmetry with the Haskell DSL imports.
-from hydra.dsl.packaging import (
+# hydra.core.packaging — these are DSL accessors (generated), not kernel functions.
+# Re-export from hydra.core.dsl.packaging for symmetry with the Haskell DSL imports.
+from hydra.core.dsl.packaging import (
     un_module_name as packaging_un_module_name,
 )
 
-# hydra.util — QualifiedName and namespaces_focus moved from hydra.packaging to
-# hydra.util in #369 (QualifiedName and Namespaces<n> live in hydra.util).
-from hydra.dsl.util import (
+# hydra.core.util — QualifiedName and namespaces_focus moved from hydra.core.packaging to
+# hydra.core.util in #369 (QualifiedName and Namespaces<n> live in hydra.core.util).
+from hydra.core.dsl.util import (
     module_names_focus as packaging_namespaces_focus,
     qualified_name_local as packaging_qualified_name_local,
     qualified_name_module_name as packaging_qualified_name_namespace,
@@ -139,24 +139,24 @@ from hydra.dsl.util import (
 # Partial-application / first-class-reference sites: these functions are either
 # referenced with FEWER args than their full arity (the rest arrive later in the
 # term) or passed around as bare term-level values (e.g. to Lists.map, compose),
-# so the arity-saturated generated wrappers in hydra.dsl.* cannot express them
+# so the arity-saturated generated wrappers in hydra.core.dsl.* cannot express them
 # (calling one immediately builds a term; there is no unapplied handle to pass
 # around). Keep as raw refs -- var(...) returns a TypedTerm whose __call__ builds
 # the same application generated wrappers do, so it still works when called too.
-environment_with_lambda_context = var("hydra.environment.withLambdaContext")
-environment_with_let_context = var("hydra.environment.withLetContext")
-environment_with_type_lambda_context = var("hydra.environment.withTypeLambdaContext")
-formatting_convert_case = var("hydra.formatting.convertCase")
-formatting_sanitize_with_underscores = var("hydra.formatting.sanitizeWithUnderscores")
+environment_with_lambda_context = var("hydra.core.environment.withLambdaContext")
+environment_with_let_context = var("hydra.core.environment.withLetContext")
+environment_with_type_lambda_context = var("hydra.core.environment.withTypeLambdaContext")
+formatting_convert_case = var("hydra.core.formatting.convertCase")
+formatting_sanitize_with_underscores = var("hydra.core.formatting.sanitizeWithUnderscores")
 utils_py_name_to_py_type_parameter = var("hydra.python.utils.pyNameToPyTypeParameter")
 names_encode_type_variable = var("hydra.python.names.encodeTypeVariable")
 names_encode_namespace_with_overrides = var("hydra.python.names.encodeNamespaceWithOverrides")
 names_encode_name = var("hydra.python.names.encodeName")
 utils_py_name_to_py_expression = var("hydra.python.utils.pyNameToPyExpression")
 
-# hydra.util CaseConvention enum constants are TTerms (injects), already
-# available as constants in hydra.dsl.util. Re-export here for symmetry.
-from hydra.dsl.util import (
+# hydra.core.util CaseConvention enum constants are TTerms (injects), already
+# available as constants in hydra.core.dsl.util. Re-export here for symmetry.
+from hydra.core.dsl.util import (
     case_convention_camel as util_case_convention_camel,
     case_convention_lower_snake as util_case_convention_lower_snake,
     case_convention_upper_snake as util_case_convention_upper_snake,

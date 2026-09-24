@@ -15,12 +15,12 @@ import Hydra.Demos.Genpg.Examples.Health.GraphSchema
 import Hydra.Demos.Genpg.Examples.Health.Mapping
 import Hydra.Demos.Genpg.Demo (transformTables)
 import Hydra.Rdf.ShaclRdf (shapesGraphToNtriples)
-import Hydra.Overlay.Haskell.Lib.Literals (printInt32)
+import Hydra.Core.Overlay.Haskell.Lib.Literals (printInt32)
 import qualified Hydra.Pg.Rdf.Environment as PgRdfEnv
 import qualified Hydra.Pg.Rdf.Mappings as PgRdfMappings
 
 import qualified Hydra.Rdf.Syntax as Rdf
-import qualified Hydra.Shacl.Model as Shacl
+import qualified Hydra.Rdf.Shacl.Model as Shacl
 import qualified Hydra.Rdf.Serde as Serde
 import qualified Hydra.Rdf.Utils as RdfUtils
 import qualified Hydra.Pg.Model as Pg

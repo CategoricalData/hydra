@@ -1,27 +1,27 @@
--- | Primitive declarations for the hydra.lib.equality namespace.
+-- | Primitive declarations for the hydra.core.lib.equality namespace.
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Lib.Equality where
 
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap          as Bootstrap
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms      as Phantoms
-import qualified Hydra.Overlay.Haskell.Dsl.Types              as Types
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap          as Bootstrap
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types              as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lib.equality"
+ns = ModuleName "hydra.core.lib.equality"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.equality module.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.equality module.")}
   where
     definitions = [equal, notEqual]
 
@@ -31,7 +31,7 @@ define = primitiveInModule module_
 defineWithDefault :: String -> String -> TermSignature -> [String] -> TypedTerm a -> PrimitiveDefinition
 defineWithDefault = primitiveWithDefaultInModule module_
 
--- Signatures (derived from Hydra.Overlay.Haskell.Libraries primN declarations).
+-- Signatures (derived from Hydra.Core.Overlay.Haskell.Libraries primN declarations).
 
 -- Shared type variable
 tx :: Type

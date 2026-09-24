@@ -1,6 +1,6 @@
 package hydra.cypher;
 
-import hydra.cypher.openCypher.Query;
+import hydra.pg.cypher.openCypher.Query;
 import hydra.tools.AntlrReaderBase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

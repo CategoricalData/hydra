@@ -2,8 +2,8 @@
 
 Reads the shared ``schema.json`` and each graph JSON file (produced by the Java
 ``GenerateData`` from DSL definitions), decodes them back into
-``hydra.neo4j.model`` values, and validates each graph against the schema with
-``hydra.validate.neo4j.validate_graph``. The same validator -- generated from one
+``hydra.pg.neo4j.model`` values, and validates each graph against the schema with
+``hydra.pg.validate.neo4j.validate_graph``. The same validator -- generated from one
 Hydra source -- runs identically in the Java and Haskell counterparts; because
 every host reads the *same* JSON files, the data and the logic are identical
 across languages by construction.
@@ -14,17 +14,17 @@ Usage: python3 json_demo.py <data-directory>
 import sys
 from pathlib import Path
 
-import hydra.error.neo4j as err
-import hydra.json.model as jmodel
-import hydra.json.parser as jparser
-import hydra.neo4j.model as model
-import hydra.parsing as parsing
-import hydra.validate.neo4j as validate
-import hydra.validation as validation
+import hydra.pg.error.neo4j as err
+import hydra.core.json.model as jmodel
+import hydra.core.json.parser as jparser
+import hydra.pg.neo4j.model as model
+import hydra.core.parsing as parsing
+import hydra.pg.validate.neo4j as validate
+import hydra.core.validation as validation
 
 
 # ---------------------------------------------------------------------------
-# JSON access helpers (over hydra.json.model.Value)
+# JSON access helpers (over hydra.core.json.model.Value)
 # ---------------------------------------------------------------------------
 
 def as_object(v):
@@ -67,7 +67,7 @@ def field(obj, name):
 
 
 # ---------------------------------------------------------------------------
-# Decoders: JSON -> hydra.neo4j.model
+# Decoders: JSON -> hydra.pg.neo4j.model
 # ---------------------------------------------------------------------------
 
 def decode_graph_type(v):

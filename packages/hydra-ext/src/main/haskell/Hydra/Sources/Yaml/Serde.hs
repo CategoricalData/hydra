@@ -3,32 +3,32 @@ module Hydra.Sources.Yaml.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
-import           Hydra.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
-import qualified Hydra.Dsl.Lib.Strings                as Strings
+import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Core.Dsl.Lib.Strings                as Strings
 import qualified Hydra.Sources.Kernel.Terms.Formatting                as Formatting
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Lib.Chars                  as Chars
-import qualified Hydra.Dsl.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Lib.Ordering as Ordering
-import qualified Hydra.Dsl.Lib.Lists                  as Lists
-import qualified Hydra.Dsl.Lib.Logic                  as Logic
-import qualified Hydra.Dsl.Lib.Literals               as Literals
-import qualified Hydra.Dsl.Lib.Maps                   as Maps
-import qualified Hydra.Dsl.Lib.Optionals                 as Optionals
-import qualified Hydra.Dsl.Lib.Pairs                  as Pairs
-import qualified Hydra.Overlay.Haskell.Dsl.Terms                           as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Types                           as Types
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                   as Phantoms
+import qualified Hydra.Core.Dsl.Lib.Chars                  as Chars
+import qualified Hydra.Core.Dsl.Lib.Equality               as Equality
+import qualified Hydra.Core.Dsl.Lib.Ordering as Ordering
+import qualified Hydra.Core.Dsl.Lib.Lists                  as Lists
+import qualified Hydra.Core.Dsl.Lib.Logic                  as Logic
+import qualified Hydra.Core.Dsl.Lib.Literals               as Literals
+import qualified Hydra.Core.Dsl.Lib.Maps                   as Maps
+import qualified Hydra.Core.Dsl.Lib.Optionals                 as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms                           as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                           as Types
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import           Prelude hiding ((++))
 import qualified Data.List                                 as L
 import qualified Data.Map                                  as M
 import qualified Data.Set                                  as S
 
-import qualified Hydra.Yaml.Model as YM
+import qualified Hydra.Core.Yaml.Model as YM
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.yaml.serde"
+ns = ModuleName "hydra.ext.yaml.serde"
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModuleName ns
@@ -37,7 +37,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ((KernelTypes.kernelTypesModuleNames L.++ [Formatting.ns, ModuleName "hydra.yaml.model"])),
+            moduleDependencies = unqualifiedDep <$> ((KernelTypes.kernelTypesModuleNames L.++ [Formatting.ns, ModuleName "hydra.core.yaml.model"])),
             moduleMetadata = descriptionMetadata (Just "Native YAML serialization: YAML Node to String")}
   where
     definitions = [
@@ -156,12 +156,12 @@ needsQuoting = define "needsQuoting" $
   -- Empty string needs quoting
   Logic.ifElse (Strings.isEmpty $ var "s") true $
   -- Reserved words need quoting
-  Logic.ifElse (Lists.member (var "s") (var "hydra.yaml.serde.yamlReservedWords" :: TypedTerm [String])) true $
+  Logic.ifElse (Lists.member (var "s") (var "hydra.ext.yaml.serde.yamlReservedWords" :: TypedTerm [String])) true $
   -- Looks like a number needs quoting
   Logic.ifElse (looksLikeNumber @@ var "s") true $
   -- Contains special characters needs quoting
   "chars" <~ Strings.toList (var "s") $
-  "specials" <~ Strings.toList (var "hydra.yaml.serde.yamlSpecialChars" :: TypedTerm String) $
+  "specials" <~ Strings.toList (var "hydra.ext.yaml.serde.yamlSpecialChars" :: TypedTerm String) $
   "hasSpecial" <~ Logic.not (Lists.isEmpty (Lists.filter
     ("c" ~> Lists.member (var "c" :: TypedTerm Int) (var "specials"))
     (var "chars"))) $

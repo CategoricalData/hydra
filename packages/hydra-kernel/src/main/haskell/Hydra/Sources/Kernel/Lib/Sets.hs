@@ -1,32 +1,32 @@
--- | Primitive declarations for the hydra.lib.sets namespace.
+-- | Primitive declarations for the hydra.core.lib.sets namespace.
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Lib.Sets where
 
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (map)
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms hiding (map)
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), filter, map)
 import qualified Data.Set                    as S
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lib.sets"
+ns = ModuleName "hydra.core.lib.sets"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.sets module.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.sets module.")}
   where
     -- The default-impl args below (difference/intersection/map/union/unions) carry an `:: ...Int...`
-    -- placeholder instantiation. The generated `Hydra.Dsl.Lib.Sets` (unlike the old `Meta.Lib.Sets`)
+    -- placeholder instantiation. The generated `Hydra.Core.Dsl.Lib.Sets` (unlike the old `Meta.Lib.Sets`)
     -- exposes the primitive's `Ord` element constraint, so these polymorphic defs need a concrete `Ord`
     -- type here to satisfy GHC. `Int` is arbitrary and carries no meaning — the emitted primitive is
     -- type-agnostic and fully polymorphic; only the Haskell typechecker sees the `Int`. See #467.

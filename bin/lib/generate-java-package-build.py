@@ -53,7 +53,7 @@ SCM_CONNECTION = "scm:git://github.com/CategoricalData/hydra.git"
 # sbt's _3 cross-version suffix) under net.fortytwo.hydra.scala.
 GROUP_ID = "net.fortytwo.hydra.java"
 
-# Map a hydra.gradle DependencyScope variant tag to the Gradle dependency
+# Map a hydra.java.gradle DependencyScope variant tag to the Gradle dependency
 # configuration that realizes it. (#511) The build.json carries scope as a
 # single-key object, e.g. {"api": {}} / {"tool": {}}.
 SCOPE_TO_CONFIGURATION = {
@@ -65,14 +65,14 @@ SCOPE_TO_CONFIGURATION = {
 
 
 def load_overlay_build_config(repo_root: str, name: str) -> dict:
-    """Load overlay/java/<pkg>/build.json — the encoded hydra.gradle
+    """Load overlay/java/<pkg>/build.json — the encoded hydra.java.gradle
     GradleBuildConfiguration for this package (#511). Returns {} when absent
     (most packages have no overlay build config).
 
     INTERIM: this reads the JSON directly. The build.json format is the canonical
-    encoding of hydra.gradle.GradleBuildConfiguration (validated by round-trip);
+    encoding of hydra.java.gradle.GradleBuildConfiguration (validated by round-trip);
     when the build system is nativized (#416) this hand parse is replaced by the
-    generated hydra.decode.gradle decoder. The on-disk format does not change.
+    generated hydra.java.decode.gradle decoder. The on-disk format does not change.
     """
     path = os.path.join(repo_root, "overlay", "java", name, "build.json")
     if not os.path.isfile(path):
@@ -110,7 +110,7 @@ def render_build_gradle(name: str, description: str, version: str, deps: list[st
     for dep in deps:
         dep_lines.append(f"    api '{GROUP_ID}:{dep}:{version}'")
     # Third-party deps from the overlay build.json, scope-mapped (#511). Each is
-    # an encoded hydra.packaging.PackageDependency: {name, version, scope?}.
+    # an encoded hydra.core.packaging.PackageDependency: {name, version, scope?}.
     for d in overlay.get("dependencies", []):
         coord = d["name"]
         ver = _version_string(d.get("version", {}))
@@ -168,7 +168,7 @@ tasks.matching { it.name in ['compileTestJava', 'test', 'processTestResources'] 
         out_dir = antlr.get("outputDirectory", "build/generated-src/antlr/main")
         args_groovy = ", ".join(f"'{a}'" for a in args)
         antlr_block = (
-            "\n\n// ANTLR grammar generation (from hydra.gradle AntlrConfig, #511).\n"
+            "\n\n// ANTLR grammar generation (from hydra.java.gradle AntlrConfig, #511).\n"
             "compileJava.dependsOn generateGrammarSource\n"
             # The antlr output dir is on the main source set, so every task that\n
             # reads those sources (sourcesJar via withSourcesJar(), javadoc) must\n

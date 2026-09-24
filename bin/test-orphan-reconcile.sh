@@ -2,7 +2,7 @@
 # Regression test for #393 cross-namespace rename orphan reconcile.
 #
 # Background: when a DSL module is renamed across namespaces (e.g.
-# hydra.eval.lib.lists -> hydra.lib.defaults.lists), the target output of
+# hydra.eval.lib.lists -> hydra.core.lib.defaults.lists), the target output of
 # the OLD namespace dir (dist/<lang>/.../hydra/eval/lib/) is left behind.
 # The generator-side prune (#357) would remove it, but the prune only runs
 # inside assemble-distribution.sh Step 1, which is gated by digest-check
@@ -78,7 +78,7 @@ cat > "$INPUT_DIGEST" <<'EOF'
   "selfHash": "deadbeef",
   "dependencyHashes": [],
   "moduleHashes": [
-    {"key": "hydra.lib.defaults.lists", "value": "aaaa1111"}
+    {"key": "hydra.core.lib.defaults.lists", "value": "aaaa1111"}
   ]
 }
 EOF

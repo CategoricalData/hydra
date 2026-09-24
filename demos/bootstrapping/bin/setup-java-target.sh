@@ -17,7 +17,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_JAVA_DIR="$HYDRA_ROOT/heads/java"
 JAVA_RESOURCES="$SCRIPT_DIR/../resources/java"
-# hydra.overlay.java.build.Generation (#459): moved out of heads/java into the
+# hydra.build.overlay.java.Generation (#459): moved out of heads/java into the
 # hydra-build overlay so it travels with dist/java/hydra-build/ via copy-overlay.sh.
 GENERATION_SRC="$HYDRA_ROOT/overlay/java/hydra-build/src/main/java/hydra/overlay/java/build/Generation.java"
 
@@ -50,8 +50,8 @@ for f in Bootstrap.java GenerationTargets.java HydraTestBase.java; do
     cp "$JAVA_SRC/$f" "$JAVA_DST/"
 done
 
-# hydra.overlay.java.build.Generation (#459) lives under the hydra-build overlay,
-# package-qualified as hydra.overlay.java.build — preserve that subdirectory
+# hydra.build.overlay.java.Generation (#459) lives under the hydra-build overlay,
+# package-qualified as hydra.build.overlay.java — preserve that subdirectory
 # structure rather than flattening into hydra/ like the head-only classes above.
 mkdir -p "$JAVA_DST/overlay/java/build"
 cp "$GENERATION_SRC" "$JAVA_DST/overlay/java/build/"
@@ -75,19 +75,19 @@ for f in ReductionTest.java VisitorTest.java TestSuiteRunner.java TestEnv.java H
     fi
 done
 # Also copy hydra/test/TestEnv.java — the generated TestGraph.java references
-# hydra.test.TestEnv (the package-qualified name), not hydra.TestEnv. The DSL
+# hydra.core.test.TestEnv (the package-qualified name), not hydra.TestEnv. The DSL
 # emits this reference directly (post-2026-04 TestEnv handoff change), and
-# bootstrap-from-json filters hydra.test.testEnv from generation so the
+# bootstrap-from-json filters hydra.core.test.testEnv from generation so the
 # hand-written file is the source of truth.
 mkdir -p "$OUTPUT_DIR/src/test/java/hydra/test"
 if [ -f "$HYDRA_JAVA_DIR/src/test/java/hydra/test/TestEnv.java" ]; then
     cp "$HYDRA_JAVA_DIR/src/test/java/hydra/test/TestEnv.java" "$OUTPUT_DIR/src/test/java/hydra/test/"
 fi
 
-# #546: hydra-build owns hydra.build.* (main) + hydra.test.build.* (test), relocated out
-# of hydra-kernel. The kernel's generated TestSuite references hydra.test.build.*, which in
+# #546: hydra-build owns hydra.build.* (main) + hydra.core.test.build.* (test), relocated out
+# of hydra-kernel. The kernel's generated TestSuite references hydra.core.test.build.*, which in
 # turn reference hydra.build.*; neither is emitted into the cell under --kernel-only. Copy
-# both from the hydra-build baseline (else: "package hydra.test.build does not exist").
+# both from the hydra-build baseline (else: "package hydra.core.test.build does not exist").
 JAVA_BUILD_BASELINE="$HYDRA_ROOT/dist/java/hydra-build/src"
 if [ -d "$JAVA_BUILD_BASELINE/main/java/hydra/build" ]; then
     mkdir -p "$JAVA_DST/build"

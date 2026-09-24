@@ -1,7 +1,7 @@
 module Hydra.Dsl.TypesSpec where
 
 import Hydra.Kernel
-import Hydra.Overlay.Haskell.Dsl.Types
+import Hydra.Core.Overlay.Haskell.Dsl.Types
 
 import qualified Test.Hspec as H
 

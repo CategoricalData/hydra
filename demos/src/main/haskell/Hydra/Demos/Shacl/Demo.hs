@@ -16,14 +16,14 @@ import Hydra.Kernel
 import Hydra.Generation (modulesToGraph, loadModulesFromJson, readManifestField)
 import Hydra.Sources.All (kernelModules)
 
-import qualified Hydra.Shacl.Coder as ShaclCoder
+import qualified Hydra.Rdf.Shacl.Coder as ShaclCoder
 import qualified Hydra.Rdf.Syntax as Rdf
-import qualified Hydra.Shacl.Model as Shacl
+import qualified Hydra.Rdf.Shacl.Model as Shacl
 import qualified Hydra.Rdf.Utils as RdfUtils
 import qualified Hydra.Rdf.Serde as Serde
-import qualified Hydra.Encode.Packaging as EncodePackaging
-import qualified Hydra.Typing as Typing
-import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Core.Encode.Packaging as EncodePackaging
+import qualified Hydra.Core.Typing as Typing
+import qualified Hydra.Core.Lexical as Lexical
 
 import Hydra.Rdf.ShaclRdf (shapesGraphToTriples)
 

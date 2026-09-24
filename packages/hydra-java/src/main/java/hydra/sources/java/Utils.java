@@ -1,46 +1,46 @@
 package hydra.sources.java;
-import hydra.core.Field;
-import hydra.core.Name;
-import hydra.core.Type;
-import hydra.dsl.Core;
-import hydra.dsl.Errors;
-import hydra.dsl.Packaging;
-import hydra.overlay.java.dsl.Types;
-import hydra.dsl.java.Environment;
-import hydra.dsl.java.Language;
-import hydra.dsl.java.Syntax;
-import hydra.dsl.lib.Eithers;
-import hydra.dsl.lib.Equality;
-import hydra.dsl.lib.Lists;
-import hydra.dsl.lib.Literals;
-import hydra.dsl.lib.Logic;
-import hydra.dsl.lib.Maps;
-import hydra.dsl.lib.Math_;
-import hydra.dsl.lib.Optionals;
-import hydra.dsl.lib.Pairs;
-import hydra.dsl.lib.Sets;
-import hydra.dsl.lib.Strings;
-import hydra.packaging.Definition;
-import hydra.packaging.EntityMetadata;
-import hydra.packaging.Module;
-import hydra.packaging.ModuleDependency;
-import hydra.packaging.ModuleName;
-import hydra.typed.TypedTerm;
-import hydra.overlay.java.util.Optional;
+import hydra.core.model.Field;
+import hydra.core.model.Name;
+import hydra.core.model.Type;
+import hydra.core.dsl.Core;
+import hydra.core.dsl.Errors;
+import hydra.core.dsl.Packaging;
+import hydra.core.overlay.java.dsl.Types;
+import hydra.java.dsl.Environment;
+import hydra.java.dsl.Language;
+import hydra.java.dsl.Syntax;
+import hydra.core.dsl.lib.Eithers;
+import hydra.core.dsl.lib.Equality;
+import hydra.core.dsl.lib.Lists;
+import hydra.core.dsl.lib.Literals;
+import hydra.core.dsl.lib.Logic;
+import hydra.core.dsl.lib.Maps;
+import hydra.core.dsl.lib.Math_;
+import hydra.core.dsl.lib.Optionals;
+import hydra.core.dsl.lib.Pairs;
+import hydra.core.dsl.lib.Sets;
+import hydra.core.dsl.lib.Strings;
+import hydra.core.packaging.Definition;
+import hydra.core.packaging.EntityMetadata;
+import hydra.core.packaging.Module;
+import hydra.core.packaging.ModuleDependency;
+import hydra.core.packaging.ModuleName;
+import hydra.core.typed.TypedTerm;
+import hydra.core.overlay.java.util.Optional;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static hydra.overlay.java.dsl.meta.Phantoms.*;
-import hydra.overlay.java.dsl.meta.Defs;
-import hydra.overlay.java.dsl.meta.Defs.Def;
-import static hydra.overlay.java.dsl.meta.Defs.define;
-import static hydra.overlay.java.dsl.meta.Defs.unqualifiedDeps;
-import static hydra.overlay.java.dsl.meta.Defs.ref;
-import static hydra.overlay.java.dsl.meta.Defs.definitionsOf;
+import static hydra.core.overlay.java.dsl.Phantoms.*;
+import hydra.core.overlay.java.dsl.meta.Defs;
+import hydra.core.overlay.java.dsl.meta.Defs.Def;
+import static hydra.core.overlay.java.dsl.meta.Defs.define;
+import static hydra.core.overlay.java.dsl.meta.Defs.unqualifiedDeps;
+import static hydra.core.overlay.java.dsl.meta.Defs.ref;
+import static hydra.core.overlay.java.dsl.meta.Defs.definitionsOf;
 import java.util.function.Supplier;
-import hydra.errors.Error_;
-import hydra.errors.OtherError;
+import hydra.core.errors.Error_;
+import hydra.core.errors.OtherError;
 import hydra.java.environment.Aliases;
 import hydra.java.syntax.AdditiveExpression;
 import hydra.java.syntax.AdditiveExpression_Binary;
@@ -157,7 +157,7 @@ import hydra.java.syntax.VariableDeclaratorId;
 import hydra.java.syntax.VariableInitializer;
 import hydra.java.syntax.VariableModifier;
 import hydra.java.syntax.Wildcard;
-import hydra.util.QualifiedName;
+import hydra.core.util.QualifiedName;
 import hydra.sources.java.Names;
 
 /**
@@ -178,7 +178,7 @@ public class Utils {
 
     /**
      * The {@link Aliases} fields in declaration order (mirrors the record in
-     * {@code Environment.aliases()}). Passed to {@link hydra.overlay.java.dsl.meta.Phantoms#recordWith}
+     * {@code Environment.aliases()}). Passed to {@link hydra.core.overlay.java.dsl.Phantoms#recordWith}
      * so a copy-with-update over an Aliases value need name only the fields it changes.
      * Keep in sync with the Aliases type definition.
      */
@@ -480,10 +480,10 @@ public class Utils {
         .lam("sub")
         .to(() ->
                 pair(
-                    wrap(new Name("hydra.packaging.ModuleName"),
-                        Strings.concat2(string("hydra.lib."), var("sub"))),
+                    wrap(new Name("hydra.core.packaging.ModuleName"),
+                        Strings.concat2(string("hydra.core.lib."), var("sub"))),
                     apply(ref(Names.javaPackageName), Lists.concat2(
-                        list(string("hydra"), string("overlay"), string("java"), string("lib")),
+                        list(string("hydra"), string("core"), string("overlay"), string("java"), string("lib")),
                         list(var("sub"))))));
 
     public static final Def importAliasesForModule = def("importAliasesForModule")
@@ -494,29 +494,29 @@ public class Utils {
                         Aliases.CURRENT_NAMESPACE,
                         proj(Module.TYPE_, Module.NAME, "mod")),
                     field(Aliases.PACKAGES, apply(ref(overlayJavaLibPackageAliases), var("overlaySubs"))),
-                    field(Aliases.BRANCH_VARS, hydra.dsl.lib.Sets.empty()),
+                    field(Aliases.BRANCH_VARS, hydra.core.dsl.lib.Sets.empty()),
                     field(
                         Aliases.RECURSIVE_VARS,
-                        hydra.dsl.lib.Sets.empty()),
+                        hydra.core.dsl.lib.Sets.empty()),
                     field(
                         Aliases.IN_SCOPE_TYPE_PARAMS,
-                        hydra.dsl.lib.Sets.empty()),
+                        hydra.core.dsl.lib.Sets.empty()),
                     field(
                         Aliases.POLYMORPHIC_LOCALS,
-                        hydra.dsl.lib.Sets.empty()),
+                        hydra.core.dsl.lib.Sets.empty()),
                     field(
                         Aliases.IN_SCOPE_JAVA_VARS,
-                        hydra.dsl.lib.Sets.empty()),
-                    field(Aliases.VAR_RENAMES, hydra.dsl.lib.Maps.empty()),
-                    field(Aliases.LAMBDA_VARS, hydra.dsl.lib.Sets.empty()),
+                        hydra.core.dsl.lib.Sets.empty()),
+                    field(Aliases.VAR_RENAMES, hydra.core.dsl.lib.Maps.empty()),
+                    field(Aliases.LAMBDA_VARS, hydra.core.dsl.lib.Sets.empty()),
                     field(
                         Aliases.TYPE_VAR_SUBST,
-                        hydra.dsl.lib.Maps.empty()),
+                        hydra.core.dsl.lib.Maps.empty()),
                     field(
                         Aliases.TRUSTED_TYPE_VARS,
-                        hydra.dsl.lib.Sets.empty()),
+                        hydra.core.dsl.lib.Sets.empty()),
                     field(Aliases.METHOD_CODOMAIN, nothing()),
-                    field(Aliases.THUNKED_VARS, hydra.dsl.lib.Sets.empty())));
+                    field(Aliases.THUNKED_VARS, hydra.core.dsl.lib.Sets.empty())));
 
     public static final Def interfaceMethodDeclaration = def("interfaceMethodDeclaration")
         .lam("mods").lam("tparams").lam("methodName").lam("params").lam("result").lam("stmts")
@@ -2282,7 +2282,7 @@ public class Utils {
                             TypeVariable.IDENTIFIER,
                             apply(
                                 ref(Utils.javaTypeIdentifier),
-                                hydra.dsl.Formatting.capitalize( var("v")))))));
+                                hydra.core.dsl.Formatting.capitalize( var("v")))))));
 
     public static final Def javaTypeVariableToType = def("javaTypeVariableToType")
         .lam("tv")
@@ -2363,7 +2363,7 @@ public class Utils {
     public static final Def javaVariableName = def("javaVariableName")
         .lam("name")
         .to(() ->
-                apply(ref(Utils.javaIdentifier), hydra.dsl.Names.localNameOf( var("name"))));
+                apply(ref(Utils.javaIdentifier), hydra.core.dsl.Names.localNameOf( var("name"))));
 
     public static final Def lookupJavaVarName = def("lookupJavaVarName")
         .lam("aliases").lam("name")
@@ -2549,7 +2549,7 @@ public class Utils {
         .to(() ->
                 let(
                     field("qn",
-                        hydra.dsl.Names.qualifyName( var("name"))),
+                        hydra.core.dsl.Names.qualifyName( var("name"))),
                     field("ns_",
                         proj(QualifiedName.TYPE_, QualifiedName.MODULE_NAME, "qn")),
                     field("local",
@@ -2622,7 +2622,7 @@ public class Utils {
         .to(() ->
                 let(
                     field("qn",
-                        hydra.dsl.Names.qualifyName( var("name"))),
+                        hydra.core.dsl.Names.qualifyName( var("name"))),
                     field("ns_",
                         proj(QualifiedName.TYPE_, QualifiedName.MODULE_NAME, "qn")),
                     field("local",
@@ -2701,7 +2701,7 @@ public class Utils {
                     Logic.ifElse(
                         Equality.equal(var("name"), string("_")),
                         string("ignored"),
-                        hydra.dsl.Formatting.sanitizeWithUnderscores(
+                        hydra.core.dsl.Formatting.sanitizeWithUnderscores(
                             Language.reservedWords(),
                             var("name")))));
 
@@ -3057,13 +3057,13 @@ public class Utils {
         .to(() ->
                 let(
                     field("qn",
-                        hydra.dsl.Names.qualifyName( var("elName"))),
+                        hydra.core.dsl.Names.qualifyName( var("elName"))),
                     field("ns_",
                         proj(QualifiedName.TYPE_, QualifiedName.MODULE_NAME, "qn")),
                     field("local",
                         proj(QualifiedName.TYPE_, QualifiedName.LOCAL, "qn")),
                     field("flocal",
-                        hydra.dsl.Formatting.capitalize(
+                        hydra.core.dsl.Formatting.capitalize(
                             apply(unwrap(Name.TYPE_), var("fname")))),
                     field("local1",
                         Logic.ifElse(
@@ -3073,7 +3073,7 @@ public class Utils {
                                 Equality.equal(var("flocal"), var("local")),
                                 Strings.concat2(var("flocal"), string("_")),
                                 var("flocal")))),
-                    hydra.dsl.Names.unqualifyName(
+                    hydra.core.dsl.Names.unqualifyName(
                         record(QualifiedName.TYPE_,
                             field(QualifiedName.MODULE_NAME, var("ns_")),
                             field(QualifiedName.LOCAL, var("local1"))))));
@@ -3240,34 +3240,34 @@ public class Utils {
         new ModuleName("hydra.java.language"),
         new ModuleName("hydra.java.names"),
         new ModuleName("hydra.java.serde"),
-        new ModuleName("hydra.formatting"),
-        new ModuleName("hydra.names"),
-        new ModuleName("hydra.serialization"),
+        new ModuleName("hydra.core.formatting"),
+        new ModuleName("hydra.core.names"),
+        new ModuleName("hydra.core.serialization"),
         new ModuleName("hydra.java.environment"),
         new ModuleName("hydra.java.syntax"),
-        new ModuleName("hydra.paths"),
-        new ModuleName("hydra.ast"),
-        new ModuleName("hydra.classes"),
-        new ModuleName("hydra.coders"),
-        new ModuleName("hydra.core"),
-        new ModuleName("hydra.error.checking"),
-        new ModuleName("hydra.error.core"),
-        new ModuleName("hydra.error.packaging"),
-        new ModuleName("hydra.errors"),
-        new ModuleName("hydra.graph"),
-        new ModuleName("hydra.json.model"),
-        new ModuleName("hydra.packaging"),
-        new ModuleName("hydra.parsing"),
-        new ModuleName("hydra.query"),
-        new ModuleName("hydra.relational"),
-        new ModuleName("hydra.tabular"),
-        new ModuleName("hydra.testing"),
-        new ModuleName("hydra.topology"),
-        new ModuleName("hydra.typed"),
-        new ModuleName("hydra.typing"),
-        new ModuleName("hydra.util"),
-        new ModuleName("hydra.validation"),
-        new ModuleName("hydra.variants"));
+        new ModuleName("hydra.core.paths"),
+        new ModuleName("hydra.core.ast"),
+        new ModuleName("hydra.core.classes"),
+        new ModuleName("hydra.core.coders"),
+        new ModuleName("hydra.core.model"),
+        new ModuleName("hydra.core.error.checking"),
+        new ModuleName("hydra.core.error.model"),
+        new ModuleName("hydra.core.error.packaging"),
+        new ModuleName("hydra.core.errors"),
+        new ModuleName("hydra.core.graph"),
+        new ModuleName("hydra.core.json.model"),
+        new ModuleName("hydra.core.packaging"),
+        new ModuleName("hydra.core.parsing"),
+        new ModuleName("hydra.core.query"),
+        new ModuleName("hydra.core.relational"),
+        new ModuleName("hydra.core.tabular"),
+        new ModuleName("hydra.core.testing"),
+        new ModuleName("hydra.core.topology"),
+        new ModuleName("hydra.core.typed"),
+        new ModuleName("hydra.core.typing"),
+        new ModuleName("hydra.core.util"),
+        new ModuleName("hydra.core.validation"),
+        new ModuleName("hydra.core.variants"));
 
     public static final Module module_ = new Module(
         NS,

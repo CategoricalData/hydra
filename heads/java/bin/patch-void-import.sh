@@ -45,7 +45,7 @@ if grep -q '^import Data.Void' "$TARGET"; then
     exit 0
 fi
 
-if ! grep -q '^module Hydra.Dsl.Lib.Functions where$' "$TARGET"; then
+if ! grep -q '^module Hydra.Core.Dsl.Lib.Functions where$' "$TARGET"; then
     echo "patch-void-import.sh: expected module header not found in $TARGET; refusing to patch blind." >&2
     exit 1
 fi
@@ -55,7 +55,7 @@ import sys
 path = sys.argv[1]
 with open(path) as f:
     text = f.read()
-marker = "module Hydra.Dsl.Lib.Functions where\n"
+marker = "module Hydra.Core.Dsl.Lib.Functions where\n"
 patch = (
     "\n"
     "-- #703 bootstrap patch (Step 8): the published hydra-haskell coder predates #684's\n"

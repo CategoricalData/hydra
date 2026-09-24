@@ -17,7 +17,7 @@
   (setq hydra-gen-main-dir (expand-file-name "src/main/emacs-lisp/hydra/" dist-base))
   (setq hydra-gen-test-dir (expand-file-name "src/test/emacs-lisp/hydra/" dist-base))
 
-  ;; #546: the hydra.build.* main + hydra.test.build.* test modules moved to the
+  ;; #546: the hydra.build.* main + hydra.core.test.build.* test modules moved to the
   ;; hydra-build package's own dist tree. In the repo layout they live under
   ;; dist/emacs-lisp/hydra-build/...; in the bootstrap-demo flat layout
   ;; (HYDRA_LISP_DIST_BASE set) all packages share one tree, so reuse it.
@@ -61,15 +61,15 @@
 ;; dist/json/hydra-build/src/main/json/expected-libraries.json by update-json-manifest.
 ;; Fail LOUDLY, named culprit, if this host's native runtime is missing an expected
 ;; library — the #533 payoff. "Registered" is probed at the RUNTIME level (is there a
-;; bound hydra_overlay_emacs_lisp_lib_<name>_* symbol?), immune to load-list drift.
+;; bound hydra_core_overlay_emacs_lisp_lib_<name>_* symbol?), immune to load-list drift.
 ;; The artifact lives in the hydra-build json dist tree, resolved as a head sibling
 ;; (../../../dist/...); in the bootstrap-demo flat layout (HYDRA_LISP_DIST_BASE set)
 ;; that tree is not assembled, so the check is skipped there.
 (require 'json)
 (defun hydra-native-library-registered-p (name)
   "True if this host's native runtime defines at least one bound symbol for the
-hydra.lib.NAME library, i.e. hydra_overlay_emacs_lisp_lib_<name>_*."
-  (let ((prefix (concat "hydra_overlay_emacs_lisp_lib_" name "_"))
+hydra.lib.NAME library, i.e. hydra_core_overlay_emacs_lisp_lib_<name>_*."
+  (let ((prefix (concat "hydra_core_overlay_emacs_lisp_lib_" name "_"))
         (found nil))
     (mapatoms
      (lambda (sym)
@@ -108,11 +108,11 @@ hydra.lib.NAME library, i.e. hydra_overlay_emacs_lisp_lib_<name>_*."
 ;; Load test data modules (types, terms, env, graph) first — these provide
 ;; the test types and terms needed by hydra-ensure-test-graph for schema
 ;; construction. test_env.el is the hand-written counterpart of the DSL's
-;; hydra.test.testEnv stub (filtered from emitted output via
+;; hydra.core.test.testEnv stub (filtered from emitted output via
 ;; testSkipEmitModuleNames); it must load before test_graph.el so the
-;; generated (require 'hydra.test.testEnv) resolves.
+;; generated (require 'hydra.core.test.testEnv) resolves.
 ;; #501: test_env.el now lives in overlay/emacs-lisp/ under the renamed
-;; hydra.overlay.emacs_lisp.test namespace and is copied into the dist MAIN tree
+;; hydra.core.overlay.emacs_lisp.test namespace and is copied into the dist MAIN tree
 ;; at overlay/emacs_lisp/test/test_env.el, so it loads from hydra-gen-main-dir
 ;; rather than the generated test tree. test_types/test_terms/test_graph remain
 ;; generated test modules in hydra-gen-test-dir.
@@ -132,14 +132,14 @@ hydra.lib.NAME library, i.e. hydra_overlay_emacs_lisp_lib_<name>_*."
 ;; Note: test_graph.el also builds the graph (via sync-lisp patch), but
 ;; hydra-load-gen-test reloads everything, so we ensure the graph is ready.
 (hydra-ensure-test-graph)
-(setq hydra_test_test_graph_test_graph hydra--test-graph)
-(setq hydra_test_test_graph_test_context (hydra-empty-context))
+(setq hydra_core_test_test_graph_test_graph hydra--test-graph)
+(setq hydra_core_test_test_graph_test_context (hydra-empty-context))
 
-;; #546: load hydra-build's test modules (hydra.test.build.*) BEFORE
+;; #546: load hydra-build's test modules (hydra.core.test.build.*) BEFORE
 ;; hydra-load-gen-test. The kernel loader list (hydra-load-gen-test) deliberately
 ;; omits test/build/*.el, but the generated kernel test suite aggregate
 ;; (test/test_suite.el, loaded inside hydra-load-gen-test) references
-;; hydra_test_build_*_all_tests, so those symbols must already be defined.
+;; hydra_core_test_build_*_all_tests, so those symbols must already be defined.
 ;; They live in hydra-build's own dist test tree (hydra-build-gen-test-dir) in the
 ;; normal layout, but in the bootstrap-demo FLAT layout everything shares one tree
 ;; (hydra-build-gen-test-dir == hydra-gen-test-dir, or is nil). Try both bases so

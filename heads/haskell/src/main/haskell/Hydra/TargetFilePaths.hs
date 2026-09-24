@@ -13,11 +13,11 @@ module Hydra.TargetFilePaths (
 ) where
 
 import Hydra.Kernel
-import qualified Hydra.File as File
+import qualified Hydra.Core.File as File
 import qualified Hydra.Java.Coder as JavaCoder
-import qualified Hydra.Predicates as Predicates
-import qualified Hydra.Names as Names
-import qualified Hydra.Util as Util
+import qualified Hydra.Core.Predicates as Predicates
+import qualified Hydra.Core.Names as Names
+import qualified Hydra.Core.Util as Util
 import qualified Data.List as L
 import qualified Data.List.Split as LS
 

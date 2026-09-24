@@ -1,29 +1,29 @@
--- | Primitive declarations for the hydra.lib.optionals namespace.
+-- | Primitive declarations for the hydra.core.lib.optionals namespace.
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Hydra.Sources.Kernel.Lib.Optionals where
 
 import Hydra.Kernel
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Optionals as Optionals
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (apply, compose, map, match)
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Optionals as Optionals
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms hiding (apply, compose, map, match)
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++), map)
 import qualified Data.Set                    as S
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.lib.optionals"
+ns = ModuleName "hydra.core.lib.optionals"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = DefinitionPrimitive <$> definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
-            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.lib.optionals module.")}
+            moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.optionals module.")}
   where
     definitions = [apply, bind, compose, foldList, given, givens, isGiven, isNone,
                    map, mapList, mapOptional, mapSet, match, toList, withDefault]
@@ -154,7 +154,7 @@ mapList = defineWithDefault "mapList" "Traverse a list in the optional monad."
       (var "xs"))
 
 mapOptional :: PrimitiveDefinition
-mapOptional = deprecatedSince "0.18" "hydra.lib.lists.mapGivens" $ defineWithDefault "mapOptional" "Map a partial function over a list, keeping only the present results."
+mapOptional = deprecatedSince "0.18" "hydra.core.lib.lists.mapGivens" $ defineWithDefault "mapOptional" "Map a partial function over a list, keeping only the present results."
   (sigWithParams [("f", "the partial function to apply to each element"), ("xs", "the list to map over")] $ TypeScheme [Name "x", Name "y"]
     ((tx Types.~> Types.optional ty) Types.~> Types.list tx Types.~> Types.list ty)
     mempty)

@@ -1,12 +1,12 @@
 package hydra;
 
-import hydra.core.FieldType;
-import hydra.core.FloatType;
-import hydra.core.IntegerType;
-import hydra.core.LiteralType;
-import hydra.core.Name;
-import hydra.core.Type;
-import hydra.overlay.java.util.ConsList;
+import hydra.core.model.FieldType;
+import hydra.core.model.FloatType;
+import hydra.core.model.IntegerType;
+import hydra.core.model.LiteralType;
+import hydra.core.model.Name;
+import hydra.core.model.Type;
+import hydra.core.overlay.java.util.ConsList;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;

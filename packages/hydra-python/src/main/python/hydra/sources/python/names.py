@@ -5,22 +5,22 @@ Host-native DSL source (authoritative; the former Haskell copy was removed in #3
 
 import sys
 
-from hydra.core import Name
-from hydra.overlay.python.dsl.python import Given
-from hydra.packaging import EntityMetadata, Module, ModuleName
+from hydra.core.model import Name
+from hydra.core.overlay.python.dsl.python import Given
+from hydra.core.packaging import EntityMetadata, Module, ModuleName
 
-import hydra.dsl.lib.equality as Equality
-import hydra.dsl.lib.lists as Lists
-import hydra.dsl.lib.logic as Logic
-import hydra.dsl.lib.maps as Maps
-import hydra.dsl.lib.optionals as Optionals
-import hydra.dsl.lib.pairs as Pairs
-import hydra.dsl.lib.sets as Sets
-import hydra.dsl.lib.strings as Strings
-from hydra.overlay.python.dsl.meta.phantoms import *  # noqa: F401,F403
-from hydra.overlay.python.dsl.meta.defs import check_complete
-import hydra.dsl.formatting
-from hydra.dsl.util import (
+import hydra.core.dsl.lib.equality as Equality
+import hydra.core.dsl.lib.lists as Lists
+import hydra.core.dsl.lib.logic as Logic
+import hydra.core.dsl.lib.maps as Maps
+import hydra.core.dsl.lib.optionals as Optionals
+import hydra.core.dsl.lib.pairs as Pairs
+import hydra.core.dsl.lib.sets as Sets
+import hydra.core.dsl.lib.strings as Strings
+from hydra.core.overlay.python.dsl.phantoms import *  # noqa: F401,F403
+from hydra.core.overlay.python.dsl.meta.defs import check_complete
+import hydra.core.dsl.formatting
+from hydra.core.dsl.util import (
     case_convention_camel as util_case_convention_camel,
     case_convention_lower_snake as util_case_convention_lower_snake,
     case_convention_pascal as util_case_convention_pascal,
@@ -34,8 +34,8 @@ from hydra.sources.python._kernel_refs import (
     packaging_qualified_name_namespace,
     packaging_un_module_name,
 )
-import hydra.dsl.names
-import hydra.dsl.core as Core
+import hydra.core.dsl.names
+import hydra.core.dsl.model as Core
 
 from hydra.sources.python import _python_helpers as PyDsl
 
@@ -56,8 +56,8 @@ from hydra.sources.python._source_dsl import (
     unqualified_dep,
 )
 DEPENDENCIES = [
-    unqualified_dep(ModuleName("hydra.names")),
-    unqualified_dep(ModuleName("hydra.formatting")),
+    unqualified_dep(ModuleName("hydra.core.names")),
+    unqualified_dep(ModuleName("hydra.core.formatting")),
     unqualified_dep(ModuleName("hydra.python.serde")),
     unqualified_dep(ModuleName("hydra.python.language")),
     unqualified_dep(ModuleName("hydra.python.environment")),
@@ -131,11 +131,11 @@ def _encode_name():
             field("focusPair", packaging_namespaces_focus(var("namespaces"))),
             field("focusNs", Pairs.first(var("focusPair"))),
             field("boundVars", project_bound_vars),
-            field("qualName", hydra.dsl.names.qualify_name(var("name"))),
+            field("qualName", hydra.core.dsl.names.qualify_name(var("name"))),
             field("mns", packaging_qualified_name_namespace(var("qualName"))),
             field("local", packaging_qualified_name_local(var("qualName"))),
             field("pyLocal",
-                _local("sanitizePythonName")(hydra.dsl.formatting.convert_case(util_case_convention_camel, var("conv"), var("local"))),
+                _local("sanitizePythonName")(hydra.core.dsl.formatting.convert_case(util_case_convention_camel, var("conv"), var("local"))),
             ),
             field("pyNs",
                 lam(
@@ -209,7 +209,7 @@ def _encode_name_qualified():
             field("focusNs", Pairs.first(var("focusPair"))),
             field("boundVars", project_bound_vars),
             field("qualName",
-                hydra.dsl.names.qualify_name(var("name")),
+                hydra.core.dsl.names.qualify_name(var("name")),
             ),
             field("mns",
                 packaging_qualified_name_namespace(var("qualName")),
@@ -279,7 +279,7 @@ def _encode_namespace():
                             "part",
                             wrap(
                                 _PY_NAME,
-                                hydra.dsl.formatting.convert_case(util_case_convention_camel, util_case_convention_lower_snake, var("part")),
+                                hydra.core.dsl.formatting.convert_case(util_case_convention_camel, util_case_convention_lower_snake, var("part")),
                             ),
                         ),
                         Strings.split_on(
@@ -294,10 +294,11 @@ def _encode_namespace():
 def _encode_namespace_string_with_overrides():
     """Convert a ModuleName to its Python dotted import string, with overlay overrides.
 
-    #630: a hydra.lib.<sub> namespace redirects to hydra.overlay.python.lib.<sub> IF that sub
+    #630: a hydra.core.lib.<sub> namespace (four segments, post-#729 package-rooted grammar) redirects
+    to hydra.core.overlay.python.lib.<sub> IF that sub
     actually has an overlay implementation on this host (checked via overlaySubs, the
     caller-supplied on-disk existence signal), before falling back to the fixed
-    overlayPythonModuleAliases map (for non-hydra.lib.* overlay routes like hydra.test.testEnv)
+    overlayPythonModuleAliases map (for non-hydra.lib.* overlay routes like hydra.core.test.testEnv)
     and finally to the shape-only default_encoding. This existence check happens at emission
     time; #630 retired the driver-level post-generation text pass (redirectForSubs "python")
     that used to do this rewrite after the fact.
@@ -311,20 +312,23 @@ def _encode_namespace_string_with_overrides():
     )
     raw = packaging_un_module_name(var("nsVal"))
     parts = Strings.split_on(string("."), raw)
-    sub = Strings.join(string("."), Lists.drop(int32(2), parts))
+    sub = Strings.join(string("."), Lists.drop(int32(3), parts))
     lib_redirect = Logic.if_else(
         Logic.and_(
             Logic.and_(
-                Equality.equal(Lists.length(parts), int32(3)),
-                Equality.equal(Lists.take(int32(2), parts), list_([string("hydra"), string("lib")])),
+                Equality.equal(Lists.length(parts), int32(4)),
+                Equality.equal(
+                    Lists.take(int32(3), parts),
+                    list_([string("hydra"), string("core"), string("lib")]),
+                ),
             ),
             Sets.member(sub, var("overlaySubs")),
         ),
-        just(Strings.concat2(string("hydra.overlay.python.lib."), sub)),
+        just(Strings.concat2(string("hydra.core.overlay.python.lib."), sub)),
         nothing(),
     )
     return (_def("encodeNamespaceStringWithOverrides")
-        .doc("Convert a ModuleName to its Python dotted import string, routing overlay modules to hydra.overlay.python.*")
+        .doc("Convert a ModuleName to its Python dotted import string, routing overlay modules to hydra.core.overlay.python.*")
         .to(
             lam(
                 "overlaySubs",
@@ -345,7 +349,7 @@ def _encode_namespace_string_with_overrides():
 def _encode_namespace_with_overrides():
     """Encode a namespace as DottedName, substituting overlay paths for known host-specific modules."""
     return (_def("encodeNamespaceWithOverrides")
-        .doc("Encode a namespace as a Python dotted name, routing overlay modules to their hydra.overlay.python.* paths")
+        .doc("Encode a namespace as a Python dotted name, routing overlay modules to their hydra.core.overlay.python.* paths")
         .to(
             lam(
                 "overlaySubs",
@@ -366,17 +370,17 @@ def _encode_namespace_with_overrides():
 
 
 def _overlay_python_module_aliases():
-    """Map from DSL module names to their hydra.overlay.python.* import strings."""
+    """Map from DSL module names to their hydra.core.overlay.python.* import strings."""
     def _module_name(s):
-        return wrap(Name("hydra.packaging.ModuleName"), string(s))
+        return wrap(Name("hydra.core.packaging.ModuleName"), string(s))
     return (_def("overlayPythonModuleAliases")
-        .doc("Alias map routing DSL-declared module names to their hydra.overlay.python.* import strings")
+        .doc("Alias map routing DSL-declared module names to their hydra.core.overlay.python.* import strings")
         .to(
             Maps.from_list(
                 list_([
                     pair(
-                        _module_name("hydra.test.testEnv"),
-                        string("hydra.overlay.python.test_env"),
+                        _module_name("hydra.core.test.testEnv"),
+                        string("hydra.core.overlay.python.test_env"),
                     ),
                 ])
             )))
@@ -391,7 +395,7 @@ def _encode_type_variable():
                 "name",
                 wrap(
                     _PY_NAME,
-                    hydra.dsl.formatting.capitalize(Core.un_name(var("name"))),
+                    hydra.core.dsl.formatting.capitalize(Core.un_name(var("name"))),
                 ),
             )))
 
@@ -425,7 +429,7 @@ def _encode_constant_for_field_name():
         .to(
             wrap(
                     _PY_NAME,
-                    hydra.dsl.formatting.convert_case(
+                    hydra.core.dsl.formatting.convert_case(
                         util_case_convention_camel,
                         util_case_convention_upper_snake,
                         Strings.join(string("_"), Strings.split_on(string("-"), Core.un_name(var("fname")))),
@@ -459,7 +463,7 @@ def _variable_reference():
             field("focusPair", packaging_namespaces_focus(var("namespaces"))),
             field("focusNs", Pairs.first(var("focusPair"))),
             field("mns",
-                hydra.dsl.names.module_name_of(var("name")),
+                hydra.core.dsl.names.module_name_of(var("name")),
             ),
             field("sameNamespace",
                 Optionals.match(var("mns"), false(), lam(
@@ -493,10 +497,10 @@ def _variant_name():
         .doc("Generate a variant name from type name and field name")
         .lam("isQualified").lam("env").lam("tname").lam("fname")
         .to(
-            _local("encodeName")(var("isQualified"), util_case_convention_pascal, var("env"), wrap("hydra.core.Name",
+            _local("encodeName")(var("isQualified"), util_case_convention_pascal, var("env"), wrap("hydra.core.model.Name",
                         Strings.concat2(
                             Core.un_name(var("tname")),
-                            hydra.dsl.formatting.capitalize(Core.un_name(var("fname"))),
+                            hydra.core.dsl.formatting.capitalize(Core.un_name(var("fname"))),
                         ),
                     ))))
 

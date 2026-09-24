@@ -42,8 +42,8 @@ mainModules = [
 -- list as new consumers appear.
 --
 -- Current consumers (as of 2026-05-16), both via Hydra.Sources.Pg.Rdf.Mappings:
---   * Hydra.Dsl.Rdf.Syntax
---   * Hydra.Dsl.Shacl.Model
+--   * Hydra.Rdf.Dsl.Syntax
+--   * Hydra.Rdf.Dsl.Shacl.Model
 mainDslModules :: [Module]
 mainDslModules = [
   RdfSyntax.module_,

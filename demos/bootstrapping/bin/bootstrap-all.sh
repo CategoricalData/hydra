@@ -315,7 +315,7 @@ if $DO_PREP; then
 # in hydra-java's build was retired in #309's bindings refactor).
 echo ""
 echo "[Pre-sync] Overlaying hand-written Haskell runtime onto dist/haskell/..."
-# Hydra.Haskell.Lib.* (and the umbrella Hydra.hs, Hydra.Dsl.*) live in
+# Hydra.Haskell.Lib.* (and the umbrella Hydra.hs, Hydra.Core.Dsl.*) live in
 # overlay/haskell/ and are required by dist/haskell/hydra-ext/...
 # at GHC time. The bin/sync.sh call below skips Haskell entirely when
 # --hosts doesn't include haskell, so the overlay would be missing for

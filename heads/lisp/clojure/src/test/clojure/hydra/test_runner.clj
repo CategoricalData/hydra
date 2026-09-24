@@ -1,15 +1,15 @@
-(ns hydra.test-runner
-  (:require [hydra.overlay.clojure.libraries :as libraries]
-            [hydra.overlay.clojure.preload :as preload]
-            [hydra.core :refer :all]
-            [hydra.errors :refer :all]
-            [hydra.graph :refer :all]
-            [hydra.packaging :refer :all]
-            [hydra.scoping :refer [hydra_scoping_type_scheme_to_term_signature]]
-            [hydra.typing :refer :all])
-  (:import [hydra.core hydra_core_wrapped_term hydra_core_injection hydra_core_field]
-           [hydra.graph hydra_graph_primitive hydra_graph_term_coder]
-           [hydra.packaging hydra_packaging_primitive_definition]))
+(ns hydra.core.test-runner
+  (:require [hydra.core.overlay.clojure.libraries :as libraries]
+            [hydra.core.overlay.clojure.preload :as preload]
+            [hydra.core.model :refer :all]
+            [hydra.core.errors :refer :all]
+            [hydra.core.graph :refer :all]
+            [hydra.core.packaging :refer :all]
+            [hydra.core.scoping :refer [hydra_core_scoping_type_scheme_to_term_signature]]
+            [hydra.core.typing :refer :all])
+  (:import [hydra.core.model hydra_core_model_wrapped_term hydra_core_model_injection hydra_core_model_field]
+           [hydra.core.graph hydra_core_graph_primitive hydra_core_graph_term_coder]
+           [hydra.core.packaging hydra_core_packaging_primitive_definition]))
 
 ;; ==========================================================================
 ;; Annotation primitives (native Clojure, operating on meta-encoded terms)
@@ -17,10 +17,10 @@
 
 (defn- is-meta-annotated? [t]
   "Check if term is a meta-encoded annotated term:
-   (:union {:type_name \"hydra.core.Term\" :field {:name \"annotated\" :term ...}})"
+   (:union {:type_name \"hydra.core.model.Term\" :field {:name \"annotated\" :term ...}})"
   (and (sequential? t) (= (first t) :inject)
        (let [m (second t)]
-         (and (= (:type_name m) "hydra.core.Term")
+         (and (= (:type_name m) "hydra.core.model.Term")
               (= (:name (:field m)) "annotated")))))
 
 (defn- meta-annotated-record [t]
@@ -54,12 +54,12 @@
 (defn- unwrap-term-variable-key [k]
   "After #386, annotation map keys are wrapped as TermVariable terms.
    Two encodings appear:
-     (:inject {:type_name \"hydra.core.Term\" :field {:name \"variable\" :term Name}})
+     (:inject {:type_name \"hydra.core.model.Term\" :field {:name \"variable\" :term Name}})
      (:variable Name)  ;; struct-compat short form
    Peel one level to return the underlying Name term."
   (cond
     (and (sequential? k) (= (first k) :inject)
-         (= (:type_name (second k)) "hydra.core.Term")
+         (= (:type_name (second k)) "hydra.core.model.Term")
          (= (:name (:field (second k))) "variable"))
     (:term (:field (second k)))
     (and (sequential? k) (= (first k) :variable))
@@ -73,7 +73,7 @@
   (cond
     ;; Inject {Term, map = (:map contents)}
     (and (sequential? ann-term) (= (first ann-term) :inject)
-         (= (:type_name (second ann-term)) "hydra.core.Term")
+         (= (:type_name (second ann-term)) "hydra.core.model.Term")
          (= (:name (:field (second ann-term))) "map"))
     (let [inner (:term (:field (second ann-term)))]
       (if (and (sequential? inner) (= (first inner) :map))
@@ -161,28 +161,28 @@
    Keys already in TermVariable form pass through."
   (cond
     (and (sequential? k) (= (first k) :inject)
-         (= (:type_name (second k)) "hydra.core.Term")
+         (= (:type_name (second k)) "hydra.core.model.Term")
          (= (:name (:field (second k))) "variable"))
     k
     :else
-    (list :inject {:type_name "hydra.core.Term"
+    (list :inject {:type_name "hydra.core.model.Term"
                    :field {:name "variable" :term k}})))
 
 (defn- wrap-annotation-map-as-term [anns-map]
   "Wrap a (NameTerm -> ValueTerm) map as a Term-encoded annotation map per
    #386: Inject{Term, map = (:map ((TermVariable ValueTerm) ...))}."
   (let [wrapped (mapv (fn [[k v]] [(wrap-key-as-term-variable k) v]) anns-map)]
-    (list :inject {:type_name "hydra.core.Term"
+    (list :inject {:type_name "hydra.core.model.Term"
                    :field {:name "map" :term (list :map wrapped)}})))
 
 (defn- make-meta-annotated [body anns-map]
   "Build a meta-encoded annotated term:
-   (:union {:type_name \"hydra.core.Term\" :field {:name \"annotated\" :term
-     (:record {:type_name \"hydra.core.AnnotatedTerm\" :fields [...]})}})
+   (:union {:type_name \"hydra.core.model.Term\" :field {:name \"annotated\" :term
+     (:record {:type_name \"hydra.core.model.AnnotatedTerm\" :fields [...]})}})
    #386: AnnotatedTerm.annotation is a Term, wrapped via wrap-annotation-map-as-term."
-  (list :union {:type_name "hydra.core.Term"
+  (list :union {:type_name "hydra.core.model.Term"
                 :field {:name "annotated"
-                        :term (list :record {:type_name "hydra.core.AnnotatedTerm"
+                        :term (list :record {:type_name "hydra.core.model.AnnotatedTerm"
                                              :fields [{:name "body" :term body}
                                                       {:name "annotation"
                                                        :term (wrap-annotation-map-as-term anns-map)}]})}}))
@@ -191,26 +191,26 @@
   (let [make-type (fn make-type [n]
                     (if (<= n 0) (list :unit)
                         (list :function {:domain (list :unit) :codomain (make-type (dec n))})))]
-    (->hydra_core_type_scheme [] (make-type arity) (list :none))))
+    (->hydra_core_model_type_scheme [] (make-type arity) (list :none))))
 
 (defn- make-prim-def
   "Build a PrimitiveDefinition (#156 shape) from name + arity."
   [name arity]
   (let [ts (make-type-scheme arity)
-        sig (hydra_scoping_type_scheme_to_term_signature ts)]
-    (->hydra_packaging_primitive_definition name (list :none) sig true true (list :none))))
+        sig (hydra_core_scoping_type_scheme_to_term_signature ts)]
+    (->hydra_core_packaging_primitive_definition name (list :none) sig true true (list :none))))
 
 (defn- make-annotation-primitive
   "Create a Primitive that takes raw term arguments and returns a term result.
    The implementation receives args as a list of terms and must return Either.
    After #368 InContext removal, errors flow through as Either Left Error directly."
   [name arity impl-fn]
-  (->hydra_graph_primitive (make-prim-def name arity)
+  (->hydra_core_graph_primitive (make-prim-def name arity)
     (fn [g] (fn [args]
       (try
         (impl-fn g args)
         (catch Throwable e
-          (list :left (list :other (->hydra_errors_other_error (.getMessage e))))))))))
+          (list :left (list :other (->hydra_core_errors_other_error (.getMessage e))))))))))
 
 ;; setTermAnnotation :: Name -> Maybe Term -> Term -> Term
 (defn- prim-set-term-annotation [_g args]
@@ -250,12 +250,12 @@
                            (sequential? (second inner)) (= (first (second inner)) :string))
                     (second (second inner))
                     (str inner))]
-            (list :inject (->hydra_core_injection "hydra.core.Term"
-                           (->hydra_core_field "literal"
-                             (list :inject (->hydra_core_injection "hydra.core.Literal"
-                                            (->hydra_core_field "string"
+            (list :inject (->hydra_core_model_injection "hydra.core.model.Term"
+                           (->hydra_core_model_field "literal"
+                             (list :inject (->hydra_core_model_injection "hydra.core.model.Literal"
+                                            (->hydra_core_model_field "string"
                                               (list :literal (list :string s))))))))))
-        desc-key (list :wrap (->hydra_core_wrapped_term "hydra.core.Name"
+        desc-key (list :wrap (->hydra_core_model_wrapped_term "hydra.core.model.Name"
                                (list :literal (list :string "description"))))
         maybe-val (if term-val (list :optional term-val) (list :optional (list :none)))]
     (prim-set-term-annotation _g [desc-key maybe-val term])))
@@ -268,7 +268,7 @@
         peeled (loop [t term]
                  (cond
                    (and (sequential? t) (= (first t) :inject)
-                        (= (:type_name (second t)) "hydra.core.Term")
+                        (= (:type_name (second t)) "hydra.core.model.Term")
                         (= (:name (:field (second t))) "typeLambda"))
                    (let [rec (:term (:field (second t)))]
                      (if (and (sequential? rec) (= (first rec) :record))
@@ -277,7 +277,7 @@
                          (recur (:term body-field)))
                        t))
                    (and (sequential? t) (= (first t) :inject)
-                        (= (:type_name (second t)) "hydra.core.Term")
+                        (= (:type_name (second t)) "hydra.core.model.Term")
                         (= (:name (:field (second t))) "typeApplication"))
                    (let [rec (:term (:field (second t)))]
                      (if (and (sequential? rec) (= (first rec) :record))
@@ -293,7 +293,7 @@
         is-desc-key? (fn [k]
                        (and (sequential? k) (= (first k) :wrap)
                             (let [wt (second k)]
-                              (and (= (:type_name wt) "hydra.core.Name")
+                              (and (= (:type_name wt) "hydra.core.model.Name")
                                    (let [b (:body wt)]
                                      (and (sequential? b) (= (first b) :literal)
                                           (sequential? (second b)) (= (first (second b)) :string)
@@ -301,8 +301,8 @@
         desc-term (some (fn [[k v]] (when (is-desc-key? k) v)) anns)]
     (if desc-term
       ;; desc-term is a meta-encoded Term; extract string from it
-      ;; It should be (:union {:type_name "hydra.core.Term" :field {:name "literal" :term
-      ;;   (:union {:type_name "hydra.core.Literal" :field {:name "string" :term (:literal (:string S))}})}})
+      ;; It should be (:union {:type_name "hydra.core.model.Term" :field {:name "literal" :term
+      ;;   (:union {:type_name "hydra.core.model.Literal" :field {:name "string" :term (:literal (:string S))}})}})
       (let [extract-str (fn [t]
                           (when (and (sequential? t) (= (first t) :inject)
                                      (= (:name (:field (second t))) "literal"))
@@ -327,17 +327,17 @@
 
         ;; Create annotation primitives
         ann-prims
-        {"hydra.annotations.setTermAnnotation"
-         (make-annotation-primitive "hydra.annotations.setTermAnnotation" 3
+        {"hydra.core.annotations.setTermAnnotation"
+         (make-annotation-primitive "hydra.core.annotations.setTermAnnotation" 3
            prim-set-term-annotation)
-         "hydra.annotations.getTermAnnotation"
-         (make-annotation-primitive "hydra.annotations.getTermAnnotation" 2
+         "hydra.core.annotations.getTermAnnotation"
+         (make-annotation-primitive "hydra.core.annotations.getTermAnnotation" 2
            prim-get-term-annotation)
-         "hydra.annotations.setTermDescription"
-         (make-annotation-primitive "hydra.annotations.setTermDescription" 2
+         "hydra.core.annotations.setTermDescription"
+         (make-annotation-primitive "hydra.core.annotations.setTermDescription" 2
            prim-set-term-description)
-         "hydra.annotations.getTermDescription"
-         (make-annotation-primitive "hydra.annotations.getTermDescription" 3
+         "hydra.core.annotations.getTermDescription"
+         (make-annotation-primitive "hydra.core.annotations.getTermDescription" 3
            prim-get-term-description)}
 
         all-prims (merge std-prims ann-prims)
@@ -353,7 +353,7 @@
           ;; Primitives are resolved via graphPrimitives, not boundTerms.
           ;; Constants and monads
           {"hydra.monads.emptyContext" (list :unit)
-           "hydra.lexical.emptyGraph"  (list :unit)}
+           "hydra.core.lexical.emptyGraph"  (list :unit)}
           ;; Test terms
           test-terms)]
     {:bound_terms bound-terms
@@ -376,7 +376,7 @@
   "Replace native primitive implementations with reducer-based wrappers for any
    primitive that has a primitiveDefinitionDefaultImplementation term."
   (let [native-graph graph
-        reduce-var (ns-resolve 'hydra.reduction 'hydra_reduction_reduce_term)
+        reduce-var (ns-resolve 'hydra.core.reduction 'hydra_core_reduction_reduce_term)
         reduce-fn (when reduce-var @reduce-var)
         cx {:functions () :annotations () :variable_types {}}
         patched-prims
@@ -389,7 +389,7 @@
                               [name (assoc prim :implementation
                                       (fn [_g] (fn [args]
                                         (let [applied (reduce (fn [f a]
-                                                                (list :application (->hydra_core_application f a)))
+                                                                (list :application (->hydra_core_model_application f a)))
                                                               impl-term args)]
                                           ((((reduce-fn cx) native-graph) true) applied)))))]))))
                       (:primitives graph)))]
@@ -401,16 +401,16 @@
     (let [base (build-test-graph)]
       ;; Try to enhance with schema types from test type definitions
       (try
-        (require 'hydra.test.testGraph)
-        (require 'hydra.json.bootstrap)
+        (require 'hydra.core.test.testGraph)
+        (require 'hydra.core.json.bootstrap)
         (let [;; Load kernel types from bootstrap (like Python's _load_bootstrap_type_schemes)
-              bootstrap-var (ns-resolve 'hydra.json.bootstrap 'hydra_json_bootstrap_types_by_name)
+              bootstrap-var (ns-resolve 'hydra.core.json.bootstrap 'hydra_core_json_bootstrap_types_by_name)
               bootstrap-types (if (and bootstrap-var (bound? bootstrap-var)) @bootstrap-var {})
               ;; Load test types
-              test-types-var (ns-resolve 'hydra.test.testGraph 'hydra_test_test_graph_test_types)
+              test-types-var (ns-resolve 'hydra.core.test.testGraph 'hydra_core_test_test_graph_test_types)
               test-types (if (and test-types-var (bound? test-types-var)) @test-types-var ())
               ;; Convert types to TypeSchemes using f_type_to_type_scheme (handles foralls)
-              type-to-ts-var (ns-resolve 'hydra.rewriting 'hydra_scoping_f_type_to_type_scheme)
+              type-to-ts-var (ns-resolve 'hydra.core.rewriting 'hydra_core_scoping_f_type_to_type_scheme)
               type-to-ts (if (and type-to-ts-var (bound? type-to-ts-var)) @type-to-ts-var nil)
               ;; Build schema types from bootstrap + test types
               ;; bootstrap-types is a Clojure map {string -> type}
@@ -423,7 +423,7 @@
                              {})
               schema-types (merge kernel-schemas test-schemas)
               ;; test-terms is also an alist
-              test-terms-var (ns-resolve 'hydra.test.testGraph 'hydra_test_test_graph_test_terms)
+              test-terms-var (ns-resolve 'hydra.core.test.testGraph 'hydra_core_test_test_graph_test_terms)
               test-terms-alist (if (and test-terms-var (bound? test-terms-var)) @test-terms-var ())
               test-terms (into {} (map (fn [entry] [(first entry) (second entry)]) test-terms-alist))
               enhanced (-> base
@@ -455,23 +455,23 @@
 ;; ==========================================================================
 
 (defn- show-term [t]
-  (let [show-fn (or (resolve 'hydra_print_core_term)
-                    (ns-resolve 'hydra.print.core 'hydra_print_core_term))]
+  (let [show-fn (or (resolve 'hydra_core_print_model_term)
+                    (ns-resolve 'hydra.core.print.model 'hydra_core_print_model_term))]
     (when show-fn ((deref show-fn) t))))
 
 (defn- show-type [t]
-  (let [show-fn (or (resolve 'hydra_print_core_type)
-                    (ns-resolve 'hydra.print.core 'hydra_print_core_type))]
+  (let [show-fn (or (resolve 'hydra_core_print_model_type)
+                    (ns-resolve 'hydra.core.print.model 'hydra_core_print_model_type))]
     (when show-fn ((deref show-fn) t))))
 
 (defn- show-type-scheme [ts]
-  (let [show-fn (or (resolve 'hydra_print_core_type_scheme)
-                    (ns-resolve 'hydra.print.core 'hydra_print_core_type_scheme))]
+  (let [show-fn (or (resolve 'hydra_core_print_model_type_scheme)
+                    (ns-resolve 'hydra.core.print.model 'hydra_core_print_model_type_scheme))]
     (when show-fn ((deref show-fn) ts))))
 
 (defn- show-let [l]
-  (let [show-fn (or (resolve 'hydra_print_core_let)
-                    (ns-resolve 'hydra.print.core 'hydra_print_core_let))]
+  (let [show-fn (or (resolve 'hydra_core_print_model_let)
+                    (ns-resolve 'hydra.core.print.model 'hydra_core_print_model_let))]
     (when show-fn ((deref show-fn) l))))
 
 (defn- normalize-show [s]
@@ -582,7 +582,7 @@
         graph @test-graph
         cx (empty-context)
         eager (= (first (:evaluation_style tc)) :eager)
-        reduce-var (ns-resolve 'hydra.reduction 'hydra_reduction_reduce_term)
+        reduce-var (ns-resolve 'hydra.core.reduction 'hydra_core_reduction_reduce_term)
         _ (when (nil? reduce-var) (throw (RuntimeException. "reduce_term var not found")))
         reduce-fn (deref reduce-var)
         _ (when (nil? reduce-fn) (throw (RuntimeException. "reduce_term is nil")))]
@@ -615,7 +615,7 @@
       (catch Throwable e
         (println (str "FAIL: " path))
         (println (str "  EXCEPTION: " (.getMessage e)))
-        (when (= path "common > hydra.lib.chars primitives > isAlphaNum > letter")
+        (when (= path "common > hydra.core.lib.chars primitives > isAlphaNum > letter")
           (.printStackTrace e))
         [0 1 0]))))
 
@@ -752,72 +752,72 @@
       [0 1 0])))
 
 (defn- run-alpha-conversion-test [path tc]
-  (let [f (resolve-fn 'hydra.reduction 'hydra_reduction_alpha_convert)]
+  (let [f (resolve-fn 'hydra.core.reduction 'hydra_core_reduction_alpha_convert)]
     (run-simple-test path (:result tc) #(((f (:old_variable tc)) (:new_variable tc)) (:term tc)))))
 
 (defn- run-case-conversion-test [path tc]
-  (let [f (resolve-fn 'hydra.formatting 'hydra_formatting_convert_case)]
+  (let [f (resolve-fn 'hydra.core.formatting 'hydra_core_formatting_convert_case)]
     (run-simple-test path (:to_string tc) #(((f (:from_convention tc)) (:to_convention tc)) (:from_string tc)))))
 
 (defn- run-deannotate-term-test [path tc]
-  (let [f (resolve-fn 'hydra.rewriting 'hydra_strip_deannotate_term)]
+  (let [f (resolve-fn 'hydra.core.rewriting 'hydra_core_strip_deannotate_term)]
     (run-simple-test path (:output tc) #(f (:input tc)))))
 
 (defn- run-deannotate-type-test [path tc]
-  (let [f (resolve-fn 'hydra.rewriting 'hydra_rewriting_deannotate_type)]
+  (let [f (resolve-fn 'hydra.core.rewriting 'hydra_core_rewriting_deannotate_type)]
     (run-simple-test path (:output tc) #(f (:input tc)))))
 
 (defn- run-flatten-let-terms-test [path tc]
-  (let [f (resolve-fn 'hydra.rewriting 'hydra_rewriting_flatten_let_terms)]
+  (let [f (resolve-fn 'hydra.core.rewriting 'hydra_core_rewriting_flatten_let_terms)]
     (run-simple-test path (:output tc) #(f (:input tc)))))
 
 (defn- run-free-variables-test [path tc]
-  (let [f (resolve-fn 'hydra.rewriting 'hydra_rewriting_free_variables_in_term)]
+  (let [f (resolve-fn 'hydra.core.rewriting 'hydra_core_rewriting_free_variables_in_term)]
     (run-simple-test path (:output tc) #(f (:input tc)))))
 
 (defn- run-lift-lambda-test [path tc]
-  (let [f (resolve-fn 'hydra.rewriting 'hydra_rewriting_lift_lambda_above_let)]
+  (let [f (resolve-fn 'hydra.core.rewriting 'hydra_core_rewriting_lift_lambda_above_let)]
     (run-simple-test path (:output tc) #(f (:input tc)))))
 
 (defn- run-simplify-term-test [path tc]
-  (let [f (resolve-fn 'hydra.rewriting 'hydra_rewriting_simplify_term)]
+  (let [f (resolve-fn 'hydra.core.rewriting 'hydra_core_rewriting_simplify_term)]
     (run-simple-test path (:output tc) #(f (:input tc)))))
 
 (defn- run-normalize-type-vars-test [path tc]
-  (let [f (resolve-fn 'hydra.rewriting 'hydra_rewriting_normalize_type_variables_in_term)]
+  (let [f (resolve-fn 'hydra.core.rewriting 'hydra_core_rewriting_normalize_type_variables_in_term)]
     (run-simple-test path (:output tc) #(f (:input tc)))))
 
 (defn- run-topological-sort-test [path tc]
-  (let [f (resolve-fn 'hydra.sorting 'hydra_sorting_topological_sort)]
+  (let [f (resolve-fn 'hydra.core.sorting 'hydra_core_sorting_topological_sort)]
     (run-simple-test path (:expected tc) #(f (:adjacency_list tc)))))
 
 (defn- run-topological-sort-scc-test [path tc]
-  (let [f (resolve-fn 'hydra.sorting 'hydra_sorting_topological_sort_components)]
+  (let [f (resolve-fn 'hydra.core.sorting 'hydra_core_sorting_topological_sort_components)]
     (run-simple-test path (:expected tc) #(f (:adjacency_list tc)))))
 
 (defn- run-serialization-test [path tc]
-  (let [parenthesize (resolve-fn 'hydra.serialization 'hydra_serialization_parenthesize)
-        print-expr (resolve-fn 'hydra.serialization 'hydra_serialization_print_expr)]
+  (let [parenthesize (resolve-fn 'hydra.core.serialization 'hydra_core_serialization_parenthesize)
+        print-expr (resolve-fn 'hydra.core.serialization 'hydra_core_serialization_print_expr)]
     (run-simple-test path (:output tc) #(print-expr (parenthesize (:input tc))))))
 
 (defn- run-type-reduction-test [path tc]
-  (let [f (resolve-fn 'hydra.reduction 'hydra_reduction_beta_reduce_type)
+  (let [f (resolve-fn 'hydra.core.reduction 'hydra_core_reduction_beta_reduce_type)
         cx (empty-context) graph @test-graph]
     (run-either-test path (:output tc) (((f cx) graph) (:input tc)))))
 
 (defn- run-unshadow-variables-test [path tc]
-  (let [f (resolve-fn 'hydra.rewriting 'hydra_rewriting_unshadow_variables)]
+  (let [f (resolve-fn 'hydra.core.rewriting 'hydra_core_rewriting_unshadow_variables)]
     (run-simple-test path (:output tc) #(f (:input tc)))))
 
 ;; ---- Medium test runners (need graph/context, Either results) ----
 
 (defn- run-eta-expansion-test [path tc]
-  (let [f (resolve-fn 'hydra.reduction 'hydra_reduction_eta_expand_typed_term)
+  (let [f (resolve-fn 'hydra.core.reduction 'hydra_core_reduction_eta_expand_typed_term)
         cx (empty-context) graph @test-graph]
     (run-either-test path (:output tc) (((f cx) graph) (:input tc)))))
 
 (defn- run-inference-test [path tc]
-  (let [f (resolve-fn 'hydra.inference 'hydra_inference_infer_type_of)
+  (let [f (resolve-fn 'hydra.core.inference 'hydra_core_inference_infer_type_of)
         cx (empty-context) graph @test-graph]
     (try
       (let [_ (when (nil? f) (throw (RuntimeException. "infer_type_of function is nil")))
@@ -840,7 +840,7 @@
           (let [pair-val (second result)
                 inner-pair (first pair-val)
                 result-scheme (second inner-pair)
-                show-ts (resolve-fn 'hydra.print.core 'hydra_print_core_type_scheme)
+                show-ts (resolve-fn 'hydra.core.print.model 'hydra_core_print_model_type_scheme)
                 expected-str (when show-ts (show-ts (:output tc)))
                 actual-str (when show-ts (show-ts result-scheme))]
             (run-string-comparison-test path expected-str actual-str))))
@@ -852,7 +852,7 @@
         [0 1 0]))))
 
 (defn- run-inference-failure-test [path tc]
-  (let [f (resolve-fn 'hydra.inference 'hydra_inference_infer_type_of)
+  (let [f (resolve-fn 'hydra.core.inference 'hydra_core_inference_infer_type_of)
         cx (empty-context) graph @test-graph
         result (((f cx) graph) (:input tc))]
     (if (= (first result) :left)
@@ -873,9 +873,9 @@
             (reverse vars))))
 
 (defn- run-type-checking-test [path tc]
-  (let [infer-fn (resolve-fn 'hydra.inference 'hydra_inference_infer_type_of)
-        type-of-fn (resolve-fn 'hydra.checking 'hydra_checking_type_of)
-        remove-types-fn (resolve-fn 'hydra.rewriting 'hydra_rewriting_remove_types_from_term)
+  (let [infer-fn (resolve-fn 'hydra.core.inference 'hydra_core_inference_infer_type_of)
+        type-of-fn (resolve-fn 'hydra.core.checking 'hydra_core_checking_type_of)
+        remove-types-fn (resolve-fn 'hydra.core.rewriting 'hydra_core_rewriting_remove_types_from_term)
         cx (empty-context) graph @test-graph]
     (try
       ;; Step 1: Infer type
@@ -929,14 +929,14 @@
 ;; ---- Variable occurs in type ----
 
 (defn- run-variable-occurs-in-type-test [path tc]
-  (let [f (resolve-fn 'hydra.unification 'hydra_unification_variable_occurs_in_type)]
+  (let [f (resolve-fn 'hydra.core.unification 'hydra_core_unification_variable_occurs_in_type)]
     (run-simple-test path (:expected tc) #((f (:variable tc)) (:type tc)))))
 
 ;; ---- Subst in type ----
 
 (defn- run-subst-in-type-test [path tc]
-  (let [f (resolve-fn 'hydra.substitution 'hydra_substitution_subst_in_type)
-        from-list (resolve-fn 'hydra.overlay.clojure.lib.maps 'hydra_lib_maps_from_list)
+  (let [f (resolve-fn 'hydra.core.substitution 'hydra_core_substitution_subst_in_type)
+        from-list (resolve-fn 'hydra.core.overlay.clojure.lib.maps 'hydra_core_lib_maps_from_list)
         ;; Build TypeSubst from list of (name, type) pairs as alist (Hydra map format)
         ;; Note: in generated code, TypeSubst is transparent (bare map, not a record)
         subst-alist (if from-list (from-list (:substitution tc)) ())]
@@ -945,11 +945,11 @@
 ;; ---- Unify types ----
 
 (defn- run-unify-types-test [path tc]
-  (let [f (resolve-fn 'hydra.unification 'hydra_unification_unify_types)
+  (let [f (resolve-fn 'hydra.core.unification 'hydra_core_unification_unify_types)
         cx (empty-context)
         ;; Build schema types as Hydra alist map from the list of names
-        from-list (resolve-fn 'hydra.overlay.clojure.lib.maps 'hydra_lib_maps_from_list)
-        schema-entries (map (fn [n] (list n (->hydra_core_type_scheme () (list :variable n) nil)))
+        from-list (resolve-fn 'hydra.core.overlay.clojure.lib.maps 'hydra_core_lib_maps_from_list)
+        schema-entries (map (fn [n] (list n (->hydra_core_model_type_scheme () (list :variable n) nil)))
                             (:schema_types tc))
         schema-types (if from-list (from-list schema-entries) ())
         result (((((f cx) schema-types) (:left tc)) (:right tc)) "test")]
@@ -999,7 +999,7 @@
 ;; ---- Join types ----
 
 (defn- run-join-types-test [path tc]
-  (let [f (resolve-fn 'hydra.unification 'hydra_unification_join_types)
+  (let [f (resolve-fn 'hydra.core.unification 'hydra_core_unification_join_types)
         cx (empty-context)
         result ((((f cx) (:left tc)) (:right tc)) "test")]
     (try
@@ -1039,9 +1039,9 @@
 ;; ---- Topological sort bindings ----
 
 (defn- run-topological-sort-bindings-test [path tc]
-  (let [f (resolve-fn 'hydra.dependencies 'hydra_dependencies_topological_sort_binding_map)
+  (let [f (resolve-fn 'hydra.core.dependencies 'hydra_core_dependencies_topological_sort_binding_map)
         ;; tc.bindings is a list of (Name, Term) pairs -- build a map
-        from-list-fn (resolve-fn 'hydra.overlay.clojure.lib.maps 'hydra_lib_maps_from_list)
+        from-list-fn (resolve-fn 'hydra.core.overlay.clojure.lib.maps 'hydra_core_lib_maps_from_list)
         binding-map (if from-list-fn
                       (from-list-fn (:bindings tc))
                       (into {} (map (fn [p] [(first p) (second p)]) (:bindings tc))))
@@ -1059,7 +1059,7 @@
 ;; ---- Hoist case statements ----
 
 (defn- run-hoist-case-statements-test [path tc]
-  (let [f (resolve-fn 'hydra.hoisting 'hydra_hoisting_hoist_case_statements)
+  (let [f (resolve-fn 'hydra.core.hoisting 'hydra_core_hoisting_hoist_case_statements)
         eg (empty-graph)]
     (run-simple-test path (:output tc) #((f eg) (:input tc)))))
 
@@ -1087,7 +1087,7 @@
       (fn [pair] false))))
 
 (defn- run-hoist-subterms-test [path tc]
-  (let [f (resolve-fn 'hydra.hoisting 'hydra_hoisting_hoist_subterms)
+  (let [f (resolve-fn 'hydra.core.hoisting 'hydra_core_hoisting_hoist_subterms)
         eg (empty-graph)
         pred (predicate-fn (:predicate tc))]
     (run-simple-test path (:output tc) #(((f pred) eg) (:input tc)))))
@@ -1095,7 +1095,7 @@
 ;; ---- Hoist let bindings ----
 
 (defn- run-hoist-let-bindings-test [path tc]
-  (let [f (resolve-fn 'hydra.hoisting 'hydra_hoisting_hoist_all_let_bindings)]
+  (let [f (resolve-fn 'hydra.core.hoisting 'hydra_core_hoisting_hoist_all_let_bindings)]
     ;; Compare via show (like Java)
     (try
       (let [result (f (:input tc))
@@ -1110,7 +1110,7 @@
 ;; ---- Hoist polymorphic let bindings ----
 
 (defn- run-hoist-polymorphic-let-bindings-test [path tc]
-  (let [f (resolve-fn 'hydra.hoisting 'hydra_hoisting_hoist_polymorphic_let_bindings)]
+  (let [f (resolve-fn 'hydra.core.hoisting 'hydra_core_hoisting_hoist_polymorphic_let_bindings)]
     ;; Use (fn [_] true) predicate like Java: b -> true
     (try
       (let [result ((f (fn [_] true)) (:input tc))
@@ -1125,7 +1125,7 @@
 ;; ---- Rewrite term ----
 
 (defn- run-rewrite-term-test [path tc]
-  (let [rewrite-fn (resolve-fn 'hydra.rewriting 'hydra_rewriting_rewrite_term)
+  (let [rewrite-fn (resolve-fn 'hydra.core.rewriting 'hydra_core_rewriting_rewrite_term)
         rewriter (:rewriter tc)
         rewriter-type (first rewriter)
         rewrite-impl
@@ -1157,7 +1157,7 @@
 ;; ---- Rewrite type ----
 
 (defn- run-rewrite-type-test [path tc]
-  (let [rewrite-fn (resolve-fn 'hydra.rewriting 'hydra_rewriting_rewrite_type)
+  (let [rewrite-fn (resolve-fn 'hydra.core.rewriting 'hydra_core_rewriting_rewrite_type)
         rewriter (:rewriter tc)
         rewriter-type (first rewriter)
         rewrite-impl
@@ -1208,7 +1208,7 @@
     (list)))
 
 (defn- run-fold-over-term-test [path tc]
-  (let [fold-fn (resolve-fn 'hydra.rewriting 'hydra_rewriting_fold_over_term)
+  (let [fold-fn (resolve-fn 'hydra.core.rewriting 'hydra_core_rewriting_fold_over_term)
         order (:traversal_order tc)
         operation (:operation tc)
         op-type (first operation)
@@ -1245,7 +1245,7 @@
 ;; ---- JSON tests ----
 
 (defn- run-json-parser-test [path tc]
-  (let [f (resolve-fn 'hydra.json.parser 'hydra_json_parser_parse_json)]
+  (let [f (resolve-fn 'hydra.core.json.parser 'hydra_core_json_parser_parse_json)]
     (try
       (let [result (f (:input tc))]
         (if (terms-match? result (:output tc))
@@ -1260,12 +1260,12 @@
         [0 1 0]))))
 
 (defn- run-json-writer-test [path tc]
-  (let [f (resolve-fn 'hydra.json.writer 'hydra_json_writer_print_json)]
+  (let [f (resolve-fn 'hydra.core.json.writer 'hydra_core_json_writer_print_json)]
     (run-simple-test path (:output tc) #(f (:input tc)))))
 
 (defn- run-json-coder-test [path tc]
-  (let [encode-fn (resolve-fn 'hydra.json.encode 'hydra_json_encode_to_json)
-        decode-fn (resolve-fn 'hydra.json.decode 'hydra_json_decode_from_json)
+  (let [encode-fn (resolve-fn 'hydra.core.json.encode 'hydra_core_json_encode_to_json)
+        decode-fn (resolve-fn 'hydra.core.json.decode 'hydra_core_json_decode_from_json)
         empty-types ()]
     (try
       (let [encode-result (encode-fn (:term tc))]
@@ -1281,7 +1281,7 @@
                   (println (str "  Actual (raw):   " (pr-str encoded)))
                   [0 1 0])
               ;; Roundtrip: decode back
-              (let [decode-result ((((decode-fn empty-types) (->hydra_core_name "test")) (:type tc)) encoded)]
+              (let [decode-result ((((decode-fn empty-types) (->hydra_core_model_name "test")) (:type tc)) encoded)]
                 (if (= (first decode-result) :left)
                   (do (println (str "FAIL: " path))
                       (println (str "  JSON decode failed: " (second decode-result)))
@@ -1304,8 +1304,8 @@
         [0 1 0]))))
 
 (defn- run-json-roundtrip-test [path tc]
-  (let [encode-fn (resolve-fn 'hydra.json.encode 'hydra_json_encode_to_json)
-        decode-fn (resolve-fn 'hydra.json.decode 'hydra_json_decode_from_json)
+  (let [encode-fn (resolve-fn 'hydra.core.json.encode 'hydra_core_json_encode_to_json)
+        decode-fn (resolve-fn 'hydra.core.json.decode 'hydra_core_json_decode_from_json)
         empty-types ()]
     (try
       (let [encode-result (encode-fn (:term tc))]
@@ -1315,7 +1315,7 @@
               [0 1 0])
           (let [encoded (second encode-result)
                 ;; Decode back
-                decode-result ((((decode-fn empty-types) (->hydra_core_name "test")) (:type tc)) encoded)]
+                decode-result ((((decode-fn empty-types) (->hydra_core_model_name "test")) (:type tc)) encoded)]
             (if (= (first decode-result) :left)
               (do (println (str "FAIL: " path))
                   (println (str "  JSON decode failed: " (second decode-result)))
@@ -1338,10 +1338,10 @@
         [0 1 0]))))
 
 (defn- run-json-decode-test [path tc]
-  (let [decode-fn (resolve-fn 'hydra.json.decode 'hydra_json_decode_from_json)
+  (let [decode-fn (resolve-fn 'hydra.core.json.decode 'hydra_core_json_decode_from_json)
         empty-types ()]
     (try
-      (let [decode-result ((((decode-fn empty-types) (->hydra_core_name "test")) (:type tc)) (:json tc))
+      (let [decode-result ((((decode-fn empty-types) (->hydra_core_model_name "test")) (:type tc)) (:json tc))
             expected (:expected tc)]
         ;; expected is an Either
         (cond
@@ -1387,9 +1387,9 @@
   [0 0 1])
 
 (defn- run-validate-core-term-test [path tc]
-  (if (resolve 'hydra_validate_core_term)
+  (if (resolve 'hydra_core_validate_model_term)
     (run-simple-test path (:output tc)
-      (fn [] ((resolve 'hydra_validate_core_term) (:typed tc) @test-graph (:input tc))))
+      (fn [] ((resolve 'hydra_core_validate_model_term) (:typed tc) @test-graph (:input tc))))
     [0 0 1]))
 
 ;; ---- Test case dispatcher ----
@@ -1520,30 +1520,30 @@
   ;; Load generated modules used by test dispatchers
   ;; Load substitution first via preloader (has forward reference issue with native require)
   (preload/load-gen-main!)
-  (require 'hydra.reduction)
-  (require 'hydra.rewriting)
-  (require 'hydra.formatting)
-  (require 'hydra.sorting)
-  (require 'hydra.serialization)
-  (require 'hydra.inference)
-  (require 'hydra.checking)
-  (require 'hydra.hoisting)
-  (require 'hydra.unification)
-  (require 'hydra.substitution)
-  (require 'hydra.print.core)
+  (require 'hydra.core.reduction)
+  (require 'hydra.core.rewriting)
+  (require 'hydra.core.formatting)
+  (require 'hydra.core.sorting)
+  (require 'hydra.core.serialization)
+  (require 'hydra.core.inference)
+  (require 'hydra.core.checking)
+  (require 'hydra.core.hoisting)
+  (require 'hydra.core.unification)
+  (require 'hydra.core.substitution)
+  (require 'hydra.core.print.model)
   ;; JSON/bootstrap modules
-  (require 'hydra.json.bootstrap)
-  (require 'hydra.json.parser)
-  (require 'hydra.json.writer)
-  (require 'hydra.json.encode)
-  (require 'hydra.json.decode)
+  (require 'hydra.core.json.bootstrap)
+  (require 'hydra.core.json.parser)
+  (require 'hydra.core.json.writer)
+  (require 'hydra.core.json.encode)
+  (require 'hydra.core.json.decode)
   ;; Load test suite
-  (require 'hydra.test.testSuite)
+  (require 'hydra.core.test.testSuite)
   ;; Build the test graph now that all namespaces are loaded
   (ensure-test-graph!)
   ;; Run test suite
   (let [t0 (System/nanoTime)
-        suite (deref (ns-resolve 'hydra.test.testSuite 'hydra_test_test_suite_all_tests))
+        suite (deref (ns-resolve 'hydra.core.test.testSuite 'hydra_core_test_test_suite_all_tests))
         [pass fail skip benchmark] (run-test-group "" suite)
         total-ms (/ (- (System/nanoTime) t0) 1e6)]
     (println)

@@ -13,8 +13,8 @@ import Hydra.Kernel
 import Hydra.Generation (currentModuleFormatVersion)
 import Hydra.PackageRouting (RoutingMap, groupByPackageIn)
 import qualified Hydra.Build.ManifestWriter as GenManifestWriter
-import qualified Hydra.Json.Model as Json
-import qualified Hydra.Json.Writer as JsonWriter
+import qualified Hydra.Core.Json.Model as Json
+import qualified Hydra.Core.Json.Writer as JsonWriter
 import qualified Hydra.Sources.Build.Libraries as Libraries
 import qualified Hydra.Sources.Build.PublishSets as PublishSets
 import qualified Hydra.Sources.Build.Registry as Registry
@@ -43,7 +43,7 @@ import qualified System.FilePath as FP
 -- not the generated wrapper namespaces).
 writePerPackageManifestsJson :: RoutingMap
                              -> FilePath
-                             -> [Module] -- ^ dslSourceModules (broad: source modules for hydra.dsl.<x>)
+                             -> [Module] -- ^ dslSourceModules (broad: source modules for hydra.core.dsl.<x>)
                              -> [Module] -- ^ encodingSourceModules (narrower: source modules for hydra.{encode,decode}.<x>)
                              -> [Module] -- ^ mainModules (to partition)
                              -> [Module] -- ^ testModules (today always hydra-kernel)

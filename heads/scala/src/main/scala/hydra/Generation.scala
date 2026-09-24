@@ -1,9 +1,9 @@
 package hydra
 
-import hydra.core.*
-import hydra.graph.{Graph, Primitive}
-import hydra.json.model.Value
-import hydra.packaging.{Module, ModuleName, Definition}
+import hydra.core.model.*
+import hydra.core.graph.{Graph, Primitive}
+import hydra.core.json.model.Value
+import hydra.core.packaging.{Module, ModuleName, Definition}
 
 import _root_.java.io.File
 import _root_.java.nio.charset.StandardCharsets
@@ -17,7 +17,7 @@ object Generation:
 
   /** Create an empty graph with standard primitives (the bootstrap graph). */
   def bootstrapGraph(): Graph =
-    val primitives: Map[String, Primitive] = hydra.overlay.scala.Libraries.standardPrimitives()
+    val primitives: Map[String, Primitive] = hydra.core.overlay.scala.Libraries.standardPrimitives()
     Graph(
       boundTerms = Map.empty,
       boundTypes = Map.empty,
@@ -38,9 +38,9 @@ object Generation:
    * Converts System F types (with foralls and annotations) to plain types for JSON decoding.
    */
   def bootstrapSchemaMap(): Map[String, Type] =
-    hydra.json.bootstrap.typesByName.map { (name, typ) =>
-      val ts = hydra.scoping.fTypeToTypeScheme(typ)
-      name -> hydra.strip.deannotateTypeRecursive(ts.body)
+    hydra.core.json.bootstrap.typesByName.map { (name, typ) =>
+      val ts = hydra.core.scoping.fTypeToTypeScheme(typ)
+      name -> hydra.core.strip.deannotateTypeRecursive(ts.body)
     }
 
   /**
@@ -59,7 +59,7 @@ object Generation:
     val d = depth - 1
     term match
       case Term.literal(Literal.binary(b)) =>
-        Term.literal(Literal.binary(hydra.overlay.scala.lib.literals.base64ToBinary(b)))
+        Term.literal(Literal.binary(hydra.core.overlay.scala.lib.literals.base64ToBinary(b)))
       case Term.application(app) =>
         Term.application(Application(decodeBinaryLiteralsDepth(app.function, d), decodeBinaryLiteralsDepth(app.argument, d)))
       case Term.lambda(lam) =>
@@ -86,14 +86,14 @@ object Generation:
     })
 
   def decodeModuleFromJson(bsGraph: Graph, schemaMap: Map[String, Type], jsonVal: Value): Module =
-    val modName: String = "hydra.packaging.Module"
+    val modName: String = "hydra.core.packaging.Module"
     val modType: Type = Type.variable(modName)
     // compactMaps = false: decodes the checked-in dist/json module-bootstrapping representation,
     // which must stay byte-stable for the published-host cold-seeder (#624).
-    hydra.json.decode.fromJson(schemaMap)(false)(modName)(modType)(jsonVal) match
+    hydra.core.json.decode.fromJson(schemaMap)(false)(modName)(modType)(jsonVal) match
       case Left(err) => throw new RuntimeException(s"JSON decode error: $err")
       case Right(term) =>
-        hydra.decode.packaging.module(bsGraph)(term) match
+        hydra.core.decode.packaging.module(bsGraph)(term) match
           case Left(err) => throw new RuntimeException(s"Module decode error: $err")
           case Right(mod) => mod
 
@@ -105,7 +105,7 @@ object Generation:
     val bsGraph = bootstrapGraph()
     namespaces.flatMap { ns =>
       val filePath = jsonDir + File.separator +
-        hydra.codegen.moduleNameToPath(ns) + ".json"
+        hydra.core.codegen.moduleNameToPath(ns) + ".json"
       val file = new File(filePath)
       if !file.exists() then
         throw new RuntimeException(s"Missing module file: $filePath")
@@ -135,7 +135,7 @@ object Generation:
 
   /** #630: the set of hydra.lib.<sub> sub-namespaces that have an overlay
    *  implementation on the given host, driving emission-time redirect of
-   *  primitive references to hydra.overlay.<lang>.lib.<sub>. Mirrors
+   *  primitive references to hydra.core.overlay.<lang>.lib.<sub>. Mirrors
    *  Hydra.Generation.overlayLibSubs (Haskell host). Empty (not absent) if the
    *  overlay directory can't be found, so callers get a safe no-redirect
    *  fallback rather than a crash.
@@ -183,16 +183,16 @@ object Generation:
    *  only supplies `doInfer`.
    */
   def generateSources(
-      coder: Module => Seq[Definition] => hydra.typing.InferenceContext => Graph =>
-        Either[hydra.errors.Error, Map[String, String]],
-      language: hydra.coders.Language,
+      coder: Module => Seq[Definition] => hydra.core.typing.InferenceContext => Graph =>
+        Either[hydra.core.errors.Error, Map[String, String]],
+      language: hydra.core.coders.Language,
       doInfer: Boolean,
       basePath: String,
       universe: Seq[Module],
       modsToGenerate: Seq[Module]): Int =
-    val cx = hydra.typing.InferenceContext(0, Seq.empty)
+    val cx = hydra.core.typing.InferenceContext(0, Seq.empty)
     val bsGraph = bootstrapGraph()
-    hydra.codegen.generateSourceFiles(
+    hydra.core.codegen.generateSourceFiles(
       coder)(language)(doInfer)(
       bsGraph)(universe)(modsToGenerate)(cx) match
       case Left(err) =>
@@ -247,8 +247,8 @@ object Generation:
   def writeTypeScript(basePath: String, universe: Seq[Module], mods: Seq[Module]): Int =
     val knownSubs = overlayLibSubs(typeScriptOverlayLibDir)
     generateSources(
-      mod => defs => cx => g => hydra.typeScript.coder.moduleToTypeScript(knownSubs)(mod)(defs)(cx)(g),
-      hydra.typeScript.language.typeScriptLanguage,
+      mod => defs => cx => g => hydra.typescript.coder.moduleToTypeScript(knownSubs)(mod)(defs)(cx)(g),
+      hydra.typescript.language.typeScriptLanguage,
       doInfer = false,
       basePath, universe, mods)
 
@@ -264,19 +264,19 @@ object Generation:
       case "commonLisp" => hydra.lisp.syntax.Dialect.commonLisp
       case "emacsLisp"  => hydra.lisp.syntax.Dialect.emacsLisp
       case other        => throw new IllegalArgumentException(s"Unknown Lisp dialect: $other")
-    val caseConv: hydra.util.CaseConvention =
-      if dialectName == "clojure" then hydra.util.CaseConvention.camel
-      else hydra.util.CaseConvention.lowerSnake
+    val caseConv: hydra.core.util.CaseConvention =
+      if dialectName == "clojure" then hydra.core.util.CaseConvention.camel
+      else hydra.core.util.CaseConvention.lowerSnake
     val knownSubs = overlayLibSubs(lispOverlayLibDir(dialectName))
     generateSources(
       mod => defs => cx => g =>
         hydra.lisp.coder.moduleToLisp(dialect)(knownSubs)(mod)(defs)(cx)(g) match
           case Left(err) => Left(err)
           case Right(program) =>
-            val code = hydra.serialization.printExpr(
-              hydra.serialization.parenthesize(
+            val code = hydra.core.serialization.printExpr(
+              hydra.core.serialization.parenthesize(
                 hydra.lisp.serde.programToExpr(program)))
-            val filePath = hydra.names.moduleNameToFilePath(caseConv)(fileExt)(mod.name)
+            val filePath = hydra.core.names.moduleNameToFilePath(caseConv)(fileExt)(mod.name)
             Right(Map(filePath -> code)),
       hydra.lisp.language.lispLanguage,
       doInfer = false,
@@ -289,7 +289,7 @@ object Generation:
     else s"${millis / 60000}m ${(millis % 60000) / 1000}s"
 
   /**
-   * Simple recursive descent JSON parser that produces hydra.json.model.Value objects.
+   * Simple recursive descent JSON parser that produces hydra.core.json.model.Value objects.
    */
   private class SimpleJsonParser(input: String):
     private var pos = 0

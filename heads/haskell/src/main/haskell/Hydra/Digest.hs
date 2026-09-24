@@ -42,7 +42,7 @@ module Hydra.Digest (
     reconcileOrphans,
 ) where
 
-import Hydra.Packaging (Module(..), ModuleName(..))
+import Hydra.Core.Packaging (Module(..), ModuleName(..))
 import qualified Hydra.Build.Walk as GenWalk
 
 import qualified Data.ByteString.Lazy as BL
@@ -305,8 +305,8 @@ emptyPerPackageDigest = PerPackageDigest M.empty "" M.empty
 -- source content -- no edge to the modules it depends on. Since type
 -- classes, a dependency's class-constraint change can alter a module's
 -- INFERRED signature without changing the module's own source text (e.g. a
--- 'hydra.lib.eithers.mapSet' constraint change propagates into
--- 'hydra.extract.core's inferred 'setOf' signature purely through
+-- 'hydra.core.lib.eithers.mapSet' constraint change propagates into
+-- 'hydra.core.extract.model's inferred 'setOf' signature purely through
 -- inference), so own-content-hash alone is no longer a sound freshness key.
 --
 -- 'computeMerkleHashes' replaces each module's own-content hash with a hash

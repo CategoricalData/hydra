@@ -17,12 +17,12 @@ module Main where
 
 import Hydra.Kernel
 import Hydra.Generation (inferModulesGivenIO)
-import qualified Hydra.Codegen as CodeGeneration
+import qualified Hydra.Core.Codegen as CodeGeneration
 import qualified Hydra.Sources.All as All
 import qualified Hydra.Sources.Ext as Ext
-import qualified Hydra.Print.Errors as PrintError
-import qualified Hydra.Json.Model as JsonModel
-import Hydra.Overlay.Haskell.Bootstrap (bootstrapGraph, unqualifiedDep, descriptionMetadata)
+import qualified Hydra.Core.Print.Errors as PrintError
+import qualified Hydra.Core.Json.Model as JsonModel
+import Hydra.Core.Overlay.Haskell.Bootstrap (bootstrapGraph, unqualifiedDep, descriptionMetadata)
 import qualified Hydra.PackageRouting as PackageRouting
 
 import qualified Data.Aeson as A
@@ -104,7 +104,7 @@ runModules spec = do
   putStrLn $ "Universe: " ++ show (length universe) ++ " modules"
   let allKernelNss = [moduleName m | m <- universe,
                        let ns = unModuleName (moduleName m),
-                       not ("hydra.test." `L.isPrefixOf` ns),
+                       not ("hydra.core.test." `L.isPrefixOf` ns),
                        not ("hydra.ext." `L.isPrefixOf` ns),
                        not ("hydra.wasm." `L.isPrefixOf` ns),
                        not ("hydra.coq." `L.isPrefixOf` ns),

@@ -9,13 +9,13 @@
 module Hydra.Demos.Grad.Demo where
 
 import Hydra.Kernel
-import qualified Hydra.Core as Core
-import qualified Hydra.Differentiation as Diff
-import qualified Hydra.Variables as Vars
-import qualified Hydra.Reduction as Reduction
-import qualified Hydra.Print.Core as PrintCore
-import qualified Hydra.Overlay.Haskell.Libraries as Lib
-import qualified Hydra.Overlay.Haskell.Lib.Math as HMath
+import qualified Hydra.Core.Model as Core
+import qualified Hydra.Core.Differentiation as Diff
+import qualified Hydra.Core.Variables as Vars
+import qualified Hydra.Core.Reduction as Reduction
+import qualified Hydra.Core.Print.Model as PrintCore
+import qualified Hydra.Core.Overlay.Haskell.Libraries as Lib
+import qualified Hydra.Core.Overlay.Haskell.Lib.Math as HMath
 
 import Control.Monad (when)
 import qualified Data.List as L
@@ -102,48 +102,48 @@ demoFunctions :: [DemoFunction]
 demoFunctions =
   [ DemoFunction
       { dfName = "x^2"
-      , dfTerm = app2 "hydra.lib.math.mulFloat64" (var "x") (var "x")
+      , dfTerm = app2 "hydra.core.lib.math.mulFloat64" (var "x") (var "x")
       , dfHaskell = \x -> x * x
       }
   , DemoFunction
       { dfName = "x^3"
-      , dfTerm = app2 "hydra.lib.math.pow" (var "x") (lit 3.0)
+      , dfTerm = app2 "hydra.core.lib.math.pow" (var "x") (lit 3.0)
       , dfHaskell = \x -> x ** 3
       }
   , DemoFunction
       { dfName = "sin(x)"
-      , dfTerm = app1 "hydra.lib.math.sin" (var "x")
+      , dfTerm = app1 "hydra.core.lib.math.sin" (var "x")
       , dfHaskell = sin
       }
   , DemoFunction
       { dfName = "exp(x)"
-      , dfTerm = app1 "hydra.lib.math.exp" (var "x")
+      , dfTerm = app1 "hydra.core.lib.math.exp" (var "x")
       , dfHaskell = exp
       }
   , DemoFunction
       { dfName = "log(x)"
-      , dfTerm = app1 "hydra.lib.math.log" (var "x")
+      , dfTerm = app1 "hydra.core.lib.math.log" (var "x")
       , dfHaskell = log
       }
   , DemoFunction
       { dfName = "sqrt(x)"
-      , dfTerm = app1 "hydra.lib.math.sqrt" (var "x")
+      , dfTerm = app1 "hydra.core.lib.math.sqrt" (var "x")
       , dfHaskell = sqrt
       }
   , DemoFunction
       { dfName = "sin(cos(x))"
-      , dfTerm = app1 "hydra.lib.math.sin" (app1 "hydra.lib.math.cos" (var "x"))
+      , dfTerm = app1 "hydra.core.lib.math.sin" (app1 "hydra.core.lib.math.cos" (var "x"))
       , dfHaskell = \x -> sin (cos x)
       }
   , DemoFunction
       { dfName = "x * sin(x)"
-      , dfTerm = app2 "hydra.lib.math.mulFloat64" (var "x") (app1 "hydra.lib.math.sin" (var "x"))
+      , dfTerm = app2 "hydra.core.lib.math.mulFloat64" (var "x") (app1 "hydra.core.lib.math.sin" (var "x"))
       , dfHaskell = \x -> x * sin x
       }
   , DemoFunction
       { dfName = "exp(x^2)"
-      , dfTerm = app1 "hydra.lib.math.exp"
-          (app2 "hydra.lib.math.mulFloat64" (var "x") (var "x"))
+      , dfTerm = app1 "hydra.core.lib.math.exp"
+          (app2 "hydra.core.lib.math.mulFloat64" (var "x") (var "x"))
       , dfHaskell = \x -> exp (x * x)
       }
   ]
@@ -299,10 +299,10 @@ optimizationDemo outDir = do
   -- Build the loss function as a Hydra term:
   --   f(x) = (x - 3)^2 + 2*sin(x)
   --        = mulFloat64(subFloat64(x, 3), subFloat64(x, 3)) + mulFloat64(2, sin(x))
-  let xMinus3 = app2 "hydra.lib.math.subFloat64" (var "x") (lit 3.0)
-  let lossTerm = app2 "hydra.lib.math.addFloat64"
-        (app2 "hydra.lib.math.mulFloat64" xMinus3 xMinus3)
-        (app2 "hydra.lib.math.mulFloat64" (lit 2.0) (app1 "hydra.lib.math.sin" (var "x")))
+  let xMinus3 = app2 "hydra.core.lib.math.subFloat64" (var "x") (lit 3.0)
+  let lossTerm = app2 "hydra.core.lib.math.addFloat64"
+        (app2 "hydra.core.lib.math.mulFloat64" xMinus3 xMinus3)
+        (app2 "hydra.core.lib.math.mulFloat64" (lit 2.0) (app1 "hydra.core.lib.math.sin" (var "x")))
 
   -- Differentiate once — this produces the gradient term
   let gradTerm = Diff.differentiateTerm (Name "x") lossTerm
@@ -373,15 +373,15 @@ curveFittingDemo outDir = do
 
   -- Build the loss function L(a, b) = sum_i (a*x_i + b - y_i)^2
   -- We construct this as a Hydra term with free variables "a" and "b".
-  let residual xi yi = app2 "hydra.lib.math.subFloat64"
-        (app2 "hydra.lib.math.addFloat64"
-          (app2 "hydra.lib.math.mulFloat64" (var "a") (lit xi))
+  let residual xi yi = app2 "hydra.core.lib.math.subFloat64"
+        (app2 "hydra.core.lib.math.addFloat64"
+          (app2 "hydra.core.lib.math.mulFloat64" (var "a") (lit xi))
           (var "b"))
         (lit yi)
   let squaredResidual xi yi =
         let r = residual xi yi
-        in app2 "hydra.lib.math.mulFloat64" r r
-  let lossTerm = foldl1 (\acc t -> app2 "hydra.lib.math.addFloat64" acc t)
+        in app2 "hydra.core.lib.math.mulFloat64" r r
+  let lossTerm = foldl1 (\acc t -> app2 "hydra.core.lib.math.addFloat64" acc t)
         [squaredResidual xi yi | (xi, yi) <- dataPoints]
 
   -- Differentiate w.r.t. "a" and "b" separately

@@ -5,48 +5,48 @@ module Hydra.Sources.Kernel.Terms.Encoding where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (literalType)
-import qualified Hydra.Dsl.Paths    as Paths
-import qualified Hydra.Overlay.Haskell.Dsl.Annotations       as Annotations
-import qualified Hydra.Dsl.Ast          as Ast
-import qualified Hydra.Overlay.Haskell.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Coders       as Coders
-import qualified Hydra.Dsl.Util      as Util
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Core         as Core
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Graph        as Graph
-import qualified Hydra.Dsl.Json.Model         as Json
-import qualified Hydra.Dsl.Lib.Chars    as Chars
-import qualified Hydra.Dsl.Lib.Eithers  as Eithers
-import qualified Hydra.Dsl.Lib.Equality as Equality
-import qualified Hydra.Dsl.Lib.Lists    as Lists
-import qualified Hydra.Dsl.Lib.Literals as Literals
-import qualified Hydra.Dsl.Lib.Logic    as Logic
-import qualified Hydra.Dsl.Lib.Maps     as Maps
-import qualified Hydra.Dsl.Lib.Math     as Math
-import qualified Hydra.Dsl.Lib.Optionals   as Optionals
-import qualified Hydra.Dsl.Lib.Pairs    as Pairs
-import qualified Hydra.Dsl.Lib.Sets     as Sets
-import qualified Hydra.Dsl.Lib.Strings  as Strings
-import qualified Hydra.Overlay.Haskell.Dsl.Literals          as Literals
-import qualified Hydra.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Base         as MetaBase
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Terms        as MetaTerms
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Types        as MetaTypes
-import qualified Hydra.Dsl.Packaging       as Packaging
-import qualified Hydra.Dsl.Parsing      as Parsing
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms
-import           Hydra.Overlay.Haskell.Dsl.Typed.Phantoms     as Phantoms hiding (
+import qualified Hydra.Core.Dsl.Paths    as Paths
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations       as Annotations
+import qualified Hydra.Core.Dsl.Ast          as Ast
+import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
+import qualified Hydra.Core.Dsl.Coders       as Coders
+import qualified Hydra.Core.Dsl.Util      as Util
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph        as Graph
+import qualified Hydra.Core.Dsl.Json.Model         as Json
+import qualified Hydra.Core.Dsl.Lib.Chars    as Chars
+import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality as Equality
+import qualified Hydra.Core.Dsl.Lib.Lists    as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals as Literals
+import qualified Hydra.Core.Dsl.Lib.Logic    as Logic
+import qualified Hydra.Core.Dsl.Lib.Maps     as Maps
+import qualified Hydra.Core.Dsl.Lib.Math     as Math
+import qualified Hydra.Core.Dsl.Lib.Optionals   as Optionals
+import qualified Hydra.Core.Dsl.Lib.Pairs    as Pairs
+import qualified Hydra.Core.Dsl.Lib.Sets     as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings  as Strings
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Literals          as Literals
+import qualified Hydra.Core.Overlay.Haskell.Dsl.LiteralTypes      as LiteralTypes
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Base         as MetaBase
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Terms        as MetaTerms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types        as MetaTypes
+import qualified Hydra.Core.Dsl.Packaging       as Packaging
+import qualified Hydra.Core.Dsl.Parsing      as Parsing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms
+import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms     as Phantoms hiding (
   elimination, field, fieldType, floatType, floatValue, function, injection, integerType, integerValue, lambda, literal,
   literalType, record, term, type_, typeScheme, wrap)
-import qualified Hydra.Overlay.Haskell.Dsl.Prims             as Prims
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Tabular           as Tabular
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Testing      as Testing
-import qualified Hydra.Overlay.Haskell.Dsl.Terms             as Terms
-import qualified Hydra.Overlay.Haskell.Dsl.Tests             as Tests
-import qualified Hydra.Dsl.Topology     as Topology
-import qualified Hydra.Overlay.Haskell.Dsl.Types             as Types
-import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Errors       as Error
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.Variants     as Variants
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims             as Prims
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Tabular           as Tabular
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Testing      as Testing
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms             as Terms
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests             as Tests
+import qualified Hydra.Core.Dsl.Topology     as Topology
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Types             as Types
+import qualified Hydra.Core.Dsl.Typing       as Typing
+import qualified Hydra.Core.Dsl.Errors       as Error
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
@@ -56,30 +56,30 @@ import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Predicates as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
-import qualified Hydra.Overlay.Haskell.Dsl.Typed.DeepCore as DeepCore
-import           Hydra.Overlay.Haskell.Dsl.Typed.DeepCore ((@@@))
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Deep.Core as DeepCore
+import           Hydra.Core.Overlay.Haskell.Dsl.Deep.Core ((@@@))
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
 import qualified Data.List                   as L
 import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
-import qualified Hydra.Lib.Eithers as DefEithers
-import qualified Hydra.Lib.Lists as DefLists
-import qualified Hydra.Lib.Maps as DefMaps
-import qualified Hydra.Lib.Optionals as DefOptionals
-import qualified Hydra.Lib.Pairs as DefPairs
-import qualified Hydra.Lib.Sets as DefSets
+import qualified Hydra.Core.Lib.Eithers as DefEithers
+import qualified Hydra.Core.Lib.Lists as DefLists
+import qualified Hydra.Core.Lib.Maps as DefMaps
+import qualified Hydra.Core.Lib.Optionals as DefOptionals
+import qualified Hydra.Core.Lib.Pairs as DefPairs
+import qualified Hydra.Core.Lib.Sets as DefSets
 
 
 ns :: ModuleName
-ns = ModuleName "hydra.encoding"
+ns = ModuleName "hydra.core.encoding"
 
 module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Constants.ns, ModuleName "hydra.decode.core", Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Constants.ns, ModuleName "hydra.core.decode.model", Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Functions for generating term encoders from type modules")}
   where
     definitions = [
@@ -154,12 +154,12 @@ encodeBinding = define "encodeBinding" $
 -- Variable normalization (to t0, t1, etc.) happens later in the pipeline and
 -- handles renaming both variables and constraint keys consistently.
 -- | Generate a fully qualified binding name for an encoder function from a type name
--- For example, "hydra.core.Name" -> "hydra.encode.core.name"
+-- For example, "hydra.core.model.Name" -> "hydra.core.encode.model.name"
 -- For local types (no namespace), returns just the decapitalized local name
 encodeBindingName :: TypedTermDefinition (Name -> Name)
 encodeBindingName = define "encodeBindingName" $
   doc "Generate a binding name for an encoder function from a type name" $
-  Names.derivedBindingName @@ list [string "hydra", string "encode"] @@ boolean True
+  Names.derivedBindingName @@ list [string "encode"] @@ boolean True
 
 -- | Generate the encoder term for a field value
 -- Creates a lambda that encodes the field value and wraps in an encoded union/injection
@@ -203,7 +203,7 @@ encodeFieldValue = define "encodeFieldValue" $
         (encodeInjection @@ var "typeName" @@ var "fieldName"
           @@ ((encodeType @@ var "fieldType") @@@ DeepCore.var "y")))
 
--- | Encode an Injection as a Term (produces a Record of type hydra.core.Injection)
+-- | Encode an Injection as a Term (produces a Record of type hydra.core.model.Injection)
 -- | Encode a float value based on its float type
 -- Wraps the value in the appropriate FloatValue variant as an injection
 encodeFloatValue :: TypedTermDefinition (FloatType -> Term -> Term)
@@ -243,7 +243,7 @@ encodeForallType = define "encodeForallType" $
 
 -- | Generate an encoder for a Maybe type
 -- Encodes the inner value if present and wraps in Term.maybe
--- | Encode an Injection as a Term (produces a Record of type hydra.core.Injection)
+-- | Encode an Injection as a Term (produces a Record of type hydra.core.model.Injection)
 encodeInjection :: TypedTermDefinition (Name -> Name -> Term -> Term)
 encodeInjection = define "encodeInjection" $
   doc "Encode an Injection as a term" $
@@ -251,7 +251,7 @@ encodeInjection = define "encodeInjection" $
     DeepCore.field _Injection_typeName (encodeName @@ var "typeName"),
     DeepCore.field _Injection_field (encodeField @@ var "fieldName" @@ var "fieldTerm")]
   where
-    -- Encode a Field as a Term (produces a Record of type hydra.core.Field)
+    -- Encode a Field as a Term (produces a Record of type hydra.core.model.Field)
     encodeField :: TypedTerm (Name -> Term -> Term)
     encodeField = "fname" ~> "fterm" ~> DeepCore.record _Field [
       DeepCore.field _Field_name (encodeName @@ var "fname"),
@@ -397,19 +397,19 @@ encodeModule = define "encodeModule" $
             (Core.bindingTerm $ var "b")))
             (var "encodedBindings")))))
 
--- | Encode a Name as a Term (produces a wrapped term of type hydra.core.Name)
--- | Encode a Name as a Term (produces a wrapped term of type hydra.core.Name)
+-- | Encode a Name as a Term (produces a wrapped term of type hydra.core.model.Name)
+-- | Encode a Name as a Term (produces a wrapped term of type hydra.core.model.Name)
 encodeName :: TypedTermDefinition (Name -> Term)
 encodeName = define "encodeName" $
   doc "Encode a Name as a term" $
   "n" ~> DeepCore.wrap _Name (DeepCore.string (Core.unName (var "n")))
 
 -- | Generate an encoder module name from a source module name
--- For example, "hydra.util" -> "hydra.encode.util"
+-- For example, "hydra.core.util" -> "hydra.core.encode.util"
 encodeModuleName :: TypedTermDefinition (ModuleName -> ModuleName)
 encodeModuleName = define "encodeModuleName" $
   doc "Generate an encoder module name from a source module name" $
-  Names.derivedModuleName @@ list [string "hydra", string "encode"] @@ boolean True
+  Names.derivedModuleName @@ list [string "encode"] @@ boolean True
 
 -- | Generate an encoder for a record type
 -- For records, project each field, encode it, and build an encoded record
@@ -999,5 +999,5 @@ prependForallEncoders = define "prependForallEncoders" $
         (prependForallEncoders @@ var "baseType" @@ Core.forallTypeBody (var "ft"))]
 
 -- | Generate a fully qualified binding name for an encoder function from a type name
--- For example, "hydra.core.Name" -> "hydra.encode.core.name"
+-- For example, "hydra.core.model.Name" -> "hydra.core.encode.model.name"
 -- For local types (no namespace), returns just the decapitalized local name
