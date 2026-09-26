@@ -94,14 +94,14 @@ dedupPreservingOrder = define "dedupPreservingOrder" $
   "xs" ~> Lists.distinct (var "xs")
 
 -- | Keep only non-kernel modules: those whose name does NOT start with "hydra."
--- and does NOT start with "hydra.json.yaml.".
+-- and does NOT start with "hydra.core.json.yaml.".
 --
 -- Polarity note: this KEEPS the modules that are not part of the kernel
 -- namespace. A module named e.g. "example.foo" is kept; "hydra.core.model" and
--- "hydra.json.yaml.model" are dropped.
+-- "hydra.core.json.yaml.model" are dropped.
 filterKernelModules :: TypedTermDefinition ([Module] -> [Module])
 filterKernelModules = define "filterKernelModules" $
-  doc "Keep only modules outside the hydra.* and hydra.json.yaml.* namespaces" $
+  doc "Keep only modules outside the hydra.* and hydra.core.json.yaml.* namespaces" $
   "mods" ~>
   -- startsWith prefix s: s begins with prefix iff splitting s on prefix yields an
   -- empty first segment and at least one further segment (guards the empty-string case).
@@ -117,7 +117,7 @@ filterKernelModules = define "filterKernelModules" $
       "name" <~ Packaging.unModuleName (Packaging.moduleName $ var "m") $
       Logic.and
         (Logic.not $ var "startsWith" @@ string "hydra." @@ var "name")
-        (Logic.not $ var "startsWith" @@ string "hydra.json.yaml." @@ var "name"))
+        (Logic.not $ var "startsWith" @@ string "hydra.core.json.yaml." @@ var "name"))
     (var "mods")
 
 -- | Keep only modules that contain at least one type-defining binding.

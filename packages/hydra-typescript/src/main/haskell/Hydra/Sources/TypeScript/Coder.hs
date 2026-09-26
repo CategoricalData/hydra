@@ -1550,9 +1550,17 @@ importsToText = def "importsToText" $
     "currentSegs" <~ (Lists.drop (int32 1)
       (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "currentNs"))) $
     "currentDepth" <~ (Lists.length (var "currentSegs")) $
+    -- Post-#729 grammar: a test module's namespace is `hydra.<pkg-root>.test....`
+    -- (e.g. `hydra.core.test.annotations`), so after dropping the leading "hydra"
+    -- the "test" marker is the SECOND segment, not the first (`Lists.at 1`, not
+    -- `Lists.head`). Checking `Lists.head` here matched the pre-#729
+    -- `hydra.test....` shape and always evaluates to False post-rename, which
+    -- silently disabled the cross-tree upPrefix branch below (test modules'
+    -- imports of main modules stopped getting the extra `../../main/typescript/`
+    -- hop, producing broken relative paths two levels too shallow).
     "currentIsTest" <~ Logic.and
-      (Logic.not (Lists.isEmpty (var "currentSegs")))
-      (Equality.equal (Optionals.withDefault (string "") (Lists.head (var "currentSegs"))) (string "test")) $
+      (Ordering.gt (Lists.length (var "currentSegs")) (int32 1))
+      (Equality.equal (Optionals.withDefault (string "") (Lists.at (int32 1) (var "currentSegs"))) (string "test")) $
     "baseUpPrefix" <~ Logic.ifElse
       (Equality.equal (var "currentDepth") (int32 1))
       (string "./")
@@ -1563,9 +1571,11 @@ importsToText = def "importsToText" $
         "locals" <~ Pairs.second (var "entry") $
         "targetSegs" <~ (Lists.drop (int32 1)
           (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"))) $
+        -- See currentIsTest above: post-#729, "test" is the SECOND segment
+        -- (`Lists.at 1`), not the first.
         "targetIsTest" <~ Logic.and
-          (Logic.not (Lists.isEmpty (var "targetSegs")))
-          (Equality.equal (Optionals.withDefault (string "") (Lists.head (var "targetSegs"))) (string "test")) $
+          (Ordering.gt (Lists.length (var "targetSegs")) (int32 1))
+          (Equality.equal (Optionals.withDefault (string "") (Lists.at (int32 1) (var "targetSegs"))) (string "test")) $
         -- #501/#507/#729: the TS lib runtime impls (hydra.core.lib.*) ship under the renamed
         -- overlay namespace at hydra/core/overlay/typescript/lib/, not hydra/core/lib/ (which holds
         -- only the generated PrimitiveDefinition def-modules). A generated reference to

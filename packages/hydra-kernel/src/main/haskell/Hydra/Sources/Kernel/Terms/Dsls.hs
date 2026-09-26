@@ -340,6 +340,11 @@ dslModuleName = define "dslModuleName" $
 -- For a signature p1 .. pn -> r this yields:
 --   forall vars. TypedTerm p1 -> ... -> TypedTerm pn -> TypedTerm r
 -- (NOT TypedTerm (p1 -> ... -> r) — the wrapper is a function of phantom terms, #467.)
+-- EXCEPTION: a parameter whose type is already `TypedName a` (itself a phantom-carrying
+-- wrapper, e.g. encodeRef/decodeRef/showRef's token argument) is NOT wrapped again --
+-- this must mirror generateSignatureRef's own paramPairs choice exactly, or the exposed
+-- signature and the generated lambda's actual parameter type diverge (#729 land
+-- investigation).
 dslSignatureTypeScheme :: TypedTermDefinition (TermSignature -> TypeScheme)
 dslSignatureTypeScheme = define "dslSignatureTypeScheme" $
   doc "Build a TypedTerm-wrapped TypeScheme (functions of phantom terms) from a TermSignature" $
@@ -349,7 +354,11 @@ dslSignatureTypeScheme = define "dslSignatureTypeScheme" $
   "resultType" <~ (Typing.resultType (Typing.termSignatureResult (var "sig"))) $
   "wrappedResult" <~ (wrapInTypedTerm (var "resultType")) $
   "funType" <~ (Lists.foldr
-    ("paramType" ~> "acc" ~> Core.typeFunction $ Core.functionType (wrapInTypedTerm (var "paramType")) (var "acc"))
+    ("paramType" ~> "acc" ~> Core.typeFunction $ Core.functionType
+      (Logic.ifElse (isTypedNameApplication @@ (Strip.deannotateType @@ var "paramType"))
+        (var "paramType")
+        (wrapInTypedTerm (var "paramType")))
+      (var "acc"))
     (var "wrappedResult")
     (var "paramTypes")) $
   Core.typeScheme (var "typeVars") (var "funType") Maps.empty
@@ -567,18 +576,44 @@ generateSignatureRef = define "generateSignatureRef" $
   "refName" ~> "sig" ~>
   "params" <~ (Typing.termSignatureParameters (var "sig")) $
   -- Parameter (name, TypedTerm<paramType>) pairs for the lambda chain. Names come straight
-  -- from the signature; they are already unique within the signature.
-  "paramPairs" <~ (Lists.map
+  -- from the signature; they are already unique within the signature. A parameter whose
+  -- type is ALREADY `TypedName a` (e.g. encodeRef/decodeRef/showRef's `tn` argument) is
+  -- NOT wrapped in another TypedTerm layer -- TypedName is itself a phantom-carrying
+  -- wrapper, so wrapping it again produces TypedTerm<TypedName<a>>, which no caller ever
+  -- constructs (callers hold a bare TypedName<a>, e.g. from a *Type() token function) and
+  -- which cannot be applied at any concrete T0, breaking every call site with an "argument
+  -- mismatch" compile error (#729 land investigation). Every other parameter keeps the
+  -- normal TypedTerm<paramType> wrapping.
+  "paramFlags" <~ (Lists.map
     ("p" ~> pair
       (Core.unName (Typing.parameterName (var "p")))
-      (wrapInTypedTerm (Typing.parameterType (var "p"))))
+      (isTypedNameApplication @@ (Strip.deannotateType @@ (Typing.parameterType (var "p")))))
     (var "params")) $
-  -- Body: apply the deep reference to each unwrapped phantom argument, left to right.
+  "paramPairs" <~ (Lists.map
+    ("p" ~>
+      "pt" <~ (Typing.parameterType (var "p")) $
+      pair
+        (Core.unName (Typing.parameterName (var "p")))
+        (Logic.ifElse (isTypedNameApplication @@ (Strip.deannotateType @@ var "pt"))
+          (var "pt")
+          (wrapInTypedTerm (var "pt"))))
+    (var "params")) $
+  -- Body: apply the deep reference to each argument, left to right. A TypedName-typed
+  -- parameter's runtime value is a Name (not a Term), so it must be unwrapped to that Name
+  -- and re-wrapped into a Term.Variable node (unwrapTypedNameToVariable) to be a valid
+  -- Application argument; every other parameter goes through the normal TypedTerm-unwrap
+  -- (its runtime value already IS the Term payload). isTypedName is read from paramFlags,
+  -- a list computed FRESH and directly from params (name, isTypedName) -- not derived by
+  -- re-inspecting paramPairs' stored/wrapped type -- to sidestep any issue with detecting
+  -- the predicate on a value that has round-tripped through a deep-term pair projection.
   "appBody" <~ (Lists.foldl
-    ("acc" ~> "pp" ~> deepApplication (var "acc")
-      (unwrapTypedTerm (Core.termVariable (Core.name (Pairs.first (var "pp"))))))
+    ("acc" ~> "pf" ~>
+      deepApplication (var "acc")
+        (Logic.ifElse (Pairs.second (var "pf"))
+          (unwrapTypedNameToVariable (Core.termVariable (Core.name (Pairs.first (var "pf")))))
+          (unwrapTypedTerm (Core.termVariable (Core.name (Pairs.first (var "pf")))))))
     (deepVariable (var "refName"))
-    (var "paramPairs")) $
+    (var "paramFlags")) $
   "refTerm" <~ (wrapTermInTypedTerm (var "appBody")) $
   -- Wrap in typed lambdas for each parameter (right to left). Nullary -> no lambda.
   "rawBody" <~ (Lists.foldl
@@ -858,6 +893,14 @@ isUnitType_ :: TypedTerm (Type -> Bool)
 isUnitType_ = "t" ~> match _Type (Strip.deannotateType @@ var "t") (Just Phantoms.false) [
   _Type_unit>>: constant Phantoms.true]
 
+-- | Check whether a (deannotated) type is an application of TypedName, i.e. `TypedName a`.
+-- Used by generateSignatureRef to avoid double-wrapping a parameter that is already a
+-- phantom-carrying TypedName in another TypedTerm layer (#729 land investigation).
+isTypedNameApplication :: TypedTerm (Type -> Bool)
+isTypedNameApplication = "t" ~> match _Type (Strip.deannotateType @@ var "t") (Just Phantoms.false) [
+  _Type_application>>: "a" ~> match _Type (Strip.deannotateType @@ Core.applicationTypeFunction (var "a")) (Just Phantoms.false) [
+    _Type_variable>>: "v" ~> Equality.equal (var "v") (Core.nameLift _TypedName)]]
+
 -- | Transform a type module into a DSL module.
 -- Returns Nothing if the module has no eligible type definitions.
 -- | Build the nominal result type for a type definition.
@@ -880,6 +923,17 @@ nominalResultType = define "nominalResultType" $
 unwrapTypedTerm :: TypedTerm Term -> TypedTerm Term
 unwrapTypedTerm v = Core.termApplication $ Core.application
   (Core.termUnwrap (Core.nameLift _TypedTerm))
+  v
+
+-- | Unwrap a TypedName argument to its underlying Name value: apply (TermUnwrap _TypedName)
+-- to the variable. Used by generateSignatureRef's TypedName-typed-parameter case: unlike a
+-- TypedTerm-typed parameter (whose runtime value already IS the Term payload), a TypedName
+-- parameter's runtime value is a Name, which itself is not a valid Application argument --
+-- it must be wrapped back into a Term.Variable node so the deep-application's argument
+-- position holds a genuine Term (#729 land investigation).
+unwrapTypedNameToVariable :: TypedTerm Term -> TypedTerm Term
+unwrapTypedNameToVariable v = injectTermVariable $ Core.termApplication $ Core.application
+  (Core.termUnwrap (Core.nameLift _TypedName))
   v
 
 -- | Wrap a type in TypedName: TypeApplication (TypeVariable "hydra.core.typed.TypedName") innerType

@@ -184,9 +184,9 @@ filterKernelModulesGroup = subgroup "filterKernelModules" [
         mod' "hydra.core.model" [aTypeDef "hydra.core.model.Foo"],
         mod' "example.foo" [aTypeDef "example.foo.Bar"]]))
       (showModuleNames (Phantoms.list [mod' "example.foo" [aTypeDef "example.foo.Bar"]])),
-    universalCase "hydra.json.yaml.* dropped"
+    universalCase "hydra.core.json.yaml.* dropped"
       (showModuleNames (BuildModules.filterKernelModules @@ Phantoms.list [
-        mod' "hydra.json.yaml.model" [aTypeDef "hydra.json.yaml.model.X"],
+        mod' "hydra.core.json.yaml.model" [aTypeDef "hydra.core.json.yaml.model.X"],
         mod' "other.pkg" [aTypeDef "other.pkg.Y"]]))
       (showModuleNames (Phantoms.list [mod' "other.pkg" [aTypeDef "other.pkg.Y"]])),
     universalCase "a name merely containing hydra is kept"
