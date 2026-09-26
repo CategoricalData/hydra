@@ -84,8 +84,8 @@ def _overlay_lib_dir(repo_root, target):
     """
     base = os.path.join(repo_root, "overlay", target, "hydra-kernel", "src", "main")
     if target == "haskell":
-        return os.path.join(base, "haskell", "Hydra", "Overlay", "Haskell", "Lib")
-    return os.path.join(base, target, "hydra", "overlay", _overlay_dir_segment(target), "lib")
+        return os.path.join(base, "haskell", "Hydra", "Core", "Overlay", "Haskell", "Lib")
+    return os.path.join(base, target, "hydra", "core", "overlay", _overlay_dir_segment(target), "lib")
 
 # Lisp dialect arg -> (coder dialect name, file extension). Module-level so the #473 lib pass can
 # reach it as well as main().
@@ -98,7 +98,7 @@ _lisp_dialects = {
 
 
 def _is_lib_module(m):
-    return m.name.value.startswith("hydra.lib.")
+    return m.name.value.startswith("hydra.core.lib.")
 
 
 def _run_lib_pass(target, lang_dir, all_main_mods, mods_to_generate):
@@ -136,55 +136,57 @@ def _run_lib_pass(target, lang_dir, all_main_mods, mods_to_generate):
 
 
 def _is_lib_def_or_registry_file(p_slash):
-    """Files under hydra/lib/ are the lib-pass def-modules; the overlay Libraries registry
+    """Files under hydra/core/lib/ are the lib-pass def-modules; the overlay Libraries registry
     deliberately imports BOTH the relocated impl and the def-module (aliased, for `def_X.fn.name`).
     Neither must be redirected. #569 Defect B fix: the registry sits at different depths under
-    hydra/overlay/<lang>/ depending on the target -- directly (scala/clojure/scheme Libraries.<ext>),
-    under lib/ (flat Lisp dialects), or under sources/ (python overlay/python/sources/libraries.py).
-    Match [Ll]ibraries.<ext> at ANY depth under hydra/overlay/<lang>/ so every target's registry is
-    protected; python's sources/libraries.py was previously unguarded, so python-host generation
-    redirected its def_<sub>.<fn>.name references onto the impl, breaking pytest collection with
+    hydra/core/overlay/<lang>/ depending on the target -- directly (scala/clojure/scheme
+    Libraries.<ext>), under lib/ (flat Lisp dialects), or under sources/ (python
+    overlay/python/sources/libraries.py). Match [Ll]ibraries.<ext> at ANY depth under
+    hydra/core/overlay/<lang>/ so every target's registry is protected; python's
+    sources/libraries.py was previously unguarded, so python-host generation redirected its
+    def_<sub>.<fn>.name references onto the impl, breaking pytest collection with
     "'function' object has no attribute 'name'".
     """
-    if "/hydra/lib/" in p_slash:
+    if "/hydra/core/lib/" in p_slash:
         return True
-    m = re.search(r"/hydra/overlay/[^/]+/(.*/)?(Libraries|libraries)\.[^/]+$", p_slash)
+    m = re.search(r"/hydra/core/overlay/[^/]+/(.*/)?(Libraries|libraries)\.[^/]+$", p_slash)
     return m is not None
 
 
 def _redirect_dotted(s, lang_seg, subs):
     """Dotted-language redirect (python/scala/clojure), protecting quoted primitive-NAME strings."""
     sentinel = "@@HYDRA_LIB_NAME@@"  # improbable token; never appears in generated source
-    out = s.replace('"hydra.lib.', '"' + sentinel)
+    out = s.replace('"hydra.core.lib.', '"' + sentinel)
     for sub in subs:
-        old = "hydra.lib." + sub
-        new = "hydra." + lang_seg + ".lib." + sub
+        old = "hydra.core.lib." + sub
+        new = "hydra.core." + lang_seg + ".lib." + sub
         out = out.replace(old + ".", new + ".")
         out = out.replace(old + "\n", new + "\n")
         out = out.replace(old + " ", new + " ")
-        out = out.replace("hydra.lib import " + sub, "hydra." + lang_seg + ".lib import " + sub)
-    return out.replace(sentinel, "hydra.lib.")
+        out = out.replace("hydra.core.lib import " + sub, "hydra.core." + lang_seg + ".lib import " + sub)
+    return out.replace(sentinel, "hydra.core.lib.")
 
 
 def _redirect_scheme(s, subs):
-    """Scheme (R7RS) redirect: `(hydra lib <sub>)` -> `(hydra overlay scheme lib <sub>)`. Call
-    sites use the flattened identifier hydra_lib_<sub>_<fn> (unchanged, resolved via the renamed
-    import); primitive NAME strings are dotted "hydra.lib..." (untouched by this rewrite)."""
+    """Scheme (R7RS) redirect: `(hydra core lib <sub>)` -> `(hydra core overlay scheme lib <sub>)`.
+    Call sites use the flattened identifier hydra_core_lib_<sub>_<fn> (unchanged, resolved via the
+    renamed import); primitive NAME strings are dotted "hydra.core.lib..." (untouched by this
+    rewrite)."""
     out = s
     for sub in subs:
-        out = out.replace(f"(hydra lib {sub})", f"(hydra overlay scheme lib {sub})")
+        out = out.replace(f"(hydra core lib {sub})", f"(hydra core overlay scheme lib {sub})")
     return out
 
 
 def _redirect_lisp_flat(s, subs, lang_seg):
     """Common Lisp / Emacs Lisp redirect: rename consumer call sites
-    hydra_lib_<sub>_ -> hydra_overlay_<lang_seg>_lib_<sub>_, and drop the def-module
-    ":hydra.lib.<sub>" token from consumer defpackage (:use ...) clauses."""
+    hydra_core_lib_<sub>_ -> hydra_core_overlay_<lang_seg>_lib_<sub>_, and drop the def-module
+    ":hydra.core.lib.<sub>" token from consumer defpackage (:use ...) clauses."""
     out = s
     for sub in subs:
-        out = out.replace(f"hydra_lib_{sub}_", f"hydra_overlay_{lang_seg}_lib_{sub}_")
+        out = out.replace(f"hydra_core_lib_{sub}_", f"hydra_core_overlay_{lang_seg}_lib_{sub}_")
     for sub in subs:
-        out = out.replace(f" :hydra.lib.{sub}", "")
+        out = out.replace(f" :hydra.core.lib.{sub}", "")
     return out
 
 
@@ -214,19 +216,19 @@ def _redirect_lib_calls(repo_root, target, lang_dir):
             with open(p, "r", encoding="utf-8") as fh:
                 s = fh.read()
             if dotted_seg is not None:
-                if "hydra.lib." not in s:
+                if "hydra.core.lib." not in s:
                     continue
                 out = _redirect_dotted(s, dotted_seg, subs)
             elif target == "scheme":
-                if "(hydra lib " not in s:
+                if "(hydra core lib " not in s:
                     continue
                 out = _redirect_scheme(s, subs)
             elif target == "common-lisp":
-                if "hydra_lib_" not in s and ":hydra.lib." not in s:
+                if "hydra_core_lib_" not in s and ":hydra.core.lib." not in s:
                     continue
                 out = _redirect_lisp_flat(s, subs, "common_lisp")
             elif target == "emacs-lisp":
-                if "hydra_lib_" not in s and ":hydra.lib." not in s:
+                if "hydra_core_lib_" not in s and ":hydra.core.lib." not in s:
                     continue
                 out = _redirect_lisp_flat(s, subs, "emacs_lisp")
             else:

@@ -23,7 +23,7 @@ from hydra.core.typing import InferenceContext
 from hydra.core.model import Binding
 from hydra.core.overlay.python.dsl.python import FrozenDict, Given, Left, None_, Right
 from hydra.core.graph import Graph
-from hydra.json import model as JsonModel
+from hydra.core.json import model as JsonModel
 from hydra.core.packaging import Module, ModuleName
 from hydra.core.strip import deannotate_type_recursive, remove_types_from_term
 from hydra.core.scoping import f_type_to_type_scheme
@@ -72,10 +72,10 @@ def _overlay_lib_subs(target):
     # Hydra.Core.Overlay.Haskell.Lib.* (#630).
     base = os.path.join(_resolve_repo_root(), "overlay", target, "hydra-kernel", "src", "main")
     if target == "haskell":
-        lib_dir = os.path.join(base, "haskell", "Hydra", "Overlay", "Haskell", "Lib")
+        lib_dir = os.path.join(base, "haskell", "Hydra", "Core", "Overlay", "Haskell", "Lib")
     else:
         seg = _OVERLAY_DIR_SEGMENT.get(target, target)
-        lib_dir = os.path.join(base, target, "hydra", "overlay", seg, "lib")
+        lib_dir = os.path.join(base, target, "hydra", "core", "overlay", seg, "lib")
     if not os.path.isdir(lib_dir):
         return _LIB_SUBS_FALLBACK
     subs = set()
@@ -606,8 +606,8 @@ def infer_and_write_by_package(
     Returns the full set of inferred target modules concatenated across
     packages, in topo order.
     """
-    from hydra import codegen
-    from hydra import sorting as Sorting
+    from hydra.core import codegen
+    from hydra.core import sorting as Sorting
     from hydra.core.overlay.python.dsl.python import FrozenDict, Left, Right
 
     seed_ns = {m.name.value for m in seed_acc}
@@ -833,8 +833,8 @@ def generate_dsl_modules(universe_mods, type_mods):
     no local Haskell build. Replaces the Haskell update-json-main DSL pass for
     hydra-python (#370/#346).
     """
-    from hydra import codegen
-    from hydra import dsls
+    from hydra.core import codegen
+    from hydra.core import dsls
     from hydra.core.overlay.python.dsl.python import Left, Right
 
     cx = empty_context()
@@ -885,7 +885,7 @@ def _write_package_split_json(dist_json_root, universe_mods, universe_for_schema
     dist_json_root/<pkg>/src/main/json/. Mirrors
     Hydra.Generation.writePackageSplitJson.
     """
-    from hydra import codegen
+    from hydra.core import codegen
     graph = codegen.modules_to_graph(
         bootstrap_graph(),
         tuple(universe_mods) + tuple(universe_for_schema),

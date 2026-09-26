@@ -22,7 +22,7 @@ def fun(dom, cod):
 def register_chars_primitives() -> dict[Name, Primitive]:
     """Register all chars primitive functions."""
     from hydra.core.overlay.python.lib import chars
-    from hydra.lib import chars as def_chars
+    from hydra.core.lib import chars as def_chars
 
     primitives: dict[Name, Primitive] = {}
 
@@ -51,7 +51,7 @@ def register_chars_primitives() -> dict[Name, Primitive]:
 def register_equality_primitives() -> dict[Name, Primitive]:
     """Register all equality primitive functions."""
     from hydra.core.overlay.python.lib import equality
-    from hydra.lib import equality as def_equality
+    from hydra.core.lib import equality as def_equality
 
     primitives: dict[Name, Primitive] = {}
 
@@ -71,7 +71,7 @@ def register_functions_primitives() -> dict[Name, Primitive]:
     compose/const/flip carry kernel default implementations and need no native overlay here
     (const/flip are wired via register_default_fallback_primitives instead, #749). For #417."""
     from hydra.core.overlay.python.lib import functions
-    from hydra.lib import functions as def_functions
+    from hydra.core.lib import functions as def_functions
 
     primitives: dict[Name, Primitive] = {}
 
@@ -94,7 +94,7 @@ def register_functions_primitives() -> dict[Name, Primitive]:
 def register_ordering_primitives() -> dict[Name, Primitive]:
     """Register all ordering primitive functions. For #417."""
     from hydra.core.overlay.python.lib import ordering
-    from hydra.lib import ordering as def_ordering
+    from hydra.core.lib import ordering as def_ordering
 
     primitives: dict[Name, Primitive] = {}
 
@@ -154,7 +154,7 @@ def register_effects_primitives() -> dict[Name, Primitive]:
     """Register all effects primitive functions. In Python the effect type is transparent
     (effect<t> = t), so these have no term-level interpreter implementation; they are registered for
     name resolution and inference only. For #494."""
-    from hydra.lib import effects as def_effects
+    from hydra.core.lib import effects as def_effects
 
     primitives: dict[Name, Primitive] = {}
     primitives[def_effects.apply.name] = unsupported_effect_primitive(def_effects.apply)
@@ -172,7 +172,7 @@ def register_files_primitives() -> dict[Name, Primitive]:
     """Register all files primitive functions. As effectful primitives, these have no term-level
     interpreter implementation; they are registered for name resolution and inference only, and are
     executed via the native (host) path. For #494."""
-    from hydra.lib import files as def_files
+    from hydra.core.lib import files as def_files
 
     primitives: dict[Name, Primitive] = {}
     primitives[def_files.append_file.name] = unsupported_effect_primitive(def_files.append_file)
@@ -194,7 +194,7 @@ def register_files_primitives() -> dict[Name, Primitive]:
 def register_hashing_primitives() -> dict[Name, Primitive]:
     """Register all hashing primitive functions (SHA-256). Pure and total. For #524."""
     from hydra.core.overlay.python.lib import hashing
-    from hydra.lib import hashing as def_hashing
+    from hydra.core.lib import hashing as def_hashing
 
     primitives: dict[Name, Primitive] = {}
 
@@ -216,7 +216,7 @@ def register_system_primitives() -> dict[Name, Primitive]:
     """Register all system primitive functions. As effectful primitives, these have no term-level
     interpreter implementation; they are registered for name resolution and inference only, and are
     executed via the native (host) path. For #498."""
-    from hydra.lib import system as def_system
+    from hydra.core.lib import system as def_system
 
     primitives: dict[Name, Primitive] = {}
     primitives[def_system.execute.name] = unsupported_effect_primitive(def_system.execute)
@@ -234,7 +234,7 @@ def register_system_primitives() -> dict[Name, Primitive]:
 def register_eithers_primitives() -> dict[Name, Primitive]:
     """Register all eithers primitive functions."""
     from hydra.core.overlay.python.lib import eithers
-    from hydra.lib import eithers as def_eithers
+    from hydra.core.lib import eithers as def_eithers
 
     primitives: dict[Name, Primitive] = {}
 
@@ -322,7 +322,7 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
 def register_lists_primitives() -> dict[Name, Primitive]:
     """Register all list primitive functions."""
     from hydra.core.overlay.python.lib import lists
-    from hydra.lib import lists as def_lists
+    from hydra.core.lib import lists as def_lists
 
     primitives: dict[Name, Primitive] = {}
 
@@ -521,7 +521,7 @@ def register_lists_primitives() -> dict[Name, Primitive]:
 def register_logic_primitives() -> dict[Name, Primitive]:
     """Register all logic primitive functions."""
     from hydra.core.overlay.python.lib import logic
-    from hydra.lib import logic as def_logic
+    from hydra.core.lib import logic as def_logic
 
     primitives: dict[Name, Primitive] = {}
 
@@ -549,7 +549,7 @@ def register_logic_primitives() -> dict[Name, Primitive]:
 def register_maps_primitives() -> dict[Name, Primitive]:
     """Register all map primitive functions."""
     from hydra.core.overlay.python.lib import maps
-    from hydra.lib import maps as def_maps
+    from hydra.core.lib import maps as def_maps
 
     primitives: dict[Name, Primitive] = {}
 
@@ -675,7 +675,7 @@ def register_maps_primitives() -> dict[Name, Primitive]:
 def register_math_primitives() -> dict[Name, Primitive]:
     """Register all math primitive functions."""
     from hydra.core.overlay.python.lib import math
-    from hydra.lib import math as def_math
+    from hydra.core.lib import math as def_math
 
     primitives: dict[Name, Primitive] = {}
 
@@ -829,7 +829,7 @@ def register_math_primitives() -> dict[Name, Primitive]:
 def register_optionals_primitives() -> dict[Name, Primitive]:
     """Register all optional primitive functions."""
     from hydra.core.overlay.python.lib import optionals
-    from hydra.lib import optionals as def_optionals
+    from hydra.core.lib import optionals as def_optionals
 
     primitives: dict[Name, Primitive] = {}
 
@@ -906,7 +906,7 @@ def register_optionals_primitives() -> dict[Name, Primitive]:
 def register_sets_primitives() -> dict[Name, Primitive]:
     """Register all set primitive functions."""
     from hydra.core.overlay.python.lib import sets
-    from hydra.lib import sets as def_sets
+    from hydra.core.lib import sets as def_sets
 
     primitives: dict[Name, Primitive] = {}
 
@@ -983,7 +983,7 @@ def register_sets_primitives() -> dict[Name, Primitive]:
 def register_regex_primitives() -> dict[Name, Primitive]:
     """Register all regex primitive functions."""
     from hydra.core.overlay.python.lib import regex
-    from hydra.lib import regex as def_regex
+    from hydra.core.lib import regex as def_regex
 
     primitives: dict[Name, Primitive] = {}
 
@@ -1012,7 +1012,7 @@ def register_regex_primitives() -> dict[Name, Primitive]:
 def register_strings_primitives() -> dict[Name, Primitive]:
     """Register all string primitive functions."""
     from hydra.core.overlay.python.lib import strings
-    from hydra.lib import strings as def_strings
+    from hydra.core.lib import strings as def_strings
 
     primitives: dict[Name, Primitive] = {}
 
@@ -1057,7 +1057,7 @@ def register_strings_primitives() -> dict[Name, Primitive]:
 def register_text_primitives() -> dict[Name, Primitive]:
     """Register all text primitive functions (UTF-8 codecs). For #494."""
     from hydra.core.overlay.python.lib import text
-    from hydra.lib import text as def_text
+    from hydra.core.lib import text as def_text
 
     primitives: dict[Name, Primitive] = {}
 
@@ -1078,7 +1078,7 @@ def register_text_primitives() -> dict[Name, Primitive]:
 def register_literals_primitives() -> dict[Name, Primitive]:
     """Register all literals primitive functions."""
     from hydra.core.overlay.python.lib import literals
-    from hydra.lib import literals as def_literals
+    from hydra.core.lib import literals as def_literals
 
     primitives: dict[Name, Primitive] = {}
 
@@ -1314,7 +1314,7 @@ def register_literals_primitives() -> dict[Name, Primitive]:
 def register_pairs_primitives() -> dict[Name, Primitive]:
     """Register all pairs primitive functions."""
     from hydra.core.overlay.python.lib import pairs
-    from hydra.lib import pairs as def_pairs
+    from hydra.core.lib import pairs as def_pairs
 
     primitives: dict[Name, Primitive] = {}
 
@@ -1359,9 +1359,9 @@ def register_default_fallback_primitives(already_native: dict[Name, Primitive]) 
     functions.compose, optionals.{foldList,mapList,mapSet}, sets.filter) are wired the same way
     as needed.
     """
-    from hydra.lib import equality as def_equality
-    from hydra.lib import functions as def_functions
-    from hydra.lib import lists as def_lists
+    from hydra.core.lib import equality as def_equality
+    from hydra.core.lib import functions as def_functions
+    from hydra.core.lib import lists as def_lists
     from hydra.core.overlay.python.dsl.python import Given
 
     primitives: dict[Name, Primitive] = {}

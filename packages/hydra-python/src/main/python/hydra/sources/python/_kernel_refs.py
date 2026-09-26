@@ -28,9 +28,13 @@ def _print_ref(tn):
     the "hydra.core.show" category prefix, which predates the hydra.core.print.* rename and
     cannot be changed without a new hydra-python release. hydra.core.names.derived_binding_name
     is a generic, prefix-parameterized utility unaffected by the rename, so we call it
-    directly with the correct "hydra.core.print" prefix instead of going through show_ref.
+    directly with the correct "print" category prefix instead of going through show_ref.
+    #729: categoryPrefix carries only the category segment (not the leading "hydra") -- the
+    source name's own 2-segment root supplies "hydra.core"; derivedDefinitionName inserts
+    categoryPrefix immediately after that root. Passing ["hydra", "print"] here doubled the
+    "hydra" segment (hydra.core.hydra.print.model.type), breaking inference.
     """
-    return hydra.core.model.TermVariable(hydra.core.names.derived_binding_name(["hydra", "print"], True, tn.value))
+    return hydra.core.model.TermVariable(hydra.core.names.derived_binding_name(["print"], True, tn.value))
 
 
 # hydra.core.constants
