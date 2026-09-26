@@ -390,12 +390,32 @@ object Serde:
   private val enumCaseDefnArmBody = lambda("dec",
     let(Seq(
       field("name", ScalaSyntax.enumCaseDefnName(v("dec"))),
+      field("tparams", ScalaSyntax.enumCaseDefnTparams(v("dec"))),
       field("ctor", ScalaSyntax.enumCaseDefnCtor(v("dec"))),
       field("inits", ScalaSyntax.enumCaseDefnInits(v("dec"))),
       field("paramss", ScalaSyntax.primaryCtorParamss(v("ctor"))),
       field("allParams", listConcat(v("paramss"))),
+      field("tparamsExpr",
+        ifElse(listNull(v("tparams")), cstS(""),
+          bracketList(inlineStyle, map(v(local("typeParamToExpr")), v("tparams"))))),
+      // listConcat(paramss) can't distinguish "no parameter groups" (paramss = []) from "one
+      // EMPTY parameter group" (paramss = [[]]) -- both flatten to []. Scala 3 requires an
+      // explicit `()` for a case with a real (possibly-empty) parameter group -- i.e. whenever
+      // paramss is non-empty (a group exists) -- since fieldToEnumCaseParamssList in
+      // Coder.scala always supplies one empty group for a unit case that ALSO has case-level
+      // tparams (e.g. `case retain[A, S]()`, needed because the case shares an invariant type
+      // param with its parameterized parent). A plain, non-generic unit case (e.g. `case unit`
+      // in an ungenerified enum like TermVariant) has NO case-level tparams and gets NO
+      // parameter group either (fieldToEnumCaseParamssList only supplies a group when tparams
+      // is non-empty) -- so branching on paramss alone (not allParams) already distinguishes
+      // all three cases correctly: no group -> no parens; empty group -> "()"; non-empty group
+      // -> "(value: T)". This mirrors the already-correct sibling pattern in classDefnArmBody's
+      // paramsExpr (listNull(paramss) alone, just above in this file). NOTE: must NOT also gate
+      // on listNull(tparams) -- a normal (non-unit) case has tparams=[] but a non-empty paramss
+      // group (its value parameter), and gating on tparams there would (and, before this fix,
+      // did) wrongly suppress the value parameter for EVERY non-unit case (#729 land).
       field("params",
-        ifElse(listNull(v("allParams")),
+        ifElse(listNull(v("paramss")),
           cstS(""),
           parenList(map(v(local("dataParamToExpr")), v("allParams"))))),
       field("extendsClause",
@@ -406,7 +426,7 @@ object Serde:
             commaSep(inlineStyle, map(v(local("initToExpr")), v("inits")))))))),
       spaceSep(list(
         cstS("case"),
-        noSep(list(dataNameToExprCall(v("name")), v("params"))),
+        noSep(list(dataNameToExprCall(v("name")), v("tparamsExpr"), v("params"))),
         v("extendsClause")))))
 
   private val defnToExprBody = lambda("def",

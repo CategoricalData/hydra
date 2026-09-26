@@ -7,7 +7,7 @@ import hydra.core.packaging.{Definition, EntityMetadata, Module, ModuleName}
 import hydra.core.typed.TypedTerm
 
 import hydra.scala.dsl.syntax as ScalaSyntax
-import hydra.core.dsl.{core => CoreDsl, packaging => PackagingDsl, util => UtilDsl}
+import hydra.core.dsl.{model => CoreDsl, packaging => PackagingDsl, util => UtilDsl}
 
 /**
  * Utility functions for constructing Scala AST nodes.

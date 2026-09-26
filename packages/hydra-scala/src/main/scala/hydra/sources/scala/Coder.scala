@@ -8,7 +8,7 @@ import hydra.core.typed.TypedTerm
 import hydra.core.model.{Field, Injection, Literal, Term, WrappedTerm}
 
 import hydra.scala.dsl.syntax as ScalaSyntax
-import hydra.core.dsl.{ast => AstDsl, core => CoreDsl, errors => ErrorsDsl, graph => GraphDsl, packaging => PackagingDsl, typing => TypingDsl, util => UtilDsl}
+import hydra.core.dsl.{ast => AstDsl, model => CoreDsl, errors => ErrorsDsl, graph => GraphDsl, packaging => PackagingDsl, typing => TypingDsl, util => UtilDsl}
 
 /**
  * Scala code generator: converts Hydra modules to Scala source code.
@@ -593,12 +593,21 @@ object Coder:
   private val fieldToEnumCaseValueParam =
     ScalaSyntax.paramData(emptyList)(inject("hydra.scala.syntax.Name", "value", string("value")))(just(v("sftyp")))(nothing)
 
+  // A plain, non-generic unit case (no case-level tparams) must have NO parameter GROUP at
+  // all (paramss = []) so the printer emits a bare `case unit` -- not `case unit()`, which
+  // would break every consumer site that references it as a bare value (e.g.
+  // hydra.core.model.FloatType.float32, not .float32()). A unit case whose enum has its own
+  // type params (e.g. Edit[A, S]'s retain/delete) DOES need a single empty parameter group
+  // (paramss = [[]]) so the printer emits `case retain[A, S]()` -- Scala 3 requires the
+  // explicit `()` there because the case declares its own tparams. Only a case WITH a real
+  // value (not isUnit) gets the one-element group carrying that value param. (#729 land)
   private val fieldToEnumCaseParamssList =
-    list(
-      applyP("hydra.core.lib.logic.ifElse",
-        v("isUnit"),
+    applyP("hydra.core.lib.logic.ifElse",
+      v("isUnit"),
+      applyP("hydra.core.lib.logic.ifElse", applyP("hydra.core.lib.lists.isEmpty", v("tparams")),
         emptyList,
-        list(fieldToEnumCaseValueParam)))
+        list(emptyList)),
+      list(list(fieldToEnumCaseValueParam)))
 
   private val fieldToEnumCasePrimaryCtor =
     ScalaSyntax.primaryCtor(emptyList)(inject("hydra.scala.syntax.Name", "value", string("")))(fieldToEnumCaseParamssList)
@@ -607,8 +616,22 @@ object Coder:
     list(
       ScalaSyntax.init(v("parentType"))(inject("hydra.scala.syntax.Name", "value", string("")))(emptyList))
 
+  // Scala 3 rejects an explicit `extends Parent[A, S]` on a PARAMETERLESS enum case whose
+  // parent has its own type parameters ("illegal reference to type parameter A from enum
+  // case") -- A/S aren't in scope for a case with no value params and no case-level type
+  // params of its own. Fix: give the case its OWN type parameters, matching the parent's
+  // (`case retain[A, S]() extends Edit[A, S]`, not `case retain extends Edit[A, S]`) --
+  // this brings A/S into scope for the case, and Scala infers them at each call/pattern
+  // site from the expected/scrutinee type (an empty-parens 0-arg case, not a bare value,
+  // so call sites need `Edit.retain()` and patterns need `case Edit.retain() =>`, but
+  // those sites are themselves generated via the same domTypeArgs/objectTerm machinery so
+  // this is consistent). A case WITH value params (e.g. `set(value: A)`) is unaffected --
+  // Scala already infers its case-level type params from the value param types (#729 land).
+  private val fieldToEnumCaseTparams =
+    applyP("hydra.core.lib.logic.ifElse", v("isUnit"), v("tparams"), emptyList)
+
   private val fieldToEnumCaseEnumCaseDefnExpr =
-    ScalaSyntax.enumCaseDefn(emptyList)(v("caseName"))(emptyList)(fieldToEnumCasePrimaryCtor)(fieldToEnumCaseInitsList)
+    ScalaSyntax.enumCaseDefn(emptyList)(v("caseName"))(fieldToEnumCaseTparams)(fieldToEnumCasePrimaryCtor)(fieldToEnumCaseInitsList)
 
   private val fieldToEnumCaseSftypBindBody = lambda("sftyp",
     Phantoms.right(
