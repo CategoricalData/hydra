@@ -781,12 +781,22 @@ main = do
   let libSubsLisp = libSubs ++ ["effects","files","system","text"]
   -- Java routes most hydra.lib.* references to hydra.core.overlay.java.lib.* via the coder's
   -- overlayJavaLibPackageAliases (so it normally needs no string redirect). But that alias is
-  -- applied only on the registered-primitive emission path; the effectful hydra.core.lib.system prims
-  -- (unsupportedEffectPrimitive) fall to the plain-variable path and emit the raw hydra.core.lib.system
-  -- package, which has no Java home (the impls live only at hydra.core.overlay.java.lib.system). Redirect
-  -- just those call sites for Java. Scoped to "system" so the alias-routed libs are left untouched
-  -- (their refs are already hydra.core.overlay.java.lib.* and never match the hydra.lib. prefix). For #501.
-  let libSubsJava = ["system"]
+  -- applied only on the registered-primitive emission path; primitives that fall to the
+  -- plain-variable path (e.g. the effectful hydra.core.lib.system prims via
+  -- unsupportedEffectPrimitive, and -- empirically, #729 land -- hydra.core.lib.eithers.Bind/
+  -- Either references emitted by decode/error modules like hydra.core.decode.error.Packaging)
+  -- emit the raw hydra.core.lib.<sub> package, which has no Java home (the impls live only at
+  -- hydra.core.overlay.java.lib.<sub>). Redirect the full libSubs set for Java, matching every
+  -- other host's redirect scope, rather than allow-listing individual subs as each one is
+  -- independently discovered broken -- the alias-routed libs are unaffected (their refs are
+  -- already hydra.core.overlay.java.lib.* and never match the hydra.lib. prefix). For #501/#729.
+  -- Java also ships native effectful impls at hydra.core.overlay.java.lib.{effects,files,system,text}
+  -- (overlay/java/hydra-kernel/.../lib/{effects,files,system,text}/*.java), so -- unlike the stale
+  -- "other hosts lack these" comment above suggested -- Java's redirect scope must include them too;
+  -- generated hydra-kernel TEST sources (e.g. dist/java/.../test/lib/Files.java) reference
+  -- hydra.core.lib.effects.Bind/Map and hydra.core.lib.files.Status/CreateDirectory/WriteFile
+  -- directly, and without this extension javac fails with "package ... does not exist" (#729 land).
+  let libSubsJava = libSubs ++ ["effects","files","system","text"]
   -- For each lib sub-namespace, redirect the CODE-REFERENCE shapes the coders emit:
   --   1. member access / qualified prefix:  hydra.lib.<sub>.<fn>   (and bare prefix uses)
   --   2. bare module import (Python/Scala):  import hydra.lib.<sub>

@@ -232,13 +232,13 @@ haskellOverlayLibDir =
 -- working directory that every sync/bootstrap driver runs from.
 typeScriptOverlayLibDir :: FilePath
 typeScriptOverlayLibDir =
-  "../../overlay/typescript/hydra-core/src/main/typescript/hydra/core/overlay/typescript/lib"
+  "../../overlay/typescript/hydra-kernel/src/main/typescript/hydra/core/overlay/typescript/lib"
 
 -- | The Scala-host overlay lib directory, relative to the heads/haskell/
 -- working directory that every sync/bootstrap driver runs from.
 scalaOverlayLibDir :: FilePath
 scalaOverlayLibDir =
-  "../../overlay/scala/hydra-core/src/main/scala/hydra/core/overlay/scala/lib"
+  "../../overlay/scala/hydra-kernel/src/main/scala/hydra/core/overlay/scala/lib"
 
 -- | #568/#630: rewrite a generated Haskell source file's @Hydra.Core.Overlay.Haskell.Lib.\<Sub\>@
 -- import back to the canonical @Hydra.Lib.\<Sub\>@ kernel-module name for any sub

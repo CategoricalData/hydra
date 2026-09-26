@@ -100,7 +100,7 @@ writeJava basePath universeModules modulesToGenerate = do
 -- nonSubFiles set.
 javaOverlayLibDir :: FilePath
 javaOverlayLibDir =
-  "../../overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib"
+  "../../overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib"
 
 -- | Generate JSON Schema files from modules.
 writeJsonSchema :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
@@ -131,7 +131,7 @@ writePython basePath universeModules modulesToGenerate = do
 -- working directory that every sync/bootstrap driver runs from.
 pythonOverlayLibDir :: FilePath
 pythonOverlayLibDir =
-  "../../overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib"
+  "../../overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/lib"
 
 -- | Generate Rust source files from modules.
 writeRust :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
@@ -243,13 +243,13 @@ moduleToLispDialect dialect ext overlaySubs mod defs cx g =
 -- working directory that every sync/bootstrap driver runs from.
 clojureOverlayLibDir, schemeOverlayLibDir, commonLispOverlayLibDir, emacsLispOverlayLibDir :: FilePath
 clojureOverlayLibDir =
-  "../../overlay/clojure/hydra-kernel/src/main/clojure/hydra/overlay/clojure/lib"
+  "../../overlay/clojure/hydra-kernel/src/main/clojure/hydra/core/overlay/clojure/lib"
 schemeOverlayLibDir =
   "../../overlay/scheme/hydra-kernel/src/main/scheme/hydra/overlay/scheme/lib"
 commonLispOverlayLibDir =
-  "../../overlay/common-lisp/hydra-kernel/src/main/common-lisp/hydra/overlay/common_lisp/lib"
+  "../../overlay/common-lisp/hydra-kernel/src/main/common-lisp/hydra/core/overlay/common_lisp/lib"
 emacsLispOverlayLibDir =
-  "../../overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/overlay/emacs_lisp/lib"
+  "../../overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/core/overlay/emacs_lisp/lib"
 
 writeClojure :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
 writeClojure basePath universeModules modulesToGenerate = do
