@@ -16,8 +16,8 @@
 ;; never inspects), so we supply a fixed empty-InferenceContext placeholder
 ;; here, mirroring the Haskell host's `primCx = emptyInferenceContext` and
 ;; Python's `PRIM_CX`. Positional fields are (:fresh_type_variable_count :trace),
-;; matching make-hydra_typing_inference_context in struct-compat.lisp.
-(defparameter *prim-cx* (make-hydra_typing_inference_context 0 nil)
+;; matching make-hydra_core_typing_inference_context in struct-compat.lisp.
+(defparameter *prim-cx* (make-hydra_core_typing_inference_context 0 nil)
   "Empty InferenceContext passed to TermCoders from primitive implementations (#446).")
 
 ;; ============================================================================
@@ -103,8 +103,8 @@
 (defun build-prim-def (pname variables inputs output constraints)
   "Build a PrimitiveDefinition (#156 shape) from name + signature."
   (let* ((ts (build-type-scheme variables inputs output constraints))
-         (sig (funcall hydra_scoping_type_scheme_to_term_signature ts)))
-    (make-hydra_packaging_primitive_definition pname (list :none) sig t t (list :none))))
+         (sig (funcall hydra_core_scoping_type_scheme_to_term_signature ts)))
+    (make-hydra_core_packaging_primitive_definition pname (list :none) sig t t (list :none))))
 
 (defun lazy-args (idxs prim)
   "Mirror of Hydra.Core.Dsl.Prims.lazyArgs: mark the given (0-based) parameter
@@ -128,24 +128,24 @@
                          param)
                  (cons (cons :is_lazy t) param))))
     (let* ((def (primitive-definition prim))
-           (sig (hydra_packaging_primitive_definition-signature def))
-           (params (hydra_typing_term_signature-parameters sig))
-           (type-params (hydra_typing_term_signature-type_parameters sig))
-           (result (hydra_typing_term_signature-result sig))
+           (sig (hydra_core_packaging_primitive_definition-signature def))
+           (params (hydra_core_typing_term_signature-parameters sig))
+           (type-params (hydra_core_typing_term_signature-type_parameters sig))
+           (result (hydra_core_typing_term_signature-result sig))
            (new-params
              (loop for p in params
                    for i from 0
                    collect (if (member i idxs)
                                (set-lazy p)
                                p)))
-           (new-sig (make-hydra_typing_term_signature type-params new-params result))
-           (new-def (make-hydra_packaging_primitive_definition
-                      (hydra_packaging_primitive_definition-name def)
-                      (hydra_packaging_primitive_definition-metadata def)
+           (new-sig (make-hydra_core_typing_term_signature type-params new-params result))
+           (new-def (make-hydra_core_packaging_primitive_definition
+                      (hydra_core_packaging_primitive_definition-name def)
+                      (hydra_core_packaging_primitive_definition-metadata def)
                       new-sig
-                      (hydra_packaging_primitive_definition-is_pure def)
-                      (hydra_packaging_primitive_definition-is_total def)
-                      (hydra_packaging_primitive_definition-default_implementation def))))
+                      (hydra_core_packaging_primitive_definition-is_pure def)
+                      (hydra_core_packaging_primitive_definition-is_total def)
+                      (hydra_core_packaging_primitive_definition-default_implementation def))))
       (make-primitive new-def (primitive-implementation prim)))))
 
 ;; ============================================================================
@@ -166,12 +166,12 @@
 
 (defun tc-bigint ()
   (make-term_coder (list :literal (list :integer (list :bigint nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_bigint g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_core_extract_model_bigint g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :bigint v))))))))
 
 (defun tc-boolean ()
   (make-term_coder (list :literal (list :boolean nil))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_boolean g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_core_extract_model_boolean g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :boolean v)))))))
 
 (defun tc-decimal ()
@@ -179,68 +179,68 @@
   ;; representation -- see overlay/common_lisp/lib/literals.lisp), so it's passed through
   ;; unchanged, not coerced to a lossy double.
   (make-term_coder (list :literal (list :decimal nil))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_decimal g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_core_extract_model_decimal g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :decimal v)))))))
 
 (defun tc-float32 ()
   (make-term_coder (list :literal (list :float (list :float32 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_float32 g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_core_extract_model_float32 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :float (list :float32
       (float (float v 1.0f0) 1.0d0)))))))))
 
 (defun tc-float64 ()
   (make-term_coder (list :literal (list :float (list :float64 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_float64 g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_core_extract_model_float64 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :float (list :float64 (float v 1.0d0)))))))))
 
 (defun tc-int8 ()
   (make-term_coder (list :literal (list :integer (list :int8 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_int8 g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_core_extract_model_int8 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :int8 v))))))))
 
 (defun tc-int16 ()
   (make-term_coder (list :literal (list :integer (list :int16 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_int16 g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_core_extract_model_int16 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :int16 v))))))))
 
 (defun tc-int32 ()
   (make-term_coder (list :literal (list :integer (list :int32 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_int32 g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_core_extract_model_int32 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :int32 v))))))))
 
 (defun tc-int64 ()
   (make-term_coder (list :literal (list :integer (list :int64 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_int64 g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_core_extract_model_int64 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :int64 v))))))))
 
 (defun tc-uint8 ()
   (make-term_coder (list :literal (list :integer (list :uint8 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_uint8 g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_core_extract_model_uint8 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :uint8 v))))))))
 
 (defun tc-uint16 ()
   (make-term_coder (list :literal (list :integer (list :uint16 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_uint16 g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_core_extract_model_uint16 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :uint16 v))))))))
 
 (defun tc-uint32 ()
   (make-term_coder (list :literal (list :integer (list :uint32 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_uint32 g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_core_extract_model_uint32 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :uint32 v))))))))
 
 (defun tc-uint64 ()
   (make-term_coder (list :literal (list :integer (list :uint64 nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_uint64 g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_core_extract_model_uint64 g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :integer (list :uint64 v))))))))
 
 (defun tc-string ()
   (make-term_coder (list :literal (list :string nil))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_string g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_core_extract_model_string g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :string v)))))))
 
 (defun tc-binary ()
   (make-term_coder (list :literal (list :binary nil))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_binary g) t_))))
+    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_core_extract_model_binary g) t_))))
     (lambda (cx) (declare (ignore cx)) (lambda (v) (list :right (list :literal (list :binary v)))))))
 
 ;; Container TermCoders
@@ -250,7 +250,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (funcall (funcall (funcall hydra_extract_core_list_of
+          (funcall (funcall (funcall hydra_core_extract_model_list_of
                                      (lambda (term) (funcall (funcall (funcall (term_coder-encode el-coder) cx) g) term)))
                             g) t_))))
     (lambda (cx)
@@ -269,7 +269,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (funcall (funcall (funcall hydra_extract_core_set_of
+          (funcall (funcall (funcall hydra_core_extract_model_set_of
                                      (lambda (term) (funcall (funcall (funcall (term_coder-encode el-coder) cx) g) term)))
                             g) t_))))
     (lambda (cx)
@@ -288,7 +288,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (funcall (funcall (funcall (funcall hydra_extract_core_map
+          (funcall (funcall (funcall (funcall hydra_core_extract_model_map
                                               (lambda (term) (funcall (funcall (funcall (term_coder-encode key-coder) cx) g) term)))
                                      (lambda (term) (funcall (funcall (funcall (term_coder-encode val-coder) cx) g) term)))
                             g) t_))))
@@ -311,7 +311,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (funcall (funcall (funcall hydra_extract_core_optional_term
+          (funcall (funcall (funcall hydra_core_extract_model_optional_term
                                      (lambda (term) (funcall (funcall (funcall (term_coder-encode el-coder) cx) g) term)))
                             g) t_))))
     (lambda (cx)
@@ -331,7 +331,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (funcall (funcall (funcall (funcall hydra_extract_core_either_term
+          (funcall (funcall (funcall (funcall hydra_core_extract_model_either_term
                                               (lambda (term) (funcall (funcall (funcall (term_coder-encode left-coder) cx) g) term)))
                                      (lambda (term) (funcall (funcall (funcall (term_coder-encode right-coder) cx) g) term)))
                             g) t_))))
@@ -348,7 +348,7 @@
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (funcall (funcall (funcall (funcall hydra_extract_core_pair
+          (funcall (funcall (funcall (funcall hydra_core_extract_model_pair
                                               (lambda (term) (funcall (funcall (funcall (term_coder-encode first-coder) cx) g) term)))
                                      (lambda (term) (funcall (funcall (funcall (term_coder-encode second-coder) cx) g) term)))
                             g) t_))))
@@ -409,14 +409,14 @@
     (lambda (cx)
       (lambda (g)
         (lambda (t_)
-          (let ((r (funcall (funcall (funcall hydra_extract_core_unit_variant "hydra.core.util.Comparison") g) t_)))
+          (let ((r (funcall (funcall (funcall hydra_core_extract_model_unit_variant "hydra.core.util.Comparison") g) t_)))
             (if (eq (first r) :left) r
                 (let ((variant-name (second r)))
                   (cond
                     ((equal variant-name "lessThan")    (list :right :lt))
                     ((equal variant-name "equalTo")     (list :right :eq))
                     ((equal variant-name "greaterThan") (list :right :gt))
-                    (t (list :left (list :other (make-hydra_errors_other_error (format nil "unknown comparison: ~A" variant-name))))))))))))
+                    (t (list :left (list :other (make-hydra_core_errors_other_error (format nil "unknown comparison: ~A" variant-name))))))))))))
     (lambda (cx) (declare (ignore cx))
       (lambda (c)
         (let ((variant-name (cond
@@ -436,8 +436,8 @@
 
 (defun tc-function (dom cod)
   (make-term_coder (list :function (make-function_type (term_coder-type dom) (term_coder-type cod)))
-    (lambda (cx) (declare (ignore cx)) (lambda (g) (declare (ignore g)) (lambda (t_) (declare (ignore t_)) (list :left (list :other (make-hydra_errors_other_error "cannot encode term to a function"))))))
-    (lambda (cx) (declare (ignore cx)) (lambda (v) (declare (ignore v)) (list :left (list :other (make-hydra_errors_other_error "cannot decode functions to terms")))))))
+    (lambda (cx) (declare (ignore cx)) (lambda (g) (declare (ignore g)) (lambda (t_) (declare (ignore t_)) (list :left (list :other (make-hydra_core_errors_other_error "cannot encode term to a function"))))))
+    (lambda (cx) (declare (ignore cx)) (lambda (v) (declare (ignore v)) (list :left (list :other (make-hydra_core_errors_other_error "cannot decode functions to terms")))))))
 
 (defun tc-function-with-reduce (reduce-fn dom cod)
   "TermCoder for function types, using a reducer to bridge term-level to native."
@@ -460,7 +460,7 @@
                         (when (eq (first decode-result) :left)
                           (error "function_with_reduce: failed to decode result"))
                         (second decode-result)))))))))
-    (lambda (cx) (declare (ignore cx)) (lambda (v) (declare (ignore v)) (list :left (list :other (make-hydra_errors_other_error "cannot decode functions to terms")))))))
+    (lambda (cx) (declare (ignore cx)) (lambda (v) (declare (ignore v)) (list :left (list :other (make-hydra_core_errors_other_error "cannot decode functions to terms")))))))
 
 ;; ============================================================================
 ;; Primitive constructors
@@ -469,7 +469,7 @@
 (defun default-fallback-primitive (pname variables inputs output &optional constraints)
   "Build a Primitive for a kernel primitive with no native Common Lisp implementation, but which
    declares a portable, cross-compilable defaultImplementation term (see
-   hydra.core.lib.defaults/hydra_lib_defaults_default_implementations). Its implementation folds call
+   hydra.core.lib.defaults/hydra_core_lib_defaults_default_implementations). Its implementation folds call
    args into an Application chain over the term and evaluates via reduceTerm, rather than running
    hand-written Lisp logic. Direct translation of Clojure's default-fallback-primitive (#609 Stage
    4 — NOT YET SLOT-VALIDATED; the defaults symbol name below is inferred from the naming
@@ -480,18 +480,18 @@
    term-as-data requiring a decode step (mirrors the Java/Python/Scala/Clojure/TS fallback,
    #609 Stage 2/3/4)."
   (let* ((ts (build-type-scheme variables inputs output constraints))
-         (sig (funcall hydra_scoping_type_scheme_to_term_signature ts))
-         (default-impl (cdr (assoc pname hydra_lib_defaults_default_implementations :test #'equal)))
+         (sig (funcall hydra_core_scoping_type_scheme_to_term_signature ts))
+         (default-impl (cdr (assoc pname hydra_core_lib_defaults_default_implementations :test #'equal)))
          (definition (progn
                        (when (null default-impl)
                          (error "default-fallback-primitive: no defaultImplementation for ~A" pname))
-                       (make-hydra_packaging_primitive_definition pname (list :none) sig t t (list :given default-impl)))))
+                       (make-hydra_core_packaging_primitive_definition pname (list :none) sig t t (list :given default-impl)))))
     (make-primitive definition
       (lambda (g)
         (lambda (args)
           (let* ((applied (reduce (lambda (fn-term arg) (list :application (make-application fn-term arg)))
                                    args :initial-value default-impl)))
-            (funcall (funcall (funcall (funcall hydra_reduction_reduce_term *prim-cx*) g) t) applied)))))))
+            (funcall (funcall (funcall (funcall hydra_core_reduction_reduce_term *prim-cx*) g) t) applied)))))))
 
 (defun prim0 (pname value-fn variables output &optional constraints)
   "Create a 0-argument primitive function."
@@ -508,7 +508,7 @@
   (make-primitive (build-prim-def pname variables (list input1) output constraints)
     (lambda (g)
       (lambda (args)
-        (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 1) args)))
+        (let ((check (funcall (funcall (funcall hydra_core_extract_model_n_args pname) 1) args)))
           (if (eq (first check) :left) check
               (let ((r1 (funcall (funcall (funcall (term_coder-encode input1) *prim-cx*) g) (first args))))
                 (if (eq (first r1) :left) (wrap-other-error *prim-cx* r1)
@@ -520,7 +520,7 @@
   (make-primitive (build-prim-def pname variables (list input1 input2) output constraints)
     (lambda (g)
       (lambda (args)
-        (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 2) args)))
+        (let ((check (funcall (funcall (funcall hydra_core_extract_model_n_args pname) 2) args)))
           (if (eq (first check) :left) check
               (let ((r1 (funcall (funcall (funcall (term_coder-encode input1) *prim-cx*) g) (first args))))
                 (if (eq (first r1) :left) (wrap-other-error *prim-cx* r1)
@@ -534,7 +534,7 @@
   (make-primitive (build-prim-def pname variables (list input1 input2 input3) output constraints)
     (lambda (g)
       (lambda (args)
-        (let ((check (funcall (funcall (funcall hydra_extract_core_n_args pname) 3) args)))
+        (let ((check (funcall (funcall (funcall hydra_core_extract_model_n_args pname) 3) args)))
           (if (eq (first check) :left) check
               (let ((r1 (funcall (funcall (funcall (term_coder-encode input1) *prim-cx*) g) (first args))))
                 (if (eq (first r1) :left) (wrap-other-error *prim-cx* r1)

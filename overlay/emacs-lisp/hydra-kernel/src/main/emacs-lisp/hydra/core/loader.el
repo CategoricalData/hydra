@@ -424,7 +424,16 @@
           fixed)))))
 
 (defun hydra-set-function-bindings ()
-  "For every hydra_* variable that holds a function, set the function cell."
+  "For every hydra_* variable that holds a function, set the function cell.
+Also proxies generated HYDRA_CORE_LIB_* symbols whose value is a
+PrimitiveDefinition (not a function) to the native
+HYDRA_OVERLAY_EMACS_LISP_LIB_* implementation when available (mirrors the
+Common Lisp loader's equivalent proxy). The Lisp coder redirects most
+hydra.core.lib.<sub> call sites directly to hydra.overlay.emacs_lisp.lib.<sub>
+at code-generation time (#630), but some generated packages -- e.g.
+hydra-build, loaded via a separate --include-coders code path -- can still
+emit the canonical (un-redirected) hydra_core_lib_<sub>_<fn> call-site form;
+this proxy is the safety net for those."
   (mapatoms
    (lambda (sym)
      (let ((name (symbol-name sym)))
@@ -433,7 +442,21 @@
                   (boundp sym)
                   (functionp (symbol-value sym))
                   (not (fboundp sym)))
-         (fset sym (symbol-value sym)))))))
+         (fset sym (symbol-value sym))))))
+  (mapatoms
+   (lambda (sym)
+     (let ((name (symbol-name sym)))
+       (when (and (> (length name) 15)
+                  (string-prefix-p "hydra_core_lib_" name)
+                  (boundp sym)
+                  (not (functionp (symbol-value sym)))
+                  (not (fboundp sym)))
+         (let* ((native-name (concat "hydra_overlay_emacs_lisp_lib_" (substring name 15)))
+                (native-sym (intern-soft native-name)))
+           (when (and native-sym
+                      (boundp native-sym)
+                      (functionp (symbol-value native-sym)))
+             (fset sym (symbol-value native-sym)))))))))
 
 (defun hydra-byte-compile-all ()
   "Byte-compile all hydra_* function values for ~20-90x speedup.
@@ -522,10 +545,22 @@ Signals an error if any form remains unresolved after 10 retry passes."
                                                          subdir-name)))))))
     result))
 
+;; #729: the module-grammar rename reordered kernel module names so the package root
+;; ("core") comes before the category segment (e.g. hydra.graph -> hydra.core.graph),
+;; moving every one of these paths down into hydra/core/ (the directory this priority
+;; list is already relative to). It ALSO separately renamed each subsystem's own "core"
+;; submodule to "model" (hydra.core -> hydra.core.model, hydra.core.extract.core ->
+;; hydra.core.extract.model, etc.), so every bare "core.el" / "X/core.el" entry below is
+;; renamed to "model.el" / "X/model.el" to match. A stale entry here isn't a load
+;; failure -- the file-exists check just silently skips it -- so the affected module
+;; falls through to the alphabetically-sorted "remaining" bucket instead of its intended
+;; dependency-ordered slot, which can break genuine forward references. Also folds in
+;; the pre-existing #497 hydra.show.* -> hydra.print.* rename, which this list never
+;; picked up either.
 (defvar hydra-gen-main-file-order
-  '("core.el" "error/core.el" "error/checking.el" "error/packaging.el"
-    "context.el" "graph.el"
-    "packaging.el" "ast.el" "coders.el" "phantoms.el"
+  '("model.el" "error/model.el" "error/checking.el" "error/packaging.el"
+    "graph.el"
+    "packaging.el" "ast.el" "coders.el"
     "parsing.el" "query.el" "relational.el" "tabular.el" "testing.el"
     "topology.el" "typing.el" "util.el" "variants.el"
     "json/model.el" "classes.el" "constants.el" "paths.el"
@@ -536,14 +571,14 @@ Signals an error if any form remains unresolved after 10 retry passes."
     "strip.el" "variables.el" "scoping.el" "dependencies.el"
     "predicates.el" "resolution.el" "analysis.el" "environment.el"
     "encoding.el" "decoding.el" "codegen.el"
-    "hoisting.el" "show/core.el" "show/error/core.el" "show/errors.el"
-    "show/error/packaging.el"
-    "validation.el" "validate/core.el" "validate/packaging.el"
-    "encode/core.el" "encode/error/core.el" "encode/error/checking.el" "encode/errors.el"
+    "hoisting.el" "print/model.el" "print/error/model.el" "print/errors.el"
+    "print/error/packaging.el"
+    "validation.el" "validate/model.el" "validate/packaging.el"
+    "encode/model.el" "encode/error/model.el" "encode/error/checking.el" "encode/errors.el"
     "encode/packaging.el"
-    "decode/core.el" "decode/error/core.el" "decode/error/checking.el" "decode/errors.el"
+    "decode/model.el" "decode/error/model.el" "decode/error/checking.el" "decode/errors.el"
     "decode/packaging.el"
-    "extract/core.el" "extract/json.el"
+    "extract/model.el" "extract/json.el"
     "substitution.el" "annotations.el" "unification.el"
     "inference.el" "checking.el" "subterms.el" "serialization.el" "reduction.el"
     "json/parser.el" "json/writer.el"
@@ -699,7 +734,9 @@ package's generated modules with the same ordering/exclusion rules."
                   "test/subterms.el"
                   "test/substitution.el"
                   "test/unification.el"
-                  "test/validate/core.el"
+                  ;; #729: hydra.core.test.validate.core -> hydra.core.test.validate.model
+                  ;; (the "core" submodule of validate was itself renamed to "model").
+                  "test/validate/model.el"
                   "test/validate/packaging.el"
                   "test/validate/all.el"
                   "test/variables.el"
@@ -719,7 +756,7 @@ package's generated modules with the same ordering/exclusion rules."
 ;; computed value), so the generated type modules it constructs — Timespec
 ;; (hydra/time.el), and the hydra.core.system / hydra.core.error.system types — must be
 ;; loaded BEFORE the overlay lib dolist below. They normally load later via
-;; (hydra-load-gen-main); preload them here so make-hydra_time_timespec et al.
+;; (hydra-load-gen-main); preload them here so make-hydra_core_time_timespec et al.
 ;; are defined when system.el's get_time defvar runs.
 (dolist (tf '("time.el" "system.el" "error/system.el"))
   (let ((tp (expand-file-name tf hydra-loader-dir)))

@@ -58,8 +58,10 @@
        ;; #434 migrated the runtime (loader.lisp, json-reader.lisp, gen-main content) out of the head
        ;; into overlay -> dist/common-lisp/hydra-kernel, leaving only this driver (bootstrap.lisp) in
        ;; the head. Load the runtime from dist, not hydra-dir (heads, now empty).
+       ;; #729: the module-grammar rename moved the hydra.core.* kernel (main + overlay
+       ;; copy, incl. loader.lisp/json-reader.lisp) down one level into hydra/core/.
        (dist-hydra-dir (merge-pathnames
-                         "../../../../../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/"
+                         "../../../../../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/core/"
                          hydra-dir)))
   ;; Load the kernel loader
   (load (merge-pathnames "loader.lisp" dist-hydra-dir))

@@ -4,8 +4,8 @@
 ;;
 ;; Mirrors the role of heads/python/.../hydra/test/test_env.py: the DSL
 ;; declares hydra.core.test.testEnv as a stub with the right signatures, and
-;; testGraph emits calls into hydra_test_test_env_test_graph /
-;; hydra_test_test_env_test_context. The actual graph build (primitives,
+;; testGraph emits calls into hydra_core_test_test_env_test_graph /
+;; hydra_core_test_test_env_test_context. The actual graph build (primitives,
 ;; annotation bindings, schema types) is host-language specific and
 ;; lives here.
 ;;
@@ -17,53 +17,60 @@
 ;; runs guile from the demo root) and the assemble + setup scripts.
 ;; Keeping the helpers here makes the library self-contained.
 
-(define-library (hydra test test_env)
+;; #729: the module-grammar rename reordered kernel module names so the package root
+;; ("core") comes before the category segment, e.g. (hydra graph) -> (hydra core graph),
+;; and the module itself becomes (hydra core test test_env) with exports
+;; hydra_core_test_test_env_* -- the generated hydra.core.test.test_graph module (see
+;; dist/scheme/hydra-kernel/src/test/scheme/hydra/core/test/test_graph.scm) imports
+;; (hydra core test test_env) and calls hydra_core_test_test_env_test_graph /
+;; hydra_core_test_test_env_test_context.
+(define-library (hydra core test test_env)
   (import (scheme base)
-          (hydra core)
-          (hydra graph)
-          (hydra typing)
+          (hydra core model)
+          (hydra core graph)
+          (hydra core typing)
           (hydra overlay scheme libraries)
           (hydra overlay scheme lib maps)
-          (hydra json bootstrap)
-          (hydra scoping))
-  (export hydra_test_test_env_test_context
-          hydra_test_test_env_test_graph)
+          (hydra core json bootstrap)
+          (hydra core scoping))
+  (export hydra_core_test_test_env_test_context
+          hydra_core_test_test_env_test_graph)
   (begin
 
     ;; -------------------------------------------------------------------
     ;; Term-building helpers (mirror annotation_bindings.scm)
     (define (t-lam param body)
-      (list 'lambda (make-hydra_core_lambda param '() body)))
+      (list 'lambda (make-hydra_core_model_lambda param '() body)))
     (define (t-var name)
       (list 'variable name))
     ;; Variadic for left-associative curried application (#443).
     (define (t-app fun . args)
       (let loop ((acc fun) (xs args))
         (if (null? xs) acc
-            (loop (list 'application (make-hydra_core_application acc (car xs))) (cdr xs)))))
+            (loop (list 'application (make-hydra_core_model_application acc (car xs))) (cdr xs)))))
     (define (t-prim name)
       (list 'variable name))
     (define (t-let name val body)
-      (list 'let (make-hydra_core_let
-                   (list (make-hydra_core_binding name val '()))
+      (list 'let (make-hydra_core_model_let
+                   (list (make-hydra_core_model_binding name val '()))
                    body)))
     (define (t-inject type-name field-name term)
-      (list 'inject (make-hydra_core_injection type-name
-                     (make-hydra_core_field field-name term))))
+      (list 'inject (make-hydra_core_model_injection type-name
+                     (make-hydra_core_model_field field-name term))))
     (define (t-record type-name fields)
-      (list 'record (make-hydra_core_record type-name fields)))
+      (list 'record (make-hydra_core_model_record type-name fields)))
     (define (t-field name term)
-      (make-hydra_core_field name term))
+      (make-hydra_core_model_field name term))
     (define (t-project type-name field-name)
-      (list 'project (make-hydra_core_projection type-name field-name)))
+      (list 'project (make-hydra_core_model_projection type-name field-name)))
     (define (t-match type-name default . case-fields)
       ;; CaseStatement.cases is [CaseAlternative{name,handler}] (#369); callers
       ;; build cases via t-field (Field{name,term}), so convert each Field to
       ;; a CaseAlternative.
-      (list 'cases (make-hydra_core_case_statement type-name default
+      (list 'cases (make-hydra_core_model_case_statement type-name default
                      (map (lambda (f)
-                            (make-hydra_core_case_alternative
-                              (hydra_core_field-name f) (hydra_core_field-term f)))
+                            (make-hydra_core_model_case_alternative
+                              (hydra_core_model_field-name f) (hydra_core_model_field-term f)))
                           case-fields))))
     (define (t-right v) (list 'either (list 'right v)))
     (define (t-left v) (list 'either (list 'left v)))
@@ -77,19 +84,19 @@
     (define (annotation-bindings)
       (list
         (list "hydra.core.constants.keyClasses"
-              (list 'wrap (make-hydra_core_wrapped_term "hydra.core.model.Name"
+              (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                             (list 'literal (list 'string "classes")))))
         (list "hydra.core.constants.keyDescription"
-              (list 'wrap (make-hydra_core_wrapped_term "hydra.core.model.Name"
+              (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                             (list 'literal (list 'string "description")))))
         (list "hydra.core.constants.keyType"
-              (list 'wrap (make-hydra_core_wrapped_term "hydra.core.model.Name"
+              (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                             (list 'literal (list 'string "type")))))
         (list "hydra.core.constants.keyDebugId"
-              (list 'wrap (make-hydra_core_wrapped_term "hydra.core.model.Name"
+              (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                             (list 'literal (list 'string "debugId")))))
         (list "hydra.core.constants.keyFirstClassType"
-              (list 'wrap (make-hydra_core_wrapped_term "hydra.core.model.Name"
+              (list 'wrap (make-hydra_core_model_wrapped_term "hydra.core.model.Name"
                             (list 'literal (list 'string "firstClassType")))))
 
         (list "hydra.core.rewriting.deannotateTerm"
@@ -271,22 +278,22 @@
     ;; -------------------------------------------------------------------
     ;; Public API: testEnv exports
 
-    (define hydra_test_test_env_test_context
-      (make-hydra_typing_inference_context 0 (list)))
+    (define hydra_core_test_test_env_test_context
+      (make-hydra_core_typing_inference_context 0 (list)))
 
     ;; Curried form to match the Scheme coder's emission for multi-arg
     ;; DSL functions: Map Name Type -> Map Name Term -> Graph becomes
     ;; ((f types) terms) at the call site. The test-terms argument is
     ;; appended to bound-terms so reduction tests that reference test
     ;; data (e.g. testDataArthur) can resolve through the graph.
-    (define (hydra_test_test_env_test_graph test-types)
+    (define (hydra_core_test_test_env_test_graph test-types)
      (lambda (test-terms)
       (let* ((all-prims (standard-library))
-             (type-to-ts hydra_scoping_f_type_to_type_scheme)
+             (type-to-ts hydra_core_scoping_f_type_to_type_scheme)
              (kernel-schemas
                (map (lambda (entry)
                       (list (car entry) (type-to-ts (cdr entry))))
-                    hydra_json_bootstrap_types_by_name))
+                    hydra_core_json_bootstrap_types_by_name))
              (test-schemas
                (map (lambda (entry)
                       (list (car entry) (type-to-ts (cadr entry))))
@@ -304,7 +311,7 @@
                  (list (list "hydra.monads.emptyContext" (list 'unit '()))
                        (list "hydra.core.lexical.emptyGraph" (list 'unit '())))
                  test-term-pairs)))
-        (make-hydra_graph_graph
+        (make-hydra_core_graph_graph
           (hydra_overlay_scheme_lib_maps_from_list bound-terms)
           hydra_overlay_scheme_lib_maps_empty
           (list)

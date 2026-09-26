@@ -1003,10 +1003,10 @@
    X -> def:X and evaluating the (begin ...) body flat in the interaction environment (#473).
 
    The registry (overlay/scheme/libraries.scm) needs, per primitive, BOTH the PrimitiveDefinition
-   DATA (as def:hydra_lib_<sub>_<fn>) and the impl PROCEDURE (as hydra_overlay_scheme_lib_<sub>_<fn>, provided by the
+   DATA (as def:hydra_core_lib_<sub>_<fn>) and the impl PROCEDURE (as hydra_overlay_scheme_lib_<sub>_<fn>, provided by the
    flat-loaded overlay/scheme/lib/* impls). Loading the def-modules as real R7RS libraries fails: their
-   (make-hydra_packaging_primitive_definition ...) bodies would use the library-scoped record type,
-   which the flat-loaded registry's hydra_packaging_primitive_definition-name accessor does not accept
+   (make-hydra_core_packaging_primitive_definition ...) bodies would use the library-scoped record type,
+   which the flat-loaded registry's hydra_core_packaging_primitive_definition-name accessor does not accept
    ('Wrong type argument'). Flat-loading here reuses the kernel's already-loaded record constructors, so
    there is no duplicate record type; the def: prefix keeps the DATA from colliding with the impl
    PROCEDUREs (which are relocated to distinct names post-#501).
@@ -1050,12 +1050,23 @@
 ;; Gen-main loading
 ;; ============================================================================
 
+;; #729: the module-grammar rename reordered kernel module names so the package
+;; root ("core") comes before the category segment (e.g. hydra.graph ->
+;; hydra.core.graph), moving every one of these paths down into hydra/core/ (the
+;; directory this file list is already relative to). It ALSO separately renamed
+;; each subsystem's own "core" submodule to "model" (hydra.core -> hydra.core.model,
+;; hydra.core.extract.core -> hydra.core.extract.model, etc.), so every bare
+;; "core.scm" / "X/core.scm" entry below is renamed to "model.scm" / "X/model.scm"
+;; to match. A stale entry here isn't a load failure -- the file-exists check just
+;; silently skips it -- so the affected module falls through to the
+;; alphabetically-sorted "remaining" bucket instead of its intended
+;; dependency-ordered slot, which can break genuine forward references.
 (define (hydra-load-gen-main base)
   "Load all generated main modules in dependency order."
   (let ((files '(
            ;; Core types
-           "core.scm"
-           "error/core.scm"
+           "model.scm"
+           "error/model.scm"
            "error/checking.scm"
            "error/packaging.scm"
            "errors.scm"
@@ -1079,7 +1090,7 @@
            "constants.scm"
            "paths.scm"
            ;; POSIX type modules (#494/#498): needed by the effectful hydra.lib.{files,system} impls
-           ;; + their def-modules (e.g. make-hydra_time_timespec). Dependency order: time (leaf) ->
+           ;; + their def-modules (e.g. make-hydra_core_time_timespec). Dependency order: time (leaf) ->
            ;; file (imports hydra.core.time) -> system (imports hydra.core.file).
            "time.scm"
            "file.scm"
@@ -1109,8 +1120,8 @@
            "decoding.scm"
            "codegen.scm"
            "hoisting.scm"
-           "print/core.scm"
-           "print/error/core.scm"
+           "print/model.scm"
+           "print/error/model.scm"
            "print/errors.scm"
            "print/error/packaging.scm"
            ;; docs + the remaining print/* modules: the code generators reference e.g.
@@ -1125,19 +1136,19 @@
            "print/util.scm"
            "print/variants.scm"
            "validation.scm"
-           "validate/core.scm"
+           "validate/model.scm"
            "validate/packaging.scm"
-           "encode/core.scm"
-           "encode/error/core.scm"
+           "encode/model.scm"
+           "encode/error/model.scm"
            "encode/error/checking.scm"
            "encode/errors.scm"
            "encode/packaging.scm"
-           "decode/core.scm"
-           "decode/error/core.scm"
+           "decode/model.scm"
+           "decode/error/model.scm"
            "decode/error/checking.scm"
            "decode/errors.scm"
            "decode/packaging.scm"
-           "extract/core.scm"
+           "extract/model.scm"
            "extract/json.scm"
            ;; Higher-level operations
            "substitution.scm"

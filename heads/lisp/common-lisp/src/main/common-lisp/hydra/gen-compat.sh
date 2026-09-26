@@ -7,14 +7,16 @@
 # This script generates a compatibility file that defines those accessors
 # to work on alists.
 
-# GENDIR: the dist main hydra dir holding the generated kernel structs to read,
-# AND (post-#434) where the hand-written runtime (loader.lisp, lazy.lisp, …) is
-# copied from overlay/common-lisp/. struct-compat.lisp is a GENERATED artifact
+# GENDIR: the dist main hydra/core dir holding the generated kernel structs to
+# read, AND (post-#434) where the hand-written runtime (loader.lisp, lazy.lisp, …)
+# is copied from overlay/common-lisp/. struct-compat.lisp is a GENERATED artifact
 # (not overlay material), so it is written directly into the dist tree next to the
 # copied loader.lisp, which loads it via *hydra-loader-dir*. (Pre-#434 it was
 # written into heads/ alongside loader.lisp; now loader.lisp loads from dist, so
-# struct-compat must land in dist too.)
-GENDIR="$(cd "$(dirname "$0")/../../../../../../.." && pwd)/dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra"
+# struct-compat must land in dist too.) #729: the module-grammar rename moved the
+# hydra.core.* kernel (main + overlay copy, incl. loader.lisp) down one level
+# into hydra/core/, so struct-compat.lisp must land there too.
+GENDIR="$(cd "$(dirname "$0")/../../../../../../.." && pwd)/dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/core"
 OUTFILE="$GENDIR/struct-compat.lisp"
 
 echo ";;; Auto-generated alist-compatible struct accessors" > "$OUTFILE"
@@ -27,11 +29,29 @@ camel_to_snake() {
     echo "$1" | sed -E 's/([a-z0-9])([A-Z])/\1_\2/g' | tr '[:upper:]' '[:lower:]'
 }
 
-# Extract all cl:defstruct definitions.
+# Extract all cl:defstruct definitions, per source file, so we know each
+# struct's owning module path (needed to compute the short-name alias below).
 # Anchor to start-of-line so we don't match the literal "cl:defstruct" string
 # embedded in defvar bodies (e.g., the lambda_keyword match expression).
-grep -h "^(cl:defstruct " "$GENDIR"/*.lisp "$GENDIR"/**/*.lisp 2>/dev/null | \
-    sed 's/^(cl:defstruct //' | sed 's/)$//' | sort -u | \
+find "$GENDIR" -name "*.lisp" -print | sort | \
+while read -r srcfile; do
+    # Module-path prefix for this file, e.g. GENDIR/error/checking.lisp ->
+    # "hydra_core_error_checking_" (#729: every kernel module lives under
+    # hydra.core.*, one directory segment per module-name segment beyond
+    # "core", which is GENDIR's own basename).
+    relpath="${srcfile#"$GENDIR"/}"
+    reldir="$(dirname "$relpath")"
+    relbase="$(basename "$relpath" .lisp)"
+    if [ "$reldir" = "." ]; then
+        modpath="$relbase"
+    else
+        modpath="$(echo "$reldir" | tr '/' '_')_${relbase}"
+    fi
+    modprefix="hydra_core_${modpath}_"
+
+    grep -h "^(cl:defstruct " "$srcfile" 2>/dev/null | \
+        sed 's/^(cl:defstruct //' | sed 's/)$//'
+done | sort -u | \
 while read -r line; do
     # Parse: StructName field1 field2 ...
     struct_name=$(echo "$line" | awk '{print $1}')
@@ -63,7 +83,7 @@ while read -r line; do
     echo "(defun copy-${snake_name} (x) (copy-alist x))" >> "$OUTFILE"
     echo "(defun ${snake_name}-p (x) (listp x))" >> "$OUTFILE"
 
-    # Short-name aliases: drop the "hydra_<ns>_" prefix.
+    # Short-name aliases: drop the struct's owning-module prefix.
     # Hand-written runtime files (e.g., prims.lisp) reference structs
     # by their unqualified short name (e.g., make-term_coder rather
     # than make-hydra_core_graph_term_coder). Provide aliases for backward
@@ -71,7 +91,32 @@ while read -r line; do
     # short name, the later definition wins; this matches the
     # pre-#290 behavior when struct names were unprefixed in the
     # kernel.
-    short_name=$(echo "$snake_name" | sed -E 's/^hydra_[a-z]+_//')
+    # #729: the module-grammar rename made every kernel module 2+ path
+    # segments deep (hydra.core.<category>[.<subcategory>...]), so a fixed
+    # single-segment strip (the pre-#729 "hydra_<ns>_" regex) leaves a
+    # leftover category segment in the short name (e.g. "graph_term_coder"
+    # instead of "term_coder"), breaking every hand-written consumer that
+    # references the true short name. Strip the exact module-path prefix
+    # derived from the struct's own defining file (computed above as
+    # modprefix, one directory segment per module-name segment), which
+    # generalizes correctly to any module nesting depth.
+    short_name="$snake_name"
+    for srcfile in $(grep -l "^(cl:defstruct ${struct_name} " "$GENDIR"/*.lisp "$GENDIR"/**/*.lisp 2>/dev/null); do
+        relpath="${srcfile#"$GENDIR"/}"
+        reldir="$(dirname "$relpath")"
+        relbase="$(basename "$relpath" .lisp)"
+        if [ "$reldir" = "." ]; then
+            modpath="$relbase"
+        else
+            modpath="$(echo "$reldir" | tr '/' '_')_${relbase}"
+        fi
+        modprefix="hydra_core_${modpath}_"
+        case "$snake_name" in
+            "${modprefix}"*)
+                short_name="${snake_name#"$modprefix"}"
+                break ;;
+        esac
+    done
     # Skip aliases when the short name collides with a Common Lisp
     # built-in (make-symbol, make-string, etc.). These would trigger a
     # SYMBOL-PACKAGE-LOCKED-ERROR. The hand-written runtime is

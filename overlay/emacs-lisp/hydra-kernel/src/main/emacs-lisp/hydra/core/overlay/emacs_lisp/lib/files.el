@@ -178,7 +178,7 @@
 (defun hydra-files-timespec (time)
   (let* ((ns-pair (time-convert time 1000000000))
          (ns-total (car ns-pair)))
-    (make-hydra_time_timespec
+    (make-hydra_core_time_timespec
      :seconds (floor ns-total 1000000000)
      :nanoseconds (mod ns-total 1000000000))))
 
@@ -198,7 +198,7 @@
           (unless attrs
             (signal 'file-missing (list "no such file or directory" path)))
           (let ((file-type (nth 0 attrs)))
-            (make-hydra_file_file_status
+            (make-hydra_core_file_file_status
              :file_type (cond
                          ((eq file-type t) (list :directory nil))
                          ((stringp file-type) (list :link nil))

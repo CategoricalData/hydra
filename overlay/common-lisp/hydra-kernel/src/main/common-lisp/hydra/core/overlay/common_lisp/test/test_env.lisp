@@ -8,8 +8,8 @@
 ;;
 ;; The kernel filters out hydra.core.test.testEnv on output (via the
 ;; testSkipEmit set in each host bootstrap), so the auto-generated
-;; testGraph module references hydra_test_test_env_test_context and
-;; hydra_test_test_env_test_graph — both must be supplied by hand
+;; testGraph module references hydra_core_test_test_env_test_context and
+;; hydra_core_test_test_env_test_graph — both must be supplied by hand
 ;; per host language. This file is the Common Lisp implementation.
 ;;
 ;; The actual graph build (primitives, annotation bindings, schema
@@ -22,7 +22,7 @@
 
 (in-package :cl-user)
 
-;; Install the annotation-cache wrapper around hydra_strip_deannotate_term.
+;; Install the annotation-cache wrapper around hydra_core_strip_deannotate_term.
 ;; The kernel reducer strips annotations as a normal step of evaluation; the
 ;; CL-side annotation primitives (setTermAnnotation et al.) need access to
 ;; those stripped annotations to re-attach them after reduction. The wrapper
@@ -39,10 +39,10 @@
 (cl:defpackage :hydra.core.test.testEnv
   (:use :cl))
 
-;; Empty context: alist with the two hydra_typing_inference_context fields
+;; Empty context: alist with the two hydra_core_typing_inference_context fields
 ;; (fresh_type_variable_count, trace). The generated kernel modules create
 ;; records as alists '((:key . val) ...).
-(cl:defvar hydra_test_test_env_test_context
+(cl:defvar hydra_core_test_test_env_test_context
   (cl:list (cl:cons :fresh_type_variable_count 0)
            (cl:cons :trace cl:nil)))
 
@@ -52,12 +52,12 @@
 ;; logic. The test-terms argument is accepted for signature parity with
 ;; the DSL (Map Name Type -> Map Name Term -> Graph) but ignored — the
 ;; CL test runner reads test terms directly from
-;; hydra_test_test_graph_test_terms after load.
+;; hydra_core_test_test_graph_test_terms after load.
 ;;
 ;; The defvar holds a lambda; loader.lisp's hydra-set-function-bindings
 ;; will set the symbol-function cell so it can be called in function
 ;; position from the generated test_graph.lisp.
-(cl:defvar hydra_test_test_env_test_graph
+(cl:defvar hydra_core_test_test_env_test_graph
   (cl:lambda (test-types)
     (cl:lambda (test-terms)
       (cl:declare (cl:ignore test-terms))
@@ -68,11 +68,11 @@
 ;; with kernel bootstrap schemas + the supplied test-types map.
 (cl:defun build-test-graph-with-types (test-types)
   (cl:let* ((base (build-test-graph))
-            (bootstrap-types (cl:if (cl:boundp 'hydra_json_bootstrap_types_by_name)
-                                    hydra_json_bootstrap_types_by_name
+            (bootstrap-types (cl:if (cl:boundp 'hydra_core_json_bootstrap_types_by_name)
+                                    hydra_core_json_bootstrap_types_by_name
                                     cl:nil))
-            (type-to-ts (cl:when (cl:boundp 'hydra_scoping_f_type_to_type_scheme)
-                          hydra_scoping_f_type_to_type_scheme))
+            (type-to-ts (cl:when (cl:boundp 'hydra_core_scoping_f_type_to_type_scheme)
+                          hydra_core_scoping_f_type_to_type_scheme))
             (kernel-entries
               (cl:when (cl:and bootstrap-types type-to-ts)
                 (cl:mapcar (cl:lambda (entry)
@@ -97,7 +97,7 @@
 
 ;; Import the bound vars into :hydra.core.test.testEnv so :use lookups in
 ;; consuming packages see them as exported symbols.
-(cl:import '(hydra_test_test_env_test_context hydra_test_test_env_test_graph)
+(cl:import '(hydra_core_test_test_env_test_context hydra_core_test_test_env_test_graph)
            :hydra.core.test.testEnv)
-(cl:export '(hydra_test_test_env_test_context hydra_test_test_env_test_graph)
+(cl:export '(hydra_core_test_test_env_test_context hydra_core_test_test_env_test_graph)
            :hydra.core.test.testEnv)

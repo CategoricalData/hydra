@@ -60,21 +60,24 @@
 ;; #434: the hand-written Common Lisp runtime (prelude, prims, loader, lib/*,
 ;; …) now lives in overlay/common-lisp/ and is COPIED into the dist tree by the
 ;; assembler. The head loads it from dist/, never from heads/ or overlay/. The
-;; dist main hydra dir is dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/,
+;; dist main hydra dir is dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/core/,
 ;; or — in the bootstrap demo's flat layout — <HYDRA_LISP_DIST_BASE>/src/main/
-;; common-lisp/hydra/. (Computed here so the runtime loads below can use it,
+;; common-lisp/hydra/core/. (Computed here so the runtime loads below can use it,
 ;; before *hydra-gen-main-dir* is set by the loader.)
+;; #729: the module-grammar rename moved the hydra.core.* kernel (incl. the
+;; hand-written overlay runtime, which is copied under the hydra.core.overlay.*
+;; namespace) down one level into a hydra/core/ subdirectory.
 (defvar *hydra-cl-dist-base-env*
   (let ((v (sb-ext:posix-getenv "HYDRA_LISP_DIST_BASE")))
     (when (and v (> (length v) 0))
       (if (eql (char v (1- (length v))) #\/) v (concatenate 'string v "/")))))
 (defvar *hydra-cl-dist-main*
   (if *hydra-cl-dist-base-env*
-      (merge-pathnames "src/main/common-lisp/hydra/" *hydra-cl-dist-base-env*)
-      (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/"
+      (merge-pathnames "src/main/common-lisp/hydra/core/" *hydra-cl-dist-base-env*)
+      (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/core/"
                        *hydra-cl-head*)))
 (defun hydra-dist-main-path (relative)
-  "Resolve a runtime file relative to the dist main hydra/ dir (the overlay copy)."
+  "Resolve a runtime file relative to the dist main hydra/core/ dir (the overlay copy)."
   (merge-pathnames relative *hydra-cl-dist-main*))
 
 ;; ============================================================================
@@ -124,11 +127,13 @@
 ;; Override *hydra-gen-main-dir* to point at the generated content.
 ;; Two layouts are supported:
 ;;   - Repo default: *hydra-cl-head* = heads/lisp/common-lisp/, generated
-;;     content lives under <repo>/dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/.
+;;     content lives under <repo>/dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/core/.
 ;;   - Bootstrap demo: hand-written and generated content share the same
 ;;     <demo>/src/main/common-lisp/hydra/ tree. The demo runner sets
 ;;     HYDRA_LISP_DIST_BASE to point at the demo's generated kernel root
-;;     (e.g. <demo>) so we can target <demo>/src/main/common-lisp/hydra/.
+;;     (e.g. <demo>) so we can target <demo>/src/main/common-lisp/hydra/core/.
+;; #729: hydra.core.* kernel modules (main + overlay copy) live one level
+;; deeper, under hydra/core/, since the module-grammar rename.
 (defvar *hydra-dist-base-env*
   (let ((v (sb-ext:posix-getenv "HYDRA_LISP_DIST_BASE")))
     (when (and v (> (length v) 0))
@@ -136,8 +141,8 @@
       (if (eql (char v (1- (length v))) #\/) v (concatenate 'string v "/")))))
 (setf *hydra-gen-main-dir*
       (if *hydra-dist-base-env*
-          (merge-pathnames "src/main/common-lisp/hydra/" *hydra-dist-base-env*)
-          (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/"
+          (merge-pathnames "src/main/common-lisp/hydra/core/" *hydra-dist-base-env*)
+          (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/core/"
                            *hydra-cl-head*)))
 
 ;; #546: the hydra.build.* main modules moved from hydra-kernel to the
@@ -260,10 +265,12 @@
 ;; ============================================================================
 (format t "Loading generated test data...~%")
 
+;; #729: hydra.core.test.* generated test data lives one level deeper, under
+;; hydra/core/test/, since the module-grammar rename.
 (defvar *test-data-base*
   (if *hydra-dist-base-env*
-      (merge-pathnames "src/test/common-lisp/hydra/test/" *hydra-dist-base-env*)
-      (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/test/common-lisp/hydra/test/"
+      (merge-pathnames "src/test/common-lisp/hydra/core/test/" *hydra-dist-base-env*)
+      (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/test/common-lisp/hydra/core/test/"
                        *hydra-cl-head*)))
 
 (defun load-test-file (relative)
@@ -404,7 +411,10 @@
 (load-test-file "unification.lisp")
 
 ;; Validate tests
-(dolist (f '("validate/core.lisp"
+;; #729: hydra.core.test.validate.core -> hydra.core.test.validate.model (the "core"
+;; submodule of validate was itself renamed to "model", matching hydra.core ->
+;; hydra.core.model).
+(dolist (f '("validate/model.lisp"
              "validate/packaging.lisp"
              "validate/all.lisp"))
   (load-test-file f))

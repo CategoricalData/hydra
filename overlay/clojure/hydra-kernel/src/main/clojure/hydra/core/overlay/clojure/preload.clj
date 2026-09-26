@@ -77,10 +77,10 @@
    "hydra.core.json.bootstrap" "hydra.core.json.decode" "hydra.core.json.decoding"
    "hydra.core.json.encode" "hydra.core.extract.json" "hydra.core.json.parser" "hydra.core.json.writer"
    "hydra.core.test.transform" "hydra.core.test.utils" "hydra.core.yaml.model"
-   "hydra.core.json.yaml.decode" "hydra.core.json.yaml.encode" "hydra.eval.lib.eithers"
-   "hydra.eval.lib.equality" "hydra.eval.lib.lists" "hydra.eval.lib.logic"
-   "hydra.eval.lib.maps" "hydra.eval.lib.math" "hydra.eval.lib.optionals"
-   "hydra.eval.lib.pairs" "hydra.eval.lib.sets" "hydra.core.dsls"
+   "hydra.core.json.yaml.decode" "hydra.core.json.yaml.encode"
+   ;; #609/#729: hydra.eval.lib.* (eithers/equality/lists/logic/maps/math/optionals/pairs/sets)
+   ;; was consolidated into a single hydra.core.lib.defaults module (see digest-check/Main.hs).
+   "hydra.core.lib.defaults" "hydra.core.dsls"
    ;; Test namespaces
    "hydra.core.test.testEnv" "hydra.core.test.testGraph" "hydra.core.test.testTerms"
    "hydra.core.test.testTypes" "hydra.core.test.testSuite" "hydra.core.test.lib.chars"
@@ -185,16 +185,18 @@
 
 (defn coder-load-order
   "Walk the :require closure of `root-ns-names` and return the transitive
-   dependency set in topological order, omitting hydra.core.overlay.clojure.lib.* and hydra.eval.*
-   (which the runtime preload globalizes ahead of time) and any ns whose
-   source file is not on the classpath (e.g. clojure.string).
+   dependency set in topological order, omitting hydra.core.overlay.clojure.lib.* and
+   hydra.core.lib.defaults (which the runtime preload globalizes ahead of time) and
+   any ns whose source file is not on the classpath (e.g. clojure.string).
    #473: native primitive impls were relocated hydra.lib.* -> hydra.core.overlay.clojure.lib.*;
    the generated hydra.lib.* def-modules (PrimitiveDefinition data) are not part of
-   the runtime require-closure, so only hydra.core.overlay.clojure.lib.* is skipped here."
+   the runtime require-closure, so only hydra.core.overlay.clojure.lib.* is skipped here.
+   #609/#729: hydra.eval.* (the old default-implementation fallback registry, split
+   across several lib.* namespaces) was consolidated into hydra.core.lib.defaults."
   [root-ns-names]
   (let [skip? (fn [^String n]
                 (or (.startsWith n "hydra.core.overlay.clojure.lib.")
-                    (.startsWith n "hydra.eval.")
+                    (= n "hydra.core.lib.defaults")
                     (not (.startsWith n "hydra."))))
         reach (loop [stack (vec root-ns-names) seen #{}]
                 (if (empty? stack)
@@ -311,7 +313,7 @@
     :else false))
 
 (defn- desugar-if-else
-  "Transform (((hydra_lib_logic_if_else COND) THEN) ELSE) into (if COND THEN ELSE).
+  "Transform (((hydra_overlay_clojure_lib_logic_if_else COND) THEN) ELSE) into (if COND THEN ELSE).
    This is needed because Clojure is strict — ifElse evaluates both branches,
    which causes infinite recursion in recursive functions."
   [form]
@@ -320,14 +322,14 @@
     (not (sequential? form)) form
     :else
     (let [form (apply list (map desugar-if-else form))]
-      ;; Pattern: ((X ELSE) where X = ((hydra_lib_logic_if_else COND) THEN)
-      ;; Full: (((hydra_lib_logic_if_else COND) THEN) ELSE)
+      ;; Pattern: ((X ELSE) where X = ((hydra_overlay_clojure_lib_logic_if_else COND) THEN)
+      ;; Full: (((hydra_overlay_clojure_lib_logic_if_else COND) THEN) ELSE)
       (if (and (= (count form) 2)
                (sequential? (first form))
                (= (count (first form)) 2)
                (sequential? (first (first form)))
                (= (count (first (first form))) 2)
-               (= (first (first (first form))) 'hydra_lib_logic_if_else))
+               (= (first (first (first form))) 'hydra_overlay_clojure_lib_logic_if_else))
         (let [cond-expr (second (first (first form)))
               then-expr (second (first form))
               else-expr (second form)]

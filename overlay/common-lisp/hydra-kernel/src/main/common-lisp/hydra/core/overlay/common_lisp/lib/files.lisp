@@ -271,7 +271,7 @@
 ;; When followLinks is true (POSIX stat), a symbolic link's metadata is that of its target, and
 ;; a dangling link is not found. When false (POSIX lstat), a symbolic link's own metadata is
 ;; reported (fileType link), and a dangling link is not an error.
-;; FileStatus is a defstruct (make-hydra_file_file_status :file_type ... :size ... :modification_time
+;; FileStatus is a defstruct (make-hydra_core_file_file_status :file_type ... :size ... :modification_time
 ;; ... :access_time ... :status_change_time ...). sb-posix's stat exposes only whole-second
 ;; timestamps, so nanoseconds is always 0.
 (defvar hydra_overlay_common_lisp_lib_files_status
@@ -281,12 +281,12 @@
         #+sbcl
         (let* ((s (if follow-links (sb-posix:stat path) (sb-posix:lstat path)))
                (mode (sb-posix:stat-mode s)))
-          (make-hydra_file_file_status
+          (make-hydra_core_file_file_status
             :file_type (hydra-files-file-type mode)
             :size (sb-posix:stat-size s)
-            :modification_time (make-hydra_time_timespec :seconds (sb-posix:stat-mtime s) :nanoseconds 0)
-            :access_time (list :given (make-hydra_time_timespec :seconds (sb-posix:stat-atime s) :nanoseconds 0))
-            :status_change_time (list :given (make-hydra_time_timespec :seconds (sb-posix:stat-ctime s) :nanoseconds 0))))
+            :modification_time (make-hydra_core_time_timespec :seconds (sb-posix:stat-mtime s) :nanoseconds 0)
+            :access_time (list :given (make-hydra_core_time_timespec :seconds (sb-posix:stat-atime s) :nanoseconds 0))
+            :status_change_time (list :given (make-hydra_core_time_timespec :seconds (sb-posix:stat-ctime s) :nanoseconds 0))))
         #-sbcl (error "status requires SBCL")))))
 
 ;; writeFile :: FilePath -> binary -> effect<Either<FileError, unit>>

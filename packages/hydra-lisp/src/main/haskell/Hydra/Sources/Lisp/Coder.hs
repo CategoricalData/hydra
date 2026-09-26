@@ -628,13 +628,20 @@ encodeTerm = def "encodeTerm" $
 
      -- #630/#729: a hydra.core.lib.<sub>.<fn> variable reference (five segments, post-#729
      -- package-rooted grammar) redirects to
-     -- hydra.core.overlay.<langSeg>.lib.<sub>.<fn> IF that sub has an overlay implementation on
+     -- hydra.overlay.<langSeg>.lib.<sub>.<fn> IF that sub has an overlay implementation on
      -- this dialect (checked via overlaySubs), before case-conversion to the flat Lisp
      -- identifier form -- so e.g. hydra.core.lib.strings.concat2 becomes
      -- hydra_overlay_clojure_lib_strings_concat2 for a redirected sub, matching what the
      -- retired driver-level redirectLispFlat post-pass used to produce for the flat-namespace
-     -- dialects, and resolving correctly for Clojure/Scheme via their (now redirected)
-     -- dotted-namespace imports. Subs with no overlay stay canonical.
+     -- dialects. This "hydra.overlay." prefix (no "core") is used purely as an intermediate
+     -- string to build the flattened call-site symbol -- convertCaseCamelOrUnderscoreToLowerSnake
+     -- collapses every dot to an underscore regardless, so the same flat symbol name results
+     -- whether the intermediate string said "hydra.overlay." or "hydra.core.overlay.". This
+     -- matches every dialect's actual overlay var name (hydra_overlay_<langSeg>_lib_<sub>_<fn>,
+     -- Clojure included -- see overlay/clojure/.../hydra/core/overlay/clojure/lib/*.clj, whose
+     -- defs are named hydra_overlay_clojure_lib_*, even though the *namespace* declaring them is
+     -- hydra.core.overlay.clojure.* -- see moduleImports below, which does need the dialect-
+     -- specific namespace prefix for import declarations). Subs with no overlay stay canonical.
      _Term_variable>>: lambda "name" $
        "fullName" <~ Core.unName (var "name") $
        "parts" <~ Strings.splitOn (string ".") (var "fullName") $
@@ -646,7 +653,7 @@ encodeTerm = def "encodeTerm" $
              (Equality.equal (Lists.take (int32 3) (var "parts")) (list [string "hydra", string "core", string "lib"])))
            (Sets.member (var "sub") (var "overlaySubs" :: TypedTerm (S.Set String))))
          (Strings.concat (list [
-           string "hydra.core.overlay.",
+           string "hydra.overlay.",
            (match L._Dialect (var "dialect") (Just $ string "lisp") [
              L._Dialect_clojure>>: constant $ string "clojure",
              L._Dialect_scheme>>: constant $ string "scheme",
@@ -1095,14 +1102,26 @@ moduleExports = def "moduleExports" $
 -- | Generate import declarations from the dependency namespaces of a module's definitions.
 --
 -- #630/#729: a hydra.core.lib.<sub> import (four segments, post-#729 package-rooted grammar)
--- redirects to hydra.core.overlay.<langSeg>.lib.<sub> IF that sub
--- actually has an overlay implementation on this dialect (checked via overlaySubs, the
--- caller-supplied on-disk existence signal), otherwise it stays pointing at the generated
--- def-module namespace. This existence check happens at emission time, structurally on the
--- ModuleName -- each dialect's own AST-to-text serializer then renders the (possibly
--- redirected) namespace in its native import syntax unchanged. #630 retired the driver-level
--- post-generation text passes (redirectForSubs / redirectSchemeForSubs / redirectLispFlat)
--- that used to do this rewrite after the fact.
+-- redirects to the dialect's actual overlay namespace IF that sub actually has an overlay
+-- implementation on this dialect (checked via overlaySubs, the caller-supplied on-disk
+-- existence signal), otherwise it stays pointing at the generated def-module namespace. This
+-- existence check happens at emission time, structurally on the ModuleName -- each dialect's
+-- own AST-to-text serializer then renders the (possibly redirected) namespace in its native
+-- import syntax unchanged. #630 retired the driver-level post-generation text passes
+-- (redirectForSubs / redirectSchemeForSubs / redirectLispFlat) that used to do this rewrite
+-- after the fact.
+-- The redirected namespace prefix is NOT uniform across dialects: Clojure's overlay tree keeps
+-- the hydra.core.overlay.clojure.* namespace (its ns forms / :require declarations must match
+-- the namespace the overlay .clj source actually declares, per #501/#729 -- see
+-- overlay/clojure/.../hydra/core/overlay/clojure/lib/*.clj), while Common Lisp, Scheme, and
+-- Emacs Lisp are flat-namespace dialects whose overlay implementations are declared/resolved as
+-- hydra.overlay.<langSeg>.lib.<sub> (no "core" segment -- see e.g.
+-- overlay/common-lisp/.../hydra/core/overlay/common_lisp/lib/*.lisp, whose defvars are
+-- hydra_overlay_common_lisp_lib_<sub>_<fn>, and Scheme's own (define-library (hydra overlay
+-- scheme lib <sub>) ...) form). Call-site symbol references (see encodeTerm's _Term_variable
+-- case) flatten to the same underscored name either way, but this import-declaration namespace
+-- is rendered close to verbatim by each dialect's serializer, so it must match the dialect's
+-- real namespace convention.
 moduleImports :: TypedTermDefinition (L.Dialect -> S.Set String -> ModuleName -> [Definition] -> [L.ImportDeclaration])
 moduleImports = def "moduleImports" $
   doc "Generate import declarations from the dependency namespaces of a module's definitions" $
@@ -1112,6 +1131,8 @@ moduleImports = def "moduleImports" $
       L._Dialect_scheme>>: constant $ string "scheme",
       L._Dialect_commonLisp>>: constant $ string "common_lisp",
       L._Dialect_emacsLisp>>: constant $ string "emacs_lisp"]) $
+    "overlayNsPrefix" <~ (match L._Dialect (var "dialect") (Just $ string "hydra.overlay.") [
+      L._Dialect_clojure>>: constant $ string "hydra.core.overlay."]) $
     "redirectedNsString" <~ ("ns" ~>
       "raw" <~ Packaging.unModuleName (var "ns") $
       "parts" <~ Strings.splitOn (string ".") (var "raw") $
@@ -1122,7 +1143,7 @@ moduleImports = def "moduleImports" $
             (Equality.equal (Lists.length (var "parts")) (int32 4))
             (Equality.equal (Lists.take (int32 3) (var "parts")) (list [string "hydra", string "core", string "lib"])))
           (Sets.member (var "sub") (var "overlaySubs" :: TypedTerm (S.Set String))))
-        (Strings.concat (list [string "hydra.core.overlay.", var "langSeg", string ".lib.", var "sub"]))
+        (Strings.concat (list [var "overlayNsPrefix", var "langSeg", string ".lib.", var "sub"]))
         (var "raw")) $
     "depNss" <~ Sets.toList (Sets.delete (var "focusNs")
       (Analysis.definitionDependencyModuleNames @@ var "defs")) $

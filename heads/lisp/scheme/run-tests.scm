@@ -1,22 +1,28 @@
+;; #729: the module-grammar rename reordered kernel module names so the package root
+;; ("core") comes before the category segment, e.g. (hydra graph) -> (hydra core graph)
+;; and (hydra print core) -> (hydra core print model) (the "core" submodule of each
+;; subsystem was itself renamed to "model", matching hydra.core -> hydra.core.model).
+;; The (hydra overlay scheme ...) imports are unaffected -- overlay modules keep the
+;; hydra.overlay.<lang>.* namespace (#501), not hydra.core.overlay.<lang>.*.
 (import (scheme base) (scheme write) (scheme cxr) (scheme char)
         (scheme time) (scheme process-context) (scheme file)
         (scheme bytevector)
         (only (guile) mkdir rmdir opendir readdir closedir)  ; #494: directory ops for effectful temp-dir prep
-        (hydra core) (hydra graph) (hydra prims)
-        (hydra reduction) (hydra rewriting) (hydra print core) (hydra testing)
-        (hydra formatting) (hydra sorting) (hydra serialization)
-        (hydra inference) (hydra checking) (hydra hoisting)
-        (hydra unification) (hydra substitution) (hydra typing)
-        (hydra dependencies) (hydra strip) (hydra variables)
-        (hydra validate core)
-        (hydra json bootstrap) (hydra json parser) (hydra json writer)
-        (hydra json encode) (hydra json decode)
-        (hydra json yaml encode) (hydra json yaml decode)
-        (hydra encode core)
+        (hydra core model) (hydra core graph) (hydra core prims)
+        (hydra core reduction) (hydra core rewriting) (hydra core print model) (hydra core testing)
+        (hydra core formatting) (hydra core sorting) (hydra core serialization)
+        (hydra core inference) (hydra core checking) (hydra core hoisting)
+        (hydra core unification) (hydra core substitution) (hydra core typing)
+        (hydra core dependencies) (hydra core strip) (hydra core variables)
+        (hydra core validate model)
+        (hydra core json bootstrap) (hydra core json parser) (hydra core json writer)
+        (hydra core json encode) (hydra core json decode)
+        (hydra core json yaml encode) (hydra core json yaml decode)
+        (hydra core encode model)
         (hydra overlay scheme libraries) (hydra overlay scheme lib equality) (hydra overlay scheme lib maps)
         (hydra overlay scheme lib optionals) (hydra overlay scheme lib pairs) (hydra overlay scheme lib sets) (hydra overlay scheme lib lists)
         (hydra overlay scheme lib literals)
-        (hydra test test_graph) (hydra test test_suite))
+        (hydra core test test_graph) (hydra core test test_suite))
 
 (include "src/test/scheme/hydra/test_runner_body.scm")
 

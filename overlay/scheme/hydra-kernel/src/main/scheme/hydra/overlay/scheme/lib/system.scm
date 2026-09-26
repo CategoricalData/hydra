@@ -45,7 +45,7 @@
     ;;   Optional            : (list 'given v) | (list 'none)
     ;;   SystemError         : (list '<variant> payload), variant one of command_not_found |
     ;;                         permission_denied | invalid_working_directory | interrupted | other.
-    ;;   Command/ProcessResult : Scheme records (make-hydra_system_command / accessors) from (hydra system).
+    ;;   Command/ProcessResult : Scheme records (make-hydra_core_system_command / accessors) from (hydra system).
     ;;   FilePath/StatusCode/EnvironmentVariable : transparent (bare string / int / string).
     ;;   binary              : a vector of byte ints; Timespec : a (hydra time) record.
     ;;
@@ -58,8 +58,8 @@
 
     ;; The generated record constructors/accessors are macros in the loaded env (see module note above),
     ;; so they are invoked by eval'ing the form inside the owning module rather than called as procedures.
-    ;; make-rec: (make-rec '(hydra system) 'make-X a b ...) constructs a record from runtime values.
-    ;; rec-ref:  (rec-ref '(hydra system) 'X-field rec) reads a field of a record.
+    ;; make-rec: (make-rec '(hydra core system) 'make-X a b ...) constructs a record from runtime values.
+    ;; rec-ref:  (rec-ref '(hydra core system) 'X-field rec) reads a field of a record.
     ;;
     ;; Two loading models both need to work here (#585): bootstrap.scm flat-loads every generated
     ;; module's forms into (interaction-environment) (no real (hydra system)/(hydra time) module is
@@ -124,10 +124,10 @@
     ;; execute :: Command -> effect<Either<SystemError, ProcessResult>>
     (define hydra_overlay_scheme_lib_system_execute
       (lambda (command)
-        (let ((program (rec-ref '(hydra system) 'hydra_system_command-program command))
-              (args (rec-ref '(hydra system) 'hydra_system_command-arguments command))
-              (wd (rec-ref '(hydra system) 'hydra_system_command-working_directory command))
-              (env (rec-ref '(hydra system) 'hydra_system_command-environment command)))
+        (let ((program (rec-ref '(hydra core system) 'hydra_core_system_command-program command))
+              (args (rec-ref '(hydra core system) 'hydra_core_system_command-arguments command))
+              (wd (rec-ref '(hydra core system) 'hydra_core_system_command-working_directory command))
+              (env (rec-ref '(hydra core system) 'hydra_core_system_command-environment command)))
           (if (not (resolve-executable program))
               (list 'left (list 'command_not_found program))
               (let ((invocation (env-wrap program args env))
@@ -144,7 +144,7 @@
                            (st (close-pipe port))
                            (errbv (call-with-port (open-file errfile "rb") get-bytevector-all)))
                       (list 'right
-                        (make-rec '(hydra system) 'make-hydra_system_process_result
+                        (make-rec '(hydra core system) 'make-hydra_core_system_process_result
                           (status:exit-val st)
                           (if (eof-object? out) #() (bytevector->binary out))
                           (if (eof-object? errbv) #() (bytevector->binary errbv))))))
@@ -175,7 +175,7 @@
     ;; getTime :: effect<Timespec>  (nullary effect: a bare value)
     (define hydra_overlay_scheme_lib_system_get_time
       (let ((tv (gettimeofday)))
-        (make-rec '(hydra time) 'make-hydra_time_timespec (car tv) (* (cdr tv) 1000))))
+        (make-rec '(hydra core time) 'make-hydra_core_time_timespec (car tv) (* (cdr tv) 1000))))
 
     ;; getWorkingDirectory :: effect<Either<SystemError, FilePath>>  (nullary effect: a bare value)
     (define hydra_overlay_scheme_lib_system_get_working_directory

@@ -240,10 +240,10 @@
                               bootstrap-types))
          (test-schemas (map (lambda (entry)
                               (list (car entry) (type-to-ts (cadr entry))))
-                            (hydra_core_lib_maps_to_list test-types)))
-         (schema-types (hydra_core_lib_maps_from_list (append kernel-schemas test-schemas)))
+                            (hydra_overlay_scheme_lib_maps_to_list test-types)))
+         (schema-types (hydra_overlay_scheme_lib_maps_from_list (append kernel-schemas test-schemas)))
          ;; Test terms
-         (test-terms-alist (hydra_core_lib_maps_to_list hydra_core_test_test_graph_test_terms))
+         (test-terms-alist (hydra_overlay_scheme_lib_maps_to_list hydra_core_test_test_graph_test_terms))
          (test-terms (map (lambda (entry) (list (car entry) (cdr entry))) test-terms-alist))
          (bound-terms
            (append
@@ -259,12 +259,12 @@
              ;; Test terms
              test-terms)))
     (make-hydra_core_graph_graph
-      (hydra_core_lib_maps_from_list bound-terms)
-      hydra_core_lib_maps_empty
+      (hydra_overlay_scheme_lib_maps_from_list bound-terms)
+      hydra_overlay_scheme_lib_maps_empty
       '()
       '()
-      hydra_core_lib_maps_empty
-      (hydra_core_lib_maps_from_list
+      hydra_overlay_scheme_lib_maps_empty
+      (hydra_overlay_scheme_lib_maps_from_list
         (map (lambda (p) (list (car p) (cdr p))) all-prims))
       schema-types
       '())))
@@ -282,14 +282,14 @@
 (define (empty-graph)
   (let ((std-prims (standard-library)))
     (make-hydra_core_graph_graph
-      hydra_core_lib_maps_empty
-      hydra_core_lib_maps_empty
+      hydra_overlay_scheme_lib_maps_empty
+      hydra_overlay_scheme_lib_maps_empty
       '()
       '()
-      hydra_core_lib_maps_empty
-      (hydra_core_lib_maps_from_list
+      hydra_overlay_scheme_lib_maps_empty
+      (hydra_overlay_scheme_lib_maps_from_list
         (map (lambda (p) (list (car p) (cdr p))) std-prims))
-      hydra_core_lib_maps_empty
+      hydra_overlay_scheme_lib_maps_empty
       '())))
 
 ;; ==========================================================================

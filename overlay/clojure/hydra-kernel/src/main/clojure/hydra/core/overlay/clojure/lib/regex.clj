@@ -11,9 +11,9 @@
 
 ;; Returns [:given <native-pattern-string>], or [:none] if the pattern does not parse.
 (defn- hydra--regex-to-native [pattern]
-  (let [parsed (hydra_parse_regex_parse_regex pattern)]
+  (let [parsed (hydra_core_parse_regex_parse_regex pattern)]
     (if (= (first parsed) :given)
-      [:given (hydra_print_pcre_regex_print_regex (second parsed))]
+      [:given (hydra_core_print_pcre_regex_print_regex (second parsed))]
       [:none])))
 
 ;; matches :: String -> String -> Bool

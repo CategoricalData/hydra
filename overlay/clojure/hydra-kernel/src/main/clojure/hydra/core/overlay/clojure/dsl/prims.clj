@@ -4,22 +4,23 @@
             [hydra.core.typing :refer :all]
             [hydra.core.errors :refer :all]
             [hydra.core.packaging :refer :all]
-            [hydra.core.scoping :refer [hydra_scoping_type_scheme_to_term_signature]]
+            [hydra.core.scoping :refer [hydra_core_scoping_type_scheme_to_term_signature]]
             [hydra.core.lib.defaults]
             [hydra.core.reduction])
-  (:import [hydra.core.model hydra_core_function_type hydra_core_type_scheme
-                       hydra_core_application hydra_core_injection hydra_core_field
-                       hydra_core_type_variable_constraints]
-           [hydra.core.graph hydra_graph_primitive hydra_graph_term_coder]
-           [hydra.core.packaging hydra_packaging_primitive_definition]
-           [hydra.core.errors hydra_errors_other_error]))
+  (:import [hydra.core.model hydra_core_model_function_type hydra_core_model_type_scheme
+                       hydra_core_model_application hydra_core_model_injection hydra_core_model_field
+                       hydra_core_model_either_type hydra_core_model_map_type hydra_core_model_pair_type
+                       hydra_core_model_type_variable_constraints]
+           [hydra.core.graph hydra_core_graph_primitive hydra_core_graph_term_coder]
+           [hydra.core.packaging hydra_core_packaging_primitive_definition]
+           [hydra.core.errors hydra_core_errors_other_error]))
 
 ;; Empty InferenceContext placeholder. After #446 the primitive implementation
 ;; carrier no longer receives an InferenceContext, but the coder encode/decode
 ;; functions still take one as their first argument. Mirror the Haskell host's
 ;; `primCx = emptyInferenceContext` and the Python host's
 ;; `PRIM_CX = InferenceContext(fresh_type_variable_count=0, trace=())`.
-(def ^:private prim-cx (->hydra_typing_inference_context 0 (list)))
+(def ^:private prim-cx (->hydra_core_typing_inference_context 0 (list)))
 
 ;; Type scheme helpers -- the reducer uses primitive arity (from TypeScheme)
 ;; to decide how many args to collect before calling the implementation.
@@ -30,12 +31,12 @@
   [n]
   (if (<= n 0)
     (list :unit)
-    (list :function (->hydra_core_function_type (list :unit) (make-arity-type (dec n))))))
+    (list :function (->hydra_core_model_function_type (list :unit) (make-arity-type (dec n))))))
 
 (defn- make-type-scheme
   "Build a TypeScheme with the correct arity for primitive dispatch."
   [arity]
-  (->hydra_core_type_scheme [] (make-arity-type arity) {}))
+  (->hydra_core_model_type_scheme [] (make-arity-type arity) {}))
 
 (defn- collect-type-vars-ordered
   "Collect type variable names from a Hydra type in order of first appearance."
@@ -83,7 +84,7 @@
    (let [out-type (or (:type output) (list :unit))
          fun-type (reduce (fn [result-type input-tc]
                             (let [in-type (or (:type input-tc) (list :unit))]
-                              (list :function (->hydra_core_function_type in-type result-type))))
+                              (list :function (->hydra_core_model_function_type in-type result-type))))
                           out-type
                           (reverse inputs))
          ;; Auto-detect type variables in order of first appearance.
@@ -94,16 +95,16 @@
          ;; into a TypeClassConstraint.simple variant per #156. TypeScheme.constraints is a
          ;; plain Map (#683); an empty map means "no constraints".
          constraint-map (into {} (map (fn [[k v]]
-                                        [k (->hydra_core_type_variable_constraints (wrap-constraints v))])
+                                        [k (->hydra_core_model_type_variable_constraints (wrap-constraints v))])
                                       constraints))]
-     (->hydra_core_type_scheme vars fun-type constraint-map))))
+     (->hydra_core_model_type_scheme vars fun-type constraint-map))))
 
 (defn- build-prim-def
   "Build a PrimitiveDefinition (#156 shape) from name + signature."
   [pname variables inputs output constraints]
   (let [ts (build-type-scheme variables inputs output constraints)
-        sig (hydra_scoping_type_scheme_to_term_signature ts)]
-    (->hydra_packaging_primitive_definition pname (list :none) sig true true (list :none))))
+        sig (hydra_core_scoping_type_scheme_to_term_signature ts)]
+    (->hydra_core_packaging_primitive_definition pname (list :none) sig true true (list :none))))
 
 (defn lazy-args
   "Mirror of Hydra.Core.Dsl.Prims.lazyArgs: mark the given (0-based) parameter
@@ -150,7 +151,7 @@
 ;; Error helpers
 
 (defn- other-err [msg]
-  (list :other (->hydra_errors_other_error msg)))
+  (list :other (->hydra_core_errors_other_error msg)))
 
 (defn- wrap-other
   "Pass through Either Error results (no wrapping needed after InContext removal)."
@@ -160,102 +161,102 @@
 ;; TermCoder constructors -- each returns a TermCoder record with :type, :encode, :decode
 
 (defn tc-bigint []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :literal (list :integer (list :bigint nil)))
-   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_bigint) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_bigint) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :bigint v)))))))
 
 (defn tc-decimal []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :literal (list :decimal nil))
-   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_decimal) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_decimal) g) t))
    (fn [cx v] (list :right (list :literal (list :decimal (bigdec v)))))))
 
 (defn tc-boolean []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :literal (list :boolean nil))
-   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_boolean) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_boolean) g) t))
    (fn [cx v] (list :right (list :literal (list :boolean v))))))
 
 (defn tc-float32 []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :literal (list :float (list :float32 nil)))
-   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_float32) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_float32) g) t))
    (fn [cx v] (list :right (list :literal (list :float (list :float32 v)))))))
 
 (defn tc-float64 []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :literal (list :float (list :float64 nil)))
-   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_float64) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_float64) g) t))
    (fn [cx v] (list :right (list :literal (list :float (list :float64 (double v))))))))
 
 (defn tc-int8 []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :literal (list :integer (list :int8 nil)))
-   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_int8) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_int8) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :int8 v)))))))
 
 (defn tc-int16 []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :literal (list :integer (list :int16 nil)))
-   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_int16) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_int16) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :int16 v)))))))
 
 (defn tc-int32 []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :literal (list :integer (list :int32 nil)))
-   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_int32) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_int32) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :int32 v)))))))
 
 (defn tc-int64 []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :literal (list :integer (list :int64 nil)))
-   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_int64) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_int64) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :int64 v)))))))
 
 (defn tc-uint8 []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :literal (list :integer (list :uint8 nil)))
-   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_uint8) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_uint8) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :uint8 v)))))))
 
 (defn tc-uint16 []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :literal (list :integer (list :uint16 nil)))
-   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_uint16) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_uint16) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :uint16 v)))))))
 
 (defn tc-uint32 []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :literal (list :integer (list :uint32 nil)))
-   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_uint32) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_uint32) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :uint32 v)))))))
 
 (defn tc-uint64 []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :literal (list :integer (list :uint64 nil)))
-   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_uint64) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_uint64) g) t))
    (fn [cx v] (list :right (list :literal (list :integer (list :uint64 v)))))))
 
 (defn tc-string []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :literal (list :string nil))
-   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_string) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_string) g) t))
    (fn [cx v] (list :right (list :literal (list :string v))))))
 
 (defn tc-binary []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :literal (list :binary nil))
-   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_binary) g) t))
+   (fn [cx g t] ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_binary) g) t))
    (fn [cx v] (list :right (list :literal (list :binary v))))))
 
 ;; Container TermCoders
 
 (defn tc-list [el-coder]
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :list (:type el-coder))
    (fn [cx g t]
-     (((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_list_of) (fn [term] ((.encode el-coder) cx g term))) g) t))
+     (((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_list_of) (fn [term] ((.encode el-coder) cx g term))) g) t))
    (fn [cx lst]
      (loop [items lst result []]
        (if (empty? items)
@@ -266,10 +267,10 @@
              (recur (rest items) (conj result r)))))))))
 
 (defn tc-set [el-coder]
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :set (:type el-coder))
    (fn [cx g t]
-     (((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_set_of) (fn [term] ((.encode el-coder) cx g term))) g) t))
+     (((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_set_of) (fn [term] ((.encode el-coder) cx g term))) g) t))
    (fn [cx s]
      (loop [items (seq s) result []]
        (if (empty? items)
@@ -280,10 +281,10 @@
              (recur (rest items) (conj result r)))))))))
 
 (defn tc-map [key-coder val-coder]
-  (->hydra_graph_term_coder
-   (list :map (->hydra_core_map_type (:type key-coder) (:type val-coder)))
+  (->hydra_core_graph_term_coder
+   (list :map (->hydra_core_model_map_type (:type key-coder) (:type val-coder)))
    (fn [cx g t]
-     ((((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_map)
+     ((((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_map)
          (fn [term] ((.encode key-coder) cx g term)))
         (fn [term] ((.encode val-coder) cx g term)))
        g) t))
@@ -301,10 +302,10 @@
                  (recur (rest pairs) (assoc result (second kr) (second vr))))))))))))
 
 (defn tc-optional [el-coder]
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :optional (:type el-coder))
    (fn [cx g t]
-     (((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_optional_term)
+     (((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_optional_term)
         (fn [term] ((.encode el-coder) cx g term)))
        g) t))
    (fn [cx mv]
@@ -323,10 +324,10 @@
          (if (= (first r) :left) r (list :right (list :optional (second r)))))))))
 
 (defn tc-either [left-coder right-coder]
-  (->hydra_graph_term_coder
-   (list :either (->hydra_core_either_type (:type left-coder) (:type right-coder)))
+  (->hydra_core_graph_term_coder
+   (list :either (->hydra_core_model_either_type (:type left-coder) (:type right-coder)))
    (fn [cx g t]
-     ((((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_either_term)
+     ((((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_either_term)
          (fn [term] ((.encode left-coder) cx g term)))
         (fn [term] ((.encode right-coder) cx g term)))
        g) t))
@@ -340,10 +341,10 @@
              (list :right (list :either (list :right (second r))))))))))
 
 (defn tc-pair [first-coder second-coder]
-  (->hydra_graph_term_coder
-   (list :pair (->hydra_core_pair_type (:type first-coder) (:type second-coder)))
+  (->hydra_core_graph_term_coder
+   (list :pair (->hydra_core_model_pair_type (:type first-coder) (:type second-coder)))
    (fn [cx g t]
-     ((((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_pair)
+     ((((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_pair)
          (fn [term] ((.encode first-coder) cx g term)))
         (fn [term] ((.encode second-coder) cx g term)))
        g) t))
@@ -366,7 +367,7 @@
 (defn tc-effect
   "TermCoder for effect<t>. Transparent: encode/decode pass through the inner coder."
   [inner-coder]
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :effect (:type inner-coder))
    (fn [cx g t] ((.encode inner-coder) cx g t))
    (fn [cx v] ((.decode inner-coder) cx v))))
@@ -374,7 +375,7 @@
 (defn tc-unit
   "TermCoder for the unit type. Represents the unit value as nil at the native level."
   []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :unit nil)
    (fn [cx g t] (list :right nil))
    (fn [cx v] (list :right (list :unit)))))
@@ -383,7 +384,7 @@
   "TermCoder for a nominal type referenced by name (e.g. hydra.core.file.FilePath). Passes terms
    through unchanged; used only for the type-scheme of registered effectful primitives."
   [type-name]
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :variable type-name)
    (fn [cx g t] (list :right t))
    (fn [cx t] (list :right t))))
@@ -391,7 +392,7 @@
 (defn tc-void
   "TermCoder for the void type. Never legitimately exercised: void has no inhabitants."
   []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :void nil)
    (fn [cx g t] (list :right t))
    (fn [cx t] (list :right t))))
@@ -401,24 +402,24 @@
 (defn tc-variable
   "TermCoder for type variables -- just passes terms through unchanged."
   [_name]
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :variable _name)
    (fn [cx g t] (list :right t))
    (fn [cx t] (list :right t))))
 
 (defn tc-term []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :variable "hydra.core.model.Term")
    (fn [cx g t] (list :right t))
    (fn [cx t] (list :right t))))
 
 ;; Comparison coder
 (defn tc-comparison []
-  (->hydra_graph_term_coder
+  (->hydra_core_graph_term_coder
    (list :variable "hydra.core.util.Comparison")
    (fn [cx g t]
      ;; Extract a comparison union variant
-     (let [r ((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_unit_variant) "hydra.core.util.Comparison") g t)]
+     (let [r ((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_unit_variant) "hydra.core.util.Comparison") g t)]
        (if (= (first r) :left)
          r
          (let [variant-name (second r)]
@@ -438,16 +439,16 @@
                           (or (= c :eq) (and (number? c) (zero? c))) "equalTo"
                           (or (= c :gt) (and (number? c) (pos? c))) "greaterThan"
                           :else (throw (IllegalArgumentException. (str "not a comparison: " c))))]
-       (list :right (list :inject (->hydra_core_injection "hydra.core.util.Comparison"
-                                   (->hydra_core_field variant-name (list :unit)))))))))
+       (list :right (list :inject (->hydra_core_model_injection "hydra.core.util.Comparison"
+                                   (->hydra_core_model_field variant-name (list :unit)))))))))
 
 ;; Function coders
 
 (defn tc-function
   "TermCoder for function types -- not actually encodable/decodable."
   [_dom _cod]
-  (->hydra_graph_term_coder
-   (list :function (->hydra_core_function_type (:type _dom) (:type _cod)))
+  (->hydra_core_graph_term_coder
+   (list :function (->hydra_core_model_function_type (:type _dom) (:type _cod)))
    (fn [cx g t] (list :left (other-err "cannot encode term to a function")))
    (fn [cx v] (list :left (other-err "cannot decode functions to terms")))))
 
@@ -455,8 +456,8 @@
   "TermCoder for function types, using a reducer to bridge term-level functions
    to native functions. The reduce parameter should be (fn [cx g term] -> Either)."
   [reduce-fn dom cod]
-  (->hydra_graph_term_coder
-   (list :function (->hydra_core_function_type (:type dom) (:type cod)))
+  (->hydra_core_graph_term_coder
+   (list :function (->hydra_core_model_function_type (:type dom) (:type cod)))
    (fn [cx g fun-term]
      (list :right
            (fn [x]
@@ -464,7 +465,7 @@
                (when (= (first arg-result) :left)
                  (throw (RuntimeException. "function_with_reduce: failed to encode argument")))
                (let [arg-term (second arg-result)
-                     app-term (list :application (->hydra_core_application fun-term arg-term))
+                     app-term (list :application (->hydra_core_model_application fun-term arg-term))
                      reduce-result (reduce-fn cx g app-term)]
                  (when (= (first reduce-result) :left)
                    (throw (RuntimeException. "function_with_reduce: failed to reduce application")))
@@ -480,14 +481,14 @@
 (defn default-fallback-primitive
   "Build a Primitive for a kernel primitive with no native Clojure implementation, but which
    declares a portable, cross-compilable defaultImplementation term (see
-   hydra.core.lib.defaults/hydra_lib_defaults_default_implementations). Its implementation folds call
+   hydra.core.lib.defaults/hydra_core_lib_defaults_default_implementations). Its implementation folds call
    args into an Application chain over the term and evaluates via reduceTerm, rather than running
    hand-written Clojure logic.
 
    Note: the default term is already real and directly reducible (a `(list :lambda ...)` value),
    not an encoded/reified term-as-data requiring a decode step — confirmed by comparing
    defaults.clj's entries against encode/core.clj's real Lambda case (which produces
-   `(list :inject (->hydra_core_injection ...))`). Mirrors the Java/Python/Scala fallback
+   `(list :inject (->hydra_core_model_injection ...))`). Mirrors the Java/Python/Scala fallback
    (#609 Stage 2/3). `variables`/`inputs`/`output` mirror prim1/prim2's build-type-scheme args
    (TermCoder-shaped) — used only to build the PrimitiveDefinition's signature; the runtime
    implementation ignores the coders entirely (no encode/decode round-trip through native types —
@@ -495,17 +496,17 @@
   ([pname variables inputs output] (default-fallback-primitive pname variables inputs output nil))
   ([pname variables inputs output constraints]
    (let [ts (build-type-scheme variables inputs output constraints)
-         sig (hydra_scoping_type_scheme_to_term_signature ts)
-         default-impl (get @(ns-resolve 'hydra.core.lib.defaults 'hydra_lib_defaults_default_implementations) pname)
+         sig (hydra_core_scoping_type_scheme_to_term_signature ts)
+         default-impl (get @(ns-resolve 'hydra.core.lib.defaults 'hydra_core_lib_defaults_default_implementations) pname)
          _ (when (nil? default-impl)
              (throw (ex-info (str "default-fallback-primitive: no defaultImplementation for " pname) {})))
-         definition (->hydra_packaging_primitive_definition pname (list :none) sig true true (list :given default-impl))]
-     (->hydra_graph_primitive
+         definition (->hydra_core_packaging_primitive_definition pname (list :none) sig true true (list :given default-impl))]
+     (->hydra_core_graph_primitive
       definition
       (fn [g] (fn [args]
-        (let [applied (reduce (fn [fn-term arg] (list :application (->hydra_core_application fn-term arg)))
+        (let [applied (reduce (fn [fn-term arg] (list :application (->hydra_core_model_application fn-term arg)))
                                default-impl args)
-              reduce-fn @(ns-resolve 'hydra.core.reduction 'hydra_reduction_reduce_term)]
+              reduce-fn @(ns-resolve 'hydra.core.reduction 'hydra_core_reduction_reduce_term)]
           ((((reduce-fn prim-cx) g) true) applied))))))))
 
 (defn prim0
@@ -513,7 +514,7 @@
   ([pname value-fn _variables output]
    (prim0 pname value-fn _variables output nil))
   ([pname value-fn _variables output constraints]
-   (->hydra_graph_primitive
+   (->hydra_core_graph_primitive
     (build-prim-def pname _variables [] output constraints)
     (fn [g] (fn [args]
       (let [result ((.decode output) prim-cx (value-fn))]
@@ -524,10 +525,10 @@
   ([pname compute _variables input1 output]
    (prim1 pname compute _variables input1 output nil))
   ([pname compute _variables input1 output constraints]
-   (->hydra_graph_primitive
+   (->hydra_core_graph_primitive
     (build-prim-def pname _variables [input1] output constraints)
     (fn [g] (fn [args]
-      (let [check (((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_n_args) pname) 1) args)]
+      (let [check (((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_n_args) pname) 1) args)]
         (if (= (first check) :left)
           check
           (let [r1 ((.encode input1) prim-cx g (first args))]
@@ -541,10 +542,10 @@
   ([pname compute _variables input1 input2 output]
    (prim2 pname compute _variables input1 input2 output nil))
   ([pname compute _variables input1 input2 output constraints]
-  (->hydra_graph_primitive
+  (->hydra_core_graph_primitive
    (build-prim-def pname _variables [input1 input2] output constraints)
    (fn [g] (fn [args]
-     (let [check (((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_n_args) pname) 2) args)]
+     (let [check (((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_n_args) pname) 2) args)]
        (if (= (first check) :left)
          check
          (let [r1 ((.encode input1) prim-cx g (first args))]
@@ -561,10 +562,10 @@
   ([pname compute _variables input1 input2 input3 output]
    (prim3 pname compute _variables input1 input2 input3 output nil))
   ([pname compute _variables input1 input2 input3 output constraints]
-  (->hydra_graph_primitive
+  (->hydra_core_graph_primitive
    (build-prim-def pname _variables [input1 input2 input3] output constraints)
    (fn [g] (fn [args]
-     (let [check (((@(ns-resolve 'hydra.core.extract.model 'hydra_extract_core_n_args) pname) 3) args)]
+     (let [check (((@(ns-resolve 'hydra.core.extract.model 'hydra_core_extract_model_n_args) pname) 3) args)]
        (if (= (first check) :left)
          check
          (let [r1 ((.encode input1) prim-cx g (first args))]

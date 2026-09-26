@@ -16,8 +16,8 @@
 ;;                         :command_not_found | :permission_denied | :invalid_working_directory
 ;;                         | :interrupted | :other; payload a FilePath (string) or message string,
 ;;                         and () for the nullary :interrupted.
-;;   Command             : a hydra_system_command defrecord {:program :arguments :working_directory :environment}
-;;   ProcessResult       : a hydra_system_process_result defrecord {:exit_code :stdout :stderr}
+;;   Command             : a hydra_core_system_command defrecord {:program :arguments :working_directory :environment}
+;;   ProcessResult       : a hydra_core_system_process_result defrecord {:exit_code :stdout :stderr}
 ;;   FilePath/StatusCode/EnvironmentVariable : transparent (bare string / int / string)
 ;;   binary              : a vector of ints 0..255 (matches hydra.core.overlay.clojure.lib.files / literals)
 ;;   unit                : nil
@@ -77,7 +77,7 @@
               out (read-all (.getInputStream process))
               err (read-all (.getErrorStream process))
               code (.waitFor process)]
-          (list :right (->hydra_system_process_result code (bytes->binary out) (bytes->binary err))))
+          (list :right (->hydra_core_system_process_result code (bytes->binary out) (bytes->binary err))))
         (catch IOException e (list :left (classify program e)))
         (catch InterruptedException _e
           (.interrupt (Thread/currentThread))
@@ -108,7 +108,7 @@
 (def hydra_overlay_clojure_lib_system_get_time
   "Return the current wall-clock time as a Timespec (seconds and nanoseconds since the Unix epoch)."
   (let [now (java.time.Instant/now)]
-    (->hydra_time_timespec (.getEpochSecond now) (long (.getNano now)))))
+    (->hydra_core_time_timespec (.getEpochSecond now) (long (.getNano now)))))
 
 ;; getWorkingDirectory :: effect<Either<SystemError, FilePath>>  (nullary effect: a bare value)
 (def hydra_overlay_clojure_lib_system_get_working_directory

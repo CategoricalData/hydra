@@ -9,8 +9,8 @@
 ;;
 ;; The kernel filters hydra.core.test.testEnv from emitted output (via the
 ;; testSkipEmit set in each host bootstrap), so the auto-generated
-;; testGraph namespace references hydra_test_test_env_test_context and
-;; hydra_test_test_env_test_graph — both must be supplied by hand per
+;; testGraph namespace references hydra_core_test_test_env_test_context and
+;; hydra_core_test_test_env_test_graph — both must be supplied by hand per
 ;; host language. This file is the Clojure implementation.
 
 (ns hydra.core.overlay.clojure.test.testEnv
@@ -20,8 +20,8 @@
             [hydra.core.json.bootstrap :refer :all]
             [hydra.annotation-bindings :refer [annotation-bindings]]))
 
-;; Empty context: alist-style map matching hydra_typing_inference_context shape.
-(def hydra_test_test_env_test_context
+;; Empty context: alist-style map matching hydra_core_typing_inference_context shape.
+(def hydra_core_test_test_env_test_context
   {:fresh_type_variable_count 0 :trace ()})
 
 ;; Test graph builder. Curried to match the Clojure coder's emission
@@ -29,11 +29,11 @@
 ;; Term -> Graph becomes ((f types) terms) at the call site. Returns a
 ;; Graph populated with primitives, schema types (kernel + caller-supplied
 ;; test types), annotation bindings, and caller-supplied test terms.
-(defn hydra_test_test_env_test_graph [test-types]
+(defn hydra_core_test_test_env_test_graph [test-types]
   (fn [test-terms]
     (let [std-prims (standard-library)
-          type-to-ts hydra_scoping_f_type_to_type_scheme
-          boot-types-raw hydra_json_bootstrap_types_by_name
+          type-to-ts hydra_core_scoping_f_type_to_type_scheme
+          boot-types-raw hydra_core_json_bootstrap_types_by_name
           kernel-schemas (into {} (map (fn [[k v]] [k (type-to-ts v)]) boot-types-raw))
           test-types-list (seq test-types)
           test-schemas (into {} (map (fn [[k v]] [k (type-to-ts v)]) test-types-list))

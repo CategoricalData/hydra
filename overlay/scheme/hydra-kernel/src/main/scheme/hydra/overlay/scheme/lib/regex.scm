@@ -1,9 +1,11 @@
+;; #729: (hydra parse regex) -> (hydra core parse regex) and
+;; (hydra print posix regex) -> (hydra core print posix regex) (module-grammar rename).
 (define-library (hydra overlay scheme lib regex)
   (import (scheme base)
           (scheme char)
           (ice-9 regex)
-          (hydra parse regex)
-          (hydra print posix regex))
+          (hydra core parse regex)
+          (hydra core print posix regex))
   (export hydra_overlay_scheme_lib_regex_matches
           hydra_overlay_scheme_lib_regex_find
           hydra_overlay_scheme_lib_regex_find_all
@@ -21,9 +23,9 @@
     ;; Returns (list 'given <native-pattern-string>), or (list 'none) if the pattern does not parse.
     (define hydra--regex-to-native
       (lambda (pattern)
-        (let ((parsed (hydra_parse_regex_parse_regex pattern)))
+        (let ((parsed (hydra_core_parse_regex_parse_regex pattern)))
           (if (eq? (car parsed) 'given)
-              (list 'given (hydra_print_posix_regex_print_regex (cadr parsed)))
+              (list 'given (hydra_core_print_posix_regex_print_regex (cadr parsed)))
               (list 'none)))))
 
     ;; matches :: String -> String -> Bool

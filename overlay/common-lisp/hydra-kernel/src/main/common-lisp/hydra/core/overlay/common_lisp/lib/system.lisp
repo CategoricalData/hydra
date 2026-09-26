@@ -11,7 +11,7 @@
 ;;   Optional            : (list :given v) | (list :none)
 ;;   SystemError         : (list :<variant> payload), variant one of command_not_found |
 ;;                         permission_denied | invalid_working_directory | interrupted | other.
-;;   Command/ProcessResult : defstructs (make-hydra_system_command / hydra_system_command-program ...).
+;;   Command/ProcessResult : defstructs (make-hydra_core_system_command / hydra_core_system_command-program ...).
 ;;   FilePath/StatusCode/EnvironmentVariable : transparent (bare string / integer / string).
 ;;   binary              : a vector of (unsigned-byte 8); Timespec : a defstruct.
 ;;
@@ -50,10 +50,10 @@
 ;; execute :: Command -> effect<Either<SystemError, ProcessResult>>
 (defvar hydra_overlay_common_lisp_lib_system_execute
   (lambda (command)
-    (let ((program (hydra_system_command-program command))
-          (args (hydra_system_command-arguments command))
-          (wd (hydra_system_command-working_directory command))
-          (env (hydra_system_command-environment command)))
+    (let ((program (hydra_core_system_command-program command))
+          (args (hydra_core_system_command-arguments command))
+          (wd (hydra_core_system_command-working_directory command))
+          (env (hydra_core_system_command-environment command)))
       #+sbcl
       (handler-case
           (let* ((out-stream (make-string-output-stream))
@@ -70,7 +70,7 @@
                          :error err-stream
                          :wait t)))
             (list :right
-              (make-hydra_system_process_result
+              (make-hydra_core_system_process_result
                 :exit_code (sb-ext:process-exit-code proc)
                 :stdout (sb-ext:string-to-octets (get-output-stream-string out-stream))
                 :stderr (sb-ext:string-to-octets (get-output-stream-string err-stream)))))
@@ -86,7 +86,7 @@
 
 ;; getEnvironment / getTime / getWorkingDirectory are NULLARY effects: generated consumer code references
 ;; the bare symbol AS the effect's result, so each is a defvar holding the value. This file is loaded
-;; AFTER the generated type defstructs (see run-tests.lisp ordering) so make-hydra_time_timespec is bound.
+;; AFTER the generated type defstructs (see run-tests.lisp ordering) so make-hydra_core_time_timespec is bound.
 ;; A map is an alist of (key . value) pairs (accepted by hydra.core.lib.maps).
 (defvar hydra_overlay_common_lisp_lib_system_get_environment
   #+sbcl
@@ -107,7 +107,7 @@
 ;; getTime :: effect<Timespec>  (nullary effect)
 (defvar hydra_overlay_common_lisp_lib_system_get_time
   (multiple-value-bind (sec usec) (sb-ext:get-time-of-day)
-    (make-hydra_time_timespec :seconds sec :nanoseconds (* usec 1000))))
+    (make-hydra_core_time_timespec :seconds sec :nanoseconds (* usec 1000))))
 
 ;; getWorkingDirectory :: effect<Either<SystemError, FilePath>>  (nullary effect)
 (defvar hydra_overlay_common_lisp_lib_system_get_working_directory

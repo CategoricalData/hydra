@@ -71,7 +71,7 @@
 ;; their PrimitiveDefinitions, #473).
 ;; overlay/common_lisp/lib/system.lisp must ALSO load after gen-main (#533): its
 ;; get_time effect value is a defvar evaluated at load time, and it constructs a
-;; Timespec via make-hydra_time_timespec -- a defstruct constructor defined by the
+;; Timespec via make-hydra_core_time_timespec -- a defstruct constructor defined by the
 ;; generated hydra/time.lisp loaded in (hydra-load-gen-main). Loading system.lisp
 ;; any earlier (e.g. in the early overlay-lib dolist above) fails with
 ;; UNDEFINED-FUNCTION MAKE-HYDRA_TIME_TIMESPEC (mirrors the #498 fix already applied
@@ -96,19 +96,23 @@
                  (functionp (symbol-value sym))
                  (not (fboundp sym)))
         (setf (symbol-function sym) (symbol-value sym)))))
-  ;; For generated HYDRA_LIB_* symbols whose value is a PrimitiveDefinition (not a
-  ;; function), proxy to the native HYDRA_COMMON_LISP_LIB_* implementation when available.
-  ;; Bootstrap-generated test_graph.lisp calls e.g. (hydra_lib_maps_from_list ...)
-  ;; in function position; the generated PrimitiveDefinition value won't satisfy
-  ;; functionp, but the corresponding native HYDRA_COMMON_LISP_LIB_* lambda does.
+  ;; For generated HYDRA_CORE_LIB_* symbols whose value is a PrimitiveDefinition
+  ;; (not a function), proxy to the native HYDRA_OVERLAY_COMMON_LISP_LIB_*
+  ;; implementation when available. Bootstrap-generated test_graph.lisp calls
+  ;; e.g. (hydra_core_lib_maps_from_list ...) in function position; the generated
+  ;; PrimitiveDefinition value won't satisfy functionp, but the corresponding
+  ;; native HYDRA_OVERLAY_COMMON_LISP_LIB_* lambda does.
+  ;; #729: the module-grammar rename changed the generated prefix from HYDRA_LIB_
+  ;; to HYDRA_CORE_LIB_, and the #501 overlay rename changed the native prefix
+  ;; from HYDRA_COMMON_LISP_ to HYDRA_OVERLAY_COMMON_LISP_.
   (do-symbols (sym (find-package :cl-user))
     (let ((name (symbol-name sym)))
-      (when (and (> (length name) 10)
-                 (string= "HYDRA_LIB_" (subseq name 0 10))
+      (when (and (> (length name) 15)
+                 (string= "HYDRA_CORE_LIB_" (subseq name 0 15))
                  (boundp sym)
                  (not (functionp (symbol-value sym)))
                  (not (fboundp sym)))
-        (let* ((native-name (concatenate 'string "HYDRA_COMMON_LISP_" (subseq name 6)))
+        (let* ((native-name (concatenate 'string "HYDRA_OVERLAY_COMMON_LISP_LIB_" (subseq name 15)))
                (native-sym (find-symbol native-name (find-package :cl-user))))
           (when (and native-sym
                      (boundp native-sym)
@@ -405,7 +409,7 @@
             (transformed-args (mapcar (lambda (f) (hydra-fix-curried-calls f lambda-vars))
                                       (cdr form))))
        (cons (list* (car lam) params transformed-body) transformed-args)))
-    ;; if_else: (((HYDRA_LIB_LOGIC_IF_ELSE cond) then) else) -> (if cond then else)
+    ;; if_else: (((HYDRA_OVERLAY_COMMON_LISP_LIB_LOGIC_IF_ELSE cond) then) else) -> (if cond then else)
     ;; Must be before compound-expression case. Converts eager-evaluated curried if_else
     ;; into CL's short-circuiting (if ...) special form to prevent infinite recursion.
     ((and (consp (car form))
@@ -653,9 +657,25 @@ forward references."
                                   :defaults main-dir))
          (base (or (probe-file dir-only) dir-only))
          ;; Priority files: load these first for best dependency order
-         (priority '("core.lisp" "error/core.lisp" "error/checking.lisp" "error/packaging.lisp"
-                     "context.lisp" "graph.lisp"
-                     "packaging.lisp" "ast.lisp" "coders.lisp" "phantoms.lisp"
+         ;; #729: the module-grammar rename reordered kernel module names so the package
+         ;; root ("core") comes before the category segment (e.g. hydra.graph ->
+         ;; hydra.core.graph), moving every one of these paths down into hydra/core/ (the
+         ;; directory this priority list is already relative to). It ALSO separately
+         ;; renamed each subsystem's own "core" submodule to "model" (hydra.core ->
+         ;; hydra.core.model, hydra.core.extract.core -> hydra.core.extract.model, etc.),
+         ;; so every bare "core.lisp" / "X/core.lisp" entry below is renamed to
+         ;; "model.lisp" / "X/model.lisp" to match. A stale entry here isn't a load
+         ;; failure -- (probe-file path) just silently skips it -- so the affected module
+         ;; falls through to the alphabetically-sorted "remaining" bucket instead of its
+         ;; intended dependency-ordered slot, which can break genuine forward references
+         ;; (e.g. hydra.core.extract.model landing after hydra.core.decode.regex, which
+         ;; needs it at defvar-evaluation time -- not resolvable by the retry loop since
+         ;; extract/model.lisp itself never even gets read that early). Also folds in the
+         ;; pre-existing #497 hydra.show.* -> hydra.print.* rename, which this list never
+         ;; picked up either.
+         (priority '("model.lisp" "error/model.lisp" "error/checking.lisp" "error/packaging.lisp"
+                     "graph.lisp"
+                     "packaging.lisp" "ast.lisp" "coders.lisp"
                      "parsing.lisp" "query.lisp" "relational.lisp" "tabular.lisp" "testing.lisp"
                      "topology.lisp" "typing.lisp" "util.lisp" "variants.lisp"
                      "json/model.lisp" "classes.lisp" "constants.lisp" "paths.lisp"
@@ -666,15 +686,15 @@ forward references."
                      "strip.lisp" "variables.lisp" "scoping.lisp" "dependencies.lisp"
                      "predicates.lisp" "resolution.lisp" "analysis.lisp" "environment.lisp"
                      "encoding.lisp" "decoding.lisp" "codegen.lisp"
-                     "hoisting.lisp" "show/core.lisp" "show/error/core.lisp" "show/errors.lisp"
-                     "show/error/packaging.lisp"
+                     "hoisting.lisp" "print/model.lisp" "print/error/model.lisp" "print/errors.lisp"
+                     "print/error/packaging.lisp"
                      "validation.lisp"
-                     "validate/core.lisp" "validate/packaging.lisp"
-                     "encode/core.lisp" "encode/error/core.lisp" "encode/error/checking.lisp" "encode/errors.lisp"
+                     "validate/model.lisp" "validate/packaging.lisp"
+                     "encode/model.lisp" "encode/error/model.lisp" "encode/error/checking.lisp" "encode/errors.lisp"
                      "encode/packaging.lisp"
-                     "decode/core.lisp" "decode/error/core.lisp" "decode/error/checking.lisp" "decode/errors.lisp"
+                     "decode/model.lisp" "decode/error/model.lisp" "decode/error/checking.lisp" "decode/errors.lisp"
                      "decode/packaging.lisp"
-                     "extract/core.lisp" "extract/json.lisp"
+                     "extract/model.lisp" "extract/json.lisp"
                      "substitution.lisp" "annotations.lisp" "unification.lisp"
                      "inference.lisp" "checking.lisp" "subterms.lisp" "serialization.lisp" "reduction.lisp"
                      "json/coder.lisp" "json/parser.lisp" "json/writer.lisp"
@@ -811,7 +831,10 @@ forward references."
            "test/subterms.lisp"
            "test/substitution.lisp"
            "test/unification.lisp"
-           "test/validate/core.lisp"
+           ;; #729: hydra.core.test.validate.core -> hydra.core.test.validate.model
+           ;; (the "core" submodule of validate was itself renamed to "model").
+           "test/validate/model.lisp"
+           "test/validate/packaging.lisp"
            "test/validate/all.lisp"
            "test/test_suite.lisp")))
     (dolist (f files)

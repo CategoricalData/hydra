@@ -8,17 +8,17 @@
 ;; failure convention as an empty match. See issue #603.
 ;; No (require ...) for these: they are generated kernel modules, loaded via the rewriting
 ;; hydra-load-file (hydra-load-gen-main), which strips require/provide forms -- kernel modules are
-;; never real Emacs features. Their functions (hydra_parse_regex_parse_regex,
-;; hydra_print_emacs_regex_print_regex) are globally defined by gen-main load time, before this file's
+;; never real Emacs features. Their functions (hydra_core_parse_regex_parse_regex,
+;; hydra_core_print_emacs_regex_print_regex) are globally defined by gen-main load time, before this file's
 ;; functions are ever called (see libraries.el's comment on this same guarantee).
 
 ;; Returns (given . <native-pattern-string>), or 'none if the pattern does not parse.
-;; hydra_parse_regex_parse_regex returns an Optional tagged with the keyword :given (Hydra's native
+;; hydra_core_parse_regex_parse_regex returns an Optional tagged with the keyword :given (Hydra's native
 ;; Optional convention; see libraries.el's optional-to-native), not the symbol 'given.
 (defun hydra--regex-to-native (pattern)
-  (let ((parsed (funcall hydra_parse_regex_parse_regex pattern)))
+  (let ((parsed (funcall hydra_core_parse_regex_parse_regex pattern)))
     (if (eq (car parsed) :given)
-        (cons 'given (funcall hydra_print_emacs_regex_print_regex (cadr parsed)))
+        (cons 'given (funcall hydra_core_print_emacs_regex_print_regex (cadr parsed)))
       'none)))
 
 ;; All regex primitives bind case-fold-search to nil. POSIX ERE semantics

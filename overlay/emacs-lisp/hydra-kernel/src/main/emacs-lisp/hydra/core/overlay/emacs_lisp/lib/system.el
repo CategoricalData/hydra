@@ -13,7 +13,7 @@
 ;;   Optional            : (list :given v) | (list :none)
 ;;   SystemError         : (list :<variant> payload), variant one of command_not_found |
 ;;                         permission_denied | invalid_working_directory | interrupted | other.
-;;   Command/ProcessResult : cl-defstructs (make-hydra_system_command / hydra_system_command-program ...).
+;;   Command/ProcessResult : cl-defstructs (make-hydra_core_system_command / hydra_core_system_command-program ...).
 ;;   FilePath/StatusCode/EnvironmentVariable : transparent (bare string / integer / string).
 ;;   binary              : a unibyte string; Timespec : a cl-defstruct.
 ;;
@@ -46,10 +46,10 @@
 ;; execute :: Command -> effect<Either<SystemError, ProcessResult>>
 (defvar hydra_overlay_emacs_lisp_lib_system_execute
   (lambda (command)
-    (let ((program (hydra_system_command-program command))
-          (args (hydra_system_command-arguments command))
-          (wd (hydra_system_command-working_directory command))
-          (env (hydra_system_command-environment command)))
+    (let ((program (hydra_core_system_command-program command))
+          (args (hydra_core_system_command-arguments command))
+          (wd (hydra_core_system_command-working_directory command))
+          (env (hydra_core_system_command-environment command)))
       (condition-case e
           (let* ((errfile (make-temp-file "hydra-sys-"))
                  (default-directory (if (eq (car wd) :given) (cadr wd) default-directory))
@@ -73,7 +73,7 @@
               (if (stringp code)
                   (list :left (list :interrupted))
                 (list :right
-                      (make-hydra_system_process_result
+                      (make-hydra_core_system_process_result
                        :exit_code code
                        :stdout (cdr out)
                        :stderr errtxt)))))
@@ -105,7 +105,7 @@
 (defvar hydra_overlay_emacs_lisp_lib_system_get_time
   (let ((now (current-time)))
     ;; current-time = (HIGH LOW USEC PSEC); seconds = HIGH*65536 + LOW.
-    (make-hydra_time_timespec
+    (make-hydra_core_time_timespec
      :seconds (+ (* (nth 0 now) 65536) (nth 1 now))
      :nanoseconds (* (nth 2 now) 1000))))
 

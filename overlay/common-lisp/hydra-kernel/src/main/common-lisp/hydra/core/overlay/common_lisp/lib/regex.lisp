@@ -10,8 +10,8 @@
 ;; "no match" -- the same portable-failure convention as an empty match. See issue #603.
 ;; No package-qualified references for these: they are generated kernel modules, loaded via the
 ;; rewriting hydra-load-file (hydra-load-gen-main), which strips defpackage/in-package forms --
-;; kernel modules never get a real CL package. Their functions (hydra_parse_regex_parse_regex,
-;; hydra_print_pcre_regex_print_regex) are globally defined bare symbols by gen-main load time,
+;; kernel modules never get a real CL package. Their functions (hydra_core_parse_regex_parse_regex,
+;; hydra_core_print_pcre_regex_print_regex) are globally defined bare symbols by gen-main load time,
 ;; before this file's functions are ever called.
 
 (defun hydra--ppcre-call (fn-name &rest args)
@@ -21,9 +21,9 @@
 
 ;; (list :given <native-pattern-string>), or (list :none) if the pattern does not parse.
 (defun hydra--regex-to-native (pattern)
-  (let ((parsed (funcall hydra_parse_regex_parse_regex pattern)))
+  (let ((parsed (funcall hydra_core_parse_regex_parse_regex pattern)))
     (if (eq (car parsed) :given)
-        (list :given (funcall hydra_print_pcre_regex_print_regex (cadr parsed)))
+        (list :given (funcall hydra_core_print_pcre_regex_print_regex (cadr parsed)))
         (list :none))))
 
 ;; matches :: String -> String -> Bool

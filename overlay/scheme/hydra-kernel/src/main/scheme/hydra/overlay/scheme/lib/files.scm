@@ -391,12 +391,12 @@
           (with-file-error path
             (lambda ()
               (let ((s (if follow-links (stat path) (lstat path))))
-                (make-rec '(hydra file) 'make-hydra_file_file_status
+                (make-rec '(hydra core file) 'make-hydra_core_file_file_status
                   (file-type (stat:type s))
                   (stat:size s)
-                  (make-rec '(hydra time) 'make-hydra_time_timespec (stat:mtime s) (stat:mtimensec s))
-                  (list 'given (make-rec '(hydra time) 'make-hydra_time_timespec (stat:atime s) (stat:atimensec s)))
-                  (list 'given (make-rec '(hydra time) 'make-hydra_time_timespec (stat:ctime s) (stat:ctimensec s))))))))))
+                  (make-rec '(hydra core time) 'make-hydra_core_time_timespec (stat:mtime s) (stat:mtimensec s))
+                  (list 'given (make-rec '(hydra core time) 'make-hydra_core_time_timespec (stat:atime s) (stat:atimensec s)))
+                  (list 'given (make-rec '(hydra core time) 'make-hydra_core_time_timespec (stat:ctime s) (stat:ctimensec s))))))))))
 
     ;; writeFile :: FilePath -> binary -> effect<Either<FileError, unit>>
     ;; Replace the file at path with the raw bytes contents, creating it if necessary.

@@ -1,17 +1,23 @@
-(define-library (hydra prims)
+;; #729: the module-grammar rename reordered kernel module names so the package root
+;; ("core") comes before the category segment, e.g. (hydra graph) -> (hydra core graph)
+;; and (hydra extract core) -> (hydra core extract model) (the "core" submodule of
+;; extract was itself renamed to "model", matching hydra.core -> hydra.core.model).
+;; The (hydra overlay scheme ...) imports are unaffected -- overlay modules keep the
+;; hydra.overlay.<lang>.* namespace (#501), not hydra.core.overlay.<lang>.*.
+(define-library (hydra core prims)
   (import (scheme base) (scheme cxr) (scheme inexact)
-          (hydra core)
-          (hydra graph)
-          (hydra packaging)
-          (hydra typing)
-          (hydra scoping)
-          (hydra reduction)
-          (hydra extract core)
+          (hydra core model)
+          (hydra core graph)
+          (hydra core packaging)
+          (hydra core typing)
+          (hydra core scoping)
+          (hydra core reduction)
+          (hydra core extract model)
           (hydra overlay scheme lib maps)
           (hydra overlay scheme lib pairs)
           (hydra overlay scheme lib sets)
           ;; #609 Stage 4: default-implementation fallback registry (NOT YET SLOT-VALIDATED).
-          (prefix (hydra lib defaults) def:))
+          (prefix (hydra core lib defaults) def:))
   (export collect-type-vars-ordered build-type-scheme
           wrap-other-error
           tc-bigint tc-decimal tc-boolean
@@ -44,22 +50,22 @@
                    (set! result (cons v result)))))
               ((function)
                (let ((ft (cadr t)))
-                 (visit (hydra_core_function_type-domain ft))
-                 (visit (hydra_core_function_type-codomain ft))))
+                 (visit (hydra_core_model_function_type-domain ft))
+                 (visit (hydra_core_model_function_type-codomain ft))))
               ((list set maybe)
                (visit (cadr t)))
               ((map)
                (let ((mt (cadr t)))
-                 (visit (hydra_core_map_type-keys mt))
-                 (visit (hydra_core_map_type-values mt))))
+                 (visit (hydra_core_model_map_type-keys mt))
+                 (visit (hydra_core_model_map_type-values mt))))
               ((pair)
                (let ((pt (cadr t)))
-                 (visit (hydra_core_pair_type-first pt))
-                 (visit (hydra_core_pair_type-second pt))))
+                 (visit (hydra_core_model_pair_type-first pt))
+                 (visit (hydra_core_model_pair_type-second pt))))
               ((either)
                (let ((et (cadr t)))
-                 (visit (hydra_core_either_type-left et))
-                 (visit (hydra_core_either_type-right et))))
+                 (visit (hydra_core_model_either_type-left et))
+                 (visit (hydra_core_model_either_type-right et))))
               (else #f))))
         (reverse result)))
 
@@ -69,16 +75,16 @@
        Auto-detects type variables from the types.
        Optional constraints: alist of (varname . TypeVariableConstraints)."
       (let* ((constraints (if (and (pair? rest) (car rest)) (car rest) '()))
-             (out-type (let ((t (hydra_graph_term_coder-type output)))
+             (out-type (let ((t (hydra_core_graph_term_coder-type output)))
                          (if (or (not t) (null? t)) (list 'unit '()) t)))
              (fun-type (let loop ((ins (reverse inputs)) (acc out-type))
                          (if (null? ins)
                              acc
                              (let* ((in-tc (car ins))
-                                    (in-type (let ((t (hydra_graph_term_coder-type in-tc)))
+                                    (in-type (let ((t (hydra_core_graph_term_coder-type in-tc)))
                                                (if (or (not t) (null? t)) (list 'unit '()) t))))
                                (loop (cdr ins)
-                                     (list 'function (make-hydra_core_function_type in-type acc)))))))
+                                     (list 'function (make-hydra_core_model_function_type in-type acc)))))))
              (all-vars (collect-type-vars-ordered fun-type))
              ;; Exclude qualified names (containing dots) — those are nominal type references
              (detected-vars (let remove-qualified ((vs all-vars) (acc '()))
@@ -92,14 +98,14 @@
              (vars (if (and (pair? variables) (not (null? variables)))
                        variables
                        detected-vars)))
-        (make-hydra_core_type_scheme vars fun-type (alist->constraint-map constraints))))
+        (make-hydra_core_model_type_scheme vars fun-type (alist->constraint-map constraints))))
 
     (define (build-prim-def pname variables inputs output . rest)
       "Build a PrimitiveDefinition from name + TermCoder types (#156 shape)."
       (let* ((constraints (if (pair? rest) (car rest) #f))
              (ts (build-type-scheme variables inputs output constraints))
-             (sig (hydra_scoping_type_scheme_to_term_signature ts)))
-        (make-hydra_packaging_primitive_definition pname (list 'none) sig #t #t (list 'none))))
+             (sig (hydra_core_scoping_type_scheme_to_term_signature ts)))
+        (make-hydra_core_packaging_primitive_definition pname (list 'none) sig #t #t (list 'none))))
 
     ;; Convert an alist of (varname . TypeVariableConstraints) into the plain
     ;; Map[Name, TypeVariableConstraints] shape that TypeScheme expects (#683).
@@ -124,147 +130,147 @@
     ;; Scalar TermCoders
 
     (define (tc-bigint)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'literal (list 'integer (list 'bigint '())))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_bigint g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_core_extract_model_bigint g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'bigint v))))))))
 
     (define (tc-boolean)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'literal (list 'boolean '()))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_boolean g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_core_extract_model_boolean g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'boolean v)))))))
 
     ;; #727: v arrives as a (coefficient . scale) cons pair (the real, scale-preserving
     ;; Decimal representation -- see overlay/scheme/.../lib/literals.scm), so it's passed
     ;; through unchanged, not coerced to a lossy inexact double.
     (define (tc-decimal)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'literal (list 'decimal '()))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_decimal g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_core_extract_model_decimal g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'decimal v)))))))
 
     (define (tc-float32)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'literal (list 'float (list 'float32 '())))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_float32 g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_core_extract_model_float32 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'float (list 'float32 (inexact v)))))))))
 
     (define (tc-float64)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'literal (list 'float (list 'float64 '())))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_float64 g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_core_extract_model_float64 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'float (list 'float64 (inexact v)))))))))
 
     (define (tc-int8)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'literal (list 'integer (list 'int8 '())))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_int8 g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_core_extract_model_int8 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'int8 v))))))))
 
     (define (tc-int16)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'literal (list 'integer (list 'int16 '())))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_int16 g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_core_extract_model_int16 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'int16 v))))))))
 
     (define (tc-int32)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'literal (list 'integer (list 'int32 '())))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_int32 g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_core_extract_model_int32 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'int32 v))))))))
 
     (define (tc-int64)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'literal (list 'integer (list 'int64 '())))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_int64 g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_core_extract_model_int64 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'int64 v))))))))
 
     (define (tc-uint8)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'literal (list 'integer (list 'uint8 '())))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_uint8 g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_core_extract_model_uint8 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'uint8 v))))))))
 
     (define (tc-uint16)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'literal (list 'integer (list 'uint16 '())))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_uint16 g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_core_extract_model_uint16 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'uint16 v))))))))
 
     (define (tc-uint32)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'literal (list 'integer (list 'uint32 '())))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_uint32 g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_core_extract_model_uint32 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'uint32 v))))))))
 
     (define (tc-uint64)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'literal (list 'integer (list 'uint64 '())))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_uint64 g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_core_extract_model_uint64 g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'integer (list 'uint64 v))))))))
 
     (define (tc-string)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'literal (list 'string '()))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_string g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_core_extract_model_string g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'string v)))))))
 
     (define (tc-binary)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'literal (list 'binary '()))
-        (lambda (cx) (lambda (g) (lambda (t) ((hydra_extract_core_binary g) t))))
+        (lambda (cx) (lambda (g) (lambda (t) ((hydra_core_extract_model_binary g) t))))
         (lambda (cx) (lambda (v) (list 'right (list 'literal (list 'binary v)))))))
 
     ;; Container TermCoders
 
     (define (tc-list el-coder)
-      (make-hydra_graph_term_coder
-       (list 'list (hydra_graph_term_coder-type el-coder))
+      (make-hydra_core_graph_term_coder
+       (list 'list (hydra_core_graph_term_coder-type el-coder))
         (lambda (cx)
           (lambda (g)
             (lambda (t)
-              (((hydra_extract_core_list_of
-                 (lambda (term) ((((hydra_graph_term_coder-encode el-coder) cx) g) term)))
+              (((hydra_core_extract_model_list_of
+                 (lambda (term) ((((hydra_core_graph_term_coder-encode el-coder) cx) g) term)))
                 g) t))))
         (lambda (cx)
           (lambda (lst)
             (let loop ((items lst) (acc '()))
               (if (null? items)
                   (list 'right (list 'list (reverse acc)))
-                  (let ((r (((hydra_graph_term_coder-decode el-coder) cx) (car items))))
+                  (let ((r (((hydra_core_graph_term_coder-decode el-coder) cx) (car items))))
                     (if (eq? (car r) 'left)
                         r
                         (loop (cdr items) (cons (cadr r) acc))))))))))
 
     (define (tc-set el-coder)
-      (make-hydra_graph_term_coder
-       (list 'set (hydra_graph_term_coder-type el-coder))
+      (make-hydra_core_graph_term_coder
+       (list 'set (hydra_core_graph_term_coder-type el-coder))
         (lambda (cx)
           (lambda (g)
             (lambda (t)
-              (((hydra_extract_core_set_of
-                 (lambda (term) ((((hydra_graph_term_coder-encode el-coder) cx) g) term)))
+              (((hydra_core_extract_model_set_of
+                 (lambda (term) ((((hydra_core_graph_term_coder-encode el-coder) cx) g) term)))
                 g) t))))
         (lambda (cx)
           (lambda (s)
             (let loop ((items (hydra_overlay_scheme_lib_sets_to_list s)) (acc '()))
               (if (null? items)
                   (list 'right (list 'set (hydra_overlay_scheme_lib_sets_from_list (reverse acc))))
-                  (let ((r (((hydra_graph_term_coder-decode el-coder) cx) (car items))))
+                  (let ((r (((hydra_core_graph_term_coder-decode el-coder) cx) (car items))))
                     (if (eq? (car r) 'left)
                         r
                         (loop (cdr items) (cons (cadr r) acc))))))))))
 
     (define (tc-map key-coder val-coder)
-      (make-hydra_graph_term_coder
-       (list 'map (make-hydra_core_map_type (hydra_graph_term_coder-type key-coder) (hydra_graph_term_coder-type val-coder)))
+      (make-hydra_core_graph_term_coder
+       (list 'map (make-hydra_core_model_map_type (hydra_core_graph_term_coder-type key-coder) (hydra_core_graph_term_coder-type val-coder)))
         (lambda (cx)
           (lambda (g)
             (lambda (t)
-              ((((hydra_extract_core_map
-                  (lambda (term) ((((hydra_graph_term_coder-encode key-coder) cx) g) term)))
-                 (lambda (term) ((((hydra_graph_term_coder-encode val-coder) cx) g) term)))
+              ((((hydra_core_extract_model_map
+                  (lambda (term) ((((hydra_core_graph_term_coder-encode key-coder) cx) g) term)))
+                 (lambda (term) ((((hydra_core_graph_term_coder-encode val-coder) cx) g) term)))
                 g) t))))
         (lambda (cx)
           (lambda (m)
@@ -272,22 +278,22 @@
               (if (null? pairs)
                   (list 'right (list 'map (hydra_overlay_scheme_lib_maps_from_list (reverse acc))))
                   (let* ((p (car pairs))
-                         (kr (((hydra_graph_term_coder-decode key-coder) cx) (hydra_overlay_scheme_lib_pairs_first p))))
+                         (kr (((hydra_core_graph_term_coder-decode key-coder) cx) (hydra_overlay_scheme_lib_pairs_first p))))
                     (if (eq? (car kr) 'left)
                         kr
-                        (let ((vr (((hydra_graph_term_coder-decode val-coder) cx) (hydra_overlay_scheme_lib_pairs_second p))))
+                        (let ((vr (((hydra_core_graph_term_coder-decode val-coder) cx) (hydra_overlay_scheme_lib_pairs_second p))))
                           (if (eq? (car vr) 'left)
                               vr
                               (loop (cdr pairs) (cons (list (cadr kr) (cadr vr)) acc))))))))))))
 
     (define (tc-optional el-coder)
-      (make-hydra_graph_term_coder
-       (list 'optional (hydra_graph_term_coder-type el-coder))
+      (make-hydra_core_graph_term_coder
+       (list 'optional (hydra_core_graph_term_coder-type el-coder))
         (lambda (cx)
           (lambda (g)
             (lambda (t)
-              (((hydra_extract_core_optional_term
-                 (lambda (term) ((((hydra_graph_term_coder-encode el-coder) cx) g) term)))
+              (((hydra_core_extract_model_optional_term
+                 (lambda (term) ((((hydra_core_graph_term_coder-encode el-coder) cx) g) term)))
                 g) t))))
         (lambda (cx)
           (lambda (mv)
@@ -295,45 +301,45 @@
               ((null? mv) (list 'right (list 'optional (list 'none))))
               ((and (pair? mv) (eq? (car mv) 'none)) (list 'right (list 'optional (list 'none))))
               ((and (pair? mv) (eq? (car mv) 'given))
-               (let ((r (((hydra_graph_term_coder-decode el-coder) cx) (cadr mv))))
+               (let ((r (((hydra_core_graph_term_coder-decode el-coder) cx) (cadr mv))))
                  (if (eq? (car r) 'left) r (list 'right (list 'optional (cadr r))))))
               (else
-               (let ((r (((hydra_graph_term_coder-decode el-coder) cx) mv)))
+               (let ((r (((hydra_core_graph_term_coder-decode el-coder) cx) mv)))
                  (if (eq? (car r) 'left) r (list 'right (list 'optional (cadr r)))))))))))
 
     (define (tc-either left-coder right-coder)
-      (make-hydra_graph_term_coder
-       (list 'either (make-hydra_core_either_type (hydra_graph_term_coder-type left-coder) (hydra_graph_term_coder-type right-coder)))
+      (make-hydra_core_graph_term_coder
+       (list 'either (make-hydra_core_model_either_type (hydra_core_graph_term_coder-type left-coder) (hydra_core_graph_term_coder-type right-coder)))
         (lambda (cx)
           (lambda (g)
             (lambda (t)
-              ((((hydra_extract_core_either_term
-                  (lambda (term) ((((hydra_graph_term_coder-encode left-coder) cx) g) term)))
-                 (lambda (term) ((((hydra_graph_term_coder-encode right-coder) cx) g) term)))
+              ((((hydra_core_extract_model_either_term
+                  (lambda (term) ((((hydra_core_graph_term_coder-encode left-coder) cx) g) term)))
+                 (lambda (term) ((((hydra_core_graph_term_coder-encode right-coder) cx) g) term)))
                 g) t))))
         (lambda (cx)
           (lambda (ev)
             (if (eq? (car ev) 'left)
-                (let ((r (((hydra_graph_term_coder-decode left-coder) cx) (cadr ev))))
+                (let ((r (((hydra_core_graph_term_coder-decode left-coder) cx) (cadr ev))))
                   (if (eq? (car r) 'left) r (list 'right (list 'either (list 'left (cadr r))))))
-                (let ((r (((hydra_graph_term_coder-decode right-coder) cx) (cadr ev))))
+                (let ((r (((hydra_core_graph_term_coder-decode right-coder) cx) (cadr ev))))
                   (if (eq? (car r) 'left) r (list 'right (list 'either (list 'right (cadr r)))))))))))
 
     (define (tc-pair first-coder second-coder)
-      (make-hydra_graph_term_coder
-       (list 'pair (make-hydra_core_pair_type (hydra_graph_term_coder-type first-coder) (hydra_graph_term_coder-type second-coder)))
+      (make-hydra_core_graph_term_coder
+       (list 'pair (make-hydra_core_model_pair_type (hydra_core_graph_term_coder-type first-coder) (hydra_core_graph_term_coder-type second-coder)))
         (lambda (cx)
           (lambda (g)
             (lambda (t)
-              ((((hydra_extract_core_pair
-                  (lambda (term) ((((hydra_graph_term_coder-encode first-coder) cx) g) term)))
-                 (lambda (term) ((((hydra_graph_term_coder-encode second-coder) cx) g) term)))
+              ((((hydra_core_extract_model_pair
+                  (lambda (term) ((((hydra_core_graph_term_coder-encode first-coder) cx) g) term)))
+                 (lambda (term) ((((hydra_core_graph_term_coder-encode second-coder) cx) g) term)))
                 g) t))))
         (lambda (cx)
           (lambda (p)
-            (let ((fr (((hydra_graph_term_coder-decode first-coder) cx) (hydra_overlay_scheme_lib_pairs_first p))))
+            (let ((fr (((hydra_core_graph_term_coder-decode first-coder) cx) (hydra_overlay_scheme_lib_pairs_first p))))
               (if (eq? (car fr) 'left) fr
-                  (let ((sr (((hydra_graph_term_coder-decode second-coder) cx) (hydra_overlay_scheme_lib_pairs_second p))))
+                  (let ((sr (((hydra_core_graph_term_coder-decode second-coder) cx) (hydra_overlay_scheme_lib_pairs_second p))))
                     (if (eq? (car sr) 'left) sr
                         (list 'right (list 'pair (list (cadr fr) (cadr sr))))))))))))
 
@@ -347,26 +353,26 @@
     ;; runtimes (reached via the bootstrap redirect), not through these stub primitive impls.
 
     (define (tc-effect inner-coder)
-      (make-hydra_graph_term_coder
-       (list 'effect (hydra_graph_term_coder-type inner-coder))
-        (lambda (cx) (lambda (g) (lambda (t) ((((hydra_graph_term_coder-encode inner-coder) cx) g) t))))
-        (lambda (cx) (lambda (v) (((hydra_graph_term_coder-decode inner-coder) cx) v)))))
+      (make-hydra_core_graph_term_coder
+       (list 'effect (hydra_core_graph_term_coder-type inner-coder))
+        (lambda (cx) (lambda (g) (lambda (t) ((((hydra_core_graph_term_coder-encode inner-coder) cx) g) t))))
+        (lambda (cx) (lambda (v) (((hydra_core_graph_term_coder-decode inner-coder) cx) v)))))
 
     (define (tc-unit)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'unit '())
         (lambda (cx) (lambda (g) (lambda (t) (list 'right '()))))
         (lambda (cx) (lambda (v) (list 'right (list 'unit))))))
 
     (define (tc-named type-name)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'variable type-name)
         (lambda (cx) (lambda (g) (lambda (t) (list 'right t))))
         (lambda (cx) (lambda (t) (list 'right t)))))
 
     ;; TermCoder for the void type. Never legitimately exercised: void has no inhabitants.
     (define (tc-void)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'void '())
         (lambda (cx) (lambda (g) (lambda (t) (list 'right t))))
         (lambda (cx) (lambda (t) (list 'right t)))))
@@ -374,13 +380,13 @@
     ;; Term/variable passthrough coders
 
     (define (tc-variable name)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'variable name)
         (lambda (cx) (lambda (g) (lambda (t) (list 'right t))))
         (lambda (cx) (lambda (t) (list 'right t)))))
 
     (define (tc-term)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'variable "hydra.core.model.Term")
         (lambda (cx) (lambda (g) (lambda (t) (list 'right t))))
         (lambda (cx) (lambda (t) (list 'right t)))))
@@ -388,19 +394,19 @@
     ;; Comparison coder
 
     (define (tc-comparison)
-      (make-hydra_graph_term_coder
+      (make-hydra_core_graph_term_coder
        (list 'variable "hydra.core.util.Comparison")
         (lambda (cx)
           (lambda (g)
             (lambda (t)
-              (let ((r (((hydra_extract_core_unit_variant "hydra.core.util.Comparison") g) t)))
+              (let ((r (((hydra_core_extract_model_unit_variant "hydra.core.util.Comparison") g) t)))
                 (if (eq? (car r) 'left) r
                     (let ((variant-name (cadr r)))
                       (cond
                         ((equal? variant-name "lessThan")    (list 'right (list 'less_than '())))
                         ((equal? variant-name "equalTo")     (list 'right (list 'equal_to '())))
                         ((equal? variant-name "greaterThan") (list 'right (list 'greater_than '())))
-                        (else (list 'left (list 'other (make-hydra_errors_other_error
+                        (else (list 'left (list 'other (make-hydra_core_errors_other_error
                                             (string-append "unknown comparison: " variant-name))))))))))))
         (lambda (cx)
           (lambda (c)
@@ -416,39 +422,39 @@
                                   ((eq? c 'gt) "greaterThan")
                                   ((and (number? c) (> c 0)) "greaterThan")
                                   (else (error "not a comparison" c)))))
-              (list 'right (list 'inject (make-hydra_core_injection "hydra.core.util.Comparison"
-                                          (make-hydra_core_field variant-name (list 'unit '()))))))))))
+              (list 'right (list 'inject (make-hydra_core_model_injection "hydra.core.util.Comparison"
+                                          (make-hydra_core_model_field variant-name (list 'unit '()))))))))))
 
     ;; Function coders
 
     (define (tc-function dom cod)
-      (make-hydra_graph_term_coder
-       (list 'function (make-hydra_core_function_type (hydra_graph_term_coder-type dom) (hydra_graph_term_coder-type cod)))
-        (lambda (cx) (lambda (g) (lambda (t) (list 'left (list 'other (make-hydra_errors_other_error "cannot encode term to a function"))))))
-        (lambda (cx) (lambda (v) (list 'left (list 'other (make-hydra_errors_other_error "cannot decode functions to terms")))))))
+      (make-hydra_core_graph_term_coder
+       (list 'function (make-hydra_core_model_function_type (hydra_core_graph_term_coder-type dom) (hydra_core_graph_term_coder-type cod)))
+        (lambda (cx) (lambda (g) (lambda (t) (list 'left (list 'other (make-hydra_core_errors_other_error "cannot encode term to a function"))))))
+        (lambda (cx) (lambda (v) (list 'left (list 'other (make-hydra_core_errors_other_error "cannot decode functions to terms")))))))
 
     (define (tc-function-with-reduce reduce-fn dom cod)
-      (make-hydra_graph_term_coder
-       (list 'function (make-hydra_core_function_type (hydra_graph_term_coder-type dom) (hydra_graph_term_coder-type cod)))
+      (make-hydra_core_graph_term_coder
+       (list 'function (make-hydra_core_model_function_type (hydra_core_graph_term_coder-type dom) (hydra_core_graph_term_coder-type cod)))
         (lambda (cx)
           (lambda (g)
             (lambda (fun-term)
               (list 'right
                     (lambda (x)
-                      (let ((arg-result (((hydra_graph_term_coder-decode dom) cx) x)))
+                      (let ((arg-result (((hydra_core_graph_term_coder-decode dom) cx) x)))
                         (when (eq? (car arg-result) 'left)
                           (error "function_with_reduce: failed to encode argument"))
                         (let* ((arg-term (cadr arg-result))
-                               (app-term (list 'application (make-hydra_core_application fun-term arg-term)))
+                               (app-term (list 'application (make-hydra_core_model_application fun-term arg-term)))
                                (reduce-result (reduce-fn cx g app-term)))
                           (when (eq? (car reduce-result) 'left)
                             (error "function_with_reduce: failed to reduce application"))
                           (let* ((result-term (cadr reduce-result))
-                                 (decode-result ((((hydra_graph_term_coder-encode cod) cx) g) result-term)))
+                                 (decode-result ((((hydra_core_graph_term_coder-encode cod) cx) g) result-term)))
                             (when (eq? (car decode-result) 'left)
                               (error "function_with_reduce: failed to decode result"))
                             (cadr decode-result)))))))))
-        (lambda (cx) (lambda (v) (list 'left (list 'other (make-hydra_errors_other_error "cannot decode functions to terms")))))))
+        (lambda (cx) (lambda (v) (list 'left (list 'other (make-hydra_core_errors_other_error "cannot decode functions to terms")))))))
 
     ;; ============================================================================
     ;; Primitive constructors
@@ -459,14 +465,14 @@
     ;; still takes a cx argument, but the Scheme coders never inspect it
     ;; (wrap-other-error ignores it; the encode/decode lambdas discard it), so an
     ;; inert placeholder suffices here. This avoids importing the typing module's
-    ;; InferenceContext constructor into (hydra prims). Mirrors the Haskell host's
+    ;; InferenceContext constructor into (hydra core prims). Mirrors the Haskell host's
     ;; primCx = emptyInferenceContext and Python's PRIM_CX, which are likewise
     ;; vestigial under #446.
     (define prim-cx '())
 
     ;; #609 Stage 4: Build a Primitive for a kernel primitive with no native Scheme
     ;; implementation, but which declares a portable, cross-compilable defaultImplementation
-    ;; term (see hydra.core.lib.defaults/hydra_lib_defaults_default_implementations, imported here
+    ;; term (see hydra.core.lib.defaults/hydra_core_lib_defaults_default_implementations, imported here
     ;; under the def: prefix). Its implementation folds call args into an Application chain
     ;; over the term and evaluates via reduceTerm, rather than running hand-written Scheme
     ;; logic. Ported from Common Lisp / Emacs Lisp / Clojure's default-fallback-primitive.
@@ -474,69 +480,69 @@
     (define (default-fallback-primitive pname variables inputs output . rest)
       (let* ((constraints (if (pair? rest) (car rest) #f))
              (ts (build-type-scheme variables inputs output constraints))
-             (sig (hydra_scoping_type_scheme_to_term_signature ts))
-             (default-impl (let ((entry (assoc pname def:hydra_lib_defaults_default_implementations)))
+             (sig (hydra_core_scoping_type_scheme_to_term_signature ts))
+             (default-impl (let ((entry (assoc pname def:hydra_core_lib_defaults_default_implementations)))
                               (if entry (cdr entry)
                                   (error "default-fallback-primitive: no defaultImplementation for" pname))))
-             (definition (make-hydra_packaging_primitive_definition pname (list 'none) sig #t #t (list 'given default-impl))))
-        (make-hydra_graph_primitive definition
+             (definition (make-hydra_core_packaging_primitive_definition pname (list 'none) sig #t #t (list 'given default-impl))))
+        (make-hydra_core_graph_primitive definition
           (lambda (g)
             (lambda (args)
               (let ((applied (let loop ((fn-term default-impl) (remaining args))
                                (if (null? remaining)
                                    fn-term
-                                   (loop (list 'application (make-hydra_core_application fn-term (car remaining)))
+                                   (loop (list 'application (make-hydra_core_model_application fn-term (car remaining)))
                                          (cdr remaining))))))
-                ((((hydra_reduction_reduce_term prim-cx) g) #t) applied)))))))
+                ((((hydra_core_reduction_reduce_term prim-cx) g) #t) applied)))))))
 
     (define (prim0 pname value-fn variables output . rest)
       (let ((constraints (if (pair? rest) (car rest) #f)))
-        (make-hydra_graph_primitive (build-prim-def pname variables '() output constraints)
+        (make-hydra_core_graph_primitive (build-prim-def pname variables '() output constraints)
           (lambda (g)
             (lambda (args)
-              (let ((result (((hydra_graph_term_coder-decode output) prim-cx) (value-fn))))
+              (let ((result (((hydra_core_graph_term_coder-decode output) prim-cx) (value-fn))))
                 (wrap-other-error prim-cx result)))))))
 
     (define (prim1 pname compute variables input1 output . rest)
       (let ((constraints (if (pair? rest) (car rest) #f)))
-      (make-hydra_graph_primitive (build-prim-def pname variables (list input1) output constraints)
+      (make-hydra_core_graph_primitive (build-prim-def pname variables (list input1) output constraints)
         (lambda (g)
           (lambda (args)
-            (let ((check (((hydra_extract_core_n_args pname) 1) args)))
+            (let ((check (((hydra_core_extract_model_n_args pname) 1) args)))
               (if (eq? (car check) 'left) check
-                  (let ((r1 ((((hydra_graph_term_coder-encode input1) prim-cx) g) (car args))))
+                  (let ((r1 ((((hydra_core_graph_term_coder-encode input1) prim-cx) g) (car args))))
                     (if (eq? (car r1) 'left) (wrap-other-error prim-cx r1)
-                        (let ((result (((hydra_graph_term_coder-decode output) prim-cx) (compute (cadr r1)))))
+                        (let ((result (((hydra_core_graph_term_coder-decode output) prim-cx) (compute (cadr r1)))))
                           (wrap-other-error prim-cx result)))))))))))
 
     (define (prim2 pname compute variables input1 input2 output . rest)
       (let ((constraints (if (pair? rest) (car rest) #f)))
-      (make-hydra_graph_primitive (build-prim-def pname variables (list input1 input2) output constraints)
+      (make-hydra_core_graph_primitive (build-prim-def pname variables (list input1 input2) output constraints)
         (lambda (g)
           (lambda (args)
-            (let ((check (((hydra_extract_core_n_args pname) 2) args)))
+            (let ((check (((hydra_core_extract_model_n_args pname) 2) args)))
               (if (eq? (car check) 'left) check
-                  (let ((r1 ((((hydra_graph_term_coder-encode input1) prim-cx) g) (car args))))
+                  (let ((r1 ((((hydra_core_graph_term_coder-encode input1) prim-cx) g) (car args))))
                     (if (eq? (car r1) 'left) (wrap-other-error prim-cx r1)
-                        (let ((r2 ((((hydra_graph_term_coder-encode input2) prim-cx) g) (cadr args))))
+                        (let ((r2 ((((hydra_core_graph_term_coder-encode input2) prim-cx) g) (cadr args))))
                           (if (eq? (car r2) 'left) (wrap-other-error prim-cx r2)
-                              (let ((result (((hydra_graph_term_coder-decode output) prim-cx) ((compute (cadr r1)) (cadr r2)))))
+                              (let ((result (((hydra_core_graph_term_coder-decode output) prim-cx) ((compute (cadr r1)) (cadr r2)))))
                                 (wrap-other-error prim-cx result)))))))))))))
 
     (define (prim3 pname compute variables input1 input2 input3 output . rest)
       (let ((constraints (if (pair? rest) (car rest) #f)))
-      (make-hydra_graph_primitive (build-prim-def pname variables (list input1 input2 input3) output constraints)
+      (make-hydra_core_graph_primitive (build-prim-def pname variables (list input1 input2 input3) output constraints)
         (lambda (g)
           (lambda (args)
-            (let ((check (((hydra_extract_core_n_args pname) 3) args)))
+            (let ((check (((hydra_core_extract_model_n_args pname) 3) args)))
               (if (eq? (car check) 'left) check
-                  (let ((r1 ((((hydra_graph_term_coder-encode input1) prim-cx) g) (car args))))
+                  (let ((r1 ((((hydra_core_graph_term_coder-encode input1) prim-cx) g) (car args))))
                     (if (eq? (car r1) 'left) (wrap-other-error prim-cx r1)
-                        (let ((r2 ((((hydra_graph_term_coder-encode input2) prim-cx) g) (cadr args))))
+                        (let ((r2 ((((hydra_core_graph_term_coder-encode input2) prim-cx) g) (cadr args))))
                           (if (eq? (car r2) 'left) (wrap-other-error prim-cx r2)
-                              (let ((r3 ((((hydra_graph_term_coder-encode input3) prim-cx) g) (caddr args))))
+                              (let ((r3 ((((hydra_core_graph_term_coder-encode input3) prim-cx) g) (caddr args))))
                                 (if (eq? (car r3) 'left) (wrap-other-error prim-cx r3)
-                                    (let ((result (((hydra_graph_term_coder-decode output) prim-cx)
+                                    (let ((result (((hydra_core_graph_term_coder-decode output) prim-cx)
                                                     (((compute (cadr r1)) (cadr r2)) (cadr r3)))))
                                       (wrap-other-error prim-cx result)))))))))))))))
 
@@ -550,33 +556,33 @@
     ;; TypeError: Unsupported Term on self-recursive definitions.
     (define (lazy-args idxs prim)
       (let* ((idx-set idxs)
-             (def0 (hydra_graph_primitive-definition prim))
-             (sig (hydra_packaging_primitive_definition-signature def0))
-             (params (hydra_typing_term_signature-parameters sig))
+             (def0 (hydra_core_graph_primitive-definition prim))
+             (sig (hydra_core_packaging_primitive_definition-signature def0))
+             (params (hydra_core_typing_term_signature-parameters sig))
              (marked (let loop ((ps params) (i 0) (acc '()))
                        (if (null? ps)
                            (reverse acc)
                            (let ((p (car ps)))
                              (loop (cdr ps) (+ i 1)
                                    (cons (if (memv i idx-set)
-                                             (make-hydra_typing_parameter
-                                               (hydra_typing_parameter-name p)
-                                               (hydra_typing_parameter-description p)
-                                               (hydra_typing_parameter-type p)
+                                             (make-hydra_core_typing_parameter
+                                               (hydra_core_typing_parameter-name p)
+                                               (hydra_core_typing_parameter-description p)
+                                               (hydra_core_typing_parameter-type p)
                                                #t)
                                              p)
                                          acc))))))
-             (sig2 (make-hydra_typing_term_signature
-                     (hydra_typing_term_signature-type_parameters sig)
+             (sig2 (make-hydra_core_typing_term_signature
+                     (hydra_core_typing_term_signature-type_parameters sig)
                      marked
-                     (hydra_typing_term_signature-result sig)))
-             (def2 (make-hydra_packaging_primitive_definition
-                     (hydra_packaging_primitive_definition-name def0)
-                     (hydra_packaging_primitive_definition-metadata def0)
+                     (hydra_core_typing_term_signature-result sig)))
+             (def2 (make-hydra_core_packaging_primitive_definition
+                     (hydra_core_packaging_primitive_definition-name def0)
+                     (hydra_core_packaging_primitive_definition-metadata def0)
                      sig2
-                     (hydra_packaging_primitive_definition-is_pure def0)
-                     (hydra_packaging_primitive_definition-is_total def0)
-                     (hydra_packaging_primitive_definition-default_implementation def0))))
-        (make-hydra_graph_primitive def2 (hydra_graph_primitive-implementation prim))))
+                     (hydra_core_packaging_primitive_definition-is_pure def0)
+                     (hydra_core_packaging_primitive_definition-is_total def0)
+                     (hydra_core_packaging_primitive_definition-default_implementation def0))))
+        (make-hydra_core_graph_primitive def2 (hydra_core_graph_primitive-implementation prim))))
 
 ))

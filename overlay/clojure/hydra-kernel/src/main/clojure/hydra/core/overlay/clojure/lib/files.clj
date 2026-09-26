@@ -229,15 +229,15 @@
     S_IFSOCK (list :socket nil)
     (list :regular nil)))
 
-;; java.time.Instant -> hydra.core.time.Timespec (a hydra_time_timespec defrecord {:seconds :nanoseconds}).
+;; java.time.Instant -> hydra.core.time.Timespec (a hydra_core_time_timespec defrecord {:seconds :nanoseconds}).
 (defn- timespec [^java.time.Instant instant]
-  (->hydra_time_timespec (.getEpochSecond instant) (long (.getNano instant))))
+  (->hydra_core_time_timespec (.getEpochSecond instant) (long (.getNano instant))))
 
 ;; status :: Bool -> FilePath -> effect<Either<FileError, FileStatus>>
 ;; When followLinks is true (POSIX stat), a symbolic link's metadata is that of its target, and
 ;; a dangling link is not found. When false (POSIX lstat), a symbolic link's own metadata is
 ;; reported (fileType link), and a dangling link is not an error.
-;; FileStatus is a hydra_file_file_status defrecord
+;; FileStatus is a hydra_core_file_file_status defrecord
 ;; {:file_type :size :modification_time :access_time :status_change_time}.
 (def hydra_overlay_clojure_lib_files_status
   "Retrieve metadata about the file at path."
@@ -248,7 +248,7 @@
                          (into-array LinkOption [LinkOption/NOFOLLOW_LINKS]))
               attrs (Files/readAttributes (path-of path) "unix:*" options)
               mode (int (.get attrs "mode"))]
-          (->hydra_file_file_status
+          (->hydra_core_file_file_status
             (file-type-from-mode mode)
             (.get attrs "size")
             (timespec (.toInstant ^java.nio.file.attribute.FileTime (.get attrs "lastModifiedTime")))

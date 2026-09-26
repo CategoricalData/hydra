@@ -1,28 +1,35 @@
+;; #729: the module-grammar rename reordered kernel module names so the package root
+;; ("core") comes before the category segment, e.g. (hydra graph) -> (hydra core graph)
+;; and (hydra print core) -> (hydra core print model) (the "core" submodule of print
+;; was itself renamed to "model", matching hydra.core -> hydra.core.model). (hydra
+;; prims) keeps its bare pre-#729 name (hand-written overlay driver, not renamed). The
+;; (hydra overlay scheme ...) imports are unaffected -- overlay modules keep the
+;; hydra.overlay.<lang>.* namespace (#501), not hydra.core.overlay.<lang>.*.
 (define-library (hydra test_runner)
   (import (scheme base) (scheme write) (scheme cxr) (scheme char)
           (scheme file)  ; #494: file-exists? / delete-file for effectful temp-dir prep
           (only (guile) mkdir rmdir opendir readdir closedir)  ; #494: directory ops (guile)
-          (hydra core)
-          (hydra graph)
+          (hydra core model)
+          (hydra core graph)
           (hydra prims)
-          (hydra reduction)
-          (hydra rewriting)
-          (hydra formatting)
-          (hydra sorting)
-          (hydra serialization)
-          (hydra inference)
-          (hydra checking)
-          (hydra hoisting)
-          (hydra unification)
-          (hydra substitution)
-          (hydra print core)
-          (hydra testing)
-          (hydra json bootstrap)
-          (hydra json parser)
-          (hydra json writer)
-          (hydra json encode)
-          (hydra json decode)
-          (hydra test test_graph)
+          (hydra core reduction)
+          (hydra core rewriting)
+          (hydra core formatting)
+          (hydra core sorting)
+          (hydra core serialization)
+          (hydra core inference)
+          (hydra core checking)
+          (hydra core hoisting)
+          (hydra core unification)
+          (hydra core substitution)
+          (hydra core print model)
+          (hydra core testing)
+          (hydra core json bootstrap)
+          (hydra core json parser)
+          (hydra core json writer)
+          (hydra core json encode)
+          (hydra core json decode)
+          (hydra core test test_graph)
           (hydra overlay scheme libraries)
           (hydra overlay scheme lib equality)
           (hydra overlay scheme lib maps)
@@ -350,10 +357,10 @@
                                   bootstrap-types))
              (test-schemas (map (lambda (entry)
                                   (list (car entry) (type-to-ts (cadr entry))))
-                                (hydra_core_lib_maps_to_list test-types)))
-             (schema-types (hydra_core_lib_maps_from_list (append kernel-schemas test-schemas)))
+                                (hydra_overlay_scheme_lib_maps_to_list test-types)))
+             (schema-types (hydra_overlay_scheme_lib_maps_from_list (append kernel-schemas test-schemas)))
              ;; Test terms
-             (test-terms-alist (hydra_core_lib_maps_to_list hydra_core_test_test_graph_test_terms))
+             (test-terms-alist (hydra_overlay_scheme_lib_maps_to_list hydra_core_test_test_graph_test_terms))
              (test-terms (map (lambda (entry) (list (car entry) (cdr entry))) test-terms-alist))
              (bound-terms
                (append
@@ -369,12 +376,12 @@
                  ;; Test terms
                  test-terms)))
         (make-hydra_core_graph_graph
-          (hydra_core_lib_maps_from_list bound-terms)
-          hydra_core_lib_maps_empty
+          (hydra_overlay_scheme_lib_maps_from_list bound-terms)
+          hydra_overlay_scheme_lib_maps_empty
           '()
           '()
-          hydra_core_lib_maps_empty
-          (hydra_core_lib_maps_from_list
+          hydra_overlay_scheme_lib_maps_empty
+          (hydra_overlay_scheme_lib_maps_from_list
             (map (lambda (p) (list (car p) (cdr p))) all-prims))
           schema-types
           '())))
@@ -392,14 +399,14 @@
     (define (empty-graph)
       (let ((std-prims (standard-library)))
         (make-hydra_core_graph_graph
-          hydra_core_lib_maps_empty
-          hydra_core_lib_maps_empty
+          hydra_overlay_scheme_lib_maps_empty
+          hydra_overlay_scheme_lib_maps_empty
           '()
           '()
-          hydra_core_lib_maps_empty
-          (hydra_core_lib_maps_from_list
+          hydra_overlay_scheme_lib_maps_empty
+          (hydra_overlay_scheme_lib_maps_from_list
             (map (lambda (p) (list (car p) (cdr p))) std-prims))
-          hydra_core_lib_maps_empty
+          hydra_overlay_scheme_lib_maps_empty
           '())))
 
     ;; ==========================================================================
@@ -1205,7 +1212,7 @@
     (define (run-subst-in-type-test path tc)
       (let* (;; Build TypeSubst from list of (name, type) pairs
              ;; Note: TypeSubst is transparent (bare alist map, not a record)
-             (subst-alist (hydra_core_lib_maps_from_list
+             (subst-alist (hydra_overlay_scheme_lib_maps_from_list
                             (hydra_core_testing_subst_in_type_test_case-substitution tc))))
         (run-simple-test path
           (hydra_core_testing_subst_in_type_test_case-output tc)
@@ -1220,7 +1227,7 @@
              ;; Build schema types as Hydra alist map from the list of names
              (schema-entries (map (lambda (n) (list n (make-hydra_core_model_type_scheme '() (list 'variable n) '())))
                                   (hydra_core_testing_unify_types_test_case-schema_types tc)))
-             (schema-types (hydra_core_lib_maps_from_list schema-entries))
+             (schema-types (hydra_overlay_scheme_lib_maps_from_list schema-entries))
              (result (((((hydra_core_unification_unify_types cx) schema-types)
                          (hydra_core_testing_unify_types_test_case-left tc))
                         (hydra_core_testing_unify_types_test_case-right tc))
@@ -1254,7 +1261,7 @@
                         (normalize-subst (lambda (ts)
                                            (my-list-sort
                                              (lambda (a b) (string<? (car a) (car b)))
-                                             (hydra_core_lib_maps_to_list ts)))))
+                                             (hydra_overlay_scheme_lib_maps_to_list ts)))))
                    (if (equal? (normalize-subst expected-subst) (normalize-subst actual-subst))
                        (list 1 0 0)
                        (begin
@@ -1315,7 +1322,7 @@
     ;; ---- Topological sort bindings ----
 
     (define (run-topological-sort-bindings-test path tc)
-      (let* ((binding-map (hydra_core_lib_maps_from_list
+      (let* ((binding-map (hydra_overlay_scheme_lib_maps_from_list
                             (hydra_core_testing_topological_sort_bindings_test_case-bindings tc)))
              (result (hydra_core_dependencies_topological_sort_binding_map binding-map))
              ;; Compare as sets of sets (order within SCCs doesn't matter)
@@ -1566,7 +1573,7 @@
                    (display (string-append "FAIL: " path "\n"))
                    (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                    (list 0 1 0)))
-        (let* ((empty-types hydra_core_lib_maps_empty)
+        (let* ((empty-types hydra_overlay_scheme_lib_maps_empty)
                (tc-type (hydra_core_testing_json_coder_test_case-type tc))
                (tc-term (hydra_core_testing_json_coder_test_case-term tc))
                (tc-json (hydra_core_testing_json_coder_test_case-json tc))
@@ -1608,7 +1615,7 @@
                    (display (string-append "FAIL: " path "\n"))
                    (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                    (list 0 1 0)))
-        (let* ((empty-types hydra_core_lib_maps_empty)
+        (let* ((empty-types hydra_overlay_scheme_lib_maps_empty)
                (tc-type (hydra_core_testing_json_roundtrip_test_case-type tc))
                (tc-term (hydra_core_testing_json_roundtrip_test_case-term tc))
                (encode-result (hydra_core_json_encode_to_json tc-term)))
@@ -1642,7 +1649,7 @@
                    (display (string-append "FAIL: " path "\n"))
                    (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                    (list 0 1 0)))
-        (let* ((empty-types hydra_core_lib_maps_empty)
+        (let* ((empty-types hydra_overlay_scheme_lib_maps_empty)
                (tc-type (hydra_core_testing_json_decode_test_case-type tc))
                (tc-json (hydra_core_testing_json_decode_test_case-json tc))
                (expected (hydra_core_testing_json_decode_test_case-expected tc))

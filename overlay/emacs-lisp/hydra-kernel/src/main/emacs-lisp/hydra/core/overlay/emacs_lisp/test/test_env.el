@@ -10,8 +10,8 @@
 ;;
 ;; The kernel filters hydra.core.test.testEnv from emitted output (via the
 ;; testSkipEmit set in each host bootstrap), so the auto-generated
-;; test_graph.el module references hydra_test_test_env_test_context and
-;; hydra_test_test_env_test_graph — both must be supplied by hand per
+;; test_graph.el module references hydra_core_test_test_env_test_context and
+;; hydra_core_test_test_env_test_graph — both must be supplied by hand per
 ;; host language. This file is the Emacs Lisp implementation.
 
 (require 'cl-lib)
@@ -21,8 +21,8 @@
 (require 'hydra.core.json.bootstrap)
 (require 'hydra.annotation-bindings)
 
-;; Empty context: alist-style structure matching hydra_typing_inference_context.
-(defvar hydra_test_test_env_test_context
+;; Empty context: alist-style structure matching hydra_core_typing_inference_context.
+(defvar hydra_core_test_test_env_test_context
   (list (cons :fresh_type_variable_count 0)
         (cons :trace nil)))
 
@@ -32,12 +32,12 @@
 ;; Returns a Graph populated with primitives, schema types (kernel +
 ;; caller-supplied test types), annotation bindings, and caller-supplied
 ;; test terms.
-(defun hydra_test_test_env_test_graph (test-types)
+(defun hydra_core_test_test_env_test_graph (test-types)
   (lambda (test-terms)
     (let* ((std-prims (standard-library))
            (type-to-ts (lambda (typ)
-                         (funcall hydra_scoping_f_type_to_type_scheme typ)))
-           (boot-types-raw hydra_json_bootstrap_types_by_name)
+                         (funcall hydra_core_scoping_f_type_to_type_scheme typ)))
+           (boot-types-raw hydra_core_json_bootstrap_types_by_name)
            (kernel-schemas
              (mapcar (lambda (entry)
                        (list (car entry) (funcall type-to-ts (cdr entry))))

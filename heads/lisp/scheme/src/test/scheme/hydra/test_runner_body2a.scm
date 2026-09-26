@@ -188,7 +188,7 @@
 (define (run-subst-in-type-test path tc)
   (let* (;; Build TypeSubst from list of (name, type) pairs
          ;; Note: TypeSubst is transparent (bare alist map, not a record)
-         (subst-alist (hydra_core_lib_maps_from_list
+         (subst-alist (hydra_overlay_scheme_lib_maps_from_list
                         (hydra_core_testing_subst_in_type_test_case-substitution tc))))
     (run-simple-test path
       (hydra_core_testing_subst_in_type_test_case-output tc)
@@ -203,7 +203,7 @@
          ;; Build schema types as Hydra alist map from the list of names
          (schema-entries (map (lambda (n) (list n (make-hydra_core_model_type_scheme '() (list 'variable n) '())))
                               (hydra_core_testing_unify_types_test_case-schema_types tc)))
-         (schema-types (hydra_core_lib_maps_from_list schema-entries))
+         (schema-types (hydra_overlay_scheme_lib_maps_from_list schema-entries))
          (result (((((hydra_core_unification_unify_types cx) schema-types)
                      (hydra_core_testing_unify_types_test_case-left tc))
                     (hydra_core_testing_unify_types_test_case-right tc))
@@ -237,7 +237,7 @@
                     (normalize-subst (lambda (ts)
                                        (my-list-sort
                                          (lambda (a b) (string<? (car a) (car b)))
-                                         (hydra_core_lib_maps_to_list ts)))))
+                                         (hydra_overlay_scheme_lib_maps_to_list ts)))))
                (if (equal? (normalize-subst expected-subst) (normalize-subst actual-subst))
                    (list 1 0 0)
                    (begin
@@ -298,7 +298,7 @@
 ;; ---- Topological sort bindings ----
 
 (define (run-topological-sort-bindings-test path tc)
-  (let* ((binding-map (hydra_core_lib_maps_from_list
+  (let* ((binding-map (hydra_overlay_scheme_lib_maps_from_list
                         (hydra_core_testing_topological_sort_bindings_test_case-bindings tc)))
          (result (hydra_core_dependencies_topological_sort_binding_map binding-map))
          ;; Compare as sets of sets (order within SCCs doesn't matter)
@@ -362,7 +362,7 @@
                (display (string-append "FAIL: " path "\n"))
                (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                (list 0 1 0)))
-    (let* ((empty-types hydra_core_lib_maps_empty)
+    (let* ((empty-types hydra_overlay_scheme_lib_maps_empty)
            (tc-type (hydra_core_testing_json_coder_test_case-type tc))
            (tc-term (hydra_core_testing_json_coder_test_case-term tc))
            (tc-json (hydra_core_testing_json_coder_test_case-json tc))
@@ -404,7 +404,7 @@
                (display (string-append "FAIL: " path "\n"))
                (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                (list 0 1 0)))
-    (let* ((empty-types hydra_core_lib_maps_empty)
+    (let* ((empty-types hydra_overlay_scheme_lib_maps_empty)
            (tc-type (hydra_core_testing_json_roundtrip_test_case-type tc))
            (tc-term (hydra_core_testing_json_roundtrip_test_case-term tc))
            (encode-result (hydra_core_json_encode_to_json tc-term)))
@@ -438,7 +438,7 @@
                (display (string-append "FAIL: " path "\n"))
                (display (string-append "  EXCEPTION: " (obj->string exn) "\n"))
                (list 0 1 0)))
-    (let* ((empty-types hydra_core_lib_maps_empty)
+    (let* ((empty-types hydra_overlay_scheme_lib_maps_empty)
            (tc-type (hydra_core_testing_json_decode_test_case-type tc))
            (tc-json (hydra_core_testing_json_decode_test_case-json tc))
            (expected (hydra_core_testing_json_decode_test_case-expected tc))

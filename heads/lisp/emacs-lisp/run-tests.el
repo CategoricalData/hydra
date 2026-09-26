@@ -9,13 +9,15 @@
 ;; the assembler. The head loads it from dist/, never from heads/ or overlay/.
 ;; Compute the dist base first (honoring the bootstrap demo's HYDRA_LISP_DIST_BASE
 ;; flat layout), then load the loader from dist.
+;; #729: the module-grammar rename moved the hydra.core.* kernel (main + overlay
+;; copy, incl. loader.el) down one level into hydra/core/.
 (let* ((env-base (getenv "HYDRA_LISP_DIST_BASE"))
        (dist-base (if (and env-base (> (length env-base) 0))
                       (file-name-as-directory env-base)
                     (expand-file-name "../../../dist/emacs-lisp/hydra-kernel/"
                                       (file-name-directory load-file-name)))))
-  (setq hydra-gen-main-dir (expand-file-name "src/main/emacs-lisp/hydra/" dist-base))
-  (setq hydra-gen-test-dir (expand-file-name "src/test/emacs-lisp/hydra/" dist-base))
+  (setq hydra-gen-main-dir (expand-file-name "src/main/emacs-lisp/hydra/core/" dist-base))
+  (setq hydra-gen-test-dir (expand-file-name "src/test/emacs-lisp/hydra/core/" dist-base))
 
   ;; #546: the hydra.build.* main + hydra.core.test.build.* test modules moved to the
   ;; hydra-build package's own dist tree. In the repo layout they live under
@@ -61,15 +63,20 @@
 ;; dist/json/hydra-build/src/main/json/expected-libraries.json by update-json-manifest.
 ;; Fail LOUDLY, named culprit, if this host's native runtime is missing an expected
 ;; library — the #533 payoff. "Registered" is probed at the RUNTIME level (is there a
-;; bound hydra_core_overlay_emacs_lisp_lib_<name>_* symbol?), immune to load-list drift.
+;; bound hydra_overlay_emacs_lisp_lib_<name>_* symbol?), immune to load-list drift.
 ;; The artifact lives in the hydra-build json dist tree, resolved as a head sibling
 ;; (../../../dist/...); in the bootstrap-demo flat layout (HYDRA_LISP_DIST_BASE set)
 ;; that tree is not assembled, so the check is skipped there.
+;; #501/#729: overlay implementations are declared under the hydra.overlay.<lang>.*
+;; namespace (not hydra.core.overlay.<lang>.*), so the native symbol prefix is
+;; hydra_overlay_emacs_lisp_lib_<name>_ -- see e.g.
+;; overlay/emacs-lisp/.../hydra/core/overlay/emacs_lisp/lib/strings.el, whose defuns
+;; are named hydra_overlay_emacs_lisp_lib_strings_*.
 (require 'json)
 (defun hydra-native-library-registered-p (name)
   "True if this host's native runtime defines at least one bound symbol for the
-hydra.lib.NAME library, i.e. hydra_core_overlay_emacs_lisp_lib_<name>_*."
-  (let ((prefix (concat "hydra_core_overlay_emacs_lisp_lib_" name "_"))
+hydra.lib.NAME library, i.e. hydra_overlay_emacs_lisp_lib_<name>_*."
+  (let ((prefix (concat "hydra_overlay_emacs_lisp_lib_" name "_"))
         (found nil))
     (mapatoms
      (lambda (sym)
