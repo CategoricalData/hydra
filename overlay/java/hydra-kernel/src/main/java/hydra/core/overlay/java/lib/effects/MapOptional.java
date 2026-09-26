@@ -29,7 +29,7 @@ public class MapOptional extends PrimitiveFunction {
      * @return the name "hydra.core.lib.effects.mapOptional"
      */
     public Name name() {
-        return hydra.lib.Effects.mapOptional().name;
+        return hydra.core.lib.Effects.mapOptional().name;
     }
 
     /**

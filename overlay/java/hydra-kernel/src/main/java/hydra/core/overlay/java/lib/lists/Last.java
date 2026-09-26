@@ -24,7 +24,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Last extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.last().name;
+        return hydra.core.lib.Lists.last().name;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class Last extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<List<Term>, Term>) l -> Terms.optional(Last.apply(l)), hydra.core.extract.Core.list(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<List<Term>, Term>) l -> Terms.optional(Last.apply(l)), hydra.core.extract.Model.list(graph, args.get(0)));
     }
 
     /**

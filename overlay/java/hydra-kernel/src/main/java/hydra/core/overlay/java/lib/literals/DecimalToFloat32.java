@@ -23,7 +23,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class DecimalToFloat32 extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Literals.decimalToFloat32().name;
+        return hydra.core.lib.Literals.decimalToFloat32().name;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class DecimalToFloat32 extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(d -> Terms.float32(apply(d)), hydra.core.extract.Core.decimal(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(d -> Terms.float32(apply(d)), hydra.core.extract.Model.decimal(graph, args.get(0)));
     }
 
     public static Float apply(BigDecimal value) {

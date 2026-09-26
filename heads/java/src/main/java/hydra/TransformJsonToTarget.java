@@ -1,5 +1,6 @@
 package hydra;
 
+import hydra.core.Codegen;
 import hydra.build.overlay.java.Generation;
 import hydra.core.packaging.Definition;
 import hydra.core.packaging.Module;
@@ -242,7 +243,7 @@ public class TransformJsonToTarget {
         } else if (includeDsls) {
             // mainDslModules lists the SOURCE type-module names (e.g. hydra.jvm.serde), not the
             // derived DSL wrapper module names — the wrapper's own JSON lives at the name
-            // hydra.Dsls.dslModuleName(ns) produces (e.g. hydra.jvm.dsl.serde), already generated
+            // hydra.core.Dsls.dslModuleName(ns) produces (e.g. hydra.jvm.dsl.serde), already generated
             // and stored as its own file. Mirrors bootstrap-from-json/Main.hs's loadPackageDsl:
             // derive names via dslModuleName, then filter to those that actually exist on disk
             // before loading (a source module may have no DSL-eligible bindings).
@@ -250,7 +251,7 @@ public class TransformJsonToTarget {
             List<ModuleName> dslSrcNs = Bootstrap.readManifestFieldOrEmpty(pkgMainDir, "mainDslModules");
             modsToGenerate = new ArrayList<>(pkgMainMods);
             List<ModuleName> derivedNs = new ArrayList<>();
-            for (ModuleName ns : dslSrcNs) derivedNs.add(hydra.Dsls.dslModuleName(ns));
+            for (ModuleName ns : dslSrcNs) derivedNs.add(hydra.core.Dsls.dslModuleName(ns));
             List<ModuleName> existingNs = new ArrayList<>();
             for (ModuleName ns : derivedNs) {
                 java.nio.file.Path p = Paths.get(pkgMainDir, Codegen.moduleNameToPath(ns) + ".json");
@@ -441,7 +442,7 @@ public class TransformJsonToTarget {
             case "java":       return hydra.java.Language.javaLanguage();
             case "python":     return hydra.python.Language.pythonLanguage();
             case "scala":      return hydra.scala.Language.scalaLanguage();
-            case "typescript": return hydra.typeScript.Language.typeScriptLanguage();
+            case "typescript": return hydra.typescript.Language.typeScriptLanguage();
             case "clojure":      return GenerationTargets.lispDialectLanguage("clojureLanguage");
             case "scheme":       return GenerationTargets.lispDialectLanguage("schemeLanguage");
             case "common-lisp":  return GenerationTargets.lispDialectLanguage("commonLispLanguage");
@@ -489,7 +490,7 @@ public class TransformJsonToTarget {
     // level down (via fsub); calling recurse.apply(t) first (bottom-up) then inspecting the result
     // is the exact contract, matching the Haskell `recurse t` application.
     private static hydra.core.model.Term stripScaleDistinctCases(hydra.core.model.Term term0) {
-        return hydra.Rewriting.rewriteTerm(
+        return hydra.core.Rewriting.rewriteTerm(
                 recurse -> t -> {
                     hydra.core.model.Term recursedT = recurse.apply(t);
                     if (recursedT instanceof hydra.core.model.Term.List) {

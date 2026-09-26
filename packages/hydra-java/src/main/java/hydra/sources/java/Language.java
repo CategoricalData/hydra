@@ -7,7 +7,6 @@ import static hydra.core.overlay.java.dsl.meta.Defs.definitionsOf;
 import static hydra.core.overlay.java.dsl.meta.Defs.unqualifiedDeps;
 import hydra.core.model.Name;
 import hydra.core.model.Type;
-import hydra.core.dsl.Core;
 import hydra.core.dsl.Packaging;
 import hydra.core.overlay.java.dsl.Types;
 import hydra.java.dsl.Environment;

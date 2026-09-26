@@ -27,7 +27,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Mod extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Math_.mod().name;
+        return hydra.core.lib.Math_.mod().name;
     }
 
     @Override

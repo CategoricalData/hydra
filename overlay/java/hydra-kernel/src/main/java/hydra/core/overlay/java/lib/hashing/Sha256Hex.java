@@ -29,7 +29,7 @@ public class Sha256Hex extends PrimitiveFunction {
      * @return the name "hydra.core.lib.hashing.sha256Hex"
      */
     public Name name() {
-        return hydra.lib.Hashing.sha256Hex().name;
+        return hydra.core.lib.Hashing.sha256Hex().name;
     }
 
     /**
@@ -49,7 +49,7 @@ public class Sha256Hex extends PrimitiveFunction {
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(
             bytes -> Terms.string(Sha256Hex.apply(bytes)),
-            hydra.core.extract.Core.binary(graph, args.get(0)));
+            hydra.core.extract.Model.binary(graph, args.get(0)));
     }
 
     /**

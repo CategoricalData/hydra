@@ -31,7 +31,7 @@ public class Rename extends PrimitiveFunction {
      * @return the name "hydra.core.lib.files.rename"
      */
     public Name name() {
-        return hydra.lib.Files.rename().name;
+        return hydra.core.lib.Files.rename().name;
     }
 
     /**

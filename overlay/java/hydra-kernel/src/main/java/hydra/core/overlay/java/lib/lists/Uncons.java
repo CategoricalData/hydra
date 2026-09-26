@@ -28,7 +28,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Uncons extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.uncons().name;
+        return hydra.core.lib.Lists.uncons().name;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class Uncons extends PrimitiveFunction {
         return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(
             (Function<List<Term>, Term>) l -> Terms.optional(
                 Uncons.apply(l).map(p -> Terms.pair(p.first, Terms.list(p.second)))),
-            hydra.core.extract.Core.list(graph, args.get(0)));
+            hydra.core.extract.Model.list(graph, args.get(0)));
     }
 
     /**

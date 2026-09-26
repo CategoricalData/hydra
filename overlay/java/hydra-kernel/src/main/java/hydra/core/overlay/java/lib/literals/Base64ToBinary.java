@@ -28,7 +28,7 @@ public class Base64ToBinary extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.base64ToBinary"
      */
     public Name name() {
-        return hydra.lib.Literals.base64ToBinary().name;
+        return hydra.core.lib.Literals.base64ToBinary().name;
     }
 
     /**
@@ -46,7 +46,7 @@ public class Base64ToBinary extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<String, Term>) s -> new Term.Literal(new hydra.core.model.Literal.Binary(apply(s))), hydra.core.extract.Core.string(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<String, Term>) s -> new Term.Literal(new hydra.core.model.Literal.Binary(apply(s))), hydra.core.extract.Model.string(graph, args.get(0)));
     }
 
     /**

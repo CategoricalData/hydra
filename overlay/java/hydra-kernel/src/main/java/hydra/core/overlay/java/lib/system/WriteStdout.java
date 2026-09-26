@@ -26,7 +26,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class WriteStdout extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.System_.writeStdout().name;
+        return hydra.core.lib.System_.writeStdout().name;
     }
 
     @Override

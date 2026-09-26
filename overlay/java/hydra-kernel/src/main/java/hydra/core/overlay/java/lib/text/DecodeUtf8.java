@@ -33,7 +33,7 @@ public class DecodeUtf8 extends PrimitiveFunction {
      * @return the name "hydra.core.lib.text.decodeUtf8"
      */
     public Name name() {
-        return hydra.lib.Text.decodeUtf8().name;
+        return hydra.core.lib.Text.decodeUtf8().name;
     }
 
     /**
@@ -62,7 +62,7 @@ public class DecodeUtf8 extends PrimitiveFunction {
                     return Terms.right(Terms.string(right.value));
                 }
             }),
-            hydra.core.extract.Core.binary(graph, args.get(0)));
+            hydra.core.extract.Model.binary(graph, args.get(0)));
     }
 
     /**

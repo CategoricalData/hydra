@@ -42,7 +42,7 @@ public class Partition extends PrimitiveFunction {
         return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((java.util.List<hydra.core.overlay.java.util.Either<Term, Term>> eithers) -> {
                 Pair<List<Term>, List<Term>> p = apply(eithers);
                 return Terms.pair(new Term.List(p.first), new Term.List(p.second));
-            }, hydra.core.extract.Core.listOf(arg -> hydra.core.extract.Core.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph, arg), graph, args.get(0)));
+            }, hydra.core.extract.Model.listOf(arg -> hydra.core.extract.Model.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph, arg), graph, args.get(0)));
     }
 
     /**

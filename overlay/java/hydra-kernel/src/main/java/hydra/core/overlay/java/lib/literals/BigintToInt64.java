@@ -27,7 +27,7 @@ public class BigintToInt64 extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.bigintToInt64"
      */
     public Name name() {
-        return hydra.lib.Literals.bigintToInt64().name;
+        return hydra.core.lib.Literals.bigintToInt64().name;
     }
 
     /**
@@ -45,7 +45,7 @@ public class BigintToInt64 extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.int64(apply(s)), hydra.core.extract.Core.bigint(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.int64(apply(s)), hydra.core.extract.Model.bigint(graph, args.get(0)));
     }
 
     /**

@@ -25,7 +25,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Find extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Regex.find().name;
+        return hydra.core.lib.Regex.find().name;
     }
 
     @Override
@@ -36,10 +36,10 @@ public class Find extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(
-            hydra.core.extract.Core.string(graph, args.get(0)),
+            hydra.core.extract.Model.string(graph, args.get(0)),
             pat -> hydra.core.overlay.java.lib.eithers.Map.apply(
                 input -> Terms.optional(apply(pat, input).map(Terms::string)),
-                hydra.core.extract.Core.string(graph, args.get(1))));
+                hydra.core.extract.Model.string(graph, args.get(1))));
     }
 
     public static Function<String, Optional<String>> apply(String pattern) {

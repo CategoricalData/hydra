@@ -34,7 +34,7 @@ public class ListDirectory extends PrimitiveFunction {
      * @return the name "hydra.core.lib.files.listDirectory"
      */
     public Name name() {
-        return hydra.lib.Files.listDirectory().name;
+        return hydra.core.lib.Files.listDirectory().name;
     }
 
     /**

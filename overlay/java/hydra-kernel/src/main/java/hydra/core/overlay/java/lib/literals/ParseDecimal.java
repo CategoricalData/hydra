@@ -31,7 +31,7 @@ public class ParseDecimal extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.parseDecimal"
      */
     public Name name() {
-        return hydra.lib.Literals.parseDecimal().name;
+        return hydra.core.lib.Literals.parseDecimal().name;
     }
 
     /**
@@ -49,7 +49,7 @@ public class ParseDecimal extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.optional(apply(s).map(Terms::decimal)), hydra.core.extract.Core.string(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.optional(apply(s).map(Terms::decimal)), hydra.core.extract.Model.string(graph, args.get(0)));
     }
 
     /**

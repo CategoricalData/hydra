@@ -26,7 +26,7 @@ public class Join extends PrimitiveFunction {
      * @return the name "hydra.core.lib.strings.join"
      */
     public Name name() {
-        return hydra.lib.Strings.join().name;
+        return hydra.core.lib.Strings.join().name;
     }
 
     /**
@@ -44,7 +44,7 @@ public class Join extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.string(graph, args.get(0)), delim -> hydra.core.overlay.java.lib.eithers.Map.apply(strings -> Terms.string(Join.apply(delim, strings)), hydra.core.extract.Core.listOf(t -> hydra.core.extract.Core.string(graph, t), graph, args.get(1))));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.string(graph, args.get(0)), delim -> hydra.core.overlay.java.lib.eithers.Map.apply(strings -> Terms.string(Join.apply(delim, strings)), hydra.core.extract.Model.listOf(t -> hydra.core.extract.Model.string(graph, t), graph, args.get(1))));
     }
 
     /**

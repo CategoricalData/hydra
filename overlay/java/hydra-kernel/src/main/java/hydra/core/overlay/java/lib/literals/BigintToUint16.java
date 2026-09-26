@@ -27,7 +27,7 @@ public class BigintToUint16 extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.bigintToUint16"
      */
     public Name name() {
-        return hydra.lib.Literals.bigintToUint16().name;
+        return hydra.core.lib.Literals.bigintToUint16().name;
     }
 
     /**
@@ -45,7 +45,7 @@ public class BigintToUint16 extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.uint16(apply(s)), hydra.core.extract.Core.bigint(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.uint16(apply(s)), hydra.core.extract.Model.bigint(graph, args.get(0)));
     }
 
     /**

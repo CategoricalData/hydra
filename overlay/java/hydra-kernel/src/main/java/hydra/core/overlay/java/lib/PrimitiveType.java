@@ -44,47 +44,47 @@ public class PrimitiveType<T> {
     }
 
     public static PrimitiveType<Boolean> boolean_() {
-        return new PrimitiveType<>("boolean", Types.boolean_(), hydra.core.extract.Core::boolean_, Boolean::compareTo);
+        return new PrimitiveType<>("boolean", Types.boolean_(), hydra.core.extract.Model::boolean_, Boolean::compareTo);
     }
 
     public static PrimitiveType<BigInteger> bigint() {
-        return new PrimitiveType<>("bigint", Types.bigint(), hydra.core.extract.Core::bigint, BigInteger::compareTo);
+        return new PrimitiveType<>("bigint", Types.bigint(), hydra.core.extract.Model::bigint, BigInteger::compareTo);
     }
 
     public static PrimitiveType<String> binary() {
         return new PrimitiveType<>("binary", Types.binary(),
             (graph, t) -> hydra.core.overlay.java.lib.eithers.Map.apply(
                 bytes -> new String(bytes, java.nio.charset.StandardCharsets.UTF_8),
-                hydra.core.extract.Core.binary(graph, t)),
+                hydra.core.extract.Model.binary(graph, t)),
             String::compareTo);
     }
 
     public static PrimitiveType<Float> float32() {
-        return new PrimitiveType<>("float32", Types.float32(), hydra.core.extract.Core::float32, Float::compareTo);
+        return new PrimitiveType<>("float32", Types.float32(), hydra.core.extract.Model::float32, Float::compareTo);
     }
 
     public static PrimitiveType<Double> float64() {
-        return new PrimitiveType<>("float64", Types.float64(), hydra.core.extract.Core::float64, Double::compareTo);
+        return new PrimitiveType<>("float64", Types.float64(), hydra.core.extract.Model::float64, Double::compareTo);
     }
 
     public static PrimitiveType<Byte> int8() {
-        return new PrimitiveType<>("int8", Types.int8(), hydra.core.extract.Core::int8, Byte::compareTo);
+        return new PrimitiveType<>("int8", Types.int8(), hydra.core.extract.Model::int8, Byte::compareTo);
     }
 
     public static PrimitiveType<Short> int16() {
-        return new PrimitiveType<>("int16", Types.int16(), hydra.core.extract.Core::int16, Short::compareTo);
+        return new PrimitiveType<>("int16", Types.int16(), hydra.core.extract.Model::int16, Short::compareTo);
     }
 
     public static PrimitiveType<Integer> int32() {
-        return new PrimitiveType<>("int32", Types.int32(), hydra.core.extract.Core::int32, Integer::compareTo);
+        return new PrimitiveType<>("int32", Types.int32(), hydra.core.extract.Model::int32, Integer::compareTo);
     }
 
     public static PrimitiveType<Long> int64() {
-        return new PrimitiveType<>("int64", Types.int64(), hydra.core.extract.Core::int64, Long::compareTo);
+        return new PrimitiveType<>("int64", Types.int64(), hydra.core.extract.Model::int64, Long::compareTo);
     }
 
     public static PrimitiveType<String> string() {
-        return new PrimitiveType<>("string", Types.string(), hydra.core.extract.Core::string, String::compareTo);
+        return new PrimitiveType<>("string", Types.string(), hydra.core.extract.Model::string, String::compareTo);
     }
 
     public static PrimitiveType<Term> term() {
@@ -108,18 +108,18 @@ public class PrimitiveType<T> {
     }
 
     public static PrimitiveType<Short> uint8() {
-        return new PrimitiveType<>("uint8", Types.uint8(), hydra.core.extract.Core::uint8, Short::compareTo);
+        return new PrimitiveType<>("uint8", Types.uint8(), hydra.core.extract.Model::uint8, Short::compareTo);
     }
 
     public static PrimitiveType<Character> uint16() {
-        return new PrimitiveType<>("uint16", Types.uint16(), hydra.core.extract.Core::uint16, Character::compareTo);
+        return new PrimitiveType<>("uint16", Types.uint16(), hydra.core.extract.Model::uint16, Character::compareTo);
     }
 
     public static PrimitiveType<Long> uint32() {
-        return new PrimitiveType<>("uint32", Types.uint32(), hydra.core.extract.Core::uint32, Long::compareTo);
+        return new PrimitiveType<>("uint32", Types.uint32(), hydra.core.extract.Model::uint32, Long::compareTo);
     }
 
     public static PrimitiveType<BigInteger> uint64() {
-        return new PrimitiveType<>("uint64", Types.uint64(), hydra.core.extract.Core::uint64, BigInteger::compareTo);
+        return new PrimitiveType<>("uint64", Types.uint64(), hydra.core.extract.Model::uint64, BigInteger::compareTo);
     }
 }

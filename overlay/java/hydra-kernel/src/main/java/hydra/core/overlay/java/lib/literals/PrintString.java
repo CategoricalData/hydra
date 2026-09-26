@@ -26,7 +26,7 @@ public class PrintString extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.printString"
      */
     public Name name() {
-        return hydra.lib.Literals.printString().name;
+        return hydra.core.lib.Literals.printString().name;
     }
 
     /**
@@ -44,7 +44,7 @@ public class PrintString extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.string(apply(s)), hydra.core.extract.Core.string(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.string(apply(s)), hydra.core.extract.Model.string(graph, args.get(0)));
     }
 
     /**

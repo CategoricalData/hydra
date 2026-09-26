@@ -75,7 +75,7 @@ public class TestSuiteRunner {
                     for (hydra.core.model.Term arg : args) {
                         applied = new hydra.core.model.Term.Application(new hydra.core.model.Application(applied, arg));
                     }
-                    return hydra.Reduction.reduceTerm(emptyContext(), nativeGraph, true, applied);
+                    return hydra.core.Reduction.reduceTerm(emptyContext(), nativeGraph, true, applied);
                 }));
             } else {
                 patched.put(entry.getKey(), prim);
@@ -110,7 +110,7 @@ public class TestSuiteRunner {
         allTypes.putAll(testTypes); // test types override kernel types if any overlap
         hydra.core.overlay.java.util.PersistentMap<Name, TypeScheme> schemaTypes = hydra.core.overlay.java.util.PersistentMap.empty();
         for (Map.Entry<Name, Type> entry : allTypes.entrySet()) {
-            schemaTypes = schemaTypes.insert(entry.getKey(), hydra.Resolution.typeToTypeScheme(entry.getValue()));
+            schemaTypes = schemaTypes.insert(entry.getKey(), hydra.core.Resolution.typeToTypeScheme(entry.getValue()));
         }
 
         // Build bound terms map from test terms + primitive bridges + kernel constants
@@ -156,7 +156,7 @@ public class TestSuiteRunner {
 
         // Add type element terms to boundTerms (encoded types)
         for (Map.Entry<Name, Type> entry : allTypes.entrySet()) {
-            boundTerms.put(entry.getKey(), hydra.core.encode.Core.type(entry.getValue()));
+            boundTerms.put(entry.getKey(), hydra.core.encode.Model.type(entry.getValue()));
         }
 
         hydra.core.overlay.java.util.PersistentMap<Name, Term> persistentBoundTerms = hydra.core.overlay.java.util.PersistentMap.empty();

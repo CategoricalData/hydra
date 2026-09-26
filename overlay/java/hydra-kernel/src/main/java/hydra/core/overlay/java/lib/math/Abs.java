@@ -29,7 +29,7 @@ public class Abs extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return hydra.lib.Math_.abs().name;
+        return hydra.core.lib.Math_.abs().name;
     }
 
     /**

@@ -25,7 +25,7 @@ public class And extends PrimitiveFunction {
      * @return the name "hydra.core.lib.logic.and"
      */
     public Name name() {
-        return hydra.lib.Logic.and().name;
+        return hydra.core.lib.Logic.and().name;
     }
 
     /**
@@ -43,7 +43,7 @@ public class And extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.boolean_(graph, args.get(0)), b1 -> hydra.core.overlay.java.lib.eithers.Map.apply(b2 -> Terms.boolean_(And.apply(b1, b2)), hydra.core.extract.Core.boolean_(graph, args.get(1))));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.boolean_(graph, args.get(0)), b1 -> hydra.core.overlay.java.lib.eithers.Map.apply(b2 -> Terms.boolean_(And.apply(b1, b2)), hydra.core.extract.Model.boolean_(graph, args.get(1))));
     }
 
     /**

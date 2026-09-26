@@ -25,7 +25,7 @@ public class Or extends PrimitiveFunction {
      * @return the name "hydra.core.lib.logic.or"
      */
     public Name name() {
-        return hydra.lib.Logic.or().name;
+        return hydra.core.lib.Logic.or().name;
     }
 
     /**
@@ -43,7 +43,7 @@ public class Or extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.boolean_(graph, args.get(0)), b1 -> hydra.core.overlay.java.lib.eithers.Map.apply(b2 -> Terms.boolean_(Or.apply(b1, b2)), hydra.core.extract.Core.boolean_(graph, args.get(1))));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.boolean_(graph, args.get(0)), b1 -> hydra.core.overlay.java.lib.eithers.Map.apply(b2 -> Terms.boolean_(Or.apply(b1, b2)), hydra.core.extract.Model.boolean_(graph, args.get(1))));
     }
 
     /**

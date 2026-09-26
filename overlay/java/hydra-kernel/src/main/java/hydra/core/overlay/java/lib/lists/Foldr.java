@@ -25,7 +25,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Foldr extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.foldr().name;
+        return hydra.core.lib.Lists.foldr().name;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class Foldr extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.list(graph, args.get(2)), xs -> {
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.list(graph, args.get(2)), xs -> {
                 Term acc = args.get(1);
                 // Fold from the right: walk the (reversed) list right-to-left, prepending into a stack
                 ConsList<Term> stack = ConsList.empty();
@@ -48,8 +48,8 @@ public class Foldr extends PrimitiveFunction {
                 }
                 // stack now has elements in reverse order; iterating it processes original list from the right
                 for (Term x : stack) {
-                    Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                        hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), x, acc));
+                    Either<Error_, Term> r = hydra.core.Reduction.reduceTerm(
+                        hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), x, acc));
                     if (r.isLeft()) return r;
                     acc = ((Either.Right<Error_, Term>) r).value;
                 }

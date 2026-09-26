@@ -27,7 +27,7 @@ public class DecimalToFloat64 extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.decimalToFloat64"
      */
     public Name name() {
-        return hydra.lib.Literals.decimalToFloat64().name;
+        return hydra.core.lib.Literals.decimalToFloat64().name;
     }
 
     /**
@@ -45,7 +45,7 @@ public class DecimalToFloat64 extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(d -> Terms.float64(apply(d)), hydra.core.extract.Core.decimal(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(d -> Terms.float64(apply(d)), hydra.core.extract.Model.decimal(graph, args.get(0)));
     }
 
     /**

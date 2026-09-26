@@ -27,7 +27,7 @@ public class Bind extends PrimitiveFunction {
      * @return the name "hydra.core.lib.effects.bind"
      */
     public Name name() {
-        return hydra.lib.Effects.bind().name;
+        return hydra.core.lib.Effects.bind().name;
     }
 
     /**

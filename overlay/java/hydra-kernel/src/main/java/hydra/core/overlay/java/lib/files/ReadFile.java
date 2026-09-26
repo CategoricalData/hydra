@@ -31,7 +31,7 @@ public class ReadFile extends PrimitiveFunction {
      * @return the name "hydra.core.lib.files.readFile"
      */
     public Name name() {
-        return hydra.lib.Files.readFile().name;
+        return hydra.core.lib.Files.readFile().name;
     }
 
     /**

@@ -27,7 +27,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class ZipWith extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.zipWith().name;
+        return hydra.core.lib.Lists.zipWith().name;
     }
 
     @Override
@@ -40,15 +40,15 @@ public class ZipWith extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.list(graph, args.get(1)), lst1 ->
-                hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.list(graph, args.get(2)), lst2 -> {
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.list(graph, args.get(1)), lst1 ->
+                hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.list(graph, args.get(2)), lst2 -> {
                     Term f = args.get(0);
                     ConsList<Term> reversed = ConsList.empty();
                     Iterator<Term> it1 = lst1.iterator();
                     Iterator<Term> it2 = lst2.iterator();
                     while (it1.hasNext() && it2.hasNext()) {
-                        Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                            hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(Terms.apply(f, it1.next()), it2.next()));
+                        Either<Error_, Term> r = hydra.core.Reduction.reduceTerm(
+                            hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(Terms.apply(f, it1.next()), it2.next()));
                         if (r.isLeft()) return (Either) r;
                         reversed = ConsList.cons(((Either.Right<Error_, Term>) r).value, reversed);
                     }

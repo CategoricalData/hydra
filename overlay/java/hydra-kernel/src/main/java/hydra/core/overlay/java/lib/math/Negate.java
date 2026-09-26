@@ -29,7 +29,7 @@ public class Negate extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return hydra.lib.Math_.negate().name;
+        return hydra.core.lib.Math_.negate().name;
     }
 
     /**

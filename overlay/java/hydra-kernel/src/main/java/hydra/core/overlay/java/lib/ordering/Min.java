@@ -22,7 +22,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Min extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Ordering.min().name;
+        return hydra.core.lib.Ordering.min().name;
     }
 
     @Override

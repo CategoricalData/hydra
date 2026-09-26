@@ -114,8 +114,8 @@ public class TermsTest {
             @Override
             public String visit(Term.Annotated instance) {
                 // #386: annotation is now a Term (TermMap), not a Map<Name, Term>.
-                Term desc = hydra.Annotations.getAnnotationMap(instance.value.annotation).get(new Name("description"));
-                return ((hydra.core.overlay.java.util.Either.Right<?, String>) hydra.core.extract.Core.string(null, desc)).value;
+                Term desc = hydra.core.Annotations.getAnnotationMap(instance.value.annotation).get(new Name("description"));
+                return ((hydra.core.overlay.java.util.Either.Right<?, String>) hydra.core.extract.Model.string(null, desc)).value;
             }
 
             @Override

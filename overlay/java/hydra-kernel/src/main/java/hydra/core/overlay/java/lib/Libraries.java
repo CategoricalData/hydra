@@ -72,7 +72,7 @@ public class Libraries {
 
     /**
      * Primitive functions which have no native Java implementation, but do declare a portable
-     * defaultImplementation term in the kernel (see hydra.lib.Defaults.defaultImplementations()).
+     * defaultImplementation term in the kernel (see hydra.core.lib.Defaults.defaultImplementations()).
      * Each is registered as a {@link DefaultFallbackPrimitiveFunction}, which evaluates the
      * default term via {@link hydra.Reduction#reduceTerm} rather than running Java logic.
      *
@@ -96,12 +96,12 @@ public class Libraries {
 
         ConsList<PrimitiveFunction> fallbacks = ConsList.empty();
         for (hydra.core.packaging.PrimitiveDefinition def : Arrays.asList(
-                hydra.lib.Lists.takeWhile(),
-                hydra.lib.Equality.notEqual(),
-                hydra.lib.Functions.const_(),
-                hydra.lib.Functions.flip())) {
+                hydra.core.lib.Lists.takeWhile(),
+                hydra.core.lib.Equality.notEqual(),
+                hydra.core.lib.Functions.const_(),
+                hydra.core.lib.Functions.flip())) {
             if (!alreadyNative.contains(def.name.value)) {
-                hydra.core.model.Term defaultImpl = hydra.lib.Defaults.defaultImplementations().get(def.name);
+                hydra.core.model.Term defaultImpl = hydra.core.lib.Defaults.defaultImplementations().get(def.name);
                 if (defaultImpl != null) {
                     fallbacks = ConsList.cons(
                         new DefaultFallbackPrimitiveFunction(def, defaultImpl), fallbacks);

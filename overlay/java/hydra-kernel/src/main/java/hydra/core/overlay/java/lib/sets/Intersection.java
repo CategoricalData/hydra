@@ -29,7 +29,7 @@ public class Intersection extends PrimitiveFunction {
      * @return the name "hydra.core.lib.sets.intersection"
      */
     public Name name() {
-        return hydra.lib.Sets.intersection().name;
+        return hydra.core.lib.Sets.intersection().name;
     }
 
     /**
@@ -47,7 +47,7 @@ public class Intersection extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.set(graph, args.get(0)), s1 -> hydra.core.overlay.java.lib.eithers.Map.apply(s2 -> Terms.set(apply(s1, s2)), hydra.core.extract.Core.set(graph, args.get(1))));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.set(graph, args.get(0)), s1 -> hydra.core.overlay.java.lib.eithers.Map.apply(s2 -> Terms.set(apply(s1, s2)), hydra.core.extract.Model.set(graph, args.get(1))));
     }
 
     /**

@@ -29,7 +29,7 @@ public class Bimap extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return hydra.lib.Maps.bimap().name;
+        return hydra.core.lib.Maps.bimap().name;
     }
 
     /**
@@ -49,14 +49,14 @@ public class Bimap extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph ->
-            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), mp -> {
+            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), mp -> {
                 PersistentMap<Term, Term> result = PersistentMap.<Term, Term>empty();
                 for (Map.Entry<Term, Term> entry : mp.entrySet()) {
-                    Either<Error_, Term> kr = hydra.Reduction.reduceTerm(
-                        hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), entry.getKey()));
+                    Either<Error_, Term> kr = hydra.core.Reduction.reduceTerm(
+                        hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), entry.getKey()));
                     if (kr.isLeft()) return (Either) kr;
-                    Either<Error_, Term> vr = hydra.Reduction.reduceTerm(
-                        hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(1), entry.getValue()));
+                    Either<Error_, Term> vr = hydra.core.Reduction.reduceTerm(
+                        hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(1), entry.getValue()));
                     if (vr.isLeft()) return (Either) vr;
                     result = result.insert(((Either.Right<Error_, Term>) kr).value,
                                             ((Either.Right<Error_, Term>) vr).value);

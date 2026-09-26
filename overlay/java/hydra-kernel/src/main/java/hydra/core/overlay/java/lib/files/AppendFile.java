@@ -33,7 +33,7 @@ public class AppendFile extends PrimitiveFunction {
      * @return the name "hydra.core.lib.files.appendFile"
      */
     public Name name() {
-        return hydra.lib.Files.appendFile().name;
+        return hydra.core.lib.Files.appendFile().name;
     }
 
     /**

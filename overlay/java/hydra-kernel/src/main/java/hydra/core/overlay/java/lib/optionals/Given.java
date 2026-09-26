@@ -27,7 +27,7 @@ public class Given extends PrimitiveFunction {
      * @return the name "hydra.core.lib.optionals.given"
      */
     public Name name() {
-        return hydra.lib.Optionals.given().name;
+        return hydra.core.lib.Optionals.given().name;
     }
 
     /**

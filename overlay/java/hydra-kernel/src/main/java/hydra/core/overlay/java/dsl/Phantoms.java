@@ -1,5 +1,5 @@
-package hydra.core.overlay.java.dsl.meta;
-import hydra.Scoping;
+package hydra.core.overlay.java.dsl;
+import hydra.core.Scoping;
 import hydra.core.model.Binding;
 import hydra.core.model.Field;
 import hydra.core.model.Name;

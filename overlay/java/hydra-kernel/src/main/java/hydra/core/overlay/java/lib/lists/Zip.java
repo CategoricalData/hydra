@@ -27,7 +27,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Zip extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.zip().name;
+        return hydra.core.lib.Lists.zip().name;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Zip extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.list(graph, args.get(0)), lst1 ->
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.list(graph, args.get(0)), lst1 ->
             hydra.core.overlay.java.lib.eithers.Map.apply((Function<List<Term>, Term>) lst2 -> {
                     ConsList<Term> reversed = ConsList.empty();
                     Iterator<Term> it1 = lst1.iterator();
@@ -49,7 +49,7 @@ public class Zip extends PrimitiveFunction {
                         reversed = ConsList.cons(Terms.pair(it1.next(), it2.next()), reversed);
                     }
                     return Terms.list(reversed.reverse());
-                }, hydra.core.extract.Core.list(graph, args.get(1))));
+                }, hydra.core.extract.Model.list(graph, args.get(1))));
     }
 
     /**

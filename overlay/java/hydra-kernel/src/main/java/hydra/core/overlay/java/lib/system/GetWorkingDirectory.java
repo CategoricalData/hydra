@@ -23,7 +23,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class GetWorkingDirectory extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.System_.getWorkingDirectory().name;
+        return hydra.core.lib.System_.getWorkingDirectory().name;
     }
 
     @Override

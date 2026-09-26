@@ -37,7 +37,7 @@ public class Status extends PrimitiveFunction {
      * @return the name "hydra.core.lib.files.status"
      */
     public Name name() {
-        return hydra.lib.Files.status().name;
+        return hydra.core.lib.Files.status().name;
     }
 
     /**

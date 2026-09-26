@@ -29,7 +29,7 @@ public class Map extends PrimitiveFunction {
      * @return the name "hydra.core.lib.sets.map"
      */
     public Name name() {
-        return hydra.lib.Sets.map().name;
+        return hydra.core.lib.Sets.map().name;
     }
 
     /**
@@ -56,7 +56,7 @@ public class Map extends PrimitiveFunction {
                     result = result.insert(Terms.apply(mapping, e));
                 }
                 return Terms.set(result);
-            }, hydra.core.extract.Core.set(graph, args.get(1)));
+            }, hydra.core.extract.Model.set(graph, args.get(1)));
         };
     }
 

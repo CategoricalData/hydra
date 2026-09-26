@@ -24,7 +24,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Lt extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Ordering.lt().name;
+        return hydra.core.lib.Ordering.lt().name;
     }
 
     @Override

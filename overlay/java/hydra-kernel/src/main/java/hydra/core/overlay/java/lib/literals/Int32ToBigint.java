@@ -27,7 +27,7 @@ public class Int32ToBigint extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.int32ToBigint"
      */
     public Name name() {
-        return hydra.lib.Literals.int32ToBigint().name;
+        return hydra.core.lib.Literals.int32ToBigint().name;
     }
 
     /**
@@ -45,7 +45,7 @@ public class Int32ToBigint extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.bigint(apply(s)), hydra.core.extract.Core.int32(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.bigint(apply(s)), hydra.core.extract.Model.int32(graph, args.get(0)));
     }
 
     /**

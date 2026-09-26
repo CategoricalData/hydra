@@ -31,7 +31,7 @@ public class CreateSymlink extends PrimitiveFunction {
      * @return the name "hydra.core.lib.files.createSymlink"
      */
     public Name name() {
-        return hydra.lib.Files.createSymlink().name;
+        return hydra.core.lib.Files.createSymlink().name;
     }
 
     /**

@@ -37,7 +37,7 @@ public class RemoveDirectory extends PrimitiveFunction {
      * @return the name "hydra.core.lib.files.removeDirectory"
      */
     public Name name() {
-        return hydra.lib.Files.removeDirectory().name;
+        return hydra.core.lib.Files.removeDirectory().name;
     }
 
     /**

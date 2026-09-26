@@ -28,7 +28,7 @@ public class Map extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return hydra.lib.Maps.map().name;
+        return hydra.core.lib.Maps.map().name;
     }
 
     /**
@@ -48,11 +48,11 @@ public class Map extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph ->
-            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)), mp -> {
+            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)), mp -> {
                 PersistentMap<Term, Term> result = PersistentMap.<Term, Term>empty();
                 for (java.util.Map.Entry<Term, Term> e : mp.entrySet()) {
-                    Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                        hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), e.getValue()));
+                    Either<Error_, Term> r = hydra.core.Reduction.reduceTerm(
+                        hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), e.getValue()));
                     if (r.isLeft()) return (Either) r;
                     result = result.insert(e.getKey(), ((Either.Right<Error_, Term>) r).value);
                 }

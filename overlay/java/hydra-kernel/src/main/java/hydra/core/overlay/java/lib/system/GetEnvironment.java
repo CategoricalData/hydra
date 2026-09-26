@@ -25,7 +25,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class GetEnvironment extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.System_.getEnvironment().name;
+        return hydra.core.lib.System_.getEnvironment().name;
     }
 
     @Override

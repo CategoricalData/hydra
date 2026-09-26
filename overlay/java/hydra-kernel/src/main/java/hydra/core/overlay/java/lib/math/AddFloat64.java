@@ -26,7 +26,7 @@ public class AddFloat64 extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return hydra.lib.Math_.addFloat64().name;
+        return hydra.core.lib.Math_.addFloat64().name;
     }
 
     /**
@@ -44,7 +44,7 @@ public class AddFloat64 extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.float64(graph, args.get(0)), arg0 -> hydra.core.overlay.java.lib.eithers.Map.apply(arg1 -> Terms.float64(apply(arg0, arg1)), hydra.core.extract.Core.float64(graph, args.get(1))));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.float64(graph, args.get(0)), arg0 -> hydra.core.overlay.java.lib.eithers.Map.apply(arg1 -> Terms.float64(apply(arg0, arg1)), hydra.core.extract.Model.float64(graph, args.get(1))));
     }
 
     /**

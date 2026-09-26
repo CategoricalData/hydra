@@ -25,7 +25,7 @@ public class E extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return hydra.lib.Math_.e().name;
+        return hydra.core.lib.Math_.e().name;
     }
 
     /**

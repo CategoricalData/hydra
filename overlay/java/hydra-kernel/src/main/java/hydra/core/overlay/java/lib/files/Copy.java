@@ -38,7 +38,7 @@ public class Copy extends PrimitiveFunction {
      * @return the name "hydra.core.lib.files.copy"
      */
     public Name name() {
-        return hydra.lib.Files.copy().name;
+        return hydra.core.lib.Files.copy().name;
     }
 
     /**

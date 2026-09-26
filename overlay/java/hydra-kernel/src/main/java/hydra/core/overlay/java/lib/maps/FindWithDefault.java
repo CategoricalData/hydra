@@ -28,7 +28,7 @@ public class FindWithDefault extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return hydra.lib.Maps.findWithDefault().name;
+        return hydra.core.lib.Maps.findWithDefault().name;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class FindWithDefault extends PrimitiveFunction {
                     Optional<Term> result = Lookup.apply(args.get(1), mp);
                     return result.orElse(args.get(0));
                 },
-                hydra.core.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
+                hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
     }
 
     /**

@@ -52,7 +52,7 @@ public class Bimap extends PrimitiveFunction {
                     public Term visit(hydra.core.overlay.java.util.Either.Right<Term, Term> right) {
                         return Terms.right(Terms.apply(forRight, right.value));
                     }
-                }), hydra.core.extract.Core.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
+                }), hydra.core.extract.Model.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
         };
     }
 

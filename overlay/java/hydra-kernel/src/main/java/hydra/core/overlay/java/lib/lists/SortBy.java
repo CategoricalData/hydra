@@ -25,7 +25,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class SortBy extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.sortBy().name;
+        return hydra.core.lib.Lists.sortBy().name;
     }
 
     @Override
@@ -37,14 +37,14 @@ public class SortBy extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph ->
-            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.list(graph, args.get(1)), lst -> {
+            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.list(graph, args.get(1)), lst -> {
                 // Pre-compute all keys so we can short-circuit on error.
                 // ArrayList scratch is used here because sorting requires random access.
                 ArrayList<Term> indexed = new ArrayList<>(lst);
                 ArrayList<Term> keys = new ArrayList<>(indexed.size());
                 for (Term x : indexed) {
-                    Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                        hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), x));
+                    Either<Error_, Term> r = hydra.core.Reduction.reduceTerm(
+                        hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), x));
                     if (r.isLeft()) return (Either) r;
                     keys.add(((Either.Right<Error_, Term>) r).value);
                 }

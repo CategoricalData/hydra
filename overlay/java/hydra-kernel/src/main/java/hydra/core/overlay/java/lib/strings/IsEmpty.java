@@ -26,7 +26,7 @@ public class IsEmpty extends PrimitiveFunction {
      * @return the name "hydra.core.lib.strings.isEmpty"
      */
     public Name name() {
-        return hydra.lib.Strings.isEmpty().name;
+        return hydra.core.lib.Strings.isEmpty().name;
     }
 
     /**
@@ -44,7 +44,7 @@ public class IsEmpty extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.boolean_(apply(s)), hydra.core.extract.Core.string(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.boolean_(apply(s)), hydra.core.extract.Model.string(graph, args.get(0)));
     }
 
     /**

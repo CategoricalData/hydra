@@ -26,7 +26,7 @@ public class Pure extends PrimitiveFunction {
      * @return the name "hydra.core.lib.effects.pure"
      */
     public Name name() {
-        return hydra.lib.Effects.pure().name;
+        return hydra.core.lib.Effects.pure().name;
     }
 
     /**

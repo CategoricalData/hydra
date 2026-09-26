@@ -24,7 +24,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Join extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.join().name;
+        return hydra.core.lib.Lists.join().name;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Join extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.list(graph, args.get(0)), delim1 -> hydra.core.overlay.java.lib.eithers.Map.apply(sublists1 -> Terms.list(apply(delim1, sublists1)), hydra.core.extract.Core.listOf(t -> hydra.core.extract.Core.list(graph, t), graph, args.get(1))));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.list(graph, args.get(0)), delim1 -> hydra.core.overlay.java.lib.eithers.Map.apply(sublists1 -> Terms.list(apply(delim1, sublists1)), hydra.core.extract.Model.listOf(t -> hydra.core.extract.Model.list(graph, t), graph, args.get(1))));
     }
 
     /**

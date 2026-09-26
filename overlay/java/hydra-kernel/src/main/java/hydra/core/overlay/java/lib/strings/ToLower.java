@@ -25,7 +25,7 @@ public class ToLower extends PrimitiveFunction {
      * @return the name "hydra.core.lib.strings.toLower"
      */
     public Name name() {
-        return hydra.lib.Strings.toLower().name;
+        return hydra.core.lib.Strings.toLower().name;
     }
 
     /**
@@ -43,7 +43,7 @@ public class ToLower extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.string(apply(s)), hydra.core.extract.Core.string(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.string(apply(s)), hydra.core.extract.Model.string(graph, args.get(0)));
     }
 
     /**

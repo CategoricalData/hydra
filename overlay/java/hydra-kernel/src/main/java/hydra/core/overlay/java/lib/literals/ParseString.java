@@ -29,7 +29,7 @@ public class ParseString extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.parseString"
      */
     public Name name() {
-        return hydra.lib.Literals.parseString().name;
+        return hydra.core.lib.Literals.parseString().name;
     }
 
     /**
@@ -47,7 +47,7 @@ public class ParseString extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.optional(apply(s).map(Terms::string)), hydra.core.extract.Core.string(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.optional(apply(s).map(Terms::string)), hydra.core.extract.Model.string(graph, args.get(0)));
     }
 
     /**

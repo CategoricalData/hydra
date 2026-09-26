@@ -35,7 +35,7 @@ public class Cons extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(l -> Terms.list(Cons.apply(args.get(0), l)), hydra.core.extract.Core.list(graph, args.get(1)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(l -> Terms.list(Cons.apply(args.get(0), l)), hydra.core.extract.Model.list(graph, args.get(1)));
     }
 
     /**

@@ -25,7 +25,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Truncate extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Math_.truncate().name;
+        return hydra.core.lib.Math_.truncate().name;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Truncate extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((arg0) -> Terms.float64(apply(arg0)), hydra.core.extract.Core.float64(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((arg0) -> Terms.float64(apply(arg0)), hydra.core.extract.Model.float64(graph, args.get(0)));
     }
 
     /**

@@ -205,7 +205,7 @@ public class BenchInference {
         boolean ok;
         String err = "";
         try {
-            result = hydra.Codegen.inferModulesGiven(cx, bsGraph, universeWithTarget, targets);
+            result = hydra.core.Codegen.inferModulesGiven(cx, bsGraph, universeWithTarget, targets);
             if (result instanceof Either.Right) {
                 ok = true;
             } else if (result instanceof Either.Left) {

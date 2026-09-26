@@ -40,15 +40,15 @@ public class MapList extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.list(graph, args.get(1)), lst -> {
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.list(graph, args.get(1)), lst -> {
                 Term fn = args.get(0);
                 ConsList<Term> reversed = ConsList.empty();
                 for (Term element : lst) {
-                    Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                        hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(fn, element));
+                    Either<Error_, Term> r = hydra.core.Reduction.reduceTerm(
+                        hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(fn, element));
                     if (r.isLeft()) return r;
                     Either<Error_, hydra.core.overlay.java.util.Either<Term, Term>> eitherResult =
-                        hydra.core.extract.Core.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph,
+                        hydra.core.extract.Model.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph,
                             ((Either.Right<Error_, Term>) r).value);
                     if (eitherResult.isLeft()) return (Either) eitherResult;
                     hydra.core.overlay.java.util.Either<Term, Term> inner =

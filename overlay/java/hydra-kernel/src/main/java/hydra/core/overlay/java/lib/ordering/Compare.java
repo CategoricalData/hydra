@@ -22,7 +22,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Compare extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Ordering.compare().name;
+        return hydra.core.lib.Ordering.compare().name;
     }
 
     @Override

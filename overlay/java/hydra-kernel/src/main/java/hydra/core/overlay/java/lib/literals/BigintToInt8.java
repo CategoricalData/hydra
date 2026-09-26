@@ -27,7 +27,7 @@ public class BigintToInt8 extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.bigintToInt8"
      */
     public Name name() {
-        return hydra.lib.Literals.bigintToInt8().name;
+        return hydra.core.lib.Literals.bigintToInt8().name;
     }
 
     /**
@@ -45,7 +45,7 @@ public class BigintToInt8 extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.int8(apply(s)), hydra.core.extract.Core.bigint(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.int8(apply(s)), hydra.core.extract.Model.bigint(graph, args.get(0)));
     }
 
     /**

@@ -28,7 +28,7 @@ public class ToList extends PrimitiveFunction {
      * @return the name "hydra.core.lib.strings.toList"
      */
     public Name name() {
-        return hydra.lib.Strings.toList().name;
+        return hydra.core.lib.Strings.toList().name;
     }
 
     /**
@@ -52,7 +52,7 @@ public class ToList extends PrimitiveFunction {
                 reversed = ConsList.cons(Terms.int32(i), reversed);
             }
             return Terms.list(reversed.reverse());
-        }, hydra.core.extract.Core.string(graph, args.get(0)));
+        }, hydra.core.extract.Model.string(graph, args.get(0)));
     }
 
     /**

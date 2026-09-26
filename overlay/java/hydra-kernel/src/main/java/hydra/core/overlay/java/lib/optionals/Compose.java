@@ -23,7 +23,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Compose extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Optionals.compose().name;
+        return hydra.core.lib.Optionals.compose().name;
     }
 
     @Override
@@ -39,12 +39,12 @@ public class Compose extends PrimitiveFunction {
         return args -> graph -> {
             Function<Term, Either<Error_, Optional<Term>>> nativeF = val ->
                 hydra.core.overlay.java.lib.eithers.Bind.apply(
-                    hydra.Reduction.reduceTerm(hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), val)),
-                    reduced -> hydra.core.extract.Core.optionalTerm(t -> Either.right(t), graph, reduced));
+                    hydra.core.Reduction.reduceTerm(hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), val)),
+                    reduced -> hydra.core.extract.Model.optionalTerm(t -> Either.right(t), graph, reduced));
             Function<Term, Either<Error_, Optional<Term>>> nativeG = val ->
                 hydra.core.overlay.java.lib.eithers.Bind.apply(
-                    hydra.Reduction.reduceTerm(hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(1), val)),
-                    reduced -> hydra.core.extract.Core.optionalTerm(t -> Either.right(t), graph, reduced));
+                    hydra.core.Reduction.reduceTerm(hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(1), val)),
+                    reduced -> hydra.core.extract.Model.optionalTerm(t -> Either.right(t), graph, reduced));
             return hydra.core.overlay.java.lib.eithers.Bind.apply(nativeF.apply(args.get(2)), maybeB -> {
                 if (!maybeB.isGiven()) {
                     return Either.right(Terms.optional(Optional.none()));

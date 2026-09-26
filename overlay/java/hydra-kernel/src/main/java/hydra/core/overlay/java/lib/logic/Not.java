@@ -25,7 +25,7 @@ public class Not extends PrimitiveFunction {
      * @return the name "hydra.core.lib.logic.not"
      */
     public Name name() {
-        return hydra.lib.Logic.not().name;
+        return hydra.core.lib.Logic.not().name;
     }
 
     /**
@@ -43,7 +43,7 @@ public class Not extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(b1 -> Terms.boolean_(Not.apply(b1)), hydra.core.extract.Core.boolean_(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(b1 -> Terms.boolean_(Not.apply(b1)), hydra.core.extract.Model.boolean_(graph, args.get(0)));
     }
 
     /**

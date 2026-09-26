@@ -27,7 +27,7 @@ public class PrintUint32 extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.printUint32"
      */
     public Name name() {
-        return hydra.lib.Literals.printUint32().name;
+        return hydra.core.lib.Literals.printUint32().name;
     }
 
     /**
@@ -45,7 +45,7 @@ public class PrintUint32 extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<Long, Term>) l -> Terms.string(apply(l)), hydra.core.extract.Core.uint32(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<Long, Term>) l -> Terms.string(apply(l)), hydra.core.extract.Model.uint32(graph, args.get(0)));
     }
 
     /**

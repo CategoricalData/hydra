@@ -29,7 +29,7 @@ public class Sub extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return hydra.lib.Math_.sub().name;
+        return hydra.core.lib.Math_.sub().name;
     }
 
     /**

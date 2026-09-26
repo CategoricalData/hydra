@@ -26,7 +26,7 @@ import hydra.core.overlay.java.util.PersistentSet;
  */
 public class Filter extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Sets.filter().name;
+        return hydra.core.lib.Sets.filter().name;
     }
 
     @Override
@@ -37,13 +37,13 @@ public class Filter extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph ->
-            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.set(graph, args.get(1)), arg -> {
+            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.set(graph, args.get(1)), arg -> {
                 PersistentSet<Term> result = PersistentSet.<Term>empty();
                 for (Term x : arg) {
-                    Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                        hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), x));
+                    Either<Error_, Term> r = hydra.core.Reduction.reduceTerm(
+                        hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), x));
                     if (r.isLeft()) return (Either) r;
-                    Either<Error_, Boolean> b = hydra.core.extract.Core.boolean_(graph,
+                    Either<Error_, Boolean> b = hydra.core.extract.Model.boolean_(graph,
                         ((Either.Right<Error_, Term>) r).value);
                     if (b.isLeft()) return (Either) b;
                     if (((Either.Right<Error_, Boolean>) b).value) {

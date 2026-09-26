@@ -24,7 +24,7 @@ import hydra.core.overlay.java.util.Optional;
  */
 public class Replace extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Regex.replace().name;
+        return hydra.core.lib.Regex.replace().name;
     }
 
     @Override
@@ -35,12 +35,12 @@ public class Replace extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(
-            hydra.core.extract.Core.string(graph, args.get(0)),
+            hydra.core.extract.Model.string(graph, args.get(0)),
             pat -> hydra.core.overlay.java.lib.eithers.Bind.apply(
-                hydra.core.extract.Core.string(graph, args.get(1)),
+                hydra.core.extract.Model.string(graph, args.get(1)),
                 repl -> hydra.core.overlay.java.lib.eithers.Map.apply(
                     input -> Terms.string(apply(pat, repl, input)),
-                    hydra.core.extract.Core.string(graph, args.get(2)))));
+                    hydra.core.extract.Model.string(graph, args.get(2)))));
     }
 
     public static Function<String, Function<String, String>> apply(String pattern) {

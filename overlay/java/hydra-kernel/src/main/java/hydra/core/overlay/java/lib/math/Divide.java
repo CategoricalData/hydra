@@ -29,7 +29,7 @@ public class Divide extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return hydra.lib.Math_.divide().name;
+        return hydra.core.lib.Math_.divide().name;
     }
 
     /**

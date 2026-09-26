@@ -22,7 +22,7 @@ import hydra.core.overlay.java.util.Either;
 
 public class BinaryToBytes extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Literals.binaryToBytes().name;
+        return hydra.core.lib.Literals.binaryToBytes().name;
     }
 
     @Override

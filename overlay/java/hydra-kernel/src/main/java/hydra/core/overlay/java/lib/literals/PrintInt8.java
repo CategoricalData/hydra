@@ -27,7 +27,7 @@ public class PrintInt8 extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.printInt8"
      */
     public Name name() {
-        return hydra.lib.Literals.printInt8().name;
+        return hydra.core.lib.Literals.printInt8().name;
     }
 
     /**
@@ -45,7 +45,7 @@ public class PrintInt8 extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<Byte, Term>) b -> Terms.string(apply(b)), hydra.core.extract.Core.int8(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<Byte, Term>) b -> Terms.string(apply(b)), hydra.core.extract.Model.int8(graph, args.get(0)));
     }
 
     /**

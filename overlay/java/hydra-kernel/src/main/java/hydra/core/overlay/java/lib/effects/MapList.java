@@ -29,7 +29,7 @@ public class MapList extends PrimitiveFunction {
      * @return the name "hydra.core.lib.effects.mapList"
      */
     public Name name() {
-        return hydra.lib.Effects.mapList().name;
+        return hydra.core.lib.Effects.mapList().name;
     }
 
     /**

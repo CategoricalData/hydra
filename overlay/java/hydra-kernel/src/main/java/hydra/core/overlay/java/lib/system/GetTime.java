@@ -22,7 +22,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class GetTime extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.System_.getTime().name;
+        return hydra.core.lib.System_.getTime().name;
     }
 
     @Override

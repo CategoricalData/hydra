@@ -32,7 +32,7 @@ public class ToList extends PrimitiveFunction {
      * @return the name "hydra.core.lib.sets.toList"
      */
     public Name name() {
-        return hydra.lib.Sets.toList().name;
+        return hydra.core.lib.Sets.toList().name;
     }
 
     /**
@@ -56,7 +56,7 @@ public class ToList extends PrimitiveFunction {
             ArrayList<Term> scratch = new ArrayList<>(terms);
             scratch.sort(hydra.core.overlay.java.lib.ordering.Compare::compareTerms);
             return Terms.list(ConsList.fromList(scratch));
-        }, hydra.core.extract.Core.set(graph, args.get(0)));
+        }, hydra.core.extract.Model.set(graph, args.get(0)));
     }
 
     /**

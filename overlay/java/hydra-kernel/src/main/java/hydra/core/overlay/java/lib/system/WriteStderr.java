@@ -26,7 +26,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class WriteStderr extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.System_.writeStderr().name;
+        return hydra.core.lib.System_.writeStderr().name;
     }
 
     @Override

@@ -28,7 +28,7 @@ public class FoldList extends PrimitiveFunction {
      * @return the name "hydra.core.lib.effects.foldList"
      */
     public Name name() {
-        return hydra.lib.Effects.foldList().name;
+        return hydra.core.lib.Effects.foldList().name;
     }
 
     /**

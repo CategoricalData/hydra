@@ -29,7 +29,7 @@ public class ToList extends PrimitiveFunction {
      * @return the name "hydra.core.lib.optionals.toList"
      */
     public Name name() {
-        return hydra.lib.Optionals.toList().name;
+        return hydra.core.lib.Optionals.toList().name;
     }
 
     /**
@@ -49,7 +49,7 @@ public class ToList extends PrimitiveFunction {
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(
             (Function<Optional<Term>, Term>) opt -> Terms.list(apply(opt)),
-            hydra.core.extract.Core.optionalTerm(t -> Either.right(t), graph, args.get(0)));
+            hydra.core.extract.Model.optionalTerm(t -> Either.right(t), graph, args.get(0)));
     }
 
     /**

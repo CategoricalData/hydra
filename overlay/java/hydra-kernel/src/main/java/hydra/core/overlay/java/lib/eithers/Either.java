@@ -51,7 +51,7 @@ public class Either extends PrimitiveFunction {
                     public Term visit(hydra.core.overlay.java.util.Either.Right<Term, Term> right) {
                         return Terms.apply(forRight, right.value);
                     }
-                }), hydra.core.extract.Core.eitherTerm(t -> hydra.core.overlay.java.util.Either.right(t), t -> hydra.core.overlay.java.util.Either.right(t), graph, args.get(2)));
+                }), hydra.core.extract.Model.eitherTerm(t -> hydra.core.overlay.java.util.Either.right(t), t -> hydra.core.overlay.java.util.Either.right(t), graph, args.get(2)));
         };
     }
 

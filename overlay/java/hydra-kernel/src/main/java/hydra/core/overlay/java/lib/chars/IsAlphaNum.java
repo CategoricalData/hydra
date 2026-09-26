@@ -26,7 +26,7 @@ public class IsAlphaNum extends PrimitiveFunction {
      * @return the name "hydra.core.lib.chars.isAlphaNum"
      */
     public Name name() {
-        return hydra.lib.Chars.isAlphaNum().name;
+        return hydra.core.lib.Chars.isAlphaNum().name;
     }
 
     /**
@@ -44,7 +44,7 @@ public class IsAlphaNum extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(c -> Terms.boolean_(apply(c)), hydra.core.extract.Core.int32(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(c -> Terms.boolean_(apply(c)), hydra.core.extract.Model.int32(graph, args.get(0)));
     }
 
     /**

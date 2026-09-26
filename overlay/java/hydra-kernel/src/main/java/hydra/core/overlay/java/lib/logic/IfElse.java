@@ -26,7 +26,7 @@ public class IfElse extends PrimitiveFunction {
      * @return the name "hydra.core.lib.logic.ifElse"
      */
     public Name name() {
-        return hydra.lib.Logic.ifElse().name;
+        return hydra.core.lib.Logic.ifElse().name;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class IfElse extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(b -> IfElse.apply(b, args.get(1), args.get(2)), hydra.core.extract.Core.boolean_(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(b -> IfElse.apply(b, args.get(1), args.get(2)), hydra.core.extract.Model.boolean_(graph, args.get(0)));
     }
 
     /**
@@ -94,5 +94,20 @@ public class IfElse extends PrimitiveFunction {
      */
     public static <X> X lazy(boolean condition, Supplier<X> ifBranch, Supplier<X> elseBranch) {
         return condition ? ifBranch.get() : elseBranch.get();
+    }
+
+    /**
+     * Alias for {@link #lazy(boolean, Supplier, Supplier)}. The Java coder's generic
+     * lazy-argument wrapping (packages/hydra-java's Coder.wrapLazyArguments) calls every
+     * lazy-parameter primitive's implementation via {@code applyLazy} except ifElse itself,
+     * which is meant to dispatch to {@code lazy} by name-based special case -- but any call
+     * site that doesn't go through that special case (e.g. lazy-argument wrapping triggered
+     * from a context where the primitive name isn't threaded through as the literal
+     * "hydra.core.lib.logic.ifElse" string) falls through to the generic applyLazy naming
+     * convention instead. Providing this alias keeps both naming paths correct without
+     * requiring that every caller thread the exact primitive name through.
+     */
+    public static <X> X applyLazy(boolean condition, Supplier<X> ifBranch, Supplier<X> elseBranch) {
+        return lazy(condition, ifBranch, elseBranch);
     }
 }

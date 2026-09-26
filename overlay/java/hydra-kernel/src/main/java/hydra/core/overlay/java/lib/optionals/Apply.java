@@ -28,7 +28,7 @@ public class Apply extends PrimitiveFunction {
      * @return the name "hydra.core.lib.optionals.apply"
      */
     public Name name() {
-        return hydra.lib.Optionals.apply().name;
+        return hydra.core.lib.Optionals.apply().name;
     }
 
     /**
@@ -48,12 +48,12 @@ public class Apply extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph ->
-            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.optionalTerm(t -> Either.right(t), graph, args.get(0)), optionalF ->
+            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.optionalTerm(t -> Either.right(t), graph, args.get(0)), optionalF ->
                 hydra.core.overlay.java.lib.eithers.Map.apply(optionalArg ->
                     (optionalF.isGiven() && optionalArg.isGiven())
                         ? Terms.optional(Optional.given(Terms.apply(optionalF.fromGiven(), optionalArg.fromGiven())))
                         : Terms.optional(Optional.none()),
-                    hydra.core.extract.Core.optionalTerm(t -> Either.right(t), graph, args.get(1))));
+                    hydra.core.extract.Model.optionalTerm(t -> Either.right(t), graph, args.get(1))));
     }
 
     /**

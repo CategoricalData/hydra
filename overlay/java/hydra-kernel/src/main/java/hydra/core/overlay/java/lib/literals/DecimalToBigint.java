@@ -25,7 +25,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class DecimalToBigint extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Literals.decimalToBigint().name;
+        return hydra.core.lib.Literals.decimalToBigint().name;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class DecimalToBigint extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(d -> Terms.bigint(apply(d)), hydra.core.extract.Core.decimal(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(d -> Terms.bigint(apply(d)), hydra.core.extract.Model.decimal(graph, args.get(0)));
     }
 
     public static BigInteger apply(BigDecimal value) {

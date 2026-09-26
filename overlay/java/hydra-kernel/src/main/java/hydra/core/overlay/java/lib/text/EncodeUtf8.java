@@ -29,7 +29,7 @@ public class EncodeUtf8 extends PrimitiveFunction {
      * @return the name "hydra.core.lib.text.encodeUtf8"
      */
     public Name name() {
-        return hydra.lib.Text.encodeUtf8().name;
+        return hydra.core.lib.Text.encodeUtf8().name;
     }
 
     /**
@@ -49,7 +49,7 @@ public class EncodeUtf8 extends PrimitiveFunction {
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(
             text -> Terms.literal(new Literal.Binary(EncodeUtf8.apply(text))),
-            hydra.core.extract.Core.string(graph, args.get(0)));
+            hydra.core.extract.Model.string(graph, args.get(0)));
     }
 
     /**

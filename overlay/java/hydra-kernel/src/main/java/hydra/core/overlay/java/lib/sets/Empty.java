@@ -29,7 +29,7 @@ public class Empty extends PrimitiveFunction {
      * @return the name "hydra.core.lib.sets.empty"
      */
     public Name name() {
-        return hydra.lib.Sets.empty().name;
+        return hydra.core.lib.Sets.empty().name;
     }
 
     /**

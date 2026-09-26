@@ -21,7 +21,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Absurd extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Functions.absurd().name;
+        return hydra.core.lib.Functions.absurd().name;
     }
 
     @Override

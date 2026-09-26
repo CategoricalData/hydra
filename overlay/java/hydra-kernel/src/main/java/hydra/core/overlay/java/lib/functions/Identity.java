@@ -19,7 +19,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Identity extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Functions.identity().name;
+        return hydra.core.lib.Functions.identity().name;
     }
 
     @Override

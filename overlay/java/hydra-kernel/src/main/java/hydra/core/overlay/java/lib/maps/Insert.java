@@ -28,7 +28,7 @@ public class Insert extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return hydra.lib.Maps.insert().name;
+        return hydra.core.lib.Maps.insert().name;
     }
 
     /**
@@ -50,7 +50,7 @@ public class Insert extends PrimitiveFunction {
         return args -> graph -> {
             Term key = args.get(0);
             Term value = args.get(1);
-            return hydra.core.overlay.java.lib.eithers.Map.apply(before -> Terms.map(apply(key, value, before)), hydra.core.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
+            return hydra.core.overlay.java.lib.eithers.Map.apply(before -> Terms.map(apply(key, value, before)), hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
         };
     }
 

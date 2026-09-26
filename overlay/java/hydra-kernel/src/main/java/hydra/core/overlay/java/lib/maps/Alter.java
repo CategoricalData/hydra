@@ -31,7 +31,7 @@ public class Alter extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return hydra.lib.Maps.alter().name;
+        return hydra.core.lib.Maps.alter().name;
     }
 
     /**
@@ -50,14 +50,14 @@ public class Alter extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), (Map<Term, Term> mp) -> {
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), (Map<Term, Term> mp) -> {
                 Term f = args.get(0);
                 Term key = args.get(1);
                 Optional<Term> currentValue = Lookup.apply(key, mp);
-                Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                    hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(f, Terms.optional(currentValue)));
+                Either<Error_, Term> r = hydra.core.Reduction.reduceTerm(
+                    hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(f, Terms.optional(currentValue)));
                 if (r.isLeft()) return (Either) r;
-                Either<Error_, Optional<Term>> maybeResult = hydra.core.extract.Core.optionalTerm(
+                Either<Error_, Optional<Term>> maybeResult = hydra.core.extract.Model.optionalTerm(
                     t -> Either.right(t), graph, ((Either.Right<Error_, Term>) r).value);
                 if (maybeResult.isLeft()) return (Either) maybeResult;
                 Optional<Term> newValue = ((Either.Right<Error_, Optional<Term>>) maybeResult).value;

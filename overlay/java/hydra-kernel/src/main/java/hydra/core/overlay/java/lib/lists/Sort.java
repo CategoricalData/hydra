@@ -26,7 +26,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Sort extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.sort().name;
+        return hydra.core.lib.Lists.sort().name;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Sort extends PrimitiveFunction {
                 ArrayList<Term> scratch = new ArrayList<>(lst);
                 scratch.sort(hydra.core.overlay.java.lib.ordering.Compare::compareTerms);
                 return Terms.list(ConsList.fromList(scratch));
-            }, hydra.core.extract.Core.list(graph, args.get(0)));
+            }, hydra.core.extract.Model.list(graph, args.get(0)));
     }
 
     /**

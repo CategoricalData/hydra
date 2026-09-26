@@ -1,5 +1,6 @@
 package hydra;
 
+import hydra.core.Codegen;
 import hydra.build.overlay.java.Generation;
 import hydra.core.packaging.Module;
 import hydra.core.packaging.ModuleName;
@@ -570,11 +571,11 @@ public class Bootstrap {
         if ("haskell".equals(target)) {
             return base.resolve(Paths.get("haskell", "Hydra", "Overlay", "Haskell", "Lib"));
         }
-        return base.resolve(Paths.get(target, "hydra", "overlay", overlayDirSegment(target), "lib"));
+        return base.resolve(Paths.get(target, "hydra", "core", "overlay", overlayDirSegment(target), "lib"));
     }
 
     private static boolean isLibModule(Module m) {
-        return m.name.value.startsWith("hydra.lib.");
+        return m.name.value.startsWith("hydra.core.lib.");
     }
 
     /**

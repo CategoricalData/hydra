@@ -41,15 +41,15 @@ public class MapSet extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.set(graph, args.get(1)), items -> {
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.set(graph, args.get(1)), items -> {
                 Term fn = args.get(0);
                 PersistentSet<Term> results = PersistentSet.<Term>empty();
                 for (Term element : items) {
-                    Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                        hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(fn, element));
+                    Either<Error_, Term> r = hydra.core.Reduction.reduceTerm(
+                        hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(fn, element));
                     if (r.isLeft()) return (Either) r;
                     Either<Error_, hydra.core.overlay.java.util.Either<Term, Term>> eitherResult =
-                        hydra.core.extract.Core.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph,
+                        hydra.core.extract.Model.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph,
                             ((Either.Right<Error_, Term>) r).value);
                     if (eitherResult.isLeft()) return (Either) eitherResult;
                     hydra.core.overlay.java.util.Either<Term, Term> inner =

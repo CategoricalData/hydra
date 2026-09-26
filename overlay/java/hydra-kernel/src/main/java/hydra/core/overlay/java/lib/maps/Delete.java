@@ -28,7 +28,7 @@ public class Delete extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return hydra.lib.Maps.delete().name;
+        return hydra.core.lib.Maps.delete().name;
     }
 
     /**
@@ -49,7 +49,7 @@ public class Delete extends PrimitiveFunction {
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> {
             Term key = args.get(0);
-            return hydra.core.overlay.java.lib.eithers.Map.apply(before -> Terms.map(apply(key, before)), hydra.core.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
+            return hydra.core.overlay.java.lib.eithers.Map.apply(before -> Terms.map(apply(key, before)), hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
         };
     }
 

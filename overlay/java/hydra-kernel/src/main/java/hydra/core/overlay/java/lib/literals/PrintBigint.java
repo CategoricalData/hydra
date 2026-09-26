@@ -28,7 +28,7 @@ public class PrintBigint extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.printBigint"
      */
     public Name name() {
-        return hydra.lib.Literals.printBigint().name;
+        return hydra.core.lib.Literals.printBigint().name;
     }
 
     /**
@@ -46,7 +46,7 @@ public class PrintBigint extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<BigInteger, Term>) i -> Terms.string(apply(i)), hydra.core.extract.Core.bigint(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<BigInteger, Term>) i -> Terms.string(apply(i)), hydra.core.extract.Model.bigint(graph, args.get(0)));
     }
 
     /**

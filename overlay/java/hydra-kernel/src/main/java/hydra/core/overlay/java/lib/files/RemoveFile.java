@@ -31,7 +31,7 @@ public class RemoveFile extends PrimitiveFunction {
      * @return the name "hydra.core.lib.files.removeFile"
      */
     public Name name() {
-        return hydra.lib.Files.removeFile().name;
+        return hydra.core.lib.Files.removeFile().name;
     }
 
     /**

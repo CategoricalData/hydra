@@ -24,7 +24,7 @@ import hydra.core.overlay.java.util.Optional;
  */
 public class Matches extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Regex.matches().name;
+        return hydra.core.lib.Regex.matches().name;
     }
 
     @Override
@@ -35,10 +35,10 @@ public class Matches extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(
-            hydra.core.extract.Core.string(graph, args.get(0)),
+            hydra.core.extract.Model.string(graph, args.get(0)),
             pat -> hydra.core.overlay.java.lib.eithers.Map.apply(
                 input -> Terms.boolean_(apply(pat, input)),
-                hydra.core.extract.Core.string(graph, args.get(1))));
+                hydra.core.extract.Model.string(graph, args.get(1))));
     }
 
     public static Function<String, Boolean> apply(String pattern) {

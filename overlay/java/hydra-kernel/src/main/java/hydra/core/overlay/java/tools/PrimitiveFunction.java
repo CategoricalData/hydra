@@ -1,6 +1,6 @@
 package hydra.core.overlay.java.tools;
 
-import hydra.Scoping;
+import hydra.core.Scoping;
 import hydra.core.model.Name;
 import hydra.core.model.Term;
 import hydra.core.model.TypeScheme;
@@ -115,7 +115,7 @@ public abstract class PrimitiveFunction {
             signatureWithLaziness(),
             isPure(),
             Boolean.TRUE,
-            Optional.givenNullable(hydra.lib.Defaults.defaultImplementations().get(name())));
+            Optional.givenNullable(hydra.core.lib.Defaults.defaultImplementations().get(name())));
         return new Primitive(definition, nativeImpl);
     }
 }

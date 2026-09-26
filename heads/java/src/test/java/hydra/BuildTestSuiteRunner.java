@@ -1,7 +1,7 @@
 package hydra;
 
 import hydra.core.testing.TestGroup;
-import hydra.core.test.build.TestSuite;
+import hydra.build.test.TestSuite;
 
 import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.TestFactory;

@@ -27,7 +27,7 @@ public class WithDefault extends PrimitiveFunction {
      * @return the name "hydra.core.lib.optionals.withDefault"
      */
     public Name name() {
-        return hydra.lib.Optionals.withDefault().name;
+        return hydra.core.lib.Optionals.withDefault().name;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class WithDefault extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(Either.right(args.get(0)), defaultTerm ->
-            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.optionalTerm(t -> Either.right(t), graph, args.get(1)), opt ->
+            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.optionalTerm(t -> Either.right(t), graph, args.get(1)), opt ->
                 Either.right(opt.isGiven() ? opt.fromGiven() : defaultTerm)));
     }
 

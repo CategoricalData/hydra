@@ -29,7 +29,7 @@ public class Givens extends PrimitiveFunction {
      * @return the name "hydra.core.lib.optionals.givens"
      */
     public Name name() {
-        return hydra.lib.Optionals.givens().name;
+        return hydra.core.lib.Optionals.givens().name;
     }
 
     /**
@@ -47,7 +47,7 @@ public class Givens extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<java.util.List<Optional<Term>>, Term>) optionals -> Terms.list(apply(optionals)), hydra.core.extract.Core.listOf(x -> hydra.core.extract.Core.optionalTerm(t -> Either.right(t), graph, x), graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<java.util.List<Optional<Term>>, Term>) optionals -> Terms.list(apply(optionals)), hydra.core.extract.Model.listOf(x -> hydra.core.extract.Model.optionalTerm(t -> Either.right(t), graph, x), graph, args.get(0)));
     }
 
     /**

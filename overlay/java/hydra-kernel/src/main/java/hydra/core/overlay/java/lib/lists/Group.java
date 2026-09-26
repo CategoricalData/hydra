@@ -26,7 +26,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Group extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.group().name;
+        return hydra.core.lib.Lists.group().name;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class Group extends PrimitiveFunction {
                     reversed = ConsList.cons(Terms.list(g), reversed);
                 }
                 return Terms.list(reversed.reverse());
-            }, hydra.core.extract.Core.list(graph, args.get(0)));
+            }, hydra.core.extract.Model.list(graph, args.get(0)));
     }
 
     /**

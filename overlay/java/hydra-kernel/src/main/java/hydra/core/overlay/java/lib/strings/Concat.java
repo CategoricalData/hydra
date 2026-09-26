@@ -26,7 +26,7 @@ public class Concat extends PrimitiveFunction {
      * @return the name "hydra.core.lib.strings.concat"
      */
     public Name name() {
-        return hydra.lib.Strings.concat().name;
+        return hydra.core.lib.Strings.concat().name;
     }
 
     /**
@@ -44,7 +44,7 @@ public class Concat extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(strings -> Terms.string(apply(strings)), hydra.core.extract.Core.listOf(t -> hydra.core.extract.Core.string(graph, t), graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(strings -> Terms.string(apply(strings)), hydra.core.extract.Model.listOf(t -> hydra.core.extract.Model.string(graph, t), graph, args.get(0)));
     }
 
     /**

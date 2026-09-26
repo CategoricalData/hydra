@@ -23,7 +23,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Exit extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.System_.exit().name;
+        return hydra.core.lib.System_.exit().name;
     }
 
     @Override

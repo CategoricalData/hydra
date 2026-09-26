@@ -28,7 +28,7 @@ public class IsNone extends PrimitiveFunction {
      * @return the name "hydra.core.lib.optionals.isNone"
      */
     public Name name() {
-        return hydra.lib.Optionals.isNone().name;
+        return hydra.core.lib.Optionals.isNone().name;
     }
 
     /**
@@ -46,7 +46,7 @@ public class IsNone extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(x -> Terms.boolean_(IsNone.apply(x)), hydra.core.extract.Core.optionalTerm(t -> Either.right(t), graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(x -> Terms.boolean_(IsNone.apply(x)), hydra.core.extract.Model.optionalTerm(t -> Either.right(t), graph, args.get(0)));
     }
 
     /**

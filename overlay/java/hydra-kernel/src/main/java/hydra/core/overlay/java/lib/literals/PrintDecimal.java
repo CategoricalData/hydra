@@ -28,7 +28,7 @@ public class PrintDecimal extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.printDecimal"
      */
     public Name name() {
-        return hydra.lib.Literals.printDecimal().name;
+        return hydra.core.lib.Literals.printDecimal().name;
     }
 
     /**
@@ -46,7 +46,7 @@ public class PrintDecimal extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<BigDecimal, Term>) d -> Terms.string(apply(d)), hydra.core.extract.Core.decimal(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<BigDecimal, Term>) d -> Terms.string(apply(d)), hydra.core.extract.Model.decimal(graph, args.get(0)));
     }
 
     /**

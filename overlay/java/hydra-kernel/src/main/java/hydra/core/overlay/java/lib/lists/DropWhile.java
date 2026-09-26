@@ -26,7 +26,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class DropWhile extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.dropWhile().name;
+        return hydra.core.lib.Lists.dropWhile().name;
     }
 
     @Override
@@ -37,13 +37,13 @@ public class DropWhile extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph ->
-            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.list(graph, args.get(1)), lst -> {
+            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.list(graph, args.get(1)), lst -> {
                 ConsList<Term> remaining = ConsList.fromList(lst);
                 while (!remaining.isEmpty()) {
-                    Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                        hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), remaining.head()));
+                    Either<Error_, Term> r = hydra.core.Reduction.reduceTerm(
+                        hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), remaining.head()));
                     if (r.isLeft()) return (Either) r;
-                    Either<Error_, Boolean> b = hydra.core.extract.Core.boolean_(graph,
+                    Either<Error_, Boolean> b = hydra.core.extract.Model.boolean_(graph,
                         ((Either.Right<Error_, Term>) r).value);
                     if (b.isLeft()) return (Either) b;
                     if (!((Either.Right<Error_, Boolean>) b).value) break;

@@ -27,7 +27,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Rem extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Math_.rem().name;
+        return hydra.core.lib.Math_.rem().name;
     }
 
     @Override

@@ -27,7 +27,7 @@ public class Compose extends PrimitiveFunction {
      * @return the name "hydra.core.lib.effects.compose"
      */
     public Name name() {
-        return hydra.lib.Effects.compose().name;
+        return hydra.core.lib.Effects.compose().name;
     }
 
     /**

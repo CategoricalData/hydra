@@ -31,7 +31,7 @@ public class Even extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return hydra.lib.Math_.even().name;
+        return hydra.core.lib.Math_.even().name;
     }
 
     /**

@@ -28,7 +28,7 @@ public class Bind extends PrimitiveFunction {
      * @return the name "hydra.core.lib.optionals.bind"
      */
     public Name name() {
-        return hydra.lib.Optionals.bind().name;
+        return hydra.core.lib.Optionals.bind().name;
     }
 
     /**
@@ -47,15 +47,15 @@ public class Bind extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.optionalTerm(t -> Either.right(t), graph, args.get(0)), arg -> {
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.optionalTerm(t -> Either.right(t), graph, args.get(0)), arg -> {
                 if (arg.isNone()) {
                     return Either.right(Terms.optional(Optional.none()));
                 }
                 Term val = arg.fromGiven();
-                Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                    hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(1), val));
+                Either<Error_, Term> r = hydra.core.Reduction.reduceTerm(
+                    hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(1), val));
                 if (r.isLeft()) return (Either) r;
-                Either<Error_, Optional<Term>> maybeResult = hydra.core.extract.Core.optionalTerm(
+                Either<Error_, Optional<Term>> maybeResult = hydra.core.extract.Model.optionalTerm(
                     t -> Either.right(t), graph, ((Either.Right<Error_, Term>) r).value);
                 if (maybeResult.isLeft()) return (Either) maybeResult;
                 return Either.right(Terms.optional(((Either.Right<Error_, Optional<Term>>) maybeResult).value));

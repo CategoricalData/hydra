@@ -1,6 +1,6 @@
 package hydra.pg.overlay.java.tinkerpop.coder;
 
-import hydra.Reflect;
+import hydra.core.Reflect;
 import hydra.core.model.Literal;
 import hydra.core.model.LiteralType;
 import hydra.pg.error.model.InvalidValueError;

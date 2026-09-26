@@ -27,7 +27,7 @@ public class SplitOn extends PrimitiveFunction {
      * @return the name "hydra.core.lib.strings.splitOn"
      */
     public Name name() {
-        return hydra.lib.Strings.splitOn().name;
+        return hydra.core.lib.Strings.splitOn().name;
     }
 
     /**
@@ -45,7 +45,7 @@ public class SplitOn extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.string(graph, args.get(0)), s -> hydra.core.overlay.java.lib.eithers.Map.apply(s2 -> Terms.listOfStrings(apply(s, s2)), hydra.core.extract.Core.string(graph, args.get(1))));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.string(graph, args.get(0)), s -> hydra.core.overlay.java.lib.eithers.Map.apply(s2 -> Terms.listOfStrings(apply(s, s2)), hydra.core.extract.Model.string(graph, args.get(1))));
     }
 
     /**

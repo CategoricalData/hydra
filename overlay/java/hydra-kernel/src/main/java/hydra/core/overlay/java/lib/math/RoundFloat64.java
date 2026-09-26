@@ -23,7 +23,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class RoundFloat64 extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Math_.roundFloat64().name;
+        return hydra.core.lib.Math_.roundFloat64().name;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class RoundFloat64 extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.int32(graph, args.get(0)), arg0 -> hydra.core.overlay.java.lib.eithers.Map.apply(arg1 -> Terms.float64(apply(arg0, arg1)), hydra.core.extract.Core.float64(graph, args.get(1))));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.int32(graph, args.get(0)), arg0 -> hydra.core.overlay.java.lib.eithers.Map.apply(arg1 -> Terms.float64(apply(arg0, arg1)), hydra.core.extract.Model.float64(graph, args.get(1))));
     }
 
     public static Function<Double, Double> apply(int n) {

@@ -1,10 +1,10 @@
 package hydra.build.overlay.java;
 
-import hydra.Annotations;
-import hydra.Codegen;
-import hydra.Dsls;
-import hydra.Sorting;
-import hydra.Strip;
+import hydra.core.Annotations;
+import hydra.core.Codegen;
+import hydra.core.Dsls;
+import hydra.core.Sorting;
+import hydra.core.Strip;
 import hydra.core.model.Binding;
 import hydra.core.model.Name;
 import hydra.core.model.Term;
@@ -19,7 +19,7 @@ import hydra.core.packaging.Definition;
 import hydra.core.packaging.Module;
 import hydra.core.packaging.TermDefinition;
 import hydra.core.packaging.ModuleName;
-import hydra.Rewriting;
+import hydra.core.Rewriting;
 import hydra.core.overlay.java.tools.PrimitiveFunction;
 import hydra.core.overlay.java.util.Either;
 import hydra.core.overlay.java.util.Optional;
@@ -284,7 +284,7 @@ public class Generation {
         // compactMaps = false: decodes the checked-in dist/json module-bootstrapping
         // representation, which must stay byte-stable for the published-host cold-seeder (#624).
         // Called via reflection because this file compiles against two different
-        // hydra.json.Decode signatures depending on consumer: the LOCAL dist/java/hydra-kernel
+        // hydra.core.json.Decode signatures depending on consumer: the LOCAL dist/java/hydra-kernel
         // (5-arg, with compactMaps) when compiled into packages/hydra-java's headsExtras
         // rollup, and the PUBLISHED hydra-kernel jar (still pre-#624 4-arg) when compiled by
         // target-driver/json-driver. A direct call only compiles against one signature at a
@@ -318,10 +318,10 @@ public class Generation {
         });
     }
 
-    // Reflective bridge for hydra.json.Decode.fromJson (#624): tries the current 5-arg
+    // Reflective bridge for hydra.core.json.Decode.fromJson (#624): tries the current 5-arg
     // signature (schemaMap, compactMaps, name, type, value) first, falling back to the
     // pre-#624 4-arg signature (schemaMap, name, type, value) if that overload does not
-    // exist on the classpath's hydra.json.Decode. See decodeModuleFromJson's comment: this
+    // exist on the classpath's hydra.core.json.Decode. See decodeModuleFromJson's comment: this
     // file is compiled against the PUBLISHED hydra-kernel (still 4-arg) by target-driver/
     // json-driver, and against the LOCAL dist/java/hydra-kernel (5-arg) by hydra-java's
     // headsExtras rollup -- a direct call can only match one at compile time. Remove the
@@ -331,19 +331,19 @@ public class Generation {
     private static Object invokeFromJson(Map<Name, hydra.core.model.Type> schemaMap, Name modName,
             hydra.core.model.Type modType, Value jsonVal) {
         try {
-            Method fiveArg = hydra.json.Decode.class.getMethod(
+            Method fiveArg = hydra.core.json.Decode.class.getMethod(
                 "fromJson", Map.class, Boolean.class, Name.class, hydra.core.model.Type.class, Value.class);
             return fiveArg.invoke(null, schemaMap, false, modName, modType, jsonVal);
         } catch (NoSuchMethodException e) {
             try {
-                Method fourArg = hydra.json.Decode.class.getMethod(
+                Method fourArg = hydra.core.json.Decode.class.getMethod(
                     "fromJson", Map.class, Name.class, hydra.core.model.Type.class, Value.class);
                 return fourArg.invoke(null, schemaMap, modName, modType, jsonVal);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e2) {
-                throw new RuntimeException("hydra.json.Decode.fromJson: no compatible overload found", e2);
+                throw new RuntimeException("hydra.core.json.Decode.fromJson: no compatible overload found", e2);
             }
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("hydra.json.Decode.fromJson invocation failed", e);
+            throw new RuntimeException("hydra.core.json.Decode.fromJson invocation failed", e);
         }
     }
 
@@ -353,10 +353,10 @@ public class Generation {
      * then extracts and recursively deannotates the body type for JSON decoding.
      */
     public static Map<Name, hydra.core.model.Type> bootstrapSchemaMap() {
-        Map<Name, hydra.core.model.Type> raw = hydra.json.Bootstrap.typesByName();
+        Map<Name, hydra.core.model.Type> raw = hydra.core.json.Bootstrap.typesByName();
         Map<Name, hydra.core.model.Type> result = new HashMap<>();
         for (Map.Entry<Name, hydra.core.model.Type> entry : raw.entrySet()) {
-            hydra.core.model.TypeScheme ts = hydra.Scoping.fTypeToTypeScheme(entry.getValue());
+            hydra.core.model.TypeScheme ts = hydra.core.Scoping.fTypeToTypeScheme(entry.getValue());
             result.put(entry.getKey(), Strip.deannotateTypeRecursive(ts.body));
         }
         return result;
@@ -367,10 +367,10 @@ public class Generation {
      * Converts each System F type (with foralls) to a TypeScheme.
      */
     public static Map<Name, hydra.core.model.TypeScheme> bootstrapTypeSchemes() {
-        Map<Name, hydra.core.model.Type> raw = hydra.json.Bootstrap.typesByName();
+        Map<Name, hydra.core.model.Type> raw = hydra.core.json.Bootstrap.typesByName();
         Map<Name, hydra.core.model.TypeScheme> result = new HashMap<>();
         for (Map.Entry<Name, hydra.core.model.Type> entry : raw.entrySet()) {
-            result.put(entry.getKey(), hydra.Scoping.fTypeToTypeScheme(entry.getValue()));
+            result.put(entry.getKey(), hydra.core.Scoping.fTypeToTypeScheme(entry.getValue()));
         }
         return result;
     }
@@ -567,7 +567,7 @@ public class Generation {
     public static List<Module> filterKernelModules(List<Module> modules) {
         List<Module> result = new ArrayList<>();
         for (Module m : modules) {
-            if (!m.name.value.startsWith("hydra.") && !m.name.value.startsWith("hydra.json.yaml.")) {
+            if (!m.name.value.startsWith("hydra.") && !m.name.value.startsWith("hydra.core.json.yaml.")) {
                 result.add(m);
             }
         }
@@ -1042,7 +1042,7 @@ public class Generation {
             // driver's alphabetized field order and sorted namespace arrays exactly.
             Value manifestValue = hydra.build.ManifestWriter.packageManifestJson(
                 pkg, main, dsl, enc, java.util.Collections.emptyList());
-            String jsonStr = hydra.json.Writer.printJson(manifestValue);
+            String jsonStr = hydra.core.json.Writer.printJson(manifestValue);
             Path pkgDir = Paths.get(distJsonRoot, pkg, "src", "main", "json");
             Files.createDirectories(pkgDir);
             Path filePath = pkgDir.resolve("manifest.json");
@@ -1121,8 +1121,8 @@ public class Generation {
      *
      * <p>Each type module {@code hydra.java.X} yields a {@code hydra.java.dsl.X}
      * module of phantom-typed builder functions, auto-derived from its type
-     * definitions by the kernel's {@code hydra.Dsls.dslModule} transform. Both the
-     * transform and the orchestrator ({@code hydra.Codegen.generateCoderModules})
+     * definitions by the kernel's {@code hydra.core.Dsls.dslModule} transform. Both the
+     * transform and the orchestrator ({@code hydra.core.Codegen.generateCoderModules})
      * are kernel functions present in the published hydra-kernel jar, so this runs
      * against the published host with no local Haskell build. Replaces the Haskell
      * update-json-main DSL pass for hydra-java (#370/#346).</p>
@@ -1183,13 +1183,13 @@ public class Generation {
     public static List<Module> generateEncoderModules(
             List<Module> universeMods, List<Module> typeMods) {
         return generateCoderModulesVia(universeMods, typeMods,
-            (c, g, m) -> hydra.Encoding.encodeModule(c, g, m), "encoder");
+            (c, g, m) -> hydra.core.Encoding.encodeModule(c, g, m), "encoder");
     }
 
     public static List<Module> generateDecoderModules(
             List<Module> universeMods, List<Module> typeMods) {
         return generateCoderModulesVia(universeMods, typeMods,
-            (c, g, m) -> hydra.Decoding.decodeModule(c, g, m), "decoder");
+            (c, g, m) -> hydra.core.Decoding.decodeModule(c, g, m), "decoder");
     }
 
     /** Shared synthesis driver for the encode/decode coder modules; mirrors

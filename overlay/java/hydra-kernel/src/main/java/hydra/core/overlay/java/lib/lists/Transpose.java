@@ -25,7 +25,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Transpose extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.transpose().name;
+        return hydra.core.lib.Lists.transpose().name;
     }
 
     @Override
@@ -35,11 +35,11 @@ public class Transpose extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.list(graph, args.get(0)), outerList -> {
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.list(graph, args.get(0)), outerList -> {
             // Parse each inner list, accumulating into a ConsList in reverse, then reverse once.
             ConsList<List<Term>> matrixRev = ConsList.empty();
             for (Term inner : outerList) {
-                Either<Error_, List<Term>> rowE = hydra.core.extract.Core.list(graph, inner);
+                Either<Error_, List<Term>> rowE = hydra.core.extract.Model.list(graph, inner);
                 if (rowE.isLeft()) return (Either) rowE;
                 matrixRev = ConsList.cons(((Either.Right<Error_, List<Term>>) rowE).value, matrixRev);
             }

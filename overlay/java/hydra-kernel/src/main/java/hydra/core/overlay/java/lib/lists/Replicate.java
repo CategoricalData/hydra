@@ -25,7 +25,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Replicate extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.replicate().name;
+        return hydra.core.lib.Lists.replicate().name;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Replicate extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.int32(graph, args.get(0)), n -> {
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.int32(graph, args.get(0)), n -> {
             return Either.right(Terms.list(apply(n, args.get(1))));
         });
     }

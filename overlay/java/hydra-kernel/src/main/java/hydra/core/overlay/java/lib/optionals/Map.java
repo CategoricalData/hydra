@@ -27,7 +27,7 @@ public class Map extends PrimitiveFunction {
      * @return the name "hydra.core.lib.optionals.map"
      */
     public Name name() {
-        return hydra.lib.Optionals.map().name;
+        return hydra.core.lib.Optionals.map().name;
     }
 
     /**
@@ -46,7 +46,7 @@ public class Map extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.optionalTerm(instance -> Either.right(Terms.apply(args.get(0), instance)), graph, args.get(1)), opt -> Either.right(Terms.optional(opt)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.optionalTerm(instance -> Either.right(Terms.apply(args.get(0), instance)), graph, args.get(1)), opt -> Either.right(Terms.optional(opt)));
     }
 
     /**

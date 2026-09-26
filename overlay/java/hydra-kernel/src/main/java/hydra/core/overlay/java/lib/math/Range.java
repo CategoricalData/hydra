@@ -28,7 +28,7 @@ public class Range extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return hydra.lib.Math_.range().name;
+        return hydra.core.lib.Math_.range().name;
     }
 
     /**
@@ -46,13 +46,13 @@ public class Range extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.int32(graph, args.get(0)), arg0 -> hydra.core.overlay.java.lib.eithers.Map.apply(arg1 -> {
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.int32(graph, args.get(0)), arg0 -> hydra.core.overlay.java.lib.eithers.Map.apply(arg1 -> {
                 ConsList<Term> result = ConsList.empty();
                 for (int i = arg1 - 1; i >= arg0; i--) {
                     result = ConsList.cons(Terms.int32(i), result);
                 }
                 return Terms.list(result);
-            }, hydra.core.extract.Core.int32(graph, args.get(1))));
+            }, hydra.core.extract.Model.int32(graph, args.get(1))));
     }
 
     /**

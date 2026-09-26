@@ -33,7 +33,7 @@ public class ToList extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return hydra.lib.Maps.toList().name;
+        return hydra.core.lib.Maps.toList().name;
     }
 
     /**
@@ -54,7 +54,7 @@ public class ToList extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> {
-            Either<Error_, Map<Term, Term>> r = hydra.core.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
+            Either<Error_, Map<Term, Term>> r = hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
             return hydra.core.overlay.java.lib.eithers.Map.apply(m -> {
                 ConsList<Term> reversed = ConsList.empty();
                 for (Map.Entry<Term, Term> e : m.entrySet()) {

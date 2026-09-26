@@ -31,7 +31,7 @@ public class ParseBigint extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.parseBigint"
      */
     public Name name() {
-        return hydra.lib.Literals.parseBigint().name;
+        return hydra.core.lib.Literals.parseBigint().name;
     }
 
     /**
@@ -49,7 +49,7 @@ public class ParseBigint extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.optional(apply(s).map(Terms::bigint)), hydra.core.extract.Core.string(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.optional(apply(s).map(Terms::bigint)), hydra.core.extract.Model.string(graph, args.get(0)));
     }
 
     /**

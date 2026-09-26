@@ -29,7 +29,7 @@ public class BinaryToBase64 extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.binaryToBase64"
      */
     public Name name() {
-        return hydra.lib.Literals.binaryToBase64().name;
+        return hydra.core.lib.Literals.binaryToBase64().name;
     }
 
     /**

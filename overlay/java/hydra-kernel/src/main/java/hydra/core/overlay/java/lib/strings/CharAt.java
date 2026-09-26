@@ -25,7 +25,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class CharAt extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Strings.charAt().name;
+        return hydra.core.lib.Strings.charAt().name;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class CharAt extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.int32(graph, args.get(0)), i -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.optional(CharAt.apply(i, s).map(Terms::int32)), hydra.core.extract.Core.string(graph, args.get(1))));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.int32(graph, args.get(0)), i -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.optional(CharAt.apply(i, s).map(Terms::int32)), hydra.core.extract.Model.string(graph, args.get(1))));
     }
 
     /**

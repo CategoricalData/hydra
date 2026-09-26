@@ -24,7 +24,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Bind extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.bind().name;
+        return hydra.core.lib.Lists.bind().name;
     }
 
     @Override
@@ -35,14 +35,14 @@ public class Bind extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.list(graph, args.get(0)), argsArg -> {
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.list(graph, args.get(0)), argsArg -> {
                 Term mapping = args.get(1);
                 ConsList<Term> reversed = ConsList.empty();
                 for (Term a : argsArg) {
-                    Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                        hydra.Lexical.emptyInferenceContext(), graph, true, Terms.apply(mapping, a));
+                    Either<Error_, Term> r = hydra.core.Reduction.reduceTerm(
+                        hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(mapping, a));
                     if (r.isLeft()) return (Either) r;
-                    Either<Error_, List<Term>> inner = hydra.core.extract.Core.list(graph,
+                    Either<Error_, List<Term>> inner = hydra.core.extract.Model.list(graph,
                         ((Either.Right<Error_, Term>) r).value);
                     if (inner.isLeft()) return (Either) inner;
                     for (Term y : ((Either.Right<Error_, List<Term>>) inner).value) {

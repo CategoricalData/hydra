@@ -32,7 +32,7 @@ public class WriteFile extends PrimitiveFunction {
      * @return the name "hydra.core.lib.files.writeFile"
      */
     public Name name() {
-        return hydra.lib.Files.writeFile().name;
+        return hydra.core.lib.Files.writeFile().name;
     }
 
     /**

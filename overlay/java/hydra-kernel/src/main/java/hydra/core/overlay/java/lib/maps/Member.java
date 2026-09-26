@@ -28,7 +28,7 @@ public class Member extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return hydra.lib.Maps.member().name;
+        return hydra.core.lib.Maps.member().name;
     }
 
     /**
@@ -49,7 +49,7 @@ public class Member extends PrimitiveFunction {
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(
                 (Function<Map<Term, Term>, Term>) mp -> Terms.boolean_(mp.containsKey(args.get(0))),
-                hydra.core.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
+                hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
     }
 
     /**

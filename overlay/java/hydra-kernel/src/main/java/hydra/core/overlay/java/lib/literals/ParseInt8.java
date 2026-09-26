@@ -30,7 +30,7 @@ public class ParseInt8 extends PrimitiveFunction {
      * @return the function name "hydra.core.lib.literals.parseInt8"
      */
     public Name name() {
-        return hydra.lib.Literals.parseInt8().name;
+        return hydra.core.lib.Literals.parseInt8().name;
     }
 
     /**
@@ -48,7 +48,7 @@ public class ParseInt8 extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.optional(apply(s).map(Terms::int8)), hydra.core.extract.Core.string(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.optional(apply(s).map(Terms::int8)), hydra.core.extract.Model.string(graph, args.get(0)));
     }
 
     /**

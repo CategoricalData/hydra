@@ -28,7 +28,7 @@ public class Size extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return hydra.lib.Maps.size().name;
+        return hydra.core.lib.Maps.size().name;
     }
 
     /**
@@ -49,7 +49,7 @@ public class Size extends PrimitiveFunction {
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(
                 (Function<Map<Term, Term>, Term>) mp -> Terms.int32(mp.size()),
-                hydra.core.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(0)));
+                hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(0)));
     }
 
     /**

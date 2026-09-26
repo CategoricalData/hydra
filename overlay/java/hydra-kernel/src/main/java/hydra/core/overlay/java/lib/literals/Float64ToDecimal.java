@@ -25,7 +25,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Float64ToDecimal extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Literals.float64ToDecimal().name;
+        return hydra.core.lib.Literals.float64ToDecimal().name;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Float64ToDecimal extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(d -> Terms.decimal(apply(d)), hydra.core.extract.Core.float64(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(d -> Terms.decimal(apply(d)), hydra.core.extract.Model.float64(graph, args.get(0)));
     }
 
     public static BigDecimal apply(Double value) {

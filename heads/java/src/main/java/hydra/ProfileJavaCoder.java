@@ -1,5 +1,6 @@
 package hydra;
 
+import hydra.core.Codegen;
 import hydra.core.typing.InferenceContext;
 import hydra.core.model.Name;
 import hydra.core.model.Term;

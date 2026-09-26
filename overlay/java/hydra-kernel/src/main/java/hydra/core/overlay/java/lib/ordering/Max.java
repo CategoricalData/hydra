@@ -22,7 +22,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Max extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Ordering.max().name;
+        return hydra.core.lib.Ordering.max().name;
     }
 
     @Override

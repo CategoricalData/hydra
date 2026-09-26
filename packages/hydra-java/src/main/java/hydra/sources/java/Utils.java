@@ -2,7 +2,6 @@ package hydra.sources.java;
 import hydra.core.model.Field;
 import hydra.core.model.Name;
 import hydra.core.model.Type;
-import hydra.core.dsl.Core;
 import hydra.core.dsl.Errors;
 import hydra.core.dsl.Packaging;
 import hydra.core.overlay.java.dsl.Types;

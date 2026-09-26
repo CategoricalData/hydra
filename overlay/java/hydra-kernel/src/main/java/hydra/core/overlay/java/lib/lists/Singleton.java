@@ -24,7 +24,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Singleton extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Lists.singleton().name;
+        return hydra.core.lib.Lists.singleton().name;
     }
 
     @Override

@@ -27,7 +27,7 @@ public class Apply extends PrimitiveFunction {
      * @return the name "hydra.core.lib.effects.apply"
      */
     public Name name() {
-        return hydra.lib.Effects.apply().name;
+        return hydra.core.lib.Effects.apply().name;
     }
 
     /**

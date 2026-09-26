@@ -27,7 +27,7 @@ public class FromList extends PrimitiveFunction {
      * @return the name "hydra.core.lib.strings.fromList"
      */
     public Name name() {
-        return hydra.lib.Strings.fromList().name;
+        return hydra.core.lib.Strings.fromList().name;
     }
 
     /**
@@ -46,7 +46,7 @@ public class FromList extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> {
-            Either<Error_, java.util.List<Integer>> list = hydra.core.extract.Core.listOf(t -> hydra.core.extract.Core.int32(graph, t), graph, args.get(0));
+            Either<Error_, java.util.List<Integer>> list = hydra.core.extract.Model.listOf(t -> hydra.core.extract.Model.int32(graph, t), graph, args.get(0));
             return hydra.core.overlay.java.lib.eithers.Map.apply(l -> Terms.string(FromList.apply(l)), list);
         };
     }

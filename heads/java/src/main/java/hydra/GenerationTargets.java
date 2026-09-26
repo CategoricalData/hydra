@@ -1,5 +1,6 @@
 package hydra;
 
+import hydra.core.Codegen;
 import hydra.core.coders.Language;
 import hydra.core.errors.Error_;
 import hydra.core.graph.Graph;
@@ -145,8 +146,8 @@ public class GenerationTargets {
     public static List<String> writeTypeScript(String repoRoot, String basePath, List<Module> universe, List<Module> mods) {
         java.util.Set<String> overlaySubs = new java.util.HashSet<>(Bootstrap.libSubsForTarget(repoRoot, "typescript"));
         return generateSources(
-                mod -> defs -> cx -> g -> hydra.typeScript.Coder.moduleToTypeScript(overlaySubs, mod, defs, cx, g),
-                hydra.typeScript.Language.typeScriptLanguage(),
+                mod -> defs -> cx -> g -> hydra.typescript.Coder.moduleToTypeScript(overlaySubs, mod, defs, cx, g),
+                hydra.typescript.Language.typeScriptLanguage(),
                 false,
                 basePath, universe, mods);
     }
@@ -221,10 +222,10 @@ public class GenerationTargets {
                         return result;
                     }
                     hydra.lisp.syntax.Program program = (hydra.lisp.syntax.Program) ((hydra.core.overlay.java.util.Either.Right) result).value;
-                    String code = hydra.Serialization.printExpr(
-                            hydra.Serialization.parenthesize(
+                    String code = hydra.core.Serialization.printExpr(
+                            hydra.core.Serialization.parenthesize(
                                     hydra.lisp.Serde.programToExpr(program)));
-                    String filePath = hydra.Names.moduleNameToFilePath(
+                    String filePath = hydra.core.Names.moduleNameToFilePath(
                             cc, new hydra.core.file.FileExtension(fileExt), mod.name);
                     Map<String, String> fileMap = new java.util.TreeMap<>();
                     fileMap.put(filePath, code);

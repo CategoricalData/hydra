@@ -28,7 +28,7 @@ public class Match extends PrimitiveFunction {
      * @return the name "hydra.core.lib.optionals.match"
      */
     public Name name() {
-        return hydra.lib.Optionals.match().name;
+        return hydra.core.lib.Optionals.match().name;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class Match extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Core.optionalTerm(t -> Either.right(t), graph, args.get(0)), opt ->
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.optionalTerm(t -> Either.right(t), graph, args.get(0)), opt ->
             opt.isGiven()
                 ? Either.right(Terms.apply(args.get(2), opt.fromGiven()))
                 : Either.right(args.get(1)));

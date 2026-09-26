@@ -1,10 +1,10 @@
 package hydra.sources.java;
-import hydra.Refs;
+import hydra.core.dsl.Refs;
 import hydra.core.model.Field;
 import hydra.core.model.Name;
 import hydra.core.model.Type;
 import hydra.core.model.TypeScheme;
-import hydra.core.dsl.Core;
+import hydra.core.dsl.Model;
 import hydra.core.dsl.Packaging;
 import hydra.core.overlay.java.dsl.Types;
 import hydra.java.dsl.Environment;
@@ -181,15 +181,45 @@ public class Coder {
     public static final ModuleName NS = new ModuleName("hydra.java.coder");
 
     /**
-     * Local mirror of the published {@code hydra.Refs.showRef} (#497): that helper hardcodes
+     * Local mirror of the published {@code hydra.core.Refs.showRef} (#497): that helper hardcodes
      * the "hydra.core.show" category prefix, which predates the hydra.core.print.* rename and cannot be
-     * changed without a new hydra-java release. {@code hydra.Names.derivedBindingName} is a
+     * changed without a new hydra-java release. {@code hydra.core.Names.derivedBindingName} is a
      * generic, prefix-parameterized utility unaffected by the rename, so we call it directly
-     * with the correct "hydra.core.print" prefix instead of going through {@code Refs.showRef}.
+     * with the correct "print" category prefix instead of going through {@code Refs.showRef}.
+     * The categoryPrefix argument does NOT include the "hydra.core" package-root segments --
+     * derivedBindingName's #729-aware derivedDefinitionName already prepends those automatically
+     * (Take(2, nsParts)), so passing "hydra" here as well double-prepends it (produces
+     * "hydra.core.hydra.print.<ns>.<local>" instead of "hydra.core.print.<ns>.<local>").
      */
     private static <T0> hydra.core.model.Term printRef(hydra.core.typed.TypedName<T0> tn) {
         return new hydra.core.model.Term.Variable(
-            hydra.Names.derivedBindingName(hydra.core.overlay.java.util.ConsList.of("hydra", "print"), true, tn.value));
+            hydra.core.Names.derivedBindingName(hydra.core.overlay.java.util.ConsList.of("print"), true, tn.value));
+    }
+
+    /**
+     * Local mirror of {@code hydra.core.dsl.Refs.encodeRef}, following the same pattern as
+     * printRef above (#497): {@code Refs.encodeRef} builds a DEFERRED term-level application
+     * of hydra.core.refs.encodeRef to a raw Term.Variable wrapping the type's own name (e.g.
+     * Term.Variable("hydra.core.model.Type")) -- correct for code that only ever gets emitted
+     * as target-language output and evaluated there, but hydra.java.coder is itself a DSL
+     * source module that gets SELF-INFERRED (via UpdateJavaJson's inferAndWriteByPackage), and
+     * "hydra.core.model.Type" is a TYPE name, not a bound TERM -- so type-checking that
+     * Term.Variable as a free-variable lookup fails with NoSuchBindingError during that
+     * self-inference pass (#729 land). Since Refs.encodeRef's own body just computes
+     * derivedBindingName(["encode"], true, name) and wraps it as a Term.Variable, compute that
+     * directly here (same as printRef) so the resulting term already IS the resolved variable
+     * reference, with no unresolved TypedName-as-Variable argument left for inference to choke
+     * on.
+     */
+    private static <T0> hydra.core.model.Term encodeRefDirect(hydra.core.typed.TypedName<T0> tn) {
+        return new hydra.core.model.Term.Variable(
+            hydra.core.Names.derivedBindingName(hydra.core.overlay.java.util.ConsList.of("encode"), true, tn.value));
+    }
+
+    /** Local mirror of {@code hydra.core.dsl.Refs.decodeRef}; see encodeRefDirect above. */
+    private static <T0> hydra.core.model.Term decodeRefDirect(hydra.core.typed.TypedName<T0> tn) {
+        return new hydra.core.model.Term.Variable(
+            hydra.core.Names.derivedBindingName(hydra.core.overlay.java.util.ConsList.of("decode"), true, tn.value));
     }
 
     private static Def def(String localName, Supplier<TypedTerm<?>> body) {
@@ -238,7 +268,7 @@ public class Coder {
                     lambda("t",
                         hydra.core.dsl.Annotations.setTermAnnotation(
                             hydra.core.dsl.Constants.keyType(),
-                            just(apply(tterm(Refs.encodeRef(Core.typeType())), var("typ"))),
+                            just(apply(tterm(encodeRefDirect(Model.typeType())), var("typ"))),
                             var("t"))),
                     matchWithDefault(Term.TYPE_,
                         hydra.core.dsl.Strip.deannotateTerm( var("term")),
@@ -463,11 +493,11 @@ public class Coder {
                                                         Maps.insert(
                                                             hydra.core.dsl.Constants.keyType(),
                                                             apply(
-                                                                tterm(Refs.encodeRef(Core.typeType())),
+                                                                tterm(encodeRefDirect(Model.typeType())),
                                                                 var("t'")),
                                                             var("ann")))),
                                                 apply(
-                                                    tterm(Refs.decodeRef(Core.typeType())),
+                                                    tterm(decodeRefDirect(Model.typeType())),
                                                     var("cx"),
                                                     var("typeTerm")))))),
                                 inject(Term.TYPE_,
@@ -1317,7 +1347,7 @@ public class Coder {
                                                                                         proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft"),
                                                                                         var("dom"))))))))))),
                                                 apply(
-                                                    tterm(Refs.decodeRef(Core.typeType())),
+                                                    tterm(decodeRefDirect(Model.typeType())),
                                                     var("g"),
                                                     var("typeTerm")))))),
                                 Maps.union(var("annSubst"), var("bodySubst"))))),
@@ -4910,28 +4940,60 @@ public class Coder {
                                                                         var("cx"),
                                                                         var("g")),
                                                                     lambda("domArgs",
-                                                                        let("targs",
-                                                                            apply(
-                                                                                ref(Coder.typeArgsOrDiamond),
-                                                                                Lists.concat2(
-                                                                                    var("domArgs"),
-                                                                                    list(
-                                                                                        inject(
-                                                                                            TypeArgument.TYPE_,
-                                                                                            TypeArgument.REFERENCE,
-                                                                                            var("rt"))))),
-                                                                            // The visit()/otherwise() override parameter types must carry the
-                                                                            // union's OWN declared type parameters (e.g. Edit.Set<A, S>), not
-                                                                            // domArgs derived from the encode-site domain — which is empty when
-                                                                            // `dom` is not a type-application spine, producing a RAW case-class type
-                                                                            // (Edit.Set) that fails to override the generic interface method (#327).
-                                                                            // The constructor call above keeps the diamond (typeArgsOrDiamond).
-                                                                            Eithers.bind(
+                                                                        // The visit()/otherwise() override parameter types, AND the
+                                                                        // anonymous PartialVisitor constructor's own type arguments, must
+                                                                        // carry concrete types that are actually in scope at this call
+                                                                        // site. Prefer domArgs (derived from `dom`, the eliminator's real
+                                                                        // domain type, e.g. ParseResult<T0> -> [T0]) when non-empty — using
+                                                                        // the union's OWN abstract declared parameters (e.g. bare "A") here
+                                                                        // is wrong whenever the visitor is a local anonymous class, since
+                                                                        // "A" is not bound in that scope (#729 land: ParseResult<A> "cannot
+                                                                        // find symbol: class A" in Parsers.java/Regex.java). Only fall back
+                                                                        // to the union's own declared parameters (unionArgs, computed the
+                                                                        // same way below) when `dom` is not a type-application spine and
+                                                                        // domArgs comes back empty — the RAW case-class type problem #327
+                                                                        // fixed (Edit.Set instead of Edit.Set<A, S>). The constructor call
+                                                                        // always instantiates an anonymous class body (visit()/otherwise()
+                                                                        // overrides), so Java's diamond inference can never work here
+                                                                        // regardless of Java version (it cannot infer type arguments from
+                                                                        // usage inside the body) — always emit explicit
+                                                                        // TypeArgumentsOrDiamond.ARGUMENTS, never defer to
+                                                                        // typeArgsOrDiamond's diamond default. targs is bound at this outer
+                                                                        // scope (from domArgs, mirroring the pre-#729 structure) rather than
+                                                                        // inside the unionArgs Eithers.bind below — nesting this
+                                                                        // construction inside that continuation lambda triggers a
+                                                                        // NoSuchBindingError during this module's own DSL inference (see
+                                                                        // #729 land notes), for reasons not fully understood; this ordering
+                                                                        // is known to work.
+                                                                        Eithers.bind(
+                                                                            Logic.ifElse(
+                                                                                Lists.isEmpty(var("domArgs")),
                                                                                 apply(
                                                                                     ref(Coder.javaTypeArgumentsForNamedType),
                                                                                     var("tname"),
                                                                                     var("cx"),
                                                                                     var("g")),
+                                                                                right(var("domArgs"))),
+                                                                            lambda("targArgs",
+                                                                        let("targs",
+                                                                            apply(
+                                                                                ref(Coder.explicitTypeArguments),
+                                                                                Lists.concat2(
+                                                                                    var("targArgs"),
+                                                                                    list(
+                                                                                        inject(
+                                                                                            TypeArgument.TYPE_,
+                                                                                            TypeArgument.REFERENCE,
+                                                                                            var("rt"))))),
+                                                                            Eithers.bind(
+                                                                                Logic.ifElse(
+                                                                                    Lists.isEmpty(var("domArgs")),
+                                                                                    apply(
+                                                                                        ref(Coder.javaTypeArgumentsForNamedType),
+                                                                                        var("tname"),
+                                                                                        var("cx"),
+                                                                                        var("g")),
+                                                                                    right(var("domArgs"))),
                                                                                 lambda("unionArgs",
                                                                             Eithers.bind(
                                                                                 Optionals.match(
@@ -5008,7 +5070,7 @@ public class Coder {
                                                                                                                 Identifier.TYPE_,
                                                                                                                 ref(Names.acceptMethodName)),
                                                                                                             list(
-                                                                                                                var("visitor"))))))))))))))))))))))))),
+                                                                                                                var("visitor"))))))))))))))))))))))))))),
                         field(
                             Term.UNWRAP,
                             constant(
@@ -5149,7 +5211,7 @@ public class Coder {
                                     Literal.STRING,
                                     Strings.concat2(
                                         string("Unimplemented function variant: "),
-                                        apply(tterm(printRef(Core.termTerm())), var("funTerm")))))),
+                                        apply(tterm(printRef(Model.termTerm())), var("funTerm")))))),
                         field(
                             Term.PROJECT,
                             constant(
@@ -5220,7 +5282,7 @@ public class Coder {
                                                                         Strings.concat2(
                                                                             string("expected function type for lambda body, but got: "),
                                                                             apply(
-                                                                                tterm(printRef(Core.typeType())),
+                                                                                tterm(printRef(Model.typeType())),
                                                                                 var("cod")))))),
                                                             field(
                                                                 Type.FUNCTION,
@@ -5956,7 +6018,7 @@ public class Coder {
                                     string("nullary function"),
                                     Strings.concat2(
                                         string(" in "),
-                                        apply(tterm(printRef(Core.termTerm())), var("funTerm")))))))));
+                                        apply(tterm(printRef(Model.termTerm())), var("funTerm")))))))));
 
     public static final Def encodeNullaryConstant_typeArgsFromReturnType = def("encodeNullaryConstant_typeArgsFromReturnType")
         .lam("aliases").lam("t").lam("cx").lam("g")
@@ -6764,7 +6826,7 @@ public class Coder {
                                                                         hydra.core.dsl.Constants.keyType(),
                                                                         just(
                                                                             apply(
-                                                                                tterm(Refs.encodeRef(Core.typeType())),
+                                                                                tterm(encodeRefDirect(Model.typeType())),
                                                                                 var("branchType"))),
                                                                         var("t1")),
                                                                     apply(
@@ -7445,7 +7507,7 @@ public class Coder {
                                                                                         hydra.core.dsl.Constants.keyType(),
                                                                                         just(
                                                                                             apply(
-                                                                                                tterm(Refs.encodeRef(Core.typeType())),
+                                                                                                tterm(encodeRefDirect(Model.typeType())),
                                                                                                 var("resolvedType"))),
                                                                                         proj(Field.TYPE_, Field.TERM, "fld"))),
                                                                                 apply(
@@ -7688,7 +7750,7 @@ public class Coder {
                                                                                 hydra.core.dsl.Constants.keyType(),
                                                                                 just(
                                                                                     apply(
-                                                                                        tterm(Refs.encodeRef(Core.typeType())),
+                                                                                        tterm(encodeRefDirect(Model.typeType())),
                                                                                         proj(ForallType.TYPE_, ForallType.BODY, "fa"))),
                                                                                 proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl"))))))),
                                                         apply(
@@ -8040,7 +8102,7 @@ public class Coder {
                                                                                                                                 hydra.core.dsl.Constants.keyType(),
                                                                                                                                 just(
                                                                                                                                     apply(
-                                                                                                                                        tterm(Refs.encodeRef(Core.typeType())),
+                                                                                                                                        tterm(encodeRefDirect(Model.typeType())),
                                                                                                                                         var("branchType"))),
                                                                                                                                 var("t1")),
                                                                                                                             apply(
@@ -8668,7 +8730,7 @@ public class Coder {
                                 wrap(OtherError.TYPE_,
                                     Strings.concat2(
                                         string("can't encode unsupported type in Java: "),
-                                        apply(tterm(printRef(Core.typeType())), var("t")))))),
+                                        apply(tterm(printRef(Model.typeType())), var("t")))))),
                         field(
                             Type.APPLICATION,
                             lambda("at",
@@ -9394,6 +9456,16 @@ public class Coder {
                                                                             var("resolvedName")))))),
                                                         field(
                                                             JavaSymbolClass.CONSTANT,
+                                                            // NOTE (#729 land, corrected after a misread): encodeVariable's
+                                                            // Term.VARIABLE dispatch calls this function ONLY when
+                                                            // Maps.lookup(name, Graph.PRIMITIVES) is NOTHING (Optionals.match's
+                                                            // 2nd arg is the NOTHING case) -- i.e. encodeVariable handles the
+                                                            // NON-primitive reference case. The primitive case is the sibling
+                                                            // `constant(...)` branch at the Term.VARIABLE call site, which
+                                                            // already correctly routes through encodeNullaryPrimitiveByName /
+                                                            // encodeFunctionPrimitiveByName (both isPrim=true internally). So
+                                                            // isPrim must stay false here -- a prior "fix" flipped this to true
+                                                            // based on a misreading of the match-branch order; reverted.
                                                             constant(
                                                                 right(
                                                                     apply(
@@ -9588,6 +9660,23 @@ public class Coder {
                                 field(
                                     MethodInvocation.ARGUMENTS,
                                     list(var("thisArg"), var("otherArg"))))))));
+
+    // Unlike typeArgsOrDiamond, always builds an explicit TypeArgumentsOrDiamond.ARGUMENTS
+    // list — never the diamond default. Needed at call sites (e.g. encodeElimination's
+    // PartialVisitor constructor) that always instantiate an anonymous class body, where
+    // Java's diamond inference cannot work regardless of Java version (it cannot infer type
+    // arguments from usage inside the body — #729 land: "cannot find symbol: class A" in
+    // Parsers.java/Regex.java). Kept as its own top-level Def (mirroring
+    // typeArgsOrDiamond/domTypeArgs/javaTypeArgumentsForType) rather than inlining the
+    // inject(TypeArgumentsOrDiamond...) construction at the call site, which triggers a
+    // NoSuchBindingError during this module's own DSL inference when inlined deep inside
+    // encodeElimination's body.
+    public static final Def explicitTypeArguments = def("explicitTypeArguments")
+        .lam("args")
+        .to(() ->
+                inject(TypeArgumentsOrDiamond.TYPE_,
+                    TypeArgumentsOrDiamond.ARGUMENTS,
+                    var("args")));
 
     public static final Def extractArgType = def("extractArgType")
         .lam("_lhs").lam("typ")
@@ -10296,7 +10385,7 @@ public class Coder {
                                             wrap(OtherError.TYPE_,
                                                 Strings.concat2(
                                                     string("expected function type, got: "),
-                                                    apply(tterm(printRef(Core.typeType())), var("t")))))),
+                                                    apply(tterm(printRef(Model.typeType())), var("t")))))),
                                     field(Type.FUNCTION, lambda("ft", right(var("ft"))))))))));
 
     public static final Def groupPairsByFirst = def("groupPairsByFirst")
@@ -11160,7 +11249,7 @@ public class Coder {
                     lambda("t",
                         hydra.core.dsl.Annotations.setTermAnnotation(
                             hydra.core.dsl.Constants.keyType(),
-                            just(apply(tterm(Refs.encodeRef(Core.typeType())), var("typ"))),
+                            just(apply(tterm(encodeRefDirect(Model.typeType())), var("typ"))),
                             var("t"))),
                     matchWithDefault(Term.TYPE_,
                         hydra.core.dsl.Strip.deannotateTerm( var("term")),
@@ -11246,7 +11335,7 @@ public class Coder {
                                                             hydra.core.dsl.Constants.keyType(),
                                                             just(
                                                                 apply(
-                                                                    tterm(Refs.encodeRef(Core.typeType())),
+                                                                    tterm(encodeRefDirect(Model.typeType())),
                                                                     var("ft"))),
                                                             var("fun"))))))),
                                     apply(
@@ -11374,7 +11463,7 @@ public class Coder {
                             field("annotatedFun",
                                 hydra.core.dsl.Annotations.setTermAnnotation(
                                     hydra.core.dsl.Constants.keyType(),
-                                    just(apply(tterm(Refs.encodeRef(Core.typeType())), var("funType"))),
+                                    just(apply(tterm(encodeRefDirect(Model.typeType())), var("funType"))),
                                     var("fun"))),
                             apply(
                                 ref(Coder.rebuildApps),
@@ -11385,7 +11474,7 @@ public class Coder {
                             hydra.core.dsl.Strip.deannotateTerm( var("t")),
                             hydra.core.dsl.Annotations.setTermAnnotation(
                                 hydra.core.dsl.Constants.keyType(),
-                                just(apply(tterm(Refs.encodeRef(Core.typeType())), var("resultType"))),
+                                just(apply(tterm(encodeRefDirect(Model.typeType())), var("resultType"))),
                                 var("t")),
                             field(
                                 Term.APPLICATION,
@@ -11422,14 +11511,14 @@ public class Coder {
                                                                 hydra.core.dsl.Constants.keyType(),
                                                                 just(
                                                                     apply(
-                                                                        tterm(Refs.encodeRef(Core.typeType())),
+                                                                        tterm(encodeRefDirect(Model.typeType())),
                                                                         var("ft"))),
                                                                 var("lhs"))))))),
                                         hydra.core.dsl.Annotations.setTermAnnotation(
                                             hydra.core.dsl.Constants.keyType(),
                                             just(
                                                 apply(
-                                                    tterm(Refs.encodeRef(Core.typeType())),
+                                                    tterm(encodeRefDirect(Model.typeType())),
                                                     var("resultType"))),
                                             inject(Term.TYPE_,
                                                 Term.APPLICATION,
@@ -11489,7 +11578,7 @@ public class Coder {
                                                         hydra.core.dsl.Constants.keyType(),
                                                         just(
                                                             apply(
-                                                                tterm(Refs.encodeRef(Core.typeType())),
+                                                                tterm(encodeRefDirect(Model.typeType())),
                                                                 var("remainingType"))),
                                                         var("app"))),
                                                 apply(
@@ -13088,7 +13177,7 @@ public class Coder {
                                             hydra.core.dsl.Annotations.setTermAnnotation(
                                                 hydra.core.dsl.Constants.keyType(),
                                                 just(
-                                                    apply(tterm(Refs.encodeRef(Core.typeType())), var("typ"))),
+                                                    apply(tterm(encodeRefDirect(Model.typeType())), var("typ"))),
                                                 var("value"))),
                                         Eithers.bind(
                                             apply(
@@ -13246,7 +13335,7 @@ public class Coder {
                 let("annotatedBody",
                     hydra.core.dsl.Annotations.setTermAnnotation(
                         hydra.core.dsl.Constants.keyType(),
-                        just(apply(tterm(Refs.encodeRef(Core.typeType())), var("typ"))),
+                        just(apply(tterm(encodeRefDirect(Model.typeType())), var("typ"))),
                         var("body")),
                     Eithers.bind(
                         apply(
@@ -13704,7 +13793,7 @@ public class Coder {
                                     Strings.concat2(
                                         string("visitBranch: field term is not a lambda: "),
                                         apply(
-                                            tterm(printRef(Core.termTerm())),
+                                            tterm(printRef(Model.termTerm())),
                                             proj(CaseAlternative.TYPE_, CaseAlternative.HANDLER, "field")))))),
                         field(
                             Term.LAMBDA,
@@ -14033,6 +14122,7 @@ public class Coder {
             encodeVariable_hoistedLambdaCase,
             eqClause,
             equalsClause,
+            explicitTypeArguments,
             extractArgType,
             extractDirectReturn,
             extractDirectReturn_go,

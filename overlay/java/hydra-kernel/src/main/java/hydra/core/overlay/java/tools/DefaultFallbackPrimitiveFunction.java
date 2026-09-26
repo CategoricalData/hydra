@@ -1,6 +1,6 @@
 package hydra.core.overlay.java.tools;
 
-import hydra.Reduction;
+import hydra.core.Reduction;
 import hydra.core.model.Application;
 import hydra.core.model.Name;
 import hydra.core.model.Term;
@@ -18,7 +18,7 @@ import java.util.function.Function;
 /**
  * A {@link PrimitiveFunction} for a kernel primitive which has no native Java implementation,
  * but does declare a portable, cross-compilable {@code defaultImplementation} term (see
- * {@code hydra.lib.Defaults.defaultImplementations()}). Its {@link #implementation()} evaluates
+ * {@code hydra.core.lib.Defaults.defaultImplementations()}). Its {@link #implementation()} evaluates
  * that term against the call arguments via {@link Reduction#reduceTerm}, rather than running
  * hand-written Java logic.
  *
@@ -45,7 +45,7 @@ public class DefaultFallbackPrimitiveFunction extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return hydra.Scoping.termSignatureToTypeScheme(definition.signature);
+        return hydra.core.Scoping.termSignatureToTypeScheme(definition.signature);
     }
 
     @Override

@@ -31,7 +31,7 @@ public class Exists extends PrimitiveFunction {
      * @return the name "hydra.core.lib.files.exists"
      */
     public Name name() {
-        return hydra.lib.Files.exists().name;
+        return hydra.core.lib.Files.exists().name;
     }
 
     /**

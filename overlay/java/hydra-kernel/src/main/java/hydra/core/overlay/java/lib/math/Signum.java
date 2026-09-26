@@ -34,7 +34,7 @@ public class Signum extends PrimitiveFunction {
      * @return the function name
      */
     public Name name() {
-        return hydra.lib.Math_.signum().name;
+        return hydra.core.lib.Math_.signum().name;
     }
 
     /**

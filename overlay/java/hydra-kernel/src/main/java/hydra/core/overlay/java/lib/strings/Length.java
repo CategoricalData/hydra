@@ -26,7 +26,7 @@ public class Length extends PrimitiveFunction {
      * @return the name "hydra.core.lib.strings.length"
      */
     public Name name() {
-        return hydra.lib.Strings.length().name;
+        return hydra.core.lib.Strings.length().name;
     }
 
     /**
@@ -44,7 +44,7 @@ public class Length extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.int32(apply(s)), hydra.core.extract.Core.string(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(s -> Terms.int32(apply(s)), hydra.core.extract.Model.string(graph, args.get(0)));
     }
 
     /**

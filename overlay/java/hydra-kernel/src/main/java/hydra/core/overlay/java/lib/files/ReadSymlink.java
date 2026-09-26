@@ -34,7 +34,7 @@ public class ReadSymlink extends PrimitiveFunction {
      * @return the name "hydra.core.lib.files.readSymlink"
      */
     public Name name() {
-        return hydra.lib.Files.readSymlink().name;
+        return hydra.core.lib.Files.readSymlink().name;
     }
 
     /**

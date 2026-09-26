@@ -31,7 +31,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Execute extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.System_.execute().name;
+        return hydra.core.lib.System_.execute().name;
     }
 
     @Override

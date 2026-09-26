@@ -56,7 +56,7 @@ public class Bimap extends PrimitiveFunction {
             Term forFirst = args.get(0);
             Term forSecond = args.get(1);
             return hydra.core.overlay.java.lib.eithers.Map.apply((Function<Pair<Term, Term>, Term>) p ->
-                    Terms.pair(Terms.apply(forFirst, p.first), Terms.apply(forSecond, p.second)), hydra.core.extract.Core.pair(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
+                    Terms.pair(Terms.apply(forFirst, p.first), Terms.apply(forSecond, p.second)), hydra.core.extract.Model.pair(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
         };
     }
 

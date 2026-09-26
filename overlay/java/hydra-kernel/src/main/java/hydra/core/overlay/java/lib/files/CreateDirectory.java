@@ -32,7 +32,7 @@ public class CreateDirectory extends PrimitiveFunction {
      * @return the name "hydra.core.lib.files.createDirectory"
      */
     public Name name() {
-        return hydra.lib.Files.createDirectory().name;
+        return hydra.core.lib.Files.createDirectory().name;
     }
 
     /**

@@ -22,7 +22,7 @@ import hydra.core.overlay.java.util.Either;
  */
 public class Float32ToFloat64 extends PrimitiveFunction {
     public Name name() {
-        return hydra.lib.Literals.float32ToFloat64().name;
+        return hydra.core.lib.Literals.float32ToFloat64().name;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class Float32ToFloat64 extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(f -> Terms.float64(apply(f)), hydra.core.extract.Core.float32(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(f -> Terms.float64(apply(f)), hydra.core.extract.Model.float32(graph, args.get(0)));
     }
 
     public static Double apply(Float value) {

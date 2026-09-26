@@ -27,7 +27,7 @@ public class First extends PrimitiveFunction {
      * @return the name
      */
     public Name name() {
-        return hydra.lib.Pairs.first().name;
+        return hydra.core.lib.Pairs.first().name;
     }
 
     /**
@@ -45,7 +45,7 @@ public class First extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<Pair<Term, Term>, Term>) pair -> apply(pair), hydra.core.extract.Core.pair(t -> Either.right(t), t -> Either.right(t), graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<Pair<Term, Term>, Term>) pair -> apply(pair), hydra.core.extract.Model.pair(t -> Either.right(t), t -> Either.right(t), graph, args.get(0)));
     }
 
     /**
