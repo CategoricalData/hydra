@@ -17,10 +17,6 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_JAVA_DIR="$HYDRA_ROOT/heads/java"
 JAVA_RESOURCES="$SCRIPT_DIR/../resources/java"
-# hydra.build.overlay.java.Generation (#459): moved out of heads/java into the
-# hydra-build overlay so it travels with dist/java/hydra-build/ via copy-overlay.sh.
-GENERATION_SRC="$HYDRA_ROOT/overlay/java/hydra-build/src/main/java/hydra/overlay/java/build/Generation.java"
-
 # Clean and create output directory
 echo "Preparing output directory: $OUTPUT_DIR"
 rm -rf "$OUTPUT_DIR"
@@ -51,10 +47,10 @@ for f in Bootstrap.java GenerationTargets.java HydraTestBase.java; do
 done
 
 # hydra.build.overlay.java.Generation (#459) lives under the hydra-build overlay,
-# package-qualified as hydra.build.overlay.java — preserve that subdirectory
-# structure rather than flattening into hydra/ like the head-only classes above.
-mkdir -p "$JAVA_DST/overlay/java/build"
-cp "$GENERATION_SRC" "$JAVA_DST/overlay/java/build/"
+# package-qualified as hydra.build.overlay.java. Post-#729 its package-qualified
+# path (hydra/build/overlay/java/) falls under the hydra/build/ tree that the
+# JAVA_BUILD_BASELINE block below already copies wholesale, so no separate copy
+# is needed here (a duplicate copy here was reported as "duplicate class" by javac).
 
 # Kernel runtime: a single overlay copy from overlay/java/hydra-kernel/ (#418).
 # This brings in Adapters.java, Coders.java, the full lib/dsl/util/tools trees, and
@@ -132,6 +128,17 @@ done
 # Copy ext/domain modules (pg, rdf, cypher, tinkerpop, etc.) from hydra-pg and hydra-rdf.
 # These don't collide with the target-language generated kernel because the kernel
 # generation doesn't produce them.
+#
+# Exclude each package's overlay/ subtree: those are third-party-library bridges
+# (ANTLR-generated Cypher/GQL parsers, rdf4j) declared via that package's own
+# build.json (plugins/dependencies), which this demo's bare build.gradle never
+# wires in. Pre-#729, hydra-pg/hydra-rdf's overlay content lived directly under a
+# shared top-level hydra/overlay/ namespace that the kernel overlay copy (above)
+# already populated, so the "[ ! -e $dst ]" guard below silently skipped it. #729
+# moved it to hydra/pg/overlay/ and hydra/rdf/overlay/ (nested under each
+# package's own namespace), which stopped colliding and started actually being
+# copied -- exposing this always-broken-if-reached path. Exclude explicitly now
+# that the accidental guard no longer applies.
 for ext_pkg in hydra-pg hydra-rdf; do
     ext_base="$HYDRA_ROOT/dist/java/$ext_pkg/src/main/java"
     if [ -d "$ext_base/hydra" ]; then
@@ -141,6 +148,7 @@ for ext_pkg in hydra-pg hydra-rdf; do
             [ -d "$src" ] || continue
             if [ ! -e "$dst" ]; then
                 cp -r "$src" "$dst"
+                rm -rf "$dst/overlay"
             fi
         done
         echo "    Copied $ext_pkg ext/domain packages"

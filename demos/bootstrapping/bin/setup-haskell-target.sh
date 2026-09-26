@@ -64,18 +64,17 @@ PREP_HASH=$(
              "$HYDRA_KERNEL_DIR/src/main/haskell/Hydra" \
              "$HYDRA_HASKELL_DIR/src/main/haskell/Hydra" \
              "$HYDRA_BUILD_DIR/src/main/haskell/Hydra" \
-             "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Decode" \
-             "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Encode" \
-             "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl" \
-             "$HYDRA_ROOT/dist/haskell/hydra-haskell/src/main/haskell/Hydra/Dsl" \
+             "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Decode" \
+             "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Encode" \
+             "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Dsl" \
+             "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Lib" \
+             "$HYDRA_ROOT/dist/haskell/hydra-haskell/src/main/haskell/Hydra/Haskell/Dsl" \
              "$HYDRA_ROOT/dist/haskell/hydra-build/src/main/haskell/Hydra/Build" \
-             "$HYDRA_ROOT/dist/haskell/hydra-build/src/main/haskell/Hydra/Decode/Build" \
-             "$HYDRA_ROOT/dist/haskell/hydra-build/src/main/haskell/Hydra/Encode/Build" \
              "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell" \
              "$HASKELL_RESOURCES" \
              -type f 2>/dev/null
-        echo "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsls.hs"
-        echo "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs"
+        echo "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Dsls.hs"
+        echo "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/test/haskell/Hydra/Core/Test/TestEnv.hs"
         echo "${BASH_SOURCE[0]}"
     } | LC_ALL=C sort | xargs shasum -a 256 2>/dev/null | shasum -a 256 | awk '{print $1}'
 )
@@ -162,59 +161,62 @@ if [ -d "$HS_BUILD_BASELINE/Hydra/Build" ]; then
     echo "    Copied Hydra/Build from hydra-build baseline"
 fi
 # #512: Hydra.DigestFormat (in hydra-haskell's baseline copy above) imports the typed
-# digest codec's generated Decode/Encode modules, which — like Hydra.Build.* above —
-# live in the hydra-build baseline, not hydra-kernel's Sources/{Decode,Encode} copied
-# below. Without this, the cell fails with "Could not find module
-# 'Hydra.Decode.Build.Format'".
+# digest codec's generated Decode/Encode modules (Hydra.Build.Decode.Format,
+# Hydra.Build.Encode.Format), which — like Hydra.Build.* above — live in the hydra-build
+# baseline, not hydra-kernel's Core/{Decode,Encode} copied below. Without this, the cell
+# fails with "Could not find module 'Hydra.Build.Decode.Format'".
 for build_codec_dir in Decode Encode; do
-    if [ -d "$HS_BUILD_BASELINE/Hydra/$build_codec_dir/Build" ]; then
-        mkdir -p "$HS_GEN/Hydra/$build_codec_dir/Build"
-        cp -r "$HS_BUILD_BASELINE/Hydra/$build_codec_dir/Build/." "$HS_GEN/Hydra/$build_codec_dir/Build/"
-        echo "    Copied Hydra/$build_codec_dir/Build from hydra-build baseline"
+    if [ -d "$HS_BUILD_BASELINE/Hydra/Build/$build_codec_dir" ]; then
+        mkdir -p "$HS_GEN/Hydra/Build/$build_codec_dir"
+        cp -r "$HS_BUILD_BASELINE/Hydra/Build/$build_codec_dir/." "$HS_GEN/Hydra/Build/$build_codec_dir/"
+        echo "    Copied Hydra/Build/$build_codec_dir from hydra-build baseline"
     fi
 done
-# Copy Sources/Decode and Sources/Encode (generated DSL source modules imported by
-# hand-written Sources modules like Templates.hs and Annotations.hs)
+# Copy Core/Decode and Core/Encode (generated DSL source modules imported by
+# hand-written modules like Templates.hs and Annotations.hs, e.g. Hydra.Core.Decode.Model).
+# #729 dropped the Sources segment from these module names (was Hydra.Sources.Decode.*).
 for src_dir in Decode Encode; do
-    if [ -d "$HS_KERNEL_BASELINE/Hydra/Sources/$src_dir" ]; then
-        mkdir -p "$HS_GEN/Hydra/Sources"
-        rm -rf "$HS_GEN/Hydra/Sources/$src_dir"
-        cp -r "$HS_KERNEL_BASELINE/Hydra/Sources/$src_dir" "$HS_GEN/Hydra/Sources/"
-        echo "    Copied Hydra/Sources/$src_dir from hydra-kernel baseline"
+    if [ -d "$HS_KERNEL_BASELINE/Hydra/Core/$src_dir" ]; then
+        mkdir -p "$HS_GEN/Hydra/Core"
+        rm -rf "$HS_GEN/Hydra/Core/$src_dir"
+        cp -r "$HS_KERNEL_BASELINE/Hydra/Core/$src_dir" "$HS_GEN/Hydra/Core/"
+        echo "    Copied Hydra/Core/$src_dir from hydra-kernel baseline"
     fi
 done
 # Copy generated DSL modules (Hydra.Core.Dsl.Model, Hydra.Core.Dsl.Graph, etc.) imported by
 # hand-written Hydra.Core.Dsl.Meta.* modules. Overlay on top of heads/haskell Dsl
 # (not replacing it) so hand-written Dsl files like Hydra.Core.Dsl.Terms are preserved.
-if [ -d "$HS_KERNEL_BASELINE/Hydra/Dsl" ]; then
-    mkdir -p "$HS_GEN/Hydra/Dsl"
-    cp -r "$HS_KERNEL_BASELINE/Hydra/Dsl/." "$HS_GEN/Hydra/Dsl/"
-    echo "    Overlaid Hydra/Dsl from hydra-kernel baseline"
+if [ -d "$HS_KERNEL_BASELINE/Hydra/Core/Dsl" ]; then
+    mkdir -p "$HS_GEN/Hydra/Core/Dsl"
+    cp -r "$HS_KERNEL_BASELINE/Hydra/Core/Dsl/." "$HS_GEN/Hydra/Core/Dsl/"
+    echo "    Overlaid Hydra/Core/Dsl from hydra-kernel baseline"
 fi
-# Overlay Haskell-coder Dsl wrappers from hydra-haskell
-if [ -d "$HS_HASKELL_BASELINE/Hydra/Dsl" ]; then
-    cp -r "$HS_HASKELL_BASELINE/Hydra/Dsl/." "$HS_GEN/Hydra/Dsl/"
-    echo "    Overlaid Hydra/Dsl (Haskell coder wrappers) from hydra-haskell baseline"
+# Overlay Haskell-coder Dsl wrappers from hydra-haskell (own Hydra.Haskell.* namespace,
+# not nested under Core -- that segment is specific to the hydra-kernel package).
+if [ -d "$HS_HASKELL_BASELINE/Hydra/Haskell/Dsl" ]; then
+    mkdir -p "$HS_GEN/Hydra/Haskell/Dsl"
+    cp -r "$HS_HASKELL_BASELINE/Hydra/Haskell/Dsl/." "$HS_GEN/Hydra/Haskell/Dsl/"
+    echo "    Overlaid Hydra/Haskell/Dsl (Haskell coder wrappers) from hydra-haskell baseline"
 fi
-# Copy generated Hydra.Lib.* modules (Hydra.Core.Lib.Eithers, Hydra.Core.Lib.Lists, ...).
+# Copy generated Hydra.Core.Lib.* modules (Hydra.Core.Lib.Eithers, Hydra.Core.Lib.Lists, ...).
 # Since #473 relocated the Haskell authoring DSL cluster into overlay/, the
 # hand-written Hydra.Core.Dsl.{Libraries,Meta.Phantoms,Meta.Lib.*} modules import
 # these generated definition modules. They live in the kernel baseline alongside
-# Hydra/Dsl, but were never stitched into the single-tree bootstrap output, so
-# GHC failed with "Could not find module 'Hydra.Lib.Eithers'". Copy them in,
-# parallel to the Hydra/Dsl overlay above.
-if [ -d "$HS_KERNEL_BASELINE/Hydra/Lib" ]; then
-    mkdir -p "$HS_GEN/Hydra"
-    cp -r "$HS_KERNEL_BASELINE/Hydra/Lib" "$HS_GEN/Hydra/"
-    echo "    Copied Hydra/Lib from hydra-kernel baseline"
+# Hydra/Core/Dsl, but were never stitched into the single-tree bootstrap output, so
+# GHC failed with "Could not find module 'Hydra.Core.Lib.Eithers'". Copy them in,
+# parallel to the Hydra/Core/Dsl overlay above.
+if [ -d "$HS_KERNEL_BASELINE/Hydra/Core/Lib" ]; then
+    mkdir -p "$HS_GEN/Hydra/Core"
+    cp -r "$HS_KERNEL_BASELINE/Hydra/Core/Lib" "$HS_GEN/Hydra/Core/"
+    echo "    Copied Hydra/Core/Lib from hydra-kernel baseline"
 fi
 # Copy Hydra.Core.Dsls (DSL source generator module). It is generated separately from
 # mainModules due to stack overflow issues, so it won't be produced by the bootstrap
 # code generator. It is imported by hand-written Generation.hs.
-if [ -f "$HS_KERNEL_BASELINE/Hydra/Dsls.hs" ]; then
-    mkdir -p "$HS_GEN/Hydra"
-    cp "$HS_KERNEL_BASELINE/Hydra/Dsls.hs" "$HS_GEN/Hydra/"
-    echo "    Copied Hydra/Dsls.hs from hydra-kernel baseline"
+if [ -f "$HS_KERNEL_BASELINE/Hydra/Core/Dsls.hs" ]; then
+    mkdir -p "$HS_GEN/Hydra/Core"
+    cp "$HS_KERNEL_BASELINE/Hydra/Core/Dsls.hs" "$HS_GEN/Hydra/Core/"
+    echo "    Copied Hydra/Core/Dsls.hs from hydra-kernel baseline"
 fi
 
 # Kernel test suite runner and its dependencies (now in heads/haskell)
@@ -228,8 +230,8 @@ cp "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell/Hydra/ArbitraryCore.hs" "$OUTPUT_DI
 
 # TestEnv: provides the real test graph with primitives and kernel term bindings.
 # Must be copied to src/test (where the generated TestGraph.hs imports it).
-mkdir -p "$OUTPUT_DIR/src/test/haskell/Hydra/Test"
-cp "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/Test/"
+mkdir -p "$OUTPUT_DIR/src/test/haskell/Hydra/Core/Test"
+cp "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/test/haskell/Hydra/Core/Test/TestEnv.hs" "$OUTPUT_DIR/src/test/haskell/Hydra/Core/Test/"
 
 # License (needed by cabal)
 touch "$OUTPUT_DIR/LICENSE"
