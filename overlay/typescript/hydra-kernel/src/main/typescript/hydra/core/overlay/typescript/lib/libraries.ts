@@ -23,13 +23,13 @@
 // extraPaths bridge hand-written + generated code into one namespace at
 // compile/test time.
 
-import type { Name, Term, Type, TypeScheme } from "../../../core.js";
+import type { Name, Term, Type, TypeScheme } from "../../../model.js";
 import type { InferenceContext } from "../../../typing.js";
 import type { Graph, Primitive } from "../../../graph.js";
 import type { Error as HydraError } from "../../../errors.js";
 import type { Either } from "../../../runtime.js";
 
-import * as extractCore from "../../../extract/core.js";
+import * as extractCore from "../../../extract/model.js";
 import * as scoping from "../../../scoping.js";
 import { createHash } from "node:crypto";
 

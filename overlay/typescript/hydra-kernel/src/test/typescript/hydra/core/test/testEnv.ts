@@ -23,19 +23,22 @@
 // authoring time these sibling files don't exist (they only land in
 // dist after the sync runs), so the source-tree tsc check (tsconfig.json,
 // which excludes the src/test tree from compilation) skips this file.
-// At test time the file is copied into dist/.../src/test/typescript/hydra/test/
-// where the imports resolve normally as `../../../../main/typescript/hydra/<mod>.js`.
-import type { InferenceContext } from "../../../../main/typescript/hydra/typing.js";
-import type { Graph, Primitive } from "../../../../main/typescript/hydra/graph.js";
-import type { Name, Term, Type, TypeScheme } from "../../../../main/typescript/hydra/core.js";
-import type { Error as HydraError } from "../../../../main/typescript/hydra/errors.js";
-import type { Either } from "../../../../main/typescript/hydra/runtime.js";
-import * as maps from "../../../../main/typescript/hydra/overlay/typescript/lib/maps.js";
-import * as sets from "../../../../main/typescript/hydra/overlay/typescript/lib/sets.js";
-import * as lexical from "../../../../main/typescript/hydra/lexical.js";
-import { reduceTerm } from "../../../../main/typescript/hydra/reduction.js";
+// At test time the file is copied into dist/.../src/test/typescript/hydra/core/test/
+// where the imports resolve normally as `../../../../../main/typescript/hydra/core/<mod>.js`
+// (5 levels up from hydra/core/test/, then into the main tree's hydra/core/ namespace —
+// see #729: the module-grammar rename nested every kernel module one level deeper,
+// under hydra/core/, so both the up-count and the core/ segment moved).
+import type { InferenceContext } from "../../../../../main/typescript/hydra/core/typing.js";
+import type { Graph, Primitive } from "../../../../../main/typescript/hydra/core/graph.js";
+import type { Name, Term, Type, TypeScheme } from "../../../../../main/typescript/hydra/core/model.js";
+import type { Error as HydraError } from "../../../../../main/typescript/hydra/core/errors.js";
+import type { Either } from "../../../../../main/typescript/hydra/core/runtime.js";
+import * as maps from "../../../../../main/typescript/hydra/core/overlay/typescript/lib/maps.js";
+import * as sets from "../../../../../main/typescript/hydra/core/overlay/typescript/lib/sets.js";
+import * as lexical from "../../../../../main/typescript/hydra/core/lexical.js";
+import { reduceTerm } from "../../../../../main/typescript/hydra/core/reduction.js";
 
-import { standardPrimitives } from "../../../../main/typescript/hydra/overlay/typescript/lib/libraries.js";
+import { standardPrimitives } from "../../../../../main/typescript/hydra/core/overlay/typescript/lib/libraries.js";
 import { loadAll } from "./jsonBindings.js";
 
 // When true, use each primitive's defaultImplementation (via reduceTerm) instead of its

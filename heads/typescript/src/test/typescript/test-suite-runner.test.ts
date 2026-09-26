@@ -1,7 +1,7 @@
 // Vitest runner for the Hydra common test suite.
 //
 // Walks the generated `allTests` tree (a `TestGroup` rooted in
-// `dist/typescript/hydra-kernel/src/test/typescript/hydra/test/testSuite.ts`)
+// `dist/typescript/hydra-kernel/src/test/typescript/hydra/core/test/testSuite.ts`)
 // and registers one Vitest `describe` per `TestGroup`, one `it` per
 // `TestCaseWithMetadata`. Each universal case calls `actual()` and
 // `expected()` and asserts string-equality.
@@ -20,7 +20,7 @@
 import { describe, expect, it } from "vitest";
 import { mkdirSync, rmSync } from "node:fs";
 
-import { allTests } from "../../../../../dist/typescript/hydra-kernel/src/test/typescript/hydra/test/testSuite.js";
+import { allTests } from "../../../../../dist/typescript/hydra-kernel/src/test/typescript/hydra/core/test/testSuite.js";
 
 interface TestCaseUniversal {
   readonly actual: (_: void) => string;

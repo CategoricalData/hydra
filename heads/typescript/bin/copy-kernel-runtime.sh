@@ -10,9 +10,23 @@
 # on the dist/ copy.
 #
 # Per the 0.15 layout, hydra-kernel is special: it ships not only the
-# generated kernel `.ts` files but also the runtime (`hydra/runtime.ts`,
-# `hydra/lib/*.ts`, `hydra/primitives.ts`) that every Hydra TypeScript
-# program needs.
+# generated kernel `.ts` files but also the runtime (`hydra/core/runtime.ts`,
+# `hydra/core/overlay/typescript/lib/*.ts`, `hydra/core/primitives.ts`) that
+# every Hydra TypeScript program needs.
+#
+# This is a dumb full-tree merge (cp -R), matching the Python analog
+# (heads/python/bin/copy-kernel-runtime.sh) rather than a hardcoded list of
+# top-level file/subdir names: a fixed allowlist silently stops copying
+# anything the moment the overlay's internal layout shifts. It DID shift, in
+# the #729 module-grammar rename (6c09ba4761), which moved every overlay
+# source file from hydra/{runtime.ts,lib/,overlay/typescript/lib/,...} to
+# hydra/core/{runtime.ts,overlay/typescript/lib/,...} — the old hardcoded
+# `for f in runtime.ts primitives.ts bootstrap.ts` / `for sub in lib overlay`
+# loops kept exiting 0 while silently copying nothing, leaving dist/typescript
+# missing the whole runtime (#729 follow-up). A full-tree copy is immune to
+# this class of drift: preserving generated siblings under the dist package
+# untouched only requires the overlay tree to contain solely hand-written
+# runtime, which is already true for every other host's overlay.
 #
 # Usage:
 #   copy-kernel-runtime.sh [--dist-root <dir>]
@@ -56,44 +70,29 @@ cat > "$DIST_ROOT/hydra-kernel/package.json" <<'EOF'
 }
 EOF
 
-# Top-level runtime files (core types, primitive registry).
-# `runtime.ts` lives alongside the GENERATED `core.ts` — they used to
-# share the name and the hand-written file clobbered the generated kernel
-# core every sync, masking all kernel exports (Term, Type, Literal, …) at
-# tsc-check time. Now `runtime.ts` provides the JS-native value
-# constructors (Given/None/Left/Right/Pair/Unit + Name/Namespace
-# factories), while generated `core.ts` provides the kernel type
-# definitions imported by every other generated file.
-for f in runtime.ts primitives.ts bootstrap.ts; do
-    if [ -f "$SRC_DIR/hydra/$f" ]; then
-        cp "$SRC_DIR/hydra/$f" "$OUT_DIR/hydra/$f"
-    fi
-done
-
-# Subpackages: lib (primitive impls) + overlay (renamed namespace, #501).
-# Merge into existing tree (which already contains generated kernel modules),
-# preserving generated children.
-for sub in lib overlay; do
-    if [ -d "$SRC_DIR/hydra/$sub" ]; then
-        mkdir -p "$OUT_DIR/hydra/$sub"
-        cp -R "$SRC_DIR/hydra/$sub/." "$OUT_DIR/hydra/$sub/"
-    fi
-done
+# Merge the entire overlay main tree onto the generated kernel dist. Trailing
+# /. on the source copies CONTENTS into the dest, leaving generated siblings
+# (e.g. hydra/core.ts, the rest of hydra/core/*) untouched. `runtime.ts` lives
+# alongside the GENERATED `core.ts` — they used to share the name and the
+# hand-written file clobbered the generated kernel core every sync, masking
+# all kernel exports (Term, Type, Literal, …) at tsc-check time. Now
+# `runtime.ts` provides the JS-native value constructors (Given/None/
+# Left/Right/Pair/Unit + Name/Namespace factories), while generated `core.ts`
+# provides the kernel type definitions imported by every other generated file.
+cp -R "$SRC_DIR/." "$OUT_DIR/"
 
 echo "  Copied hand-written TypeScript runtime into $OUT_DIR/hydra/"
 
-# Test-tree hand-written modules (testEnv.ts) — copied if the test source
-# dir exists. testEnv mirrors the role of the Python/Java/Scala/Lisp
-# hand-written equivalents: the DSL declares the FQNs so the coder can
+# Test-tree hand-written modules (testEnv.ts, jsonBindings.ts) — copied if the
+# test source dir exists. testEnv mirrors the role of the Python/Java/Scala/
+# Lisp hand-written equivalents: the DSL declares the FQNs so the coder can
 # resolve references during inference, but the actual runtime values are
-# provided per-language at test time.
+# provided per-language at test time. Full-tree merge (see the main-tree copy
+# above for why); the source lives under hydra/core/test/ (#729), not hydra/test/.
 TEST_SRC_DIR="$OVERLAY_ROOT/test/typescript"
 TEST_OUT_DIR="$DIST_ROOT/hydra-kernel/src/test/typescript"
-if [ -d "$TEST_SRC_DIR/hydra/test" ]; then
-    mkdir -p "$TEST_OUT_DIR/hydra/test"
-    for f in "$TEST_SRC_DIR"/hydra/test/*.ts; do
-        [ -f "$f" ] || continue
-        cp "$f" "$TEST_OUT_DIR/hydra/test/"
-    done
-    echo "  Copied hand-written TypeScript test runtime into $TEST_OUT_DIR/hydra/test/"
+if [ -d "$TEST_SRC_DIR" ]; then
+    mkdir -p "$TEST_OUT_DIR"
+    cp -R "$TEST_SRC_DIR/." "$TEST_OUT_DIR/"
+    echo "  Copied hand-written TypeScript test runtime into $TEST_OUT_DIR/hydra/"
 fi

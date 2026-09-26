@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { loadAll } from "../../../../../../../dist/typescript/hydra-kernel/src/test/typescript/hydra/test/jsonBindings.js";
+import { loadAll } from "../../../../../../../dist/typescript/hydra-kernel/src/test/typescript/hydra/core/test/jsonBindings.js";
 
 // bug_564: docs/json-format.md documents a "compact string form" for union
 // variants with Unit payload — e.g. Type.unit / Type.void encode as the

@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { isGiven, None } from "../../../../../../dist/typescript/hydra-kernel/src/main/typescript/hydra/runtime.js";
+import { isGiven, None } from "../../../../../../dist/typescript/hydra-kernel/src/main/typescript/hydra/core/runtime.js";
 import {
   div,
   mod,
-} from "../../../../../../dist/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib/math.js";
+} from "../../../../../../dist/typescript/hydra-kernel/src/main/typescript/hydra/core/overlay/typescript/lib/math.js";
 
 // Regression test for #677: exercises the *emitted* flat-function surface
 // (hydra/overlay/typescript/lib/math.ts) directly, not the registry/interpreter

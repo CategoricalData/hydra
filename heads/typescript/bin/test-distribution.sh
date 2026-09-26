@@ -43,7 +43,7 @@ if [ ! -d "$TS_MAIN/hydra" ]; then
 fi
 
 # Build a unified tsconfig that covers main + test trees. The test files
-# emit cross-tree imports of the form `../../../../main/typescript/hydra/...`
+# emit cross-tree imports of the form `../../../../../main/typescript/hydra/core/...`
 # which resolve correctly under NodeNext module resolution.
 #
 # - `types: ["node"]` — hand-written runtime modules import `node:fs`,
@@ -68,7 +68,7 @@ cat > "$TS_CONFIG" <<EOF
     "skipLibCheck": true
   },
   "include": ["main/typescript/hydra/**/*.ts", "test/typescript/hydra/**/*.ts"],
-  "exclude": ["main/typescript/hydra/bootstrap.ts"]
+  "exclude": ["main/typescript/hydra/core/bootstrap.ts"]
 }
 EOF
 

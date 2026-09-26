@@ -2,7 +2,7 @@
 //
 // Package-scoped counterpart to test-suite-runner.test.ts (hydra-kernel); part of #547's
 // per-package test aggregation. Walks the generated `allTests` tree (a `TestGroup` rooted
-// in `dist/typescript/hydra-build/src/test/typescript/hydra/test/build/testSuite.js`) the
+// in `dist/typescript/hydra-build/src/test/typescript/hydra/build/test/testSuite.js`) the
 // same way the kernel runner does — vitest auto-discovers this file alongside it, so no
 // composition/registration step is needed.
 //
@@ -12,7 +12,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { allTests } from "../../../../../dist/typescript/hydra-build/src/test/typescript/hydra/test/build/testSuite.js";
+import { allTests } from "../../../../../dist/typescript/hydra-build/src/test/typescript/hydra/build/test/testSuite.js";
 
 interface TestCaseUniversal {
   readonly actual: (_: void) => string;
