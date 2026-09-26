@@ -497,7 +497,7 @@
                                       "record": {
                                         "typeName": "hydra.core.testing.TestCaseWithMetadata",
                                         "fields": [
-                                          {"name": "name", "term": {"literal": {"string": "hydra.json.yaml.* dropped"}}},
+                                          {"name": "name", "term": {"literal": {"string": "hydra.core.json.yaml.* dropped"}}},
                                           {
                                             "name": "case",
                                             "term": {
@@ -543,7 +543,7 @@
                                                                               "fields": [
                                                                                 {
                                                                                   "name": "name",
-                                                                                  "term": {"wrap": {"typeName": "hydra.core.packaging.ModuleName", "body": {"literal": {"string": "hydra.json.yaml.model"}}}}},
+                                                                                  "term": {"wrap": {"typeName": "hydra.core.packaging.ModuleName", "body": {"literal": {"string": "hydra.core.json.yaml.model"}}}}},
                                                                                 {
                                                                                   "name": "metadata",
                                                                                   "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.packaging.EntityMetadata"}}}},
@@ -565,7 +565,7 @@
                                                                                                 "fields": [
                                                                                                   {
                                                                                                     "name": "name",
-                                                                                                    "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.json.yaml.model.X"}}}}},
+                                                                                                    "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.json.yaml.model.X"}}}}},
                                                                                                   {
                                                                                                     "name": "metadata",
                                                                                                     "term": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.packaging.EntityMetadata"}}}},

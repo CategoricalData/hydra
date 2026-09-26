@@ -72,7 +72,8 @@
                     "typeName": "hydra.core.model.Term",
                     "field": {
                       "name": "variable",
-                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.java.language.javaMaxTupleLength"}}}}}}}}},
+                      "term": {
+                        "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.java.language.javaMaxTupleLength"}}}}}}}}},
             "annotation": {
               "map": [
                 {
@@ -85,7 +86,8 @@
           "typeParameters": [],
           "parameters": [],
           "result": {
-            "type": {"application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.coders.Language"}}}}},
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.coders.Language"}}}}},
         "body": {
           "annotated": {
             "body": {

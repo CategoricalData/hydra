@@ -174,7 +174,8 @@
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lt"}, "type": {"literal": {"integer": "int32"}}}},
                                                                     "argument": {"variable": "c"}}},
                                                                 "argument": {"literal": {"integer": {"int32": 127}}}}}}}}},
-                                                    "argument": {"application": {"function": {"variable": "hydra.core.lib.strings.fromList"}, "argument": {"list": [{"variable": "c"}]}}}}},
+                                                    "argument": {
+                                                      "application": {"function": {"variable": "hydra.core.lib.strings.fromList"}, "argument": {"list": [{"variable": "c"}]}}}}},
                                                 "argument": {"application": {"function": {"variable": "hydra.jvm.serde.javaUnicodeEscape"}, "argument": {"variable": "c"}}}}}}}}}}}}}}}}}}}}},
             "annotation": {
               "map": [
@@ -345,15 +346,18 @@
                                 "function": {"variable": "hydra.core.lib.strings.concat2"},
                                 "argument": {
                                   "application": {
-                                    "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "\\u"}}}},
+                                    "function": {
+                                      "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "\\u"}}}},
                                     "argument": {"application": {"function": {"variable": "hydra.jvm.serde.padHex4"}, "argument": {"variable": "hi"}}}}}}},
                             "argument": {
                               "application": {
-                                "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "\\u"}}}},
+                                "function": {
+                                  "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "\\u"}}}},
                                 "argument": {"application": {"function": {"variable": "hydra.jvm.serde.padHex4"}, "argument": {"variable": "lo"}}}}}}}}}}},
                 "argument": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "\\u"}}}},
+                    "function": {
+                      "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "\\u"}}}},
                     "argument": {"application": {"function": {"variable": "hydra.jvm.serde.padHex4"}, "argument": {"variable": "n"}}}}}}}}}}},
     {
       "term": {

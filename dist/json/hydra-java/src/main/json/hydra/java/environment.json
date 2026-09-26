@@ -98,7 +98,8 @@
                     "name": "packages",
                     "type": {
                       "annotated": {
-                        "body": {"map": {"keys": {"variable": "hydra.core.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}},
+                        "body": {
+                          "map": {"keys": {"variable": "hydra.core.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Maps module names to Java package names"}}}]}}}},
                   {

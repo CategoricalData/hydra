@@ -933,7 +933,9 @@
                                     "argument": {
                                       "application": {
                                         "function": {
-                                          "typeApplication": {"body": {"variable": "hydra.core.lib.lists.isEmpty"}, "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}},
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.core.lib.lists.isEmpty"},
+                                            "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}},
                                         "argument": {"variable": "rhs"}}}}}}},
                             "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.python.syntax.Primary"}}}}},
                         "argument": {
@@ -1436,7 +1438,8 @@
                                                       "application": {
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.pairs.first"}, "type": {"variable": "hydra.core.packaging.ModuleName"}}},
+                                                            "body": {
+                                                              "typeApplication": {"body": {"variable": "hydra.core.lib.pairs.first"}, "type": {"variable": "hydra.core.packaging.ModuleName"}}},
                                                             "type": {"variable": "hydra.python.syntax.DottedName"}}},
                                                         "argument": {
                                                           "application": {
@@ -1472,7 +1475,8 @@
                                                       "application": {
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.maps.insert"}, "type": {"variable": "hydra.core.packaging.ModuleName"}}},
+                                                            "body": {
+                                                              "typeApplication": {"body": {"variable": "hydra.core.lib.maps.insert"}, "type": {"variable": "hydra.core.packaging.ModuleName"}}},
                                                             "type": {"variable": "hydra.python.syntax.DottedName"}}},
                                                         "argument": {"variable": "coreNs"}}},
                                                     "argument": {"application": {"function": {"variable": "hydra.python.names.encodeNamespace"}, "argument": {"variable": "coreNs"}}}}},
@@ -1659,7 +1663,8 @@
                               "application": {
                                 "function": {
                                   "application": {
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"variable": "hydra.python.syntax.Block"}}},
+                                    "function": {
+                                      "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"variable": "hydra.python.syntax.Block"}}},
                                     "argument": {
                                       "application": {
                                         "function": {

@@ -2,9 +2,9 @@
   "mainDslModules": ["hydra.java.environment", "hydra.java.language", "hydra.java.syntax"],
   "mainEncodingModules": ["hydra.java.gradle"],
   "mainModules": [
-    "hydra.java.gradle",
     "hydra.java.coder",
     "hydra.java.environment",
+    "hydra.java.gradle",
     "hydra.java.language",
     "hydra.java.names",
     "hydra.java.serde",

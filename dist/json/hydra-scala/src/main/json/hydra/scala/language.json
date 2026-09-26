@@ -59,7 +59,8 @@
                     "name": "floatTypes",
                     "term": {
                       "application": {
-                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.sets.fromList"}, "type": {"variable": "hydra.core.model.FloatType"}}},
+                        "function": {
+                          "typeApplication": {"body": {"variable": "hydra.core.lib.sets.fromList"}, "type": {"variable": "hydra.core.model.FloatType"}}},
                         "argument": {
                           "list": [
                             {"inject": {"typeName": "hydra.core.model.FloatType", "field": {"name": "float32", "term": "unit"}}},
@@ -69,7 +70,8 @@
                     "name": "integerTypes",
                     "term": {
                       "application": {
-                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.sets.fromList"}, "type": {"variable": "hydra.core.model.IntegerType"}}},
+                        "function": {
+                          "typeApplication": {"body": {"variable": "hydra.core.lib.sets.fromList"}, "type": {"variable": "hydra.core.model.IntegerType"}}},
                         "argument": {
                           "list": [
                             {"inject": {"typeName": "hydra.core.model.IntegerType", "field": {"name": "bigint", "term": "unit"}}},

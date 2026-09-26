@@ -77,7 +77,9 @@
                                     "record": {
                                       "typeName": "hydra.core.model.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "outputDirectory"}}}}},
+                                        {
+                                          "name": "name",
+                                          "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "outputDirectory"}}}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -113,7 +115,8 @@
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.java.gradle.GradleBuildConfiguration"}}}}},
+                              "term": {
+                                "wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.java.gradle.GradleBuildConfiguration"}}}}},
                             {
                               "name": "fields",
                               "term": {
@@ -122,7 +125,9 @@
                                     "record": {
                                       "typeName": "hydra.core.model.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "dependencies"}}}}},
+                                        {
+                                          "name": "name",
+                                          "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "dependencies"}}}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -196,7 +201,9 @@
                                     "record": {
                                       "typeName": "hydra.core.model.Field",
                                       "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "extraSourceDirs"}}}}},
+                                        {
+                                          "name": "name",
+                                          "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "extraSourceDirs"}}}}},
                                         {
                                           "name": "term",
                                           "term": {
@@ -216,7 +223,8 @@
                                                               "application": {
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.core.file.FilePath"}}},
+                                                                    "body": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.core.file.FilePath"}}},
                                                                     "type": {"variable": "hydra.core.model.Term"}}},
                                                                 "argument": {"variable": "hydra.core.encode.file.filePath"}}},
                                                             "argument": {"variable": "xs"}}}}}}}},
@@ -289,7 +297,8 @@
                                                               "application": {
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.optionals.map"}, "type": {"variable": "hydra.java.gradle.AntlrConfig"}}},
+                                                                    "body": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.map"}, "type": {"variable": "hydra.java.gradle.AntlrConfig"}}},
                                                                     "type": {"variable": "hydra.core.model.Term"}}},
                                                                 "argument": {"variable": "hydra.java.encode.gradle.antlrConfig"}}},
                                                             "argument": {"variable": "opt"}}}}}}}},

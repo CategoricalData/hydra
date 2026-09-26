@@ -102,11 +102,13 @@
                   "argument": {
                     "list": [
                       {"literal": {"string": "hydra"}},
+                      {"literal": {"string": "core"}},
                       {"literal": {"string": "overlay"}},
                       {"literal": {"string": "java"}},
                       {"literal": {"string": "util"}}]}}}},
             "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The hydra.core.overlay.java.util package name"}}}]}}}}},
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "The hydra.core.overlay.java.util package name"}}}]}}}}},
     {
       "term": {
         "name": "hydra.java.names.instanceName",

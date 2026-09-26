@@ -113,7 +113,8 @@
                 "domain": {"literal": "string"},
                 "body": {
                   "application": {
-                    "function": {"application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "test_"}}}},
+                    "function": {
+                      "application": {"function": {"variable": "hydra.core.lib.strings.concat2"}, "argument": {"literal": {"string": "test_"}}}},
                     "argument": {
                       "application": {
                         "function": {"variable": "hydra.core.lib.strings.fromList"},
@@ -380,7 +381,9 @@
                                                 "body": {
                                                   "typeApplication": {
                                                     "body": {
-                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.eithers.mapList"}, "type": {"variable": "hydra.core.testing.TestCaseWithMetadata"}}},
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.core.lib.eithers.mapList"},
+                                                        "type": {"variable": "hydra.core.testing.TestCaseWithMetadata"}}},
                                                     "type": {"list": {"literal": "string"}}}},
                                                 "type": {"variable": "t0"}}},
                                             "argument": {
@@ -600,7 +603,9 @@
                                                     "function": {
                                                       "application": {
                                                         "function": {
-                                                          "typeApplication": {"body": {"variable": "hydra.python.testing.buildPythonTestModule"}, "type": {"variable": "hydra.core.packaging.Module"}}},
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.python.testing.buildPythonTestModule"},
+                                                            "type": {"variable": "hydra.core.packaging.Module"}}},
                                                         "argument": {"variable": "testModule"}}},
                                                     "argument": {"variable": "testGroup"}}},
                                                 "argument": {"variable": "testBody"}}},
@@ -625,7 +630,8 @@
                                               "application": {
                                                 "function": {
                                                   "application": {
-                                                    "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.optionals.withDefault"}, "type": {"list": {"literal": "string"}}}},
+                                                    "function": {
+                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.withDefault"}, "type": {"list": {"literal": "string"}}}},
                                                     "argument": {"typeApplication": {"body": {"list": []}, "type": {"literal": "string"}}}}},
                                                 "argument": {
                                                   "application": {

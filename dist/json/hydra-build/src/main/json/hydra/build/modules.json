@@ -197,14 +197,14 @@
                                             "function": {"variable": "hydra.core.lib.logic.not"},
                                             "argument": {
                                               "application": {
-                                                "function": {"application": {"function": {"variable": "startsWith"}, "argument": {"literal": {"string": "hydra.json.yaml."}}}},
+                                                "function": {"application": {"function": {"variable": "startsWith"}, "argument": {"literal": {"string": "hydra.core.json.yaml."}}}},
                                                 "argument": {"variable": "name"}}}}}}}}}}}}},
                         "argument": {"variable": "mods"}}}}}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Keep only modules outside the hydra.* and hydra.json.yaml.* namespaces"}}}]}}}}},
+                  "value": {"literal": {"string": "Keep only modules outside the hydra.* and hydra.core.json.yaml.* namespaces"}}}]}}}}},
     {
       "term": {
         "name": "hydra.build.modules.filterTypeModules",
