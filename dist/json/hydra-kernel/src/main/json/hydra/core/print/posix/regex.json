@@ -1,7 +1,7 @@
 {
   "name": "hydra.core.print.posix.regex",
   "metadata": {
-    "description": "Per-dialect printer rendering the hydra.core.regex AST into POSIX ERE syntax (Haskell Text.Regex.TDFA, Scheme Guile (ice-9 regex)). Differs from the canonical hydra.core.print.regex in three places, each probe-verified against TDFA (docs/ specification/regex.md and issue #567/#603): (1) Hydra's . (any character INCLUDING newline) renders as the explicit full-code-point-range class [<U+0000>-<U+10FFFF>], because POSIX ERE's native . excludes newline and does not support the \\s / \\S shorthands; (2) anchors ^ and $ (whole-STRING boundaries in Hydra) render as the GNU/glibc whole-buffer anchors \\` and \\', because TDFA's native ^ and $ are line-oriented; (3) character-class metacharacters ] ^ - are disambiguated POSITIONALLY (] first, - last, ^ never first) rather than by backslash-escaping, because POSIX ERE bracket expressions have no escape mechanism at all (a backslash inside [...] is an ordinary character on TDFA). All other productions are native POSIX ERE.",
+    "description": "Per-dialect printer rendering the hydra.core.regex AST into POSIX ERE syntax (Haskell Text.Regex.TDFA, Scheme Guile (ice-9 regex)). Differs from the canonical hydra.core.print.regex in three places, each probe-verified against BOTH TDFA and Guile (docs/specification/regex.md and issue #567/#603/#729-land): (1) Hydra's . (any character INCLUDING newline) renders as (.|<newline>), a grouped alternation, because POSIX ERE's native . excludes newline, does not support the \\s / \\S shorthands, and (on Guile specifically) rejects a literal NUL byte inside a bracket expression, ruling out an explicit [<U+0000>-<U+10FFFF>] range class; (2) anchors ^ and $ (whole-STRING boundaries in Hydra) render as the GNU/glibc whole-buffer anchors \\` and \\', because TDFA's native ^ and $ are line-oriented; (3) character-class metacharacters ] ^ - are disambiguated POSITIONALLY (] first, - last, ^ never first) rather than by backslash-escaping, because POSIX ERE bracket expressions have no escape mechanism at all (a backslash inside [...] is an ordinary character on TDFA). All other productions are native POSIX ERE.",
     "comments": [],
     "seeAlso": [],
     "provisions": []},
@@ -81,24 +81,19 @@
                 "function": {"variable": "hydra.core.lib.strings.concat"},
                 "argument": {
                   "list": [
-                    {"literal": {"string": "["}},
+                    {"literal": {"string": "(.|"}},
                     {
                       "application": {
                         "function": {"variable": "hydra.core.print.posix.regex.printCodePoint"},
-                        "argument": {"literal": {"integer": {"int32": 0}}}}},
-                    {"literal": {"string": "-"}},
-                    {
-                      "application": {
-                        "function": {"variable": "hydra.core.print.posix.regex.printCodePoint"},
-                        "argument": {"literal": {"integer": {"int32": 1114111}}}}},
-                    {"literal": {"string": "]"}}]}}},
+                        "argument": {"literal": {"integer": {"int32": 10}}}}},
+                    {"literal": {"string": ")"}}]}}},
             "annotation": {
               "map": [
                 {
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {
-                      "string": "The POSIX ERE rendering of Hydra's . (any character incl. newline): an explicit character-class range spanning the whole Unicode scalar range, which POSIX ERE engines match literally."}}}]}}}}},
+                      "string": "The POSIX ERE rendering of Hydra's . (any character incl. newline): '.' alternated with an explicit newline, grouped — portable across POSIX ERE engines including Guile, which rejects a literal NUL byte in a bracket expression."}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.print.posix.regex.atom",
@@ -161,7 +156,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Render a single atom; . renders as the explicit full-code-point-range class (POSIX-safe)."}}}]}}}}},
+                  "value": {"literal": {"string": "Render a single atom; . renders as (.|<newline>), portable across POSIX ERE engines."}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.print.posix.regex.characterClass",
@@ -629,7 +624,7 @@
                   "key": {"variable": "description"},
                   "value": {
                     "literal": {
-                      "string": "Render a hydra.core.regex AST into POSIX ERE syntax. Identical to the canonical printer except that . (any incl. newline) becomes the explicit full-code-point-range class."}}}]}}}}},
+                      "string": "Render a hydra.core.regex AST into POSIX ERE syntax. Identical to the canonical printer except that . (any incl. newline) becomes the grouped alternation (.|<newline>)."}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.print.posix.regex.quantified",

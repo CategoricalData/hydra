@@ -131,11 +131,13 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just $
               "Per-dialect printer rendering the hydra.core.regex AST into POSIX ERE syntax (Haskell"
               <> " Text.Regex.TDFA, Scheme Guile (ice-9 regex)). Differs from the canonical"
-              <> " hydra.core.print.regex in three places, each probe-verified against TDFA (docs/"
-              <> " specification/regex.md and issue #567/#603): (1) Hydra's . (any character INCLUDING"
-              <> " newline) renders as the explicit full-code-point-range class"
-              <> " [<U+0000>-<U+10FFFF>], because POSIX ERE's native . excludes newline and does not"
-              <> " support the \\s / \\S shorthands; (2) anchors ^ and $ (whole-STRING boundaries in"
+              <> " hydra.core.print.regex in three places, each probe-verified against BOTH TDFA and"
+              <> " Guile (docs/specification/regex.md and issue #567/#603/#729-land): (1) Hydra's ."
+              <> " (any character INCLUDING newline) renders as (.|<newline>), a grouped alternation,"
+              <> " because POSIX ERE's native . excludes newline, does not support the \\s / \\S"
+              <> " shorthands, and (on Guile specifically) rejects a literal NUL byte inside a bracket"
+              <> " expression, ruling out an explicit [<U+0000>-<U+10FFFF>] range class;"
+              <> " (2) anchors ^ and $ (whole-STRING boundaries in"
               <> " Hydra) render as the GNU/glibc whole-buffer anchors \\` and \\', because TDFA's"
               <> " native ^ and $ are line-oriented; (3) character-class metacharacters ] ^ - are"
               <> " disambiguated POSITIONALLY (] first, - last, ^ never first) rather than by"
@@ -168,19 +170,22 @@ printCodePoint = define "printCodePoint" $
   doc "Render a single Unicode code point as a one-character string." $
   "c" ~> Strings.fromList (list [var "c"])
 
--- The full-code-point-range class that stands in for Hydra's newline-inclusive '.' under POSIX ERE.
--- TDFA accepts an explicit literal-character range spanning [U+0000, U+10FFFF] (probe-verified), which
--- matches every character including newline. 1114111 = 0x10FFFF.
+-- The alternation that stands in for Hydra's newline-inclusive '.' under POSIX ERE.
+-- An explicit [U+0000-U+10FFFF] character-class range is TDFA-safe (probe-verified) but breaks
+-- Guile's (ice-9 regex) make-regexp: a raw NUL byte in a bracket expression is "Invalid regular
+-- expression" there (glibc regcomp rejects it, apparently treating \x00 as a string terminator
+-- rather than a class member). (.|\n) — POSIX . (any char except newline) alternated with an
+-- explicit newline, wrapped in a group — is valid ERE and probe-verified to match correctly on
+-- BOTH TDFA and Guile. #729-land Scheme conformance failure (dot-includes-newline suite, 5 cases).
 anyClass :: TypedTermDefinition String
 anyClass = define "anyClass" $
-  doc ("The POSIX ERE rendering of Hydra's . (any character incl. newline): an explicit character-class"
-    <> " range spanning the whole Unicode scalar range, which POSIX ERE engines match literally.") $
+  doc ("The POSIX ERE rendering of Hydra's . (any character incl. newline): '.' alternated with an"
+    <> " explicit newline, grouped — portable across POSIX ERE engines including Guile, which rejects"
+    <> " a literal NUL byte in a bracket expression.") $
   Strings.concat $ list [
-    string "[",
-    printCodePoint @@ int32 0,
-    string "-",
-    printCodePoint @@ int32 1114111,
-    string "]"]
+    string "(.|",
+    printCodePoint @@ int32 10,
+    string ")"]
 
 escapeLiteral :: TypedTermDefinition (Int -> String)
 escapeLiteral = define "escapeLiteral" $
@@ -255,11 +260,11 @@ characterClass = define "characterClass" $
       Strings.concat (Lists.map (asTerm classItem) (var "ordered")),
       string "]"]
 
--- The dialect divergence: Hydra's . (any incl. newline) renders as the explicit full-range class
+-- The dialect divergence: Hydra's . (any incl. newline) renders as the grouped alternation
 -- (anyClass), NOT a bare . (POSIX . excludes newline) and NOT [\s\S] (unsupported on TDFA).
 atom :: TypedTermDefinition (Term -> String)
 atom = define "atom" $
-  doc "Render a single atom; . renders as the explicit full-code-point-range class (POSIX-safe)." $
+  doc "Render a single atom; . renders as (.|<newline>), portable across POSIX ERE engines." $
   "a" ~>
     match _Atom (var "a") Nothing [
       _Atom_literal>>: "c" ~> escapeLiteral @@ var "c",
@@ -317,5 +322,5 @@ alternation = define "alternation" $
 printRegex :: TypedTermDefinition ([Term] -> String)
 printRegex = define "printRegex" $
   doc ("Render a hydra.core.regex AST into POSIX ERE syntax. Identical to the canonical printer except that"
-    <> " . (any incl. newline) becomes the explicit full-code-point-range class.") $
+    <> " . (any incl. newline) becomes the grouped alternation (.|<newline>).") $
   "r" ~> alternation @@ var "r"
