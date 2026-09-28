@@ -646,16 +646,21 @@ object Serde:
     define(NS, "nameToExpr").doc("Convert a name to an expression").to(nameToExprBody)
 
   // ---- patToExpr ----
+  // isCall (not listNull(args)) decides bare-name vs. call-syntax: an empty args list is
+  // ambiguous between "no parens" (a plain unit case, e.g. FloatType.float32) and "explicit
+  // empty parens" (a unit case of a polymorphic union, e.g. Edit.retain()) — see ExtractPat's
+  // isCall field (Syntax.scala) and encodeCasePatIsCall (Coder.scala) for why the coder must
+  // decide this, not the printer (which has no semantic type information to derive it from).
   private val patExtractArm = lambda("pe",
     let(Seq(
       field("fun", ScalaSyntax.extractPatFun(v("pe"))),
       field("args", ScalaSyntax.extractPatArgs(v("pe")))),
       ifElse(
-        listNull(v("args")),
-        termToExprCall(v("fun")),
+        ScalaSyntax.extractPatIsCall(v("pe")),
         noSep(list(
           termToExprCall(v("fun")),
-          parenList(map(v(local("patToExpr")), v("args"))))))))
+          parenList(map(v(local("patToExpr")), v("args"))))),
+        termToExprCall(v("fun")))))
 
   private val patToExprBody = lambda("pat",
     `match`("hydra.scala.syntax.Pat", v("pat"),

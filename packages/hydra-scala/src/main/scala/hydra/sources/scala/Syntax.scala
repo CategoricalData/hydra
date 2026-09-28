@@ -299,7 +299,16 @@ object Syntax:
   lazy val extractPatDef: Definition = define("ExtractPat",
     Types.record(
       Types.field("fun", meta("Data")),
-      Types.field("args", Types.list(meta("Pat")))))
+      Types.field("args", Types.list(meta("Pat"))),
+      // Distinguishes a bare value reference (e.g. `FloatType.float32`, no args, no parens)
+      // from a call-syntax pattern with an empty argument list (e.g. `Edit.retain()`, needed
+      // whenever the case declaration itself has case-level type params — see
+      // fieldToEnumCaseTparams in Coder.scala). The printer (Serde.scala's patExtractArm) has
+      // no semantic type information, so this can't be inferred from `args` alone: an empty
+      // `args` is ambiguous between "no parens" and "explicit empty parens" (#729-land Scala
+      // Edit.retain/Edit.delete bug — args.isEmpty was wrongly treated as always meaning "no
+      // parens"). True whenever args is non-empty (parens are unambiguous there too).
+      Types.field("isCall", Types.boolean_)))
 
   lazy val forDataDef: Definition = define("ForData",
     Types.record(

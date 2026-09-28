@@ -27,7 +27,7 @@ object Coder:
       "hydra.core.scoping", "hydra.core.strip", "hydra.core.variables", "hydra.core.analysis",
       "hydra.core.environment", "hydra.core.predicates", "hydra.core.resolution", "hydra.core.print.model",
       "hydra.core.annotations", "hydra.core.constants", "hydra.core.inference", "hydra.core.sorting",
-      "hydra.core.arity", "hydra.core.serialization", "hydra.core.reduction",
+      "hydra.core.arity", "hydra.core.serialization", "hydra.core.reduction", "hydra.core.lexical",
       "hydra.scala.syntax", "hydra.scala.language")
     ++ Helpers.kernelTypesModuleNames
 
@@ -1497,13 +1497,25 @@ object Coder:
         list(inject("hydra.scala.syntax.Pat", "wildcard", Phantoms.unit))),
       list(applyP(localUtils("svar"), v("v"))))
 
+  // Call-syntax parens are needed whenever the case declaration has a parameter group at all
+  // (fieldToEnumCaseParamssList): every non-unit case (it declares a value param), and every
+  // unit case of a polymorphic union (fieldToEnumCaseTparams gives it its own empty parameter
+  // group so it can `extends Parent[A, S]` — e.g. `case retain[A, S]()`). Only a unit case of
+  // a NON-polymorphic union has no parameter group at all and must stay bare (e.g.
+  // `FloatType.float32`, not `.float32()`).
+  private val encodeCasePatIsCall =
+    applyP("hydra.core.lib.logic.or",
+      applyP("hydra.core.lib.logic.not", v("isUnit")),
+      v("isPolymorphic"))
+
   private val encodeCasePat =
     inject("hydra.scala.syntax.Pat", "extract",
       ScalaSyntax.extractPat(
         applyP(localUtils("sname"),
           applyP(localUtils("qualifyUnionFieldName"),
             string("MATCHED."), v("sn"), v("fname"))))(
-        v("patArgs")))
+        v("patArgs"))(
+        v("isCall")))
 
   private val encodeCaseBindAndReturn =
     applyP("hydra.core.lib.eithers.bind",
@@ -1518,7 +1530,7 @@ object Coder:
         list(string("v_"), v("shortTypeName"), string("_"),
           CoreDsl.unName(v("fname")), v("lamParamSuffix"))))
 
-  private val encodeCaseBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("ftypes", lambda("sn", lambda("f",
+  private val encodeCaseBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("ftypes", lambda("sn", lambda("isPolymorphic", lambda("f",
     Phantoms.let(Seq(
       field("fname", CoreDsl.caseAlternativeName(v("f"))),
       field("fterm", CoreDsl.caseAlternativeHandler(v("f"))),
@@ -1528,9 +1540,10 @@ object Coder:
       field("v", encodeCaseVName),
       field("domainIsUnit", encodeCaseDomainIsUnit),
       field("patArgs", encodeCasePatArgs),
+      field("isCall", encodeCasePatIsCall),
       field("pat", encodeCasePat),
       field("applied", applyP(local("applyVar"), v("fterm"), v("v")))),
-      encodeCaseBindAndReturn)))))))
+      encodeCaseBindAndReturn))))))))
 
   lazy val encodeCaseDef: Definition =
     define(NS, "encodeCase").doc("Encode a case branch").to(encodeCaseBody)
@@ -1650,7 +1663,7 @@ object Coder:
     applyP("hydra.core.lib.eithers.mapList",
       lambda("f",
         applyP(local("encodeCase"),
-          v("overlaySubs"), v("cx"), v("g"), v("ftypes"), v("sn"), v("f"))),
+          v("overlaySubs"), v("cx"), v("g"), v("ftypes"), v("sn"), v("isPolymorphic"), v("f"))),
       v("cases"))
 
   private val encodeFunctionCasesAddDefaultThen = lambda("fieldCases",
@@ -1690,6 +1703,26 @@ object Coder:
                   inject("hydra.scala.syntax.Data", "match",
                     ScalaSyntax.matchData(v("sa"))(v("scases")))))))))))
 
+  // A union's own declared type parameters change how its NULLARY cases pattern-match:
+  // Scala 3 requires empty-but-explicit parens (`case Edit.retain() =>`) whenever the case
+  // declaration itself has case-level type params (see fieldToEnumCaseTparams above, which
+  // gives every unit case of a polymorphic union its own tparams so it can `extends
+  // Parent[A, S]`) — a bare `case Edit.retain =>` refers to the nonexistent singleton and
+  // fails to typecheck against `Edit[T0, T1]`. resolveType + fTypeIsPolymorphic detect this
+  // from the union's own Type (a `forall`-wrapped union means every case is generated with
+  // case-level tparams); encodeCasePatArgs below uses it to force non-empty Pat.extract args
+  // even when there's no value to bind, so the printer emits the parens.
+  //
+  // Uses resolveType (graphSchemaTypes/graphBoundTypes, TYPE-level lookup), NOT
+  // dereferenceType (Lexical.lookupBinding, a TERM-level lookup) — dereferenceType silently
+  // returns Nothing for a type name like `tname` here (it is not a term binding), which
+  // always defaulted isPolymorphic to False and made this whole check a no-op.
+  private val encodeFunctionCasesIsPolymorphic =
+    applyP("hydra.core.lib.optionals.match",
+      applyP("hydra.core.resolution.resolveType", v("g"), v("dom")),
+      Phantoms.bool(false),
+      lambda("typ", applyP("hydra.core.resolution.fTypeIsPolymorphic", v("typ"))))
+
   private val encodeFunctionCasesArm = lambda("cs",
     Phantoms.let(Seq(
       field("v", string("v")),
@@ -1698,6 +1731,7 @@ object Coder:
       field("sn", applyP(localUtils("nameOfType"), v("g"), v("dom"))),
       field("cases", CoreDsl.caseStatementCases(v("cs"))),
       field("dflt", CoreDsl.caseStatementDefault(v("cs"))),
+      field("isPolymorphic", encodeFunctionCasesIsPolymorphic),
       field("ftypes",
         applyP("hydra.core.lib.eithers.either",
           constant(v("hydra.core.lib.maps.empty")),
@@ -1933,6 +1967,40 @@ object Coder:
               applyP(localUtils("sname"), v("n")),
               v("args")))))))
 
+  // A nullary injection into a polymorphic union (e.g. hydra.core.diff.Edit.retain) needs
+  // explicit empty-parens call syntax for the same reason as encodeCasePatIsCall's pattern
+  // side: the case declaration has its own case-level type params (fieldToEnumCaseTparams),
+  // so the bare name `Edit.retain` refers to a nonexistent singleton, not the constructor —
+  // Scala 3 requires `Edit.retain()`. See resolveType/fTypeIsPolymorphic notes on
+  // encodeFunctionCasesIsPolymorphic above (same root cause, different call site: this arm
+  // handles term-level injections rather than case-alternative patterns).
+  private val encodeTermInjectIsPolymorphic =
+    applyP("hydra.core.lib.optionals.match",
+      applyP("hydra.core.resolution.resolveType", v("g"), CoreDsl.typeVariable(v("sn"))),
+      Phantoms.bool(false),
+      lambda("typ", applyP("hydra.core.resolution.fTypeIsPolymorphic", v("typ"))))
+
+  private val encodeTermInjectIsValueUnit =
+    applyP("hydra.core.lib.optionals.match",
+      v("unionFtypesLookup"),
+      matchWithDefault("hydra.core.model.Term",
+        applyP("hydra.core.strip.deannotateAndDetypeTerm", v("ft")),
+        Phantoms.bool(false),
+        field("unit", constant(Phantoms.bool(true))),
+        field("record", lambda("rec",
+          applyP("hydra.core.lib.equality.equal",
+            applyP("hydra.core.lib.lists.length", CoreDsl.recordFields(v("rec"))),
+            int32(0))))),
+      lambda("dom",
+        matchWithDefault("hydra.core.model.Type",
+          applyP("hydra.core.strip.deannotateType", v("dom")),
+          Phantoms.bool(false),
+          field("unit", constant(Phantoms.bool(true))),
+          field("record", lambda("rt",
+            applyP("hydra.core.lib.equality.equal",
+              applyP("hydra.core.lib.lists.length", v("rt")),
+              int32(0)))))))
+
   private val encodeTermInjectArm = lambda("inj",
     Phantoms.let(Seq(
       field("sn", CoreDsl.injectionTypeName(v("inj"))),
@@ -1942,34 +2010,22 @@ object Coder:
         applyP(localUtils("sname"),
           applyP(localUtils("qualifyUnionFieldName"),
             string("UNION."), just(v("sn")), v("fn")))),
+      field("isPolymorphic", encodeTermInjectIsPolymorphic),
       field("unionFtypes",
         applyP("hydra.core.lib.eithers.either",
           constant(v("hydra.core.lib.maps.empty")),
           lambda("x_", v("x_")),
           applyP("hydra.core.resolution.fieldTypes",
             v("cx"), v("g"),
-            CoreDsl.typeVariable(v("sn")))))),
+            CoreDsl.typeVariable(v("sn"))))),
+      field("unionFtypesLookup", applyP("hydra.core.lib.maps.lookup", v("fn"), v("unionFtypes"))),
+      field("isValueUnit", encodeTermInjectIsValueUnit)),
       applyP("hydra.core.lib.logic.ifElse",
-        applyP("hydra.core.lib.optionals.match",
-          applyP("hydra.core.lib.maps.lookup", v("fn"), v("unionFtypes")),
-          matchWithDefault("hydra.core.model.Term",
-            applyP("hydra.core.strip.deannotateAndDetypeTerm", v("ft")),
-            Phantoms.bool(false),
-            field("unit", constant(Phantoms.bool(true))),
-            field("record", lambda("rec",
-              applyP("hydra.core.lib.equality.equal",
-                applyP("hydra.core.lib.lists.length", CoreDsl.recordFields(v("rec"))),
-                int32(0))))),
-          lambda("dom",
-            matchWithDefault("hydra.core.model.Type",
-              applyP("hydra.core.strip.deannotateType", v("dom")),
-              Phantoms.bool(false),
-              field("unit", constant(Phantoms.bool(true))),
-              field("record", lambda("rt",
-                applyP("hydra.core.lib.equality.equal",
-                  applyP("hydra.core.lib.lists.length", v("rt")),
-                  int32(0))))))),
-        Phantoms.right(v("lhs")),
+        v("isValueUnit"),
+        applyP("hydra.core.lib.logic.ifElse",
+          v("isPolymorphic"),
+          Phantoms.right(applyP(localUtils("sapply"), v("lhs"), emptyList)),
+          Phantoms.right(v("lhs"))),
         applyP("hydra.core.lib.eithers.bind",
           applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("ft")),
           lambda("sarg",

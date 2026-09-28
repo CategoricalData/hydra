@@ -18,7 +18,7 @@ object Utils:
 
   /** Dependencies: matches Haskell `[scalaLanguage, names, formatting] ++ (scalaSyntax : kernelTypesModuleNames)`. */
   private val DEPS: Seq[ModuleName] =
-    Seq("hydra.scala.language", "hydra.core.names", "hydra.core.formatting", "hydra.scala.syntax")
+    Seq("hydra.scala.language", "hydra.core.names", "hydra.core.formatting", "hydra.core.strip", "hydra.scala.syntax")
       ++ Helpers.kernelTypesModuleNames
 
   // ===== Local helpers — shorthand FQN references =====
