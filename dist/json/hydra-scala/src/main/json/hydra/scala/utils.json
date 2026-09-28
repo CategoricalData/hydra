@@ -5,6 +5,7 @@
     {"module": "hydra.scala.language"},
     {"module": "hydra.core.names"},
     {"module": "hydra.core.formatting"},
+    {"module": "hydra.core.strip"},
     {"module": "hydra.scala.syntax"},
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},

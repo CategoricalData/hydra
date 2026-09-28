@@ -2142,29 +2142,28 @@
                                                 "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"variable": "hydra.core.ast.Expr"}}},
                                                 "argument": {
                                                   "application": {
-                                                    "function": {
-                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.lists.isEmpty"}, "type": {"variable": "hydra.scala.syntax.Pat"}}},
-                                                    "argument": {"variable": "args"}}}}},
-                                            "argument": {"application": {"function": {"variable": "hydra.scala.serde.termToExpr"}, "argument": {"variable": "fun"}}}}},
-                                        "argument": {
-                                          "application": {
-                                            "function": {"variable": "hydra.core.serialization.noSep"},
+                                                    "function": {"project": {"typeName": "hydra.scala.syntax.ExtractPat", "fieldName": "isCall"}},
+                                                    "argument": {"variable": "pe"}}}}},
                                             "argument": {
-                                              "list": [
-                                                {"application": {"function": {"variable": "hydra.scala.serde.termToExpr"}, "argument": {"variable": "fun"}}},
-                                                {
-                                                  "application": {
-                                                    "function": {"variable": "hydra.core.serialization.parenListAdaptive"},
-                                                    "argument": {
+                                              "application": {
+                                                "function": {"variable": "hydra.core.serialization.noSep"},
+                                                "argument": {
+                                                  "list": [
+                                                    {"application": {"function": {"variable": "hydra.scala.serde.termToExpr"}, "argument": {"variable": "fun"}}},
+                                                    {
                                                       "application": {
-                                                        "function": {
+                                                        "function": {"variable": "hydra.core.serialization.parenListAdaptive"},
+                                                        "argument": {
                                                           "application": {
                                                             "function": {
-                                                              "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.scala.syntax.Pat"}}},
-                                                                "type": {"variable": "hydra.core.ast.Expr"}}},
-                                                            "argument": {"variable": "hydra.scala.serde.patToExpr"}}},
-                                                        "argument": {"variable": "args"}}}}}]}}}}}}}}}},
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.scala.syntax.Pat"}}},
+                                                                    "type": {"variable": "hydra.core.ast.Expr"}}},
+                                                                "argument": {"variable": "hydra.scala.serde.patToExpr"}}},
+                                                            "argument": {"variable": "args"}}}}}]}}}}},
+                                        "argument": {"application": {"function": {"variable": "hydra.scala.serde.termToExpr"}, "argument": {"variable": "fun"}}}}}}}}}},
                           {
                             "name": "var",
                             "handler": {

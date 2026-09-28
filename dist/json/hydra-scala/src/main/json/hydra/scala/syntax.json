@@ -852,7 +852,8 @@
           "body": {
             "record": [
               {"name": "fun", "type": {"variable": "hydra.scala.syntax.Data"}},
-              {"name": "args", "type": {"list": {"variable": "hydra.scala.syntax.Pat"}}}]},
+              {"name": "args", "type": {"list": {"variable": "hydra.scala.syntax.Pat"}}},
+              {"name": "isCall", "type": {"literal": "boolean"}}]},
           "constraints": []}}},
     {
       "type": {
