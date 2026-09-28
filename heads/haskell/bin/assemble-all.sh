@@ -34,6 +34,31 @@ fi
 
 BATCH_PACKAGES=$(batch_emit_packages)
 
+# Keep-paths manifest for hand-written Haskell overlay files (#418), same
+# derivation heads/haskell/bin/assemble-distribution.sh uses per-package.
+# Without this, --prune-stale below deletes every overlaid module (e.g.
+# hydra-kernel's Hydra.Core.Overlay.Haskell.Lib.*, the umbrella Hydra.hs) on
+# every batch run, since the generator only knows about what it just wrote.
+# Scan every package with an overlay tree, not just hydra-kernel — hydra,
+# hydra-pg, and hydra-typescript also have hand-written Haskell overlay
+# source (see heads/haskell/bin/overlay-kernel-runtime.sh).
+KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-haskell.XXXXXX)"
+trap 'rm -f "$KEEP_MANIFEST"' EXIT
+for pkg_overlay_dir in "$HYDRA_ROOT_DIR"/overlay/haskell/*/; do
+    pkg="$(basename "$pkg_overlay_dir")"
+    OVERLAY_SRC="$pkg_overlay_dir/src"
+    if [ -d "$OVERLAY_SRC" ]; then
+        ( cd "$OVERLAY_SRC" && find . -type f -print \
+            | sed 's|^\./||' \
+            | awk -v base="$DIST_ROOT/$pkg/src" -F/ '{
+                  ss = $1 "/" $2;                         # e.g. main/haskell
+                  rel = substr($0, length(ss) + 2);       # path after "main/haskell/"
+                  printf "%s/%s\t%s\n", base, ss, rel;
+              }' \
+            >> "$KEEP_MANIFEST" )
+    fi
+done
+
 # Stale-file pruning is handled by bootstrap-from-json --prune-stale (#357).
 cd "$HYDRA_ROOT_DIR/heads/haskell"
 # #416: digest-check no longer needed here (refresh promoted to bin/digest.sh); only bootstrap-from-json is built.
@@ -55,7 +80,7 @@ stack exec bootstrap-from-json -- \
     --target haskell \
     --all-packages \
     --include-coders --include-dsls \
-    --prune-stale \
+    --prune-stale --keep-paths-from "$KEEP_MANIFEST" \
     --output "$DIST_ROOT"
 
 echo ""
@@ -64,7 +89,7 @@ stack exec bootstrap-from-json -- \
     --target haskell \
     --all-packages \
     --include-coders --include-dsls --include-tests \
-    --prune-stale \
+    --prune-stale --keep-paths-from "$KEEP_MANIFEST" \
     --output "$DIST_ROOT"
 
 # No per-package post-processing today — the generator emits

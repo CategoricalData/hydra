@@ -52,19 +52,31 @@ for pkg in $BATCH_PACKAGES; do
     rm -f "$DIST_ROOT/$pkg/build/main/digest.json" "$DIST_ROOT/$pkg/build/test/digest.json"
 done
 
-# Step 0: Copy hand-written Java runtime into hydra-kernel dist BEFORE
-# generation. This used to run after Step 3; moved up so that #357 prune
-# (in bootstrap-from-json --prune-stale below) can be told via a manifest
-# which files are hand-written and must be preserved.
+# Step 0: Copy hand-written Java runtime into dist BEFORE generation. This
+# used to run after Step 3; moved up so that #357 prune (in
+# bootstrap-from-json --prune-stale below) can be told via a manifest which
+# files are hand-written and must be preserved.
+#
+# Every package with a Java overlay tree needs this, not just hydra-kernel —
+# hydra-build's overlay (hydra.build.overlay.java.Generation etc.) is a real
+# compile-time dependency of heads/java's own driver classes
+# (TransformJsonToTarget.java etc.), so skipping it here left dist/java/
+# hydra-build without its overlay even though hydra-build IS in the batch
+# generation output; the local-host fallback build
+# (:hydra-java:compileHeadsExtrasJava, hostOverrides[java]=local) then failed
+# with "package hydra.build.overlay.java does not exist". #416: the
+# overlay-copy is the same plan the general copy-overlay path uses, pinned
+# per package. Call the host-independent bin/apply-assembly-plan.sh
+# (pure-bash executor of the promoted assembly plan) instead of the per-host
+# copy-kernel-runtime.sh. Byte-identical (asserted by
+# bin/test-assembly-plan-conformance.sh).
 KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-java.XXXXXX)"
 trap 'rm -f "$KEEP_MANIFEST"' EXIT
-# #416: the hydra-kernel runtime overlay-copy is the same plan the general
-# copy-overlay path uses, pinned to hydra-kernel. Call the host-independent
-# bin/apply-assembly-plan.sh (pure-bash executor of the promoted assembly plan)
-# instead of the per-host copy-kernel-runtime.sh. Byte-identical (asserted by
-# bin/test-assembly-plan-conformance.sh).
-echo "Step 0: Applying hydra-kernel assembly plan (Java runtime overlay + keep-paths)..."
-"$HYDRA_ROOT_DIR/bin/apply-assembly-plan.sh" java hydra-kernel --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
+echo "Step 0: Applying Java assembly plans (runtime overlay + keep-paths)..."
+for pkg_overlay_dir in "$HYDRA_ROOT_DIR"/overlay/java/*/; do
+    pkg="$(basename "$pkg_overlay_dir")"
+    "$HYDRA_ROOT_DIR/bin/apply-assembly-plan.sh" java "$pkg" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
+done
 echo ""
 
 echo "Step 1: Generating main Java modules for every package..."

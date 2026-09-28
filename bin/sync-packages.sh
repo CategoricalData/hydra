@@ -293,6 +293,18 @@ echo "  Tests:    $([ "$NO_TEST" = true ] && echo "skipped (--no-tests)" || echo
 echo "=========================================="
 echo ""
 
+# The Haskell host compiles dist/haskell/hydra-kernel/ (a package.yaml source-dir)
+# which includes hand-written runtime modules (Hydra.Core.Overlay.Haskell.Lib.*, the
+# umbrella Hydra.hs) that live in the top-level overlay/haskell/ tree (#418). That
+# dist Overlay/ location is gitignored, so a cold or freshly-reset dist/haskell/ has
+# it absent, and every `stack build`/`stack exec` below (starting with Phase 1's own
+# transform) fails with "Could not find module Hydra.Kernel" etc. bin/sync.sh's
+# Phase 0 runs this before its own Phase 1 for the same reason; sync-packages.sh
+# skipped it on the assumption Phase 0 had already run, which is false on a fresh
+# worktree. Idempotent cp -R merge — cheap to run unconditionally.
+HYDRA_HASKELL_HOST_MODE="${HYDRA_HASKELL_HOST_MODE:-local}" "$HYDRA_ROOT_DIR/heads/haskell/bin/overlay-kernel-runtime.sh"
+echo ""
+
 # Phase 1: JSON sources. When operating on every package, invoke the
 # transform in batch mode (single Haskell-universe load writing
 # per-package JSON via namespaceToPackage). When scoped to a subset,
@@ -343,6 +355,31 @@ echo ""
 pkg_supports_target() {
     "$HYDRA_PACKAGES_PY" supports-target "$1" "$2"
 }
+
+# hydra-scala input-digest seed (#509). hydra-scala is host-native like
+# hydra-jvm/java/python: its coder JSON is committed and re-derived by the Phase 5
+# Scala driver, but assemble_refresh_digest gates on
+# dist/json/hydra-scala/build/main/digest.json. Unlike the Java/Python digests
+# (refreshed inside generate-hydra-java-from-java.sh), nothing seeds the Scala
+# digest. Do it here — before any assembler runs, mirroring bin/sync.sh's
+# equivalent seed step — so a cold dist/json/hydra-scala/build/ doesn't fail
+# the very first assembler that gates on it (e.g. the haskell target).
+if [ ! -f "$HYDRA_ROOT_DIR/dist/json/hydra-scala/build/main/digest.json" ] && \
+   [ -d "$HYDRA_ROOT_DIR/dist/json/hydra-scala/src/main/json" ]; then
+    echo "Seeding hydra-scala input digest for assembly gate (#509)..."
+    "$HYDRA_ROOT_DIR/bin/digest.sh" refresh-input \
+       --package hydra-scala \
+       --dist-json-root "$HYDRA_ROOT_DIR/dist/json" || exit 1
+    echo ""
+fi
+
+# Re-apply the Haskell overlay (see the Phase-1 comment above): Phase 1's own
+# stack build/exec calls regenerate dist/haskell/hydra-kernel's *generated*
+# content, and that regeneration does not preserve the hand-written overlay
+# modules merged in earlier — so the haskell-target assembler below needs this
+# re-applied fresh, not just once at the top of the script.
+HYDRA_HASKELL_HOST_MODE="${HYDRA_HASKELL_HOST_MODE:-local}" "$HYDRA_ROOT_DIR/heads/haskell/bin/overlay-kernel-runtime.sh"
+echo ""
 
 # Phase 2: Assemblers. When generating every package for a target and
 # the head has a batch assembler (assemble-all.sh), invoke it once per
