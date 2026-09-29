@@ -627,7 +627,7 @@ public class Generation {
      * Hydra's own multi-package self-hosted build orchestration: routing requires
      * {@code distJsonRoot} to already contain each package's {@code manifest.json},
      * which a fresh downstream output root does not. A project generating code from
-     * its own Hydra modules should call {@link hydra.Codegen#inferModulesGiven} and
+     * its own Hydra modules should call {@link hydra.core.Codegen#inferModulesGiven} and
      * {@link hydra.build.ManifestWriter#packageManifestJson} directly instead — see
      * docs/recipes/downstream-codegen.md (#650).</p>
      */
