@@ -6,7 +6,7 @@ import hydra.pg.error.model.InvalidGraphError;
 import hydra.core.overlay.java.util.Optional;
 import hydra.pg.model.Graph;
 import hydra.pg.model.GraphSchema;
-import hydra.core.validate.Pg;
+import hydra.pg.validate.Model;
 import hydra.core.validation.ValidationResult;
 
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
@@ -53,13 +53,13 @@ public class Validate {
     /**
      * Runs Hydra's PG validation and reduces the result to the first error, if any.
      *
-     * <p>{@link Pg#validateGraph} returns a {@link ValidationResult} accumulating
+     * <p>{@link Model#validateGraph} returns a {@link ValidationResult} accumulating
      * all findings; this collapses it to first-error semantics to match {@link Result}.
      */
     private static Optional<InvalidGraphError<Literal>> firstError(
             GraphSchema<LiteralType> schema, Graph<Literal> hydraGraph) {
-        ValidationResult<InvalidGraphError<Literal>> result = Pg.validateGraph(
-                Pg.defaultPgProfile(),
+        ValidationResult<InvalidGraphError<Literal>> result = Model.validateGraph(
+                Model.defaultPgProfile(),
                 new ValidationResult<>(List.of(), List.of()),
                 HydraGremlinBridge::checkLiteral,
                 schema,

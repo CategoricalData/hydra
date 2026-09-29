@@ -236,7 +236,7 @@ public class HydraGremlinBridge {
      * Returns a function that, given a Literal, returns Optional.none() if the type matches
      * or Optional.given(InvalidValueError) if it does not.
      *
-     * <p>This is the {@code checkValue} callback for {@link hydra.core.validate.Pg#validateGraph}
+     * <p>This is the {@code checkValue} callback for {@link hydra.pg.validate.Model#validateGraph}
      * when property values are Literals.
      */
     public static Function<Literal, Optional<InvalidValueError>> checkLiteral(LiteralType type) {
