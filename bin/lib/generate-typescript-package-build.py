@@ -133,7 +133,7 @@ def render_tsconfig_build(name: str) -> str:
   }},
   "include": ["src/main/typescript/**/*.ts"],
   "exclude": [
-    "src/main/typescript/hydra/bootstrap.ts",
+    "src/main/typescript/hydra/core/bootstrap.ts",
     "src/test"
   ]
 }}
