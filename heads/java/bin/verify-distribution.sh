@@ -62,6 +62,14 @@ if [ "${#PUBLISH_SET[@]}" -eq 0 ]; then
     echo "ERROR: could not derive Java publish set from hydra.json registry" >&2
     exit 1
 fi
+# hydra-ext: TEMPORARILY EXCLUDED as of 0.17.4 (#643 — the visitor-pattern inner
+# interface collides with the enclosing `Visitor` type in hydra.ext.cpp.syntax /
+# a Bind.apply generic-inference failure in hydra.ext.pegasus.Coder), even though
+# its targetLanguages/registry metadata says it qualifies for Java (#636). Mirrors
+# the identical filter in publish-maven.sh — this script must stay in sync with
+# what actually gets published, or it fails on a package publish-maven.sh never
+# attempts to publish. Undo this filter once #643 lands.
+PUBLISH_SET=($(printf '%s\n' "${PUBLISH_SET[@]}" | grep -v '^hydra-ext$'))
 # #519: Java artifacts publish under the per-language group net.fortytwo.hydra.java
 # (must match GROUP_ID in bin/lib/generate-java-package-build.py).
 GROUP="net.fortytwo.hydra.java"
