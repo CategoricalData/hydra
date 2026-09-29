@@ -15,6 +15,83 @@ they are documented here for completeness.
 
 ---
 
+## [0.18.0] - 2026-09-29
+
+Module-naming systematization release: every kernel and package module moves onto a uniform
+`hydra.core.*` / `hydra.<pkg>.*` grammar, completing the package ⊃ module ⊃ definition containment
+tower. The rename touches every module, definition, and cross-host reference in the codebase; this
+release exists primarily to ship it as its own coordinated batch. Also lands the translingual regex
+primitive pipeline and several silent-correctness fixes in the coder layer.
+
+### Highlights
+
+- **Module-name grammar systematization** ([#729](https://github.com/CategoricalData/hydra/issues/729)):
+  every `hydra.*` module renamed onto a uniform package-derived prefix — kernel modules move to
+  `hydra.core.*`, package modules to `hydra.<pkg>.*` — closing the long-standing inconsistency where
+  a package name had no structural relationship to the module names it contained. The rename spans
+  every host (Haskell, Java, Python, Scala, TypeScript, all four Lisp dialects) and required fixing
+  stale namespace references, overlay-directory paths, and `hostOverrides` shims across every driver
+  and bootstrap script that had hardcoded the old grammar. Further consolidation (a structurally
+  enforced package↔prefix law) is tracked for 0.18.1.
+- **Translingual regex primitives** ([#603](https://github.com/CategoricalData/hydra/issues/603)):
+  `hydra.lib.regex` primitives (`find`, `findAll`, `matches`, `replace`, `replaceAll`, `split`) now run
+  every pattern through the shared `hydra.regex` parse/print pipeline instead of handing raw pattern
+  strings to each host's native engine, so a pattern means the same thing on every host. Includes a
+  host-independent conformance suite and a leftmost-longest alternation fix in the PCRE/POSIX printers.
+- **Silent-corruption fixes across the coder layer**
+  ([#744](https://github.com/CategoricalData/hydra/issues/744),
+  [#765](https://github.com/CategoricalData/hydra/issues/765),
+  [#649](https://github.com/CategoricalData/hydra/issues/649)): fixed data-corrupting bugs in the
+  JSON-Schema/Avro/GraphQL/GraphSON/Protobuf coders (extended integer widths, map-key handling), the
+  kernel's encode/decode generators (reversed type-parameter order on 2+-param polymorphic types), and
+  the Python coder (silently dropping a module's types when types and terms share a file path).
+- **Self-hosted specification docs** ([#723](https://github.com/CategoricalData/hydra/issues/723)):
+  the module-reference pages under `docs/specification/` are now generated directly from the kernel
+  (`bin/regenerate-spec.sh`) via a new metadata-only doc coder, rather than hand-maintained.
+
+### New features
+
+- **[#603](https://github.com/CategoricalData/hydra/issues/603)** host-independent regex conformance
+  suite covering the minimal-core grammar (literals, classes, quantifiers, alternation, anchors,
+  grouping) across all 9 hosts.
+- **[#723](https://github.com/CategoricalData/hydra/issues/723)** `hydra.markdown` type module and
+  `generateModuleDoc`, the metadata-only doc coder backing the self-generated spec pages.
+- **[#382](https://github.com/CategoricalData/hydra/issues/382)** the Rust coder is split out of
+  `hydra-ext` into its own first-class `hydra-rust` package.
+
+### Bug fixes
+
+- **[#744](https://github.com/CategoricalData/hydra/issues/744)** silent data corruption in
+  JSON-Schema/Avro/GraphQL/GraphSON/Protobuf coders for extended integer widths and map-key handling.
+- **[#765](https://github.com/CategoricalData/hydra/issues/765)** kernel encode/decode generators
+  emitted reversed type-parameter order for 2+-param polymorphic types.
+- **[#649](https://github.com/CategoricalData/hydra/issues/649)** Python coder silently dropped a
+  module's types when types and terms targeted the same output file path.
+- **[#572](https://github.com/CategoricalData/hydra/issues/572)** TypeScript kernel-JSON test
+  bridge's compact-form decode heuristic mishandled nullary union arms.
+- **[#761](https://github.com/CategoricalData/hydra/issues/761)** cold-seed generation ignored
+  `hostOverrides.java=local`, silently pulling the published Java host jar instead.
+- **[#736](https://github.com/CategoricalData/hydra/issues/736)** Java build now pins JDK 11 via a
+  Gradle toolchain block, instead of depending on ambient `JAVA_HOME`.
+
+### Improvements
+
+- **[#327](https://github.com/CategoricalData/hydra/issues/327)** new `hydra.diff` schema-diff type
+  module; `Term.Inject` comparison is now by variant name.
+- **[#573](https://github.com/CategoricalData/hydra/issues/573)** per-registry publish sets (Hackage,
+  Maven, PyPI, npm) are now derived from the package registry itself instead of 13 hand-maintained
+  lists — closes a recurring class of silent release-time drift.
+- **[#735](https://github.com/CategoricalData/hydra/issues/735)** cross-host decimal-scale test
+  filtering now driven by a translingual `scaleDistinct` capability tag instead of hand-copied
+  per-host skip lists.
+
+### Documentation
+
+- **[#655](https://github.com/CategoricalData/hydra/issues/655)** documented the overlay-emission
+  "implementation wins" decision for bare primitive references (`docs/overlays.md`).
+
+---
+
 ## [0.17.7] - 2026-09-14
 
 Correctness-hardening point release on the 0.17.x line, consolidating the 0.17.6 breaking batch. It
