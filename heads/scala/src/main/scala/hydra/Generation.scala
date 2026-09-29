@@ -154,26 +154,29 @@ object Generation:
    *  every Scala-hosted sync/bootstrap driver runs from (packages/hydra-scala/
    *  for the updateScalaJson sbt task; mirrors the Haskell host's convention).
    */
-  private val pythonOverlayLibDir = "../../overlay/python/hydra-kernel/src/main/python/hydra/overlay/python/lib"
+  private val pythonOverlayLibDir = "../../overlay/python/hydra-kernel/src/main/python/hydra/core/overlay/python/lib"
 
   /** The Scala-host overlay lib directory. */
-  private val scalaOverlayLibDir = "../../overlay/scala/hydra-kernel/src/main/scala/hydra/overlay/scala/lib"
+  private val scalaOverlayLibDir = "../../overlay/scala/hydra-kernel/src/main/scala/hydra/core/overlay/scala/lib"
 
   /** The Java-host overlay lib directory. */
-  private val javaOverlayLibDir = "../../overlay/java/hydra-kernel/src/main/java/hydra/overlay/java/lib"
+  private val javaOverlayLibDir = "../../overlay/java/hydra-kernel/src/main/java/hydra/core/overlay/java/lib"
 
   /** The Haskell-host overlay lib directory. */
-  private val haskellOverlayLibDir = "../../overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Overlay/Haskell/Lib"
+  private val haskellOverlayLibDir = "../../overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib"
 
   /** The TypeScript-host overlay lib directory. */
-  private val typeScriptOverlayLibDir = "../../overlay/typescript/hydra-kernel/src/main/typescript/hydra/overlay/typescript/lib"
+  private val typeScriptOverlayLibDir = "../../overlay/typescript/hydra-kernel/src/main/typescript/hydra/core/overlay/typescript/lib"
 
-  /** Lisp-dialect overlay lib directories, keyed by dialect name. */
+  /** Lisp-dialect overlay lib directories, keyed by dialect name. Scheme is the one
+   *  dialect without a `core/` segment in its overlay path (a real, pre-existing
+   *  exception, not an oversight -- see the #729 ExtGeneration.hs overlay-dir fix).
+   */
   private def lispOverlayLibDir(dialectName: String): String = dialectName match
-    case "clojure"    => "../../overlay/clojure/hydra-kernel/src/main/clojure/hydra/overlay/clojure/lib"
+    case "clojure"    => "../../overlay/clojure/hydra-kernel/src/main/clojure/hydra/core/overlay/clojure/lib"
     case "scheme"     => "../../overlay/scheme/hydra-kernel/src/main/scheme/hydra/overlay/scheme/lib"
-    case "commonLisp" => "../../overlay/common-lisp/hydra-kernel/src/main/common-lisp/hydra/overlay/common_lisp/lib"
-    case "emacsLisp"  => "../../overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/overlay/emacs_lisp/lib"
+    case "commonLisp" => "../../overlay/common-lisp/hydra-kernel/src/main/common-lisp/hydra/core/overlay/common_lisp/lib"
+    case "emacsLisp"  => "../../overlay/emacs-lisp/hydra-kernel/src/main/emacs-lisp/hydra/core/overlay/emacs_lisp/lib"
     case other        => throw new IllegalArgumentException(s"Unknown Lisp dialect: $other")
 
   /** Generate source files and write them to disk. Returns number of files written.
