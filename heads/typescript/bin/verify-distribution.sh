@@ -106,9 +106,11 @@ TMP_INSTALL="$(mktemp -d "${TMPDIR:-/tmp}/hydra-npm-smoke.XXXXXX")"
     npm install --no-audit --no-fund --loglevel=error "${tarballs[@]}" 2>/dev/null
     # Verify the kernel core module loads via its subpath export — catches a
     # file missing from the pack. All Hydra TS packages are subpath-only by
-    # design (#600); there is no "." entry to smoke-test.
+    # design (#600); there is no "." entry to smoke-test. hydra/core is a
+    # namespace directory (many submodules, e.g. model.js/codegen.js/...),
+    # not a single hydra/core.js file, so probe a real leaf module.
     node --input-type=module <<'EOF'
-import {} from 'hydra-kernel/dist/hydra/core.js';
+import {} from 'hydra-kernel/dist/hydra/core/model.js';
 console.log('  OK   hydra-kernel');
 EOF
 )
