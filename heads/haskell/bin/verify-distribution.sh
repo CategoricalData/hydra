@@ -42,18 +42,18 @@ done
 VERSION="$("$HYDRA_ROOT/bin/lib/hydra-packages.py" current-version)"
 
 if [ "$FULL" = true ]; then
-    # The full Hackage publish set (leaves first), DERIVED from the hydra.json
-    # registry (mirrors publish-hackage.sh) plus the hand-written `hydra` umbrella
-    # appended last — so this verification always covers exactly what
-    # publish-hackage.sh will assemble and upload, with no separately-maintained
-    # package list to fall out of sync (#573).
-    read -ra _REGISTRY_TOPO < <("$HYDRA_ROOT/bin/lib/hydra-packages.py" topo \
-        $("$HYDRA_ROOT/bin/lib/hydra-packages.py" list))
-    if [ "${#_REGISTRY_TOPO[@]}" -eq 0 ]; then
-        echo "ERROR: could not derive publish set from hydra.json registry" >&2
+    # The full Hackage publish set (leaves first), taken from publish-hackage.sh
+    # --list — the single curated source of truth for the Hackage channel (see the
+    # #589 follow-up note in publish-hackage.sh). Deriving this from the raw
+    # hydra.json registry topo instead would wrongly pull in the experimental
+    # targets (hydra-go/hydra-coq/hydra-wasm/hydra-rust) and hydra-bench, none of
+    # which are actually published — the same drift #589 already fixed once in
+    # prepare-release's sdist check.
+    read -ra PKGS < <("$SCRIPT_DIR/publish-hackage.sh" --list)
+    if [ "${#PKGS[@]}" -eq 0 ]; then
+        echo "ERROR: could not derive publish set from publish-hackage.sh --list" >&2
         exit 1
     fi
-    PKGS=("${_REGISTRY_TOPO[@]}" hydra)
 else
     # Lightweight default smoke set: kernel, hydra-build (#573 — must always be
     # exercised here), the Haskell coder, and the umbrella. Runs on every routine
