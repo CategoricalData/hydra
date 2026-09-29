@@ -433,7 +433,11 @@ object BootstrapHelpers:
    *  compilation (#569 Defect B; mirrors the Java driver's isLibDefOrRegistryFile). */
   private def isLibDefFile(f: File): Boolean =
     val p = f.getPath.replace(File.separatorChar, '/')
-    p.contains("/hydra/lib/") || p.matches(".*/hydra/overlay/[^/]+/[Ll]ibraries\\.[^/]+$")
+    // #729 renamed hydra/overlay/<seg>/ to hydra/<pkg>/overlay/<seg>/ (hydra/core/overlay/... for
+    // kernel-owned overlays, hydra/build/overlay/... for hydra-build's). Match on the /overlay/
+    // segment itself rather than a hardcoded hydra/overlay/ prefix, so this survives any package
+    // segment preceding it.
+    p.contains("/hydra/lib/") || p.matches(".*/overlay/[^/]+/[Ll]ibraries\\.[^/]+$")
 
   /** Hand-written overlay files (path segment `/hydra/overlay/`) are copied verbatim into the cell by
    *  the per-target setup script and are ALREADY correct — e.g. the Common-Lisp/Emacs-Lisp
@@ -445,7 +449,10 @@ object BootstrapHelpers:
    *  The Haskell driver never hits this because it applies the redirect inline to GENERATED modules
    *  only, never to copied overlays. */
   private def isOverlayFile(f: File): Boolean =
-    f.getPath.replace(File.separatorChar, '/').contains("/hydra/overlay/")
+    // #729: match the /overlay/ segment itself (see isLibDefFile's comment) rather than a
+    // hardcoded hydra/overlay/ prefix -- real paths are hydra/core/overlay/... or
+    // hydra/build/overlay/..., not hydra/overlay/... directly.
+    f.getPath.replace(File.separatorChar, '/').contains("/overlay/")
 
   private def allFilesUnder(dir: File): Seq[File] =
     val here = Option(dir.listFiles()).getOrElse(Array.empty[File]).toSeq
